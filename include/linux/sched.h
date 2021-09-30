@@ -1526,6 +1526,10 @@ struct task_struct {
 #ifdef CONFIG_ANDROID_SIMPLE_LMK
         struct task_struct              *simple_lmk_next;
 #endif
+#ifdef CONFIG_SPRD_ROTATION_TASK
+	u64 last_enqueue_ts;
+#endif
+
 	/* task is frozen/stopped (used by the cgroup freezer) */
 	ANDROID_KABI_USE(1, unsigned frozen:1);
 
