@@ -118,7 +118,7 @@ unsigned int sysctl_boost_stask_to_big = 1;
 #ifdef CONFIG_SCHED_BORE
 enum sched_tunable_scaling sysctl_sched_tunable_scaling = SCHED_TUNABLESCALING_NONE;
 #else // CONFIG_SCHED_BORE
-enum sched_tunable_scaling sysctl_sched_tunable_scaling = SCHED_TUNABLESCALING_LINEAR;
+enum sched_tunable_scaling sysctl_sched_tunable_scaling = SCHED_TUNABLESCALING_NONE;
 #endif // CONFIG_SCHED_BORE
 
 /*
@@ -160,8 +160,8 @@ unsigned int sysctl_sched_child_runs_first __read_mostly = 1;
 unsigned int sysctl_sched_wakeup_granularity		= 4000000UL;
 unsigned int normalized_sysctl_sched_wakeup_granularity	= 4000000UL;
 #else // CONFIG_SCHED_BORE
-unsigned int sysctl_sched_wakeup_granularity		= 1000000UL;
-unsigned int normalized_sysctl_sched_wakeup_granularity	= 1000000UL;
+unsigned int sysctl_sched_wakeup_granularity		= 3000000UL;
+unsigned int normalized_sysctl_sched_wakeup_granularity	= 3000000UL;
 #endif // CONFIG_SCHED_BORE
 
 const_debug unsigned int sysctl_sched_migration_cost	= 1000000UL;
