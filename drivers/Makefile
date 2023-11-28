@@ -198,3 +198,4 @@ obj-$(CONFIG_XIAOMI_MIUI)	+= xiaomi/
 
 obj-$(CONFIG_KSU) += kernelsu/
 obj-y				+= oplus/
+obj-y				+= kjson/
