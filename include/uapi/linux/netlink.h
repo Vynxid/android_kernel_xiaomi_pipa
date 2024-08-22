@@ -35,7 +35,13 @@
 #define NETLINK_MILLET          29
 #endif
 
-#define MAX_LINKS 32		
+#ifdef CONFIG_OPLUS
+#define NETLINK_OPLUS_NWPOWERSTATE	32	/*OPLUS NW PowerState*/
+#define NETLINK_OPLUS_IPV6_RTO  33
+#define MAX_LINKS 34
+#else
+#define MAX_LINKS 32
+#endif /* CONFIG_OPLUS */
 
 struct sockaddr_nl {
 	__kernel_sa_family_t	nl_family;	/* AF_NETLINK	*/
