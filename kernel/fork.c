@@ -2382,9 +2382,9 @@ long _do_fork(unsigned long clone_flags,
 
 	if (task_is_zygote(current)) {
 #ifdef CONFIG_CPU_INPUT_BOOST
-		cpu_input_boost_kick_max(50);
+		cpu_input_boost_kick_max(150);
 #endif
-		devfreq_boost_kick_max(DEVFREQ_CPU_LLCC_DDR_BW, 50);
+		devfreq_boost_kick_max(DEVFREQ_CPU_LLCC_DDR_BW, 150);
 	}
 
 	/*
