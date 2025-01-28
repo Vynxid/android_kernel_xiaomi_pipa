@@ -187,7 +187,7 @@ static inline u32 log2plus1_u64_u32f8(u64 v) {
 
 static inline u32 calc_burst_penalty(u64 burst_time) {
 	u32 greed, tolerance, penalty, scaled_penalty;
-	
+
 	greed = log2plus1_u64_u32f8(burst_time);
 	tolerance = sched_burst_penalty_offset << 8;
 	penalty = max(0, (s32)greed - (s32)tolerance);
@@ -203,16 +203,23 @@ static inline u64 scale_slice(u64 delta, struct sched_entity *se) {
 static inline struct task_struct *task_of(struct sched_entity *se);
 
 static void update_burst_score(struct sched_entity *se) {
-	if (!entity_is_task(se)) return;
-	struct task_struct *p = task_of(se);
-	u8 prio = p->static_prio - MAX_RT_PRIO;
-	u8 prev_prio = min(39, prio + se->burst_score);
+    struct task_struct *p;
+    u8 prio;
+    u8 prev_prio;
+    u8 new_prio;
 
-	se->burst_score = se->burst_penalty >> 2;
+    if (!entity_is_task(se))
+        return;
 
-	u8 new_prio = min(39, prio + se->burst_score);
-	if (new_prio != prev_prio)
-		reweight_task(p, new_prio);
+    p = task_of(se);
+    prio = p->static_prio - MAX_RT_PRIO;
+    prev_prio = min(39, prio + se->burst_score);
+
+    se->burst_score = se->burst_penalty >> 2;
+
+    new_prio = min(39, prio + se->burst_score);
+    if (new_prio != prev_prio)
+        reweight_task(p, new_prio);
 }
 
 static void update_burst_penalty(struct sched_entity *se) {
