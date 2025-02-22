@@ -751,4 +751,6 @@ struct dsi_display *get_main_display(void);
 
 void dsi_display_set_fod_ui(struct dsi_display *display, bool status);
 
+int mi_get_disp_id(struct dsi_display *display);
+
 #endif /* _DSI_DISPLAY_H_ */
