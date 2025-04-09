@@ -89,6 +89,7 @@ echo "TARGET_DEVICE: $TARGET_DEVICE"
 echo "Cleaning..."
 rm -rf out/
 rm -rf anykernel/
+rm -rf error.log
 
 echo "Clone AnyKernel3 for packing kernel"
 git clone https://github.com/liyafe1997/AnyKernel3 -b kona --single-branch --depth=1 anykernel
@@ -98,7 +99,7 @@ if [ "$build_choice" == "1" ]; then
     echo "Building for AOSP......"
     make $MAKE_ARGS_AOSP ${TARGET_DEVICE}_aosp_defconfig
 
-    make $MAKE_ARGS_AOSP -j$(nproc --all) 2> >(tee -a error.txt >&2)
+    make $MAKE_ARGS_AOSP -j$(nproc --all) 2> >(tee -a error.log >&2)
 
     if [ -f "out/arch/arm64/boot/Image" ]; then
         echo "The file [out/arch/arm64/boot/Image] exists. AOSP Build successfully."
@@ -188,7 +189,7 @@ sed -i 's/\/\/39 01 00 00 11 00 03 51 03 FF/39 01 00 00 11 00 03 51 03 FF/g' ${d
 
     make $MAKE_ARGS ${TARGET_DEVICE}_defconfig
 
-    make $MAKE_ARGS -j$(nproc --all) 2> >(tee -a error.txt >&2)
+    make $MAKE_ARGS -j$(nproc --all) 2> >(tee -a error.log >&2)
 
     if [ -f "out/arch/arm64/boot/Image" ]; then
         echo "The file [out/arch/arm64/boot/Image] exists. MIUI Build successfully."
