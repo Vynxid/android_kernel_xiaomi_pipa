@@ -3194,7 +3194,7 @@ static int hns_roce_v1_m_qp(struct ib_qp *ibqp, const struct ib_qp_attr *attr,
 			       QP_CONTEXT_QPC_BYTES_156_RETRY_COUNT_INIT_S,
 			       attr->retry_cnt);
 		if (attr->timeout < 0x12) {
-			dev_info(dev, "ack timeout value(0x%x) must bigger than 0x12.\n",
+			dev_dbg(dev, "ack timeout value(0x%x) must bigger than 0x12.\n",
 				 attr->timeout);
 			roce_set_field(context->qpc_bytes_156,
 				       QP_CONTEXT_QPC_BYTES_156_ACK_TIMEOUT_M,

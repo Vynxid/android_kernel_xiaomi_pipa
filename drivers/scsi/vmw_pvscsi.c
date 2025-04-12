@@ -1532,7 +1532,7 @@ static int pvscsi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 		goto out_reset_adapter;
 	}
 
-	dev_info(&pdev->dev, "VMware PVSCSI rev %d host #%u\n",
+	dev_dbg(&pdev->dev, "VMware PVSCSI rev %d host #%u\n",
 		 adapter->rev, host->host_no);
 
 	pvscsi_unmask_intr(adapter);
@@ -1605,7 +1605,7 @@ static struct pci_driver pvscsi_pci_driver = {
 
 static int __init pvscsi_init(void)
 {
-	pr_info("%s - version %s\n",
+	pr_debug("%s - version %s\n",
 		PVSCSI_LINUX_DRIVER_DESC, PVSCSI_DRIVER_VERSION_STRING);
 	return pci_register_driver(&pvscsi_pci_driver);
 }

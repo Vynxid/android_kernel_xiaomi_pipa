@@ -207,7 +207,7 @@ static int arc_ps2_probe(struct platform_device *pdev)
 	if (IS_ERR(arc_ps2->addr))
 		return PTR_ERR(arc_ps2->addr);
 
-	dev_info(&pdev->dev, "irq = %d, address = 0x%p, ports = %i\n",
+	dev_dbg(&pdev->dev, "irq = %d, address = 0x%p, ports = %i\n",
 		 irq, arc_ps2->addr, ARC_PS2_PORTS);
 
 	id = ioread32(arc_ps2->addr);

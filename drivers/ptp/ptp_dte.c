@@ -267,7 +267,7 @@ static int ptp_dte_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, ptp_dte);
 
-	dev_info(dev, "ptp clk probe done\n");
+	dev_dbg(dev, "ptp clk probe done\n");
 
 	return 0;
 }

@@ -1411,7 +1411,7 @@ static int fsi_dma_probe(struct fsi_priv *fsi, struct fsi_stream *io, struct dev
 		else
 			fsi->capture.handler	= &fsi_pio_pop_handler;
 
-		dev_info(dev, "switch handler (dma => pio)\n");
+		dev_dbg(dev, "switch handler (dma => pio)\n");
 
 		/* probe again */
 		return fsi_stream_probe(fsi, dev);

@@ -698,7 +698,7 @@ static irqreturn_t tegra_dma_isr(int irq, void *dev_id)
 	}
 
 	spin_unlock_irqrestore(&tdc->lock, flags);
-	dev_info(tdc2dev(tdc),
+	dev_dbg(tdc2dev(tdc),
 		"Interrupt already served status 0x%08lx\n", status);
 	return IRQ_NONE;
 }
@@ -1465,7 +1465,7 @@ static int tegra_dma_probe(struct platform_device *pdev)
 		goto err_unregister_dma_dev;
 	}
 
-	dev_info(&pdev->dev, "Tegra20 APB DMA driver register %d channels\n",
+	dev_dbg(&pdev->dev, "Tegra20 APB DMA driver register %d channels\n",
 			cdata->nr_channels);
 	return 0;
 

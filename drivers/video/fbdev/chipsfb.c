@@ -419,7 +419,7 @@ static int chipsfb_pci_init(struct pci_dev *dp, const struct pci_device_id *ent)
 		goto err_unmap;
 	}
 
-	dev_info(&dp->dev,"fb%d: Chips 65550 frame buffer"
+	dev_dbg(&dp->dev,"fb%d: Chips 65550 frame buffer"
 		 " (%dK RAM detected)\n",
 		 p->node, p->fix.smem_len / 1024);
 

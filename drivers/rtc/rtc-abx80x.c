@@ -559,7 +559,7 @@ static int abx80x_probe(struct i2c_client *client,
 	lot = ((buf[4] & 0x80) << 2) | ((buf[6] & 0x80) << 1) | buf[3];
 	uid = ((buf[4] & 0x7f) << 8) | buf[5];
 	wafer = (buf[6] & 0x7c) >> 2;
-	dev_info(&client->dev, "model %04x, revision %u.%u, lot %x, wafer %x, uid %x\n",
+	dev_dbg(&client->dev, "model %04x, revision %u.%u, lot %x, wafer %x, uid %x\n",
 		 partnumber, majrev, minrev, lot, wafer, uid);
 
 	data = i2c_smbus_read_byte_data(client, ABX8XX_REG_CTRL1);
@@ -600,7 +600,7 @@ static int abx80x_probe(struct i2c_client *client,
 		trickle_cfg = abx80x_dt_trickle_cfg(np);
 
 	if (trickle_cfg > 0) {
-		dev_info(&client->dev, "Enabling trickle charger: %02x\n",
+		dev_dbg(&client->dev, "Enabling trickle charger: %02x\n",
 			 trickle_cfg);
 		abx80x_enable_trickle_charger(client, trickle_cfg);
 	}
@@ -619,7 +619,7 @@ static int abx80x_probe(struct i2c_client *client,
 	i2c_set_clientdata(client, rtc);
 
 	if (client->irq > 0) {
-		dev_info(&client->dev, "IRQ %d supplied\n", client->irq);
+		dev_dbg(&client->dev, "IRQ %d supplied\n", client->irq);
 		err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
 						abx80x_handle_irq,
 						IRQF_SHARED | IRQF_ONESHOT,

@@ -302,7 +302,7 @@ static int __init txx9ndfmc_probe(struct platform_device *dev)
 	drvdata->hold = hold;
 	spw = clamp(spw, 1, 15);
 	drvdata->spw = spw;
-	dev_info(&dev->dev, "CLK:%ldMHz HOLD:%d SPW:%d\n",
+	dev_dbg(&dev->dev, "CLK:%ldMHz HOLD:%d SPW:%d\n",
 		 (gbusclk + 500000) / 1000000, hold, spw);
 
 	nand_controller_init(&drvdata->controller);

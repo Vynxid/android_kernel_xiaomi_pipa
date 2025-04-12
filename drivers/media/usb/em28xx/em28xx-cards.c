@@ -3081,7 +3081,7 @@ static void em28xx_card_setup(struct em28xx *dev)
 		em28xx_set_model(dev);
 	}
 
-	dev_info(&dev->intf->dev, "Identified as %s (card=%d)\n",
+	dev_dbg(&dev->intf->dev, "Identified as %s (card=%d)\n",
 		 dev->board.name, dev->model);
 
 	dev->tuner_type = em28xx_boards[dev->model].tuner_type;
@@ -3398,7 +3398,7 @@ void em28xx_free_device(struct kref *ref)
 {
 	struct em28xx *dev = kref_to_dev(ref);
 
-	dev_info(&dev->intf->dev, "Freeing device\n");
+	dev_dbg(&dev->intf->dev, "Freeing device\n");
 
 	if (!dev->disconnected)
 		em28xx_release_resources(dev);
@@ -3506,10 +3506,10 @@ static int em28xx_init_dev(struct em28xx *dev, struct usb_device *udev,
 		}
 	}
 	if (!chip_name)
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "unknown em28xx chip ID (%d)\n", dev->chip_id);
 	else
-		dev_info(&dev->intf->dev, "chip ID is %s\n", chip_name);
+		dev_dbg(&dev->intf->dev, "chip ID is %s\n", chip_name);
 
 	em28xx_media_device_init(dev, udev);
 
@@ -3737,7 +3737,7 @@ static int em28xx_usb_probe(struct usb_interface *intf,
 
 	/* Don't register audio interfaces */
 	if (intf->altsetting[0].desc.bInterfaceClass == USB_CLASS_AUDIO) {
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"audio device (%04x:%04x): interface %i, class %i\n",
 			le16_to_cpu(udev->descriptor.idVendor),
 			le16_to_cpu(udev->descriptor.idProduct),
@@ -3799,7 +3799,7 @@ static int em28xx_usb_probe(struct usb_interface *intf,
 		speed = "unknown";
 	}
 
-	dev_info(&intf->dev,
+	dev_dbg(&intf->dev,
 		"New device %s %s @ %s Mbps (%04x:%04x, interface %d, class %d)\n",
 		udev->manufacturer ? udev->manufacturer : "",
 		udev->product ? udev->product : "",
@@ -3836,7 +3836,7 @@ static int em28xx_usb_probe(struct usb_interface *intf,
 	dev->dev_next = NULL;
 
 	if (has_vendor_audio) {
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"Audio interface %i found (Vendor Class)\n", ifnum);
 		dev->usb_audio_type = EM28XX_USB_AUDIO_VENDOR;
 	}
@@ -3855,12 +3855,12 @@ static int em28xx_usb_probe(struct usb_interface *intf,
 	}
 
 	if (has_video)
-		dev_info(&intf->dev, "Video interface %i found:%s%s\n",
+		dev_dbg(&intf->dev, "Video interface %i found:%s%s\n",
 			ifnum,
 			dev->analog_ep_bulk ? " bulk" : "",
 			dev->analog_ep_isoc ? " isoc" : "");
 	if (has_dvb)
-		dev_info(&intf->dev, "DVB interface %i found:%s%s\n",
+		dev_dbg(&intf->dev, "DVB interface %i found:%s%s\n",
 			ifnum,
 			dev->dvb_ep_bulk ? " bulk" : "",
 			dev->dvb_ep_isoc ? " isoc" : "");
@@ -3913,13 +3913,13 @@ static int em28xx_usb_probe(struct usb_interface *intf,
 	if (has_video) {
 		if (!dev->analog_ep_isoc || (try_bulk && dev->analog_ep_bulk))
 			dev->analog_xfer_bulk = 1;
-		dev_info(&intf->dev, "analog set to %s mode.\n",
+		dev_dbg(&intf->dev, "analog set to %s mode.\n",
 			dev->analog_xfer_bulk ? "bulk" : "isoc");
 	}
 	if (has_dvb) {
 		if (!dev->dvb_ep_isoc || (try_bulk && dev->dvb_ep_bulk))
 			dev->dvb_xfer_bulk = 1;
-		dev_info(&intf->dev, "dvb set to %s mode.\n",
+		dev_dbg(&intf->dev, "dvb set to %s mode.\n",
 			dev->dvb_xfer_bulk ? "bulk" : "isoc");
 	}
 
@@ -3957,7 +3957,7 @@ static int em28xx_usb_probe(struct usb_interface *intf,
 			if (!dev->dvb_ep_isoc_ts2 ||
 			    (try_bulk && dev->dvb_ep_bulk_ts2))
 				dev->dev_next->dvb_xfer_bulk = 1;
-			dev_info(&dev->intf->dev, "dvb ts2 set to %s mode.\n",
+			dev_dbg(&dev->intf->dev, "dvb ts2 set to %s mode.\n",
 				 dev->dev_next->dvb_xfer_bulk ? "bulk" : "isoc");
 		}
 
@@ -4028,13 +4028,13 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
 
 	if (dev->dev_next) {
 		dev->dev_next->disconnected = 1;
-		dev_info(&dev->intf->dev, "Disconnecting %s\n",
+		dev_dbg(&dev->intf->dev, "Disconnecting %s\n",
 			 dev->dev_next->name);
 	}
 
 	dev->disconnected = 1;
 
-	dev_info(&dev->intf->dev, "Disconnecting %s\n", dev->name);
+	dev_dbg(&dev->intf->dev, "Disconnecting %s\n", dev->name);
 
 	flush_request_modules(dev);
 

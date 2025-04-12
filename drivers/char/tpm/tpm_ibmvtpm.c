@@ -227,7 +227,7 @@ static int tpm_ibmvtpm_send(struct tpm_chip *chip, u8 *buf, size_t count)
 	}
 
 	if (ibmvtpm->tpm_processing_cmd) {
-		dev_info(ibmvtpm->dev,
+		dev_dbg(ibmvtpm->dev,
 		         "Need to wait for TPM to finish\n");
 		/* wait for previous command to finish */
 		sig = wait_event_interruptible(ibmvtpm->wq, !ibmvtpm->tpm_processing_cmd);
@@ -512,13 +512,13 @@ static void ibmvtpm_crq_process(struct ibmvtpm_crq *crq,
 	case VALID_INIT_CRQ:
 		switch (crq->msg) {
 		case INIT_CRQ_RES:
-			dev_info(ibmvtpm->dev, "CRQ initialized\n");
+			dev_dbg(ibmvtpm->dev, "CRQ initialized\n");
 			rc = ibmvtpm_crq_send_init_complete(ibmvtpm);
 			if (rc)
 				dev_err(ibmvtpm->dev, "Unable to send CRQ init complete rc=%d\n", rc);
 			return;
 		case INIT_CRQ_COMP_RES:
-			dev_info(ibmvtpm->dev,
+			dev_dbg(ibmvtpm->dev,
 				 "CRQ initialization completed\n");
 			return;
 		default:

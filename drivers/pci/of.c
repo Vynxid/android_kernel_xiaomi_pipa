@@ -238,7 +238,7 @@ void of_pci_check_probe_only(void)
 	else
 		pci_clear_flags(PCI_PROBE_ONLY);
 
-	pr_info("PROBE_ONLY %sabled\n", val ? "en" : "dis");
+	pr_debug("PROBE_ONLY %sabled\n", val ? "en" : "dis");
 }
 EXPORT_SYMBOL_GPL(of_pci_check_probe_only);
 
@@ -280,14 +280,14 @@ int devm_of_pci_get_host_bridge_resources(struct device *dev,
 	if (!bus_range)
 		return -ENOMEM;
 
-	dev_info(dev, "host bridge %pOF ranges:\n", dev_node);
+	dev_dbg(dev, "host bridge %pOF ranges:\n", dev_node);
 
 	err = of_pci_parse_bus_range(dev_node, bus_range);
 	if (err) {
 		bus_range->start = busno;
 		bus_range->end = bus_max;
 		bus_range->flags = IORESOURCE_BUS;
-		dev_info(dev, "  No bus range found for %pOF, using %pR\n",
+		dev_dbg(dev, "  No bus range found for %pOF, using %pR\n",
 			 dev_node, bus_range);
 	} else {
 		if (bus_range->end > bus_range->start + bus_max)
@@ -309,7 +309,7 @@ int devm_of_pci_get_host_bridge_resources(struct device *dev,
 			snprintf(range_type, 4, "MEM");
 		else
 			snprintf(range_type, 4, "err");
-		dev_info(dev, "  %s %#010llx..%#010llx -> %#010llx\n",
+		dev_dbg(dev, "  %s %#010llx..%#010llx -> %#010llx\n",
 			 range_type, range.cpu_addr,
 			 range.cpu_addr + range.size - 1, range.pci_addr);
 

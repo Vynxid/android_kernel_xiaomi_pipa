@@ -238,7 +238,7 @@ static int jsm_probe_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	}
 
 	/* Log the information about the board */
-	dev_info(&pdev->dev, "board %d: Digi Classic/Neo (rev %d), irq %d\n",
+	dev_dbg(&pdev->dev, "board %d: Digi Classic/Neo (rev %d), irq %d\n",
 			adapter_count, brd->rev, brd->irq);
 
 	pci_set_drvdata(pdev, brd);

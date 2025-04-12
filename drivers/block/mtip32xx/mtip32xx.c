@@ -617,14 +617,14 @@ static void mtip_handle_tfe(struct driver_data *dd)
 	} else {
 		buf = (unsigned char *)dd->port->log_buf;
 		if (buf[259] & 0x1) {
-			dev_info(&dd->pdev->dev,
+			dev_dbg(&dd->pdev->dev,
 				"Write protect bit is set.\n");
 			set_bit(MTIP_DDF_WRITE_PROTECT_BIT, &dd->dd_flag);
 			fail_all_ncq_write = 1;
 			fail_reason = "write protect";
 		}
 		if (buf[288] == 0xF7) {
-			dev_info(&dd->pdev->dev,
+			dev_dbg(&dd->pdev->dev,
 				"Exceeded Tmax, drive in thermal shutdown.\n");
 			set_bit(MTIP_DDF_OVER_TEMP_BIT, &dd->dd_flag);
 			fail_all_ncq_cmds = 1;
@@ -632,7 +632,7 @@ static void mtip_handle_tfe(struct driver_data *dd)
 		}
 		if (buf[288] == 0xBF) {
 			set_bit(MTIP_DDF_REBUILD_FAILED_BIT, &dd->dd_flag);
-			dev_info(&dd->pdev->dev,
+			dev_dbg(&dd->pdev->dev,
 				"Drive indicates rebuild has failed. Secure erase required.\n");
 			fail_all_ncq_cmds = 1;
 			fail_reason = "rebuild failed";
@@ -1533,22 +1533,22 @@ static void mtip_dump_identify(struct mtip_port *port)
 		return;
 
 	strscpy(cbuf, (char *)(port->identify + 10), 21);
-	dev_info(&port->dd->pdev->dev,
+	dev_dbg(&port->dd->pdev->dev,
 		"Serial No.: %s\n", cbuf);
 
 	strscpy(cbuf, (char *)(port->identify + 23), 9);
-	dev_info(&port->dd->pdev->dev,
+	dev_dbg(&port->dd->pdev->dev,
 		"Firmware Ver.: %s\n", cbuf);
 
 	strscpy(cbuf, (char *)(port->identify + 27), 41);
-	dev_info(&port->dd->pdev->dev, "Model: %s\n", cbuf);
+	dev_dbg(&port->dd->pdev->dev, "Model: %s\n", cbuf);
 
-	dev_info(&port->dd->pdev->dev, "Security: %04x %s\n",
+	dev_dbg(&port->dd->pdev->dev, "Security: %04x %s\n",
 		port->identify[128],
 		port->identify[128] & 0x4 ? "(LOCKED)" : "");
 
 	if (mtip_hw_get_capacity(port->dd, &sectors))
-		dev_info(&port->dd->pdev->dev,
+		dev_dbg(&port->dd->pdev->dev,
 			"Capacity: %llu sectors (%llu MB)\n",
 			 (u64)sectors,
 			 ((u64)sectors) * ATA_SECT_SIZE >> 20);
@@ -1565,7 +1565,7 @@ static void mtip_dump_identify(struct mtip_port *port)
 		strscpy(cbuf, "?", 2);
 		break;
 	}
-	dev_info(&port->dd->pdev->dev,
+	dev_dbg(&port->dd->pdev->dev,
 		"Card Type: %s\n", cbuf);
 }
 
@@ -2633,7 +2633,7 @@ static void mtip_detect_product(struct driver_data *dd)
 		dd->product_type = MTIP_PRODUCT_ASICFPGA;
 		rev = (hwdata & HSORG_HWREV) >> 8;
 		slotgroups = (hwdata & HSORG_SLOTGROUPS) + 1;
-		dev_info(&dd->pdev->dev,
+		dev_dbg(&dd->pdev->dev,
 			"ASIC-FPGA design, HS rev 0x%x, "
 			"%i slot groups [%i slots]\n",
 			 rev,
@@ -2958,17 +2958,17 @@ static int mtip_hw_get_identify(struct driver_data *dd)
 	} else {
 		buf = (unsigned char *)dd->port->log_buf;
 		if (buf[259] & 0x1) {
-			dev_info(&dd->pdev->dev,
+			dev_dbg(&dd->pdev->dev,
 				"Write protect bit is set.\n");
 			set_bit(MTIP_DDF_WRITE_PROTECT_BIT, &dd->dd_flag);
 		}
 		if (buf[288] == 0xF7) {
-			dev_info(&dd->pdev->dev,
+			dev_dbg(&dd->pdev->dev,
 				"Exceeded Tmax, drive in thermal shutdown.\n");
 			set_bit(MTIP_DDF_OVER_TEMP_BIT, &dd->dd_flag);
 		}
 		if (buf[288] == 0xBF) {
-			dev_info(&dd->pdev->dev,
+			dev_dbg(&dd->pdev->dev,
 				"Drive indicates rebuild has failed.\n");
 			set_bit(MTIP_DDF_REBUILD_FAILED_BIT, &dd->dd_flag);
 		}
@@ -2980,7 +2980,7 @@ static int mtip_hw_get_identify(struct driver_data *dd)
 		dev_warn(&dd->pdev->dev,
 				"Unable to check write protect progress\n");
 	else
-		dev_info(&dd->pdev->dev,
+		dev_dbg(&dd->pdev->dev,
 				"Write protect progress: %u%% (%u blocks)\n",
 				attr242.cur, le32_to_cpu(attr242.data));
 
@@ -3971,7 +3971,7 @@ static int mtip_block_remove(struct driver_data *dd)
 			mtip_standby_drive(dd);
 	}
 	else
-		dev_info(&dd->pdev->dev, "device %s surprise removal\n",
+		dev_dbg(&dd->pdev->dev, "device %s surprise removal\n",
 						dd->disk->disk_name);
 
 	blk_freeze_queue_start(dd->queue);
@@ -4025,7 +4025,7 @@ static int mtip_block_shutdown(struct driver_data *dd)
 
 	/* Delete our gendisk structure, and cleanup the blk queue. */
 	if (dd->disk) {
-		dev_info(&dd->pdev->dev,
+		dev_dbg(&dd->pdev->dev,
 			"Shutting down %s ...\n", dd->disk->disk_name);
 
 		if (test_bit(MTIP_DDF_INIT_DONE_BIT, &dd->dd_flag))
@@ -4045,7 +4045,7 @@ static int mtip_block_shutdown(struct driver_data *dd)
 
 static int mtip_block_suspend(struct driver_data *dd)
 {
-	dev_info(&dd->pdev->dev,
+	dev_dbg(&dd->pdev->dev,
 		"Suspending %s ...\n", dd->disk->disk_name);
 	mtip_hw_suspend(dd);
 	return 0;
@@ -4053,7 +4053,7 @@ static int mtip_block_suspend(struct driver_data *dd)
 
 static int mtip_block_resume(struct driver_data *dd)
 {
-	dev_info(&dd->pdev->dev, "Resuming %s ...\n",
+	dev_dbg(&dd->pdev->dev, "Resuming %s ...\n",
 		dd->disk->disk_name);
 	mtip_hw_resume(dd);
 	return 0;
@@ -4121,7 +4121,7 @@ static void mtip_disable_link_opts(struct driver_data *dd, struct pci_dev *pdev)
 			&pcie_dev_ctrl);
 		if (pcie_dev_ctrl & (1 << 11) ||
 		    pcie_dev_ctrl & (1 << 4)) {
-			dev_info(&dd->pdev->dev,
+			dev_dbg(&dd->pdev->dev,
 				"Disabling ERO/No-Snoop on bridge device %04x:%04x\n",
 					pdev->vendor, pdev->device);
 			pcie_dev_ctrl &= ~(PCI_EXP_DEVCTL_NOSNOOP_EN |
@@ -4186,10 +4186,10 @@ static int mtip_pci_probe(struct pci_dev *pdev,
 		if (!node_online(my_node))
 			my_node = mtip_get_next_rr_node();
 	} else {
-		dev_info(&pdev->dev, "Kernel not reporting proximity, choosing a node\n");
+		dev_dbg(&pdev->dev, "Kernel not reporting proximity, choosing a node\n");
 		my_node = mtip_get_next_rr_node();
 	}
-	dev_info(&pdev->dev, "NUMA node %d (closest: %d,%d, probe on %d:%d)\n",
+	dev_dbg(&pdev->dev, "NUMA node %d (closest: %d,%d, probe on %d:%d)\n",
 		my_node, pcibus_to_node(pdev->bus), dev_to_node(&pdev->dev),
 		cpu_to_node(raw_smp_processor_id()), raw_smp_processor_id());
 
@@ -4259,7 +4259,7 @@ static int mtip_pci_probe(struct pci_dev *pdev,
 			j = strlen(cpu_list);
 		}
 
-		dev_info(&pdev->dev, "Node %d on package %d has %d cpu(s): %s\n",
+		dev_dbg(&pdev->dev, "Node %d on package %d has %d cpu(s): %s\n",
 			dd->numa_node,
 			topology_physical_package_id(cpumask_first(node_mask)),
 			nr_cpus_node(dd->numa_node),
@@ -4268,7 +4268,7 @@ static int mtip_pci_probe(struct pci_dev *pdev,
 		dev_dbg(&pdev->dev, "mtip32xx: node_mask empty\n");
 
 	dd->isr_binding = get_least_used_cpu_on_node(dd->numa_node);
-	dev_info(&pdev->dev, "Initial IRQ binding node:cpu %d:%d\n",
+	dev_dbg(&pdev->dev, "Initial IRQ binding node:cpu %d:%d\n",
 		cpu_to_node(dd->isr_binding), dd->isr_binding);
 
 	/* first worker context always runs in ISR */
@@ -4291,7 +4291,7 @@ static int mtip_pci_probe(struct pci_dev *pdev,
 			}
 		}
 		if (j)
-			dev_info(&pdev->dev, "CPU %d: WQs %s\n", cpu, cpu_list);
+			dev_dbg(&pdev->dev, "CPU %d: WQs %s\n", cpu, cpu_list);
 	}
 
 	INIT_WORK(&dd->work[0].work, mtip_workq_sdbf0);
@@ -4564,7 +4564,7 @@ static int __init mtip_init(void)
 {
 	int error;
 
-	pr_info(MTIP_DRV_NAME " Version " MTIP_DRV_VERSION "\n");
+	pr_debug(MTIP_DRV_NAME " Version " MTIP_DRV_VERSION "\n");
 
 	spin_lock_init(&dev_lock);
 

@@ -775,7 +775,7 @@ static int fsl_re_probe(struct platform_device *ofdev)
 	/* Program Galois Field polynomial */
 	out_be32(&re_priv->re_regs->galois_field_config, FSL_RE_GFM_POLY);
 
-	dev_info(dev, "version %x, mode %x, gfp %x\n",
+	dev_dbg(dev, "version %x, mode %x, gfp %x\n",
 		 in_be32(&re_priv->re_regs->re_version_id),
 		 in_be32(&re_priv->re_regs->global_config),
 		 in_be32(&re_priv->re_regs->galois_field_config));

@@ -125,7 +125,7 @@ int vlan_check_real_dev(struct net_device *real_dev,
 
 	if (real_dev->features & NETIF_F_VLAN_CHALLENGED ||
 	    real_dev->type != ARPHRD_ETHER) {
-		pr_info("VLANs not supported on %s\n", name);
+		pr_debug("VLANs not supported on %s\n", name);
 		NL_SET_ERR_MSG_MOD(extack, "VLANs not supported on device");
 		return -EOPNOTSUPP;
 	}
@@ -378,7 +378,7 @@ static int vlan_device_event(struct notifier_block *unused, unsigned long event,
 
 	if ((event == NETDEV_UP) &&
 	    (dev->features & NETIF_F_HW_VLAN_CTAG_FILTER)) {
-		pr_info("adding VLAN 0 to HW filter on device %s\n",
+		pr_debug("adding VLAN 0 to HW filter on device %s\n",
 			dev->name);
 		vlan_vid_add(dev, htons(ETH_P_8021Q), 0);
 	}
@@ -765,7 +765,7 @@ static int __init vlan_proto_init(void)
 	int err;
 	unsigned int i;
 
-	pr_info("%s v%s\n", vlan_fullname, vlan_version);
+	pr_debug("%s v%s\n", vlan_fullname, vlan_version);
 
 	err = register_pernet_subsys(&vlan_net_ops);
 	if (err < 0)

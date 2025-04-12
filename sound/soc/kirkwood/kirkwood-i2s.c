@@ -253,7 +253,7 @@ static int kirkwood_i2s_play_trigger(struct snd_pcm_substream *substream,
 		} while (timeout--);
 
 		if ((ctl | value) & KIRKWOOD_PLAYCTL_PLAY_BUSY)
-			dev_notice(dai->dev, "timed out waiting for busy to deassert: %08x\n",
+			dev_dbg(dai->dev, "timed out waiting for busy to deassert: %08x\n",
 				   ctl);
 	}
 
@@ -572,7 +572,7 @@ static int kirkwood_i2s_dev_probe(struct platform_device *pdev)
 			devm_clk_put(&pdev->dev, priv->extclk);
 			priv->extclk = ERR_PTR(-EINVAL);
 		} else {
-			dev_info(&pdev->dev, "found external clock\n");
+			dev_dbg(&pdev->dev, "found external clock\n");
 			clk_prepare_enable(priv->extclk);
 			soc_dai = kirkwood_i2s_dai_extclk;
 		}

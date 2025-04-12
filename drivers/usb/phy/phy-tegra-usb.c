@@ -1130,7 +1130,7 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
 		if (IS_ERR(tegra_phy->vbus))
 			return PTR_ERR(tegra_phy->vbus);
 	} else {
-		dev_notice(&pdev->dev, "no vbus regulator");
+		dev_dbg(&pdev->dev, "no vbus regulator");
 		tegra_phy->vbus = ERR_PTR(-ENODEV);
 	}
 

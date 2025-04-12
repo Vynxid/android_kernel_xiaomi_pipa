@@ -808,7 +808,7 @@ static int tegra_adma_probe(struct platform_device *pdev)
 
 	pm_runtime_put(&pdev->dev);
 
-	dev_info(&pdev->dev, "Tegra210 ADMA driver registered %d channels\n",
+	dev_dbg(&pdev->dev, "Tegra210 ADMA driver registered %d channels\n",
 		 tdma->nr_channels);
 
 	return 0;

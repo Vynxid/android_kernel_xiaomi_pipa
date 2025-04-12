@@ -1045,7 +1045,7 @@ static void atmel_sha_hw_version_init(struct atmel_sha_dev *dd)
 
 	dd->hw_version = atmel_sha_get_version(dd);
 
-	dev_info(dd->dev,
+	dev_dbg(dd->dev,
 			"version: 0x%x\n", dd->hw_version);
 
 	clk_disable(dd->iclk);
@@ -2830,7 +2830,7 @@ static int atmel_sha_probe(struct platform_device *pdev)
 		if (err)
 			goto err_sha_dma;
 
-		dev_info(dev, "using %s for DMA transfers\n",
+		dev_dbg(dev, "using %s for DMA transfers\n",
 				dma_chan_name(sha_dd->dma_lch_in.chan));
 	}
 
@@ -2842,7 +2842,7 @@ static int atmel_sha_probe(struct platform_device *pdev)
 	if (err)
 		goto err_algs;
 
-	dev_info(dev, "Atmel SHA1/SHA256%s%s\n",
+	dev_dbg(dev, "Atmel SHA1/SHA256%s%s\n",
 			sha_dd->caps.has_sha224 ? "/SHA224" : "",
 			sha_dd->caps.has_sha_384_512 ? "/SHA384/SHA512" : "");
 

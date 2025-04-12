@@ -180,7 +180,7 @@ static int gptu_probe(struct platform_device *pdev)
 	clkdev_add_gptu(&pdev->dev, "timer3a", TIMER3A);
 	clkdev_add_gptu(&pdev->dev, "timer3b", TIMER3B);
 
-	dev_info(&pdev->dev, "gptu: 6 timers loaded\n");
+	dev_dbg(&pdev->dev, "gptu: 6 timers loaded\n");
 
 	return 0;
 }
@@ -203,7 +203,7 @@ int __init gptu_init(void)
 	int ret = platform_driver_register(&dma_driver);
 
 	if (ret)
-		pr_info("gptu: Error registering platform driver\n");
+		pr_debug("gptu: Error registering platform driver\n");
 	return ret;
 }
 

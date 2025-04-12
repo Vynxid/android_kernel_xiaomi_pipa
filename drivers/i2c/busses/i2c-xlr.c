@@ -436,7 +436,7 @@ static int xlr_i2c_probe(struct platform_device *pdev)
 		goto err_unprepare_clk;
 
 	platform_set_drvdata(pdev, priv);
-	dev_info(&priv->adap.dev, "Added I2C Bus.\n");
+	dev_dbg(&priv->adap.dev, "Added I2C Bus.\n");
 	return 0;
 
 err_unprepare_clk:

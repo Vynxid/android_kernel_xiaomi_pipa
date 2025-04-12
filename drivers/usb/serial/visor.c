@@ -373,11 +373,11 @@ static int palm_os_3_probe(struct usb_serial *serial,
 			string = "unknown";
 			break;
 		}
-		dev_info(dev, "%s: port %d, is for %s use\n",
+		dev_dbg(dev, "%s: port %d, is for %s use\n",
 			serial->type->description,
 			connection_info->connections[i].port, string);
 	}
-	dev_info(dev, "%s: Number of ports: %d\n", serial->type->description,
+	dev_dbg(dev, "%s: Number of ports: %d\n", serial->type->description,
 		num_ports);
 
 	/*

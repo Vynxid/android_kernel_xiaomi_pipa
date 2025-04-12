@@ -3408,7 +3408,7 @@ static int talitos_probe(struct platform_device *ofdev)
 			dev_err(dev, "failed to register hwrng: %d\n", err);
 			goto err_out;
 		} else
-			dev_info(dev, "hwrng\n");
+			dev_dbg(dev, "hwrng\n");
 	}
 
 	/* register crypto algorithms the device supports */
@@ -3453,7 +3453,7 @@ static int talitos_probe(struct platform_device *ofdev)
 		}
 	}
 	if (!list_empty(&priv->alg_list))
-		dev_info(dev, "%s algorithms registered in /proc/crypto\n",
+		dev_dbg(dev, "%s algorithms registered in /proc/crypto\n",
 			 (char *)of_get_property(np, "compatible", NULL));
 
 	return 0;

@@ -49,10 +49,10 @@ static void __maybe_unused print_credit_config(struct xlr_fmn_info *fmn_info)
 {
 	int bkt;
 
-	pr_info("Bucket size :\n");
-	pr_info("Station\t: Size\n");
+	pr_debug("Bucket size :\n");
+	pr_debug("Station\t: Size\n");
 	for (bkt = 0; bkt < 16; bkt++)
-		pr_info(" %d  %d  %d  %d  %d  %d  %d %d\n",
+		pr_debug(" %d  %d  %d  %d  %d  %d  %d %d\n",
 			xlr_board_fmn_config.bucket_size[(bkt * 8) + 0],
 			xlr_board_fmn_config.bucket_size[(bkt * 8) + 1],
 			xlr_board_fmn_config.bucket_size[(bkt * 8) + 2],
@@ -61,12 +61,12 @@ static void __maybe_unused print_credit_config(struct xlr_fmn_info *fmn_info)
 			xlr_board_fmn_config.bucket_size[(bkt * 8) + 5],
 			xlr_board_fmn_config.bucket_size[(bkt * 8) + 6],
 			xlr_board_fmn_config.bucket_size[(bkt * 8) + 7]);
-	pr_info("\n");
+	pr_debug("\n");
 
-	pr_info("Credits distribution :\n");
-	pr_info("Station\t: Size\n");
+	pr_debug("Credits distribution :\n");
+	pr_debug("Station\t: Size\n");
 	for (bkt = 0; bkt < 16; bkt++)
-		pr_info(" %d  %d  %d  %d  %d  %d  %d %d\n",
+		pr_debug(" %d  %d  %d  %d  %d  %d  %d %d\n",
 			fmn_info->credit_config[(bkt * 8) + 0],
 			fmn_info->credit_config[(bkt * 8) + 1],
 			fmn_info->credit_config[(bkt * 8) + 2],
@@ -75,7 +75,7 @@ static void __maybe_unused print_credit_config(struct xlr_fmn_info *fmn_info)
 			fmn_info->credit_config[(bkt * 8) + 5],
 			fmn_info->credit_config[(bkt * 8) + 6],
 			fmn_info->credit_config[(bkt * 8) + 7]);
-	pr_info("\n");
+	pr_debug("\n");
 }
 
 static void check_credit_distribution(void)
@@ -99,7 +99,7 @@ static void check_credit_distribution(void)
 			pr_err("ERROR: Bucket %d: credits (%d) > size (%d)\n",
 				bkt, total_credits, cfg->bucket_size[bkt]);
 	}
-	pr_info("Credit distribution complete.\n");
+	pr_debug("Credit distribution complete.\n");
 }
 
 /**
@@ -109,23 +109,23 @@ static void check_credit_distribution(void)
  *
  * The device is also given 'cpu_credits' to send messages to the CPUs
  *
- * @dev_info: FMN information structure for each devices
- * @start_stn_id: Starting station id of dev_info
- * @end_stn_id: End station id of dev_info
+ * @dev_dbg: FMN information structure for each devices
+ * @start_stn_id: Starting station id of dev_dbg
+ * @end_stn_id: End station id of dev_dbg
  * @num_buckets: Total number of buckets for den_info
- * @cpu_credits: Allowed credits to cpu for each devices pointing by dev_info
+ * @cpu_credits: Allowed credits to cpu for each devices pointing by dev_dbg
  * @size: Size of the each buckets in the device station
  */
-static void setup_fmn_cc(struct xlr_fmn_info *dev_info, int start_stn_id,
+static void setup_fmn_cc(struct xlr_fmn_info *dev_dbg, int start_stn_id,
 		int end_stn_id, int num_buckets, int cpu_credits, int size)
 {
 	int i, j, num_core, n, credits_per_cpu;
 	struct xlr_fmn_info *cpu = xlr_board_fmn_config.cpu;
 
 	num_core = hweight32(nlm_current_node()->coremask);
-	dev_info->num_buckets	= num_buckets;
-	dev_info->start_stn_id	= start_stn_id;
-	dev_info->end_stn_id	= end_stn_id;
+	dev_dbg->num_buckets	= num_buckets;
+	dev_dbg->start_stn_id	= start_stn_id;
+	dev_dbg->end_stn_id	= end_stn_id;
 
 	n = num_core;
 	if (num_core == 3)
@@ -152,7 +152,7 @@ static void setup_fmn_cc(struct xlr_fmn_info *dev_info, int start_stn_id,
 	/* Distributing cpu per bucket credits to devices */
 	for (i = 0; i < num_core; i++) {
 		for (j = 0; j < FMN_CORE_NBUCKETS; j++)
-			dev_info->credit_config[(i * 8) + j] = cpu_credits;
+			dev_dbg->credit_config[(i * 8) + j] = cpu_credits;
 	}
 }
 

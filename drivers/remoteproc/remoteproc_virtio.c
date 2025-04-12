@@ -332,7 +332,7 @@ int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
 		goto out;
 	}
 
-	dev_info(dev, "registered %s (type %d)\n", dev_name(&vdev->dev), id);
+	dev_dbg(dev, "registered %s (type %d)\n", dev_name(&vdev->dev), id);
 
 out:
 	return ret;

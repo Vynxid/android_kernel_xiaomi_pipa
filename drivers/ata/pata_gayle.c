@@ -136,7 +136,7 @@ static int __init pata_gayle_init_one(struct platform_device *pdev)
 
 	pdata = dev_get_platdata(&pdev->dev);
 
-	dev_info(&pdev->dev, "Amiga Gayle IDE controller (A%u style)\n",
+	dev_dbg(&pdev->dev, "Amiga Gayle IDE controller (A%u style)\n",
 		pdata->explicit_ack ? 1200 : 4000);
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);

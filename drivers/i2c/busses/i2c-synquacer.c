@@ -622,7 +622,7 @@ static int synquacer_i2c_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, i2c);
 
-	dev_info(&pdev->dev, "%s: synquacer_i2c adapter\n",
+	dev_dbg(&pdev->dev, "%s: synquacer_i2c adapter\n",
 		 dev_name(&i2c->adapter.dev));
 
 	return 0;

@@ -193,7 +193,7 @@ static int set_mi_vip_task_req(const char *buf, const struct kernel_param *kp)
 		if (sscanf(buf, "%u-%u\n", &val, &times) != 2)
 			return -EINVAL;
 
-		pr_info("val %d times %d\n", val, times);
+		pr_debug("val %d times %d\n", val, times);
 		mi_vip_task_req(&val, 1, times);
 		return 0;
 	}
@@ -204,7 +204,7 @@ static int set_mi_vip_task_req(const char *buf, const struct kernel_param *kp)
 			return -EINVAL;
 
 		mi_viptask[num++] = val;
-		pr_info("arg %d val %d\n", num, val);
+		pr_debug("arg %d val %d\n", num, val);
 		cp = strpbrk(cp + 1, ":");
 		cp++;
 		if ((cp >= buf + len))
@@ -219,7 +219,7 @@ static int set_mi_vip_task_req(const char *buf, const struct kernel_param *kp)
 			if (kstrtouint(cp, 0, &times))
 				return -EINVAL;
 
-			pr_info("arg %d times %d\n", num, times);
+			pr_debug("arg %d times %d\n", num, times);
 			mi_vip_task_req(mi_viptask, num, times);
 			return 0;
 		}
@@ -230,7 +230,7 @@ static int set_mi_vip_task_req(const char *buf, const struct kernel_param *kp)
 			return -EINVAL;
 
 		mi_viptask[num++] = val;
-		pr_info("arg %d val = %d times = %d\n", num, val, times);
+		pr_debug("arg %d val = %d times = %d\n", num, val, times);
 	}
 
 	mi_vip_task_req(mi_viptask, num, times);
@@ -260,7 +260,7 @@ module_param_cb(mi_viptask, &param_ops_mi_viptask, NULL, 0644);
 static void add_uid_to_list(int uid, enum CLUSTER_AFFINITY type)
 {
 	if (unlikely(uid >= BIT_MAP_SIZE)) {
-		pr_info("Big uid %d warning\n", uid);
+		pr_debug("Big uid %d warning\n", uid);
 		return;
 	}
 	switch (type) {
@@ -286,12 +286,12 @@ static void add_uid_to_list(int uid, enum CLUSTER_AFFINITY type)
 		break;
 	}
 	if (tsched_debug)
-		pr_info("Add uid %d to %d list\n", uid, type);
+		pr_debug("Add uid %d to %d list\n", uid, type);
 }
 static void del_uid_from_list(int uid, enum CLUSTER_AFFINITY type)
 {
 	if (unlikely(uid >= BIT_MAP_SIZE)) {
-		pr_info("Big uid %d warning\n", uid);
+		pr_debug("Big uid %d warning\n", uid);
 		return;
 	}
 	switch (type) {
@@ -311,7 +311,7 @@ static void del_uid_from_list(int uid, enum CLUSTER_AFFINITY type)
 		break;
 	}
 	if (tsched_debug)
-		pr_info("Del uid %d from %d list\n", uid, type);
+		pr_debug("Del uid %d from %d list\n", uid, type);
 }
 static inline void reset_affinity_list_zero(enum CLUSTER_AFFINITY type)
 {
@@ -392,7 +392,7 @@ static int set_clus_affinity_uidlist(const char *buf,
 			if (kstrtouint(cp, 0, &val))
 				return -EINVAL;
 			del_uid_from_list(val, type);
-			pr_info("arg %d val %d\n", i, val);
+			pr_debug("arg %d val %d\n", i, val);
 			cp = strpbrk(cp + 1, ":");
 			cp++;
 			if (cp >= buf + len)
@@ -403,7 +403,7 @@ static int set_clus_affinity_uidlist(const char *buf,
 				return -EINVAL;
 
 			del_uid_from_list(val, type);
-			pr_info("arg %d val = %d\n", i, val);
+			pr_debug("arg %d val = %d\n", i, val);
 		}
 		return 0;
 	}
@@ -412,7 +412,7 @@ static int set_clus_affinity_uidlist(const char *buf,
 			return -EINVAL;
 
 		add_uid_to_list(val, type);
-		pr_info("arg %d val %d\n", i, val);
+		pr_debug("arg %d val %d\n", i, val);
 		cp = strpbrk(cp + 1, ":");
 		cp++;
 		if (cp >= buf + len)
@@ -423,7 +423,7 @@ static int set_clus_affinity_uidlist(const char *buf,
 			return -EINVAL;
 
 		add_uid_to_list(val, type);
-		pr_info("arg %d val = %d\n", i, val);
+		pr_debug("arg %d val = %d\n", i, val);
 	}
 	return 0;
 }
@@ -829,7 +829,7 @@ static void trigger_migt(void)
 		glk_freq_limit_start = 1;
 		if (current->pid != render_pid) {
 			if (migt_debug)
-				pr_info("render pid change from %d to %d\n",
+				pr_debug("render pid change from %d to %d\n",
 					render_pid, current->pid);
 			trace_render_change(render_pid, current->pid);
 			if (render_update)
@@ -928,9 +928,9 @@ static void add_uid_to_ceiling_user(int uid)
 				     ceiling_users.count;
 
 	if (migt_debug == 2) {
-		pr_info("--------ceiling_user list--------\n");
+		pr_debug("--------ceiling_user list--------\n");
 		for (i = 0; i < users; i++)
-			pr_info("%d ", ceiling_users.uid[i]);
+			pr_debug("%d ", ceiling_users.uid[i]);
 	}
 
 	for (i = 0; i < users; i++)
@@ -938,7 +938,7 @@ static void add_uid_to_ceiling_user(int uid)
 			return;
 
 	if (migt_debug == 2)
-		pr_info("\nadd uid %d to ceiling users\n", uid);
+		pr_debug("\nadd uid %d to ceiling users\n", uid);
 
 	// need to add new ceiling user
 	if (users < MAX_CEILING_USERS) {
@@ -1266,7 +1266,7 @@ static int migt_init(void)
 		s->migt_ceiling_max = UINT_MAX;
 	}
 
-	pr_info("migt init success\n");
+	pr_debug("migt init success\n");
 	cpufreq_register_notifier(&boost_adjust_nb, CPUFREQ_POLICY_NOTIFIER);
 	cpufreq_register_notifier(&ceiling_adjust_nb, CPUFREQ_POLICY_NOTIFIER);
 	return 0;

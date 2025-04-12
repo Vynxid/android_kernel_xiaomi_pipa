@@ -519,7 +519,7 @@ static int et8ek8_reglist_import(struct i2c_client *client,
 {
 	int nlists = 0, i;
 
-	dev_info(&client->dev, "meta_reglist version %s\n", meta->version);
+	dev_dbg(&client->dev, "meta_reglist version %s\n", meta->version);
 
 	while (meta->reglist[nlists].ptr)
 		nlists++;
@@ -1183,7 +1183,7 @@ static int et8ek8_dev_init(struct v4l2_subdev *subdev)
 
 	sensor->version = (rev_h << 8) + rev_l;
 	if (sensor->version != ET8EK8_REV_1 && sensor->version != ET8EK8_REV_2)
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			 "unknown version 0x%x detected, continuing anyway\n",
 			 sensor->version);
 

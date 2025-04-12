@@ -1243,7 +1243,7 @@ static int fschmd_probe(struct i2c_client *client,
 
 		list_add(&data->list, &watchdog_data_list);
 		watchdog_set_timeout(data, 60);
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			"Registered watchdog chardev major 10, minor: %d\n",
 			watchdog_minors[i]);
 		break;
@@ -1255,7 +1255,7 @@ static int fschmd_probe(struct i2c_client *client,
 	}
 	mutex_unlock(&watchdog_data_mutex);
 
-	dev_info(&client->dev, "Detected FSC %s chip, revision: %d\n",
+	dev_dbg(&client->dev, "Detected FSC %s chip, revision: %d\n",
 		names[data->kind], (int) data->revision);
 
 	return 0;

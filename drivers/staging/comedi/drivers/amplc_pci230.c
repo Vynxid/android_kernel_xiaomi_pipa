@@ -1493,7 +1493,7 @@ static int pci230_ai_check_chanlist(struct comedi_device *dev,
 	 */
 	if (devpriv->hwver > 0 && devpriv->hwver < 4) {
 		if (subseq_len > 1 && CR_CHAN(cmd->chanlist[0])) {
-			dev_info(dev->class_dev,
+			dev_dbg(dev->class_dev,
 				 "amplc_pci230: ai_cmdtest: Buggy PCI230+/260+ h/w version %u requires first channel of multi-channel sequence to be 0 (corrected in h/w version 4)\n",
 				 devpriv->hwver);
 			return -EINVAL;
@@ -2376,7 +2376,7 @@ static int pci230_auto_attach(struct comedi_device *dev,
 	struct comedi_subdevice *s;
 	int rc;
 
-	dev_info(dev->class_dev, "amplc_pci230: attach pci %s\n",
+	dev_dbg(dev->class_dev, "amplc_pci230: attach pci %s\n",
 		 pci_name(pci_dev));
 
 	devpriv = comedi_alloc_devpriv(dev, sizeof(*devpriv));

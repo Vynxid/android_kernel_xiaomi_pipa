@@ -521,7 +521,7 @@ static int csi2tx_probe(struct platform_device *pdev)
 	if (ret < 0)
 		goto err_free_priv;
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "Probed CSI2TX with %u/%u lanes, %u streams, %s D-PHY\n",
 		 csi2tx->num_lanes, csi2tx->max_lanes, csi2tx->max_streams,
 		 csi2tx->has_internal_dphy ? "internal" : "no");

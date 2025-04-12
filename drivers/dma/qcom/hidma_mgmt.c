@@ -230,7 +230,7 @@ static int hidma_mgmt_probe(struct platform_device *pdev)
 
 	if (max_write_request &&
 			(max_write_request != mgmtdev->max_write_request)) {
-		dev_info(&pdev->dev, "overriding max-write-burst-bytes: %d\n",
+		dev_dbg(&pdev->dev, "overriding max-write-burst-bytes: %d\n",
 			max_write_request);
 		mgmtdev->max_write_request = max_write_request;
 	} else
@@ -244,7 +244,7 @@ static int hidma_mgmt_probe(struct platform_device *pdev)
 	}
 	if (max_read_request &&
 			(max_read_request != mgmtdev->max_read_request)) {
-		dev_info(&pdev->dev, "overriding max-read-burst-bytes: %d\n",
+		dev_dbg(&pdev->dev, "overriding max-read-burst-bytes: %d\n",
 			max_read_request);
 		mgmtdev->max_read_request = max_read_request;
 	} else
@@ -258,7 +258,7 @@ static int hidma_mgmt_probe(struct platform_device *pdev)
 	}
 	if (max_wr_xactions &&
 			(max_wr_xactions != mgmtdev->max_wr_xactions)) {
-		dev_info(&pdev->dev, "overriding max-write-transactions: %d\n",
+		dev_dbg(&pdev->dev, "overriding max-write-transactions: %d\n",
 			max_wr_xactions);
 		mgmtdev->max_wr_xactions = max_wr_xactions;
 	} else
@@ -272,7 +272,7 @@ static int hidma_mgmt_probe(struct platform_device *pdev)
 	}
 	if (max_rd_xactions &&
 			(max_rd_xactions != mgmtdev->max_rd_xactions)) {
-		dev_info(&pdev->dev, "overriding max-read-transactions: %d\n",
+		dev_dbg(&pdev->dev, "overriding max-read-transactions: %d\n",
 			max_rd_xactions);
 		mgmtdev->max_rd_xactions = max_rd_xactions;
 	} else
@@ -312,7 +312,7 @@ static int hidma_mgmt_probe(struct platform_device *pdev)
 		goto out;
 	}
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "HW rev: %d.%d @ %pa with %d physical channels\n",
 		 mgmtdev->hw_version_major, mgmtdev->hw_version_minor,
 		 &res->start, mgmtdev->dma_channels);

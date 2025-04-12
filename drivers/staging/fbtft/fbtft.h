@@ -396,13 +396,13 @@ module_exit(fbtft_driver_module_exit);
 do {                                                         \
 	if (unlikely((dev)->platform_data &&                 \
 	    (((struct fbtft_platform_data *)(dev)->platform_data)->display.debug & DEBUG_DRIVER_INIT_FUNCTIONS))) \
-		dev_info(dev, format, ##arg);                \
+		dev_dbg(dev, format, ##arg);                \
 } while (0)
 
 #define fbtft_par_dbg(level, par, format, arg...)            \
 do {                                                         \
 	if (unlikely(par->debug & level))                    \
-		dev_info(par->info->device, format, ##arg);  \
+		dev_dbg(par->info->device, format, ##arg);  \
 } while (0)
 
 #define fbtft_par_dbg_hex(level, par, dev, type, buf, num, format, arg...) \

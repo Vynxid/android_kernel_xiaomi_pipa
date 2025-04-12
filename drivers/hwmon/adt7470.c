@@ -1335,7 +1335,7 @@ static int adt7470_probe(struct i2c_client *client,
 	data->client = client;
 	mutex_init(&data->lock);
 
-	dev_info(&client->dev, "%s chip found\n", client->name);
+	dev_dbg(&client->dev, "%s chip found\n", client->name);
 
 	/* Initialize the ADT7470 chip */
 	adt7470_init_client(client);

@@ -883,10 +883,10 @@ static int tda10071_init(struct dvb_frontend *fe)
 		if (ret)
 			goto error_release_firmware;
 
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			 "found a '%s' in cold state, will try to load a firmware\n",
 			 tda10071_ops.info.name);
-		dev_info(&client->dev, "downloading firmware from file '%s'\n",
+		dev_dbg(&client->dev, "downloading firmware from file '%s'\n",
 			 fw_file);
 
 		/* do not download last byte */
@@ -925,7 +925,7 @@ static int tda10071_init(struct dvb_frontend *fe)
 			goto error;
 
 		if (uitmp) {
-			dev_info(&client->dev, "firmware did not run\n");
+			dev_dbg(&client->dev, "firmware did not run\n");
 			ret = -EFAULT;
 			goto error;
 		} else {
@@ -942,9 +942,9 @@ static int tda10071_init(struct dvb_frontend *fe)
 		if (ret)
 			goto error;
 
-		dev_info(&client->dev, "firmware version %d.%d.%d.%d\n",
+		dev_dbg(&client->dev, "firmware version %d.%d.%d.%d\n",
 			 buf[0], buf[1], buf[2], buf[3]);
-		dev_info(&client->dev, "found a '%s' in warm state\n",
+		dev_dbg(&client->dev, "found a '%s' in warm state\n",
 			 tda10071_ops.info.name);
 
 		ret = regmap_bulk_read(dev->regmap, 0x81, buf, 2);
@@ -1225,7 +1225,7 @@ static int tda10071_probe(struct i2c_client *client,
 	/* setup callbacks */
 	pdata->get_dvb_frontend = tda10071_get_dvb_frontend;
 
-	dev_info(&client->dev, "NXP TDA10071 successfully identified\n");
+	dev_dbg(&client->dev, "NXP TDA10071 successfully identified\n");
 	return 0;
 err_kfree:
 	kfree(dev);

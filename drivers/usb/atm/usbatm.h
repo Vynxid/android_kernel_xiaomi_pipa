@@ -29,7 +29,7 @@
 #define usb_err(instance, format, arg...)	\
 	dev_err(&(instance)->usb_intf->dev , format , ## arg)
 #define usb_info(instance, format, arg...)	\
-	dev_info(&(instance)->usb_intf->dev , format , ## arg)
+	dev_dbg(&(instance)->usb_intf->dev , format , ## arg)
 #define usb_warn(instance, format, arg...)	\
 	dev_warn(&(instance)->usb_intf->dev , format , ## arg)
 #define usb_dbg(instance, format, arg...)	\

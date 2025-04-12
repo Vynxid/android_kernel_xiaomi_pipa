@@ -1858,7 +1858,7 @@ static int xillybus_init_chrdev(struct xilly_endpoint *endpoint,
 		}
 	}
 
-	dev_info(endpoint->dev, "Created %d device files.\n",
+	dev_dbg(endpoint->dev, "Created %d device files.\n",
 		 endpoint->num_channels);
 	return 0; /* succeed */
 
@@ -1887,7 +1887,7 @@ static void xillybus_cleanup_chrdev(struct xilly_endpoint *endpoint)
 				       endpoint->lowest_minor),
 				 endpoint->num_channels);
 
-	dev_info(endpoint->dev, "Removed %d device files.\n",
+	dev_dbg(endpoint->dev, "Removed %d device files.\n",
 		 endpoint->num_channels);
 }
 

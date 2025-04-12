@@ -401,7 +401,7 @@ static void cdc_ncm_update_rxtx_max(struct usbnet *dev, u32 new_rx, u32 new_tx)
 	if (val != ctx->rx_max) {
 		__le32 dwNtbInMaxSize = cpu_to_le32(val);
 
-		dev_info(&dev->intf->dev, "setting rx_max = %u\n", val);
+		dev_dbg(&dev->intf->dev, "setting rx_max = %u\n", val);
 
 		/* tell device to use new size */
 		if (usbnet_write_cmd(dev, USB_CDC_SET_NTB_INPUT_SIZE,
@@ -422,7 +422,7 @@ static void cdc_ncm_update_rxtx_max(struct usbnet *dev, u32 new_rx, u32 new_tx)
 
 	val = cdc_ncm_check_tx_max(dev, new_tx);
 	if (val != ctx->tx_max)
-		dev_info(&dev->intf->dev, "setting tx_max = %u\n", val);
+		dev_dbg(&dev->intf->dev, "setting tx_max = %u\n", val);
 
 	/* Adding a pad byte here if necessary simplifies the handling
 	 * in cdc_ncm_fill_tx_frame, making tx_max always represent
@@ -932,7 +932,7 @@ int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_
 			dev_dbg(&intf->dev, "failed to get mac address\n");
 			goto error2;
 		}
-		dev_info(&intf->dev, "MAC-Address: %pM\n", dev->net->dev_addr);
+		dev_dbg(&intf->dev, "MAC-Address: %pM\n", dev->net->dev_addr);
 	}
 
 	/* finish setting up the device specific data */
@@ -949,7 +949,7 @@ int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_
 			if (!ctx->delayed_ndp32)
 				goto error2;
 		}
-		dev_info(&intf->dev, "NDP will be placed at end of frame for this device.");
+		dev_dbg(&intf->dev, "NDP will be placed at end of frame for this device.");
 	}
 
 	/* override ethtool_ops */
@@ -972,7 +972,7 @@ error2:
 error:
 	cdc_ncm_free((struct cdc_ncm_ctx *)dev->data[0]);
 	dev->data[0] = 0;
-	dev_info(&intf->dev, "bind() failure\n");
+	dev_dbg(&intf->dev, "bind() failure\n");
 	return -ENODEV;
 }
 EXPORT_SYMBOL_GPL(cdc_ncm_bind_common);

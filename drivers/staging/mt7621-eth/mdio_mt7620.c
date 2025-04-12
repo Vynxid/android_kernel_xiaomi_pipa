@@ -158,11 +158,11 @@ void mt7620_print_link_state(struct mtk_eth *eth, int port, int link,
 	struct mt7620_gsw *gsw = eth->sw_priv;
 
 	if (link)
-		dev_info(gsw->dev, "port %d link up (%sMbps/%s duplex)\n",
+		dev_dbg(gsw->dev, "port %d link up (%sMbps/%s duplex)\n",
 			 port, mtk_speed_str(speed),
 			 (duplex) ? "Full" : "Half");
 	else
-		dev_info(gsw->dev, "port %d link down\n", port);
+		dev_dbg(gsw->dev, "port %d link down\n", port);
 }
 
 void mt7620_mdio_link_adjust(struct mtk_eth *eth, int port)

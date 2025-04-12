@@ -321,7 +321,7 @@ static void i2c_imx_dma_request(struct imx_i2c_struct *i2c_imx,
 
 	i2c_imx->dma = dma;
 	init_completion(&dma->cmd_complete);
-	dev_info(dev, "using %s (tx) and %s (rx) for DMA transfers\n",
+	dev_dbg(dev, "using %s (tx) and %s (rx) for DMA transfers\n",
 		dma_chan_name(dma->chan_tx), dma_chan_name(dma->chan_rx));
 
 	return;
@@ -332,7 +332,7 @@ fail_tx:
 	dma_release_channel(dma->chan_tx);
 fail_al:
 	devm_kfree(dev, dma);
-	dev_info(dev, "can't use DMA, using PIO instead.\n");
+	dev_dbg(dev, "can't use DMA, using PIO instead.\n");
 }
 
 static void i2c_imx_dma_callback(void *arg)
@@ -1027,7 +1027,7 @@ static int i2c_imx_init_recovery_info(struct imx_i2c_struct *i2c_imx,
 
 	i2c_imx->pinctrl = devm_pinctrl_get(&pdev->dev);
 	if (!i2c_imx->pinctrl || IS_ERR(i2c_imx->pinctrl)) {
-		dev_info(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
+		dev_dbg(&pdev->dev, "can't get pinctrl, bus recovery not supported\n");
 		return PTR_ERR(i2c_imx->pinctrl);
 	}
 
@@ -1188,7 +1188,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
 	dev_dbg(&i2c_imx->adapter.dev, "device resources: %pR\n", res);
 	dev_dbg(&i2c_imx->adapter.dev, "adapter name: \"%s\"\n",
 		i2c_imx->adapter.name);
-	dev_info(&i2c_imx->adapter.dev, "IMX I2C adapter registered\n");
+	dev_dbg(&i2c_imx->adapter.dev, "IMX I2C adapter registered\n");
 
 	/* Init DMA config if supported */
 	i2c_imx_dma_request(i2c_imx, phy_addr);

@@ -925,7 +925,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
 
 	tz->tz_enabled = 1;
 
-	dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
+	dev_dbg(&tz->device->dev, "registered as thermal_zone%d\n",
 		 tz->thermal_zone->id);
 	return 0;
 }
@@ -1126,7 +1126,7 @@ static int acpi_thermal_add(struct acpi_device *device)
 	mutex_init(&tz->thermal_check_lock);
 	INIT_WORK(&tz->thermal_check_work, acpi_thermal_check_fn);
 
-	pr_info(PREFIX "%s [%s] (%ld C)\n", acpi_device_name(device),
+	pr_debug(PREFIX "%s [%s] (%ld C)\n", acpi_device_name(device),
 		acpi_device_bid(device), DECI_KELVIN_TO_CELSIUS(tz->temperature));
 	goto end;
 
@@ -1196,7 +1196,7 @@ static int acpi_thermal_resume(struct device *dev)
 static int thermal_act(const struct dmi_system_id *d) {
 
 	if (act == 0) {
-		pr_notice(PREFIX "%s detected: "
+		pr_debug(PREFIX "%s detected: "
 			  "disabling all active thermal trip points\n", d->ident);
 		act = -1;
 	}
@@ -1204,7 +1204,7 @@ static int thermal_act(const struct dmi_system_id *d) {
 }
 static int thermal_nocrt(const struct dmi_system_id *d) {
 
-	pr_notice(PREFIX "%s detected: "
+	pr_debug(PREFIX "%s detected: "
 		  "disabling all critical thermal trip point actions.\n", d->ident);
 	nocrt = 1;
 	return 0;
@@ -1212,7 +1212,7 @@ static int thermal_nocrt(const struct dmi_system_id *d) {
 static int thermal_tzp(const struct dmi_system_id *d) {
 
 	if (tzp == 0) {
-		pr_notice(PREFIX "%s detected: "
+		pr_debug(PREFIX "%s detected: "
 			  "enabling thermal zone polling\n", d->ident);
 		tzp = 300;	/* 300 dS = 30 Seconds */
 	}
@@ -1221,7 +1221,7 @@ static int thermal_tzp(const struct dmi_system_id *d) {
 static int thermal_psv(const struct dmi_system_id *d) {
 
 	if (psv == 0) {
-		pr_notice(PREFIX "%s detected: "
+		pr_debug(PREFIX "%s detected: "
 			  "disabling all passive thermal trip points\n", d->ident);
 		psv = -1;
 	}
@@ -1275,7 +1275,7 @@ static int __init acpi_thermal_init(void)
 	dmi_check_system(thermal_dmi_table);
 
 	if (off) {
-		pr_notice(PREFIX "thermal control disabled\n");
+		pr_debug(PREFIX "thermal control disabled\n");
 		return -ENODEV;
 	}
 

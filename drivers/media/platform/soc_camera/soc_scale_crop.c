@@ -18,7 +18,7 @@
 #include "soc_scale_crop.h"
 
 #ifdef DEBUG_GEOMETRY
-#define dev_geo	dev_info
+#define dev_geo	dev_dbg
 #else
 #define dev_geo	dev_dbg
 #endif

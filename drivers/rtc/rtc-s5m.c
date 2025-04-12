@@ -818,7 +818,7 @@ static int s5m_rtc_probe(struct platform_device *pdev)
 	}
 
 	if (!info->irq) {
-		dev_info(&pdev->dev, "Alarm IRQ not available\n");
+		dev_dbg(&pdev->dev, "Alarm IRQ not available\n");
 		return 0;
 	}
 

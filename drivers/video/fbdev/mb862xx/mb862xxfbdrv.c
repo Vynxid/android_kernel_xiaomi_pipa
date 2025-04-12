@@ -645,13 +645,13 @@ static int mb862xx_gdc_init(struct mb862xxfb_par *par)
 	ver = inreg(host, GC_CID);
 	rev = inreg(pio, GC_REVISION);
 	if ((ver == 0x303) && (rev & 0xffffff00) == 0x20050100) {
-		dev_info(par->dev, "Fujitsu Lime v1.%d found\n",
+		dev_dbg(par->dev, "Fujitsu Lime v1.%d found\n",
 			 (int)rev & 0xff);
 		par->type = BT_LIME;
 		ccf = par->gc_mode ? par->gc_mode->ccf : GC_CCF_COT_100;
 		mmr = par->gc_mode ? par->gc_mode->mmr : 0x414fb7f2;
 	} else {
-		dev_info(par->dev, "? GDC, CID/Rev.: 0x%lx/0x%lx \n", ver, rev);
+		dev_dbg(par->dev, "? GDC, CID/Rev.: 0x%lx/0x%lx \n", ver, rev);
 		return -ENODEV;
 	}
 
@@ -870,7 +870,7 @@ static int coralp_init(struct mb862xxfb_par *par)
 	if (cn == 3) {
 		unsigned long reg;
 
-		dev_info(par->dev, "Fujitsu Coral-%s GDC Rev.%d found\n",\
+		dev_dbg(par->dev, "Fujitsu Coral-%s GDC Rev.%d found\n",\
 			 (ver == 6) ? "P" : (ver == 8) ? "PA" : "?",
 			 par->pdev->revision);
 		reg = inreg(disp, GC_DCM1);
@@ -947,7 +947,7 @@ static int carmine_init(struct mb862xxfb_par *par)
 
 	/* check for engine module revision */
 	if (inreg(draw, GC_2D3D_REV) == GC_RE_REVISION)
-		dev_info(par->dev, "Fujitsu Carmine GDC Rev.%d found\n",
+		dev_dbg(par->dev, "Fujitsu Carmine GDC Rev.%d found\n",
 			 par->pdev->revision);
 	else
 		goto err_init;

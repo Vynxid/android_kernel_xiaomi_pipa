@@ -203,7 +203,7 @@ static void *usbpd_ipc_log;
 #define usbpd_info(dev, fmt, ...) do { \
 	ipc_log_string(usbpd_ipc_log, "%s: %s: " fmt, dev_name(dev), __func__, \
 			##__VA_ARGS__); \
-	dev_info(dev, fmt, ##__VA_ARGS__); \
+	dev_dbg(dev, fmt, ##__VA_ARGS__); \
 	} while (0)
 
 #define usbpd_warn(dev, fmt, ...) do { \
@@ -358,8 +358,8 @@ static void *usbpd_ipc_log;
 #define dev_dbg dev_err
 #undef pr_debug
 #define pr_debug pr_err
-#undef pr_info
-#define pr_info pr_err
+#undef pr_debug
+#define pr_debug pr_err
 
 static int min_sink_current = 900;
 module_param(min_sink_current, int, 0600);

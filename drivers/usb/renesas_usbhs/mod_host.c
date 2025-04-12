@@ -1558,7 +1558,7 @@ int usbhs_mod_host_probe(struct usbhs_priv *priv)
 		INIT_LIST_HEAD(&udev->ep_list_head);
 	}
 
-	dev_info(dev, "host probed\n");
+	dev_dbg(dev, "host probed\n");
 
 	return 0;
 }

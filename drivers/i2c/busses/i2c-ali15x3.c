@@ -173,7 +173,7 @@ static int ali15x3_setup(struct pci_dev *ALI15X3_dev)
 	}
 
 	if(force_addr) {
-		dev_info(&ALI15X3_dev->dev, "forcing ISA address 0x%04X\n",
+		dev_dbg(&ALI15X3_dev->dev, "forcing ISA address 0x%04X\n",
 			ali15x3_smba);
 		if (PCIBIOS_SUCCESSFUL != pci_write_config_word(ALI15X3_dev,
 								SMBBA,
@@ -192,14 +192,14 @@ static int ali15x3_setup(struct pci_dev *ALI15X3_dev)
 	/* check if whole device is enabled */
 	pci_read_config_byte(ALI15X3_dev, SMBCOM, &temp);
 	if ((temp & 1) == 0) {
-		dev_info(&ALI15X3_dev->dev, "enabling SMBus device\n");
+		dev_dbg(&ALI15X3_dev->dev, "enabling SMBus device\n");
 		pci_write_config_byte(ALI15X3_dev, SMBCOM, temp | 0x01);
 	}
 
 	/* Is SMB Host controller enabled? */
 	pci_read_config_byte(ALI15X3_dev, SMBHSTCFG, &temp);
 	if ((temp & 1) == 0) {
-		dev_info(&ALI15X3_dev->dev, "enabling SMBus controller\n");
+		dev_dbg(&ALI15X3_dev->dev, "enabling SMBus controller\n");
 		pci_write_config_byte(ALI15X3_dev, SMBHSTCFG, temp | 0x01);
 	}
 
@@ -262,7 +262,7 @@ static int ali15x3_transaction(struct i2c_adapter *adap)
 	   then the BUSY bit may come back on when you try and use the chip again.
 	   If that's the case you are stuck.
 	*/
-		dev_info(&adap->dev, "Resetting entire SMB Bus to "
+		dev_dbg(&adap->dev, "Resetting entire SMB Bus to "
 			"clear busy condition (%02x)\n", temp);
 		outb_p(ALI15X3_T_OUT, SMBHSTCNT);
 		temp = inb_p(SMBHSTSTS);

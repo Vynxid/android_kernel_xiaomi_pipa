@@ -1704,14 +1704,14 @@ static int ov7670_init_gpio(struct i2c_client *client, struct ov7670_info *info)
 	info->pwdn_gpio = devm_gpiod_get_optional(&client->dev, "powerdown",
 			GPIOD_OUT_LOW);
 	if (IS_ERR(info->pwdn_gpio)) {
-		dev_info(&client->dev, "can't get %s GPIO\n", "powerdown");
+		dev_dbg(&client->dev, "can't get %s GPIO\n", "powerdown");
 		return PTR_ERR(info->pwdn_gpio);
 	}
 
 	info->resetb_gpio = devm_gpiod_get_optional(&client->dev, "reset",
 			GPIOD_OUT_LOW);
 	if (IS_ERR(info->resetb_gpio)) {
-		dev_info(&client->dev, "can't get %s GPIO\n", "reset");
+		dev_dbg(&client->dev, "can't get %s GPIO\n", "reset");
 		return PTR_ERR(info->resetb_gpio);
 	}
 

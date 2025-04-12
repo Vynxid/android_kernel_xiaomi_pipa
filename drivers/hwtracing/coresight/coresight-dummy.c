@@ -22,7 +22,7 @@ static int dummy_source_enable(struct coresight_device *csdev,
 {
 	struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
 
-	dev_info(drvdata->dev, "Dummy source enabled\n");
+	dev_dbg(drvdata->dev, "Dummy source enabled\n");
 
 	return 0;
 }
@@ -32,7 +32,7 @@ static void dummy_source_disable(struct coresight_device *csdev,
 {
 	struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
 
-	dev_info(drvdata->dev, "Dummy source disabled\n");
+	dev_dbg(drvdata->dev, "Dummy source disabled\n");
 }
 
 static int dummy_sink_enable(struct coresight_device *csdev, u32 mode,
@@ -40,7 +40,7 @@ static int dummy_sink_enable(struct coresight_device *csdev, u32 mode,
 {
 	struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
 
-	dev_info(drvdata->dev, "Dummy sink enabled\n");
+	dev_dbg(drvdata->dev, "Dummy sink enabled\n");
 
 	return 0;
 }
@@ -49,7 +49,7 @@ static int dummy_sink_disable(struct coresight_device *csdev)
 {
 	struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
 
-	dev_info(drvdata->dev, "Dummy sink disabled\n");
+	dev_dbg(drvdata->dev, "Dummy sink disabled\n");
 
 	return 0;
 }
@@ -112,7 +112,7 @@ static int dummy_probe(struct platform_device *pdev)
 		desc->type = CORESIGHT_DEV_TYPE_SINK;
 		desc->subtype.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_BUFFER;
 	} else {
-		dev_info(dev, "Device type not set.\n");
+		dev_dbg(dev, "Device type not set.\n");
 		return -EINVAL;
 	}
 
@@ -123,7 +123,7 @@ static int dummy_probe(struct platform_device *pdev)
 	if (IS_ERR(drvdata->csdev))
 		return PTR_ERR(drvdata->csdev);
 
-	dev_info(dev, "Dummy device initialized\n");
+	dev_dbg(dev, "Dummy device initialized\n");
 
 	return 0;
 }

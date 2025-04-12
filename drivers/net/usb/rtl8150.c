@@ -478,7 +478,7 @@ static void write_bulk_callback(struct urb *urb)
 	if (!netif_device_present(dev->netdev))
 		return;
 	if (status)
-		dev_info(&urb->dev->dev, "%s: Tx status %d\n",
+		dev_dbg(&urb->dev->dev, "%s: Tx status %d\n",
 			 dev->netdev->name, status);
 	netif_trans_update(dev->netdev);
 	netif_wake_queue(dev->netdev);
@@ -503,7 +503,7 @@ static void intr_callback(struct urb *urb)
 		return;
 	/* -EPIPE:  should clear the halt */
 	default:
-		dev_info(&urb->dev->dev, "%s: intr status %d\n",
+		dev_dbg(&urb->dev->dev, "%s: intr status %d\n",
 			 dev->netdev->name, status);
 		goto resubmit;
 	}
@@ -685,7 +685,7 @@ static void rtl8150_set_multicast(struct net_device *netdev)
 	netif_stop_queue(netdev);
 	if (netdev->flags & IFF_PROMISC) {
 		rx_creg |= 0x0001;
-		dev_info(&netdev->dev, "%s: promiscuous mode\n", netdev->name);
+		dev_dbg(&netdev->dev, "%s: promiscuous mode\n", netdev->name);
 	} else if (!netdev_mc_empty(netdev) ||
 		   (netdev->flags & IFF_ALLMULTI)) {
 		rx_creg &= 0xfffe;
@@ -932,7 +932,7 @@ static int rtl8150_probe(struct usb_interface *intf,
 		goto out2;
 	}
 
-	dev_info(&intf->dev, "%s: rtl8150 is detected\n", netdev->name);
+	dev_dbg(&intf->dev, "%s: rtl8150 is detected\n", netdev->name);
 
 	return 0;
 

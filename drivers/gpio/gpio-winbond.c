@@ -559,7 +559,7 @@ static bool winbond_gpio_configure_port(unsigned long base, unsigned int idx)
 		winbond_sio_reg_bclear(base, info->outputreg,
 				       info->outputppbit);
 	else
-		pr_notice("GPIO%u pins are %s\n", idx + 1,
+		pr_debug("GPIO%u pins are %s\n", idx + 1,
 			  winbond_sio_reg_btest(base, info->outputreg,
 						info->outputppbit) ?
 			  "push-pull" :
@@ -596,7 +596,7 @@ static int winbond_gpio_check_chip(unsigned long base)
 	chip = winbond_sio_reg_read(base, WB_SIO_REG_CHIP_MSB) << 8;
 	chip |= winbond_sio_reg_read(base, WB_SIO_REG_CHIP_LSB);
 
-	pr_notice("chip ID at %lx is %.4x\n", base, chip);
+	pr_debug("chip ID at %lx is %.4x\n", base, chip);
 
 	if ((chip & WB_SIO_CHIP_ID_W83627UHG_MASK) !=
 	    WB_SIO_CHIP_ID_W83627UHG) {

@@ -209,7 +209,7 @@ static int ssb_sdio_switch_core(struct ssb_bus *bus, struct ssb_device *dev)
 	sbaddr = (coreidx * SSB_CORE_SIZE) + SSB_ENUM_BASE;
 	if (unlikely(bus->sdio_sbaddr != sbaddr)) {
 #if SSB_VERBOSE_SDIOCORESWITCH_DEBUG
-		dev_info(ssb_sdio_dev(bus),
+		dev_dbg(ssb_sdio_dev(bus),
 			   "switching to %s core, index %d\n",
 			   ssb_core_name(dev->id.coreid), coreidx);
 #endif

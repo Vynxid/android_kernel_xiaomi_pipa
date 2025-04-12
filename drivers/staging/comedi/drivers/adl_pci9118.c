@@ -823,14 +823,14 @@ static int pci9118_ai_setup_dma(struct comedi_device *dev,
 		if (dmalen0 < scan_bytes) {
 			/* uff, too short DMA buffer, disable EOS support! */
 			devpriv->ai_flags &= (~CMDF_WAKE_EOS);
-			dev_info(dev->class_dev,
+			dev_dbg(dev->class_dev,
 				 "WAR: DMA0 buf too short, can't support CMDF_WAKE_EOS (%d<%d)\n",
 				  dmalen0, scan_bytes);
 		} else {
 			/* short first DMA buffer to one scan */
 			dmalen0 = scan_bytes;
 			if (dmalen0 < 4) {
-				dev_info(dev->class_dev,
+				dev_dbg(dev->class_dev,
 					 "ERR: DMA0 buf len bug? (%d<4)\n",
 					 dmalen0);
 				dmalen0 = 4;
@@ -841,14 +841,14 @@ static int pci9118_ai_setup_dma(struct comedi_device *dev,
 		if (dmalen1 < scan_bytes) {
 			/* uff, too short DMA buffer, disable EOS support! */
 			devpriv->ai_flags &= (~CMDF_WAKE_EOS);
-			dev_info(dev->class_dev,
+			dev_dbg(dev->class_dev,
 				 "WAR: DMA1 buf too short, can't support CMDF_WAKE_EOS (%d<%d)\n",
 				 dmalen1, scan_bytes);
 		} else {
 			/* short second DMA buffer to one scan */
 			dmalen1 = scan_bytes;
 			if (dmalen1 < 4) {
-				dev_info(dev->class_dev,
+				dev_dbg(dev->class_dev,
 					 "ERR: DMA1 buf len bug? (%d<4)\n",
 					 dmalen1);
 				dmalen1 = 4;

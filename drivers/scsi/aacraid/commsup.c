@@ -1048,17 +1048,17 @@ static void aac_handle_aif_bu(struct aac_dev *dev, struct aac_aifcmd *aifcmd)
 	switch (aac_aif_data(aifcmd, 1)) {
 	case AifBuCacheDataLoss:
 		if (aac_aif_data(aifcmd, 2))
-			dev_info(&dev->pdev->dev, "Backup unit had cache data loss - [%d]\n",
+			dev_dbg(&dev->pdev->dev, "Backup unit had cache data loss - [%d]\n",
 			aac_aif_data(aifcmd, 2));
 		else
-			dev_info(&dev->pdev->dev, "Backup Unit had cache data loss\n");
+			dev_dbg(&dev->pdev->dev, "Backup Unit had cache data loss\n");
 		break;
 	case AifBuCacheDataRecover:
 		if (aac_aif_data(aifcmd, 2))
-			dev_info(&dev->pdev->dev, "DDR cache data recovered successfully - [%d]\n",
+			dev_dbg(&dev->pdev->dev, "DDR cache data recovered successfully - [%d]\n",
 			aac_aif_data(aifcmd, 2));
 		else
-			dev_info(&dev->pdev->dev, "DDR cache data recovered successfully\n");
+			dev_dbg(&dev->pdev->dev, "DDR cache data recovered successfully\n");
 		break;
 	}
 }
@@ -1651,7 +1651,7 @@ out:
 	 * occurred
 	 */
 	if (!retval && !is_kdump_kernel()) {
-		dev_info(&aac->pdev->dev, "Scheduling bus rescan\n");
+		dev_dbg(&aac->pdev->dev, "Scheduling bus rescan\n");
 		aac_schedule_safw_scan_worker(aac);
 	}
 

@@ -148,7 +148,7 @@ static int as3711_i2c_probe(struct i2c_client *client,
 	i2c_set_clientdata(client, as3711);
 
 	if (client->irq)
-		dev_notice(&client->dev, "IRQ not supported yet\n");
+		dev_dbg(&client->dev, "IRQ not supported yet\n");
 
 	as3711->regmap = devm_regmap_init_i2c(client, &as3711_regmap_config);
 	if (IS_ERR(as3711->regmap)) {
@@ -167,7 +167,7 @@ static int as3711_i2c_probe(struct i2c_client *client,
 	}
 	if (id1 != 0x8b)
 		return -ENODEV;
-	dev_info(as3711->dev, "AS3711 detected: %x:%x\n", id1, id2);
+	dev_dbg(as3711->dev, "AS3711 detected: %x:%x\n", id1, id2);
 
 	/*
 	 * We can reuse as3711_subdevs[],

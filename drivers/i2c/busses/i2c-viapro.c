@@ -381,7 +381,7 @@ found:
 			 * this.
 			 */
 			pci_write_config_byte(pdev, SMBHSTCFG, temp | 0x01);
-			dev_info(&pdev->dev, "Enabling SMBus device\n");
+			dev_dbg(&pdev->dev, "Enabling SMBus device\n");
 		} else {
 			dev_err(&pdev->dev, "SMBUS: Error: Host SMBus "
 				"controller not enabled! - upgrade BIOS or "

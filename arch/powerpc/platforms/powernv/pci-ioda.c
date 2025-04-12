@@ -97,7 +97,7 @@ static int __init iommu_setup(char *str)
 	while (*str) {
 		if (!strncmp(str, "nobypass", 8)) {
 			pnv_iommu_bypass_disabled = true;
-			pr_info("PowerNV: IOMMU bypass window disabled.\n");
+			pr_debug("PowerNV: IOMMU bypass window disabled.\n");
 			break;
 		}
 		str += strcspn(str, ",");
@@ -440,18 +440,18 @@ static void __init pnv_ioda_parse_m64_window(struct pnv_phb *phb)
 	u64 pci_addr;
 
 	if (phb->type != PNV_PHB_IODA1 && phb->type != PNV_PHB_IODA2) {
-		pr_info("  Not support M64 window\n");
+		pr_debug("  Not support M64 window\n");
 		return;
 	}
 
 	if (!firmware_has_feature(FW_FEATURE_OPAL)) {
-		pr_info("  Firmware too old to support M64 window\n");
+		pr_debug("  Firmware too old to support M64 window\n");
 		return;
 	}
 
 	r = of_get_property(dn, "ibm,opal-m64-window", NULL);
 	if (!r) {
-		pr_info("  No <ibm,opal-m64-window> on %pOF\n",
+		pr_debug("  No <ibm,opal-m64-window> on %pOF\n",
 			dn);
 		return;
 	}
@@ -493,7 +493,7 @@ static void __init pnv_ioda_parse_m64_window(struct pnv_phb *phb)
 	phb->ioda.m64_base = pci_addr;
 
 	/* This lines up nicely with the display from processing OF ranges */
-	pr_info(" MEM 0x%016llx..0x%016llx -> 0x%016llx (M64 #%d..%d)\n",
+	pr_debug(" MEM 0x%016llx..0x%016llx -> 0x%016llx (M64 #%d..%d)\n",
 		res->start, res->end, pci_addr, m64_range[0],
 		m64_range[0] + m64_range[1] - 1);
 
@@ -504,7 +504,7 @@ static void __init pnv_ioda_parse_m64_window(struct pnv_phb *phb)
 	m64_range[1]--;
 	phb->ioda.m64_bar_idx = m64_range[0] + m64_range[1];
 
-	pr_info(" Using M64 #%d as default window\n", phb->ioda.m64_bar_idx);
+	pr_debug(" Using M64 #%d as default window\n", phb->ioda.m64_bar_idx);
 
 	/* Mark remaining ones free */
 	for (i = m64_range[0]; i < m64_range[1]; i++)
@@ -1025,7 +1025,7 @@ static int pnv_pci_vf_resource_shift(struct pci_dev *dev, int offset)
 		res2 = *res;
 		res->start += size * offset;
 
-		dev_info(&dev->dev, "VF BAR%d: %pR shifted to %pR (%sabling %d VFs shifted by %d)\n",
+		dev_dbg(&dev->dev, "VF BAR%d: %pR shifted to %pR (%sabling %d VFs shifted by %d)\n",
 			 i, &res2, res, (offset > 0) ? "En" : "Dis",
 			 num_vfs, offset);
 
@@ -1234,7 +1234,7 @@ static struct pnv_ioda_pe *pnv_ioda_setup_npu_PE(struct pci_dev *npu_pdev)
 			 * be assigned the same PE as the existing
 			 * peer NPU.
 			 */
-			dev_info(&npu_pdev->dev,
+			dev_dbg(&npu_pdev->dev,
 				"Associating to existing PE %x\n", pe_num);
 			pci_dev_get(npu_pdev);
 			npu_pdn = pci_get_pdn(npu_pdev);
@@ -1616,7 +1616,7 @@ int pnv_pci_sriov_enable(struct pci_dev *pdev, u16 num_vfs)
 
 	if (phb->type == PNV_PHB_IODA2) {
 		if (!pdn->vfs_expanded) {
-			dev_info(&pdev->dev, "don't support this SRIOV device"
+			dev_dbg(&pdev->dev, "don't support this SRIOV device"
 				" with non 64bit-prefetchable IOV BAR\n");
 			return -ENOSPC;
 		}
@@ -1626,7 +1626,7 @@ int pnv_pci_sriov_enable(struct pci_dev *pdev, u16 num_vfs)
 		 * could be enabled must be less than the number of M64 BARs.
 		 */
 		if (pdn->m64_single_mode && num_vfs > phb->ioda.m64_bar_idx) {
-			dev_info(&pdev->dev, "Not enough M64 BAR for VFs\n");
+			dev_dbg(&pdev->dev, "Not enough M64 BAR for VFs\n");
 			return -EBUSY;
 		}
 
@@ -1663,7 +1663,7 @@ int pnv_pci_sriov_enable(struct pci_dev *pdev, u16 num_vfs)
 				0, num_vfs, 0);
 			if (*pdn->pe_num_map >= phb->ioda.total_pe_num) {
 				mutex_unlock(&phb->ioda.pe_alloc_mutex);
-				dev_info(&pdev->dev, "Failed to enable VF%d\n", num_vfs);
+				dev_dbg(&pdev->dev, "Failed to enable VF%d\n", num_vfs);
 				kfree(pdn->pe_num_map);
 				return -EBUSY;
 			}
@@ -1675,7 +1675,7 @@ int pnv_pci_sriov_enable(struct pci_dev *pdev, u16 num_vfs)
 		/* Assign M64 window accordingly */
 		ret = pnv_pci_vf_assign_m64(pdev, num_vfs);
 		if (ret) {
-			dev_info(&pdev->dev, "Not enough M64 window resources\n");
+			dev_dbg(&pdev->dev, "Not enough M64 window resources\n");
 			goto m64_failed;
 		}
 
@@ -1871,7 +1871,7 @@ static int pnv_pci_ioda_dma_set_mask(struct pci_dev *pdev, u64 dma_mask)
 	}
 
 	if (bypass) {
-		dev_info(&pdev->dev, "Using 64-bit DMA iommu bypass\n");
+		dev_dbg(&pdev->dev, "Using 64-bit DMA iommu bypass\n");
 		set_dma_ops(&pdev->dev, &dma_nommu_ops);
 	} else {
 		/*
@@ -1900,7 +1900,7 @@ static int pnv_pci_ioda_dma_set_mask(struct pci_dev *pdev, u64 dma_mask)
 			 */
 			return -ENOMEM;
 		} else {
-			dev_info(&pdev->dev, "Using 32-bit DMA via iommu\n");
+			dev_dbg(&pdev->dev, "Using 32-bit DMA via iommu\n");
 			set_dma_ops(&pdev->dev, &dma_iommu_ops);
 		}
 	}
@@ -2996,7 +2996,7 @@ static void pnv_pci_init_ioda_msis(struct pnv_phb *phb)
 
 	phb->msi_setup = pnv_pci_ioda_msi_setup;
 	phb->msi32_support = 1;
-	pr_info("  Allocated bitmap for %d MSIs (base IRQ 0x%x)\n",
+	pr_debug("  Allocated bitmap for %d MSIs (base IRQ 0x%x)\n",
 		count, phb->msi_base);
 }
 #else
@@ -3051,7 +3051,7 @@ static void pnv_pci_ioda_fixup_iov_resources(struct pci_dev *pdev)
 		 */
 		if (total_vf_bar_sz > gate) {
 			mul = roundup_pow_of_two(total_vfs);
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				"VF BAR Total IOV size %llx > %llx, roundup to %d VFs\n",
 				total_vf_bar_sz, gate, mul);
 			pdn->m64_single_mode = true;
@@ -3074,7 +3074,7 @@ static void pnv_pci_ioda_fixup_iov_resources(struct pci_dev *pdev)
 		dev_dbg(&pdev->dev, " Fixing VF BAR%d: %pR to\n", i, res);
 		res->end = res->start + size * mul - 1;
 		dev_dbg(&pdev->dev, "                       %pR\n", res);
-		dev_info(&pdev->dev, "VF BAR%d: %pR (expanded to %d VFs for PE alignment)",
+		dev_dbg(&pdev->dev, "VF BAR%d: %pR (expanded to %d VFs for PE alignment)",
 			 i, res, mul);
 	}
 	pdn->vfs_expanded = mul;
@@ -3798,7 +3798,7 @@ static void __init pnv_pci_init_ioda_phb(struct device_node *np,
 	if (!of_device_is_available(np))
 		return;
 
-	pr_info("Initializing %s PHB (%pOF)\n",	pnv_phb_names[ioda_type], np);
+	pr_debug("Initializing %s PHB (%pOF)\n",	pnv_phb_names[ioda_type], np);
 
 	prop64 = of_get_property(np, "ibm,opal-phbid", NULL);
 	if (!prop64) {
@@ -3964,14 +3964,14 @@ static void __init pnv_pci_init_ioda_phb(struct device_node *np,
 					 segment_size);
 #endif
 
-	pr_info("  %03d (%03d) PE's M32: 0x%x [segment=0x%x]\n",
+	pr_debug("  %03d (%03d) PE's M32: 0x%x [segment=0x%x]\n",
 		phb->ioda.total_pe_num, phb->ioda.reserved_pe_idx,
 		phb->ioda.m32_size, phb->ioda.m32_segsize);
 	if (phb->ioda.m64_size)
-		pr_info("                 M64: 0x%lx [segment=0x%lx]\n",
+		pr_debug("                 M64: 0x%lx [segment=0x%lx]\n",
 			phb->ioda.m64_size, phb->ioda.m64_segsize);
 	if (phb->ioda.io_size)
-		pr_info("                  IO: 0x%x [segment=0x%x]\n",
+		pr_debug("                  IO: 0x%x [segment=0x%x]\n",
 			phb->ioda.io_size, phb->ioda.io_segsize);
 
 
@@ -4028,7 +4028,7 @@ static void __init pnv_pci_init_ioda_phb(struct device_node *np,
 	 * kernel parameter will force this reset too.
 	 */
 	if (is_kdump_kernel() || pci_reset_phbs) {
-		pr_info("  Issue PHB reset ...\n");
+		pr_debug("  Issue PHB reset ...\n");
 		pnv_eeh_phb_reset(hose, EEH_RESET_FUNDAMENTAL);
 		pnv_eeh_phb_reset(hose, EEH_RESET_DEACTIVATE);
 	}
@@ -4072,7 +4072,7 @@ void __init pnv_pci_init_ioda_hub(struct device_node *np)
 	const __be64 *prop64;
 	u64 hub_id;
 
-	pr_info("Probing IODA IO-Hub %pOF\n", np);
+	pr_debug("Probing IODA IO-Hub %pOF\n", np);
 
 	prop64 = of_get_property(np, "ibm,opal-hubid", NULL);
 	if (!prop64) {

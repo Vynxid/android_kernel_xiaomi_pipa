@@ -228,7 +228,7 @@ struct mvs_phy {
 	u64		dev_sas_addr;
 	u64		att_dev_sas_addr;
 	u32		att_dev_info;
-	u32		dev_info;
+	u32		dev_dbg;
 	u32		phy_type;
 	u32		phy_status;
 	u32		irq_status;

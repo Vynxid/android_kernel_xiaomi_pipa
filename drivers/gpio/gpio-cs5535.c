@@ -212,7 +212,7 @@ static int chip_gpio_request(struct gpio_chip *c, unsigned offset)
 
 	/* check if this pin is available */
 	if ((mask & (1 << offset)) == 0) {
-		dev_info(&chip->pdev->dev,
+		dev_dbg(&chip->pdev->dev,
 			"pin %u is not available (check mask)\n", offset);
 		spin_unlock_irqrestore(&chip->lock, flags);
 		return -EINVAL;
@@ -334,7 +334,7 @@ static int cs5535_gpio_probe(struct platform_device *pdev)
 	cs5535_gpio_chip.pdev = pdev;
 	spin_lock_init(&cs5535_gpio_chip.lock);
 
-	dev_info(&pdev->dev, "reserved resource region %pR\n", res);
+	dev_dbg(&pdev->dev, "reserved resource region %pR\n", res);
 
 	/* mask out reserved pins */
 	mask &= 0x1F7FFFFF;
@@ -344,7 +344,7 @@ static int cs5535_gpio_probe(struct platform_device *pdev)
 	mask &= ~(1 << 28);
 
 	if (mask_orig != mask)
-		dev_info(&pdev->dev, "mask changed from 0x%08lX to 0x%08lX\n",
+		dev_dbg(&pdev->dev, "mask changed from 0x%08lX to 0x%08lX\n",
 				mask_orig, mask);
 
 	/* finally, register with the generic GPIO API */

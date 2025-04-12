@@ -409,7 +409,7 @@ static void esd_usb2_read_bulk_callback(struct urb *urb)
 		return;
 
 	default:
-		dev_info(dev->udev->dev.parent,
+		dev_dbg(dev->udev->dev.parent,
 			 "Rx URB aborted (%d)\n", urb->status);
 		goto resubmit_urb;
 	}

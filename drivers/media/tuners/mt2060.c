@@ -507,7 +507,7 @@ static int mt2060_probe(struct i2c_client *client,
 	if (ret)
 		goto err;
 
-	dev_info(&client->dev, "Microtune MT2060 successfully identified\n");
+	dev_dbg(&client->dev, "Microtune MT2060 successfully identified\n");
 	memcpy(&fe->ops.tuner_ops, &mt2060_tuner_ops, sizeof(fe->ops.tuner_ops));
 	fe->ops.tuner_ops.release = NULL;
 	fe->tuner_priv = dev;

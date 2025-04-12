@@ -85,7 +85,7 @@ static int wm8400_init(struct wm8400 *wm8400,
 		return ret;
 	}
 	reg = (reg & WM8400_CHIP_REV_MASK) >> WM8400_CHIP_REV_SHIFT;
-	dev_info(wm8400->dev, "WM8400 revision %x\n", reg);
+	dev_dbg(wm8400->dev, "WM8400 revision %x\n", reg);
 
 	ret = wm8400_register_codec(wm8400);
 	if (ret != 0) {

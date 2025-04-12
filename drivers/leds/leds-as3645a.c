@@ -481,7 +481,7 @@ static int as3645a_detect(struct as3645a *flash)
 		vendor = "Unknown";
 	}
 
-	dev_info(dev, "Chip vendor: %s (%d) Version: %d\n", vendor,
+	dev_dbg(dev, "Chip vendor: %s (%d) Version: %d\n", vendor,
 		 man, version);
 
 	rval = as3645a_write(flash, AS_PASSWORD_REG, AS_PASSWORD_UNLOCK_VALUE);

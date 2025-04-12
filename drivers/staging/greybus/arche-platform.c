@@ -222,7 +222,7 @@ arche_platform_coldboot_seq(struct arche_platform_drvdata *arche_pdata)
 	if (arche_pdata->state == ARCHE_PLATFORM_STATE_ACTIVE)
 		return 0;
 
-	dev_info(arche_pdata->dev, "Booting from cold boot state\n");
+	dev_dbg(arche_pdata->dev, "Booting from cold boot state\n");
 
 	svc_reset_onoff(arche_pdata->svc_reset_gpio,
 			arche_pdata->is_reset_act_hi);
@@ -257,7 +257,7 @@ arche_platform_fw_flashing_seq(struct arche_platform_drvdata *arche_pdata)
 	if (arche_pdata->state == ARCHE_PLATFORM_STATE_FW_FLASHING)
 		return 0;
 
-	dev_info(arche_pdata->dev, "Switching to FW flashing state\n");
+	dev_dbg(arche_pdata->dev, "Switching to FW flashing state\n");
 
 	svc_reset_onoff(arche_pdata->svc_reset_gpio,
 			arche_pdata->is_reset_act_hi);
@@ -584,7 +584,7 @@ static int arche_platform_probe(struct platform_device *pdev)
 		mutex_unlock(&arche_pdata->platform_state_mutex);
 	}
 
-	dev_info(dev, "Device registered successfully\n");
+	dev_dbg(dev, "Device registered successfully\n");
 	return 0;
 
 err_coldboot:

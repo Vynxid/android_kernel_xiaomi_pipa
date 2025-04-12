@@ -1292,7 +1292,7 @@ static int rj54n1_video_probe(struct i2c_client *client,
 
 	if (data1 != 0x51 || data2 != 0x10) {
 		ret = -ENODEV;
-		dev_info(&client->dev, "No RJ54N1CB0C found, read 0x%x:0x%x\n",
+		dev_dbg(&client->dev, "No RJ54N1CB0C found, read 0x%x:0x%x\n",
 			 data1, data2);
 		goto done;
 	}
@@ -1302,7 +1302,7 @@ static int rj54n1_video_probe(struct i2c_client *client,
 	if (ret < 0)
 		goto done;
 
-	dev_info(&client->dev, "Detected a RJ54N1CB0C chip ID 0x%x:0x%x\n",
+	dev_dbg(&client->dev, "Detected a RJ54N1CB0C chip ID 0x%x:0x%x\n",
 		 data1, data2);
 
 	ret = v4l2_ctrl_handler_setup(&rj54n1->hdl);

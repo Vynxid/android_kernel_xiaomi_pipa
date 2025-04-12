@@ -1506,10 +1506,10 @@ static int dsi_panel_parse_misc_host_config(struct dsi_host_common_cfg *host,
 	rc = utils->read_u32(utils->data, "qcom,mdss-dsi-phy-voltage", &val);
 	if (!rc) {
 		host->phy_voltage = val;
-		pr_info("[%s] phy_voltage = %d\n", name, val);
+		pr_debug("[%s] phy_voltage = %d\n", name, val);
 	} else {
 		host->phy_voltage = 0;
-		pr_info("[%s] phy_voltage default value = %d\n", name, val);
+		pr_debug("[%s] phy_voltage default value = %d\n", name, val);
 	}
 
 	DSI_DEBUG("[%s] DMA scheduling parameters Line: %d Window: %d\n", name,
@@ -3224,9 +3224,9 @@ static int dsi_panel_parse_dsc_params(struct dsi_display_mode *mode,
 	rc = utils->read_u64(utils->data, "mi,dsc-panel-id", &data_id);
 	if (rc) {
 		data_id = 0;
-		pr_info("mi,dsc-panel-id not specified\n");
+		pr_debug("mi,dsc-panel-id not specified\n");
 	} else {
-		pr_info("mi,dsc-panel-id is 0x%llx\n", data_id);
+		pr_debug("mi,dsc-panel-id is 0x%llx\n", data_id);
 	}
 	priv_info->dsc.panel_id = data_id;
 

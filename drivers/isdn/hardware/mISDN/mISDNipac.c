@@ -123,7 +123,7 @@ isac_empty_fifo(struct isac_hw *isac, int count)
 	if (!isac->dch.rx_skb) {
 		isac->dch.rx_skb = mI_alloc_skb(isac->dch.maxlen, GFP_ATOMIC);
 		if (!isac->dch.rx_skb) {
-			pr_info("%s: D receive out of memory\n", isac->name);
+			pr_debug("%s: D receive out of memory\n", isac->name);
 			WriteISAC(isac, ISAC_CMDR, 0x80);
 			return;
 		}
@@ -240,12 +240,12 @@ isac_retransmit(struct isac_hw *isac)
 		isac->dch.tx_idx = 0;
 		isac_fill_fifo(isac);
 	} else if (isac->dch.tx_skb) { /* should not happen */
-		pr_info("%s: tx_skb exist but not busy\n", isac->name);
+		pr_debug("%s: tx_skb exist but not busy\n", isac->name);
 		test_and_set_bit(FLG_TX_BUSY, &isac->dch.Flags);
 		isac->dch.tx_idx = 0;
 		isac_fill_fifo(isac);
 	} else {
-		pr_info("%s: ISAC XDU no TX_BUSY\n", isac->name);
+		pr_debug("%s: ISAC XDU no TX_BUSY\n", isac->name);
 		if (get_next_dframe(&isac->dch))
 			isac_fill_fifo(isac);
 	}
@@ -264,7 +264,7 @@ isac_mos_irq(struct isac_hw *isac)
 		if (!isac->mon_rx) {
 			isac->mon_rx = kmalloc(MAX_MON_FRAME, GFP_ATOMIC);
 			if (!isac->mon_rx) {
-				pr_info("%s: ISAC MON RX out of memory!\n",
+				pr_debug("%s: ISAC MON RX out of memory!\n",
 					isac->name);
 				isac->mocr &= 0xf0;
 				isac->mocr |= 0x0a;
@@ -294,7 +294,7 @@ afterMONR0:
 		if (!isac->mon_rx) {
 			isac->mon_rx = kmalloc(MAX_MON_FRAME, GFP_ATOMIC);
 			if (!isac->mon_rx) {
-				pr_info("%s: ISAC MON RX out of memory!\n",
+				pr_debug("%s: ISAC MON RX out of memory!\n",
 					isac->name);
 				isac->mocr &= 0x0f;
 				isac->mocr |= 0xa0;
@@ -329,7 +329,7 @@ afterMONR1:
 			if (ret)
 				kfree(isac->mon_rx);
 		} else {
-			pr_info("%s: MONITOR 0 received %d but no user\n",
+			pr_debug("%s: MONITOR 0 received %d but no user\n",
 				isac->name, isac->mon_rxp);
 			kfree(isac->mon_rx);
 		}
@@ -347,7 +347,7 @@ afterMONR1:
 			if (ret)
 				kfree(isac->mon_rx);
 		} else {
-			pr_info("%s: MONITOR 1 received %d but no user\n",
+			pr_debug("%s: MONITOR 1 received %d but no user\n",
 				isac->name, isac->mon_rxp);
 			kfree(isac->mon_rx);
 		}
@@ -746,7 +746,7 @@ dbusy_timer_handler(struct timer_list *t)
 			if (isac->dch.tx_idx)
 				isac->dch.tx_idx = 0;
 			else
-				pr_info("%s: ISAC D-Channel Busy no tx_idx\n",
+				pr_debug("%s: ISAC D-Channel Busy no tx_idx\n",
 					isac->name);
 			/* Transmitter reset */
 			WriteISAC(isac, ISAC_CMDR, 0x01);
@@ -816,7 +816,7 @@ isac_init(struct isac_hw *isac)
 		/* all HDLC IRQ unmasked */
 		val = ReadISAC(isac, ISACX_ID);
 		if (isac->dch.debug & DEBUG_HW)
-			pr_notice("%s: ISACX Design ID %x\n",
+			pr_debug("%s: ISACX Design ID %x\n",
 				  isac->name, val & 0x3f);
 		val = ReadISAC(isac, ISACX_CIR0);
 		pr_debug("%s: ISACX CIR0 %02X\n", isac->name, val);
@@ -841,13 +841,13 @@ isac_init(struct isac_hw *isac)
 		}
 		val = ReadISAC(isac, ISAC_RBCH);
 		if (isac->dch.debug & DEBUG_HW)
-			pr_notice("%s: ISAC version (%x): %s\n", isac->name,
+			pr_debug("%s: ISAC version (%x): %s\n", isac->name,
 				  val, ISACVer[(val >> 5) & 3]);
 		isac->type |= ((val >> 5) & 3);
 		if (!isac->adf2)
 			isac->adf2 = 0x80;
 		if (!(isac->adf2 & 0x80)) { /* only IOM 2 Mode */
-			pr_info("%s: only support IOM2 mode but adf2=%02x\n",
+			pr_debug("%s: only support IOM2 mode but adf2=%02x\n",
 				isac->name, isac->adf2);
 			isac_release(isac);
 			return -EINVAL;
@@ -901,7 +901,7 @@ waitforCEC(struct hscx_hw *hx)
 		pr_debug("%s: B%1d CEC %d us\n", hx->ip->name, hx->bch.nr,
 			 50 - to);
 	if (!to)
-		pr_info("%s: B%1d CEC timeout\n", hx->ip->name, hx->bch.nr);
+		pr_debug("%s: B%1d CEC timeout\n", hx->ip->name, hx->bch.nr);
 }
 
 
@@ -921,7 +921,7 @@ waitforXFW(struct hscx_hw *hx)
 		pr_debug("%s: B%1d XFW %d us\n", hx->ip->name, hx->bch.nr,
 			 50 - to);
 	if (!to)
-		pr_info("%s: B%1d XFW timeout\n", hx->ip->name, hx->bch.nr);
+		pr_debug("%s: B%1d XFW timeout\n", hx->ip->name, hx->bch.nr);
 }
 
 static void
@@ -1051,18 +1051,18 @@ ipac_rme(struct hscx_hw *hx)
 		/* !(VFR && !RDO && CRC && !RAB) */
 		if (!(rstab & 0x80)) {
 			if (hx->bch.debug & DEBUG_HW_BCHANNEL)
-				pr_notice("%s: B%1d invalid frame\n",
+				pr_debug("%s: B%1d invalid frame\n",
 					  hx->ip->name, hx->bch.nr);
 		}
 		if (rstab & 0x40) {
 			if (hx->bch.debug & DEBUG_HW_BCHANNEL)
-				pr_notice("%s: B%1d RDO proto=%x\n",
+				pr_debug("%s: B%1d RDO proto=%x\n",
 					  hx->ip->name, hx->bch.nr,
 					  hx->bch.state);
 		}
 		if (!(rstab & 0x20)) {
 			if (hx->bch.debug & DEBUG_HW_BCHANNEL)
-				pr_notice("%s: B%1d CRC error\n",
+				pr_debug("%s: B%1d CRC error\n",
 					  hx->ip->name, hx->bch.nr);
 		}
 		hscx_cmdr(hx, 0x80); /* Do RMC */
@@ -1219,7 +1219,7 @@ mISDNipac_irq(struct ipac_hw *ipac, int maxloop)
 		pr_debug("%s: %d irqloops cpu%d\n", ipac->name,
 			 maxloop - cnt, smp_processor_id());
 	if (maxloop && !cnt)
-		pr_notice("%s: %d IRQ LOOP cpu%d\n", ipac->name,
+		pr_debug("%s: %d IRQ LOOP cpu%d\n", ipac->name,
 			  maxloop, smp_processor_id());
 	return IRQ_HANDLED;
 }
@@ -1262,7 +1262,7 @@ hscx_mode(struct hscx_hw *hscx, u32 bprotocol)
 			test_and_set_bit(FLG_HDLC, &hscx->bch.Flags);
 			break;
 		default:
-			pr_info("%s: protocol not known %x\n", hscx->ip->name,
+			pr_debug("%s: protocol not known %x\n", hscx->ip->name,
 				bprotocol);
 			return -ENOPROTOOPT;
 		}
@@ -1298,7 +1298,7 @@ hscx_mode(struct hscx_hw *hscx, u32 bprotocol)
 			test_and_set_bit(FLG_HDLC, &hscx->bch.Flags);
 			break;
 		default:
-			pr_info("%s: protocol not known %x\n", hscx->ip->name,
+			pr_debug("%s: protocol not known %x\n", hscx->ip->name,
 				bprotocol);
 			return -ENOPROTOOPT;
 		}
@@ -1334,7 +1334,7 @@ hscx_mode(struct hscx_hw *hscx, u32 bprotocol)
 			test_and_set_bit(FLG_HDLC, &hscx->bch.Flags);
 			break;
 		default:
-			pr_info("%s: protocol not known %x\n", hscx->ip->name,
+			pr_debug("%s: protocol not known %x\n", hscx->ip->name,
 				bprotocol);
 			return -ENOPROTOOPT;
 		}
@@ -1384,7 +1384,7 @@ hscx_l2l1(struct mISDNchannel *ch, struct sk_buff *skb)
 		ret = 0;
 		break;
 	default:
-		pr_info("%s: %s unknown prim(%x,%x)\n",
+		pr_debug("%s: %s unknown prim(%x,%x)\n",
 			hx->ip->name, __func__, hh->prim, hh->id);
 		ret = -EINVAL;
 	}
@@ -1425,7 +1425,7 @@ hscx_bctrl(struct mISDNchannel *ch, u32 cmd, void *arg)
 		ret = channel_bctrl(bch, arg);
 		break;
 	default:
-		pr_info("%s: %s unknown prim(%x)\n",
+		pr_debug("%s: %s unknown prim(%x)\n",
 			hx->ip->name, __func__, cmd);
 	}
 	return ret;
@@ -1457,7 +1457,7 @@ hscx_init(struct hscx_hw *hx)
 		val = ReadHSCX(hx, HSCX_VSTR);
 		pr_debug("%s: HSCX VSTR %02x\n", hx->ip->name, val);
 		if (hx->bch.debug & DEBUG_HW)
-			pr_notice("%s: HSCX version %s\n", hx->ip->name,
+			pr_debug("%s: HSCX version %s\n", hx->ip->name,
 				  HSCXVer[val & 0x0f]);
 	} else
 		WriteHSCX(hx, IPAC_CCR1, 0x82);
@@ -1486,7 +1486,7 @@ ipac_init(struct ipac_hw *ipac)
 		WriteIPAC(ipac, IPAC_CONF, ipac->conf);
 		val = ReadIPAC(ipac, IPAC_ID);
 		if (ipac->hscx[0].bch.debug & DEBUG_HW)
-			pr_notice("%s: IPAC Design ID %02x\n", ipac->name, val);
+			pr_debug("%s: IPAC Design ID %02x\n", ipac->name, val);
 	}
 	/* nothing special for IPACX to do here */
 	return isac_init(&ipac->isac);
@@ -1531,7 +1531,7 @@ channel_ctrl(struct ipac_hw *ipac, struct mISDN_ctrl_req *cq)
 		ret = ipac->isac.ctrl(&ipac->isac, HW_TIMER3_VALUE, cq->p1);
 		break;
 	default:
-		pr_info("%s: unknown CTRL OP %x\n", ipac->name, cq->op);
+		pr_debug("%s: unknown CTRL OP %x\n", ipac->name, cq->op);
 		ret = -EINVAL;
 		break;
 	}
@@ -1559,7 +1559,7 @@ ipac_dctrl(struct mISDNchannel *ch, u32 cmd, void *arg)
 		if (err)
 			break;
 		if (!try_module_get(ipac->owner))
-			pr_info("%s: cannot get module\n", ipac->name);
+			pr_debug("%s: cannot get module\n", ipac->name);
 		break;
 	case CLOSE_CHANNEL:
 		pr_debug("%s: dev(%d) close from %p\n", ipac->name,
@@ -1584,7 +1584,7 @@ mISDNipac_init(struct ipac_hw *ipac, void *hw)
 
 	ipac->hw = hw;
 	if (ipac->isac.dch.debug & DEBUG_HW)
-		pr_notice("%s: ipac type %x\n", ipac->name, ipac->type);
+		pr_debug("%s: ipac type %x\n", ipac->name, ipac->type);
 	if (ipac->type & IPAC_TYPE_HSCX) {
 		ipac->isac.type = IPAC_TYPE_ISAC;
 		ipac->hscx[0].off = 0;
@@ -1639,14 +1639,14 @@ EXPORT_SYMBOL(mISDNipac_init);
 static int __init
 isac_mod_init(void)
 {
-	pr_notice("mISDNipac module version %s\n", ISAC_REV);
+	pr_debug("mISDNipac module version %s\n", ISAC_REV);
 	return 0;
 }
 
 static void __exit
 isac_mod_cleanup(void)
 {
-	pr_notice("mISDNipac module unloaded\n");
+	pr_debug("mISDNipac module unloaded\n");
 }
 module_init(isac_mod_init);
 module_exit(isac_mod_cleanup);

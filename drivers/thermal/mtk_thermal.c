@@ -641,7 +641,7 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
 		else
 			mt->o_slope = MT8173_CALIB_BUF0_O_SLOPE(buf[0]);
 	} else {
-		dev_info(dev, "Device not calibrated, using default calibration values\n");
+		dev_dbg(dev, "Device not calibrated, using default calibration values\n");
 	}
 
 out:

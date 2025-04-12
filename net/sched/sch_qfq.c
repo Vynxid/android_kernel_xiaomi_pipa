@@ -420,7 +420,7 @@ static int qfq_change_class(struct Qdisc *sch, u32 classid, u32 parentid,
 	int delta_w;
 
 	if (tca[TCA_OPTIONS] == NULL) {
-		pr_notice("qfq: no options\n");
+		pr_debug("qfq: no options\n");
 		return -EINVAL;
 	}
 
@@ -432,7 +432,7 @@ static int qfq_change_class(struct Qdisc *sch, u32 classid, u32 parentid,
 	if (tb[TCA_QFQ_WEIGHT]) {
 		weight = nla_get_u32(tb[TCA_QFQ_WEIGHT]);
 		if (!weight || weight > (1UL << QFQ_MAX_WSHIFT)) {
-			pr_notice("qfq: invalid weight %u\n", weight);
+			pr_debug("qfq: invalid weight %u\n", weight);
 			return -EINVAL;
 		}
 	} else
@@ -444,7 +444,7 @@ static int qfq_change_class(struct Qdisc *sch, u32 classid, u32 parentid,
 		lmax = psched_mtu(qdisc_dev(sch));
 
 	if (lmax < QFQ_MIN_LMAX || lmax > (1UL << QFQ_MTU_SHIFT)) {
-		pr_notice("qfq: invalid max length %u\n", lmax);
+		pr_debug("qfq: invalid max length %u\n", lmax);
 		return -EINVAL;
 	}
 
@@ -459,7 +459,7 @@ static int qfq_change_class(struct Qdisc *sch, u32 classid, u32 parentid,
 	delta_w = weight - (cl ? cl->agg->class_weight : 0);
 
 	if (q->wsum + delta_w > QFQ_MAX_WSUM) {
-		pr_notice("qfq: total weight out of range (%d + %u)\n",
+		pr_debug("qfq: total weight out of range (%d + %u)\n",
 			  delta_w, q->wsum);
 		return -EINVAL;
 	}

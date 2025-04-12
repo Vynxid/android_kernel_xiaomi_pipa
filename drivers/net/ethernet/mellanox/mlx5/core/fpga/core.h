@@ -73,10 +73,10 @@ struct mlx5_fpga_device {
 		format, __func__, __LINE__, ##__VA_ARGS__)
 
 #define mlx5_fpga_notice(__adev, format, ...) \
-	dev_notice(&(__adev)->mdev->pdev->dev, "FPGA: " format, ##__VA_ARGS__)
+	dev_dbg(&(__adev)->mdev->pdev->dev, "FPGA: " format, ##__VA_ARGS__)
 
 #define mlx5_fpga_info(__adev, format, ...) \
-	dev_info(&(__adev)->mdev->pdev->dev, "FPGA: " format, ##__VA_ARGS__)
+	dev_dbg(&(__adev)->mdev->pdev->dev, "FPGA: " format, ##__VA_ARGS__)
 
 int mlx5_fpga_init(struct mlx5_core_dev *mdev);
 void mlx5_fpga_cleanup(struct mlx5_core_dev *mdev);

@@ -1698,17 +1698,17 @@ static int adt7475_probe(struct i2c_client *client,
 		goto eremove;
 	}
 
-	dev_info(&client->dev, "%s device, revision %d\n",
+	dev_dbg(&client->dev, "%s device, revision %d\n",
 		 names[id->driver_data], revision);
 	if ((data->has_voltage & 0x11) || data->has_fan4 || data->has_pwm2)
-		dev_info(&client->dev, "Optional features:%s%s%s%s%s\n",
+		dev_dbg(&client->dev, "Optional features:%s%s%s%s%s\n",
 			 (data->has_voltage & (1 << 0)) ? " in0" : "",
 			 (data->has_voltage & (1 << 4)) ? " in4" : "",
 			 data->has_fan4 ? " fan4" : "",
 			 data->has_pwm2 ? " pwm2" : "",
 			 data->has_vid ? " vid" : "");
 	if (data->bypass_attn)
-		dev_info(&client->dev, "Bypassing attenuators on:%s%s%s%s\n",
+		dev_dbg(&client->dev, "Bypassing attenuators on:%s%s%s%s\n",
 			 (data->bypass_attn & (1 << 0)) ? " in0" : "",
 			 (data->bypass_attn & (1 << 1)) ? " in1" : "",
 			 (data->bypass_attn & (1 << 3)) ? " in3" : "",

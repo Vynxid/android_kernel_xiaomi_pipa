@@ -942,7 +942,7 @@ static void hifn_init_pll(struct hifn_device *dev)
 		freq = simple_strtoul(hifn_pll_ref + 3, NULL, 10);
 	else {
 		freq = 66;
-		dev_info(&dev->pdev->dev, "assuming %uMHz clock speed, override with hifn_pll_ref=%.3s<frequency>\n",
+		dev_dbg(&dev->pdev->dev, "assuming %uMHz clock speed, override with hifn_pll_ref=%.3s<frequency>\n",
 			 freq, hifn_pll_ref);
 	}
 
@@ -1587,7 +1587,7 @@ err_out:
 	spin_unlock_irqrestore(&dev->lock, flags);
 err_out_exit:
 	if (err) {
-		dev_info(&dev->pdev->dev, "iv: %p [%d], key: %p [%d], mode: %u, op: %u, "
+		dev_dbg(&dev->pdev->dev, "iv: %p [%d], key: %p [%d], mode: %u, op: %u, "
 			 "type: %u, err: %d.\n",
 			 rctx->iv, rctx->ivsize,
 			 ctx->key, ctx->keysize,
@@ -1663,7 +1663,7 @@ static inline void hifn_complete_sa(struct hifn_device *dev, int i)
 	dev->sa[i] = NULL;
 	dev->started--;
 	if (dev->started < 0)
-		dev_info(&dev->pdev->dev, "%s: started: %d.\n", __func__,
+		dev_dbg(&dev->pdev->dev, "%s: started: %d.\n", __func__,
 			 dev->started);
 	spin_unlock_irqrestore(&dev->lock, flags);
 	BUG_ON(dev->started < 0);
@@ -1823,22 +1823,22 @@ static void hifn_work(struct work_struct *work)
 			int i;
 			struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
 
-			dev_info(&dev->pdev->dev,
+			dev_dbg(&dev->pdev->dev,
 				 "r: %08x, active: %d, started: %d, "
 				 "success: %lu: qlen: %u/%u, reset: %d.\n",
 				 r, dev->active, dev->started,
 				 dev->success, dev->queue.qlen, dev->queue.max_qlen,
 				 reset);
 
-			dev_info(&dev->pdev->dev, "%s: res: ", __func__);
+			dev_dbg(&dev->pdev->dev, "%s: res: ", __func__);
 			for (i = 0; i < HIFN_D_RES_RSIZE; ++i) {
-				pr_info("%x.%p ", dma->resr[i].l, dev->sa[i]);
+				pr_debug("%x.%p ", dma->resr[i].l, dev->sa[i]);
 				if (dev->sa[i]) {
 					hifn_process_ready(dev->sa[i], -ENODEV);
 					hifn_complete_sa(dev, i);
 				}
 			}
-			pr_info("\n");
+			pr_debug("\n");
 
 			hifn_reset_dma(dev, 1);
 			hifn_stop_device(dev);
@@ -2672,7 +2672,7 @@ static int __init hifn_init(void)
 		return -ENODEV;
 	}
 
-	pr_info("Driver for HIFN 795x crypto accelerator chip "
+	pr_debug("Driver for HIFN 795x crypto accelerator chip "
 		"has been successfully registered.\n");
 
 	return 0;
@@ -2682,7 +2682,7 @@ static void __exit hifn_fini(void)
 {
 	pci_unregister_driver(&hifn_pci_driver);
 
-	pr_info("Driver for HIFN 795x crypto accelerator chip "
+	pr_debug("Driver for HIFN 795x crypto accelerator chip "
 		"has been successfully unregistered.\n");
 }
 

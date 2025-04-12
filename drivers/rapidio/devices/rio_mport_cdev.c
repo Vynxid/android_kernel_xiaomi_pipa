@@ -1654,7 +1654,7 @@ static void rio_release_dev(struct device *dev)
 	struct rio_dev *rdev;
 
 	rdev = to_rio_dev(dev);
-	pr_info(DRV_PREFIX "%s: %s\n", __func__, rio_name(rdev));
+	pr_debug(DRV_PREFIX "%s: %s\n", __func__, rio_name(rdev));
 	kfree(rdev);
 }
 
@@ -1681,7 +1681,7 @@ static int rio_mport_add_riodev(struct mport_cdev_priv *priv,
 				   void __user *arg)
 {
 	struct mport_dev *md = priv->md;
-	struct rio_rdev_info dev_info;
+	struct rio_rdev_info dev_dbg;
 	struct rio_dev *rdev;
 	struct rio_switch *rswitch = NULL;
 	struct rio_mport *mport;
@@ -1693,24 +1693,24 @@ static int rio_mport_add_riodev(struct mport_cdev_priv *priv,
 	u8 hopcount;
 	int err;
 
-	if (copy_from_user(&dev_info, arg, sizeof(dev_info)))
+	if (copy_from_user(&dev_dbg, arg, sizeof(dev_dbg)))
 		return -EFAULT;
-	dev_info.name[sizeof(dev_info.name) - 1] = '\0';
+	dev_dbg.name[sizeof(dev_dbg.name) - 1] = '\0';
 
-	rmcd_debug(RDEV, "name:%s ct:0x%x did:0x%x hc:0x%x", dev_info.name,
-		   dev_info.comptag, dev_info.destid, dev_info.hopcount);
+	rmcd_debug(RDEV, "name:%s ct:0x%x did:0x%x hc:0x%x", dev_dbg.name,
+		   dev_dbg.comptag, dev_dbg.destid, dev_dbg.hopcount);
 
-	dev = bus_find_device_by_name(&rio_bus_type, NULL, dev_info.name);
+	dev = bus_find_device_by_name(&rio_bus_type, NULL, dev_dbg.name);
 	if (dev) {
-		rmcd_debug(RDEV, "device %s already exists", dev_info.name);
+		rmcd_debug(RDEV, "device %s already exists", dev_dbg.name);
 		put_device(dev);
 		return -EEXIST;
 	}
 
 	size = sizeof(*rdev);
 	mport = md->mport;
-	destid = dev_info.destid;
-	hopcount = dev_info.hopcount;
+	destid = dev_dbg.destid;
+	hopcount = dev_dbg.hopcount;
 
 	if (rio_mport_read_config_32(mport, destid, hopcount,
 				     RIO_PEF_CAR, &rval))
@@ -1782,7 +1782,7 @@ static int rio_mport_add_riodev(struct mport_cdev_priv *priv,
 	rio_mport_read_config_32(mport, destid, hopcount, RIO_DST_OPS_CAR,
 				 &rdev->dst_ops);
 
-	rdev->comp_tag = dev_info.comptag;
+	rdev->comp_tag = dev_dbg.comptag;
 	rdev->destid = destid;
 	/* hopcount is stored as specified by a caller, regardles of EP or SW */
 	rdev->hopcount = hopcount;
@@ -1792,8 +1792,8 @@ static int rio_mport_add_riodev(struct mport_cdev_priv *priv,
 		rswitch->route_table = NULL;
 	}
 
-	if (strlen(dev_info.name))
-		dev_set_name(&rdev->dev, "%s", dev_info.name);
+	if (strlen(dev_dbg.name))
+		dev_set_name(&rdev->dev, "%s", dev_dbg.name);
 	else if (rdev->pef & RIO_PEF_SWITCH)
 		dev_set_name(&rdev->dev, "%02x:s:%04x", mport->id,
 			     rdev->comp_tag & RIO_CTAG_UDEVID);
@@ -1825,30 +1825,30 @@ cleanup:
 
 static int rio_mport_del_riodev(struct mport_cdev_priv *priv, void __user *arg)
 {
-	struct rio_rdev_info dev_info;
+	struct rio_rdev_info dev_dbg;
 	struct rio_dev *rdev = NULL;
 	struct device  *dev;
 	struct rio_mport *mport;
 	struct rio_net *net;
 
-	if (copy_from_user(&dev_info, arg, sizeof(dev_info)))
+	if (copy_from_user(&dev_dbg, arg, sizeof(dev_dbg)))
 		return -EFAULT;
-	dev_info.name[sizeof(dev_info.name) - 1] = '\0';
+	dev_dbg.name[sizeof(dev_dbg.name) - 1] = '\0';
 
 	mport = priv->md->mport;
 
 	/* If device name is specified, removal by name has priority */
-	if (strlen(dev_info.name)) {
+	if (strlen(dev_dbg.name)) {
 		dev = bus_find_device_by_name(&rio_bus_type, NULL,
-					      dev_info.name);
+					      dev_dbg.name);
 		if (dev)
 			rdev = to_rio_dev(dev);
 	} else {
 		do {
-			rdev = rio_get_comptag(dev_info.comptag, rdev);
+			rdev = rio_get_comptag(dev_dbg.comptag, rdev);
 			if (rdev && rdev->dev.parent == &mport->net->dev &&
-			    rdev->destid == dev_info.destid &&
-			    rdev->hopcount == dev_info.hopcount)
+			    rdev->destid == dev_dbg.destid &&
+			    rdev->hopcount == dev_dbg.hopcount)
 				break;
 		} while (rdev);
 	}
@@ -1856,8 +1856,8 @@ static int rio_mport_del_riodev(struct mport_cdev_priv *priv, void __user *arg)
 	if (!rdev) {
 		rmcd_debug(RDEV,
 			"device name:%s ct:0x%x did:0x%x hc:0x%x not found",
-			dev_info.name, dev_info.comptag, dev_info.destid,
-			dev_info.hopcount);
+			dev_dbg.name, dev_dbg.comptag, dev_dbg.destid,
+			dev_dbg.hopcount);
 		return -ENODEV;
 	}
 
@@ -2431,14 +2431,14 @@ static struct mport_dev *mport_cdev_add(struct rio_mport *mport)
 		md->properties.cap_transfer_mode = 0;
 		md->properties.cap_addr_size = 0;
 	} else
-		pr_info(DRV_PREFIX "Failed to obtain info for %s cdev(%d:%d)\n",
+		pr_debug(DRV_PREFIX "Failed to obtain info for %s cdev(%d:%d)\n",
 			mport->name, MAJOR(dev_number), mport->id);
 
 	mutex_lock(&mport_devs_lock);
 	list_add_tail(&md->node, &mport_devs);
 	mutex_unlock(&mport_devs_lock);
 
-	pr_info(DRV_PREFIX "Added %s cdev(%d:%d)\n",
+	pr_debug(DRV_PREFIX "Added %s cdev(%d:%d)\n",
 		mport->name, MAJOR(dev_number), mport->id);
 
 	return md;

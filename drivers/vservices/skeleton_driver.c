@@ -26,25 +26,25 @@ struct skeleton_info {
 static void vs_skeleton_handle_start(struct vs_service_device *service)
 {
 	/* NOTE: Do not change this message - is it used for system testing */
-	dev_info(&service->dev, "skeleton handle_start\n");
+	dev_dbg(&service->dev, "skeleton handle_start\n");
 }
 
 static int vs_skeleton_handle_message(struct vs_service_device *service,
 					  struct vs_mbuf *mbuf)
 {
-	dev_info(&service->dev, "skeleton handle_messasge\n");
+	dev_dbg(&service->dev, "skeleton handle_messasge\n");
 	return -EBADMSG;
 }
 
 static void vs_skeleton_handle_notify(struct vs_service_device *service,
 					  u32 flags)
 {
-	dev_info(&service->dev, "skeleton handle_notify\n");
+	dev_dbg(&service->dev, "skeleton handle_notify\n");
 }
 
 static void vs_skeleton_handle_reset(struct vs_service_device *service)
 {
-	dev_info(&service->dev, "skeleton handle_reset %s service %d\n",
+	dev_dbg(&service->dev, "skeleton handle_reset %s service %d\n",
 			service->is_server ? "server" : "client", service->id);
 }
 
@@ -68,7 +68,7 @@ static int vs_skeleton_remove(struct vs_service_device *service)
 {
 	struct skeleton_info *info = dev_get_drvdata(&service->dev);
 
-	dev_info(&service->dev, "skeleton remove\n");
+	dev_dbg(&service->dev, "skeleton remove\n");
 	kfree(info);
 	return 0;
 }

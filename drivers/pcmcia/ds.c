@@ -284,7 +284,7 @@ static int pcmcia_device_probe(struct device *dev)
 		dev_dbg(dev, "base %x, regs %x", p_dev->config_base,
 			p_dev->config_regs);
 	} else {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "pcmcia: could not parse base and rmask0 of CIS\n");
 		p_dev->config_base = 0;
 		p_dev->config_regs = 0;
@@ -382,13 +382,13 @@ static int pcmcia_device_remove(struct device *dev)
 
 	/* check for proper unloading */
 	if (p_dev->_irq || p_dev->_io || p_dev->_locked)
-		dev_info(dev,
+		dev_dbg(dev,
 			 "pcmcia: driver %s did not release config properly\n",
 			 p_drv->name);
 
 	for (i = 0; i < MAX_WIN; i++)
 		if (p_dev->_win & CLIENT_WIN_REQ(i))
-			dev_info(dev,
+			dev_dbg(dev,
 				 "pcmcia: driver %s did not release window properly\n",
 				 p_drv->name);
 
@@ -573,7 +573,7 @@ static struct pcmcia_device *pcmcia_device_add(struct pcmcia_socket *s,
 
 	mutex_unlock(&s->ops_mutex);
 
-	dev_notice(&p_dev->dev, "pcmcia: registering new device %s (IRQ: %d)\n",
+	dev_dbg(&p_dev->dev, "pcmcia: registering new device %s (IRQ: %d)\n",
 		   p_dev->devname, p_dev->irq);
 
 	pcmcia_device_query(p_dev);
@@ -643,7 +643,7 @@ static int pcmcia_card_add(struct pcmcia_socket *s)
 		   Note: some cards have just a device entry, it may be
 		   worth extending support to cover these in future */
 		if (ret == -EIO) {
-			dev_info(&s->dev, "no CIS, assuming an anonymous memory card.\n");
+			dev_dbg(&s->dev, "no CIS, assuming an anonymous memory card.\n");
 			pcmcia_replace_cis(s, "\xFF", 1);
 			no_chains = 1;
 			ret = 0;

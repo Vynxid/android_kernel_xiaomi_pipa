@@ -511,7 +511,7 @@ static int wl1273_fm_upload_firmware_patch(struct wl1273_device *radio)
 	 * so we only print an info message.
 	 */
 	if (request_firmware(&fw_p, fw_name, dev)) {
-		dev_info(dev, "%s - %s not found\n", __func__, fw_name);
+		dev_dbg(dev, "%s - %s not found\n", __func__, fw_name);
 
 		return 0;
 	}
@@ -1216,7 +1216,7 @@ static ssize_t wl1273_fm_fops_read(struct file *file, char __user *buf,
 		dev_err(radio->dev, "%s: Get RDS_SYNC fails.\n", __func__);
 		goto out;
 	} else if (val == 0) {
-		dev_info(radio->dev, "RDS_SYNC: Not synchronized\n");
+		dev_dbg(radio->dev, "RDS_SYNC: Not synchronized\n");
 		r = -ENODATA;
 		goto out;
 	}
@@ -1820,15 +1820,15 @@ static int wl1273_fm_vidioc_log_status(struct file *file, void *priv)
 	u16 val;
 	int r;
 
-	dev_info(dev, DRIVER_DESC);
+	dev_dbg(dev, DRIVER_DESC);
 
 	if (core->mode == WL1273_MODE_OFF) {
-		dev_info(dev, "Mode: Off\n");
+		dev_dbg(dev, "Mode: Off\n");
 		return 0;
 	}
 
 	if (core->mode == WL1273_MODE_SUSPENDED) {
-		dev_info(dev, "Mode: Suspended\n");
+		dev_dbg(dev, "Mode: Suspended\n");
 		return 0;
 	}
 
@@ -1836,38 +1836,38 @@ static int wl1273_fm_vidioc_log_status(struct file *file, void *priv)
 	if (r)
 		dev_err(dev, "%s: Get ASIC_ID fails.\n", __func__);
 	else
-		dev_info(dev, "ASIC_ID: 0x%04x\n", val);
+		dev_dbg(dev, "ASIC_ID: 0x%04x\n", val);
 
 	r = core->read(core, WL1273_ASIC_VER_GET, &val);
 	if (r)
 		dev_err(dev, "%s: Get ASIC_VER fails.\n", __func__);
 	else
-		dev_info(dev, "ASIC Version: 0x%04x\n", val);
+		dev_dbg(dev, "ASIC Version: 0x%04x\n", val);
 
 	r = core->read(core, WL1273_FIRM_VER_GET, &val);
 	if (r)
 		dev_err(dev, "%s: Get FIRM_VER fails.\n", __func__);
 	else
-		dev_info(dev, "FW version: %d(0x%04x)\n", val, val);
+		dev_dbg(dev, "FW version: %d(0x%04x)\n", val, val);
 
 	r = core->read(core, WL1273_BAND_SET, &val);
 	if (r)
 		dev_err(dev, "%s: Get BAND fails.\n", __func__);
 	else
-		dev_info(dev, "BAND: %d\n", val);
+		dev_dbg(dev, "BAND: %d\n", val);
 
 	if (core->mode == WL1273_MODE_TX) {
 		r = core->read(core, WL1273_PUPD_SET, &val);
 		if (r)
 			dev_err(dev, "%s: Get PUPD fails.\n", __func__);
 		else
-			dev_info(dev, "PUPD: 0x%04x\n", val);
+			dev_dbg(dev, "PUPD: 0x%04x\n", val);
 
 		r = core->read(core, WL1273_CHANL_SET, &val);
 		if (r)
 			dev_err(dev, "%s: Get CHANL fails.\n", __func__);
 		else
-			dev_info(dev, "Tx frequency: %dkHz\n", val*10);
+			dev_dbg(dev, "Tx frequency: %dkHz\n", val*10);
 	} else if (core->mode == WL1273_MODE_RX) {
 		int bf = radio->rangelow;
 
@@ -1875,82 +1875,82 @@ static int wl1273_fm_vidioc_log_status(struct file *file, void *priv)
 		if (r)
 			dev_err(dev, "%s: Get FREQ fails.\n", __func__);
 		else
-			dev_info(dev, "RX Frequency: %dkHz\n", bf + val*50);
+			dev_dbg(dev, "RX Frequency: %dkHz\n", bf + val*50);
 
 		r = core->read(core, WL1273_MOST_MODE_SET, &val);
 		if (r)
 			dev_err(dev, "%s: Get MOST_MODE fails.\n",
 				__func__);
 		else if (val == 0)
-			dev_info(dev, "MOST_MODE: Stereo according to blend\n");
+			dev_dbg(dev, "MOST_MODE: Stereo according to blend\n");
 		else if (val == 1)
-			dev_info(dev, "MOST_MODE: Force mono output\n");
+			dev_dbg(dev, "MOST_MODE: Force mono output\n");
 		else
-			dev_info(dev, "MOST_MODE: Unexpected value: %d\n", val);
+			dev_dbg(dev, "MOST_MODE: Unexpected value: %d\n", val);
 
 		r = core->read(core, WL1273_MOST_BLEND_SET, &val);
 		if (r)
 			dev_err(dev, "%s: Get MOST_BLEND fails.\n", __func__);
 		else if (val == 0)
-			dev_info(dev,
+			dev_dbg(dev,
 				 "MOST_BLEND: Switched blend & hysteresis.\n");
 		else if (val == 1)
-			dev_info(dev, "MOST_BLEND: Soft blend.\n");
+			dev_dbg(dev, "MOST_BLEND: Soft blend.\n");
 		else
-			dev_info(dev, "MOST_BLEND: Unexpected val: %d\n", val);
+			dev_dbg(dev, "MOST_BLEND: Unexpected val: %d\n", val);
 
 		r = core->read(core, WL1273_STEREO_GET, &val);
 		if (r)
 			dev_err(dev, "%s: Get STEREO fails.\n", __func__);
 		else if (val == 0)
-			dev_info(dev, "STEREO: Not detected\n");
+			dev_dbg(dev, "STEREO: Not detected\n");
 		else if (val == 1)
-			dev_info(dev, "STEREO: Detected\n");
+			dev_dbg(dev, "STEREO: Detected\n");
 		else
-			dev_info(dev, "STEREO: Unexpected value: %d\n", val);
+			dev_dbg(dev, "STEREO: Unexpected value: %d\n", val);
 
 		r = core->read(core, WL1273_RSSI_LVL_GET, &val);
 		if (r)
 			dev_err(dev, "%s: Get RSSI_LVL fails.\n", __func__);
 		else
-			dev_info(dev, "RX signal strength: %d\n", (s16) val);
+			dev_dbg(dev, "RX signal strength: %d\n", (s16) val);
 
 		r = core->read(core, WL1273_POWER_SET, &val);
 		if (r)
 			dev_err(dev, "%s: Get POWER fails.\n", __func__);
 		else
-			dev_info(dev, "POWER: 0x%04x\n", val);
+			dev_dbg(dev, "POWER: 0x%04x\n", val);
 
 		r = core->read(core, WL1273_INT_MASK_SET, &val);
 		if (r)
 			dev_err(dev, "%s: Get INT_MASK fails.\n", __func__);
 		else
-			dev_info(dev, "INT_MASK: 0x%04x\n", val);
+			dev_dbg(dev, "INT_MASK: 0x%04x\n", val);
 
 		r = core->read(core, WL1273_RDS_SYNC_GET, &val);
 		if (r)
 			dev_err(dev, "%s: Get RDS_SYNC fails.\n",
 				__func__);
 		else if (val == 0)
-			dev_info(dev, "RDS_SYNC: Not synchronized\n");
+			dev_dbg(dev, "RDS_SYNC: Not synchronized\n");
 
 		else if (val == 1)
-			dev_info(dev, "RDS_SYNC: Synchronized\n");
+			dev_dbg(dev, "RDS_SYNC: Synchronized\n");
 		else
-			dev_info(dev, "RDS_SYNC: Unexpected value: %d\n", val);
+			dev_dbg(dev, "RDS_SYNC: Unexpected value: %d\n", val);
 
 		r = core->read(core, WL1273_I2S_MODE_CONFIG_SET, &val);
 		if (r)
 			dev_err(dev, "%s: Get I2S_MODE_CONFIG fails.\n",
 				__func__);
 		else
-			dev_info(dev, "I2S_MODE_CONFIG: 0x%04x\n", val);
+			dev_dbg(dev, "I2S_MODE_CONFIG: 0x%04x\n", val);
 
 		r = core->read(core, WL1273_VOLUME_SET, &val);
 		if (r)
 			dev_err(dev, "%s: Get VOLUME fails.\n", __func__);
 		else
-			dev_info(dev, "VOLUME: 0x%04x\n", val);
+			dev_dbg(dev, "VOLUME: 0x%04x\n", val);
 	}
 
 	return 0;
@@ -1994,7 +1994,7 @@ static int wl1273_fm_radio_remove(struct platform_device *pdev)
 	struct wl1273_device *radio = platform_get_drvdata(pdev);
 	struct wl1273_core *core = radio->core;
 
-	dev_info(&pdev->dev, "%s.\n", __func__);
+	dev_dbg(&pdev->dev, "%s.\n", __func__);
 
 	free_irq(core->client->irq, radio);
 	core->pdata->free_resources();

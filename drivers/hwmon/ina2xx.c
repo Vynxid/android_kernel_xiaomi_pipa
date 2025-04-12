@@ -499,7 +499,7 @@ static int ina2xx_probe(struct i2c_client *client,
 	if (IS_ERR(hwmon_dev))
 		return PTR_ERR(hwmon_dev);
 
-	dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
+	dev_dbg(dev, "power monitor %s (Rshunt = %li uOhm)\n",
 		 client->name, data->rshunt);
 
 	return 0;

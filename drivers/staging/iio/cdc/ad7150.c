@@ -642,7 +642,7 @@ static int ad7150_probe(struct i2c_client *client,
 	if (ret)
 		return ret;
 
-	dev_info(&client->dev, "%s capacitive sensor registered,irq: %d\n",
+	dev_dbg(&client->dev, "%s capacitive sensor registered,irq: %d\n",
 		 id->name, client->irq);
 
 	return 0;

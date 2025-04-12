@@ -76,7 +76,7 @@ static __u8 *gembird_report_fixup(struct hid_device *hdev, __u8 *rdesc,
 		if (new_rdesc == NULL)
 			return rdesc;
 
-		dev_info(&hdev->dev,
+		dev_dbg(&hdev->dev,
 			 "fixing Gembird JPD-DualForce 2 report descriptor.\n");
 
 		/* start by copying the end of the rdesc */

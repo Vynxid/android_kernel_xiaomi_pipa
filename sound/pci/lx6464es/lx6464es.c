@@ -701,7 +701,7 @@ static int lx_init_get_version_features(struct lx6464es *chip)
 	if (err == 0) {
 		u32 freq;
 
-		dev_info(chip->card->dev, "DSP version: V%02d.%02d #%d\n",
+		dev_dbg(chip->card->dev, "DSP version: V%02d.%02d #%d\n",
 			   (dsp_version>>16) & 0xff, (dsp_version>>8) & 0xff,
 			   dsp_version & 0xff);
 
@@ -796,7 +796,7 @@ static int lx_init_dsp(struct lx6464es *chip)
 
 mac_ready:
 	dev_dbg(chip->card->dev, "mac address ready read after: %dms\n", i);
-	dev_info(chip->card->dev,
+	dev_dbg(chip->card->dev,
 		 "mac address: %02X.%02X.%02X.%02X.%02X.%02X\n",
 		   chip->mac_address[0], chip->mac_address[1], chip->mac_address[2],
 		   chip->mac_address[3], chip->mac_address[4], chip->mac_address[5]);

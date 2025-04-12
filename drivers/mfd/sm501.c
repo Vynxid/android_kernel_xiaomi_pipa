@@ -193,29 +193,29 @@ static void sm501_dump_regs(struct sm501_devdata *sm)
 {
 	void __iomem *regs = sm->regs;
 
-	dev_info(sm->dev, "System Control   %08x\n",
+	dev_dbg(sm->dev, "System Control   %08x\n",
 			smc501_readl(regs + SM501_SYSTEM_CONTROL));
-	dev_info(sm->dev, "Misc Control     %08x\n",
+	dev_dbg(sm->dev, "Misc Control     %08x\n",
 			smc501_readl(regs + SM501_MISC_CONTROL));
-	dev_info(sm->dev, "GPIO Control Low %08x\n",
+	dev_dbg(sm->dev, "GPIO Control Low %08x\n",
 			smc501_readl(regs + SM501_GPIO31_0_CONTROL));
-	dev_info(sm->dev, "GPIO Control Hi  %08x\n",
+	dev_dbg(sm->dev, "GPIO Control Hi  %08x\n",
 			smc501_readl(regs + SM501_GPIO63_32_CONTROL));
-	dev_info(sm->dev, "DRAM Control     %08x\n",
+	dev_dbg(sm->dev, "DRAM Control     %08x\n",
 			smc501_readl(regs + SM501_DRAM_CONTROL));
-	dev_info(sm->dev, "Arbitration Ctrl %08x\n",
+	dev_dbg(sm->dev, "Arbitration Ctrl %08x\n",
 			smc501_readl(regs + SM501_ARBTRTN_CONTROL));
-	dev_info(sm->dev, "Misc Timing      %08x\n",
+	dev_dbg(sm->dev, "Misc Timing      %08x\n",
 			smc501_readl(regs + SM501_MISC_TIMING));
 }
 
 static void sm501_dump_gate(struct sm501_devdata *sm)
 {
-	dev_info(sm->dev, "CurrentGate      %08x\n",
+	dev_dbg(sm->dev, "CurrentGate      %08x\n",
 			smc501_readl(sm->regs + SM501_CURRENT_GATE));
-	dev_info(sm->dev, "CurrentClock     %08x\n",
+	dev_dbg(sm->dev, "CurrentClock     %08x\n",
 			smc501_readl(sm->regs + SM501_CURRENT_CLOCK));
-	dev_info(sm->dev, "PowerModeControl %08x\n",
+	dev_dbg(sm->dev, "PowerModeControl %08x\n",
 			smc501_readl(sm->regs + SM501_POWER_MODE_CONTROL));
 }
 
@@ -906,7 +906,7 @@ static void sm501_gpio_ensure_gpio(struct sm501_gpio_chip *smchip,
 	/* check and modify if this pin is not set as gpio. */
 
 	if (smc501_readl(smchip->control) & bit) {
-		dev_info(sm501_gpio_to_dev(smchip->ourgpio)->dev,
+		dev_dbg(sm501_gpio_to_dev(smchip->ourgpio)->dev,
 			 "changing mode of gpio, bit %08lx\n", bit);
 
 		ctrl = smc501_readl(smchip->control);
@@ -1179,7 +1179,7 @@ static int sm501_register_gpio_i2c_instance(struct sm501_devdata *sm,
 
 	pdev->id = iic->bus_num;
 
-	dev_info(sm->dev, "registering i2c-%d: sda=%d, scl=%d\n",
+	dev_dbg(sm->dev, "registering i2c-%d: sda=%d, scl=%d\n",
 		 iic->bus_num,
 		 iic->pin_sda, iic->pin_scl);
 
@@ -1264,12 +1264,12 @@ static void sm501_init_regs(struct sm501_devdata *sm,
 	sm501_init_reg(sm, SM501_GPIO63_32_CONTROL, &init->gpio_high);
 
 	if (init->m1xclk) {
-		dev_info(sm->dev, "setting M1XCLK to %ld\n", init->m1xclk);
+		dev_dbg(sm->dev, "setting M1XCLK to %ld\n", init->m1xclk);
 		sm501_set_clock(sm->dev, SM501_CLOCK_M1XCLK, init->m1xclk);
 	}
 
 	if (init->mclk) {
-		dev_info(sm->dev, "setting MCLK to %ld\n", init->mclk);
+		dev_dbg(sm->dev, "setting MCLK to %ld\n", init->mclk);
 		sm501_set_clock(sm->dev, SM501_CLOCK_MCLK, init->mclk);
 	}
 
@@ -1333,7 +1333,7 @@ static int sm501_init_dev(struct sm501_devdata *sm)
 	dramctrl = smc501_readl(sm->regs + SM501_DRAM_CONTROL);
 	mem_avail = sm501_mem_local[(dramctrl >> 13) & 0x7];
 
-	dev_info(sm->dev, "SM501 At %p: Version %08lx, %ld Mb, IRQ %d\n",
+	dev_dbg(sm->dev, "SM501 At %p: Version %08lx, %ld Mb, IRQ %d\n",
 		 sm->regs, devid, (unsigned long)mem_avail >> 20, sm->irq);
 
 	sm->rev = devid & SM501_DEVICEID_REVMASK;
@@ -1503,7 +1503,7 @@ static int sm501_plat_resume(struct platform_device *pdev)
 	/* check to see if we are in the same state as when suspended */
 
 	if (smc501_readl(sm->regs + SM501_MISC_CONTROL) != sm->pm_misc) {
-		dev_info(sm->dev, "SM501_MISC_CONTROL changed over sleep\n");
+		dev_dbg(sm->dev, "SM501_MISC_CONTROL changed over sleep\n");
 		smc501_writel(sm->pm_misc, sm->regs + SM501_MISC_CONTROL);
 
 		/* our suspend causes the controller state to change,

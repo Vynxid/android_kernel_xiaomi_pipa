@@ -669,13 +669,13 @@ static int i40evf_set_channels(struct net_device *netdev,
 	if (num_req != adapter->num_active_queues &&
 	    !(adapter->vf_res->vf_cap_flags &
 	      VIRTCHNL_VF_OFFLOAD_REQ_QUEUES)) {
-		dev_info(&adapter->pdev->dev, "PF is not capable of queue negotiation.\n");
+		dev_dbg(&adapter->pdev->dev, "PF is not capable of queue negotiation.\n");
 		return -EINVAL;
 	}
 
 	if ((adapter->vf_res->vf_cap_flags & VIRTCHNL_VF_OFFLOAD_ADQ) &&
 	    adapter->num_tc) {
-		dev_info(&adapter->pdev->dev, "Cannot set channels since ADq is enabled.\n");
+		dev_dbg(&adapter->pdev->dev, "Cannot set channels since ADq is enabled.\n");
 		return -EINVAL;
 	}
 

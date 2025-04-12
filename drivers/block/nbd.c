@@ -258,7 +258,7 @@ static void nbd_mark_nsock_dead(struct nbd_device *nbd, struct nbd_sock *nsock,
 					       &nbd->config->runtime_flags)) {
 				set_bit(NBD_DISCONNECTED,
 					&nbd->config->runtime_flags);
-				dev_info(nbd_to_dev(nbd),
+				dev_dbg(nbd_to_dev(nbd),
 					"Disconnected due to user request.\n");
 			}
 		}
@@ -1135,7 +1135,7 @@ static int nbd_disconnect(struct nbd_device *nbd)
 {
 	struct nbd_config *config = nbd->config;
 
-	dev_info(disk_to_dev(nbd->disk), "NBD_DISCONNECT\n");
+	dev_dbg(disk_to_dev(nbd->disk), "NBD_DISCONNECT\n");
 	set_bit(NBD_DISCONNECT_REQUESTED, &config->runtime_flags);
 	send_disconnects(nbd);
 	return 0;
@@ -2088,7 +2088,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
 					ret = 0;
 				goto out;
 			}
-			dev_info(nbd_to_dev(nbd), "reconnected socket\n");
+			dev_dbg(nbd_to_dev(nbd), "reconnected socket\n");
 		}
 	}
 out:

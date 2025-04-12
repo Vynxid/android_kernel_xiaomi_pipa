@@ -231,7 +231,7 @@ static int _omap_device_notifier_call(struct notifier_block *nb,
 	case BUS_NOTIFY_UNBOUND_DRIVER:
 		od = to_omap_device(pdev);
 		if (od && (od->_state == OMAP_DEVICE_STATE_ENABLED)) {
-			dev_info(dev, "enabled after unload, idling\n");
+			dev_dbg(dev, "enabled after unload, idling\n");
 			err = omap_device_idle(pdev);
 			if (err)
 				dev_err(dev, "failed to idle\n");

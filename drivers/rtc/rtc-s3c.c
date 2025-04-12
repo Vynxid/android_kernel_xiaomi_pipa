@@ -409,14 +409,14 @@ static void s3c24xx_rtc_enable(struct s3c_rtc *info)
 	con = readw(info->base + S3C2410_RTCCON);
 	/* re-enable the device, and check it is ok */
 	if ((con & S3C2410_RTCCON_RTCEN) == 0) {
-		dev_info(info->dev, "rtc disabled, re-enabling\n");
+		dev_dbg(info->dev, "rtc disabled, re-enabling\n");
 
 		tmp = readw(info->base + S3C2410_RTCCON);
 		writew(tmp | S3C2410_RTCCON_RTCEN, info->base + S3C2410_RTCCON);
 	}
 
 	if (con & S3C2410_RTCCON_CNTSEL) {
-		dev_info(info->dev, "removing RTCCON_CNTSEL\n");
+		dev_dbg(info->dev, "removing RTCCON_CNTSEL\n");
 
 		tmp = readw(info->base + S3C2410_RTCCON);
 		writew(tmp & ~S3C2410_RTCCON_CNTSEL,
@@ -424,7 +424,7 @@ static void s3c24xx_rtc_enable(struct s3c_rtc *info)
 	}
 
 	if (con & S3C2410_RTCCON_CLKRST) {
-		dev_info(info->dev, "removing RTCCON_CLKRST\n");
+		dev_dbg(info->dev, "removing RTCCON_CLKRST\n");
 
 		tmp = readw(info->base + S3C2410_RTCCON);
 		writew(tmp & ~S3C2410_RTCCON_CLKRST,

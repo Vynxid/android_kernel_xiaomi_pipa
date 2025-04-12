@@ -498,7 +498,7 @@ static int si2168_init(struct dvb_frontend *fe)
 		}
 
 		if (ret == 0) {
-			dev_notice(&client->dev,
+			dev_dbg(&client->dev,
 					"please install firmware file '%s'\n",
 					SI2168_B40_FIRMWARE);
 		} else {
@@ -509,7 +509,7 @@ static int si2168_init(struct dvb_frontend *fe)
 		}
 	}
 
-	dev_info(&client->dev, "downloading firmware from file '%s'\n",
+	dev_dbg(&client->dev, "downloading firmware from file '%s'\n",
 			dev->firmware_name);
 
 	if ((fw->size % 17 == 0) && (fw->data[0] > 5)) {
@@ -567,7 +567,7 @@ static int si2168_init(struct dvb_frontend *fe)
 
 	dev->version = (cmd.args[9] + '@') << 24 | (cmd.args[6] - '0') << 16 |
 		       (cmd.args[7] - '0') << 8 | (cmd.args[8]) << 0;
-	dev_info(&client->dev, "firmware version: %c %d.%d.%d\n",
+	dev_dbg(&client->dev, "firmware version: %c %d.%d.%d\n",
 		 dev->version >> 24 & 0xff, dev->version >> 16 & 0xff,
 		 dev->version >> 8 & 0xff, dev->version >> 0 & 0xff);
 
@@ -808,10 +808,10 @@ static int si2168_probe(struct i2c_client *client,
 	dev->ts_clock_gapped = config->ts_clock_gapped;
 	dev->spectral_inversion = config->spectral_inversion;
 
-	dev_info(&client->dev, "Silicon Labs Si2168-%c%d%d successfully identified\n",
+	dev_dbg(&client->dev, "Silicon Labs Si2168-%c%d%d successfully identified\n",
 		 dev->version >> 24 & 0xff, dev->version >> 16 & 0xff,
 		 dev->version >> 8 & 0xff);
-	dev_info(&client->dev, "firmware version: %c %d.%d.%d\n",
+	dev_dbg(&client->dev, "firmware version: %c %d.%d.%d\n",
 		 dev->version >> 24 & 0xff, dev->version >> 16 & 0xff,
 		 dev->version >> 8 & 0xff, dev->version >> 0 & 0xff);
 

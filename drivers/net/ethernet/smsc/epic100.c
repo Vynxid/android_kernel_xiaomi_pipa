@@ -438,7 +438,7 @@ static int epic_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 			int mii_status = mdio_read(dev, phy, MII_BMSR);
 			if (mii_status != 0xffff  &&  mii_status != 0x0000) {
 				ep->phys[phy_idx++] = phy;
-				dev_info(&pdev->dev,
+				dev_dbg(&pdev->dev,
 					"MII transceiver #%d control "
 					"%4.4x status %4.4x.\n",
 					phy, mdio_read(dev, phy, 0), mii_status);
@@ -448,7 +448,7 @@ static int epic_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 		if (phy_idx != 0) {
 			phy = ep->phys[0];
 			ep->mii.advertising = mdio_read(dev, phy, MII_ADVERTISE);
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				"Autonegotiation advertising %4.4x link "
 				   "partner %4.4x.\n",
 				   ep->mii.advertising, mdio_read(dev, phy, 5));
@@ -469,7 +469,7 @@ static int epic_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	/* The lower four bits are the media type. */
 	if (duplex) {
 		ep->mii.force_media = ep->mii.full_duplex = 1;
-		dev_info(&pdev->dev, "Forced full duplex requested.\n");
+		dev_dbg(&pdev->dev, "Forced full duplex requested.\n");
 	}
 	dev->if_port = ep->default_port = option;
 
@@ -1558,7 +1558,7 @@ static int __init epic_init (void)
 {
 /* when a module, this is printed whether or not devices are found in probe */
 #ifdef MODULE
-	pr_info("%s%s\n", version, version2);
+	pr_debug("%s%s\n", version, version2);
 #endif
 
 	return pci_register_driver(&epic_driver);

@@ -356,11 +356,11 @@ static int jz_nand_detect_bank(struct platform_device *pdev,
 		mtd->size += chip->chipsize;
 	}
 
-	dev_info(&pdev->dev, "Found chip %zu on bank %i\n", chipnr, bank);
+	dev_dbg(&pdev->dev, "Found chip %zu on bank %i\n", chipnr, bank);
 	return 0;
 
 notfound_id:
-	dev_info(&pdev->dev, "No chip found on bank %i\n", bank);
+	dev_dbg(&pdev->dev, "No chip found on bank %i\n", bank);
 	ctrl &= ~(JZ_NAND_CTRL_ENABLE_CHIP(bank - 1));
 	writel(ctrl, nand->base + JZ_REG_NAND_CTRL);
 	jz_nand_iounmap_resource(nand->bank_mem[bank - 1],
@@ -483,7 +483,7 @@ static int jz_nand_probe(struct platform_device *pdev)
 		goto err_cleanup_nand;
 	}
 
-	dev_info(&pdev->dev, "Successfully registered JZ4740 NAND driver\n");
+	dev_dbg(&pdev->dev, "Successfully registered JZ4740 NAND driver\n");
 
 	return 0;
 

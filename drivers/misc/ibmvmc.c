@@ -361,7 +361,7 @@ static struct ibmvmc_buffer *ibmvmc_get_free_hmc_buffer(struct crq_server_adapte
 	unsigned long i;
 
 	if (hmc_index > ibmvmc.max_hmc_index) {
-		dev_info(adapter->dev, "get_free_hmc_buffer: invalid hmc_index=0x%x\n",
+		dev_dbg(adapter->dev, "get_free_hmc_buffer: invalid hmc_index=0x%x\n",
 			 hmc_index);
 		return NULL;
 	}
@@ -614,7 +614,7 @@ static int ibmvmc_send_close(struct ibmvmc_hmc *hmc)
 
 	adapter = hmc->adapter;
 
-	dev_info(adapter->dev, "CRQ send: close\n");
+	dev_dbg(adapter->dev, "CRQ send: close\n");
 
 	crq_msg.valid = 0x80;
 	crq_msg.type = VMC_MSG_CLOSE;
@@ -1250,7 +1250,7 @@ static long ibmvmc_ioctl_sethmcid(struct ibmvmc_file_session *session,
 	/* Make sure buffer is NULL terminated before trying to print it */
 	memset(print_buffer, 0, HMC_ID_LEN + 1);
 	strncpy(print_buffer, hmc->hmc_id, HMC_ID_LEN);
-	pr_info("ibmvmc: sethmcid: Set HMC ID: \"%s\"\n", print_buffer);
+	pr_debug("ibmvmc: sethmcid: Set HMC ID: \"%s\"\n", print_buffer);
 
 	memcpy(buffer->real_addr_local, hmc->hmc_id, HMC_ID_LEN);
 	/* RDMA over ID, send open msg, change state to ibmhmc_state_opening */
@@ -1566,7 +1566,7 @@ static int ibmvmc_rem_buffer(struct crq_server_adapter *adapter,
 	spin_lock_irqsave(&hmcs[hmc_index].lock, flags);
 	buffer = ibmvmc_get_free_hmc_buffer(adapter, hmc_index);
 	if (!buffer) {
-		dev_info(adapter->dev, "rem_buffer: no buffer to remove\n");
+		dev_dbg(adapter->dev, "rem_buffer: no buffer to remove\n");
 		spin_unlock_irqrestore(&hmcs[hmc_index].lock, flags);
 		ibmvmc_send_rem_buffer_resp(adapter, VMC_MSG_NO_BUFFER,
 					    hmc_session, hmc_index,
@@ -1717,7 +1717,7 @@ static void ibmvmc_process_capabilities(struct crq_server_adapter *adapter,
 	ibmvmc.max_hmc_index = min_t(u8, ibmvmc_max_hmcs, crq->max_hmc) - 1;
 	ibmvmc.state = ibmvmc_state_ready;
 
-	dev_info(adapter->dev, "Capabilities: mtu=0x%x, pool_size=0x%x, max_hmc=0x%x\n",
+	dev_dbg(adapter->dev, "Capabilities: mtu=0x%x, pool_size=0x%x, max_hmc=0x%x\n",
 		 ibmvmc.max_mtu, ibmvmc.max_buffer_pool_size,
 		 ibmvmc.max_hmc_index);
 }
@@ -1769,7 +1769,7 @@ static void ibmvmc_reset(struct crq_server_adapter *adapter, bool xport_event)
 	int i;
 
 	if (ibmvmc.state != ibmvmc_state_sched_reset) {
-		dev_info(adapter->dev, "*** Reset to initial state.\n");
+		dev_dbg(adapter->dev, "*** Reset to initial state.\n");
 		for (i = 0; i < ibmvmc_max_hmcs; i++)
 			ibmvmc_return_hmc(&hmcs[i], xport_event);
 
@@ -2239,7 +2239,7 @@ static int ibmvmc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
 	memset(adapter, 0, sizeof(*adapter));
 	adapter->dev = &vdev->dev;
 
-	dev_info(adapter->dev, "Probe for UA 0x%x\n", vdev->unit_address);
+	dev_dbg(adapter->dev, "Probe for UA 0x%x\n", vdev->unit_address);
 
 	rc = read_dma_window(vdev, adapter);
 	if (rc != 0) {
@@ -2292,7 +2292,7 @@ static int ibmvmc_remove(struct vio_dev *vdev)
 {
 	struct crq_server_adapter *adapter = dev_get_drvdata(&vdev->dev);
 
-	dev_info(adapter->dev, "Entering remove for UA 0x%x\n",
+	dev_dbg(adapter->dev, "Entering remove for UA 0x%x\n",
 		 vdev->unit_address);
 	ibmvmc_release_crq_queue(adapter);
 
@@ -2352,14 +2352,14 @@ static int __init ibmvmc_module_init(void)
 	int rc, i, j;
 
 	ibmvmc.state = ibmvmc_state_initial;
-	pr_info("ibmvmc: version %s\n", IBMVMC_DRIVER_VERSION);
+	pr_debug("ibmvmc: version %s\n", IBMVMC_DRIVER_VERSION);
 
 	rc = misc_register(&ibmvmc_miscdev);
 	if (rc) {
 		pr_err("ibmvmc: misc registration failed\n");
 		goto misc_register_failed;
 	}
-	pr_info("ibmvmc: node %d:%d\n", MISC_MAJOR,
+	pr_debug("ibmvmc: node %d:%d\n", MISC_MAJOR,
 		ibmvmc_miscdev.minor);
 
 	/* Initialize data structures */
@@ -2399,7 +2399,7 @@ misc_register_failed:
 
 static void __exit ibmvmc_module_exit(void)
 {
-	pr_info("ibmvmc: module exit\n");
+	pr_debug("ibmvmc: module exit\n");
 	vio_unregister_driver(&ibmvmc_driver);
 	misc_deregister(&ibmvmc_miscdev);
 }

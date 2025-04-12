@@ -134,7 +134,7 @@ static void keyspan_print(struct usb_keyspan* dev) /*unsigned char* data)*/
 	for (i = 0; i < RECV_SIZE; i++)
 		snprintf(codes + i * 3, 4, "%02x ", dev->in_buffer[i]);
 
-	dev_info(&dev->udev->dev, "%s\n", codes);
+	dev_dbg(&dev->udev->dev, "%s\n", codes);
 }
 
 /*

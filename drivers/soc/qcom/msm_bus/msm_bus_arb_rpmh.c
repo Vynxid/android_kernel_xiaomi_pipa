@@ -821,7 +821,7 @@ static int update_path(struct device *src_dev, int dest, uint64_t act_req_ib,
 {
 	struct device *next_dev = NULL;
 	struct link_node *lnode = NULL;
-	struct msm_bus_node_device_type *dev_info = NULL;
+	struct msm_bus_node_device_type *dev_dbg = NULL;
 	int curr_idx;
 	int ret = 0;
 
@@ -843,16 +843,16 @@ static int update_path(struct device *src_dev, int dest, uint64_t act_req_ib,
 	while (next_dev) {
 		int i;
 
-		dev_info = to_msm_bus_node(next_dev);
+		dev_dbg = to_msm_bus_node(next_dev);
 
-		if (curr_idx >= dev_info->num_lnodes) {
+		if (curr_idx >= dev_dbg->num_lnodes) {
 			MSM_BUS_ERR("%s: Invalid lnode Idx %d num lnodes %d",
-			 __func__, curr_idx, dev_info->num_lnodes);
+			 __func__, curr_idx, dev_dbg->num_lnodes);
 			ret = -ENXIO;
 			goto exit_update_path;
 		}
 
-		lnode = &dev_info->lnode_list[curr_idx];
+		lnode = &dev_dbg->lnode_list[curr_idx];
 		if (!lnode) {
 			MSM_BUS_ERR("%s: Invalid lnode ptr lnode %d",
 				 __func__, curr_idx);
@@ -865,11 +865,11 @@ static int update_path(struct device *src_dev, int dest, uint64_t act_req_ib,
 		lnode->lnode_ab[DUAL_CTX] = slp_req_bw;
 
 		for (i = 0; i < NUM_CTX; i++) {
-			aggregate_bus_req(dev_info, i);
+			aggregate_bus_req(dev_dbg, i);
 			bcm_update_bus_req(next_dev, i);
 		}
 
-		add_node_to_clist(dev_info);
+		add_node_to_clist(dev_dbg);
 
 		next_dev = lnode->next_dev;
 		curr_idx = lnode->next;
@@ -885,7 +885,7 @@ static int update_alc_vote(struct device *alc_dev, uint64_t act_req_fa_lat,
 			uint64_t cur_idle_time, int idx, int ctx)
 {
 	struct link_node *lnode = NULL;
-	struct msm_bus_node_device_type *dev_info = NULL;
+	struct msm_bus_node_device_type *dev_dbg = NULL;
 	int curr_idx, i;
 	int ret = 0;
 
@@ -901,17 +901,17 @@ static int update_alc_vote(struct device *alc_dev, uint64_t act_req_fa_lat,
 		goto exit_update_alc_vote;
 	}
 
-	dev_info = to_msm_bus_node(alc_dev);
+	dev_dbg = to_msm_bus_node(alc_dev);
 	curr_idx = idx;
 
-	if (curr_idx >= dev_info->num_lnodes) {
+	if (curr_idx >= dev_dbg->num_lnodes) {
 		MSM_BUS_ERR("%s: Invalid lnode Idx %d num lnodes %d",
-				 __func__, curr_idx, dev_info->num_lnodes);
+				 __func__, curr_idx, dev_dbg->num_lnodes);
 		ret = -ENXIO;
 		goto exit_update_alc_vote;
 	}
 
-	lnode = &dev_info->lnode_list[curr_idx];
+	lnode = &dev_dbg->lnode_list[curr_idx];
 	if (!lnode) {
 		MSM_BUS_ERR("%s: Invalid lnode ptr lnode %d",
 			 __func__, curr_idx);
@@ -927,9 +927,9 @@ static int update_alc_vote(struct device *alc_dev, uint64_t act_req_fa_lat,
 	lnode->alc_idx[DUAL_CTX] = 0;
 
 	for (i = 0; i < NUM_CTX; i++)
-		bcm_update_alc_req(dev_info, i);
+		bcm_update_alc_req(dev_dbg, i);
 
-	add_node_to_clist(dev_info);
+	add_node_to_clist(dev_dbg);
 
 exit_update_alc_vote:
 	return ret;
@@ -943,7 +943,7 @@ static int query_path(struct device *src_dev, int dest, uint64_t act_req_ib,
 {
 	struct device *next_dev = NULL;
 	struct link_node *lnode = NULL;
-	struct msm_bus_node_device_type *dev_info = NULL;
+	struct msm_bus_node_device_type *dev_dbg = NULL;
 	int curr_idx;
 	int ret = 0;
 
@@ -965,16 +965,16 @@ static int query_path(struct device *src_dev, int dest, uint64_t act_req_ib,
 	while (next_dev) {
 		int i;
 
-		dev_info = to_msm_bus_node(next_dev);
+		dev_dbg = to_msm_bus_node(next_dev);
 
-		if (curr_idx >= dev_info->num_lnodes) {
+		if (curr_idx >= dev_dbg->num_lnodes) {
 			MSM_BUS_ERR("%s: Invalid lnode Idx %d num lnodes %d",
-			 __func__, curr_idx, dev_info->num_lnodes);
+			 __func__, curr_idx, dev_dbg->num_lnodes);
 			ret = -ENXIO;
 			goto exit_query_path;
 		}
 
-		lnode = &dev_info->lnode_list[curr_idx];
+		lnode = &dev_dbg->lnode_list[curr_idx];
 		if (!lnode) {
 			MSM_BUS_ERR("%s: Invalid lnode ptr lnode %d",
 				 __func__, curr_idx);
@@ -987,11 +987,11 @@ static int query_path(struct device *src_dev, int dest, uint64_t act_req_ib,
 		lnode->query_ab[DUAL_CTX] = slp_req_bw;
 
 		for (i = 0; i < NUM_CTX; i++) {
-			aggregate_bus_query_req(dev_info, i);
+			aggregate_bus_query_req(dev_dbg, i);
 			bcm_query_bus_req(next_dev, i);
 		}
 
-		add_node_to_query_list(dev_info);
+		add_node_to_query_list(dev_dbg);
 
 		next_dev = lnode->next_dev;
 		curr_idx = lnode->next;
@@ -1006,7 +1006,7 @@ static int remove_path(struct device *src_dev, int dst, uint64_t cur_ib,
 {
 	struct device *next_dev = NULL;
 	struct link_node *lnode = NULL;
-	struct msm_bus_node_device_type *dev_info = NULL;
+	struct msm_bus_node_device_type *dev_dbg = NULL;
 	int ret = 0;
 	int cur_idx = src_idx;
 	int next_idx;
@@ -1031,11 +1031,11 @@ static int remove_path(struct device *src_dev, int dst, uint64_t cur_ib,
 	next_dev = src_dev;
 
 	while (next_dev) {
-		dev_info = to_msm_bus_node(next_dev);
-		lnode = &dev_info->lnode_list[cur_idx];
+		dev_dbg = to_msm_bus_node(next_dev);
+		lnode = &dev_dbg->lnode_list[cur_idx];
 		next_idx = lnode->next;
 		next_dev = lnode->next_dev;
-		remove_lnode(dev_info, cur_idx);
+		remove_lnode(dev_dbg, cur_idx);
 		cur_idx = next_idx;
 	}
 

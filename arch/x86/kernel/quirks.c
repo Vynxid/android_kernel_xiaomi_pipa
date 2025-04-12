@@ -34,7 +34,7 @@ static void quirk_intel_irqbalance(struct pci_dev *dev)
 	pci_bus_read_config_word(dev->bus, PCI_DEVFN(8, 0), 0x4c, &word);
 
 	if (!(word & (1 << 13))) {
-		dev_info(&dev->dev, "Intel E7520/7320/7525 detected; "
+		dev_dbg(&dev->dev, "Intel E7520/7320/7525 detected; "
 			"disabling irq balancing and affinity\n");
 		noirqdebug_setup("");
 #ifdef CONFIG_PROC_FS

@@ -512,7 +512,7 @@ static int xgene_msi_probe(struct platform_device *pdev)
 	if (rc)
 		goto err_cpuhp;
 
-	dev_info(&pdev->dev, "APM X-Gene PCIe MSI driver loaded\n");
+	dev_dbg(&pdev->dev, "APM X-Gene PCIe MSI driver loaded\n");
 
 	return 0;
 

@@ -1204,7 +1204,7 @@ static int pegasus_probe(struct usb_interface *intf,
 	}
 	set_ethernet_addr(pegasus);
 	if (pegasus->features & PEGASUS_II) {
-		dev_info(&intf->dev, "setup Pegasus II specific registers\n");
+		dev_dbg(&intf->dev, "setup Pegasus II specific registers\n");
 		setup_pegasus_II(pegasus);
 	}
 	pegasus->phy = mii_phy_probe(pegasus);
@@ -1221,7 +1221,7 @@ static int pegasus_probe(struct usb_interface *intf,
 		goto out3;
 	queue_delayed_work(pegasus_workqueue, &pegasus->carrier_check,
 			   CARRIER_CHECK_DELAY);
-	dev_info(&intf->dev, "%s, %s, %pM\n", net->name,
+	dev_dbg(&intf->dev, "%s, %s, %pM\n", net->name,
 		 usb_dev_id[dev_index].name, net->dev_addr);
 	return 0;
 
@@ -1325,7 +1325,7 @@ static void __init parse_id(char *id)
 	if ((token = strsep(&id, ":")) != NULL)
 		device_id = simple_strtoul(token, NULL, 16);
 	flags = simple_strtoul(id, NULL, 16);
-	pr_info("%s: new device %s, vendor ID 0x%04x, device ID 0x%04x, flags: 0x%x\n",
+	pr_debug("%s: new device %s, vendor ID 0x%04x, device ID 0x%04x, flags: 0x%x\n",
 		driver_name, name, vendor_id, device_id, flags);
 
 	if (vendor_id > 0x10000 || vendor_id == 0)
@@ -1345,7 +1345,7 @@ static void __init parse_id(char *id)
 
 static int __init pegasus_init(void)
 {
-	pr_info("%s: %s, " DRIVER_DESC "\n", driver_name, DRIVER_VERSION);
+	pr_debug("%s: %s, " DRIVER_DESC "\n", driver_name, DRIVER_VERSION);
 	if (devid)
 		parse_id(devid);
 	return usb_register(&pegasus_driver);

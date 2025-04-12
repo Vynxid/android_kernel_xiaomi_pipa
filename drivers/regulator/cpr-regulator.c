@@ -396,20 +396,20 @@ module_param_named(debug_enable, cpr_debug_enable, int, 0644);
 #define cpr_debug(cpr_vreg, message, ...) \
 	do { \
 		if (cpr_debug_enable & CPR_DEBUG_MASK_API) \
-			pr_info("%s: " message, (cpr_vreg)->rdesc.name, \
+			pr_debug("%s: " message, (cpr_vreg)->rdesc.name, \
 				##__VA_ARGS__); \
 	} while (0)
 #define cpr_debug_irq(cpr_vreg, message, ...) \
 	do { \
 		if (cpr_debug_enable & CPR_DEBUG_MASK_IRQ) \
-			pr_info("%s: " message, (cpr_vreg)->rdesc.name, \
+			pr_debug("%s: " message, (cpr_vreg)->rdesc.name, \
 				##__VA_ARGS__); \
 		else \
 			pr_debug("%s: " message, (cpr_vreg)->rdesc.name, \
 				##__VA_ARGS__); \
 	} while (0)
 #define cpr_info(cpr_vreg, message, ...) \
-	pr_info("%s: " message, (cpr_vreg)->rdesc.name, ##__VA_ARGS__)
+	pr_debug("%s: " message, (cpr_vreg)->rdesc.name, ##__VA_ARGS__)
 #define cpr_err(cpr_vreg, message, ...) \
 	pr_err("%s: " message, (cpr_vreg)->rdesc.name, ##__VA_ARGS__)
 

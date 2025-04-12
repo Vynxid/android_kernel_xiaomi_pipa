@@ -775,7 +775,7 @@ static ssize_t show_associate_remote(struct device *d,
 	else
 		strcpy(buf, "closed\n");
 
-	dev_info(d, "Visit http://www.lirc.org/html/imon-24g.html for instructions on how to associate your iMON 2.4G DT/LT remote\n");
+	dev_dbg(d, "Visit http://www.lirc.org/html/imon-24g.html for instructions on how to associate your iMON 2.4G DT/LT remote\n");
 	mutex_unlock(&ictx->lock);
 	return strlen(buf);
 }
@@ -1808,53 +1808,53 @@ static void imon_get_ffdc_type(struct imon_context *ictx)
 	switch (ffdc_cfg_byte) {
 	/* iMON Knob, no display, iMON IR + vol knob */
 	case 0x21:
-		dev_info(ictx->dev, "0xffdc iMON Knob, iMON IR");
+		dev_dbg(ictx->dev, "0xffdc iMON Knob, iMON IR");
 		ictx->display_supported = false;
 		break;
 	/* iMON 2.4G LT (usb stick), no display, iMON RF */
 	case 0x4e:
-		dev_info(ictx->dev, "0xffdc iMON 2.4G LT, iMON RF");
+		dev_dbg(ictx->dev, "0xffdc iMON 2.4G LT, iMON RF");
 		ictx->display_supported = false;
 		ictx->rf_device = true;
 		break;
 	/* iMON VFD, no IR (does have vol knob tho) */
 	case 0x35:
-		dev_info(ictx->dev, "0xffdc iMON VFD + knob, no IR");
+		dev_dbg(ictx->dev, "0xffdc iMON VFD + knob, no IR");
 		detected_display_type = IMON_DISPLAY_TYPE_VFD;
 		break;
 	/* iMON VFD, iMON IR */
 	case 0x24:
 	case 0x30:
 	case 0x85:
-		dev_info(ictx->dev, "0xffdc iMON VFD, iMON IR");
+		dev_dbg(ictx->dev, "0xffdc iMON VFD, iMON IR");
 		detected_display_type = IMON_DISPLAY_TYPE_VFD;
 		break;
 	/* iMON VFD, MCE IR */
 	case 0x46:
 	case 0x9e:
-		dev_info(ictx->dev, "0xffdc iMON VFD, MCE IR");
+		dev_dbg(ictx->dev, "0xffdc iMON VFD, MCE IR");
 		detected_display_type = IMON_DISPLAY_TYPE_VFD;
 		allowed_protos = RC_PROTO_BIT_RC6_MCE;
 		break;
 	/* iMON VFD, iMON or MCE IR */
 	case 0x7e:
-		dev_info(ictx->dev, "0xffdc iMON VFD, iMON or MCE IR");
+		dev_dbg(ictx->dev, "0xffdc iMON VFD, iMON or MCE IR");
 		detected_display_type = IMON_DISPLAY_TYPE_VFD;
 		allowed_protos |= RC_PROTO_BIT_RC6_MCE;
 		break;
 	/* iMON LCD, MCE IR */
 	case 0x9f:
-		dev_info(ictx->dev, "0xffdc iMON LCD, MCE IR");
+		dev_dbg(ictx->dev, "0xffdc iMON LCD, MCE IR");
 		detected_display_type = IMON_DISPLAY_TYPE_LCD;
 		allowed_protos = RC_PROTO_BIT_RC6_MCE;
 		break;
 	/* no display, iMON IR */
 	case 0x26:
-		dev_info(ictx->dev, "0xffdc iMON Inside, iMON IR");
+		dev_dbg(ictx->dev, "0xffdc iMON Inside, iMON IR");
 		ictx->display_supported = false;
 		break;
 	default:
-		dev_info(ictx->dev, "Unknown 0xffdc device, defaulting to VFD and iMON IR");
+		dev_dbg(ictx->dev, "Unknown 0xffdc device, defaulting to VFD and iMON IR");
 		detected_display_type = IMON_DISPLAY_TYPE_VFD;
 		/*
 		 * We don't know which one it is, allow user to set the
@@ -1913,7 +1913,7 @@ static void imon_set_display_type(struct imon_context *ictx)
 			ictx->display_supported = false;
 		else
 			ictx->display_supported = true;
-		dev_info(ictx->dev, "%s: overriding display type to %d via modparam\n",
+		dev_dbg(ictx->dev, "%s: overriding display type to %d via modparam\n",
 			 __func__, display_type);
 	}
 
@@ -1955,7 +1955,7 @@ static struct rc_dev *imon_init_rdev(struct imon_context *ictx)
 	ret = send_packet(ictx);
 	/* Not fatal, but warn about it */
 	if (ret)
-		dev_info(ictx->dev, "panel buttons/knobs setup failed\n");
+		dev_dbg(ictx->dev, "panel buttons/knobs setup failed\n");
 
 	if (ictx->product == 0xffdc) {
 		imon_get_ffdc_type(ictx);
@@ -2066,7 +2066,7 @@ static struct input_dev *imon_init_touch(struct imon_context *ictx)
 	touch->dev.parent = ictx->dev;
 	ret = input_register_device(touch);
 	if (ret <  0) {
-		dev_info(ictx->dev, "touchscreen input dev register failed\n");
+		dev_dbg(ictx->dev, "touchscreen input dev register failed\n");
 		goto touch_register_failed;
 	}
 
@@ -2353,7 +2353,7 @@ static void imon_init_display(struct imon_context *ictx,
 		ret = usb_register_dev(intf, &imon_vfd_class);
 	if (ret)
 		/* Not a fatal error, so ignore */
-		dev_info(ictx->dev, "could not get a minor number for display\n");
+		dev_dbg(ictx->dev, "could not get a minor number for display\n");
 
 }
 
@@ -2438,7 +2438,7 @@ static int imon_probe(struct usb_interface *interface,
 		mutex_unlock(&ictx->lock);
 	}
 
-	dev_info(dev, "iMON device (%04x:%04x, intf%d) on usb<%d:%d> initialized\n",
+	dev_dbg(dev, "iMON device (%04x:%04x, intf%d) on usb<%d:%d> initialized\n",
 		 vendor, product, ifnum,
 		 usbdev->bus->busnum, usbdev->devnum);
 

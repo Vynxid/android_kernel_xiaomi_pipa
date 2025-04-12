@@ -1830,7 +1830,7 @@ static int kvaser_usb_hydra_get_software_details(struct kvaser_usb *dev)
 	}
 
 	if (flags & KVASER_USB_HYDRA_SW_FLAG_FW_BETA)
-		dev_info(&dev->intf->dev, "Beta firmware in use\n");
+		dev_dbg(&dev->intf->dev, "Beta firmware in use\n");
 
 	if (flags & KVASER_USB_HYDRA_SW_FLAG_EXT_CAP)
 		card_data->capabilities |= KVASER_USB_CAP_EXT_CAP;
@@ -1882,7 +1882,7 @@ static int kvaser_usb_hydra_get_capabilities(struct kvaser_usb *dev)
 	u16 status;
 
 	if (!(dev->card_data.capabilities & KVASER_USB_CAP_EXT_CAP)) {
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "No extended capability support. Upgrade your device.\n");
 		return 0;
 	}
@@ -1894,7 +1894,7 @@ static int kvaser_usb_hydra_get_capabilities(struct kvaser_usb *dev)
 	if (err)
 		return err;
 	if (status)
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "KVASER_USB_HYDRA_CAP_CMD_LISTEN_MODE failed %u\n",
 			 status);
 
@@ -1905,7 +1905,7 @@ static int kvaser_usb_hydra_get_capabilities(struct kvaser_usb *dev)
 	if (err)
 		return err;
 	if (status)
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "KVASER_USB_HYDRA_CAP_CMD_ERR_REPORT failed %u\n",
 			 status);
 
@@ -1915,7 +1915,7 @@ static int kvaser_usb_hydra_get_capabilities(struct kvaser_usb *dev)
 	if (err)
 		return err;
 	if (status)
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "KVASER_USB_HYDRA_CAP_CMD_ONE_SHOT failed %u\n",
 			 status);
 

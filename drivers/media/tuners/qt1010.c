@@ -437,7 +437,7 @@ struct dvb_frontend * qt1010_attach(struct dvb_frontend *fe,
 	if (fe->ops.i2c_gate_ctrl)
 		fe->ops.i2c_gate_ctrl(fe, 0); /* close i2c_gate */
 
-	dev_info(&priv->i2c->dev,
+	dev_dbg(&priv->i2c->dev,
 			"%s: Quantek QT1010 successfully identified\n",
 			KBUILD_MODNAME);
 

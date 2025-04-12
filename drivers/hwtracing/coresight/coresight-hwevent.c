@@ -308,7 +308,7 @@ static int hwevent_probe(struct platform_device *pdev)
 	if (IS_ERR(drvdata->csdev))
 		return PTR_ERR(drvdata->csdev);
 
-	dev_info(dev, "Hardware Event driver initialized\n");
+	dev_dbg(dev, "Hardware Event driver initialized\n");
 	return 0;
 }
 

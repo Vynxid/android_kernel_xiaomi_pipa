@@ -1978,7 +1978,7 @@ static int synaptics_rmi4_sensor_report(struct synaptics_rmi4_data *rmi4_data,
 		}
 	}
 	if (rmi4_data->status.unconfigured && !rmi4_data->status.flash_prog) {
-		pr_notice("%s: spontaneous reset detected\n", __func__);
+		pr_debug("%s: spontaneous reset detected\n", __func__);
 		retval = synaptics_rmi4_reinit_device(rmi4_data);
 		if (retval < 0) {
 			dev_err(rmi4_data->pdev->dev.parent,
@@ -3248,7 +3248,7 @@ static int synaptics_rmi4_check_status(struct synaptics_rmi4_data *rmi4_data,
 
 	if (rmi4_data->status.flash_prog == 1) {
 		rmi4_data->flash_prog_mode = true;
-		pr_notice("%s: In flash prog mode, status = 0x%02x\n",
+		pr_debug("%s: In flash prog mode, status = 0x%02x\n",
 				__func__,
 				rmi4_data->status.status_code);
 	} else {
@@ -3540,7 +3540,7 @@ rescan_pdt:
 					__func__);
 			return -EINVAL;
 		} else {
-			pr_notice("%s: In microbootloader mode\n",
+			pr_debug("%s: In microbootloader mode\n",
 					__func__);
 			return 0;
 		}

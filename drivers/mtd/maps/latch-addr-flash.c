@@ -137,7 +137,7 @@ static int latch_addr_flash_probe(struct platform_device *dev)
 	if (latch_addr_data == NULL)
 		return -ENODEV;
 
-	pr_notice("latch-addr platform flash device: %#llx byte "
+	pr_debug("latch-addr platform flash device: %#llx byte "
 		  "window at %#.8llx\n",
 		  (unsigned long long)win_size, (unsigned long long)win_base);
 

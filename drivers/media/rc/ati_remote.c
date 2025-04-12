@@ -144,7 +144,7 @@ module_param(mouse, bool, 0444);
 MODULE_PARM_DESC(mouse, "Enable mouse device, default = yes");
 
 #define dbginfo(dev, format, arg...) \
-	do { if (debug) dev_info(dev , format , ## arg); } while (0)
+	do { if (debug) dev_dbg(dev , format , ## arg); } while (0)
 #undef err
 #define err(format, arg...) printk(KERN_ERR format , ## arg)
 
@@ -182,7 +182,7 @@ static const char *get_medion_keymap(struct usb_interface *interface)
 		}
 	}
 
-	dev_info(&interface->dev,
+	dev_dbg(&interface->dev,
 		 "Unknown Medion X10 receiver, using default ati_remote Medion keymap\n");
 
 	return RC_MAP_MEDION_X10;

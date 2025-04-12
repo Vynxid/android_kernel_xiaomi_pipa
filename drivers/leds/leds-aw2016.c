@@ -396,7 +396,7 @@ static int aw2016_check_chipid(struct aw2016_led *led)
 
 	for (cnt = 5; cnt > 0; cnt--) {
 		aw2016_read(led, AW2016_REG_RESET, &val);
-		dev_notice(&led->client->dev, "aw2016 chip id %0x", val);
+		dev_dbg(&led->client->dev, "aw2016 chip id %0x", val);
 		if (val == AW2016_CHIPID)
 			return 0;
 	}
@@ -672,7 +672,7 @@ static struct i2c_driver aw2016_led_driver = {
 
 static int __init aw2016_led_init(void)
 {
-	pr_info("%s: driver version: %s\n", __func__, AW2016_DRIVER_VERSION);
+	pr_debug("%s: driver version: %s\n", __func__, AW2016_DRIVER_VERSION);
 	return i2c_add_driver(&aw2016_led_driver);
 }
 module_init(aw2016_led_init);

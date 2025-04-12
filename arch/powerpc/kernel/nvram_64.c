@@ -291,7 +291,7 @@ int __init nvram_init_os_partition(struct nvram_os_partition *part)
 
 	/* Found one but too small, remove it */
 	if (p && size < part->min_size) {
-		pr_info("nvram: Found too small %s partition,"
+		pr_debug("nvram: Found too small %s partition,"
 					" removing it...\n", part->name);
 		nvram_remove_partition(part->name, NVRAM_SIG_OS, NULL);
 		p = 0;
@@ -302,7 +302,7 @@ int __init nvram_init_os_partition(struct nvram_os_partition *part)
 		p = nvram_create_partition(part->name, NVRAM_SIG_OS,
 					part->req_size, part->min_size);
 		if (p == -ENOSPC) {
-			pr_info("nvram: No room to create %s partition, "
+			pr_debug("nvram: No room to create %s partition, "
 				"deleting any obsolete OS partitions...\n",
 				part->name);
 			nvram_remove_partition(NULL, NVRAM_SIG_OS,
@@ -589,7 +589,7 @@ void __init nvram_init_oops_partition(int rtas_partition_exists)
 			pr_err("nvram: Failed to initialize oops partition!");
 			return;
 		}
-		pr_notice("nvram: Using %s partition to log both"
+		pr_debug("nvram: Using %s partition to log both"
 			" RTAS errors and oops/panic reports\n",
 			rtas_log_partition.name);
 		memcpy(&oops_log_partition, &rtas_log_partition,

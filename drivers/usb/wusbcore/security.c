@@ -497,7 +497,7 @@ int wusb_dev_4way_handshake(struct wusbhc *wusbhc, struct wusb_dev *wusb_dev,
 			goto error_dev_update_address;
 	}
 	result = 0;
-	dev_info(dev, "device authenticated\n");
+	dev_dbg(dev, "device authenticated\n");
 
 error_dev_update_address:
 error_wusbhc_set_gtk:

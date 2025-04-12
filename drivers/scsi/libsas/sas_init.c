@@ -417,7 +417,7 @@ void sas_resume_ha(struct sas_ha_struct *ha)
 	 */
 	i = phys_suspended(ha);
 	if (i)
-		dev_info(ha->dev, "waiting up to 25 seconds for %d phy%s to resume\n",
+		dev_dbg(ha->dev, "waiting up to 25 seconds for %d phy%s to resume\n",
 			 i, i > 1 ? "s" : "");
 	wait_event_timeout(ha->eh_wait_q, phys_suspended(ha) == 0, tmo);
 	for (i = 0; i < ha->num_phys; i++) {

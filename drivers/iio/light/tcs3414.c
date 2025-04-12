@@ -304,10 +304,10 @@ static int tcs3414_probe(struct i2c_client *client,
 
 	switch (ret & 0xf0) {
 	case 0x00:
-		dev_info(&client->dev, "TCS3404 found\n");
+		dev_dbg(&client->dev, "TCS3404 found\n");
 		break;
 	case 0x10:
-		dev_info(&client->dev, "TCS3413/14/15/16 found\n");
+		dev_dbg(&client->dev, "TCS3413/14/15/16 found\n");
 		break;
 	default:
 		return -ENODEV;

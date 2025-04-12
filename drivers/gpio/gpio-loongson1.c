@@ -75,7 +75,7 @@ static int ls1x_gpio_probe(struct platform_device *pdev)
 		goto err;
 
 	platform_set_drvdata(pdev, gc);
-	dev_info(dev, "Loongson1 GPIO driver registered\n");
+	dev_dbg(dev, "Loongson1 GPIO driver registered\n");
 
 	return 0;
 err:

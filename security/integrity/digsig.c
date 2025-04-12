@@ -103,7 +103,7 @@ int __init integrity_init_keyring(const unsigned int id)
 				    restriction, NULL);
 	if (IS_ERR(keyring[id])) {
 		err = PTR_ERR(keyring[id]);
-		pr_info("Can't allocate %s keyring (%d)\n",
+		pr_debug("Can't allocate %s keyring (%d)\n",
 			keyring_name[id], err);
 		keyring[id] = NULL;
 	}
@@ -140,7 +140,7 @@ int __init integrity_load_x509(const unsigned int id, const char *path)
 		pr_err("Problem loading X.509 certificate (%d): %s\n",
 		       rc, path);
 	} else {
-		pr_notice("Loaded X.509 cert '%s': %s\n",
+		pr_debug("Loaded X.509 cert '%s': %s\n",
 			  key_ref_to_ptr(key)->description, path);
 		key_ref_put(key);
 	}

@@ -277,7 +277,7 @@ static void pcibios_allocate_dev_resources(struct pci_dev *dev, int pass)
 					idx, r, disabled, pass);
 				if (pci_claim_resource(dev, idx) < 0) {
 					if (r->flags & IORESOURCE_PCI_FIXED) {
-						dev_info(&dev->dev, "BAR %d %pR is immovable\n",
+						dev_dbg(&dev->dev, "BAR %d %pR is immovable\n",
 							 idx, r);
 					} else {
 						/* We'll assign a new address later */

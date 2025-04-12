@@ -112,7 +112,7 @@ static int dvb_usb_media_device_init(struct dvb_usb_adapter *adap)
 
 	dvb_register_media_controller(&adap->dvb_adap, mdev);
 
-	dev_info(&d->udev->dev, "media controller created\n");
+	dev_dbg(&d->udev->dev, "media controller created\n");
 #endif
 	return 0;
 }

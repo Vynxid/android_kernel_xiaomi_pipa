@@ -626,7 +626,7 @@ static int ac100_rtc_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "RTC enabled\n");
+	dev_dbg(&pdev->dev, "RTC enabled\n");
 
 	return 0;
 }

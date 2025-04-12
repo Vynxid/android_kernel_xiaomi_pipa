@@ -358,7 +358,7 @@ int __uwb_dev_offair(struct uwb_dev *uwb_dev, struct uwb_rc *rc)
 
 	uwb_mac_addr_print(macbuf, sizeof(macbuf), &uwb_dev->mac_addr);
 	uwb_dev_addr_print(devbuf, sizeof(devbuf), &uwb_dev->dev_addr);
-	dev_info(dev, "uwb device (mac %s dev %s) disconnected from %s %s\n",
+	dev_dbg(dev, "uwb device (mac %s dev %s) disconnected from %s %s\n",
 		 macbuf, devbuf,
 		 uwb_dev->dev.bus->name,
 		 rc ? dev_name(&(rc->uwb_dev.dev)) : "");
@@ -440,7 +440,7 @@ void uwbd_dev_onair(struct uwb_rc *rc, struct uwb_beca_e *bce)
 		goto error_dev_add;
 	}
 
-	dev_info(dev, "uwb device (mac %s dev %s) connected to %s %s\n",
+	dev_dbg(dev, "uwb device (mac %s dev %s) connected to %s %s\n",
 		 macbuf, devbuf, uwb_dev->dev.bus->name,
 		 dev_name(&(rc->uwb_dev.dev)));
 	uwb_notify(rc, uwb_dev, UWB_NOTIF_ONAIR);

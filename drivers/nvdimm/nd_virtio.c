@@ -69,7 +69,7 @@ static int virtio_pmem_flush(struct nd_region *nd_region)
 	while ((err = virtqueue_add_sgs(vpmem->req_vq, sgs, 1, 1, req_data,
 					GFP_ATOMIC)) == -ENOSPC) {
 
-		dev_info(&vdev->dev, "failed to send command to virtio pmem device, no free slots in the virtqueue\n");
+		dev_dbg(&vdev->dev, "failed to send command to virtio pmem device, no free slots in the virtqueue\n");
 		req_data->wq_buf_avail = false;
 		list_add_tail(&req_data->list, &vpmem->req_list);
 		spin_unlock_irqrestore(&vpmem->pmem_lock, flags);
@@ -85,7 +85,7 @@ static int virtio_pmem_flush(struct nd_region *nd_region)
 	 * do anything about that.
 	 */
 	if (err || !err1) {
-		dev_info(&vdev->dev, "failed to send command to virtio pmem device\n");
+		dev_dbg(&vdev->dev, "failed to send command to virtio pmem device\n");
 		err = -EIO;
 	} else {
 		/* A host repsonse results in "host_ack" getting called */

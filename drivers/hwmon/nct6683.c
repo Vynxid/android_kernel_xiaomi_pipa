@@ -1286,7 +1286,7 @@ static int nct6683_probe(struct platform_device *pdev)
 			  nct6683_read(data, NCT6683_REG_BUILD_DAY),
 			  nct6683_read(data, NCT6683_REG_BUILD_YEAR));
 
-	dev_info(dev, "%s EC firmware version %d.%d build %s\n",
+	dev_dbg(dev, "%s EC firmware version %d.%d build %s\n",
 		 nct6683_chip_names[data->kind],
 		 nct6683_read(data, NCT6683_REG_VERSION_HI),
 		 nct6683_read(data, NCT6683_REG_VERSION_LO),
@@ -1385,7 +1385,7 @@ static int __init nct6683_find(int sioaddr, struct nct6683_sio_data *sio_data)
 	}
 
 	superio_exit(sioaddr);
-	pr_info("Found %s or compatible chip at %#x:%#x\n",
+	pr_debug("Found %s or compatible chip at %#x:%#x\n",
 		nct6683_chip_names[sio_data->kind], sioaddr, addr);
 	sio_data->sioreg = sioaddr;
 

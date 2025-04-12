@@ -734,7 +734,7 @@ void snd_print_channel_allocation(int spk_alloc, char *buf, int buflen);
 #define codec_warn(codec, fmt, args...) \
 	dev_warn(hda_codec_dev(codec), fmt, ##args)
 #define codec_info(codec, fmt, args...) \
-	dev_info(hda_codec_dev(codec), fmt, ##args)
+	dev_dbg(hda_codec_dev(codec), fmt, ##args)
 #define codec_dbg(codec, fmt, args...) \
 	dev_dbg(hda_codec_dev(codec), fmt, ##args)
 

@@ -2628,7 +2628,7 @@ static struct ipr_hostrcb *ipr_get_free_hostrcb(struct ipr_ioa_cfg *ioa)
 					struct ipr_hostrcb, queue);
 
 	if (unlikely(!hostrcb)) {
-		dev_info(&ioa->pdev->dev, "Reclaiming async error buffers.");
+		dev_dbg(&ioa->pdev->dev, "Reclaiming async error buffers.");
 		hostrcb = list_first_entry_or_null(&ioa->hostrcb_report_q,
 						struct ipr_hostrcb, queue);
 	}
@@ -3803,19 +3803,19 @@ static ssize_t ipr_store_iopoll_weight(struct device *dev,
 	int i;
 
 	if (!ioa_cfg->sis64) {
-		dev_info(&ioa_cfg->pdev->dev, "irq_poll not supported on this adapter\n");
+		dev_dbg(&ioa_cfg->pdev->dev, "irq_poll not supported on this adapter\n");
 		return -EINVAL;
 	}
 	if (kstrtoul(buf, 10, &user_iopoll_weight))
 		return -EINVAL;
 
 	if (user_iopoll_weight > 256) {
-		dev_info(&ioa_cfg->pdev->dev, "Invalid irq_poll weight. It must be less than 256\n");
+		dev_dbg(&ioa_cfg->pdev->dev, "Invalid irq_poll weight. It must be less than 256\n");
 		return -EINVAL;
 	}
 
 	if (user_iopoll_weight == ioa_cfg->iopoll_weight) {
-		dev_info(&ioa_cfg->pdev->dev, "Current irq_poll weight has the same weight\n");
+		dev_dbg(&ioa_cfg->pdev->dev, "Current irq_poll weight has the same weight\n");
 		return strlen(buf);
 	}
 
@@ -7304,7 +7304,7 @@ static int ipr_ioa_reset_done(struct ipr_cmnd *ipr_cmd)
 	}
 
 	scsi_report_bus_reset(ioa_cfg->host, IPR_VSET_BUS);
-	dev_info(&ioa_cfg->pdev->dev, "IOA initialized.\n");
+	dev_dbg(&ioa_cfg->pdev->dev, "IOA initialized.\n");
 
 	ioa_cfg->reset_retries = 0;
 	list_add_tail(&ipr_cmd->queue, &ipr_cmd->hrrq->hrrq_free_q);
@@ -7901,7 +7901,7 @@ static int ipr_ioafp_query_ioa_cfg(struct ipr_cmnd *ipr_cmd)
 	ENTER;
 	if (cap->cap & IPR_CAP_DUAL_IOA_RAID)
 		ioa_cfg->dual_raid = 1;
-	dev_info(&ioa_cfg->pdev->dev, "Adapter firmware version: %02X%02X%02X%02X\n",
+	dev_dbg(&ioa_cfg->pdev->dev, "Adapter firmware version: %02X%02X%02X%02X\n",
 		 ucode_vpd->major_release, ucode_vpd->card_type,
 		 ucode_vpd->minor_release[0], ucode_vpd->minor_release[1]);
 	ioarcb->cmd_pkt.request_type = IPR_RQTYPE_IOACMD;
@@ -8208,7 +8208,7 @@ static int ipr_ioafp_identify_hrrq(struct ipr_cmnd *ipr_cmd)
 	ENTER;
 	ipr_cmd->job_step = ipr_ioafp_std_inquiry;
 	if (ioa_cfg->identify_hrrq_index == 0)
-		dev_info(&ioa_cfg->pdev->dev, "Starting IOA initialization sequence.\n");
+		dev_dbg(&ioa_cfg->pdev->dev, "Starting IOA initialization sequence.\n");
 
 	if (ioa_cfg->identify_hrrq_index < ioa_cfg->hrrq_num) {
 		hrrq = &ioa_cfg->hrrq[ioa_cfg->identify_hrrq_index];
@@ -8470,7 +8470,7 @@ static int ipr_reset_enable_ioa(struct ipr_cmnd *ipr_cmd)
 
 	int_reg = readl(ioa_cfg->regs.sense_interrupt_mask_reg);
 
-	dev_info(&ioa_cfg->pdev->dev, "Initializing IOA.\n");
+	dev_dbg(&ioa_cfg->pdev->dev, "Initializing IOA.\n");
 
 	if (ioa_cfg->sis64) {
 		ipr_cmd->job_step = ipr_reset_next_stage;
@@ -10082,7 +10082,7 @@ static irqreturn_t ipr_test_intr(int irq, void *devp)
 	unsigned long lock_flags = 0;
 	irqreturn_t rc = IRQ_HANDLED;
 
-	dev_info(&ioa_cfg->pdev->dev, "Received IRQ : %d\n", irq);
+	dev_dbg(&ioa_cfg->pdev->dev, "Received IRQ : %d\n", irq);
 	spin_lock_irqsave(ioa_cfg->host->host_lock, lock_flags);
 
 	ioa_cfg->msi_received = 1;
@@ -10125,7 +10125,7 @@ static int ipr_test_msi(struct ipr_ioa_cfg *ioa_cfg, struct pci_dev *pdev)
 		dev_err(&pdev->dev, "Can not assign irq %d\n", irq);
 		return rc;
 	} else if (ipr_debug)
-		dev_info(&pdev->dev, "IRQ assigned: %d\n", irq);
+		dev_dbg(&pdev->dev, "IRQ assigned: %d\n", irq);
 
 	writel(IPR_PCII_IO_DEBUG_ACKNOWLEDGE, ioa_cfg->regs.sense_interrupt_reg32);
 	int_reg = readl(ioa_cfg->regs.sense_interrupt_reg);
@@ -10135,10 +10135,10 @@ static int ipr_test_msi(struct ipr_ioa_cfg *ioa_cfg, struct pci_dev *pdev)
 
 	if (!ioa_cfg->msi_received) {
 		/* MSI test failed */
-		dev_info(&pdev->dev, "MSI test failed.  Falling back to LSI.\n");
+		dev_dbg(&pdev->dev, "MSI test failed.  Falling back to LSI.\n");
 		rc = -EOPNOTSUPP;
 	} else if (ipr_debug)
-		dev_info(&pdev->dev, "MSI test succeeded.\n");
+		dev_dbg(&pdev->dev, "MSI test succeeded.\n");
 
 	spin_unlock_irqrestore(ioa_cfg->host->host_lock, lock_flags);
 
@@ -10170,7 +10170,7 @@ static int ipr_probe_ioa(struct pci_dev *pdev,
 
 	ENTER;
 
-	dev_info(&pdev->dev, "Found IOA with IRQ: %d\n", pdev->irq);
+	dev_dbg(&pdev->dev, "Found IOA with IRQ: %d\n", pdev->irq);
 	host = scsi_host_alloc(&driver_template, sizeof(*ioa_cfg));
 
 	if (!host) {
@@ -10310,7 +10310,7 @@ static int ipr_probe_ioa(struct pci_dev *pdev,
 		rc = ipr_test_msi(ioa_cfg, pdev);
 		switch (rc) {
 		case 0:
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				"Request for %d MSI%ss succeeded.", ioa_cfg->nvectors,
 				pdev->msix_enabled ? "-X" : "");
 			break;

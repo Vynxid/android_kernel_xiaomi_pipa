@@ -97,7 +97,7 @@ static void sas_phye_resume_timeout(struct work_struct *work)
 
 	/* phew, lldd got the phy back in the nick of time */
 	if (!phy->suspended) {
-		dev_info(&phy->phy->dev, "resume timeout cancelled\n");
+		dev_dbg(&phy->phy->dev, "resume timeout cancelled\n");
 		return;
 	}
 

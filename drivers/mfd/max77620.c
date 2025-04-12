@@ -417,7 +417,7 @@ static int max77620_read_es_version(struct max77620_chip *chip)
 	}
 
 	/* CID4 is OTP Version  and CID5 is ES version */
-	dev_info(chip->dev, "PMIC Version OTP:0x%02X and ES:0x%X\n",
+	dev_dbg(chip->dev, "PMIC Version OTP:0x%02X and ES:0x%X\n",
 		 cid_val[4], MAX77620_CID5_DIDM(cid_val[5]));
 
 	return ret;

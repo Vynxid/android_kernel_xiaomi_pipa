@@ -90,7 +90,7 @@ struct pci_config_window *pci_ecam_create(struct device *dev,
 		if (err)
 			goto err_exit;
 	}
-	dev_info(dev, "ECAM at %pR for %pR\n", &cfg->res, &cfg->busr);
+	dev_dbg(dev, "ECAM at %pR for %pR\n", &cfg->res, &cfg->busr);
 	return cfg;
 
 err_exit_iomap:

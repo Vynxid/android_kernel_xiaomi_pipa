@@ -693,7 +693,7 @@ static void sil_init_controller(struct ata_host *host)
 			if ((tmp & 0x3) != 0x01)
 				continue;
 			if (!cnt)
-				dev_info(&pdev->dev,
+				dev_dbg(&pdev->dev,
 					 "Applying R_ERR on DMA activate FIS errata fix\n");
 			writel(tmp & ~0x3, mmio_base + sil_port[i].sfis_cfg);
 			cnt++;
@@ -755,7 +755,7 @@ static int sil_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	if (sil_broken_system_poweroff(pdev)) {
 		pi.flags |= ATA_FLAG_NO_POWEROFF_SPINDOWN |
 					ATA_FLAG_NO_HIBERNATE_SPINDOWN;
-		dev_info(&pdev->dev, "quirky BIOS, skipping spindown "
+		dev_dbg(&pdev->dev, "quirky BIOS, skipping spindown "
 				"on poweroff and hibernation\n");
 	}
 

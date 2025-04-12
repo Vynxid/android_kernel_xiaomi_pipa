@@ -416,7 +416,7 @@ static int geode_aes_probe(struct pci_dev *dev, const struct pci_device_id *id)
 	if (ret)
 		goto ealg;
 
-	dev_notice(&dev->dev, "GEODE AES engine enabled.\n");
+	dev_dbg(&dev->dev, "GEODE AES engine enabled.\n");
 	return 0;
 
  ealg:

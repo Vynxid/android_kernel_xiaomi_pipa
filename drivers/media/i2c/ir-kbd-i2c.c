@@ -448,7 +448,7 @@ static int zilog_init(struct IR_i2c *ir)
 		return ret < 0 ? ret : -EIO;
 	}
 
-	dev_info(&ir->c->dev, "Zilog/Hauppauge IR blaster firmware version %d.%d.%d\n",
+	dev_dbg(&ir->c->dev, "Zilog/Hauppauge IR blaster firmware version %d.%d.%d\n",
 		 buf[1], buf[2], buf[3]);
 
 	return 0;

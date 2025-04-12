@@ -432,7 +432,7 @@ int twl6030_init_irq(struct device *dev, int irq_num)
 		return -ENOMEM;
 	}
 
-	dev_info(dev, "PIH (irq %d) nested IRQs\n", irq_num);
+	dev_dbg(dev, "PIH (irq %d) nested IRQs\n", irq_num);
 
 	/* install an irq handler to demultiplex the TWL6030 interrupt */
 	status = request_threaded_irq(irq_num, NULL, twl6030_irq_thread,

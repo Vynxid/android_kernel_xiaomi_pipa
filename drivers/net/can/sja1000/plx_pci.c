@@ -536,7 +536,7 @@ static void plx_pci_del_card(struct pci_dev *pdev)
 		if (!dev)
 			continue;
 
-		dev_info(&pdev->dev, "Removing %s\n", dev->name);
+		dev_dbg(&pdev->dev, "Removing %s\n", dev->name);
 		unregister_sja1000dev(dev);
 		priv = netdev_priv(dev);
 		if (priv->reg_base)
@@ -586,7 +586,7 @@ static int plx_pci_add_card(struct pci_dev *pdev,
 		return -ENODEV;
 	}
 
-	dev_info(&pdev->dev, "Detected \"%s\" card at slot #%i\n",
+	dev_dbg(&pdev->dev, "Detected \"%s\" card at slot #%i\n",
 		 ci->name, PCI_SLOT(pdev->devfn));
 
 	/* Allocate card structures to hold addresses, ... */
@@ -664,7 +664,7 @@ static int plx_pci_add_card(struct pci_dev *pdev,
 
 			card->channels++;
 
-			dev_info(&pdev->dev, "Channel #%d at 0x%p, irq %d "
+			dev_dbg(&pdev->dev, "Channel #%d at 0x%p, irq %d "
 				 "registered as %s\n", i + 1, priv->reg_base,
 				 dev->irq, dev->name);
 		} else {

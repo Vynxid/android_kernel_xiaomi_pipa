@@ -1294,7 +1294,7 @@ static int ov5645_probe(struct i2c_client *client,
 		goto power_down;
 	}
 
-	dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
+	dev_dbg(dev, "OV5645 detected at address 0x%02x\n", client->addr);
 
 	ret = ov5645_read_reg(ov5645, OV5645_AEC_PK_MANUAL,
 			      &ov5645->aec_pk_manual);

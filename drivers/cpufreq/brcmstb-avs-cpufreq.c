@@ -612,7 +612,7 @@ static int brcm_avs_cpufreq_init(struct cpufreq_policy *policy)
 		ret = brcm_avs_get_pstate(priv, &pstate);
 		if (!ret) {
 			policy->cur = freq_table[pstate].frequency;
-			dev_info(dev, "registered\n");
+			dev_dbg(dev, "registered\n");
 			return 0;
 		}
 	}

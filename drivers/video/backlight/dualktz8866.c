@@ -374,7 +374,7 @@ static int ktz8866_probe(struct i2c_client *client,
     }
 
     if (ktz8866_status.ktz8866a_init == true && ktz8866_status.ktz8866b_init == true) {
-        dev_info(&client->dev,"ktz8866a and ktz8866b init success create test node\n");
+        dev_dbg(&client->dev,"ktz8866a and ktz8866b init success create test node\n");
         proc_create("bl_selftest", 0644, NULL, &bl_selftest_fops);
     }
 

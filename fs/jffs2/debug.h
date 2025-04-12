@@ -84,7 +84,7 @@ do {						\
 		task_pid_nr(current), __func__, ##__VA_ARGS__)
 
 #define JFFS2_NOTICE(fmt, ...)						\
-	pr_notice("notice: (%d) %s: " fmt,				\
+	pr_debug("notice: (%d) %s: " fmt,				\
 		  task_pid_nr(current), __func__, ##__VA_ARGS__)
 
 #define JFFS2_DEBUG(fmt, ...)						\

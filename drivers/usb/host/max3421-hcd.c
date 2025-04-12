@@ -1185,7 +1185,7 @@ dump_eps(struct usb_hcd *hcd)
 		}
 
 		epnum = usb_endpoint_num(&ep->desc);
-		pr_info("EP%0u %u lst %04u rtr %u nak %6u rxmt %u: %s\n",
+		pr_debug("EP%0u %u lst %04u rtr %u nak %6u rxmt %u: %s\n",
 			epnum, max3421_ep->pkt_state, max3421_ep->last_active,
 			max3421_ep->retries, max3421_ep->naks,
 			max3421_ep->retransmit, ubuf);
@@ -1247,13 +1247,13 @@ max3421_handle_irqs(struct usb_hcd *hcd)
 			max3421_hcd->port_status |=  USB_PORT_STAT_ENABLE;
 		} else {
 			/* BUSEVENT due to completion of Bus Resume */
-			pr_info("%s: BUSEVENT Bus Resume Done\n", __func__);
+			pr_debug("%s: BUSEVENT Bus Resume Done\n", __func__);
 		}
 	}
 	if (hirq & BIT(MAX3421_HI_RWU_BIT))
-		pr_info("%s: RWU\n", __func__);
+		pr_debug("%s: RWU\n", __func__);
 	if (hirq & BIT(MAX3421_HI_SUSDN_BIT))
-		pr_info("%s: SUSDN\n", __func__);
+		pr_debug("%s: SUSDN\n", __func__);
 
 	chg = (old_port_status ^ max3421_hcd->port_status);
 	max3421_hcd->port_status |= chg << 16;
@@ -1277,7 +1277,7 @@ max3421_handle_irqs(struct usb_hcd *hcd)
 					break;	/* error or buffer full */
 				dp += ret;
 			}
-			pr_info("%s: hrsl_stats %s\n", __func__, sbuf);
+			pr_debug("%s: hrsl_stats %s\n", __func__, sbuf);
 			memset(max3421_hcd->err_stat, 0,
 			       sizeof(max3421_hcd->err_stat));
 			last_time = jiffies;
@@ -1397,7 +1397,7 @@ max3421_spi_thread(void *dev_id)
 		dev_err(&spi->dev, "bad rev 0x%02x", max3421_hcd->rev);
 		msleep(10000);
 	}
-	dev_info(&spi->dev, "rev 0x%x, SPI clk %dHz, bpw %u, irq %d\n",
+	dev_dbg(&spi->dev, "rev 0x%x, SPI clk %dHz, bpw %u, irq %d\n",
 		 max3421_hcd->rev, spi->max_speed_hz, spi->bits_per_word,
 		 spi->irq);
 
@@ -1454,7 +1454,7 @@ max3421_spi_thread(void *dev_id)
 		}
 	}
 	set_current_state(TASK_RUNNING);
-	dev_info(&spi->dev, "SPI thread exiting");
+	dev_dbg(&spi->dev, "SPI thread exiting");
 	return 0;
 }
 
@@ -1835,7 +1835,7 @@ max3421_of_vbus_en_pin(struct device *dev, struct max3421_hcd_platform_data *pda
 		dev_err(dev, "device tree node property 'maxim,vbus-en-pin' is missing\n");
 		return retval;
 	}
-	dev_info(dev, "property 'maxim,vbus-en-pin' value is <%d %d>\n", value[0], value[1]);
+	dev_dbg(dev, "property 'maxim,vbus-en-pin' value is <%d %d>\n", value[0], value[1]);
 
 	pdata->vbus_gpout = value[0];
 	pdata->vbus_active_level = value[1];

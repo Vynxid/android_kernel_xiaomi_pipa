@@ -1130,7 +1130,7 @@ static struct kgsl_process_private *kgsl_process_private_open(
 		private = _process_private_open(device);
 	}
 	if (i >= 100) {
-		pr_info("kgsl: kgsl_process_private_open times = %d\n", i);
+		pr_debug("kgsl: kgsl_process_private_open times = %d\n", i);
 	}
 
 	return private;
@@ -3675,7 +3675,7 @@ struct kgsl_mem_entry *gpumem_alloc_entry(
 	/* Cap the alignment bits to the highest number we can handle */
 	align = MEMFLAGS(flags, KGSL_MEMALIGN_MASK, KGSL_MEMALIGN_SHIFT);
 	if (align >= ilog2(KGSL_MAX_ALIGN)) {
-		dev_info(dev_priv->device->dev,
+		dev_dbg(dev_priv->device->dev,
 			"Alignment too large; restricting to %dK\n",
 			KGSL_MAX_ALIGN >> 10);
 

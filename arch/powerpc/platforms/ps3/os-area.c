@@ -653,7 +653,7 @@ static int update_flash_db(void)
 
 	error = db_verify(db);
 	if (error) {
-		pr_notice("%s: Verify of flash database failed, formatting.\n",
+		pr_debug("%s: Verify of flash database failed, formatting.\n",
 			  __func__);
 		dump_db(db);
 		os_area_db_init(db);

@@ -1885,7 +1885,7 @@ static int nvme_setup_host_mem(struct nvme_dev *dev)
 			return 0; /* controller must work without HMB */
 		}
 
-		dev_info(dev->ctrl.device,
+		dev_dbg(dev->ctrl.device,
 			"allocated %lld MiB host memory buffer.\n",
 			dev->host_mem_size >> ilog2(SZ_1M));
 	}
@@ -2558,7 +2558,7 @@ static int nvme_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	if (result)
 		goto release_mempool;
 
-	dev_info(dev->ctrl.device, "pci function %s\n", dev_name(&pdev->dev));
+	dev_dbg(dev->ctrl.device, "pci function %s\n", dev_name(&pdev->dev));
 
 	nvme_reset_ctrl(&dev->ctrl);
 	nvme_get_ctrl(&dev->ctrl);
@@ -2681,7 +2681,7 @@ static pci_ers_result_t nvme_slot_reset(struct pci_dev *pdev)
 {
 	struct nvme_dev *dev = pci_get_drvdata(pdev);
 
-	dev_info(dev->ctrl.device, "restart after slot reset\n");
+	dev_dbg(dev->ctrl.device, "restart after slot reset\n");
 	pci_restore_state(pdev);
 	nvme_reset_ctrl(&dev->ctrl);
 	return PCI_ERS_RESULT_RECOVERED;

@@ -965,7 +965,7 @@ send_capability:
 			ret = msm_xfer_msg(&dev->ctrl, &txn);
 			break;
 		case SLIM_MSG_MC_REPORT_ABSENT:
-			dev_info(dev->dev, "Received Report Absent Message\n");
+			dev_dbg(dev->dev, "Received Report Absent Message\n");
 			break;
 		default:
 			break;

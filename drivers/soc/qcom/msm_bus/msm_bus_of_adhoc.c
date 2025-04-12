@@ -600,7 +600,7 @@ static int get_bus_node_device_data(
 						&node_device->node_qos_clks,
 						&node_device->num_node_qos_clks,
 						node_device->node_info->id)) {
-				dev_info(&pdev->dev,
+				dev_dbg(&pdev->dev,
 					"Bypass QoS programming\n");
 				node_device->fabdev->bypass_qos_prg = true;
 			}
@@ -650,7 +650,7 @@ static int get_bus_node_device_data(
 						&node_device->node_qos_clks,
 						&node_device->num_node_qos_clks,
 						node_device->node_info->id)) {
-				dev_info(&pdev->dev,
+				dev_dbg(&pdev->dev,
 					"Bypass QoS programming\n");
 				node_device->fabdev->bypass_qos_prg = true;
 			}

@@ -998,7 +998,7 @@ static int cio2_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
 
 	r = pm_runtime_get_sync(&cio2->pci_dev->dev);
 	if (r < 0) {
-		dev_info(&cio2->pci_dev->dev, "failed to set power %d\n", r);
+		dev_dbg(&cio2->pci_dev->dev, "failed to set power %d\n", r);
 		pm_runtime_put_noidle(&cio2->pci_dev->dev);
 		return r;
 	}
@@ -1344,7 +1344,7 @@ static int cio2_video_link_validate(struct media_link *link)
 	int ret;
 
 	if (!media_entity_remote_pad(link->sink->entity->pads)) {
-		dev_info(&cio2->pci_dev->dev,
+		dev_dbg(&cio2->pci_dev->dev,
 			 "video node %s pad not connected\n", vd->name);
 		return -ENOTCONN;
 	}
@@ -1753,7 +1753,7 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
 		return r;
 	}
 
-	dev_info(&pci_dev->dev, "device 0x%x (rev: 0x%x)\n",
+	dev_dbg(&pci_dev->dev, "device 0x%x (rev: 0x%x)\n",
 		 pci_dev->device, pci_dev->revision);
 
 	r = pcim_iomap_regions(pci_dev, 1 << CIO2_PCI_BAR, pci_name(pci_dev));

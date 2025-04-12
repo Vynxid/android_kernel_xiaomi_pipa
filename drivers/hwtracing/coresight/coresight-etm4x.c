@@ -1462,7 +1462,7 @@ static int etm4_probe(struct amba_device *adev, const struct amba_id *id)
 
 	drvdata->cpu = pdata ? pdata->cpu : -ENODEV;
 	if (drvdata->cpu == -ENODEV) {
-		dev_info(dev, "CPU not available\n");
+		dev_dbg(dev, "CPU not available\n");
 		return -ENODEV;
 	}
 
@@ -1498,13 +1498,13 @@ static int etm4_probe(struct amba_device *adev, const struct amba_id *id)
 
 	pm_runtime_put(&adev->dev);
 	etmdrvdata[drvdata->cpu] = drvdata;
-	dev_info(dev, "CPU%d: ETM v%d.%d initialized\n",
+	dev_dbg(dev, "CPU%d: ETM v%d.%d initialized\n",
 		 drvdata->cpu, drvdata->arch >> 4, drvdata->arch & 0xf);
 
 	drvdata->tupwr_disable = of_property_read_bool(drvdata->dev->of_node,
 				"qcom,tupwr-disable");
 
-	dev_info(dev, "CPU%d: %s initialized\n",
+	dev_dbg(dev, "CPU%d: %s initialized\n",
 			drvdata->cpu, (char *)id->data);
 
 	if (boot_enable) {

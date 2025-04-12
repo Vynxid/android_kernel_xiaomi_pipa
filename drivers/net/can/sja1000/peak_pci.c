@@ -674,7 +674,7 @@ static int peak_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 			goto failure_free_dev;
 		}
 
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "%s at reg_base=0x%p cfg_base=0x%p irq=%d\n",
 			 dev->name, priv->reg_base, chan->cfg_base, dev->irq);
 	}
@@ -738,7 +738,7 @@ static void peak_pci_remove(struct pci_dev *pdev)
 	while (1) {
 		struct net_device *prev_dev = chan->prev_dev;
 
-		dev_info(&pdev->dev, "removing device %s\n", dev->name);
+		dev_dbg(&pdev->dev, "removing device %s\n", dev->name);
 		/* do that only for first channel */
 		if (!prev_dev && chan->pciec_card)
 			peak_pciec_remove(chan->pciec_card);

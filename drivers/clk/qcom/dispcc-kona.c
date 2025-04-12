@@ -1571,7 +1571,7 @@ static int disp_cc_kona_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered Display CC clocks\n");
+	dev_dbg(&pdev->dev, "Registered Display CC clocks\n");
 	return ret;
 }
 

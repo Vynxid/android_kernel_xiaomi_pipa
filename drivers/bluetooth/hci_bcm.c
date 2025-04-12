@@ -840,7 +840,7 @@ static int bcm_resource(struct acpi_resource *ares, void *data)
 	case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
 		irq = &ares->data.extended_irq;
 		if (irq->polarity != ACPI_ACTIVE_LOW)
-			dev_info(dev->dev, "ACPI Interrupt resource is active-high, this is usually wrong, treating the IRQ as active-low\n");
+			dev_dbg(dev->dev, "ACPI Interrupt resource is active-high, this is usually wrong, treating the IRQ as active-low\n");
 		dev->irq_active_low = true;
 		break;
 
@@ -966,7 +966,7 @@ static int bcm_get_resources(struct bcm_device *dev)
 
 	dmi_id = dmi_first_match(bcm_broken_irq_dmi_table);
 	if (dmi_id) {
-		dev_info(dev->dev, "%s: Has a broken IRQ config, disabling IRQ support / runtime-pm\n",
+		dev_dbg(dev->dev, "%s: Has a broken IRQ config, disabling IRQ support / runtime-pm\n",
 			 dmi_id->ident);
 		dev->irq = 0;
 	}
@@ -1071,7 +1071,7 @@ static int bcm_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, dev);
 
-	dev_info(&pdev->dev, "%s device registered.\n", dev->name);
+	dev_dbg(&pdev->dev, "%s device registered.\n", dev->name);
 
 	/* Place this instance on the device list */
 	mutex_lock(&bcm_device_lock);
@@ -1093,7 +1093,7 @@ static int bcm_remove(struct platform_device *pdev)
 	list_del(&dev->list);
 	mutex_unlock(&bcm_device_lock);
 
-	dev_info(&pdev->dev, "%s device unregistered.\n", dev->name);
+	dev_dbg(&pdev->dev, "%s device unregistered.\n", dev->name);
 
 	return 0;
 }

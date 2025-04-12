@@ -395,7 +395,7 @@ static int process_status(struct solos_card *card, int port, struct sk_buff *skb
 	/* Anything but 'Showtime' is down */
 	if (strcmp(state_str, "Showtime")) {
 		atm_dev_signal_change(card->atmdev[port], ATM_PHY_SIG_LOST);
-		dev_info(&card->dev->dev, "Port %d: %s\n", port, state_str);
+		dev_dbg(&card->dev->dev, "Port %d: %s\n", port, state_str);
 		return 0;
 	}
 
@@ -406,7 +406,7 @@ static int process_status(struct solos_card *card, int port, struct sk_buff *skb
 	if (!attn)
 		return -EIO;
 
-	dev_info(&card->dev->dev, "Port %d: %s @%d/%d kb/s%s%s%s%s\n",
+	dev_dbg(&card->dev->dev, "Port %d: %s @%d/%d kb/s%s%s%s%s\n",
 		 port, state_str, rate_down/1000, rate_up/1000,
 		 snr[0]?", SNR ":"", snr, attn[0]?", Attn ":"", attn);
 	
@@ -664,7 +664,7 @@ static int flash_upgrade(struct solos_card *card, int chip)
 			else
 				blocksize = SPI_FLASH_BLOCK;
 		} else {
-			dev_info(&card->dev->dev, "FPGA version doesn't support"
+			dev_dbg(&card->dev->dev, "FPGA version doesn't support"
 					" daughter board upgrades\n");
 			return -EPERM;
 		}
@@ -677,7 +677,7 @@ static int flash_upgrade(struct solos_card *card, int chip)
 			else
 				blocksize = SPI_FLASH_BLOCK;
 		} else {
-			dev_info(&card->dev->dev, "FPGA version doesn't support"
+			dev_dbg(&card->dev->dev, "FPGA version doesn't support"
 					" daughter board upgrades\n");
 			return -EPERM;
 		}
@@ -689,24 +689,24 @@ static int flash_upgrade(struct solos_card *card, int chip)
 	if (request_firmware(&fw, fw_name, &card->dev->dev))
 		return -ENOENT;
 
-	dev_info(&card->dev->dev, "Flash upgrade starting\n");
+	dev_dbg(&card->dev->dev, "Flash upgrade starting\n");
 
 	/* New FPGAs require driver version before permitting flash upgrades */
 	iowrite32(DRIVER_VERSION, card->config_regs + DRIVER_VER);
 
 	numblocks = fw->size / blocksize;
-	dev_info(&card->dev->dev, "Firmware size: %zd\n", fw->size);
-	dev_info(&card->dev->dev, "Number of blocks: %d\n", numblocks);
+	dev_dbg(&card->dev->dev, "Firmware size: %zd\n", fw->size);
+	dev_dbg(&card->dev->dev, "Number of blocks: %d\n", numblocks);
 	
-	dev_info(&card->dev->dev, "Changing FPGA to Update mode\n");
+	dev_dbg(&card->dev->dev, "Changing FPGA to Update mode\n");
 	iowrite32(1, card->config_regs + FPGA_MODE);
 	(void) ioread32(card->config_regs + FPGA_MODE); 
 
 	/* Set mode to Chip Erase */
 	if(chip == 0 || chip == 2)
-		dev_info(&card->dev->dev, "Set FPGA Flash mode to FPGA Chip Erase\n");
+		dev_dbg(&card->dev->dev, "Set FPGA Flash mode to FPGA Chip Erase\n");
 	if(chip == 1 || chip == 3)
-		dev_info(&card->dev->dev, "Set FPGA Flash mode to Solos Chip Erase\n");
+		dev_dbg(&card->dev->dev, "Set FPGA Flash mode to Solos Chip Erase\n");
 	iowrite32((chip * 2), card->config_regs + FLASH_MODE);
 
 
@@ -720,7 +720,7 @@ static int flash_upgrade(struct solos_card *card, int chip)
 		iowrite32(0, card->config_regs + WRITE_FLASH);
 
 		/* Set mode to Block Write */
-		/* dev_info(&card->dev->dev, "Set FPGA Flash mode to Block Write\n"); */
+		/* dev_dbg(&card->dev->dev, "Set FPGA Flash mode to Block Write\n"); */
 		iowrite32(((chip * 2) + 1), card->config_regs + FLASH_MODE);
 
 		/* Copy block to buffer, swapping each 16 bits for Atmel flash */
@@ -746,7 +746,7 @@ static int flash_upgrade(struct solos_card *card, int chip)
 	iowrite32(0, card->config_regs + WRITE_FLASH);
 	iowrite32(0, card->config_regs + FPGA_MODE);
 	iowrite32(0, card->config_regs + FLASH_MODE);
-	dev_info(&card->dev->dev, "Returning FPGA to Data mode\n");
+	dev_dbg(&card->dev->dev, "Returning FPGA to Data mode\n");
 	return 0;
 }
 
@@ -828,8 +828,8 @@ static void solos_bh(unsigned long card_arg)
 					      size);
 			}
 			if (atmdebug) {
-				dev_info(&card->dev->dev, "Received: port %d\n", port);
-				dev_info(&card->dev->dev, "size: %d VPI: %d VCI: %d\n",
+				dev_dbg(&card->dev->dev, "Received: port %d\n", port);
+				dev_dbg(&card->dev->dev, "size: %d VPI: %d VCI: %d\n",
 					 size, le16_to_cpu(header->vpi),
 					 le16_to_cpu(header->vci));
 				print_buffer(skb);
@@ -1119,9 +1119,9 @@ static uint32_t fpga_tx(struct solos_card *card)
 				int size = le16_to_cpu(header->size);
 
 				skb_pull(oldskb, sizeof(*header));
-				dev_info(&card->dev->dev, "Transmitted: port %d\n",
+				dev_dbg(&card->dev->dev, "Transmitted: port %d\n",
 					 port);
-				dev_info(&card->dev->dev, "size: %d VPI: %d VCI: %d\n",
+				dev_dbg(&card->dev->dev, "size: %d VPI: %d VCI: %d\n",
 					 size, le16_to_cpu(header->vpi),
 					 le16_to_cpu(header->vci));
 				print_buffer(oldskb);
@@ -1266,7 +1266,7 @@ static int fpga_probe(struct pci_dev *dev, const struct pci_device_id *id)
 		card->buffer_size = BUF_SIZE;
 	else
 		card->buffer_size = OLD_BUF_SIZE;
-	dev_info(&dev->dev, "Solos FPGA Version %d.%02d svn-%d\n",
+	dev_dbg(&dev->dev, "Solos FPGA Version %d.%02d svn-%d\n",
 		 major_ver, minor_ver, fpga_ver);
 
 	if (fpga_ver < 37 && (fpga_upgrade || firmware_upgrade ||
@@ -1385,7 +1385,7 @@ static int atm_init(struct solos_card *card, struct device *parent)
 		if (sysfs_create_group(&card->atmdev[i]->class_dev.kobj, &solos_attr_group))
 			dev_err(&card->dev->dev, "Could not register parameter group for ATM device %d\n", i);
 
-		dev_info(&card->dev->dev, "Registered ATM device %d\n", card->atmdev[i]->number);
+		dev_dbg(&card->dev->dev, "Registered ATM device %d\n", card->atmdev[i]->number);
 
 		card->atmdev[i]->ci_range.vpi_bits = 8;
 		card->atmdev[i]->ci_range.vci_bits = 16;
@@ -1419,7 +1419,7 @@ static void atm_remove(struct solos_card *card)
 		if (card->atmdev[i]) {
 			struct sk_buff *skb;
 
-			dev_info(&card->dev->dev, "Unregistering ATM device %d\n", card->atmdev[i]->number);
+			dev_dbg(&card->dev->dev, "Unregistering ATM device %d\n", card->atmdev[i]->number);
 
 			sysfs_remove_group(&card->atmdev[i]->class_dev.kobj, &solos_attr_group);
 			atm_dev_deregister(card->atmdev[i]);

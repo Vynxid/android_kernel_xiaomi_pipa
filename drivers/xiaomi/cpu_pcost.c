@@ -103,7 +103,7 @@ static u64 get_cpu_atime_us(int cpu, u64 *wtime)
 	cpu_idle_time = get_cpu_idle_time_us(cpu, &cpu_wtime);
 
 	if (debug_pcost)
-		pr_info("cpu %d idle utime %15llu wall time %15llu\n", cpu,
+		pr_debug("cpu %d idle utime %15llu wall time %15llu\n", cpu,
 			cpu_idle_time, cpu_wtime);
 
 	cpu_idle_time = cpu_idle_time - cpu_data->prev_idle_time;
@@ -157,7 +157,7 @@ static void clus_power_update(unsigned int new_freq, int src_cpu)
 			continue;
 
 		if (unlikely(debug_pcost))
-			pr_info(" %d atime %15llu, wtime %15llu\n", cpu,
+			pr_debug(" %d atime %15llu, wtime %15llu\n", cpu,
 				atime[cpu], wtime[cpu]);
 	}
 
@@ -263,7 +263,7 @@ static ssize_t read_clus_power(int src_cpu, char *buf)
 				cid);
 
 	if (debug_pcost)
-		pr_info("\n-----------\n");
+		pr_debug("\n-----------\n");
 
 	clus_power_update(cur_freq, src_cpu);
 	for_each_cpu (cpu, &clus->cpus) {
@@ -278,7 +278,7 @@ static ssize_t read_clus_power(int src_cpu, char *buf)
 			if (!debug_pcost)
 				break;
 
-			pr_info("%d a %15llu\n, w %15llu\n", i, atime[i],
+			pr_debug("%d a %15llu\n, w %15llu\n", i, atime[i],
 				w_time);
 		}
 
@@ -297,7 +297,7 @@ static ssize_t read_clus_power(int src_cpu, char *buf)
 		pcost[nr_cap] += fcost;
 
 		if (debug_pcost)
-			pr_info("%2d p: %15llu a: %15llu w: %15llu ap %15llu\n",
+			pr_debug("%2d p: %15llu a: %15llu w: %15llu ap %15llu\n",
 				i, clus->cstate[i].power, atime[i], wtime[i],
 				pcost[i]);
 
@@ -310,7 +310,7 @@ static ssize_t read_clus_power(int src_cpu, char *buf)
 	}
 
 	if (debug_pcost)
-		pr_info("%d: %llu\n", cid, pcost[clus->nr_cap_stats]);
+		pr_debug("%d: %llu\n", cid, pcost[clus->nr_cap_stats]);
 
 	len += snprintf(buf + len, PAGE_SIZE - len, "cid %d: %llu\n", cid,
 			pcost[clus->nr_cap_stats]);
@@ -371,13 +371,13 @@ static ssize_t show_ea_stat(struct cpufreq_policy *policy, char *buf)
 			return len;
 
 		if (debug_pcost)
-			pr_info("%d: buf %lu P %8lu, F %8lu  len %d\n", i, buf,
+			pr_debug("%d: buf %lu P %8lu, F %8lu  len %d\n", i, buf,
 				clus->cstate[i].power, clus->cstate[i].freq,
 				len);
 		len += snprintf(buf + len, PAGE_SIZE - len, "%2d %8lu %8lu\n",
 				i, clus->cstate[i].power, clus->cstate[i].freq);
 		if (debug_pcost)
-			pr_info("%d: buf %lu P %8lu, F %8lu  len %d\n", i,
+			pr_debug("%d: buf %lu P %8lu, F %8lu  len %d\n", i,
 				buf + len, clus->cstate[i].power,
 				clus->cstate[i].freq, len);
 	}
@@ -428,7 +428,7 @@ static int alloc_percpu_time(int cpu, int nr_cap)
 	}
 
 	init_cpu_suc[cpu] = 1;
-	pr_info("cpu %d alloc percpu active %lu\n", cpu,
+	pr_debug("cpu %d alloc percpu active %lu\n", cpu,
 		per_cpu(cpu_st, cpu).atime);
 
 	return 0;
@@ -480,7 +480,7 @@ static int enery_probe(int cluster)
 	for (index = 0; index < nr_cap; index++) {
 		cpu_cap_dt(cpu, index, &cstate[index].power,
 			   &cstate[index].freq, NULL);
-		pr_info("%2d, P: %8lu, F:%8lu\n", index, cstate[index].power,
+		pr_debug("%2d, P: %8lu, F:%8lu\n", index, cstate[index].power,
 			cstate[index].freq);
 	}
 
@@ -506,7 +506,7 @@ static int cpu_pcost_init(void)
 	const struct cpumask *cluster_cpus;
 	int i, cpu, cluster = 0;
 
-	pr_info("come into %s\n", __func__);
+	pr_debug("come into %s\n", __func__);
 	for_each_cpu (i, &cpus) {
 		if (cluster >= MAX_CLUSTER)
 			break;
@@ -543,7 +543,7 @@ static int cpu_pcost_init(void)
 	if (!ea_wq)
 		goto alloc_err;
 
-	pr_info("%s suc\n", __func__);
+	pr_debug("%s suc\n", __func__);
 	return 0;
 
 alloc_err:

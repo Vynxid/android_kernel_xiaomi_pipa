@@ -917,7 +917,7 @@ static int lp5523_probe(struct i2c_client *client,
 	if (ret)
 		goto err_init;
 
-	dev_info(&client->dev, "%s Programmable led chip found\n", id->name);
+	dev_dbg(&client->dev, "%s Programmable led chip found\n", id->name);
 
 	ret = lp55xx_register_leds(led, chip);
 	if (ret)

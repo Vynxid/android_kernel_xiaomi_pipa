@@ -25,7 +25,7 @@ extern void ksu_try_umount(const char *mnt, bool check_mnt, int flags, uid_t uid
 
 #ifdef CONFIG_KSU_SUSFS_ENABLE_LOG
 bool susfs_is_log_enabled __read_mostly = true;
-#define SUSFS_LOGI(fmt, ...) if (susfs_is_log_enabled) pr_info("susfs:[%u][%d][%s] " fmt, current_uid().val, current->pid, __func__, ##__VA_ARGS__)
+#define SUSFS_LOGI(fmt, ...) if (susfs_is_log_enabled) pr_debug("susfs:[%u][%d][%s] " fmt, current_uid().val, current->pid, __func__, ##__VA_ARGS__)
 #define SUSFS_LOGE(fmt, ...) if (susfs_is_log_enabled) pr_err("susfs:[%u][%d][%s]" fmt, current_uid().val, current->pid, __func__, ##__VA_ARGS__)
 #else
 #define SUSFS_LOGI(fmt, ...) 
@@ -699,9 +699,9 @@ void susfs_set_log(bool enabled) {
 	susfs_is_log_enabled = enabled;
 	spin_unlock(&susfs_spin_lock);
 	if (susfs_is_log_enabled) {
-		pr_info("susfs: enable logging to kernel");
+		pr_debug("susfs: enable logging to kernel");
 	} else {
-		pr_info("susfs: disable logging to kernel");
+		pr_debug("susfs: disable logging to kernel");
 	}
 }
 #endif // #ifdef CONFIG_KSU_SUSFS_ENABLE_LOG

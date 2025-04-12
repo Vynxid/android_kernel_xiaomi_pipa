@@ -650,7 +650,7 @@ static int nmclan_config(struct pcmcia_device *link)
       dev_dbg(&link->dev, "nmclan_cs configured: mace id=%x %x\n",
 	    sig[0], sig[1]);
     } else {
-      pr_notice("mace id not found: %x %x should be 0x40 0x?9\n",
+      pr_debug("mace id not found: %x %x should be 0x40 0x?9\n",
 		sig[0], sig[1]);
       goto failed;
     }
@@ -663,13 +663,13 @@ static int nmclan_config(struct pcmcia_device *link)
   if (if_port <= 2)
     dev->if_port = if_port;
   else
-    pr_notice("invalid if_port requested\n");
+    pr_debug("invalid if_port requested\n");
 
   SET_NETDEV_DEV(dev, &link->dev);
 
   i = register_netdev(dev);
   if (i != 0) {
-    pr_notice("register_netdev() failed\n");
+    pr_debug("register_netdev() failed\n");
     goto failed;
   }
 

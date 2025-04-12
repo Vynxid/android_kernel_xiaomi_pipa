@@ -654,7 +654,7 @@ static int tpm_tis_i2c_init(struct device *dev)
 		goto out_release;
 	}
 
-	dev_info(dev, "1.2 TPM (device-id 0x%X)\n", vendor >> 16);
+	dev_dbg(dev, "1.2 TPM (device-id 0x%X)\n", vendor >> 16);
 
 	tpm_dev.chip = chip;
 

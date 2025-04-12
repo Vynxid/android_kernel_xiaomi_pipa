@@ -939,7 +939,7 @@ int ti_bandgap_probe(struct platform_device *pdev)
 		 */
 		val = ti_bandgap_readl(bgp, tsr->bgap_efuse);
 		if (!val)
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Non-trimmed BGAP, Temp not accurate\n");
 	}
 

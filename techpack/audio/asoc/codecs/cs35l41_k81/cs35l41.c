@@ -981,7 +981,7 @@ static int cs35l41_vol_ramp0(struct cs35l41_private *cs35l41,
 	}
 
 	if (final_y <= init_y) {
-		dev_info(cs35l41->dev, "Vol ramp slope is not positive\n");
+		dev_dbg(cs35l41->dev, "Vol ramp slope is not positive\n");
 		cs35l41_set_vol((int)init_y, cs35l41);
 		usleep_range(final_x, final_x + 1);
 		cs35l41_set_vol((int)final_y, cs35l41);
@@ -1134,7 +1134,7 @@ static int cs35l41_put_ramp_status(struct snd_kcontrol *kcontrol,
 	component = snd_soc_kcontrol_component(kcontrol);
 	cs35l41 = snd_soc_component_get_drvdata(component);
 
-	dev_info(cs35l41->dev,
+	dev_dbg(cs35l41->dev,
 		 "Volume ramp status cannot be set\n");
 	return 0;
 }
@@ -2925,7 +2925,7 @@ static int cs35l41_handle_of_data(struct device *dev,
 	} else {
 		/* Device tree provides file name */
 		num_fast_switch = (size_t)ret;
-		dev_info(dev, "num_fast_switch:%zu\n", num_fast_switch);
+		dev_dbg(dev, "num_fast_switch:%zu\n", num_fast_switch);
 		cs35l41->fast_switch_names =
 			devm_kmalloc(dev, num_fast_switch * sizeof(char *),
 				     GFP_KERNEL);
@@ -2935,7 +2935,7 @@ static int cs35l41_handle_of_data(struct device *dev,
 					      cs35l41->fast_switch_names,
 					      num_fast_switch);
 		for (i = 0; i < num_fast_switch; i++) {
-			dev_info(dev, "%d:%s\n", i,
+			dev_dbg(dev, "%d:%s\n", i,
 				 cs35l41->fast_switch_names[i]);
 		}
 		cs35l41->fast_switch_enum.items	= num_fast_switch;
@@ -3623,7 +3623,7 @@ int cs35l41_probe(struct cs35l41_private *cs35l41,
 		ret = PTR_ERR(cs35l41->reset_gpio);
 		cs35l41->reset_gpio = NULL;
 		if (ret == -EBUSY) {
-			dev_info(cs35l41->dev,
+			dev_dbg(cs35l41->dev,
 				 "Reset line busy, assuming shared reset\n");
 		} else {
 			dev_err(cs35l41->dev,
@@ -3916,7 +3916,7 @@ int cs35l41_probe(struct cs35l41_private *cs35l41,
 		goto err;
 	}
 
-	dev_info(cs35l41->dev, "Cirrus Logic CS35L41 (%x), Revision: %02X\n",
+	dev_dbg(cs35l41->dev, "Cirrus Logic CS35L41 (%x), Revision: %02X\n",
 			regid, reg_revid);
 
 	cs35l41->wq = create_singlethread_workqueue("cs35l41");

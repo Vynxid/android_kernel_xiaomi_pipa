@@ -885,7 +885,7 @@ static int pvrdma_pci_probe(struct pci_dev *pdev,
 	}
 
 	dev->dsr_version = pvrdma_read_reg(dev, PVRDMA_REG_VERSION);
-	dev_info(&pdev->dev, "device version %d, driver version %d\n",
+	dev_dbg(&pdev->dev, "device version %d, driver version %d\n",
 		 dev->dsr_version, PVRDMA_VERSION);
 
 	dev->dsr = dma_zalloc_coherent(&pdev->dev, sizeof(*dev->dsr),
@@ -988,7 +988,7 @@ static int pvrdma_pci_probe(struct pci_dev *pdev,
 	}
 	dev_hold(dev->netdev);
 
-	dev_info(&pdev->dev, "paired device to %s\n", dev->netdev->name);
+	dev_dbg(&pdev->dev, "paired device to %s\n", dev->netdev->name);
 
 	/* Interrupt setup */
 	ret = pvrdma_alloc_intrs(dev);
@@ -1045,7 +1045,7 @@ static int pvrdma_pci_probe(struct pci_dev *pdev,
 		goto err_unreg_ibdev;
 	}
 
-	dev_info(&pdev->dev, "attached to device\n");
+	dev_dbg(&pdev->dev, "attached to device\n");
 	return 0;
 
 err_unreg_ibdev:
@@ -1095,7 +1095,7 @@ static void pvrdma_pci_remove(struct pci_dev *pdev)
 	if (!dev)
 		return;
 
-	dev_info(&pdev->dev, "detaching from device\n");
+	dev_dbg(&pdev->dev, "detaching from device\n");
 
 	unregister_netdevice_notifier(&dev->nb_netdev);
 	dev->nb_netdev.notifier_call = NULL;

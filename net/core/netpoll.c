@@ -64,11 +64,11 @@ static unsigned int carrier_timeout = 4;
 module_param(carrier_timeout, uint, 0644);
 
 #define np_info(np, fmt, ...)				\
-	pr_info("%s: " fmt, np->name, ##__VA_ARGS__)
+	pr_debug("%s: " fmt, np->name, ##__VA_ARGS__)
 #define np_err(np, fmt, ...)				\
 	pr_err("%s: " fmt, np->name, ##__VA_ARGS__)
 #define np_notice(np, fmt, ...)				\
-	pr_notice("%s: " fmt, np->name, ##__VA_ARGS__)
+	pr_debug("%s: " fmt, np->name, ##__VA_ARGS__)
 
 static int netpoll_start_xmit(struct sk_buff *skb, struct net_device *dev,
 			      struct netdev_queue *txq)

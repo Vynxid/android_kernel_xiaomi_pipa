@@ -1305,7 +1305,7 @@ static void ufs_qcom_dev_ref_clk_ctrl(struct ufs_qcom_host *host, bool enable)
 		 * exit command.
 		 */
 		if (enable) {
-			if (host->hba->dev_info.quirks &
+			if (host->hba->dev_dbg.quirks &
 			    UFS_DEVICE_QUIRK_WAIT_AFTER_REF_CLK_UNGATE) {
 				if (!oops_in_progress)
 					usleep_range(50, 60);
@@ -1452,7 +1452,7 @@ static int ufs_qcom_apply_dev_quirks(struct ufs_hba *hba)
 {
 	int err = 0;
 
-	if (hba->dev_info.quirks & UFS_DEVICE_QUIRK_HOST_PA_SAVECONFIGTIME)
+	if (hba->dev_dbg.quirks & UFS_DEVICE_QUIRK_HOST_PA_SAVECONFIGTIME)
 		err = ufs_qcom_quirk_host_pa_saveconfigtime(hba);
 
 	return err;
@@ -2077,7 +2077,7 @@ static void ufs_qcom_parse_lpm(struct ufs_qcom_host *host)
 
 	host->disable_lpm = of_property_read_bool(node, "qcom,disable-lpm");
 	if (host->disable_lpm)
-		pr_info("%s: will disable all LPM modes\n", __func__);
+		pr_debug("%s: will disable all LPM modes\n", __func__);
 }
 
 static int ufs_qcom_parse_reg_info(struct ufs_qcom_host *host, char *name,
@@ -2096,7 +2096,7 @@ static int ufs_qcom_parse_reg_info(struct ufs_qcom_host *host, char *name,
 
 	snprintf(prop_name, MAX_PROP_SIZE, "%s-supply", name);
 	if (!of_parse_phandle(np, prop_name, 0)) {
-		dev_info(dev, "%s: Unable to find %s regulator, assuming enabled\n",
+		dev_dbg(dev, "%s: Unable to find %s regulator, assuming enabled\n",
 			 __func__, prop_name);
 		ret = -ENODEV;
 		goto out;
@@ -2228,7 +2228,7 @@ static int ufs_qcom_init(struct ufs_hba *hba)
 
 	err = ufs_qcom_pm_qos_init(host);
 	if (err)
-		dev_info(dev, "%s: PM QoS will be disabled\n", __func__);
+		dev_dbg(dev, "%s: PM QoS will be disabled\n", __func__);
 
 	/* restore the secure configuration */
 	ufs_qcom_update_sec_cfg(hba, true);

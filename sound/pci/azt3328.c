@@ -2590,13 +2590,13 @@ snd_azf3328_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
 		goto out_err;
 
 #ifdef MODULE
-	dev_info(card->dev,
+	dev_dbg(card->dev,
 		 "Sound driver for Aztech AZF3328-based soundcards such as PCI168.\n");
-	dev_info(card->dev,
+	dev_dbg(card->dev,
 		 "Hardware was completely undocumented, unfortunately.\n");
-	dev_info(card->dev,
+	dev_dbg(card->dev,
 		 "Feel free to contact andi AT lisas.de for bug reports etc.!\n");
-	dev_info(card->dev,
+	dev_dbg(card->dev,
 		 "User-scalable sequencer timer set to %dHz (1024000Hz / %d).\n",
 		 1024000 / seqtimer_scaling, seqtimer_scaling);
 #endif

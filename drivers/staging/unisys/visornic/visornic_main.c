@@ -1942,7 +1942,7 @@ static int visornic_probe(struct visor_device *dev)
 		goto cleanup_register_netdev;
 	}
 
-	dev_info(&dev->device, "%s success netdev=%s\n",
+	dev_dbg(&dev->device, "%s success netdev=%s\n",
 		 __func__, netdev->name);
 	return 0;
 

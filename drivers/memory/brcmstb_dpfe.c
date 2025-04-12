@@ -711,7 +711,7 @@ static int brcmstb_dpfe_probe(struct platform_device *pdev)
 
 	ret = sysfs_create_groups(&pdev->dev.kobj, dpfe_groups);
 	if (!ret)
-		dev_info(dev, "registered.\n");
+		dev_dbg(dev, "registered.\n");
 
 	return ret;
 }

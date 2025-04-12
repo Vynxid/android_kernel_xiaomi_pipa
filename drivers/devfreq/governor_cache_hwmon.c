@@ -401,7 +401,7 @@ int register_cache_hwmon(struct device *dev, struct cache_hwmon *hwmon)
 	mutex_unlock(&register_lock);
 
 	if (!ret) {
-		dev_info(dev, "Cache HWmon governor registered.\n");
+		dev_dbg(dev, "Cache HWmon governor registered.\n");
 	} else {
 		dev_err(dev, "Failed to add Cache HWmon governor\n");
 		return ret;

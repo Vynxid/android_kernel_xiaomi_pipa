@@ -127,7 +127,7 @@ int __init instantiate_cache_sram(struct platform_device *dev,
 	rh_attach_region(cache_sram->rh, 0, cache_sram->size);
 	spin_lock_init(&cache_sram->lock);
 
-	dev_info(&dev->dev, "[base:0x%llx, size:0x%x] configured and loaded\n",
+	dev_dbg(&dev->dev, "[base:0x%llx, size:0x%x] configured and loaded\n",
 		(unsigned long long)cache_sram->base_phys, cache_sram->size);
 
 	return 0;
@@ -156,5 +156,5 @@ void remove_cache_sram(struct platform_device *dev)
 	kfree(cache_sram);
 	cache_sram = NULL;
 
-	dev_info(&dev->dev, "MPC85xx Cache-SRAM driver unloaded\n");
+	dev_dbg(&dev->dev, "MPC85xx Cache-SRAM driver unloaded\n");
 }

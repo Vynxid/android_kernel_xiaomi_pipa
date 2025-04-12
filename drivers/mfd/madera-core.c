@@ -527,7 +527,7 @@ int madera_dev_init(struct madera *madera)
 	}
 	madera->rev &= MADERA_HW_REVISION_MASK;
 
-	dev_info(dev, "%s silicon revision %d\n", madera->type_name,
+	dev_dbg(dev, "%s silicon revision %d\n", madera->type_name,
 		 madera->rev);
 
 	/* Apply hardware patch */

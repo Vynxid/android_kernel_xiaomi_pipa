@@ -194,15 +194,15 @@ TRACE_EVENT(cam_req_mgr_apply_request,
 		struct cam_req_mgr_connected_device *dev),
 	TP_ARGS(link, req, dev),
 	TP_STRUCT__entry(
-		__string(name, dev->dev_info.name)
+		__string(name, dev->dev_dbg.name)
 		__field(uint32_t, dev_id)
 		__field(uint64_t, req_id)
 		__field(void*, link)
 		__field(void*, session)
 	),
 	TP_fast_assign(
-		__assign_str(name, dev->dev_info.name);
-		__entry->dev_id  = dev->dev_info.dev_id;
+		__assign_str(name, dev->dev_dbg.name);
+		__entry->dev_id  = dev->dev_dbg.dev_id;
 		__entry->req_id  = req->request_id;
 		__entry->link    = link;
 		__entry->session = link->parent;
@@ -221,7 +221,7 @@ TRACE_EVENT(cam_req_mgr_add_req,
 		struct cam_req_mgr_connected_device *dev),
 	TP_ARGS(link, idx, add_req, tbl, dev),
 	TP_STRUCT__entry(
-		__string(name, dev->dev_info.name)
+		__string(name, dev->dev_dbg.name)
 		__field(uint32_t, dev_id)
 		__field(uint64_t, req_id)
 		__field(uint32_t, slot_id)
@@ -232,8 +232,8 @@ TRACE_EVENT(cam_req_mgr_add_req,
 		__field(void*, session)
 	),
 	TP_fast_assign(
-		__assign_str(name, dev->dev_info.name);
-		__entry->dev_id    = dev->dev_info.dev_id;
+		__assign_str(name, dev->dev_dbg.name);
+		__entry->dev_id    = dev->dev_dbg.dev_id;
 		__entry->req_id    = add_req->req_id;
 		__entry->slot_id   = idx;
 		__entry->delay     = tbl->pd;

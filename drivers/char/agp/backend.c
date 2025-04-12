@@ -278,14 +278,14 @@ int agp_add_bridge(struct agp_bridge_data *bridge)
 
 	/* Grab reference on the chipset driver. */
 	if (!try_module_get(bridge->driver->owner)) {
-		dev_info(&bridge->dev->dev, "can't lock chipset driver\n");
+		dev_dbg(&bridge->dev->dev, "can't lock chipset driver\n");
 		error = -EINVAL;
 		goto err_put_bridge;
 	}
 
 	error = agp_backend_initialize(bridge);
 	if (error) {
-		dev_info(&bridge->dev->dev,
+		dev_dbg(&bridge->dev->dev,
 			 "agp_backend_initialize() failed\n");
 		goto err_out;
 	}
@@ -293,12 +293,12 @@ int agp_add_bridge(struct agp_bridge_data *bridge)
 	if (list_empty(&agp_bridges)) {
 		error = agp_frontend_initialize();
 		if (error) {
-			dev_info(&bridge->dev->dev,
+			dev_dbg(&bridge->dev->dev,
 				 "agp_frontend_initialize() failed\n");
 			goto frontend_err;
 		}
 
-		dev_info(&bridge->dev->dev, "AGP aperture is %dM @ 0x%lx\n",
+		dev_dbg(&bridge->dev->dev, "AGP aperture is %dM @ 0x%lx\n",
 			 bridge->driver->fetch_size(), bridge->gart_bus_addr);
 
 	}

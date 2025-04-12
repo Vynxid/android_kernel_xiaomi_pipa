@@ -138,7 +138,7 @@ static irqreturn_t adf_msix_isr_ae(int irq, void *dev_ptr)
 				vf_info = accel_dev->pf.vf_info + i;
 
 				if (!__ratelimit(&vf_info->vf2pf_ratelimit)) {
-					dev_info(&GET_DEV(accel_dev),
+					dev_dbg(&GET_DEV(accel_dev),
 						 "Too many ints from VF%d\n",
 						  vf_info->vf_nr + 1);
 					continue;

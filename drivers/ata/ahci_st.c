@@ -110,13 +110,13 @@ static int st_ahci_probe_resets(struct ahci_host_priv *hpriv,
 
 	drv_data->pwr = devm_reset_control_get(dev, "pwr-dwn");
 	if (IS_ERR(drv_data->pwr)) {
-		dev_info(dev, "power reset control not defined\n");
+		dev_dbg(dev, "power reset control not defined\n");
 		drv_data->pwr = NULL;
 	}
 
 	drv_data->sw_rst = devm_reset_control_get(dev, "sw-rst");
 	if (IS_ERR(drv_data->sw_rst)) {
-		dev_info(dev, "soft reset control not defined\n");
+		dev_dbg(dev, "soft reset control not defined\n");
 		drv_data->sw_rst = NULL;
 	}
 

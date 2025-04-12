@@ -895,7 +895,7 @@ static unsigned int handle_tx(struct eg20t_port *priv)
 	int tx_empty;
 
 	if (!priv->start_tx) {
-		dev_info(priv->port.dev, "%s:Tx isn't started. (%lu)\n",
+		dev_dbg(priv->port.dev, "%s:Tx isn't started. (%lu)\n",
 			__func__, jiffies);
 		pch_uart_hal_disable_interrupt(priv, PCH_UART_HAL_TX_INT);
 		priv->tx_empty = 1;
@@ -946,7 +946,7 @@ static unsigned int dma_handle_tx(struct eg20t_port *priv)
 	int rem;
 
 	if (!priv->start_tx) {
-		dev_info(priv->port.dev, "%s:Tx isn't started. (%lu)\n",
+		dev_dbg(priv->port.dev, "%s:Tx isn't started. (%lu)\n",
 			__func__, jiffies);
 		pch_uart_hal_disable_interrupt(priv, PCH_UART_HAL_TX_INT);
 		priv->tx_empty = 1;
@@ -1490,7 +1490,7 @@ static int pch_uart_verify_port(struct uart_port *port,
 
 	priv = container_of(port, struct eg20t_port, port);
 	if (serinfo->flags & UPF_LOW_LATENCY) {
-		dev_info(priv->port.dev,
+		dev_dbg(priv->port.dev,
 			"PCH UART : Use PIO Mode (without DMA)\n");
 		priv->use_dma = 0;
 		serinfo->flags &= ~UPF_LOW_LATENCY;
@@ -1505,7 +1505,7 @@ static int pch_uart_verify_port(struct uart_port *port,
 			if (priv->chan_rx)
 				priv->use_dma = 1;
 		}
-		dev_info(priv->port.dev, "PCH UART: %s\n",
+		dev_dbg(priv->port.dev, "PCH UART: %s\n",
 				priv->use_dma ?
 				"Use DMA Mode" : "No DMA");
 	}

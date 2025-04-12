@@ -847,7 +847,7 @@ static int jffs2_rename (struct inode *old_dir_i, struct dentry *old_dentry,
 			f->inocache->pino_nlink++;
 		mutex_unlock(&f->sem);
 
-		pr_notice("%s(): Link succeeded, unlink failed (err %d). You now have a hard link\n",
+		pr_debug("%s(): Link succeeded, unlink failed (err %d). You now have a hard link\n",
 			  __func__, ret);
 		/*
 		 * We can't keep the target in dcache after that.

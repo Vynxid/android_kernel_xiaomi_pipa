@@ -1067,7 +1067,7 @@ int serial8250_register_8250_port(struct uart_8250_port *up)
 
 			ret = uart->port.line;
 		} else {
-			dev_info(uart->port.dev,
+			dev_dbg(uart->port.dev,
 				"skipping CIR port at 0x%lx / 0x%llx, IRQ %d\n",
 				uart->port.iobase,
 				(unsigned long long)uart->port.mapbase,
@@ -1144,7 +1144,7 @@ static int __init serial8250_init(void)
 
 	serial8250_isa_init_ports();
 
-	pr_info("Serial: 8250/16550 driver, %d ports, IRQ sharing %sabled\n",
+	pr_debug("Serial: 8250/16550 driver, %d ports, IRQ sharing %sabled\n",
 		nr_uarts, share_irqs ? "en" : "dis");
 
 #ifdef CONFIG_SPARC

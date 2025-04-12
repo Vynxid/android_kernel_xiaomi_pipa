@@ -1057,8 +1057,8 @@ static int aaci_probe(struct amba_device *dev,
 
 	ret = snd_card_register(aaci->card);
 	if (ret == 0) {
-		dev_info(&dev->dev, "%s\n", aaci->card->longname);
-		dev_info(&dev->dev, "FIFO %u entries\n", aaci->fifo_depth);
+		dev_dbg(&dev->dev, "%s\n", aaci->card->longname);
+		dev_dbg(&dev->dev, "FIFO %u entries\n", aaci->fifo_depth);
 		amba_set_drvdata(dev, aaci->card);
 		return ret;
 	}

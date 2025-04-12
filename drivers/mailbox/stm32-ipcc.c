@@ -327,7 +327,7 @@ static int stm32_ipcc_probe(struct platform_device *pdev)
 
 	ip_ver = readl_relaxed(ipcc->reg_base + IPCC_VER);
 
-	dev_info(dev, "ipcc rev:%ld.%ld enabled, %d chans, proc %d\n",
+	dev_dbg(dev, "ipcc rev:%ld.%ld enabled, %d chans, proc %d\n",
 		 FIELD_GET(VER_MAJREV_MASK, ip_ver),
 		 FIELD_GET(VER_MINREV_MASK, ip_ver),
 		 ipcc->controller.num_chans, ipcc->proc_id);

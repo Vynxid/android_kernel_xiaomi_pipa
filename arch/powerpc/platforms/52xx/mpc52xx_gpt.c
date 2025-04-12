@@ -673,7 +673,7 @@ static int mpc52xx_gpt_wdt_init(void)
 	if (err)
 		pr_err("%s: cannot register watchdog device\n", WDT_IDENTITY);
 	else
-		pr_info("%s: watchdog device registered\n", WDT_IDENTITY);
+		pr_debug("%s: watchdog device registered\n", WDT_IDENTITY);
 	return err;
 }
 
@@ -693,7 +693,7 @@ static int mpc52xx_gpt_wdt_setup(struct mpc52xx_gpt_priv *gpt,
 	if (mpc52xx_gpt_do_start(gpt, real_timeout, 0, 1))
 		dev_warn(gpt->dev, "starting as wdt failed\n");
 	else
-		dev_info(gpt->dev, "watchdog set to %us timeout\n", *period);
+		dev_dbg(gpt->dev, "watchdog set to %us timeout\n", *period);
 	return 0;
 }
 
@@ -748,10 +748,10 @@ static int mpc52xx_gpt_probe(struct platform_device *ofdev)
 		on_boot_wdt = of_get_property(ofdev->dev.of_node,
 					      "fsl,wdt-on-boot", NULL);
 		if (on_boot_wdt) {
-			dev_info(gpt->dev, "used as watchdog\n");
+			dev_dbg(gpt->dev, "used as watchdog\n");
 			gpt->wdt_mode |= MPC52xx_GPT_IS_WDT;
 		} else
-			dev_info(gpt->dev, "can function as watchdog\n");
+			dev_dbg(gpt->dev, "can function as watchdog\n");
 		mpc52xx_gpt_wdt_setup(gpt, on_boot_wdt);
 	}
 

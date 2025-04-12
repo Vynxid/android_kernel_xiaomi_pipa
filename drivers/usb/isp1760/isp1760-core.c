@@ -94,7 +94,7 @@ static void isp1760_init_core(struct isp1760_device *isp)
 
 	isp1760_write32(isp->regs, HC_PORT1_CTRL, otgctrl);
 
-	dev_info(isp->dev, "bus width: %u, oc: %s\n",
+	dev_dbg(isp->dev, "bus width: %u, oc: %s\n",
 		 isp->devflags & ISP1760_FLAG_BUS_WIDTH_16 ? 16 : 32,
 		 isp->devflags & ISP1760_FLAG_ANALOG_OC ? "analog" : "digital");
 }

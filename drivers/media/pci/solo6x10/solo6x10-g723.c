@@ -422,7 +422,7 @@ int solo_g723_init(struct solo_dev *solo_dev)
 
 	solo_g723_config(solo_dev);
 
-	dev_info(&solo_dev->pdev->dev, "Alsa sound card as %s\n", name);
+	dev_dbg(&solo_dev->pdev->dev, "Alsa sound card as %s\n", name);
 
 	return 0;
 

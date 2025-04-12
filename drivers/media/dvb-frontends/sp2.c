@@ -398,7 +398,7 @@ static int sp2_probe(struct i2c_client *client,
 	if (ret)
 		goto err;
 
-	dev_info(&s->client->dev, "CIMaX SP2 successfully attached\n");
+	dev_dbg(&s->client->dev, "CIMaX SP2 successfully attached\n");
 	return 0;
 err:
 	dev_dbg(&client->dev, "init failed=%d\n", ret);

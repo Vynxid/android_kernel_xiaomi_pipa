@@ -139,7 +139,7 @@ static int r9701_probe(struct spi_device *spi)
 	 * 2000/1/1 00:00:00
 	 */
 	if (r9701_get_datetime(&spi->dev, &dt)) {
-		dev_info(&spi->dev, "trying to repair invalid date/time\n");
+		dev_dbg(&spi->dev, "trying to repair invalid date/time\n");
 		dt.tm_sec  = 0;
 		dt.tm_min  = 0;
 		dt.tm_hour = 0;

@@ -927,11 +927,11 @@ static int mt9m111_video_probe(struct i2c_client *client)
 
 	switch (data) {
 	case 0x143a: /* MT9M111 or MT9M131 */
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			"Detected a MT9M111/MT9M131 chip ID %x\n", data);
 		break;
 	case 0x148c: /* MT9M112 */
-		dev_info(&client->dev, "Detected a MT9M112 chip ID %x\n", data);
+		dev_dbg(&client->dev, "Detected a MT9M112 chip ID %x\n", data);
 		break;
 	default:
 		dev_err(&client->dev,

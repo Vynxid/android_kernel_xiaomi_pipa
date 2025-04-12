@@ -372,7 +372,7 @@ static int lms501kf03_probe(struct spi_device *spi)
 
 	spi_set_drvdata(spi, lcd);
 
-	dev_info(&spi->dev, "lms501kf03 panel driver has been probed.\n");
+	dev_dbg(&spi->dev, "lms501kf03 panel driver has been probed.\n");
 
 	return 0;
 }

@@ -606,7 +606,7 @@ static void mvs_64xx_fix_phy_info(struct mvs_info *mvi, int i,
 			PHY_MAX_SPP_PHYS_LINK_RATE_MASK) >> 12;
 
 	mvs_write_port_cfg_addr(mvi, i, PHYR_IDENTIFY);
-	phy->dev_info = mvs_read_port_cfg_data(mvi, i);
+	phy->dev_dbg = mvs_read_port_cfg_data(mvi, i);
 
 	mvs_write_port_cfg_addr(mvi, i, PHYR_ATT_DEV_INFO);
 	phy->att_dev_info = mvs_read_port_cfg_data(mvi, i);

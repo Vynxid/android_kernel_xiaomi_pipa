@@ -1275,7 +1275,7 @@ static int dcc_probe(struct platform_device *pdev)
 			return -EINVAL;
 		}
 	} else {
-		dev_info(dev, "DCC XPU is not specified\n");
+		dev_dbg(dev, "DCC XPU is not specified\n");
 	}
 
 	ret = dcc_xpu_unlock(drvdata);

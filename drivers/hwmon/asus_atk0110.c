@@ -1126,7 +1126,7 @@ static int atk_ec_ctl(struct atk_data *data, int enable)
 				enable ? "en" : "dis");
 		err = -EIO;
 	} else {
-		dev_info(dev, "EC %sabled\n",
+		dev_dbg(dev, "EC %sabled\n",
 				enable ? "en" : "dis");
 	}
 
@@ -1278,7 +1278,7 @@ static int atk_probe_if(struct atk_data *data)
 	 * are present the new one (GGRP/GITM) is not functional.
 	 */
 	if (new_if)
-		dev_info(dev, "Overriding interface detection\n");
+		dev_dbg(dev, "Overriding interface detection\n");
 	if (data->rtmp_handle &&
 			data->rvlt_handle && data->rfan_handle && !new_if)
 		data->old_interface = true;
@@ -1342,7 +1342,7 @@ static int atk_add(struct acpi_device *device)
 	if (err < 0)
 		goto out;
 	if (err == 0) {
-		dev_info(&device->dev,
+		dev_dbg(&device->dev,
 			 "No usable sensor detected, bailing out\n");
 		err = -ENODEV;
 		goto out;
@@ -1399,7 +1399,7 @@ static int __init atk0110_init(void)
 
 	ret = acpi_bus_register_driver(&atk_driver);
 	if (ret)
-		pr_info("acpi_bus_register_driver failed: %d\n", ret);
+		pr_debug("acpi_bus_register_driver failed: %d\n", ret);
 
 	return ret;
 }

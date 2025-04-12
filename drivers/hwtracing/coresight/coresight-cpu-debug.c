@@ -627,7 +627,7 @@ static int debug_probe(struct amba_device *adev, const struct amba_id *id)
 		pm_runtime_put(dev);
 	mutex_unlock(&debug_lock);
 
-	dev_info(dev, "Coresight debug-CPU%d initialized\n", drvdata->cpu);
+	dev_dbg(dev, "Coresight debug-CPU%d initialized\n", drvdata->cpu);
 	return 0;
 
 err_func_init:

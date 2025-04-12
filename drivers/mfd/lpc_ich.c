@@ -950,7 +950,7 @@ static int lpc_ich_init_gpio(struct pci_dev *dev)
 	pci_read_config_dword(dev, priv->abase, &base_addr_cfg);
 	base_addr = base_addr_cfg & 0x0000ff80;
 	if (!base_addr) {
-		dev_notice(&dev->dev, "I/O space for ACPI uninitialized\n");
+		dev_dbg(&dev->dev, "I/O space for ACPI uninitialized\n");
 		lpc_ich_gpio_cell.num_resources--;
 		goto gpe0_done;
 	}
@@ -976,7 +976,7 @@ gpe0_done:
 	pci_read_config_dword(dev, priv->gbase, &base_addr_cfg);
 	base_addr = base_addr_cfg & 0x0000ff80;
 	if (!base_addr) {
-		dev_notice(&dev->dev, "I/O space for GPIO uninitialized\n");
+		dev_dbg(&dev->dev, "I/O space for GPIO uninitialized\n");
 		ret = -ENODEV;
 		goto gpio_done;
 	}
@@ -1030,7 +1030,7 @@ static int lpc_ich_init_wdt(struct pci_dev *dev)
 	pci_read_config_dword(dev, priv->abase, &base_addr_cfg);
 	base_addr = base_addr_cfg & 0x0000ff80;
 	if (!base_addr) {
-		dev_notice(&dev->dev, "I/O space for ACPI uninitialized\n");
+		dev_dbg(&dev->dev, "I/O space for ACPI uninitialized\n");
 		ret = -ENODEV;
 		goto wdt_done;
 	}
@@ -1063,7 +1063,7 @@ static int lpc_ich_init_wdt(struct pci_dev *dev)
 		pci_read_config_dword(dev, RCBABASE, &base_addr_cfg);
 		base_addr = base_addr_cfg & 0xffffc000;
 		if (!(base_addr_cfg & 1)) {
-			dev_notice(&dev->dev, "RCBA is disabled by "
+			dev_dbg(&dev->dev, "RCBA is disabled by "
 					"hardware/BIOS, device disabled\n");
 			ret = -ENODEV;
 			goto wdt_done;

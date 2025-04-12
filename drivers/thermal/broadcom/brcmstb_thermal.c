@@ -339,7 +339,7 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
 		goto err;
 	}
 
-	dev_info(&pdev->dev, "registered AVS TMON of-sensor driver\n");
+	dev_dbg(&pdev->dev, "registered AVS TMON of-sensor driver\n");
 
 	return 0;
 

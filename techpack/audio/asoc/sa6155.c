@@ -7483,7 +7483,7 @@ static int sa6155_ssr_enable(struct device *dev, void *data)
 		goto err;
 	}
 
-	dev_info(dev, "%s: setting snd_card to ONLINE\n", __func__);
+	dev_dbg(dev, "%s: setting snd_card to ONLINE\n", __func__);
 	snd_soc_card_change_online_state(card, 1);
 
 err:
@@ -7500,7 +7500,7 @@ static void sa6155_ssr_disable(struct device *dev, void *data)
 		return;
 	}
 
-	dev_info(dev, "%s: setting snd_card to OFFLINE\n", __func__);
+	dev_dbg(dev, "%s: setting snd_card to OFFLINE\n", __func__);
 	snd_soc_card_change_online_state(card, 0);
 }
 
@@ -7612,7 +7612,7 @@ static int msm_asoc_machine_probe(struct platform_device *pdev)
 			ret);
 		goto err;
 	}
-	dev_info(&pdev->dev, "Sound card %s registered\n", card->name);
+	dev_dbg(&pdev->dev, "Sound card %s registered\n", card->name);
 
 	/* Parse pinctrl info from devicetree */
 	ret = msm_get_pinctrl(pdev);

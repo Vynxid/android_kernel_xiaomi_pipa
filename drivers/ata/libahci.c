@@ -462,55 +462,55 @@ void ahci_save_initial_config(struct device *dev, struct ahci_host_priv *hpriv)
 
 	/* some chips have errata preventing 64bit use */
 	if ((cap & HOST_CAP_64) && (hpriv->flags & AHCI_HFLAG_32BIT_ONLY)) {
-		dev_info(dev, "controller can't do 64bit DMA, forcing 32bit\n");
+		dev_dbg(dev, "controller can't do 64bit DMA, forcing 32bit\n");
 		cap &= ~HOST_CAP_64;
 	}
 
 	if ((cap & HOST_CAP_NCQ) && (hpriv->flags & AHCI_HFLAG_NO_NCQ)) {
-		dev_info(dev, "controller can't do NCQ, turning off CAP_NCQ\n");
+		dev_dbg(dev, "controller can't do NCQ, turning off CAP_NCQ\n");
 		cap &= ~HOST_CAP_NCQ;
 	}
 
 	if (!(cap & HOST_CAP_NCQ) && (hpriv->flags & AHCI_HFLAG_YES_NCQ)) {
-		dev_info(dev, "controller can do NCQ, turning on CAP_NCQ\n");
+		dev_dbg(dev, "controller can do NCQ, turning on CAP_NCQ\n");
 		cap |= HOST_CAP_NCQ;
 	}
 
 	if ((cap & HOST_CAP_PMP) && (hpriv->flags & AHCI_HFLAG_NO_PMP)) {
-		dev_info(dev, "controller can't do PMP, turning off CAP_PMP\n");
+		dev_dbg(dev, "controller can't do PMP, turning off CAP_PMP\n");
 		cap &= ~HOST_CAP_PMP;
 	}
 
 	if ((cap & HOST_CAP_SNTF) && (hpriv->flags & AHCI_HFLAG_NO_SNTF)) {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "controller can't do SNTF, turning off CAP_SNTF\n");
 		cap &= ~HOST_CAP_SNTF;
 	}
 
 	if ((cap2 & HOST_CAP2_SDS) && (hpriv->flags & AHCI_HFLAG_NO_DEVSLP)) {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "controller can't do DEVSLP, turning off\n");
 		cap2 &= ~HOST_CAP2_SDS;
 		cap2 &= ~HOST_CAP2_SADM;
 	}
 
 	if (!(cap & HOST_CAP_FBS) && (hpriv->flags & AHCI_HFLAG_YES_FBS)) {
-		dev_info(dev, "controller can do FBS, turning on CAP_FBS\n");
+		dev_dbg(dev, "controller can do FBS, turning on CAP_FBS\n");
 		cap |= HOST_CAP_FBS;
 	}
 
 	if ((cap & HOST_CAP_FBS) && (hpriv->flags & AHCI_HFLAG_NO_FBS)) {
-		dev_info(dev, "controller can't do FBS, turning off CAP_FBS\n");
+		dev_dbg(dev, "controller can't do FBS, turning off CAP_FBS\n");
 		cap &= ~HOST_CAP_FBS;
 	}
 
 	if (!(cap & HOST_CAP_ALPM) && (hpriv->flags & AHCI_HFLAG_YES_ALPM)) {
-		dev_info(dev, "controller can do ALPM, turning on CAP_ALPM\n");
+		dev_dbg(dev, "controller can do ALPM, turning on CAP_ALPM\n");
 		cap |= HOST_CAP_ALPM;
 	}
 
 	if (hpriv->force_port_map && port_map != hpriv->force_port_map) {
-		dev_info(dev, "forcing port_map 0x%x -> 0x%x\n",
+		dev_dbg(dev, "forcing port_map 0x%x -> 0x%x\n",
 			 port_map, hpriv->force_port_map);
 		port_map = hpriv->force_port_map;
 		hpriv->saved_port_map = port_map;
@@ -965,7 +965,7 @@ int ahci_reset_controller(struct ata_host *host)
 		if (!(hpriv->flags & AHCI_HFLAG_NO_WRITE_TO_RO))
 			ahci_restore_initial_config(host);
 	} else
-		dev_info(host->dev, "skipping global host reset\n");
+		dev_dbg(host->dev, "skipping global host reset\n");
 
 	return 0;
 }
@@ -2118,7 +2118,7 @@ static void ahci_set_aggressive_devslp(struct ata_port *ap, bool sleep)
 
 	devslp = readl(port_mmio + PORT_DEVSLP);
 	if (!(devslp & PORT_DEVSLP_DSP)) {
-		dev_info(ap->host->dev, "port does not support device sleep\n");
+		dev_dbg(ap->host->dev, "port does not support device sleep\n");
 		return;
 	}
 
@@ -2212,7 +2212,7 @@ static void ahci_enable_fbs(struct ata_port *ap)
 	writel(fbs | PORT_FBS_EN, port_mmio + PORT_FBS);
 	fbs = readl(port_mmio + PORT_FBS);
 	if (fbs & PORT_FBS_EN) {
-		dev_info(ap->host->dev, "FBS is enabled\n");
+		dev_dbg(ap->host->dev, "FBS is enabled\n");
 		pp->fbs_enabled = true;
 		pp->fbs_last_dev = -1; /* initialization */
 	} else
@@ -2247,7 +2247,7 @@ static void ahci_disable_fbs(struct ata_port *ap)
 	if (fbs & PORT_FBS_EN)
 		dev_err(ap->host->dev, "Failed to disable FBS\n");
 	else {
-		dev_info(ap->host->dev, "FBS is disabled\n");
+		dev_dbg(ap->host->dev, "FBS is disabled\n");
 		pp->fbs_enabled = false;
 	}
 
@@ -2364,7 +2364,7 @@ static int ahci_port_start(struct ata_port *ap)
 		if (cmd & PORT_CMD_FBSCP)
 			pp->fbs_supported = true;
 		else if (hpriv->flags & AHCI_HFLAG_YES_FBS) {
-			dev_info(dev, "port %d can do FBS, forcing FBSCP\n",
+			dev_dbg(dev, "port %d can do FBS, forcing FBSCP\n",
 				 ap->port_no);
 			pp->fbs_supported = true;
 		} else
@@ -2473,7 +2473,7 @@ void ahci_print_info(struct ata_host *host, const char *scc_s)
 	else
 		speed_s = "?";
 
-	dev_info(host->dev,
+	dev_dbg(host->dev,
 		"AHCI %02x%02x.%02x%02x "
 		"%u slots %u ports %s Gbps 0x%x impl %s mode\n"
 		,
@@ -2489,7 +2489,7 @@ void ahci_print_info(struct ata_host *host, const char *scc_s)
 		impl,
 		scc_s);
 
-	dev_info(host->dev,
+	dev_dbg(host->dev,
 		"flags: "
 		"%s%s%s%s%s%s%s"
 		"%s%s%s%s%s%s%s"

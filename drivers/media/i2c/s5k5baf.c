@@ -1853,7 +1853,7 @@ static int s5k5baf_parse_device_node(struct s5k5baf *state, struct device *dev)
 				   &state->mclk_frequency);
 	if (ret < 0) {
 		state->mclk_frequency = S5K5BAF_DEFAULT_MCLK_FREQ;
-		dev_info(dev, "using default %u Hz clock frequency\n",
+		dev_dbg(dev, "using default %u Hz clock frequency\n",
 			 state->mclk_frequency);
 	}
 

@@ -732,7 +732,7 @@ static void skl_probe_work(struct work_struct *work)
 
 	/* codec detection */
 	if (!bus->codec_mask)
-		dev_info(bus->dev, "no hda codecs found!\n");
+		dev_dbg(bus->dev, "no hda codecs found!\n");
 
 	/* create codec instances */
 	skl_codec_create(bus);

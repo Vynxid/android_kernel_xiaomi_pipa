@@ -92,7 +92,7 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
 	insn = p->addr[0];
 
 	if (insn_has_ll_or_sc(insn)) {
-		pr_notice("Kprobes for ll and sc instructions are not"
+		pr_debug("Kprobes for ll and sc instructions are not"
 			  "supported\n");
 		ret = -EINVAL;
 		goto out;
@@ -101,13 +101,13 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
 	if ((probe_kernel_read(&prev_insn, p->addr - 1,
 				sizeof(mips_instruction)) == 0) &&
 				insn_has_delayslot(prev_insn)) {
-		pr_notice("Kprobes for branch delayslot are not supported\n");
+		pr_debug("Kprobes for branch delayslot are not supported\n");
 		ret = -EINVAL;
 		goto out;
 	}
 
 	if (__insn_is_compact_branch(insn)) {
-		pr_notice("Kprobes for compact branches are not supported\n");
+		pr_debug("Kprobes for compact branches are not supported\n");
 		ret = -EINVAL;
 		goto out;
 	}
@@ -231,7 +231,7 @@ static int evaluate_branch_instruction(struct kprobe *p, struct pt_regs *regs,
 	return 0;
 
 unaligned:
-	pr_notice("%s: unaligned epc - sending SIGBUS.\n", current->comm);
+	pr_debug("%s: unaligned epc - sending SIGBUS.\n", current->comm);
 	force_sig(SIGBUS, current);
 	return -EFAULT;
 
@@ -251,7 +251,7 @@ static void prepare_singlestep(struct kprobe *p, struct pt_regs *regs,
 	else if (insn_has_delayslot(p->opcode)) {
 		ret = evaluate_branch_instruction(p, regs, kcb);
 		if (ret < 0) {
-			pr_notice("Kprobes: Error in evaluating branch\n");
+			pr_debug("Kprobes: Error in evaluating branch\n");
 			return;
 		}
 	}

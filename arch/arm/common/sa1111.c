@@ -444,7 +444,7 @@ static int sa1111_setup_irq(struct sa1111 *sachip, unsigned irq_base)
 	irq_set_chained_handler_and_data(sachip->irq, sa1111_irq_handler,
 					 sachip);
 
-	dev_info(sachip->dev, "Providing IRQ%u-%u\n",
+	dev_dbg(sachip->dev, "Providing IRQ%u-%u\n",
 		sachip->irq_base, sachip->irq_base + SA1111_IRQ_NR - 1);
 
 	return 0;
@@ -855,7 +855,7 @@ static int __sa1111_probe(struct device *me, struct resource *mem, int irq)
 		goto err_unmap;
 	}
 
-	pr_info("SA1111 Microprocessor Companion Chip: silicon revision %lx, metal revision %lx\n",
+	pr_debug("SA1111 Microprocessor Companion Chip: silicon revision %lx, metal revision %lx\n",
 		(id & SKID_SIREV_MASK) >> 4, id & SKID_MTREV_MASK);
 
 	/*

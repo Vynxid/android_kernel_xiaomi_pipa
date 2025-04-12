@@ -658,7 +658,7 @@ static int nozomi_read_config_table(struct nozomi *dc)
 		writew(dc->last_ier, dc->reg_ier);
 
 		dc->state = NOZOMI_STATE_ALLOCATED;
-		dev_info(&dc->pdev->dev, "Initialization OK!\n");
+		dev_dbg(&dc->pdev->dev, "Initialization OK!\n");
 		return 1;
 	}
 
@@ -667,7 +667,7 @@ static int nozomi_read_config_table(struct nozomi *dc)
 		u32 offset = 0;
 		DBG1("First phase: pushing upload buffers, clearing download");
 
-		dev_info(&dc->pdev->dev, "Version of card: %d\n",
+		dev_dbg(&dc->pdev->dev, "Version of card: %d\n",
 			 dc->config_table.version);
 
 		/* Here we should disable all I/O over F32. */
@@ -918,7 +918,7 @@ static int receive_flow_control(struct nozomi *dc)
 			 * received for APP2 is always the last
 			 */
 			dc->state = NOZOMI_STATE_READY;
-			dev_info(&dc->pdev->dev, "Device READY!\n");
+			dev_dbg(&dc->pdev->dev, "Device READY!\n");
 		}
 		break;
 	default:
@@ -1256,7 +1256,7 @@ static void nozomi_get_card_type(struct nozomi *dc)
 	/* Assume card type F32_8 if no match */
 	dc->card_type = size == 2048 ? F32_2 : F32_8;
 
-	dev_info(&dc->pdev->dev, "Card type is: %d\n", dc->card_type);
+	dev_dbg(&dc->pdev->dev, "Card type is: %d\n", dc->card_type);
 }
 
 static void nozomi_setup_private_data(struct nozomi *dc)

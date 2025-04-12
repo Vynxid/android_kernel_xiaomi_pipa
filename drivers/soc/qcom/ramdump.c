@@ -370,7 +370,7 @@ void *create_ramdump_device(const char *dev_name, struct device *parent)
 		rd_dev->complete_ramdump = of_property_read_bool(
 				parent->of_node, "qcom,complete-ramdump");
 		if (!rd_dev->complete_ramdump)
-			dev_info(parent,
+			dev_dbg(parent,
 			"for %s segments only will be dumped.", dev_name);
 	}
 

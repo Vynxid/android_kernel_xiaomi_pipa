@@ -1254,7 +1254,7 @@ static int iss_probe(struct platform_device *pdev)
 		goto error_iss;
 
 	iss->revision = iss_reg_read(iss, OMAP4_ISS_MEM_TOP, ISS_HL_REVISION);
-	dev_info(iss->dev, "Revision %08x found\n", iss->revision);
+	dev_dbg(iss->dev, "Revision %08x found\n", iss->revision);
 
 	for (i = 1; i < OMAP4_ISS_MEM_LAST; i++) {
 		ret = iss_map_mem_resource(pdev, iss, i);
@@ -1276,7 +1276,7 @@ static int iss_probe(struct platform_device *pdev)
 	if (ret < 0)
 		goto error_iss;
 
-	dev_info(iss->dev, "ISP Revision %08x found\n",
+	dev_dbg(iss->dev, "ISP Revision %08x found\n",
 		 iss_reg_read(iss, OMAP4_ISS_MEM_ISP_SYS1, ISP5_REVISION));
 
 	/* Interrupt */

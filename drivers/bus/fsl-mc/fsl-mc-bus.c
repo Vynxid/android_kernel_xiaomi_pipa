@@ -830,7 +830,7 @@ static int fsl_mc_bus_probe(struct platform_device *pdev)
 		goto error_cleanup_mc_io;
 	}
 
-	dev_info(&pdev->dev, "MC firmware version: %u.%u.%u\n",
+	dev_dbg(&pdev->dev, "MC firmware version: %u.%u.%u\n",
 		 mc_version.major, mc_version.minor, mc_version.revision);
 
 	error = get_mc_addr_translation_ranges(&pdev->dev,

@@ -867,7 +867,7 @@ static int jz4780_dma_probe(struct platform_device *pdev)
 		goto err_unregister_dev;
 	}
 
-	dev_info(dev, "JZ4780 DMA controller initialised\n");
+	dev_dbg(dev, "JZ4780 DMA controller initialised\n");
 	return 0;
 
 err_unregister_dev:

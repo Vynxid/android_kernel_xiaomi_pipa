@@ -859,7 +859,7 @@ static void mtk_pcie_enable_port(struct mtk_pcie_port *port)
 	if (!pcie->soc->startup(port))
 		return;
 
-	dev_info(dev, "Port%d link down\n", port->slot);
+	dev_dbg(dev, "Port%d link down\n", port->slot);
 
 	phy_power_off(port->phy);
 err_phy_on:

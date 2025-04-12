@@ -1283,7 +1283,7 @@ static int mrf24j40_probe(struct spi_device *spi)
 	struct ieee802154_hw *hw;
 	struct mrf24j40 *devrec;
 
-	dev_info(&spi->dev, "probe(). IRQ: %d\n", spi->irq);
+	dev_dbg(&spi->dev, "probe(). IRQ: %d\n", spi->irq);
 
 	/* Register with the 802154 subsystem */
 

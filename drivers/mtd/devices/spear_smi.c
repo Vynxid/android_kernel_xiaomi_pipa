@@ -871,7 +871,7 @@ static int spear_smi_setup_banks(struct platform_device *pdev,
 	/* verify whether nor flash is really present on board */
 	flash_index = spear_smi_probe_flash(dev, bank);
 	if (flash_index < 0) {
-		dev_info(&dev->pdev->dev, "smi-nor%d not found\n", bank);
+		dev_dbg(&dev->pdev->dev, "smi-nor%d not found\n", bank);
 		return flash_index;
 	}
 	/* map the memory for nor flash chip */
@@ -903,11 +903,11 @@ static int spear_smi_setup_banks(struct platform_device *pdev,
 	flash->mtd._write = spear_mtd_write;
 	flash->dev_id = flash_devices[flash_index].device_id;
 
-	dev_info(&dev->pdev->dev, "mtd .name=%s .size=%llx(%lluM)\n",
+	dev_dbg(&dev->pdev->dev, "mtd .name=%s .size=%llx(%lluM)\n",
 			flash->mtd.name, flash->mtd.size,
 			flash->mtd.size / (1024 * 1024));
 
-	dev_info(&dev->pdev->dev, ".erasesize = 0x%x(%uK)\n",
+	dev_dbg(&dev->pdev->dev, ".erasesize = 0x%x(%uK)\n",
 			flash->mtd.erasesize, flash->mtd.erasesize / 1024);
 
 #ifndef CONFIG_OF

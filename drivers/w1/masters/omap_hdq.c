@@ -697,7 +697,7 @@ static int omap_hdq_probe(struct platform_device *pdev)
 	}
 
 	rev = hdq_reg_in(hdq_data, OMAP_HDQ_REVISION);
-	dev_info(&pdev->dev, "OMAP HDQ Hardware Rev %c.%c. Driver in %s mode\n",
+	dev_dbg(&pdev->dev, "OMAP HDQ Hardware Rev %c.%c. Driver in %s mode\n",
 		(rev >> 4) + '0', (rev & 0x0f) + '0', "Interrupt");
 
 	spin_lock_init(&hdq_data->hdq_spinlock);

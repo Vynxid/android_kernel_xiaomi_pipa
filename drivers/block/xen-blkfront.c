@@ -189,7 +189,7 @@ struct blkfront_ring_info {
 	struct list_head grants;
 	unsigned int persistent_gnts_c;
 	unsigned long shadow_free;
-	struct blkfront_info *dev_info;
+	struct blkfront_info *dev_dbg;
 };
 
 /*
@@ -274,7 +274,7 @@ static int get_id_from_freelist(struct blkfront_ring_info *rinfo)
 {
 	unsigned long free = rinfo->shadow_free;
 
-	BUG_ON(free >= BLK_RING_SIZE(rinfo->dev_info));
+	BUG_ON(free >= BLK_RING_SIZE(rinfo->dev_dbg));
 	rinfo->shadow_free = rinfo->shadow[free].req.u.rw.id;
 	rinfo->shadow[free].req.u.rw.id = 0x0fffffee; /* debug */
 	return free;
@@ -295,7 +295,7 @@ static int add_id_to_freelist(struct blkfront_ring_info *rinfo,
 
 static int fill_grant_buffer(struct blkfront_ring_info *rinfo, int num)
 {
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 	struct page *granted_page;
 	struct grant *gnt_list_entry, *n;
 	int i = 0;
@@ -363,7 +363,7 @@ static struct grant *get_grant(grant_ref_t *gref_head,
 			       struct blkfront_ring_info *rinfo)
 {
 	struct grant *gnt_list_entry = get_free_grant(rinfo);
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 
 	if (gnt_list_entry->gref != GRANT_INVALID_REF)
 		return gnt_list_entry;
@@ -387,7 +387,7 @@ static struct grant *get_indirect_grant(grant_ref_t *gref_head,
 					struct blkfront_ring_info *rinfo)
 {
 	struct grant *gnt_list_entry = get_free_grant(rinfo);
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 
 	if (gnt_list_entry->gref != GRANT_INVALID_REF)
 		return gnt_list_entry;
@@ -550,7 +550,7 @@ static unsigned long blkif_ring_get_request(struct blkfront_ring_info *rinfo,
 
 static int blkif_queue_discard_req(struct request *req, struct blkfront_ring_info *rinfo)
 {
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 	struct blkif_request *ring_req, *final_ring_req;
 	unsigned long id;
 
@@ -700,7 +700,7 @@ static void blkif_setup_extra_req(struct blkif_request *first,
 
 static int blkif_queue_rw_req(struct request *req, struct blkfront_ring_info *rinfo)
 {
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 	struct blkif_request *ring_req, *extra_ring_req = NULL;
 	struct blkif_request *final_ring_req, *final_extra_ring_req = NULL;
 	unsigned long id, extra_id = NO_ASSOCIATED_ID;
@@ -866,7 +866,7 @@ static int blkif_queue_rw_req(struct request *req, struct blkfront_ring_info *ri
  */
 static int blkif_queue_request(struct request *req, struct blkfront_ring_info *rinfo)
 {
-	if (unlikely(rinfo->dev_info->connected != BLKIF_STATE_CONNECTED))
+	if (unlikely(rinfo->dev_dbg->connected != BLKIF_STATE_CONNECTED))
 		return 1;
 
 	if (unlikely(req_op(req) == REQ_OP_DISCARD ||
@@ -911,7 +911,7 @@ static blk_status_t blkif_queue_rq(struct blk_mq_hw_ctx *hctx,
 	if (RING_FULL(&rinfo->ring))
 		goto out_busy;
 
-	if (blkif_request_flush_invalid(qd->rq, rinfo->dev_info))
+	if (blkif_request_flush_invalid(qd->rq, rinfo->dev_dbg))
 		goto out_err;
 
 	if (blkif_queue_request(qd->rq, rinfo))
@@ -1032,7 +1032,7 @@ static void xlvbd_flush(struct blkfront_info *info)
 {
 	blk_queue_write_cache(info->rq, info->feature_flush ? true : false,
 			      info->feature_fua ? true : false);
-	pr_info("blkfront: %s: %s %s %s %s %s %s %s\n",
+	pr_debug("blkfront: %s: %s %s %s %s %s %s %s\n",
 		info->gd->disk_name, flush_info(info),
 		"persistent grants:", info->feature_persistent ?
 		"enabled;" : "disabled;", "indirect descriptors:",
@@ -1239,7 +1239,7 @@ static void xlvbd_release_gendisk(struct blkfront_info *info)
 static inline void kick_pending_request_queues_locked(struct blkfront_ring_info *rinfo)
 {
 	if (!RING_FULL(&rinfo->ring))
-		blk_mq_start_stopped_hw_queues(rinfo->dev_info->rq, true);
+		blk_mq_start_stopped_hw_queues(rinfo->dev_dbg->rq, true);
 }
 
 static void kick_pending_request_queues(struct blkfront_ring_info *rinfo)
@@ -1255,14 +1255,14 @@ static void blkif_restart_queue(struct work_struct *work)
 {
 	struct blkfront_ring_info *rinfo = container_of(work, struct blkfront_ring_info, work);
 
-	if (rinfo->dev_info->connected == BLKIF_STATE_CONNECTED)
+	if (rinfo->dev_dbg->connected == BLKIF_STATE_CONNECTED)
 		kick_pending_request_queues(rinfo);
 }
 
 static void blkif_free_ring(struct blkfront_ring_info *rinfo)
 {
 	struct grant *persistent_gnt, *n;
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 	int i, j, segs;
 
 	/*
@@ -1449,7 +1449,7 @@ static int blkif_completion(unsigned long *id,
 	int i = 0;
 	struct scatterlist *sg;
 	int num_sg, num_grant;
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 	struct blk_shadow *s = &rinfo->shadow[*id];
 	struct copy_from_grant data = {
 		.grant_idx = 0,
@@ -1579,7 +1579,7 @@ static irqreturn_t blkif_interrupt(int irq, void *dev_id)
 	RING_IDX i, rp;
 	unsigned long flags;
 	struct blkfront_ring_info *rinfo = (struct blkfront_ring_info *)dev_id;
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
 
 	if (unlikely(info->connected != BLKIF_STATE_CONNECTED)) {
@@ -1744,7 +1744,7 @@ static int setup_blkring(struct xenbus_device *dev,
 {
 	struct blkif_sring *sring;
 	int err, i;
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 	unsigned long ring_size = info->nr_ring_pages * XEN_PAGE_SIZE;
 	grant_ref_t gref[XENBUS_MAX_RING_GRANTS];
 
@@ -1797,7 +1797,7 @@ static int write_per_ring_nodes(struct xenbus_transaction xbt,
 	int err;
 	unsigned int i;
 	const char *message = NULL;
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 
 	if (info->nr_ring_pages == 1) {
 		err = xenbus_printf(xbt, dir, "ring-ref", "%u", rinfo->ring_ref[0]);
@@ -2005,7 +2005,7 @@ static int negotiate_mq(struct blkfront_info *info)
 		rinfo = &info->rinfo[i];
 		INIT_LIST_HEAD(&rinfo->indirect_pages);
 		INIT_LIST_HEAD(&rinfo->grants);
-		rinfo->dev_info = info;
+		rinfo->dev_dbg = info;
 		INIT_WORK(&rinfo->work, blkif_restart_queue);
 		spin_lock_init(&rinfo->ring_lock);
 	}
@@ -2259,7 +2259,7 @@ static int blkfront_setup_indirect(struct blkfront_ring_info *rinfo)
 {
 	unsigned int psegs, grants, memflags;
 	int err, i;
-	struct blkfront_info *info = rinfo->dev_info;
+	struct blkfront_info *info = rinfo->dev_dbg;
 
 	memflags = memalloc_noio_save();
 
@@ -2682,7 +2682,7 @@ static void blkif_release(struct gendisk *disk, fmode_t mode)
 
 	if (xbdev && xbdev->state == XenbusStateClosing) {
 		/* pending switch to state closed */
-		dev_info(disk_to_dev(bdev->bd_disk), "releasing disk\n");
+		dev_dbg(disk_to_dev(bdev->bd_disk), "releasing disk\n");
 		xlvbd_release_gendisk(info);
 		xenbus_frontend_closed(info->xbdev);
  	}
@@ -2691,7 +2691,7 @@ static void blkif_release(struct gendisk *disk, fmode_t mode)
 
 	if (!xbdev) {
 		/* sudden device removal */
-		dev_info(disk_to_dev(bdev->bd_disk), "releasing disk\n");
+		dev_dbg(disk_to_dev(bdev->bd_disk), "releasing disk\n");
 		xlvbd_release_gendisk(info);
 		disk->private_data = NULL;
 		free_info(info);
@@ -2809,13 +2809,13 @@ static int __init xlblk_init(void)
 		xen_blkif_max_segments = BLKIF_MAX_SEGMENTS_PER_REQUEST;
 
 	if (xen_blkif_max_ring_order > XENBUS_MAX_RING_GRANT_ORDER) {
-		pr_info("Invalid max_ring_order (%d), will use default max: %d.\n",
+		pr_debug("Invalid max_ring_order (%d), will use default max: %d.\n",
 			xen_blkif_max_ring_order, XENBUS_MAX_RING_GRANT_ORDER);
 		xen_blkif_max_ring_order = XENBUS_MAX_RING_GRANT_ORDER;
 	}
 
 	if (xen_blkif_max_queues > nr_cpus) {
-		pr_info("Invalid max_queues (%d), will use default max: %d.\n",
+		pr_debug("Invalid max_queues (%d), will use default max: %d.\n",
 			xen_blkif_max_queues, nr_cpus);
 		xen_blkif_max_queues = nr_cpus;
 	}

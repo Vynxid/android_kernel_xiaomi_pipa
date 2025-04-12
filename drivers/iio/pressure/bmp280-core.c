@@ -1063,7 +1063,7 @@ int bmp280_common_probe(struct device *dev,
 	gpiod = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
 	/* Deassert the signal */
 	if (!IS_ERR(gpiod)) {
-		dev_info(dev, "release reset\n");
+		dev_dbg(dev, "release reset\n");
 		gpiod_set_value(gpiod, 0);
 	}
 

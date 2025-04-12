@@ -744,7 +744,7 @@ static int rp2_probe(struct pci_dev *pdev,
 	card->pdev = pdev;
 
 	rp2_decode_cap(id, &card->n_ports, &card->smpte);
-	dev_info(&pdev->dev, "found new card with %d ports\n", card->n_ports);
+	dev_dbg(&pdev->dev, "found new card with %d ports\n", card->n_ports);
 
 	card->minor_start = rp2_alloc_ports(card->n_ports);
 	if (card->minor_start < 0) {

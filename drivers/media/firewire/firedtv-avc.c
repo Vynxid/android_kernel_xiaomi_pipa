@@ -290,7 +290,7 @@ int avc_recv(struct firedtv *fdtv, void *data, size_t length)
 				goto wake;
 			break;
 		default:
-			dev_info(fdtv->device,
+			dev_dbg(fdtv->device,
 				 "remote control result = %d\n", r->response);
 		}
 		return 0;
@@ -1115,7 +1115,7 @@ int avc_ca_pmt(struct firedtv *fdtv, char *msg, int length)
 	c->opcode  = AVC_OPCODE_VENDOR;
 
 	if (msg[0] != EN50221_LIST_MANAGEMENT_ONLY) {
-		dev_info(fdtv->device, "forcing list_management to ONLY\n");
+		dev_dbg(fdtv->device, "forcing list_management to ONLY\n");
 		msg[0] = EN50221_LIST_MANAGEMENT_ONLY;
 	}
 	/* We take the cmd_id from the programme level only! */
@@ -1402,7 +1402,7 @@ repeat:
 			dev_err(fdtv->device, "CMP: cannot change channel\n");
 			return -EBUSY;
 		}
-		dev_info(fdtv->device, "CMP: overlaying connection\n");
+		dev_dbg(fdtv->device, "CMP: overlaying connection\n");
 
 		/* We don't allocate isochronous resources. */
 	} else {

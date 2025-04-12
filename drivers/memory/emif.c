@@ -1286,43 +1286,43 @@ static void __init_or_module of_get_custom_configs(struct device_node *np_emif,
 
 static void __init_or_module of_get_ddr_info(struct device_node *np_emif,
 		struct device_node *np_ddr,
-		struct ddr_device_info *dev_info)
+		struct ddr_device_info *dev_dbg)
 {
 	u32 density = 0, io_width = 0;
 	int len;
 
 	if (of_find_property(np_emif, "cs1-used", &len))
-		dev_info->cs1_used = true;
+		dev_dbg->cs1_used = true;
 
 	if (of_find_property(np_emif, "cal-resistor-per-cs", &len))
-		dev_info->cal_resistors_per_cs = true;
+		dev_dbg->cal_resistors_per_cs = true;
 
 	if (of_device_is_compatible(np_ddr , "jedec,lpddr2-s4"))
-		dev_info->type = DDR_TYPE_LPDDR2_S4;
+		dev_dbg->type = DDR_TYPE_LPDDR2_S4;
 	else if (of_device_is_compatible(np_ddr , "jedec,lpddr2-s2"))
-		dev_info->type = DDR_TYPE_LPDDR2_S2;
+		dev_dbg->type = DDR_TYPE_LPDDR2_S2;
 
 	of_property_read_u32(np_ddr, "density", &density);
 	of_property_read_u32(np_ddr, "io-width", &io_width);
 
 	/* Convert from density in Mb to the density encoding in jedc_ddr.h */
 	if (density & (density - 1))
-		dev_info->density = 0;
+		dev_dbg->density = 0;
 	else
-		dev_info->density = __fls(density) - 5;
+		dev_dbg->density = __fls(density) - 5;
 
 	/* Convert from io_width in bits to io_width encoding in jedc_ddr.h */
 	if (io_width & (io_width - 1))
-		dev_info->io_width = 0;
+		dev_dbg->io_width = 0;
 	else
-		dev_info->io_width = __fls(io_width) - 1;
+		dev_dbg->io_width = __fls(io_width) - 1;
 }
 
 static struct emif_data * __init_or_module of_get_memory_device_details(
 		struct device_node *np_emif, struct device *dev)
 {
 	struct emif_data		*emif = NULL;
-	struct ddr_device_info		*dev_info = NULL;
+	struct ddr_device_info		*dev_dbg = NULL;
 	struct emif_platform_data	*pd = NULL;
 	struct device_node		*np_ddr;
 	int				len;
@@ -1332,16 +1332,16 @@ static struct emif_data * __init_or_module of_get_memory_device_details(
 		goto error;
 	emif	= devm_kzalloc(dev, sizeof(struct emif_data), GFP_KERNEL);
 	pd	= devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
-	dev_info = devm_kzalloc(dev, sizeof(*dev_info), GFP_KERNEL);
+	dev_dbg = devm_kzalloc(dev, sizeof(*dev_dbg), GFP_KERNEL);
 
-	if (!emif || !pd || !dev_info) {
+	if (!emif || !pd || !dev_dbg) {
 		dev_err(dev, "%s: Out of memory!!\n",
 			__func__);
 		goto error;
 	}
 
 	emif->plat_data		= pd;
-	pd->device_info		= dev_info;
+	pd->device_info		= dev_dbg;
 	emif->dev		= dev;
 	emif->np_ddr		= np_ddr;
 	emif->temperature_level	= SDRAM_TEMP_NOMINAL;
@@ -1356,7 +1356,7 @@ static struct emif_data * __init_or_module of_get_memory_device_details(
 	if (of_find_property(np_emif, "hw-caps-ll-interface", &len))
 		pd->hw_caps |= EMIF_HW_CAPS_LL_INTERFACE;
 
-	of_get_ddr_info(np_emif, np_ddr, dev_info);
+	of_get_ddr_info(np_emif, np_ddr, dev_dbg);
 	if (!is_dev_data_valid(pd->device_info->type, pd->device_info->density,
 			pd->device_info->io_width, pd->phy_type, pd->ip_rev,
 			emif->dev)) {
@@ -1405,7 +1405,7 @@ static struct emif_data *__init_or_module get_device_details(
 {
 	u32				size;
 	struct emif_data		*emif = NULL;
-	struct ddr_device_info		*dev_info;
+	struct ddr_device_info		*dev_dbg;
 	struct emif_custom_configs	*cust_cfgs;
 	struct emif_platform_data	*pd;
 	struct device			*dev;
@@ -1423,18 +1423,18 @@ static struct emif_data *__init_or_module get_device_details(
 
 	emif	= devm_kzalloc(dev, sizeof(*emif), GFP_KERNEL);
 	temp	= devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
-	dev_info = devm_kzalloc(dev, sizeof(*dev_info), GFP_KERNEL);
+	dev_dbg = devm_kzalloc(dev, sizeof(*dev_dbg), GFP_KERNEL);
 
-	if (!emif || !temp || !dev_info) {
+	if (!emif || !temp || !dev_dbg) {
 		dev_err(dev, "%s:%d: allocation error\n", __func__, __LINE__);
 		goto error;
 	}
 
 	memcpy(temp, pd, sizeof(*pd));
 	pd = temp;
-	memcpy(dev_info, pd->device_info, sizeof(*dev_info));
+	memcpy(dev_dbg, pd->device_info, sizeof(*dev_dbg));
 
-	pd->device_info		= dev_info;
+	pd->device_info		= dev_dbg;
 	emif->plat_data		= pd;
 	emif->dev		= dev;
 	emif->temperature_level	= SDRAM_TEMP_NOMINAL;
@@ -1445,7 +1445,7 @@ static struct emif_data *__init_or_module get_device_details(
 	 * mark it as a duplicate of EMIF1 and skip copying timings data.
 	 * This will save some memory and some computation later.
 	 */
-	emif->duplicate = emif1 && (memcmp(dev_info,
+	emif->duplicate = emif1 && (memcmp(dev_dbg,
 		emif1->plat_data->device_info,
 		sizeof(struct ddr_device_info)) == 0);
 
@@ -1567,7 +1567,7 @@ static int __init_or_module emif_probe(struct platform_device *pdev)
 		 */
 	}
 
-	dev_info(&pdev->dev, "%s: device configured with addr = %p and IRQ%d\n",
+	dev_dbg(&pdev->dev, "%s: device configured with addr = %p and IRQ%d\n",
 		__func__, emif->base, irq);
 
 	return 0;

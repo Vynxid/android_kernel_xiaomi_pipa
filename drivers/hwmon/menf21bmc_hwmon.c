@@ -210,7 +210,7 @@ static int menf21bmc_hwmon_probe(struct platform_device *pdev)
 	if (IS_ERR(hwmon_dev))
 		return PTR_ERR(hwmon_dev);
 
-	dev_info(&pdev->dev, "MEN 14F021P00 BMC hwmon device enabled");
+	dev_dbg(&pdev->dev, "MEN 14F021P00 BMC hwmon device enabled");
 
 	return 0;
 }

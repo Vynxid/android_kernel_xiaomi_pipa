@@ -478,7 +478,7 @@ static int agp_serverworks_probe(struct pci_dev *pdev,
 			(unsigned int)pdev->bus->number,
 			PCI_DEVFN(0, 1));
 	if (!bridge_dev) {
-		dev_info(&pdev->dev, "can't find secondary device\n");
+		dev_dbg(&pdev->dev, "can't find secondary device\n");
 		return -ENODEV;
 	}
 
@@ -489,7 +489,7 @@ static int agp_serverworks_probe(struct pci_dev *pdev,
 	if (temp & PCI_BASE_ADDRESS_MEM_TYPE_64) {
 		pci_read_config_dword(pdev, SVWRKS_APSIZE + 4, &temp2);
 		if (temp2 != 0) {
-			dev_info(&pdev->dev, "64 bit aperture address, "
+			dev_dbg(&pdev->dev, "64 bit aperture address, "
 				 "but top bits are not zero; disabling AGP\n");
 			return -ENODEV;
 		}
@@ -502,7 +502,7 @@ static int agp_serverworks_probe(struct pci_dev *pdev,
 		pci_read_config_dword(pdev,
 				serverworks_private.mm_addr_ofs + 4, &temp2);
 		if (temp2 != 0) {
-			dev_info(&pdev->dev, "64 bit MMIO address, but top "
+			dev_dbg(&pdev->dev, "64 bit MMIO address, but top "
 				 "bits are not zero; disabling AGP\n");
 			return -ENODEV;
 		}

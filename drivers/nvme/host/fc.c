@@ -538,7 +538,7 @@ nvme_fc_resume_controller(struct nvme_fc_ctrl *ctrl)
 		 * As all reconnects were suppressed, schedule a
 		 * connect.
 		 */
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"NVME-FC{%d}: connectivity re-established. "
 			"Attempting reconnect\n", ctrl->cnum);
 
@@ -757,7 +757,7 @@ restart:
 static void
 nvme_fc_ctrl_connectivity_loss(struct nvme_fc_ctrl *ctrl)
 {
-	dev_info(ctrl->ctrl.device,
+	dev_dbg(ctrl->ctrl.device,
 		"NVME-FC{%d}: controller connectivity lost. Awaiting "
 		"Reconnect", ctrl->cnum);
 
@@ -2440,7 +2440,7 @@ nvme_fc_create_io_queues(struct nvme_fc_ctrl *ctrl)
 				ctrl->lport->ops->max_hw_queues);
 	ret = nvme_set_queue_count(&ctrl->ctrl, &nr_io_queues);
 	if (ret) {
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"set_queue_count failed: %d\n", ret);
 		return ret;
 	}
@@ -2514,7 +2514,7 @@ nvme_fc_recreate_io_queues(struct nvme_fc_ctrl *ctrl)
 				ctrl->lport->ops->max_hw_queues);
 	ret = nvme_set_queue_count(&ctrl->ctrl, &nr_io_queues);
 	if (ret) {
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"set_queue_count failed: %d\n", ret);
 		return ret;
 	}
@@ -2858,7 +2858,7 @@ nvme_fc_reconnect_or_delete(struct nvme_fc_ctrl *ctrl, int status)
 		return;
 
 	if (portptr->port_state == FC_OBJSTATE_ONLINE)
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"NVME-FC{%d}: reset: Reconnect attempt failed (%d)\n",
 			ctrl->cnum, status);
 	else if (time_after_eq(jiffies, rport->dev_loss_end))
@@ -2866,7 +2866,7 @@ nvme_fc_reconnect_or_delete(struct nvme_fc_ctrl *ctrl, int status)
 
 	if (recon && nvmf_should_reconnect(&ctrl->ctrl)) {
 		if (portptr->port_state == FC_OBJSTATE_ONLINE)
-			dev_info(ctrl->ctrl.device,
+			dev_dbg(ctrl->ctrl.device,
 				"NVME-FC{%d}: Reconnect attempt in %ld "
 				"seconds\n",
 				ctrl->cnum, recon_delay / HZ);
@@ -2935,7 +2935,7 @@ nvme_fc_reset_ctrl_work(struct work_struct *work)
 	if (ret)
 		nvme_fc_reconnect_or_delete(ctrl, ret);
 	else
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"NVME-FC{%d}: controller reset complete\n",
 			ctrl->cnum);
 }
@@ -2984,7 +2984,7 @@ nvme_fc_connect_ctrl_work(struct work_struct *work)
 	if (ret)
 		nvme_fc_reconnect_or_delete(ctrl, ret);
 	else
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"NVME-FC{%d}: controller connect complete\n",
 			ctrl->cnum);
 }
@@ -3158,7 +3158,7 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
 
 	flush_delayed_work(&ctrl->connect_work);
 
-	dev_info(ctrl->ctrl.device,
+	dev_dbg(ctrl->ctrl.device,
 		"NVME-FC{%d}: new ctrl: NQN \"%s\"\n",
 		ctrl->cnum, ctrl->ctrl.opts->subsysnqn);
 

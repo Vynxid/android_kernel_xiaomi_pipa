@@ -631,7 +631,7 @@ static int pil_mss_reset(struct pil_desc *pil)
 			goto err_q6v5_reset;
 	}
 
-	dev_info(pil->dev, "MBA boot done\n");
+	dev_dbg(pil->dev, "MBA boot done\n");
 	drv->is_booted = true;
 
 	return 0;
@@ -723,7 +723,7 @@ int pil_mss_reset_load_mba(struct pil_desc *pil)
 	drv->mba_dp_virt = mba_dp_virt;
 	mba_dp_phys_end = mba_dp_phys + drv->mba_dp_size;
 
-	dev_info(pil->dev, "Loading MBA and DP (if present) from %pa to %pa\n",
+	dev_dbg(pil->dev, "Loading MBA and DP (if present) from %pa to %pa\n",
 					&mba_dp_phys, &mba_dp_phys_end);
 
 	/* Load the MBA image into memory */
@@ -831,7 +831,7 @@ int pil_mss_debug_reset(struct pil_desc *pil)
 	 * Need to Wait for timeout for debug reset sequence to
 	 * complete before returning
 	 */
-	pr_info("Minidump: waiting encryption to complete\n");
+	pr_debug("Minidump: waiting encryption to complete\n");
 	msleep(13000);
 	if (pil->minidump_ss) {
 		writel_relaxed(0x2, drv->reg_base + QDSP6SS_NMI_CFG);

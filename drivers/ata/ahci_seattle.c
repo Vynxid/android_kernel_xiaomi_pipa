@@ -155,7 +155,7 @@ static const struct ata_port_info *ahci_seattle_get_port_info(
 	hpriv->em_msg_type = EM_MSG_TYPE_LED;
 	hpriv->plat_data = plat_data;
 
-	dev_info(dev, "SGPIO LED control is enabled.\n");
+	dev_dbg(dev, "SGPIO LED control is enabled.\n");
 	return &ahci_port_seattle_info;
 }
 

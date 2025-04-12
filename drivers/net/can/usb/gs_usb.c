@@ -997,7 +997,7 @@ static int gs_usb_probe(struct usb_interface *intf,
 	}
 
 	icount = dconf->icount + 1;
-	dev_info(&intf->dev, "Configuring for %d interfaces\n", icount);
+	dev_dbg(&intf->dev, "Configuring for %d interfaces\n", icount);
 
 	if (icount > GS_MAX_INTF) {
 		dev_err(&intf->dev,

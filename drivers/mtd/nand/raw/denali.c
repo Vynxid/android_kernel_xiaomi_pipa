@@ -1231,7 +1231,7 @@ static int denali_attach_chip(struct nand_chip *chip)
 
 		ret = dma_set_mask(denali->dev, DMA_BIT_MASK(dma_bit));
 		if (ret) {
-			dev_info(denali->dev,
+			dev_dbg(denali->dev,
 				 "Failed to set DMA mask. Disabling DMA.\n");
 			denali->dma_avail = 0;
 		}

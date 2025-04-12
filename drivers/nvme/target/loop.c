@@ -324,7 +324,7 @@ static int nvme_loop_init_io_queues(struct nvme_loop_ctrl *ctrl)
 	if (ret || !nr_io_queues)
 		return ret;
 
-	dev_info(ctrl->ctrl.device, "creating %d I/O queues.\n", nr_io_queues);
+	dev_dbg(ctrl->ctrl.device, "creating %d I/O queues.\n", nr_io_queues);
 
 	for (i = 1; i <= nr_io_queues; i++) {
 		ctrl->queues[i].ctrl = ctrl;
@@ -639,7 +639,7 @@ static struct nvme_ctrl *nvme_loop_create_ctrl(struct device *dev,
 
 	nvme_loop_init_iod(ctrl, &ctrl->async_event_iod, 0);
 
-	dev_info(ctrl->ctrl.device,
+	dev_dbg(ctrl->ctrl.device,
 		 "new ctrl: \"%s\"\n", ctrl->ctrl.opts->subsysnqn);
 
 	nvme_get_ctrl(&ctrl->ctrl);

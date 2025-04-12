@@ -1330,7 +1330,7 @@ static int ucan_probe(struct usb_interface *intf,
 	if (!iface_desc)
 		return -ENODEV;
 
-	dev_info(&udev->dev,
+	dev_dbg(&udev->dev,
 		 "%s: probing device on interface #%d\n",
 		 UCAN_DRIVER_NAME,
 		 iface_desc->desc.bInterfaceNumber);

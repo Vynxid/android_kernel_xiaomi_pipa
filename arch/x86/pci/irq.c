@@ -433,7 +433,7 @@ static int pirq_vlsi_get(struct pci_dev *router, struct pci_dev *dev, int pirq)
 {
 	WARN_ON_ONCE(pirq >= 9);
 	if (pirq > 8) {
-		dev_info(&dev->dev, "VLSI router PIRQ escape (%d)\n", pirq);
+		dev_dbg(&dev->dev, "VLSI router PIRQ escape (%d)\n", pirq);
 		return 0;
 	}
 	return read_config_nybble(router, 0x74, pirq-1);
@@ -443,7 +443,7 @@ static int pirq_vlsi_set(struct pci_dev *router, struct pci_dev *dev, int pirq, 
 {
 	WARN_ON_ONCE(pirq >= 9);
 	if (pirq > 8) {
-		dev_info(&dev->dev, "VLSI router PIRQ escape (%d)\n", pirq);
+		dev_dbg(&dev->dev, "VLSI router PIRQ escape (%d)\n", pirq);
 		return 0;
 	}
 	write_config_nybble(router, 0x74, pirq-1, irq);
@@ -489,7 +489,7 @@ static int pirq_amd756_get(struct pci_dev *router, struct pci_dev *dev, int pirq
 	irq = 0;
 	if (pirq <= 4)
 		irq = read_config_nybble(router, 0x56, pirq - 1);
-	dev_info(&dev->dev,
+	dev_dbg(&dev->dev,
 		 "AMD756: dev [%04x:%04x], router PIRQ %d get IRQ %d\n",
 		 dev->vendor, dev->device, pirq, irq);
 	return irq;
@@ -497,7 +497,7 @@ static int pirq_amd756_get(struct pci_dev *router, struct pci_dev *dev, int pirq
 
 static int pirq_amd756_set(struct pci_dev *router, struct pci_dev *dev, int pirq, int irq)
 {
-	dev_info(&dev->dev,
+	dev_dbg(&dev->dev,
 		 "AMD756: dev [%04x:%04x], router PIRQ %d set IRQ %d\n",
 		 dev->vendor, dev->device, pirq, irq);
 	if (pirq <= 4)
@@ -857,7 +857,7 @@ static void __init pirq_find_router(struct irq_router *r)
 			h->probe(r, pirq_router_dev, pirq_router_dev->device))
 			break;
 	}
-	dev_info(&pirq_router_dev->dev, "%s IRQ router [%04x:%04x]\n",
+	dev_dbg(&pirq_router_dev->dev, "%s IRQ router [%04x:%04x]\n",
 		 pirq_router.name,
 		 pirq_router_dev->vendor, pirq_router_dev->device);
 
@@ -987,7 +987,7 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
 			return 0;
 		}
 	}
-	dev_info(&dev->dev, "%s PCI INT %c -> IRQ %d\n", msg, 'A' + pin - 1, irq);
+	dev_dbg(&dev->dev, "%s PCI INT %c -> IRQ %d\n", msg, 'A' + pin - 1, irq);
 
 	/* Update IRQ for all devices with the same pirq value */
 	for_each_pci_dev(dev2) {
@@ -1007,7 +1007,7 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
 			(!(pci_probe & PCI_USE_PIRQ_MASK) || \
 			((1 << dev2->irq) & mask))) {
 #ifndef CONFIG_PCI_MSI
-				dev_info(&dev2->dev, "IRQ routing conflict: "
+				dev_dbg(&dev2->dev, "IRQ routing conflict: "
 					 "have IRQ %d, want IRQ %d\n",
 					 dev2->irq, irq);
 #endif
@@ -1016,7 +1016,7 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
 			dev2->irq = irq;
 			pirq_penalty[irq]++;
 			if (dev != dev2)
-				dev_info(&dev->dev, "sharing IRQ %d with %s\n",
+				dev_dbg(&dev->dev, "sharing IRQ %d with %s\n",
 					 irq, pci_name(dev2));
 		}
 	}
@@ -1240,7 +1240,7 @@ static int pirq_enable_irq(struct pci_dev *dev)
 			if (irq >= 0) {
 				dev->irq_managed = 1;
 				dev->irq = irq;
-				dev_info(&dev->dev, "PCI->APIC IRQ transform: "
+				dev_dbg(&dev->dev, "PCI->APIC IRQ transform: "
 					 "INT %c -> IRQ %d\n", 'A' + pin - 1, irq);
 				return 0;
 			} else

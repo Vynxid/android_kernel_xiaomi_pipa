@@ -401,7 +401,7 @@ static int sbefifo_cleanup_hw(struct sbefifo *sbefifo)
 
 	/* The FIFO already contains a reset request from the SBE ? */
 	if (down_status & SBEFIFO_STS_RESET_REQ) {
-		dev_info(dev, "Cleanup: FIFO reset request set, resetting\n");
+		dev_dbg(dev, "Cleanup: FIFO reset request set, resetting\n");
 		rc = sbefifo_regw(sbefifo, SBEFIFO_DOWN, SBEFIFO_PERFORM_RESET);
 		if (rc) {
 			sbefifo->broken = true;
@@ -423,7 +423,7 @@ static int sbefifo_cleanup_hw(struct sbefifo *sbefifo)
 	if (!need_reset)
 		return 0;
 
-	dev_info(dev, "Cleanup: FIFO not clean (up=0x%08x down=0x%08x)\n",
+	dev_dbg(dev, "Cleanup: FIFO not clean (up=0x%08x down=0x%08x)\n",
 		 up_status, down_status);
 
  do_reset:

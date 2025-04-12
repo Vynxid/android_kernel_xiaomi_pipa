@@ -321,7 +321,7 @@ static void uwb_beacon_print(struct uwb_rc *rc, struct uwb_rc_evt_beacon *be,
 	uwb_mac_addr_print(macbuf, sizeof(macbuf), &bf->Device_Identifier);
 	uwb_dev_addr_print(devbuf, sizeof(devbuf), &bf->hdr.SrcAddr);
 	uwb_dev_addr_print(dstbuf, sizeof(dstbuf), &bf->hdr.DestAddr);
-	dev_info(&rc->uwb_dev.dev,
+	dev_dbg(&rc->uwb_dev.dev,
 		 "BEACON from %s to %s (ch%u offset %u slot %u MAC %s)\n",
 		 devbuf, dstbuf, be->bChannelNumber, be->wBPSTOffset,
 		 bf->Beacon_Slot_Number, macbuf);
@@ -481,13 +481,13 @@ int uwbd_evt_handle_rc_beacon_size(struct uwb_event *evt)
 	}
 	bs = container_of(evt->notif.rceb, struct uwb_rc_evt_beacon_size, rceb);
 	if (0)
-		dev_info(dev, "Beacon size changed to %u bytes "
+		dev_dbg(dev, "Beacon size changed to %u bytes "
 			"(FIXME: action?)\n", le16_to_cpu(bs->wNewBeaconSize));
 	else {
 		/* temporary hack until we do something with this message... */
 		static unsigned count;
 		if (++count % 1000 == 0)
-			dev_info(dev, "Beacon size changed %u times "
+			dev_dbg(dev, "Beacon size changed %u times "
 				"(FIXME: action?)\n", count);
 	}
 	result = 0;
@@ -562,7 +562,7 @@ int uwbd_evt_handle_rc_bpoie_change(struct uwb_event *evt)
 		goto error;
 	}
 	if (++count % 1000 == 0)	/* Lame placeholder */
-		dev_info(dev, "BPOIE: %u changes received\n", count);
+		dev_dbg(dev, "BPOIE: %u changes received\n", count);
 	/*
 	 * FIXME: At this point we should go over all the IEs in the
 	 *        bpoiec->BPOIE array and act on each.

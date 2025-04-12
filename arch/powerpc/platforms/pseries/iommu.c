@@ -930,7 +930,7 @@ static int query_ddw(struct pci_dev *dev, const u32 *ddw_avail,
 
 	ret = rtas_call(ddw_avail[0], 3, 5, (u32 *)query,
 		  cfg_addr, BUID_HI(buid), BUID_LO(buid));
-	dev_info(&dev->dev, "ibm,query-pe-dma-windows(%x) %x %x %x"
+	dev_dbg(&dev->dev, "ibm,query-pe-dma-windows(%x) %x %x %x"
 		" returned %d\n", ddw_avail[0], cfg_addr, BUID_HI(buid),
 		BUID_LO(buid), ret);
 	return ret;
@@ -963,7 +963,7 @@ static int create_ddw(struct pci_dev *dev, const u32 *ddw_avail,
 				cfg_addr, BUID_HI(buid), BUID_LO(buid),
 				page_shift, window_shift);
 	} while (rtas_busy_delay(ret));
-	dev_info(&dev->dev,
+	dev_dbg(&dev->dev,
 		"ibm,create-pe-dma-window(%x) %x %x %x %x %x returned %d "
 		"(liobn = 0x%x starting addr = %x %x)\n", ddw_avail[1],
 		 cfg_addr, BUID_HI(buid), BUID_LO(buid), page_shift,
@@ -1078,7 +1078,7 @@ static u64 enable_ddw(struct pci_dev *dev, struct device_node *pdn)
 	len = order_base_2(max_addr);
 	win64 = kzalloc(sizeof(struct property), GFP_KERNEL);
 	if (!win64) {
-		dev_info(&dev->dev,
+		dev_dbg(&dev->dev,
 			"couldn't allocate property for 64bit dma window\n");
 		goto out_failed;
 	}
@@ -1086,7 +1086,7 @@ static u64 enable_ddw(struct pci_dev *dev, struct device_node *pdn)
 	win64->value = ddwprop = kmalloc(sizeof(*ddwprop), GFP_KERNEL);
 	win64->length = sizeof(*ddwprop);
 	if (!win64->name || !win64->value) {
-		dev_info(&dev->dev,
+		dev_dbg(&dev->dev,
 			"couldn't allocate property name and value\n");
 		goto out_free_prop;
 	}
@@ -1111,7 +1111,7 @@ static u64 enable_ddw(struct pci_dev *dev, struct device_node *pdn)
 	ret = walk_system_ram_range(0, memblock_end_of_DRAM() >> PAGE_SHIFT,
 			win64->value, tce_setrange_multi_pSeriesLP_walk);
 	if (ret) {
-		dev_info(&dev->dev, "failed to map direct window for %pOF: %d\n",
+		dev_dbg(&dev->dev, "failed to map direct window for %pOF: %d\n",
 			 dn, ret);
 		goto out_free_window;
 	}
@@ -1244,7 +1244,7 @@ static int dma_set_mask_pSeriesLP(struct device *dev, u64 dma_mask)
 		if (pdn && PCI_DN(pdn)) {
 			dma_offset = enable_ddw(pdev, pdn);
 			if (dma_offset != 0) {
-				dev_info(dev, "Using 64-bit direct DMA at offset %llx\n", dma_offset);
+				dev_dbg(dev, "Using 64-bit direct DMA at offset %llx\n", dma_offset);
 				set_dma_offset(dev, dma_offset);
 				set_dma_ops(dev, &dma_nommu_ops);
 				ddw_enabled = true;
@@ -1254,7 +1254,7 @@ static int dma_set_mask_pSeriesLP(struct device *dev, u64 dma_mask)
 
 	/* fall back on iommu ops */
 	if (!ddw_enabled && get_dma_ops(dev) != &dma_iommu_ops) {
-		dev_info(dev, "Restoring 32-bit DMA via iommu\n");
+		dev_dbg(dev, "Restoring 32-bit DMA via iommu\n");
 		set_dma_ops(dev, &dma_iommu_ops);
 	}
 

@@ -1345,7 +1345,7 @@ static int ov2659_detect(struct v4l2_subdev *sd)
 				"Sensor detection failed (%04X, %d)\n",
 				id, ret);
 		else {
-			dev_info(&client->dev, "Found OV%04X sensor\n", id);
+			dev_dbg(&client->dev, "Found OV%04X sensor\n", id);
 			ret = ov2659_init(sd, 0);
 		}
 	}
@@ -1478,7 +1478,7 @@ static int ov2659_probe(struct i2c_client *client,
 	if (ret)
 		goto error;
 
-	dev_info(&client->dev, "%s sensor driver registered !!\n", sd->name);
+	dev_dbg(&client->dev, "%s sensor driver registered !!\n", sd->name);
 
 	return 0;
 

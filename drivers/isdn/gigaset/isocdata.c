@@ -549,13 +549,13 @@ static inline void hdlc_done(struct bc_state *bcs)
 		gig_dbg(DEBUG_ISO, "%s: skb=NULL", __func__);
 		gigaset_isdn_rcv_err(bcs);
 	} else if (procskb->len < 2) {
-		dev_notice(cs->dev, "received short frame (%d octets)\n",
+		dev_dbg(cs->dev, "received short frame (%d octets)\n",
 			   procskb->len);
 		bcs->hw.bas->runts++;
 		dev_kfree_skb_any(procskb);
 		gigaset_isdn_rcv_err(bcs);
 	} else if (bcs->rx_fcs != PPP_GOODFCS) {
-		dev_notice(cs->dev, "frame check error\n");
+		dev_dbg(cs->dev, "frame check error\n");
 		bcs->hw.bas->fcserrs++;
 		dev_kfree_skb_any(procskb);
 		gigaset_isdn_rcv_err(bcs);
@@ -583,7 +583,7 @@ static inline void hdlc_frag(struct bc_state *bcs, unsigned inbits)
 		return;
 	}
 
-	dev_notice(bcs->cs->dev, "received partial byte (%d bits)\n", inbits);
+	dev_dbg(bcs->cs->dev, "received partial byte (%d bits)\n", inbits);
 	bcs->hw.bas->alignerrs++;
 	gigaset_isdn_rcv_err(bcs);
 	__skb_trim(bcs->rx_skb, 0);

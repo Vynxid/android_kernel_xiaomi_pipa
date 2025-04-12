@@ -426,7 +426,7 @@ static int bcd2000_probe(struct usb_interface *interface,
 	return 0;
 
 probe_error:
-	dev_info(&bcd2k->dev->dev, PREFIX "error during probing");
+	dev_dbg(&bcd2k->dev->dev, PREFIX "error during probing");
 	bcd2000_free_usb_related_resources(bcd2k, interface);
 	snd_card_free(card);
 	mutex_unlock(&devices_mutex);

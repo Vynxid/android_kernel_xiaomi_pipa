@@ -1039,7 +1039,7 @@ static int nmk_i2c_probe(struct amba_device *adev, const struct amba_id *id)
 
 	i2c_set_adapdata(adap, dev);
 
-	dev_info(&adev->dev,
+	dev_dbg(&adev->dev,
 		 "initialize %s on virtual base %p\n",
 		 adap->name, dev->virtbase);
 

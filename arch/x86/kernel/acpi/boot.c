@@ -772,7 +772,7 @@ int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
 
 	cpu = acpi_register_lapic(physid, acpi_id, ACPI_MADT_ENABLED);
 	if (cpu < 0) {
-		pr_info(PREFIX "Unable to map lapic to logical cpu number\n");
+		pr_debug(PREFIX "Unable to map lapic to logical cpu number\n");
 		return cpu;
 	}
 
@@ -1357,10 +1357,10 @@ static int __init disable_acpi_pci(const struct dmi_system_id *d)
 static int __init disable_acpi_xsdt(const struct dmi_system_id *d)
 {
 	if (!acpi_force) {
-		pr_notice("%s detected: force use of acpi=rsdt\n", d->ident);
+		pr_debug("%s detected: force use of acpi=rsdt\n", d->ident);
 		acpi_gbl_do_not_use_xsdt = TRUE;
 	} else {
-		pr_notice("Warning: DMI blacklist says broken, but acpi XSDT forced\n");
+		pr_debug("Warning: DMI blacklist says broken, but acpi XSDT forced\n");
 	}
 	return 0;
 }
@@ -1383,7 +1383,7 @@ static int __init dmi_disable_acpi(const struct dmi_system_id *d)
 static int __init dmi_ignore_irq0_timer_override(const struct dmi_system_id *d)
 {
 	if (!acpi_skip_timer_override) {
-		pr_notice("%s detected: Ignoring BIOS IRQ0 override\n",
+		pr_debug("%s detected: Ignoring BIOS IRQ0 override\n",
 			d->ident);
 		acpi_skip_timer_override = 1;
 	}

@@ -1583,8 +1583,8 @@ static void max98090_configure_bclk(struct snd_soc_component *component)
 	ni = 65536ULL * (max98090->lrclk < 50000 ? 96ULL : 48ULL)
 			* (unsigned long long int)max98090->lrclk;
 	do_div(ni, (unsigned long long int)max98090->sysclk);
-	dev_info(component->dev, "No better method found\n");
-	dev_info(component->dev, "Calculating ni %lld with mi 65536\n", ni);
+	dev_dbg(component->dev, "No better method found\n");
+	dev_dbg(component->dev, "Calculating ni %lld with mi 65536\n", ni);
 	snd_soc_component_write(component, M98090_REG_CLOCK_RATIO_NI_MSB,
 		(ni >> 8) & 0x7F);
 	snd_soc_component_write(component, M98090_REG_CLOCK_RATIO_NI_LSB, ni & 0xFF);
@@ -2426,10 +2426,10 @@ static int max98090_probe(struct snd_soc_component *component)
 
 	if ((ret >= M98090_REVA) && (ret <= M98090_REVA + 0x0f)) {
 		devtype = MAX98090;
-		dev_info(component->dev, "MAX98090 REVID=0x%02x\n", ret);
+		dev_dbg(component->dev, "MAX98090 REVID=0x%02x\n", ret);
 	} else if ((ret >= M98091_REVA) && (ret <= M98091_REVA + 0x0f)) {
 		devtype = MAX98091;
-		dev_info(component->dev, "MAX98091 REVID=0x%02x\n", ret);
+		dev_dbg(component->dev, "MAX98091 REVID=0x%02x\n", ret);
 	} else {
 		devtype = MAX98090;
 		dev_err(component->dev, "Unrecognized revision 0x%02x\n", ret);
@@ -2477,7 +2477,7 @@ static int max98090_probe(struct snd_soc_component *component)
 	err = device_property_read_u32(component->dev, "maxim,micbias", &micbias);
 	if (err) {
 		micbias = M98090_MBVSEL_2V8;
-		dev_info(component->dev, "use default 2.8v micbias\n");
+		dev_dbg(component->dev, "use default 2.8v micbias\n");
 	} else if (micbias > M98090_MBVSEL_2V8) {
 		dev_err(component->dev, "micbias out of range 0x%x\n", micbias);
 		micbias = M98090_MBVSEL_2V8;

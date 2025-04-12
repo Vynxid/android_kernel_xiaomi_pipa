@@ -843,7 +843,7 @@ static int mtd_part_do_parse(struct mtd_part_parser *parser,
 	if (ret <= 0)
 		return ret;
 
-	pr_notice("%d %s partitions found on MTD device %s\n", ret,
+	pr_debug("%d %s partitions found on MTD device %s\n", ret,
 		  parser->name, master->name);
 
 	pparts->nr_parts = ret;

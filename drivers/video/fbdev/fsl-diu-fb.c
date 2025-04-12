@@ -1561,7 +1561,7 @@ static int install_fb(struct fb_info *info)
 	}
 
 	mfbi->registered = 1;
-	dev_info(info->dev, "%s registered successfully\n", mfbi->id);
+	dev_dbg(info->dev, "%s registered successfully\n", mfbi->id);
 
 	return 0;
 }
@@ -1922,7 +1922,7 @@ static int __init fsl_diu_init(void)
 	if (!diu_ops.set_pixel_clock)
 		return -ENODEV;
 
-	pr_info("Freescale Display Interface Unit (DIU) framebuffer driver\n");
+	pr_debug("Freescale Display Interface Unit (DIU) framebuffer driver\n");
 
 #ifdef CONFIG_NOT_COHERENT_CACHE
 	np = of_find_node_by_type(NULL, "cpu");

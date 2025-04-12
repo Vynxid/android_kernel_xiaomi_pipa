@@ -71,7 +71,7 @@ static int octeon_mdiobus_probe(struct platform_device *pdev)
 	if (err)
 		goto fail_register;
 
-	dev_info(&pdev->dev, "Probed\n");
+	dev_dbg(&pdev->dev, "Probed\n");
 
 	return 0;
 fail_register:

@@ -623,7 +623,7 @@ static int opt3001_read_id(struct opt3001 *opt)
 
 	device_id = ret;
 
-	dev_info(opt->dev, "Found %c%c OPT%04x\n", manufacturer[0],
+	dev_dbg(opt->dev, "Found %c%c OPT%04x\n", manufacturer[0],
 			manufacturer[1], device_id);
 
 	return 0;

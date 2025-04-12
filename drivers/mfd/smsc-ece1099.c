@@ -57,7 +57,7 @@ static int smsc_i2c_probe(struct i2c_client *i2c,
 	regmap_read(smsc->regmap, SMSC_VEN_ID_L, &venid_l);
 	regmap_read(smsc->regmap, SMSC_VEN_ID_H, &venid_h);
 
-	dev_info(&i2c->dev, "SMSCxxx devid: %02x rev: %02x venid: %02x\n",
+	dev_dbg(&i2c->dev, "SMSCxxx devid: %02x rev: %02x venid: %02x\n",
 		devid, rev, (venid_h << 8) | venid_l);
 
 	ret = regmap_write(smsc->regmap, SMSC_CLK_CTRL, smsc->clk);

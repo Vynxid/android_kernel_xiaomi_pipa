@@ -580,7 +580,7 @@ static int cirrusfb_check_var(struct fb_var_screeninfo *var,
 	if (var->yres_virtual == -1) {
 		var->yres_virtual = pixels / var->xres_virtual;
 
-		dev_info(info->device,
+		dev_dbg(info->device,
 			 "virtual resolution set to maximum of %dx%d\n",
 			 var->xres_virtual, var->yres_virtual);
 	}
@@ -2147,7 +2147,7 @@ static int cirrusfb_pci_register(struct pci_dev *pdev,
 	info->screen_size = board_size;
 	cinfo->unmap = cirrusfb_pci_unmap;
 
-	dev_info(info->device,
+	dev_dbg(info->device,
 		 "Cirrus Logic chipset on PCI bus, RAM (%lu kB) at 0x%lx\n",
 		 info->screen_size >> 10, board_addr);
 	pci_set_drvdata(pdev, info);
@@ -2242,7 +2242,7 @@ static int cirrusfb_zorro_register(struct zorro_dev *z,
 		}
 	}
 
-	dev_info(info->device,
+	dev_dbg(info->device,
 		 "%s board detected, REG at 0x%lx, %lu MiB RAM at 0x%lx\n",
 		 cirrusfb_board_info[btype].name, regbase, ramsize / MB_,
 		 rambase);
@@ -2277,7 +2277,7 @@ static int cirrusfb_zorro_register(struct zorro_dev *z,
 
 	cinfo->unmap = cirrusfb_zorro_unmap;
 
-	dev_info(info->device,
+	dev_dbg(info->device,
 		 "Cirrus Logic chipset on Zorro bus, RAM (%lu MiB) at 0x%lx\n",
 		 ramsize / MB_, rambase);
 

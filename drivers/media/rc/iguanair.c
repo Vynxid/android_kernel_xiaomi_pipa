@@ -236,7 +236,7 @@ static int iguanair_get_features(struct iguanair *ir)
 	ir->packet->header.cmd = CMD_GET_VERSION;
 	rc = iguanair_send(ir, sizeof(ir->packet->header));
 	if (rc) {
-		dev_info(ir->dev, "failed to get version\n");
+		dev_dbg(ir->dev, "failed to get version\n");
 		goto out;
 	}
 
@@ -253,12 +253,12 @@ static int iguanair_get_features(struct iguanair *ir)
 
 	rc = iguanair_send(ir, sizeof(ir->packet->header));
 	if (rc) {
-		dev_info(ir->dev, "failed to get buffer size\n");
+		dev_dbg(ir->dev, "failed to get buffer size\n");
 		goto out;
 	}
 
 	if (ir->bufsize > BUF_SIZE) {
-		dev_info(ir->dev, "buffer size %u larger than expected\n",
+		dev_dbg(ir->dev, "buffer size %u larger than expected\n",
 								ir->bufsize);
 		ir->bufsize = BUF_SIZE;
 	}
@@ -267,7 +267,7 @@ static int iguanair_get_features(struct iguanair *ir)
 
 	rc = iguanair_send(ir, sizeof(ir->packet->header));
 	if (rc)
-		dev_info(ir->dev, "failed to get features\n");
+		dev_dbg(ir->dev, "failed to get features\n");
 out:
 	return rc;
 }

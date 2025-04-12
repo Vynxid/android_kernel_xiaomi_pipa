@@ -78,7 +78,7 @@ static void loongson_poweroff(void)
 
 static void loongson_halt(void)
 {
-	pr_notice("\n\n** You can safely turn off the power now **\n\n");
+	pr_debug("\n\n** You can safely turn off the power now **\n\n");
 	while (1) {
 		if (cpu_wait)
 			cpu_wait();

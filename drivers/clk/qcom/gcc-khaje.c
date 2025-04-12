@@ -3691,7 +3691,7 @@ static int gcc_khaje_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered GCC clocks\n");
+	dev_dbg(&pdev->dev, "Registered GCC clocks\n");
 
 	return ret;
 }

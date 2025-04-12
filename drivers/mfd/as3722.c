@@ -241,7 +241,7 @@ static int as3722_check_device_id(struct as3722 *as3722)
 		return ret;
 	}
 
-	dev_info(as3722->dev, "AS3722 with revision 0x%x found\n", val);
+	dev_dbg(as3722->dev, "AS3722 with revision 0x%x found\n", val);
 	return 0;
 }
 

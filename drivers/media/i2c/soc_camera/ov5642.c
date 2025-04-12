@@ -993,7 +993,7 @@ static int ov5642_video_probe(struct i2c_client *client)
 
 	id |= id_low;
 
-	dev_info(&client->dev, "Chip ID 0x%04x detected\n", id);
+	dev_dbg(&client->dev, "Chip ID 0x%04x detected\n", id);
 
 	if (id != 0x5642) {
 		ret = -ENODEV;

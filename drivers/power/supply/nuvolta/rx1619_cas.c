@@ -337,38 +337,38 @@ void rx1619_set_fod_param(struct rx1619_chg *chip, u8 mode)
 		rx1619_write(chip, fod_param[0], REG_RX_SENT_DATA2);
 		rx1619_write(chip, fod_param[1], REG_RX_SENT_DATA3);
 		chip->fod_mode = 0x1;
-		dev_info(chip->dev, "[%s] 0x%x,0x%x \n", __func__, fod_param[0],
+		dev_dbg(chip->dev, "[%s] 0x%x,0x%x \n", __func__, fod_param[0],
 			 fod_param[1]);
 	} else if (mode == 2) {
 		rx1619_write(chip, 0x2, REG_RX_SENT_DATA1);
 		rx1619_write(chip, fod_param[2], REG_RX_SENT_DATA2);
 		rx1619_write(chip, fod_param[3], REG_RX_SENT_DATA3);
 		chip->fod_mode = 0x2;
-		dev_info(chip->dev, "[%s] 0x%x,0x%x \n", __func__, fod_param[2],
+		dev_dbg(chip->dev, "[%s] 0x%x,0x%x \n", __func__, fod_param[2],
 			 fod_param[3]);
 	} else if (mode == 3) {
 		rx1619_write(chip, 0x3, REG_RX_SENT_DATA1);
 		rx1619_write(chip, fod_param[4], REG_RX_SENT_DATA2);
 		rx1619_write(chip, fod_param[5], REG_RX_SENT_DATA3);
 		chip->fod_mode = 0x3;
-		dev_info(chip->dev, "[%s] 0x%x,0x%x \n", __func__, fod_param[4],
+		dev_dbg(chip->dev, "[%s] 0x%x,0x%x \n", __func__, fod_param[4],
 			 fod_param[5]);
 	} else if (mode == 4) {
 		rx1619_write(chip, 0x4, REG_RX_SENT_DATA1);
 		rx1619_write(chip, fod_param[6], REG_RX_SENT_DATA2);
 		rx1619_write(chip, fod_param[7], REG_RX_SENT_DATA3);
 		chip->fod_mode = 0x4;
-		dev_info(chip->dev, "[%s] 0x%x,0x%x \n", __func__, fod_param[6],
+		dev_dbg(chip->dev, "[%s] 0x%x,0x%x \n", __func__, fod_param[6],
 			 fod_param[7]);
 	}
 
 	rx1619_write(chip, AP_SENT_DATA_OK, REG_AP_RX_COMM);
-	dev_info(chip->dev, "[%s] mode = 0x%x \n", __func__, mode);
+	dev_dbg(chip->dev, "[%s] mode = 0x%x \n", __func__, mode);
 }
 
 void rx1619_set_adap_vol(struct rx1619_chg *chip, u16 mv)
 {
-	dev_info(chip->dev, "set adapter vol to %d\n", mv);
+	dev_dbg(chip->dev, "set adapter vol to %d\n", mv);
 	rx1619_write(chip, PRIVATE_FAST_CHG_CMD,
 		     REG_RX_SENT_CMD); //0x87 usb type req
 	rx1619_write(chip, mv & 0xff, REG_RX_SENT_DATA1); //LSB
@@ -417,7 +417,7 @@ static int rx1619_set_ept(struct rx1619_chg *chip)
 		rc = -EINVAL;
 	}
 
-	dev_info(chip->dev, "Header: 0x%x, ept_raw: 0x%x, checksum: 0x%x\n",
+	dev_dbg(chip->dev, "Header: 0x%x, ept_raw: 0x%x, checksum: 0x%x\n",
 		 header[1], ept_raw, header[0]);
 
 	return rc;
@@ -441,7 +441,7 @@ static int rx1619_set_rpp(struct rx1619_chg *chip)
 	chksum[2] = chip->rpp_val[1];
 	header[0] = oob_check_sum(chksum, 3);
 
-	dev_info(chip->dev,
+	dev_dbg(chip->dev,
 		 "header: 0x%x, RPP_raw:  0x%x, 0x%x, checksum: 0x%x\n",
 		 header[1], chip->rpp_val[1], chip->rpp_val[0], header[0]);
 	rpp = header[0] | (chip->rpp_val[0] << 16) | (chip->rpp_val[1] << 8);
@@ -478,7 +478,7 @@ static int rx1619_set_cep(struct rx1619_chg *chip)
 	chksum[1] = chip->cep_val;
 	header[0] = oob_check_sum(chksum, 2);
 
-	dev_info(chip->dev, "Header: 0x%x, CEP_raw: 0x%x, checksum: 0x%x\n",
+	dev_dbg(chip->dev, "Header: 0x%x, CEP_raw: 0x%x, checksum: 0x%x\n",
 		 header[1], chip->cep_val, header[0]);
 	cep = header[0] | chip->cep_val << 8 | (header[1] << 16);
 	val.int64val = cep;
@@ -509,7 +509,7 @@ unsigned int rx1619_get_cep_value(struct rx1619_chg *chip)
 	u8 data = 0;
 
 	rx1619_read(chip, &data, REG_CEP_VALUE); //cep-0x0008
-	dev_info(chip->dev, "[%s] cep value=0x%x \n", __func__, data);
+	dev_dbg(chip->dev, "[%s] cep value=0x%x \n", __func__, data);
 
 	return data;
 }
@@ -519,7 +519,7 @@ void rx1619_set_ble_status(struct rx1619_chg *chip, u8 data)
 	rx1619_write(chip, 0x8b, REG_RX_SENT_CMD); //0x8b sent BLEOK
 	rx1619_write(chip, data, REG_RX_SENT_DATA1);
 	rx1619_write(chip, AP_SENT_DATA_OK, REG_AP_RX_COMM);
-	dev_info(chip->dev, "[%s] AP sent ble_OK status = 0x%x\n", __func__,
+	dev_dbg(chip->dev, "[%s] AP sent ble_OK status = 0x%x\n", __func__,
 		 data);
 }
 
@@ -575,13 +575,13 @@ void rx1619_oob_set_cep_work(struct work_struct *work)
 		mutex_lock(&chip->wireless_chg_lock);
 		chip->cep_val = rx1619_get_cep_value(chip);
 		rx1619_set_cep(chip);
-		dev_info(chip->dev, "[%s] cep_value = 0x%x\n", __func__,
+		dev_dbg(chip->dev, "[%s] cep_value = 0x%x\n", __func__,
 			 chip->cep_val);
 		schedule_delayed_work(&chip->oob_set_cep_work,
 				      msecs_to_jiffies(1000));
 		mutex_unlock(&chip->wireless_chg_lock);
 	} else
-		dev_info(chip->dev, "[%s] oob disabled = %d\n", __func__,
+		dev_dbg(chip->dev, "[%s] oob disabled = %d\n", __func__,
 			 chip->is_oob_ok);
 	return;
 }
@@ -592,7 +592,7 @@ int rx_op_ble_flag(int en)
 	if (!g_chip)
 		return -EINVAL;
 
-	dev_info(g_chip->dev, "set ble flag: %d\n", en);
+	dev_dbg(g_chip->dev, "set ble flag: %d\n", en);
 
 	if (en)
 		rx1619_set_ble_status(g_chip, 1);
@@ -647,7 +647,7 @@ unsigned int rx1619_start_tx_function(struct rx1619_chg *chip)
 	u16 ret = 0;
 
 	ret = rx1619_write(chip, 0x20, 0x000d); //0x10 rx, 0x20 tx
-	dev_info(chip->dev, "[%s] ret = %d\n", __func__, ret);
+	dev_dbg(chip->dev, "[%s] ret = %d\n", __func__, ret);
 
 	return ret;
 }
@@ -657,7 +657,7 @@ unsigned int rx1619_is_tx_mode(struct rx1619_chg *chip)
 	u8 data = 0;
 
 	rx1619_read(chip, &data, 0x000d);
-	dev_info(chip->dev, "[%s] data = %d\n", __func__, data);
+	dev_dbg(chip->dev, "[%s] data = %d\n", __func__, data);
 	if (data == 0x20)
 		return 1;
 	else
@@ -675,7 +675,7 @@ unsigned char rx1619_set_tx_mode(struct rx1619_chg *chip, u8 mode)
 	u8 ret = 0;
 
 	ret = rx1619_write(chip, mode, 0x0000);
-	dev_info(chip->dev, "[%s] mode = %d\n", __func__, mode);
+	dev_dbg(chip->dev, "[%s] mode = %d\n", __func__, mode);
 
 	return ret;
 }
@@ -746,7 +746,7 @@ unsigned char rx1619_get_tx_phase(struct rx1619_chg *chip)
 	u8 data = 0;
 
 	rx1619_read(chip, &data, 0x000b);
-	dev_info(chip->dev, "[%s] data=%d\n", __func__, data);
+	dev_dbg(chip->dev, "[%s] data=%d\n", __func__, data);
 
 	return data;
 }
@@ -800,14 +800,14 @@ int rx1619_set_vout(struct rx1619_chg *chip, int volt)
 	}
 
 	volt += g_Delta;
-	dev_info(chip->dev, "[rx1619] [%s] volt = %d, g_Delta=%d \n", __func__,
+	dev_dbg(chip->dev, "[rx1619] [%s] volt = %d, g_Delta=%d \n", __func__,
 		 volt, g_Delta);
 
 	vout_set = (u16)((volt * 3352) >> 16); //(u16)(volt*1023/20000)
 	vrect_set =
 		(u16)(((volt + 200) * 2438) >> 16); //((volt+200)*1023/27500)
 	/*
-	dev_info(chip->dev, "[rx1619] [%s] vout_set = 0x%x, vrect_set=0x%x \n",
+	dev_dbg(chip->dev, "[rx1619] [%s] vout_set = 0x%x, vrect_set=0x%x \n",
 				__func__, vout_set, vrect_set);
 */
 
@@ -816,7 +816,7 @@ int rx1619_set_vout(struct rx1619_chg *chip, int volt)
 	ret = rx1619_write(chip, value_h, 0x0001);
 	ret = rx1619_write(chip, value_l, 0x0002);
 	/*
-	dev_info(chip->dev, "[rx1619] [%s] vout value_h = 0x%x, value_l=0x%x \n",
+	dev_dbg(chip->dev, "[rx1619] [%s] vout value_h = 0x%x, value_l=0x%x \n",
 				__func__, value_h, value_l);
 */
 
@@ -825,7 +825,7 @@ int rx1619_set_vout(struct rx1619_chg *chip, int volt)
 	ret = rx1619_write(chip, value_h, 0x0003);
 	ret = rx1619_write(chip, value_l, 0x0004);
 	/*
-	dev_info(chip->dev, "[rx1619] [%s] vrect value_h = 0x%x, value_l=0x%x \n",
+	dev_dbg(chip->dev, "[rx1619] [%s] vrect value_h = 0x%x, value_l=0x%x \n",
 				__func__, value_h, value_l);
 */
 
@@ -864,7 +864,7 @@ bool rx1619_is_vout_on(struct rx1619_chg *chip)
 static void rx1619_set_reverse_fod(struct rx1619_chg *chip, u8 compensation,
 				   u8 threshold)
 {
-	dev_info(chip->dev, "compensation: %d, threshold:%d\n", compensation,
+	dev_dbg(chip->dev, "compensation: %d, threshold:%d\n", compensation,
 		 threshold);
 	rx1619_write(chip, compensation, REVERSE_FOD_COMPENSATION_ADDR);
 	rx1619_write(chip, threshold, REVERSE_FOD_THRESHOLD_ADDR);
@@ -961,16 +961,16 @@ static bool rx1619_check_firmware_version(struct rx1619_chg *chip, u8 area)
 	rx1619_write(chip, 0x55, 0x2017);
 	/************exit dtm************/
 
-	dev_info(chip->dev, "confirm data =0x%x, 0x%x, 0x%x, 0x%x\n",
+	dev_dbg(chip->dev, "confirm data =0x%x, 0x%x, 0x%x, 0x%x\n",
 		 read_buf[0], read_buf[1], read_buf[2], read_buf[3]);
 
-	dev_info(
+	dev_dbg(
 		chip->dev,
 		"chip_data version=0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x\n",
 		read_buf[4], read_buf[5], read_buf[6], read_buf[7], read_buf[8],
 		read_buf[9], read_buf[10], read_buf[11]);
 
-	dev_info(
+	dev_dbg(
 		chip->dev,
 		"fw_data version=0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x\n",
 		fw_data[g_fw_data_lenth - 4], fw_data[g_fw_data_lenth - 3],
@@ -1017,7 +1017,7 @@ static bool rx1619_check_firmware_version(struct rx1619_chg *chip, u8 area)
 	if ((read_buf[7] == fw_data[g_fw_data_lenth - 1]) &&
 	    (read_buf[0] ==
 	     0x66)) { //read_buf[7] is vesion, read_buf[0] is confirm value
-		dev_info(chip->dev, "g_fw_data_lenth=%d, fw version = 0x%x\n",
+		dev_dbg(chip->dev, "g_fw_data_lenth=%d, fw version = 0x%x\n",
 			 g_fw_data_lenth, (~read_buf[7]) & 0xff);
 		return true;
 	}
@@ -1310,7 +1310,7 @@ static int rx1619_check_firmware(struct rx1619_chg *chip, u8 area)
 
 	success_count = 0;
 
-	dev_info(chip->dev, "[rx1619] [%s] enter \n", __func__);
+	dev_dbg(chip->dev, "[rx1619] [%s] enter \n", __func__);
 
 	if (area == BOOT_AREA) {
 		addr = 0;
@@ -1392,7 +1392,7 @@ CCC:
 	dev_err(chip->dev, "error_conut= %d, success_count=%d\n", j,
 		success_count);
 
-	dev_info(
+	dev_dbg(
 		chip->dev,
 		"(sizeof(fw_data_boot)) = %ld (sizeof(fw_data_rx)) = %ld (sizeof(fw_data_tx)) = %ld \n",
 		(sizeof(fw_data_boot)), (sizeof(fw_data_rx)),
@@ -1483,7 +1483,7 @@ static bool rx1619_push_rx_firmware(struct rx1619_chg *chip)
 
 	msleep(500);
 
-	dev_info(chip->dev, "[rx1619] [%s] check rx enter \n", __func__);
+	dev_dbg(chip->dev, "[rx1619] [%s] check rx enter \n", __func__);
 	pass_count = 0;
 
 	/************prepare_for_mtp_read************/
@@ -1553,7 +1553,7 @@ CCC:
 		"error_conut= %d, pass_count=%d, (sizeof(fw_data_rx)) = %ld \n",
 		j, pass_count, (sizeof(fw_data_rx)));
 
-	dev_info(chip->dev, "fw_data version=0x%x, 0x%x, 0x%x, 0x%x \n",
+	dev_dbg(chip->dev, "fw_data version=0x%x, 0x%x, 0x%x, 0x%x \n",
 		 0xff & (~fw_data[g_fw_data_lenth - 4]),
 		 0xff & (~fw_data[g_fw_data_lenth - 3]),
 		 0xff & (~fw_data[g_fw_data_lenth - 2]),
@@ -1563,14 +1563,14 @@ CCC:
 	rx_bin_project_id_h = fw_data[g_fw_data_lenth - 3];
 	rx_bin_project_id_l = fw_data[g_fw_data_lenth - 2];
 
-	dev_info(chip->dev, "[rx1619] [%s] check rx exit \n", __func__);
+	dev_dbg(chip->dev, "[rx1619] [%s] check rx exit \n", __func__);
 
 	if (g_fw_data_lenth == (pass_count * 4)) {
-		dev_info(chip->dev, "[rx1619] [%s] Push rx success! \n",
+		dev_dbg(chip->dev, "[rx1619] [%s] Push rx success! \n",
 			 __func__);
 		return true;
 	} else {
-		dev_info(chip->dev, "[rx1619] [%s] Push rx fail! \n", __func__);
+		dev_dbg(chip->dev, "[rx1619] [%s] Push rx fail! \n", __func__);
 		return false;
 	}
 }
@@ -1629,12 +1629,12 @@ RETRY:
 				area);
 			return false;
 		} else {
-			dev_info(chip->dev, "download area:%d fw success! \n",
+			dev_dbg(chip->dev, "download area:%d fw success! \n",
 				 area);
 		}
 	} else {
 		if (count > RETRY_COUNT) {
-			dev_info(chip->dev, "download area:%d fw failed! \n",
+			dev_dbg(chip->dev, "download area:%d fw failed! \n",
 				 area);
 			return false;
 		} else {
@@ -1704,37 +1704,37 @@ void rx1619_dump_reg(void)
 	rx1619_read(g_chip, &data[14], 0x0023);
 	rx1619_read(g_chip, &data[15], 0x0024);
 
-	dev_info(g_chip->dev, "reave--[rx1619] [%s] REG:0x0000=0x%x\n",
+	dev_dbg(g_chip->dev, "reave--[rx1619] [%s] REG:0x0000=0x%x\n",
 		 __func__, data[0]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0001=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0001=0x%x\n", __func__,
 		 data[1]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0002=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0002=0x%x\n", __func__,
 		 data[2]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0003=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0003=0x%x\n", __func__,
 		 data[3]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0004=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0004=0x%x\n", __func__,
 		 data[4]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0005=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0005=0x%x\n", __func__,
 		 data[5]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0008=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0008=0x%x\n", __func__,
 		 data[6]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0009=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0009=0x%x\n", __func__,
 		 data[7]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x000A=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x000A=0x%x\n", __func__,
 		 data[8]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x000B=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x000B=0x%x\n", __func__,
 		 data[9]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x000C=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x000C=0x%x\n", __func__,
 		 data[10]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0020=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0020=0x%x\n", __func__,
 		 data[11]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0021=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0021=0x%x\n", __func__,
 		 data[12]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0022=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0022=0x%x\n", __func__,
 		 data[13]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0023=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0023=0x%x\n", __func__,
 		 data[14]);
-	dev_info(g_chip->dev, "[rx1619] [%s] REG:0x0024=0x%x\n", __func__,
+	dev_dbg(g_chip->dev, "[rx1619] [%s] REG:0x0024=0x%x\n", __func__,
 		 data[15]);
 	rx1619_write(g_chip, AP_REV_DATA_OK, REG_AP_RX_COMM);
 }
@@ -1771,7 +1771,7 @@ void rx1619_set_pmi_icl(struct rx1619_chg *chip, int mA)
 					  POWER_SUPPLY_PROP_CURRENT_MAX, &val);
 	}
 
-	dev_info(chip->dev, "[rx1619] [%s] [rx1619] set icl: %d\n", __func__,
+	dev_dbg(chip->dev, "[rx1619] [%s] [rx1619] set icl: %d\n", __func__,
 		 val.intval);
 }
 
@@ -1784,18 +1784,18 @@ void set_usb_type_current(struct rx1619_chg *chip, u8 data)
 		0,
 	};
 
-	dev_info(chip->dev, "[%s] data=0x%x \n", __func__, data);
+	dev_dbg(chip->dev, "[%s] data=0x%x \n", __func__, data);
 
 	switch (data) {
 	case ADAPTER_NONE: //other charger
 		if ((chip->auth == 0) && (chip->epp == 0)) { //bpp and auth fail
 			rx1619_set_pmi_icl(chip, DC_OTHER_CURRENT);
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[rx1619] [%s] bpp and no id---800mA \n",
 				 __func__);
 		} else { //auth ok
 			rx1619_set_pmi_icl(chip, DC_LOW_CURRENT);
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[rx1619] [%s] bpp and id ok---200mA \n",
 				 __func__);
 		}
@@ -1882,7 +1882,7 @@ void set_usb_type_current(struct rx1619_chg *chip, u8 data)
 		}
 		chip->target_curr = uA;
 		chip->last_icl = chip->target_curr;
-		dev_info(chip->dev, "[%s] 27W adapter \n", __func__);
+		dev_dbg(chip->dev, "[%s] 27W adapter \n", __func__);
 		break;
 
 	case ADAPTER_XIAOMI_PD_40W: //40w
@@ -1905,7 +1905,7 @@ void set_usb_type_current(struct rx1619_chg *chip, u8 data)
 		chip->target_vol = ADAPTER_EPP_MI_VOL;
 		rx1619_set_pmi_icl(chip, 1000000);
 		msleep(100);
-		dev_info(chip->dev, "[30W]ready to enable cp\n");
+		dev_dbg(chip->dev, "[30W]ready to enable cp\n");
 		if (chip->is_urd_device) {
 			for (i = 0; i <= 5; i++) {
 				uA = (USB_20W_PLUS_BASE_CURRENT_UA +
@@ -1931,11 +1931,11 @@ void set_usb_type_current(struct rx1619_chg *chip, u8 data)
 		}
 		chip->target_curr = uA;
 		chip->last_icl = chip->target_curr;
-		dev_info(chip->dev, "[%s] 40W adapter \n", __func__);
+		dev_dbg(chip->dev, "[%s] 40W adapter \n", __func__);
 		break;
 
 	default:
-		dev_info(chip->dev, "[%s] other Usb_type\n", __func__);
+		dev_dbg(chip->dev, "[%s] other Usb_type\n", __func__);
 		break;
 	}
 }
@@ -1950,24 +1950,24 @@ static void rx_charging_info(struct rx1619_chg *chip)
 	iout = rx1619_get_rx_iout(chip);
 	vrect = rx1619_get_rx_vrect(chip);
 
-	dev_info(chip->dev, "%s:Vout:%dmV, Iout:%dmA, Vrect:%dmV\n", __func__,
+	dev_dbg(chip->dev, "%s:Vout:%dmV, Iout:%dmA, Vrect:%dmV\n", __func__,
 		 vout, iout, vrect);
 }
 
 void get_usb_type_current(struct rx1619_chg *chip, u8 data)
 {
-	dev_info(chip->dev, "[%s] data=0x%x \n", __func__, data);
+	dev_dbg(chip->dev, "[%s] data=0x%x \n", __func__, data);
 
 	switch (data) {
 	case ADAPTER_NONE: //other charger
 		if ((chip->auth == 0) && (chip->epp == 0)) { //bpp and auth fail
 			chip->target_curr = DC_OTHER_CURRENT;
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[rx1619] [%s] bpp and no id---800mA \n",
 				 __func__);
 		} else { //auth ok
 			chip->target_curr = DC_LOW_CURRENT;
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[rx1619] [%s] bpp and id ok---200mA \n",
 				 __func__);
 		}
@@ -2073,13 +2073,13 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 				  POWER_SUPPLY_PROP_DC_THERMAL_LEVELS, &val);
 	dc_level = val.intval;
 
-	dev_info(
+	dev_dbg(
 		chip->dev,
 		"soc:%d,vol_now:%d,cur_now:%d,health:%d, bat_status:%d, dc_level:%d\n",
 		soc, vol_now, cur_now, health, batt_sts, dc_level);
 	/*epp 10W */
 	if ((g_USB_TYPE >= 6 && g_USB_TYPE <= 7) && (chip->epp)) {
-		dev_info(chip->dev, "standard epp logic\n");
+		dev_dbg(chip->dev, "standard epp logic\n");
 		if (soc >= 97)
 			chip->target_curr = DC_BPP_CURRENT;
 		if (soc == 100)
@@ -2088,7 +2088,7 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 			chip->target_curr = SCREEN_OFF_FUL_CURRENT;
 
 		if (chip->target_curr != chip->last_qc3_icl) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "qc3_epp, set new icl: %d, last_icl: %d\n",
 				 chip->target_curr, chip->last_qc3_icl);
 			chip->last_qc3_icl = chip->target_curr;
@@ -2105,14 +2105,14 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 		}
 
 		if (chip->is_voice_box_tx) {
-			dev_info(chip->dev, "enter voice work\n");
+			dev_dbg(chip->dev, "enter voice work\n");
 			schedule_delayed_work(&chip->voice_tx_work,
 					      msecs_to_jiffies(0));
 			goto out;
 		}
 
 		if (chip->is_train_tx) {
-			dev_info(chip->dev, "enter train work\n");
+			dev_dbg(chip->dev, "enter train work\n");
 			schedule_delayed_work(&chip->train_tx_work,
 					      msecs_to_jiffies(0));
 			goto out;
@@ -2120,7 +2120,7 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 
 		if ((dc_level >= HIGH_THERMAL_LEVEL_THR) ||
 		    (soc >= LIMIT_SOC)) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "set vin 12V for dc_level:%d, soc:%d\n",
 				 dc_level, soc);
 			//chip->target_vol = EPP_VOL_THRESHOLD;
@@ -2151,7 +2151,7 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 		if (chip->count_10v > ICL_EXCHANGE_COUNT ||
 		    (chip->epp_exchange == EXCHANGE_10V &&
 		     chip->count_15v <= ICL_EXCHANGE_COUNT)) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "iout less than 500mA ,set vin to 12V\n");
 			//chip->target_vol = EPP_VOL_THRESHOLD;
 			chip->epp_exchange = EXCHANGE_10V;
@@ -2163,14 +2163,14 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 			if (soc >= TAPER_SOC) {
 				//chip->target_curr = min(DC_BPP_CURRENT, chip->target_curr);
 				chip->target_vol = EPP_VOL_THRESHOLD;
-				dev_info(chip->dev, "set curr to %d\n",
+				dev_dbg(chip->dev, "set curr to %d\n",
 					 chip->target_curr);
 			}
 			if (soc >= FULL_SOC) {
 				chip->status = TAPER_MODE;
 				chip->target_vol = EPP_VOL_THRESHOLD;
 				//chip->target_curr = min(DC_SDP_CURRENT, chip->target_curr);
-				dev_info(
+				dev_dbg(
 					chip->dev,
 					"ready to taper_mode ,set vin to %d, curr to %d\n",
 					chip->target_vol, chip->target_curr);
@@ -2180,7 +2180,7 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 			chip->target_vol = EPP_VOL_THRESHOLD;
 			//chip->target_curr = min(DC_SDP_CURRENT, chip->target_curr);
 
-			dev_info(
+			dev_dbg(
 				chip->dev,
 				"ready to full_mode ,set vin to %d, curr to %d\n",
 				chip->target_vol, chip->target_curr);
@@ -2191,12 +2191,12 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 				chip->status = NORMAL_MODE;
 			break;
 		case FULL_MODE:
-			dev_info(chip->dev, "charge full set Vin 11V\n");
+			dev_dbg(chip->dev, "charge full set Vin 11V\n");
 			chip->target_vol = ADAPTER_EPP_QC3_VOL;
 			chip->target_curr = SCREEN_OFF_FUL_CURRENT;
 
 			if (batt_sts == POWER_SUPPLY_STATUS_CHARGING) {
-				dev_info(chip->dev,
+				dev_dbg(chip->dev,
 					 "full mode -> recharge mode\n");
 				chip->status = RECHG_MODE;
 				chip->target_curr = DC_FULL_CURRENT;
@@ -2204,7 +2204,7 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 			break;
 		case RECHG_MODE:
 			if (batt_sts == POWER_SUPPLY_STATUS_FULL) {
-				dev_info(chip->dev,
+				dev_dbg(chip->dev,
 					 "recharge mode -> full mode\n");
 				chip->status = FULL_MODE;
 				chip->target_curr = SCREEN_OFF_FUL_CURRENT;
@@ -2218,7 +2218,7 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 				}
 				break;
 			}
-			dev_info(chip->dev, "recharge mode set icl to 350mA\n");
+			dev_dbg(chip->dev, "recharge mode set icl to 350mA\n");
 			chip->target_vol = ADAPTER_EPP_QC3_VOL;
 			chip->target_curr = DC_FULL_CURRENT;
 
@@ -2283,7 +2283,7 @@ static void rx_set_charging_param(struct rx1619_chg *chip)
 		}
 	}
 out:
-	dev_info(
+	dev_dbg(
 		chip->dev,
 		"status:0x%x,adapter_vol=%d,icl_curr=%d,last_vin=%d,last_icl=%d\n",
 		chip->status, chip->target_vol, chip->target_curr, last_vin,
@@ -2295,14 +2295,14 @@ static void rx1619_dc_check_work(struct work_struct *work)
 	struct rx1619_chg *chip =
 		container_of(work, struct rx1619_chg, dc_check_work.work);
 
-	dev_info(chip->dev, "[rx1619] dc present: %d\n", chip->dcin_present);
+	dev_dbg(chip->dev, "[rx1619] dc present: %d\n", chip->dcin_present);
 	if (chip->dcin_present) {
 		chip->ss = 1;
-		dev_info(chip->dev, "dcin present, quit dc check work\n");
+		dev_dbg(chip->dev, "dcin present, quit dc check work\n");
 		return;
 	} else {
 		chip->ss = 0;
-		dev_info(chip->dev,
+		dev_dbg(chip->dev,
 			 "dcin no present, continue dc check work\n");
 		schedule_delayed_work(&chip->dc_check_work,
 				      msecs_to_jiffies(2500));
@@ -2316,7 +2316,7 @@ static void rx1619_cmd_timeout_work(struct work_struct *work)
 	struct rx1619_chg *chip =
 		container_of(work, struct rx1619_chg, cmd_timeout_work.work);
 
-	dev_info(chip->dev, "[%s] Cmd timeout set 700mA \n", __func__);
+	dev_dbg(chip->dev, "[%s] Cmd timeout set 700mA \n", __func__);
 	rx1619_set_pmi_icl(chip, DC_BPP_AUTH_FAIL_CURRENT);
 	chip->target_curr = DC_BPP_AUTH_FAIL_CURRENT;
 }
@@ -2353,7 +2353,7 @@ static void rx1619_fw_download_work(struct work_struct *work)
 	bool is_valid_fw = true;
 
 	if (chip->fw_update) {
-		dev_info(chip->dev, "[rx1619] [%s] FW Update is on going!\n",
+		dev_dbg(chip->dev, "[rx1619] [%s] FW Update is on going!\n",
 			 __func__);
 		return;
 	}
@@ -2374,25 +2374,25 @@ static void rx1619_fw_download_work(struct work_struct *work)
 			is_valid_fw = false;
 		chip->chip_ok = rx1619_check_i2c_is_ok(chip);
 		chip->fw_version = g_fw_rx_id;
-		dev_info(chip->dev,
+		dev_dbg(chip->dev,
 			 "[rx1619] %s: FW Version is 0x%x chip_ok:%d\n",
 			 __func__, g_fw_rx_id, chip->chip_ok);
 
 		if (is_valid_fw && (g_fw_rx_id >= FW_VERSION)) {
-			dev_info(
+			dev_dbg(
 				chip->dev,
 				"[rx1619] %s: FW Version correct so skip upgrade\n",
 				__func__);
 		} else {
 #ifndef CONFIG_FACTORY_BUILD
-			dev_info(chip->dev, "[rx1619] %s: FW download start\n",
+			dev_dbg(chip->dev, "[rx1619] %s: FW download start\n",
 				 __func__);
 			if (!rx1619_onekey_download_firmware(chip))
 				dev_err(chip->dev,
 					"[rx1619] [%s] program fw failed!\n",
 					__func__);
 			else {
-				dev_info(chip->dev,
+				dev_dbg(chip->dev,
 					 "[rx1619] [%s] FW Update Success!\n",
 					 __func__);
 				boot_fw_version =
@@ -2405,7 +2405,7 @@ static void rx1619_fw_download_work(struct work_struct *work)
 				rx_fw_version =
 					(~fw_data_rx[sizeof(fw_data_rx) - 1]) &
 					0xff;
-				dev_info(
+				dev_dbg(
 					chip->dev,
 					"boot_fw_version=0x%x, tx_fw_version=0x%x, rx_fw_version=0x%x\n",
 					boot_fw_version, tx_fw_version,
@@ -2413,7 +2413,7 @@ static void rx1619_fw_download_work(struct work_struct *work)
 				chip->fw_version = g_fw_rx_id;
 			}
 #else
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[rx1619] %s: factory build, don't update\n",
 				 __func__);
 #endif
@@ -2463,11 +2463,11 @@ static void rx1619_pan_tx_work(struct work_struct *work)
 		dc_level = val.intval;
 	}
 
-	dev_info(chip->dev, "soc:%d, dc_level:%d, bat_status:%d\n", soc,
+	dev_dbg(chip->dev, "soc:%d, dc_level:%d, bat_status:%d\n", soc,
 		 dc_level, batt_sts);
 
 	if (dc_level) {
-		dev_info(chip->dev, "Disable bq, dc_level:%d\n", dc_level);
+		dev_dbg(chip->dev, "Disable bq, dc_level:%d\n", dc_level);
 		chip->target_vol = ADAPTER_EPP_QC3_VOL;
 	}
 
@@ -2483,12 +2483,12 @@ static void rx1619_pan_tx_work(struct work_struct *work)
 			chip->status = NORMAL_MODE;
 		break;
 	case FULL_MODE:
-		dev_info(chip->dev, "[pan]charge full set Vin 11V\n");
+		dev_dbg(chip->dev, "[pan]charge full set Vin 11V\n");
 		chip->target_vol = ADAPTER_EPP_QC3_VOL;
 		chip->target_curr = SCREEN_OFF_FUL_CURRENT;
 
 		if (batt_sts == POWER_SUPPLY_STATUS_CHARGING) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[pan]full mode -> recharge mode\n");
 			chip->status = RECHG_MODE;
 			chip->target_curr = DC_LOW_CURRENT;
@@ -2496,7 +2496,7 @@ static void rx1619_pan_tx_work(struct work_struct *work)
 		break;
 	case RECHG_MODE:
 		if (batt_sts == POWER_SUPPLY_STATUS_FULL) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[pan]recharge mode -> full mode\n");
 			chip->status = FULL_MODE;
 			chip->target_curr = SCREEN_OFF_FUL_CURRENT;
@@ -2510,7 +2510,7 @@ static void rx1619_pan_tx_work(struct work_struct *work)
 			break;
 		}
 
-		dev_info(chip->dev, "[pan]recharge mode set icl to 350mA\n");
+		dev_dbg(chip->dev, "[pan]recharge mode set icl to 350mA\n");
 		chip->target_vol = ADAPTER_EPP_QC3_VOL;
 		chip->target_curr = DC_LOW_CURRENT;
 
@@ -2573,7 +2573,7 @@ static void rx1619_pan_tx_work(struct work_struct *work)
 		rx1619_set_pmi_icl(chip, chip->target_curr);
 	}
 
-	dev_info(
+	dev_dbg(
 		chip->dev,
 		"chip->status:0x%x,adapter_vol=%d,icl_curr=%d,last_vin=%d,last_icl=%d, bq_dis:%d\n",
 		chip->status, chip->target_vol, chip->target_curr,
@@ -2591,7 +2591,7 @@ static int rx1619_get_effective_fcc(struct rx1619_chg *chip)
 
 	effective_fcc_val = get_effective_result(chip->fcc_votable);
 	effective_fcc_val = effective_fcc_val / 1000;
-	dev_info(chip->dev, "effective_fcc: %d\n", effective_fcc_val);
+	dev_dbg(chip->dev, "effective_fcc: %d\n", effective_fcc_val);
 	return effective_fcc_val;
 }
 
@@ -2646,12 +2646,12 @@ static void rx1619_voice_tx_work(struct work_struct *work)
 		batt_temp = val.intval;
 	}
 
-	dev_info(chip->dev,
+	dev_dbg(chip->dev,
 		 "soc:%d, dc_level:%d, bat_status:%d, batt_temp:%d\n", soc,
 		 dc_level, batt_sts, batt_temp);
 
 	if (batt_temp >= VOICE_CURRENT_LIMIT_HOT_UPPER_TEMP) {
-		dev_info(chip->dev, "[voice]Tbat limit fcc 1A\n");
+		dev_dbg(chip->dev, "[voice]Tbat limit fcc 1A\n");
 		effective_fcc = rx1619_get_effective_fcc(chip);
 		if (chip->fcc_votable) {
 			effective_fcc = VOICE_FCC_HOT_LIMIT_MA;
@@ -2665,7 +2665,7 @@ static void rx1619_voice_tx_work(struct work_struct *work)
 	}
 
 	if (batt_temp >= VOICE_CURRENT_LIMIT_WARM_UPPER_TEMP) {
-		dev_info(chip->dev, "[voice]Tbat limit fcc 3.2A\n");
+		dev_dbg(chip->dev, "[voice]Tbat limit fcc 3.2A\n");
 		effective_fcc = rx1619_get_effective_fcc(chip);
 		if (chip->fcc_votable) {
 			effective_fcc = VOICE_FCC_WARM_LIMIT_MA;
@@ -2679,7 +2679,7 @@ static void rx1619_voice_tx_work(struct work_struct *work)
 	}
 
 	if (dc_level > 2) {
-		dev_info(chip->dev, "[voice]Disable bq, dc_level:%d\n",
+		dev_dbg(chip->dev, "[voice]Disable bq, dc_level:%d\n",
 			 dc_level);
 		chip->target_vol = ADAPTER_EPP_QC3_VOL;
 	}
@@ -2690,7 +2690,7 @@ static void rx1619_voice_tx_work(struct work_struct *work)
 			chip->status = TAPER_MODE;
 		break;
 	case TAPER_MODE:
-		dev_info(chip->dev, "[voice]taper mode set Vin 11V\n");
+		dev_dbg(chip->dev, "[voice]taper mode set Vin 11V\n");
 		chip->target_vol = ADAPTER_EPP_QC3_VOL;
 		if (soc == FULL_SOC && batt_sts == POWER_SUPPLY_STATUS_FULL)
 			chip->status = FULL_MODE;
@@ -2698,12 +2698,12 @@ static void rx1619_voice_tx_work(struct work_struct *work)
 			chip->status = NORMAL_MODE;
 		break;
 	case FULL_MODE:
-		dev_info(chip->dev, "[voice]charge full set Vin 11V\n");
+		dev_dbg(chip->dev, "[voice]charge full set Vin 11V\n");
 		chip->target_vol = ADAPTER_EPP_QC3_VOL;
 		chip->target_curr = SCREEN_OFF_FUL_CURRENT;
 
 		if (batt_sts == POWER_SUPPLY_STATUS_CHARGING) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[voice]full mode -> recharge mode\n");
 			chip->status = RECHG_MODE;
 			chip->target_curr = DC_LOW_CURRENT;
@@ -2711,7 +2711,7 @@ static void rx1619_voice_tx_work(struct work_struct *work)
 		break;
 	case RECHG_MODE:
 		if (batt_sts == POWER_SUPPLY_STATUS_FULL) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[voice]recharge mode -> full mode\n");
 			chip->status = FULL_MODE;
 			chip->target_curr = SCREEN_OFF_FUL_CURRENT;
@@ -2725,7 +2725,7 @@ static void rx1619_voice_tx_work(struct work_struct *work)
 			break;
 		}
 
-		dev_info(chip->dev, "[voice]recharge mode set icl to 350mA\n");
+		dev_dbg(chip->dev, "[voice]recharge mode set icl to 350mA\n");
 		chip->target_vol = ADAPTER_EPP_QC3_VOL;
 		chip->target_curr = DC_LOW_CURRENT;
 
@@ -2788,7 +2788,7 @@ static void rx1619_voice_tx_work(struct work_struct *work)
 		rx1619_set_pmi_icl(chip, chip->target_curr);
 	}
 
-	dev_info(
+	dev_dbg(
 		chip->dev,
 		"di->status:0x%x,adapter_vol=%d,icl_curr=%d,last_vin=%d,last_icl=%d, bq_dis:%d\n",
 		chip->status, chip->target_vol, chip->target_curr,
@@ -2831,7 +2831,7 @@ static void rx1619_train_tx_work(struct work_struct *work)
 		dc_level = val.intval;
 	}
 
-	dev_info(chip->dev, "soc:%d, dc_level:%d, bat_status:%d\n", soc,
+	dev_dbg(chip->dev, "soc:%d, dc_level:%d, bat_status:%d\n", soc,
 		 dc_level, batt_sts);
 
 	if (dc_level) {
@@ -2841,7 +2841,7 @@ static void rx1619_train_tx_work(struct work_struct *work)
 		else
 			chip->target_curr = 450000; //11V * 450mA
 		rx1619_set_pmi_icl(chip, chip->target_curr);
-		dev_info(chip->dev, "dc_level:%d, chip->target_curr:%d.\n",
+		dev_dbg(chip->dev, "dc_level:%d, chip->target_curr:%d.\n",
 			 dc_level, chip->target_curr);
 	}
 
@@ -2857,12 +2857,12 @@ static void rx1619_train_tx_work(struct work_struct *work)
 			chip->status = NORMAL_MODE;
 		break;
 	case FULL_MODE:
-		dev_info(chip->dev, "[train]charge full set Vin 11V\n");
+		dev_dbg(chip->dev, "[train]charge full set Vin 11V\n");
 		chip->target_vol = ADAPTER_EPP_QC3_VOL;
 		chip->target_curr = SCREEN_OFF_FUL_CURRENT;
 
 		if (batt_sts == POWER_SUPPLY_STATUS_CHARGING) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[train]full mode -> recharge mode\n");
 			chip->status = RECHG_MODE;
 			chip->target_curr = DC_LOW_CURRENT;
@@ -2870,7 +2870,7 @@ static void rx1619_train_tx_work(struct work_struct *work)
 		break;
 	case RECHG_MODE:
 		if (batt_sts == POWER_SUPPLY_STATUS_FULL) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[train]recharge mode -> full mode\n");
 			chip->status = FULL_MODE;
 			chip->target_curr = SCREEN_OFF_FUL_CURRENT;
@@ -2884,7 +2884,7 @@ static void rx1619_train_tx_work(struct work_struct *work)
 			break;
 		}
 
-		dev_info(chip->dev, "[train]recharge mode set icl to 350mA\n");
+		dev_dbg(chip->dev, "[train]recharge mode set icl to 350mA\n");
 		chip->target_vol = ADAPTER_EPP_QC3_VOL;
 		chip->target_curr = DC_LOW_CURRENT;
 
@@ -2947,7 +2947,7 @@ static void rx1619_train_tx_work(struct work_struct *work)
 		rx1619_set_pmi_icl(chip, chip->target_curr);
 	}
 
-	dev_info(
+	dev_dbg(
 		chip->dev,
 		"di->status:0x%x,adapter_vol=%d,icl_curr=%d,last_vin=%d,last_icl=%d, bq_dis:%d\n",
 		chip->status, chip->target_vol, chip->target_curr,
@@ -2969,7 +2969,7 @@ static void rx_chg_detect_work(struct work_struct *work)
 	};
 	int rc;
 
-	dev_info(chip->dev, "[idt] enter %s\n", __func__);
+	dev_dbg(chip->dev, "[idt] enter %s\n", __func__);
 
 	rc = rx_get_property_names(chip);
 	if (rc < 0)
@@ -2981,7 +2981,7 @@ static void rx_chg_detect_work(struct work_struct *work)
 	power_supply_get_property(chip->pc_port_psy, POWER_SUPPLY_PROP_ONLINE,
 				  &pc_val);
 	if (val.intval || pc_val.intval) {
-		dev_info(chip->dev,
+		dev_dbg(chip->dev,
 			 "usb_online:%d, pc online:%d set chip disable\n",
 			 val.intval, pc_val.intval);
 		rx_set_enable_mode(chip, 0);
@@ -2992,7 +2992,7 @@ static void rx_chg_detect_work(struct work_struct *work)
 	if (chip->dc_psy) {
 		power_supply_get_property(chip->dc_psy,
 					  POWER_SUPPLY_PROP_ONLINE, &val);
-		dev_info(chip->dev, "dc_online %d\n", val.intval);
+		dev_dbg(chip->dev, "dc_online %d\n", val.intval);
 		if (val.intval && chip->wireless_psy) {
 			wk_val.intval = 1;
 			power_supply_set_property(
@@ -3025,7 +3025,7 @@ static void reverse_chg_sent_state_work(struct work_struct *work)
 		power_supply_set_property(chip->wireless_psy,
 					  POWER_SUPPLY_PROP_REVERSE_CHG_STATE,
 					  &val);
-		dev_info(chip->dev, "sent tx_mode_uevent\n");
+		dev_dbg(chip->dev, "sent tx_mode_uevent\n");
 		power_supply_changed(chip->wireless_psy);
 	} else
 		dev_err(chip->dev, "get wls property error\n");
@@ -3037,7 +3037,7 @@ static void reverse_chg_state_set_work(struct work_struct *work)
 					       reverse_chg_state_work.work);
 	int ret;
 
-	dev_info(chip->dev, "no rx found and disable reverse charging\n");
+	dev_dbg(chip->dev, "no rx found and disable reverse charging\n");
 	ret = rx_set_reverse_chg_mode(chip, false);
 	chip->is_reverse_chg = 1;
 	schedule_delayed_work(&chip->reverse_sent_state_work, 0);
@@ -3051,7 +3051,7 @@ static void reverse_dping_state_set_work(struct work_struct *work)
 					       reverse_dping_state_work.work);
 	int ret;
 
-	dev_info(chip->dev, "tx mode fault and disable reverse charging\n");
+	dev_dbg(chip->dev, "tx mode fault and disable reverse charging\n");
 	ret = rx_set_reverse_chg_mode(chip, false);
 	chip->is_reverse_chg = 2;
 	schedule_delayed_work(&chip->reverse_sent_state_work, 0);
@@ -3078,14 +3078,14 @@ static void rx1619_wpc_det_work(struct work_struct *work)
 	if (gpio_is_valid(chip->power_good_gpio)) {
 		ret = gpio_get_value(chip->power_good_gpio);
 		if (ret) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "power_good high, wireless attached\n");
 			chip->power_good_flag = 1;
 			val.intval = 1;
 			schedule_delayed_work(&chip->dc_check_work,
 					      msecs_to_jiffies(2500));
 		} else {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "power_good low, wireless detached\n");
 			cancel_delayed_work(&chip->dc_check_work);
 			chip->power_good_flag = 0;
@@ -3241,13 +3241,13 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 				chip->is_reverse_chg = 4;
 				schedule_delayed_work(
 					&chip->reverse_sent_state_work, 0);
-				dev_info(chip->dev, "tx mode power transfer\n");
+				dev_dbg(chip->dev, "tx mode power transfer\n");
 				break;
 			case POWER_LIM:
-				dev_info(chip->dev, "tx mode power limit\n");
+				dev_dbg(chip->dev, "tx mode power limit\n");
 				break;
 			case CONFIGURE_CNF:
-				dev_info(chip->dev, "tx mode CONFIGURE_CNF\n");
+				dev_dbg(chip->dev, "tx mode CONFIGURE_CNF\n");
 				break;
 
 			case CONFIGURE_ERR:
@@ -3274,11 +3274,11 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 
 	rx1619_read(chip, &rx_req, REG_RX_REV_CMD); //0x0020
 	if (rx_req <= 0) {
-		dev_info(chip->dev, "rx cmd error:%d\n", rx_req);
+		dev_dbg(chip->dev, "rx cmd error:%d\n", rx_req);
 		return;
 	}
 
-	dev_info(chip->dev, "rx_req = 0x%x\n", rx_req);
+	dev_dbg(chip->dev, "rx_req = 0x%x\n", rx_req);
 
 	mutex_lock(&chip->wireless_chg_int_lock);
 
@@ -3300,7 +3300,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		chip->epp_tx_id_l = rx_rev_data[1]; //epp tx id low byte
 
 		if (chip->epp_tx_id_l == 0x59) {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "mophie tx, start dc check after 8s\n");
 			schedule_delayed_work(&chip->dc_check_work,
 					      msecs_to_jiffies(8000));
@@ -3308,7 +3308,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 			schedule_delayed_work(&chip->dc_check_work,
 					      msecs_to_jiffies(2500));
 
-		dev_info(chip->dev, "epp_tx_id_h = 0x%x, epp_tx_id_l = 0x%x\n",
+		dev_dbg(chip->dev, "epp_tx_id_h = 0x%x, epp_tx_id_l = 0x%x\n",
 			 chip->epp_tx_id_h, chip->epp_tx_id_l);
 		break;
 
@@ -3317,7 +3317,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		chip->epp_max_power = 5;
 		msleep(10);
 
-		dev_info(chip->dev, "[%s] LDO on Int \n", __func__);
+		dev_dbg(chip->dev, "[%s] LDO on Int \n", __func__);
 
 		chip->epp = (rx_rev_data[0] >> 7) & 0xff;
 		chip->epp_max_power = (rx_rev_data[0] & 0x7f);
@@ -3328,7 +3328,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		if (chip->epp) { //EPP
 			chip->epp = 1;
 			rx1619_set_pmi_icl(chip, 30000);
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "[%s] EPP--10mA and epp max power is %d\n",
 				 __func__, chip->epp_max_power);
 			msleep(50);
@@ -3357,7 +3357,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		} else
 			rx1619_set_pmi_icl(chip, DC_LOW_CURRENT);
 
-		dev_info(
+		dev_dbg(
 			chip->dev,
 			"[%s] hw_id_h=0x%x,hw_id_l=0x%x,fw_rx_id=0x%x,g_fw_tx_id=0x%x,g_epp_or_bpp=0x%x\n",
 			__func__, g_hw_id_h, g_hw_id_l, g_fw_rx_id, g_fw_tx_id,
@@ -3376,7 +3376,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		} else if (chip->fod_mode == 0x3) {
 			rx1619_set_fod_param(chip, 0x4);
 		}
-		dev_info(chip->dev, "[rx1619] [%s] fod param setting \n",
+		dev_dbg(chip->dev, "[rx1619] [%s] fod param setting \n",
 			 __func__);
 		break;
 
@@ -3385,7 +3385,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 
 		rx1619_write(chip, AP_REV_DATA_OK, REG_AP_RX_COMM);
 		msleep(10);
-		dev_info(chip->dev, "[rx1619] [%s] Calibration OK! \n",
+		dev_dbg(chip->dev, "[rx1619] [%s] Calibration OK! \n",
 			 __func__);
 		if (chip->epp && chip->epp_max_power == 10) { //EPP
 			if (chip->op_mode == LN8282_OPMODE_SWITCHING)
@@ -3418,7 +3418,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		rx1619_request_uuid(chip, chip->epp);
 		//rx1619_write(chip, PRIVATE_USB_TYPE_CMD, REG_RX_SENT_CMD);//0x87 usb type req
 		//rx1619_write(chip, AP_SENT_DATA_OK, REG_AP_RX_COMM);
-		dev_info(chip->dev, "[rx1619] [%s] SHA ONE OK! \n", __func__);
+		dev_dbg(chip->dev, "[rx1619] [%s] SHA ONE OK! \n", __func__);
 		chip->auth = 1;
 		if (!chip->epp)
 			alarm_start_relative(&chip->cmd_timeout_alarm,
@@ -3435,7 +3435,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		rx1619_write(chip, PRIVATE_FAST_CHG_CMD, REG_RX_SENT_CMD);    //0x88 fast charge req
 		rx1619_write(chip, AP_SENT_DATA_OK, REG_AP_RX_COMM);
 */
-		dev_info(chip->dev, "[rx1619] [%s] usb_type=0x%x\n", __func__,
+		dev_dbg(chip->dev, "[rx1619] [%s] usb_type=0x%x\n", __func__,
 			 usb_type);
 
 		if (chip->is_car_tx && (usb_type >= ADAPTER_XIAOMI_QC3)) {
@@ -3483,7 +3483,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 			chip->target_vol = ADAPTER_EPP_MI_VOL;
 			break;
 		default:
-			dev_info(chip->dev, "[%s] other Usb_type\n", __func__);
+			dev_dbg(chip->dev, "[%s] other Usb_type\n", __func__);
 			break;
 		}
 		if (fc_flag) {
@@ -3508,18 +3508,18 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		msleep(10);
 
 		rx1619_read(chip, &g_fc_status, REG_RX_REV_DATA1);
-		dev_info(chip->dev, "[%s] FC status = %d\n", __func__,
+		dev_dbg(chip->dev, "[%s] FC status = %d\n", __func__,
 			 g_fc_status);
 		if (chip->is_ble_tx)
 			rx1619_request_low_addr(chip);
 		if (g_fc_status == 1) {
 			set_usb_type_current(chip, g_USB_TYPE);
-			dev_info(chip->dev, "[%s] fast charge success!!! \n",
+			dev_dbg(chip->dev, "[%s] fast charge success!!! \n",
 				 __func__);
 			schedule_delayed_work(&chip->chg_monitor_work,
 					      msecs_to_jiffies(1000));
 		} else {
-			dev_info(chip->dev, "[%s] fast charge fail!!! \n",
+			dev_dbg(chip->dev, "[%s] fast charge fail!!! \n",
 				 __func__);
 			if (!chip->epp) {
 				rx1619_set_pmi_icl(chip,
@@ -3535,7 +3535,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		for (i = 0; i < 3; i++)
 			chip->mac_addr[i] = rx_rev_data[i];
 
-		dev_info(chip->dev, "get low_addr: 0x%x, 0x%x, 0x%x\n",
+		dev_dbg(chip->dev, "get low_addr: 0x%x, 0x%x, 0x%x\n",
 			 chip->mac_addr[0], chip->mac_addr[1],
 			 chip->mac_addr[2]);
 		rx1619_request_high_addr(chip);
@@ -3548,7 +3548,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		for (i = 0; i < 3; i++)
 			chip->mac_addr[i + 3] = rx_rev_data[i];
 
-		dev_info(chip->dev, "get high_addr: %x, %x, %x\n",
+		dev_dbg(chip->dev, "get high_addr: %x, %x, %x\n",
 			 chip->mac_addr[3], chip->mac_addr[4],
 			 chip->mac_addr[5]);
 
@@ -3559,7 +3559,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		msleep(10);
 
 		ble_flag = rx_rev_data[0];
-		dev_info(chip->dev, "[%s] ble_flag = 0x%x \n", __func__,
+		dev_dbg(chip->dev, "[%s] ble_flag = 0x%x \n", __func__,
 			 ble_flag);
 		if (ble_flag & BIT(2)) {
 			if (!chip->is_oob_ok) { //OOB OK
@@ -3581,7 +3581,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		chip->rpp_val[0] = rx_rev_data[0];
 		chip->rpp_val[1] = rx_rev_data[1];
 
-		dev_info(chip->dev, "[%s] rp_h = 0x%x, rp_l = 0x%x\n", __func__,
+		dev_dbg(chip->dev, "[%s] rp_h = 0x%x, rp_l = 0x%x\n", __func__,
 			 chip->rpp_val[0], chip->rpp_val[1]);
 
 		rx1619_set_rpp(chip);
@@ -3595,7 +3595,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 			for (i = 0; i < 2; i++)
 				g_uuid_data[i] = rx_rev_data[i];
 
-			dev_info(chip->dev, "TX hwid: 0x%x 0x%x\n",
+			dev_dbg(chip->dev, "TX hwid: 0x%x 0x%x\n",
 				 g_uuid_data[0], g_uuid_data[1]);
 
 			if (g_uuid_data[0] == 0x12 && g_uuid_data[1])
@@ -3607,7 +3607,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 			for (i = 0; i < 4; i++)
 				g_uuid_data[i] = rx_rev_data[i];
 
-			dev_info(
+			dev_dbg(
 				chip->dev,
 				"vendor:0x%x, module:0x%x, hw:0x%x and power:0x%x\n",
 				g_uuid_data[0], g_uuid_data[1], g_uuid_data[2],
@@ -3650,7 +3650,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 		rx1619_write(chip, AP_REV_DATA_OK, REG_AP_RX_COMM);
 		err_cmd = rx_rev_data[0];
 		cnt = 0;
-		dev_info(chip->dev, "[%s] Receive error cmd %d\n", __func__,
+		dev_dbg(chip->dev, "[%s] Receive error cmd %d\n", __func__,
 			 err_cmd);
 		if (!chip->epp &&
 		    ((err_cmd == ID_CMD) || (err_cmd == AUTH_CMD) ||
@@ -3689,7 +3689,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 				 */
 				rx1619_set_pmi_icl(chip, 750000);
 			}
-			dev_info(chip->dev, "[%s] BPP--750mA \n", __func__);
+			dev_dbg(chip->dev, "[%s] BPP--750mA \n", __func__);
 			chip->target_curr = DC_BPP_AUTH_FAIL_CURRENT;
 		}
 		break;
@@ -3700,7 +3700,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 
 		rx1619_read(chip, &tx_req, REG_RX_REV_DATA1); //0x0021
 
-		dev_info(chip->dev, "[rx1619] [%s] tx_req=0x%x \n", __func__,
+		dev_dbg(chip->dev, "[rx1619] [%s] tx_req=0x%x \n", __func__,
 			 tx_req);
 
 		if (tx_req == 0x12) { //iout
@@ -3713,7 +3713,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 			data_l = (iout & 0xff00) >> 8;
 			rx1619_write(chip, data_h, 0x0003);
 			rx1619_write(chip, data_l, 0x0004);
-			dev_info(
+			dev_dbg(
 				chip->dev,
 				"[rx1619] [%s] product test--0x12--0x%x,0x%x iout=%d \n",
 				__func__, data_h, data_l, iout);
@@ -3727,7 +3727,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 			data_l = (vout & 0xff00) >> 8;
 			rx1619_write(chip, data_h, 0x0003);
 			rx1619_write(chip, data_l, 0x0004);
-			dev_info(
+			dev_dbg(
 				chip->dev,
 				"[rx1619] [%s] product test--0x13--0x%x,0x%x vout=%d \n",
 				__func__, data_h, data_l, vout);
@@ -3739,7 +3739,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 			rx1619_write(chip, 0x00, REG_RX_SENT_DATA4);
 			rx1619_write(chip, g_fw_rx_id, REG_RX_SENT_DATA5);
 			rx1619_write(chip, g_fw_tx_id, REG_RX_SENT_DATA6);
-			dev_info(
+			dev_dbg(
 				chip->dev,
 				"[rx1619] [%s] product test--0x24--rxtx_fw_version=0x%x,0x%x\n",
 				__func__, g_fw_rx_id, g_fw_tx_id);
@@ -3749,7 +3749,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 			rx1619_write(chip, 0x23, REG_RX_SENT_DATA2); //sent cmd
 			rx1619_write(chip, g_hw_id_h, REG_RX_SENT_DATA3);
 			rx1619_write(chip, g_hw_id_l, REG_RX_SENT_DATA4);
-			dev_info(
+			dev_dbg(
 				chip->dev,
 				"[rx1619] [%s] product test--0x23--rx_hw_id=0x%x,0x%x\n",
 				__func__, g_hw_id_h, g_hw_id_l);
@@ -3758,7 +3758,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 				     REG_RX_SENT_DATA1); //sent header
 			rx1619_write(chip, 0x0b, REG_RX_SENT_DATA2); //sent cmd
 			rx1619_write(chip, g_USB_TYPE, REG_RX_SENT_DATA3);
-			dev_info(
+			dev_dbg(
 				chip->dev,
 				"[rx1619] [%s] product test--0x25--g_USB_TYPE=0x%x \n",
 				__func__, g_USB_TYPE);
@@ -3767,7 +3767,7 @@ static void rx1619_wireless_int_work(struct work_struct *work)
 			rx1619_write(chip, 0x8D, REG_RX_SENT_CMD);
 			rx1619_write(chip, 0x18, REG_RX_SENT_DATA1);
 			rx1619_write(chip, 0x30, REG_RX_SENT_DATA2);
-			dev_info(
+			dev_dbg(
 				chip->dev,
 				"[ factory reverse test ] reverse charging test : receive request\n");
 
@@ -3801,7 +3801,7 @@ static irqreturn_t rx1619_chg_stat_handler(int irq, void *dev_id)
 	struct rx1619_chg *chip = dev_id;
 	//u8 rx_req = 0;
 
-	dev_info(chip->dev, "[%s]\n", __func__);
+	dev_dbg(chip->dev, "[%s]\n", __func__);
 
 	schedule_delayed_work(&chip->wireless_int_work, 0);
 
@@ -3841,7 +3841,7 @@ static int rx1619_parse_dt(struct rx1619_chg *chip)
 		return -EINVAL;
 
 	chip->irq_gpio = of_get_named_gpio(node, "rx,irq_gpio", 0);
-	dev_info(chip->dev, "[%s]: rx1619_irq_gpio is %d\n", __func__,
+	dev_dbg(chip->dev, "[%s]: rx1619_irq_gpio is %d\n", __func__,
 		 chip->irq_gpio);
 
 	if (!gpio_is_valid(chip->irq_gpio)) {
@@ -4043,7 +4043,7 @@ static int rx_set_reverse_gpio(struct rx1619_chg *chip, int enable)
 		}
 
 		ret = gpio_get_value(chip->tx_on_gpio);
-		dev_info(chip->dev, "txon gpio: %d\n", ret);
+		dev_dbg(chip->dev, "txon gpio: %d\n", ret);
 		gpio_free(chip->tx_on_gpio);
 		if (!enable) {
 			msleep(100);
@@ -4070,7 +4070,7 @@ static int rx_get_reverse_chg_mode(struct rx1619_chg *chip)
 		dev_err(chip->dev, "%s: txon gpio not provided\n", __func__);
 		ret = -1;
 	}
-	dev_info(chip->dev, "txon gpio: %d\n", ret);
+	dev_dbg(chip->dev, "txon gpio: %d\n", ret);
 
 	return ret;
 }
@@ -4114,7 +4114,7 @@ static int rx_set_reverse_chg_mode(struct rx1619_chg *chip, int enable)
 				&chip->reverse_dping_alarm,
 				ms_to_ktime(REVERSE_DPING_CHECK_DELAY_MS));
 		} else {
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "disable reverse charging for wireless\n");
 			if (chip->wireless_psy) {
 				wk_val.intval = 0;
@@ -4149,7 +4149,7 @@ static enum alarmtimer_restart reverse_chg_alarm_cb(struct alarm *alarm,
 	struct rx1619_chg *chip =
 		container_of(alarm, struct rx1619_chg, reverse_chg_alarm);
 
-	dev_info(chip->dev, " Reverse Chg Alarm Triggered %lld\n",
+	dev_dbg(chip->dev, " Reverse Chg Alarm Triggered %lld\n",
 		 ktime_to_ms(now));
 
 	/* Atomic context, cannot use voter */
@@ -4165,7 +4165,7 @@ static enum alarmtimer_restart cmd_timeout_alarm_cb(struct alarm *alarm,
 	struct rx1619_chg *chip =
 		container_of(alarm, struct rx1619_chg, cmd_timeout_alarm);
 
-	dev_info(chip->dev, " CMD_timeout_alarm Triggered %lld\n",
+	dev_dbg(chip->dev, " CMD_timeout_alarm Triggered %lld\n",
 		 ktime_to_ms(now));
 
 	/* Atomic context, cannot use voter */
@@ -4180,7 +4180,7 @@ static enum alarmtimer_restart reverse_test_ready_alarm_cb(struct alarm *alarm,
 	struct rx1619_chg *chip = container_of(alarm, struct rx1619_chg,
 					       reverse_test_ready_alarm);
 
-	dev_info(
+	dev_dbg(
 		chip->dev,
 		"[ factory reverse test ] reverse_rest_ready_alarm Triggered\n");
 
@@ -4198,7 +4198,7 @@ static enum alarmtimer_restart reverse_dping_alarm_cb(struct alarm *alarm,
 	struct rx1619_chg *chip =
 		container_of(alarm, struct rx1619_chg, reverse_dping_alarm);
 
-	dev_info(chip->dev, "Reverse Dping Alarm Triggered %lld\n",
+	dev_dbg(chip->dev, "Reverse Dping Alarm Triggered %lld\n",
 		 ktime_to_ms(now));
 
 	/* Atomic context, cannot use voter */
@@ -4214,7 +4214,7 @@ static void rx1619_set_present(struct rx1619_chg *chip, int enable)
 		0,
 	};
 
-	dev_info(chip->dev, "dc plug %s\n", enable ? "in" : "out");
+	dev_dbg(chip->dev, "dc plug %s\n", enable ? "in" : "out");
 
 	if (enable) {
 		chip->dcin_present = 1;
@@ -4281,7 +4281,7 @@ static int rx_set_otg_state(struct rx1619_chg *chip, int plugin)
 	else
 		otg_status_cmd = OTG_PLUGOUT_CMD;
 
-	dev_info(g_chip->dev, "set otg state: %d\n", plugin);
+	dev_dbg(g_chip->dev, "set otg state: %d\n", plugin);
 
 	if (chip->reverse_gpio_state) {
 		rx1619_write(chip, otg_status_cmd, OTG_REG_ADDR);
@@ -4311,7 +4311,7 @@ static int rx_set_enable_mode(struct rx1619_chg *chip, int enable)
 				__func__, chip->enable_gpio);
 		}
 		gpio_enable_val = gpio_get_value(chip->enable_gpio);
-		pr_info("rx1619 enable gpio val is :%d\n", gpio_enable_val);
+		pr_debug("rx1619 enable gpio val is :%d\n", gpio_enable_val);
 		gpio_free(chip->enable_gpio);
 	}
 
@@ -4355,7 +4355,7 @@ static ssize_t chip_vout_store(struct device *dev,
 	int index;
 
 	index = (int)simple_strtoul(buf, NULL, 10);
-	dev_info(g_chip->dev, "[rx1619] [%s] --Store output_voltage = %d\n",
+	dev_dbg(g_chip->dev, "[rx1619] [%s] --Store output_voltage = %d\n",
 		 __func__, index);
 	if ((index < 4000) || (index > 21000)) {
 		dev_err(g_chip->dev,
@@ -4403,7 +4403,7 @@ static ssize_t chip_fod_parameter_store(struct device *dev,
 	}
 
 	for (i = 0; i < 8; i++)
-		dev_info(g_chip->dev, "[%s]: fod_param[%d] = 0x%x\n", __func__,
+		dev_dbg(g_chip->dev, "[%s]: fod_param[%d] = 0x%x\n", __func__,
 			 i, fod_param[i]);
 
 	return count;
@@ -4421,7 +4421,7 @@ static ssize_t chip_firmware_update_show(struct device *dev,
 	u8 rx_project_id_h = 0;
 	u8 rx_project_id_l = 0;
 
-	dev_info(g_chip->dev, "[rx1619] [%s] Firmware Update begin\n",
+	dev_dbg(g_chip->dev, "[rx1619] [%s] Firmware Update begin\n",
 		 __func__);
 
 	if (g_chip->fw_update) {
@@ -4457,14 +4457,14 @@ static ssize_t chip_firmware_update_show(struct device *dev,
 		rx_project_id_h = (~fw_data_rx[sizeof(fw_data_rx) - 3]) & 0xff;
 		rx_project_id_l = (~fw_data_rx[sizeof(fw_data_rx) - 2]) & 0xff;
 
-		dev_info(
+		dev_dbg(
 			g_chip->dev,
 			"boot_fw_version=%c%c_V%02x, tx_fw_version=%c%c_V%02x, rx_fw_version=%c%c_V%02x \n",
 			boot_project_id_h, boot_project_id_l, boot_fw_version,
 			tx_project_id_h, tx_project_id_l, tx_fw_version,
 			rx_project_id_h, rx_project_id_l, rx_fw_version);
 
-		dev_info(g_chip->dev,
+		dev_dbg(g_chip->dev,
 			 "[rx1619] [%s] Firmware Update Success!!! \n",
 			 __func__);
 		rx_set_reverse_gpio(g_chip, false);
@@ -4547,10 +4547,10 @@ static ssize_t attr_firmware_bin_show(struct device *dev,
 			"RX Firmware Push failed! Please try again! \n");
 
 	} else {
-		dev_info(g_chip->dev, "rx_fw_version=%c%c_V%02x \n",
+		dev_dbg(g_chip->dev, "rx_fw_version=%c%c_V%02x \n",
 			 rx_bin_project_id_h, rx_bin_project_id_l,
 			 rx_fw_version);
-		dev_info(g_chip->dev,
+		dev_dbg(g_chip->dev,
 			 "[rx1619] [%s] RX Firmware Push Success!!! \n",
 			 __func__);
 		return scnprintf(
@@ -4694,7 +4694,7 @@ static int rx1619_wireless_set_property(struct power_supply *psy,
 		break;
 	case POWER_SUPPLY_PROP_REVERSE_CHG_MODE:
 		if (chip->fw_update) {
-			dev_info(chip->dev, "fw update going, break\n");
+			dev_dbg(chip->dev, "fw update going, break\n");
 			break;
 		}
 		chip->is_reverse_chg = 0;
@@ -4815,11 +4815,11 @@ static int get_cmdline(struct rx1619_chg *chip)
 	if (strnstr(saved_command_line,
 		    "androidboot.mode=", strlen(saved_command_line))) {
 		chip->power_off_mode = 1;
-		dev_info(chip->dev,
+		dev_dbg(chip->dev,
 			 "[idtp9220]: enter power off charging app\n");
 	} else {
 		chip->power_off_mode = 0;
-		dev_info(chip->dev, "[idtp9220]: enter normal boot mode\n");
+		dev_dbg(chip->dev, "[idtp9220]: enter normal boot mode\n");
 	}
 	return 1;
 }
@@ -4977,7 +4977,7 @@ static int rx1619_probe(struct i2c_client *client,
 		return -ENODEV;
 	}
 	chip->hw_country = get_hw_country_version();
-	dev_info(&client->dev, "hw_country: %d\n", chip->hw_country);
+	dev_dbg(&client->dev, "hw_country: %d\n", chip->hw_country);
 	dev_err(chip->dev, "[rx1619] [%s] success! \n", __func__);
 	get_cmdline(chip);
 

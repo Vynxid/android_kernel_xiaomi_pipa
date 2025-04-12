@@ -826,7 +826,7 @@ static int pcan_usb_init(struct peak_usb_device *dev)
 		return err;
 	}
 
-	dev_info(dev->netdev->dev.parent,
+	dev_dbg(dev->netdev->dev.parent,
 		 "PEAK-System %s adapter hwrev %u serial %08X (%u channel)\n",
 		 pcan_usb.name, dev->device_rev, serial_number,
 		 pcan_usb.ctrl_count);

@@ -2482,20 +2482,20 @@ static int __init it87_find(int sioaddr, unsigned short *address,
 
 	superio_select(sioaddr, PME);
 	if (!(superio_inb(sioaddr, IT87_ACT_REG) & 0x01)) {
-		pr_info("Device not activated, skipping\n");
+		pr_debug("Device not activated, skipping\n");
 		goto exit;
 	}
 
 	*address = superio_inw(sioaddr, IT87_BASE_REG) & ~(IT87_EXTENT - 1);
 	if (*address == 0) {
-		pr_info("Base address not set, skipping\n");
+		pr_debug("Base address not set, skipping\n");
 		goto exit;
 	}
 
 	err = 0;
 	sio_data->sioaddr = sioaddr;
 	sio_data->revision = superio_inb(sioaddr, DEVREV) & 0x0f;
-	pr_info("Found IT%04x%s chip at 0x%x, revision %d\n", chip_type,
+	pr_debug("Found IT%04x%s chip at 0x%x, revision %d\n", chip_type,
 		it87_devices[sio_data->type].suffix,
 		*address, sio_data->revision);
 
@@ -2583,10 +2583,10 @@ static int __init it87_find(int sioaddr, unsigned short *address,
 				superio_outb(sioaddr, IT87_SIO_PINX2_REG,
 					     reg2c);
 				sio_data->need_in7_reroute = true;
-				pr_notice("Routing internal VCCH5V to in7.\n");
+				pr_debug("Routing internal VCCH5V to in7.\n");
 			}
-			pr_notice("in7 routed to internal voltage divider, with external pin disabled.\n");
-			pr_notice("Please report if it displays a reasonable voltage.\n");
+			pr_debug("in7 routed to internal voltage divider, with external pin disabled.\n");
+			pr_debug("Please report if it displays a reasonable voltage.\n");
 		}
 
 		if (reg2c & BIT(0))
@@ -2741,7 +2741,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
 		if (!sio_data->skip_vid) {
 			/* We need at least 4 VID pins */
 			if (reg & 0x0f) {
-				pr_info("VID is disabled (pins used for GPIO)\n");
+				pr_debug("VID is disabled (pins used for GPIO)\n");
 				sio_data->skip_vid = 1;
 			}
 		}
@@ -2786,7 +2786,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
 			reg |= BIT(1);
 			superio_outb(sioaddr, IT87_SIO_PINX2_REG, reg);
 			sio_data->need_in7_reroute = true;
-			pr_notice("Routing internal VCCH5V to in7\n");
+			pr_debug("Routing internal VCCH5V to in7\n");
 		}
 		if (reg & BIT(0))
 			sio_data->internal |= BIT(0);
@@ -2811,7 +2811,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
 						 IT87_SIO_BEEP_PIN_REG) & 0x3f;
 	}
 	if (sio_data->beep_pin)
-		pr_info("Beeping is supported\n");
+		pr_debug("Beeping is supported\n");
 
 	/* Disable specific features based on DMI strings */
 	board_vendor = dmi_get_system_info(DMI_BOARD_VENDOR);
@@ -2827,7 +2827,7 @@ static int __init it87_find(int sioaddr, unsigned short *address,
 			 * I use the board name string as the trigger in case
 			 * the same board is ever used in other systems.
 			 */
-			pr_info("Disabling pwm2 due to hardware constraints\n");
+			pr_debug("Disabling pwm2 due to hardware constraints\n");
 			sio_data->skip_pwm = BIT(1);
 		}
 	}
@@ -3018,7 +3018,7 @@ static int it87_check_pwm(struct device *dev)
 			 * PWM interface).
 			 */
 			if (!((pwm[0] | pwm[1] | pwm[2]) & 0x80)) {
-				dev_info(dev,
+				dev_dbg(dev,
 					 "Reconfiguring PWM to active high polarity\n");
 				it87_write_value(data, IT87_REG_FAN_CTL,
 						 tmp | 0x87);
@@ -3029,13 +3029,13 @@ static int it87_check_pwm(struct device *dev)
 				return 1;
 			}
 
-			dev_info(dev,
+			dev_dbg(dev,
 				 "PWM configuration is too broken to be fixed\n");
 		}
 
 		return 0;
 	} else if (fix_pwm_polarity) {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "PWM configuration looks sane, won't touch\n");
 	}
 
@@ -3105,7 +3105,7 @@ static int it87_probe(struct platform_device *pdev)
 	/* Check PWM configuration */
 	enable_pwm_interface = it87_check_pwm(dev);
 	if (!enable_pwm_interface)
-		dev_info(dev,
+		dev_dbg(dev,
 			 "Detected broken BIOS defaults, disabling PWM interface\n");
 
 	/* Starting with IT8721F, we handle scaling of internal voltages */

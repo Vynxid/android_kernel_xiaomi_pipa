@@ -1170,7 +1170,7 @@ static int mspro_block_init_card(struct memstick_dev *card)
 static int mspro_block_init_disk(struct memstick_dev *card)
 {
 	struct mspro_block_data *msb = memstick_get_drvdata(card);
-	struct mspro_devinfo *dev_info = NULL;
+	struct mspro_devinfo *dev_dbg = NULL;
 	struct mspro_sys_info *sys_info = NULL;
 	struct mspro_sys_attr *s_attr = NULL;
 	int rc, disk_id;
@@ -1180,17 +1180,17 @@ static int mspro_block_init_disk(struct memstick_dev *card)
 		s_attr = mspro_from_sysfs_attr(msb->attr_group.attrs[rc]);
 
 		if (s_attr->id == MSPRO_BLOCK_ID_DEVINFO)
-			dev_info = s_attr->data;
+			dev_dbg = s_attr->data;
 		else if (s_attr->id == MSPRO_BLOCK_ID_SYSINFO)
 			sys_info = s_attr->data;
 	}
 
-	if (!dev_info || !sys_info)
+	if (!dev_dbg || !sys_info)
 		return -ENODEV;
 
-	msb->cylinders = be16_to_cpu(dev_info->cylinders);
-	msb->heads = be16_to_cpu(dev_info->heads);
-	msb->sectors_per_track = be16_to_cpu(dev_info->sectors_per_track);
+	msb->cylinders = be16_to_cpu(dev_dbg->cylinders);
+	msb->heads = be16_to_cpu(dev_dbg->heads);
+	msb->sectors_per_track = be16_to_cpu(dev_dbg->sectors_per_track);
 
 	msb->page_size = be16_to_cpu(sys_info->unit_size);
 

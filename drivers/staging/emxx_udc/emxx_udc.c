@@ -97,7 +97,7 @@ static void _nbu2ss_dump_register(struct nbu2ss_udc *udc)
 	int		i;
 	u32 reg_data;
 
-	pr_info("=== %s()\n", __func__);
+	pr_debug("=== %s()\n", __func__);
 
 	if (!udc) {
 		pr_err("%s udc == NULL\n", __func__);
@@ -1395,7 +1395,7 @@ static void _nbu2ss_set_test_mode(struct nbu2ss_udc *udc, u32 mode)
 	if (mode > MAX_TEST_MODE_NUM)
 		return;
 
-	dev_info(udc->dev, "SET FEATURE : test mode = %d\n", mode);
+	dev_dbg(udc->dev, "SET FEATURE : test mode = %d\n", mode);
 
 	data = _nbu2ss_readl(&udc->p_regs->USB_CONTROL);
 	data &= ~TEST_FORCE_ENABLE;
@@ -1835,8 +1835,8 @@ static inline void _nbu2ss_ep0_int(struct nbu2ss_udc *udc)
 			| STG_END_INT | EP0_OUT_NULL_INT);
 
 	if (status == 0) {
-		dev_info(udc->dev, "%s Not Decode Interrupt\n", __func__);
-		dev_info(udc->dev, "EP0_STATUS = 0x%08x\n", intr);
+		dev_dbg(udc->dev, "%s Not Decode Interrupt\n", __func__);
+		dev_dbg(udc->dev, "EP0_STATUS = 0x%08x\n", intr);
 		return;
 	}
 
@@ -2308,7 +2308,7 @@ static inline void _nbu2ss_check_vbus(struct nbu2ss_udc *udc)
 		udc->linux_suspended = 0;
 
 		_nbu2ss_reset_controller(udc);
-		dev_info(udc->dev, " ----- VBUS OFF\n");
+		dev_dbg(udc->dev, " ----- VBUS OFF\n");
 
 		if (udc->vbus_active == 1) {
 			/* VBUS OFF */
@@ -2334,7 +2334,7 @@ static inline void _nbu2ss_check_vbus(struct nbu2ss_udc *udc)
 		if (reg_dt == 0)
 			return;
 
-		dev_info(udc->dev, " ----- VBUS ON\n");
+		dev_dbg(udc->dev, " ----- VBUS ON\n");
 
 		if (udc->linux_suspended)
 			return;
@@ -2663,7 +2663,7 @@ static int nbu2ss_ep_queue(
 	udc = ep->udc;
 
 	if (udc->vbus_active == 0) {
-		dev_info(udc->dev, "Can't ep_queue (VBUS OFF)\n");
+		dev_dbg(udc->dev, "Can't ep_queue (VBUS OFF)\n");
 		return -ESHUTDOWN;
 	}
 

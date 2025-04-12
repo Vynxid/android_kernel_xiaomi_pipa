@@ -267,7 +267,7 @@ error:
 	kfree(bebob->maudio_special_quirk);
 	bebob->maudio_special_quirk = NULL;
 	snd_card_free(bebob->card);
-	dev_info(&bebob->unit->device,
+	dev_dbg(&bebob->unit->device,
 		 "Sound card registration failed: %d\n", err);
 }
 

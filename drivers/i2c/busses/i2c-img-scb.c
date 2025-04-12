@@ -1167,7 +1167,7 @@ static int img_i2c_init(struct img_i2c *i2c)
 
 	rev = img_i2c_readl(i2c, SCB_CORE_REV_REG);
 	if ((rev & 0x00ffffff) < 0x00020200) {
-		dev_info(i2c->adap.dev.parent,
+		dev_dbg(i2c->adap.dev.parent,
 			 "Unknown hardware revision (%d.%d.%d.%d)\n",
 			 (rev >> 24) & 0xff, (rev >> 16) & 0xff,
 			 (rev >> 8) & 0xff, rev & 0xff);

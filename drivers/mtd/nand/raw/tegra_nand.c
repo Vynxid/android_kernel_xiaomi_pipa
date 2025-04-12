@@ -1013,7 +1013,7 @@ static int tegra_nand_attach_chip(struct nand_chip *chip)
 		return -EINVAL;
 	}
 
-	dev_info(ctrl->dev, "Using %s with strength %d per 512 byte step\n",
+	dev_dbg(ctrl->dev, "Using %s with strength %d per 512 byte step\n",
 		 chip->ecc.algo == NAND_ECC_BCH ? "BCH" : "RS",
 		 chip->ecc.strength);
 

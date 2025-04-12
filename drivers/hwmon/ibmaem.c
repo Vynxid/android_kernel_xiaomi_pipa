@@ -598,7 +598,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
 	/* Add to our list of AEM devices */
 	list_add_tail(&data->list, &driver_data.aem_devices);
 
-	dev_info(data->ipmi.bmc_device, "Found AEM v%d.%d at 0x%X\n",
+	dev_dbg(data->ipmi.bmc_device, "Found AEM v%d.%d at 0x%X\n",
 		 data->ver_major, data->ver_minor,
 		 data->module_handle);
 	return 0;
@@ -740,7 +740,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
 	/* Add to our list of AEM devices */
 	list_add_tail(&data->list, &driver_data.aem_devices);
 
-	dev_info(data->ipmi.bmc_device, "Found AEM v%d.%d at 0x%X\n",
+	dev_dbg(data->ipmi.bmc_device, "Found AEM v%d.%d at 0x%X\n",
 		 data->ver_major, data->ver_minor,
 		 data->module_handle);
 	return 0;

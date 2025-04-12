@@ -292,7 +292,7 @@ static int yurex_probe(struct usb_interface *interface, const struct usb_device_
 		goto error;
 	}
 
-	dev_info(&interface->dev,
+	dev_dbg(&interface->dev,
 		 "USB YUREX device now attached to Yurex #%d\n",
 		 interface->minor);
 
@@ -330,7 +330,7 @@ static void yurex_disconnect(struct usb_interface *interface)
 	/* decrement our usage count */
 	kref_put(&dev->kref, yurex_delete);
 
-	dev_info(&interface->dev, "USB YUREX #%d now disconnected\n", minor);
+	dev_dbg(&interface->dev, "USB YUREX #%d now disconnected\n", minor);
 }
 
 static struct usb_driver yurex_driver = {

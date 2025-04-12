@@ -461,7 +461,7 @@ struct crypto_engine *crypto_engine_alloc_init(struct device *dev, bool rt)
 	kthread_init_work(&engine->pump_requests, crypto_pump_work);
 
 	if (engine->rt) {
-		dev_info(dev, "will run requests pump with realtime priority\n");
+		dev_dbg(dev, "will run requests pump with realtime priority\n");
 		sched_setscheduler(engine->kworker->task, SCHED_FIFO, &param);
 	}
 

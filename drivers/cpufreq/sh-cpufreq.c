@@ -124,7 +124,7 @@ static int sh_cpufreq_cpu_init(struct cpufreq_policy *policy)
 	if (freq_table) {
 		policy->freq_table = freq_table;
 	} else {
-		dev_notice(dev, "no frequency table found, falling back "
+		dev_dbg(dev, "no frequency table found, falling back "
 			   "to rate rounding.\n");
 
 		policy->min = policy->cpuinfo.min_freq =
@@ -150,7 +150,7 @@ static void sh_cpufreq_cpu_ready(struct cpufreq_policy *policy)
 {
 	struct device *dev = get_cpu_device(policy->cpu);
 
-	dev_info(dev, "CPU Frequencies - Minimum %u.%03u MHz, "
+	dev_dbg(dev, "CPU Frequencies - Minimum %u.%03u MHz, "
 	       "Maximum %u.%03u MHz.\n",
 	       policy->min / 1000, policy->min % 1000,
 	       policy->max / 1000, policy->max % 1000);
@@ -170,7 +170,7 @@ static struct cpufreq_driver sh_cpufreq_driver = {
 
 static int __init sh_cpufreq_module_init(void)
 {
-	pr_notice("SuperH CPU frequency driver.\n");
+	pr_debug("SuperH CPU frequency driver.\n");
 	return cpufreq_register_driver(&sh_cpufreq_driver);
 }
 

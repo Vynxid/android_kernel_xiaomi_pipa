@@ -1126,7 +1126,7 @@ static int vpdma_load_firmware(struct vpdma_data *vpdma)
 		dev_err(dev, "firmware not available %s\n", VPDMA_FIRMWARE);
 		return r;
 	} else {
-		dev_info(dev, "loading firmware %s\n", VPDMA_FIRMWARE);
+		dev_dbg(dev, "loading firmware %s\n", VPDMA_FIRMWARE);
 	}
 
 	return 0;

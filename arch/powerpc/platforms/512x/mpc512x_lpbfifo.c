@@ -486,7 +486,7 @@ static int mpc512x_lpbfifo_probe(struct platform_device *pdev)
 		goto err1;
 	}
 
-	dev_info(&pdev->dev, "probe succeeded\n");
+	dev_dbg(&pdev->dev, "probe succeeded\n");
 	return 0;
 
  err1:

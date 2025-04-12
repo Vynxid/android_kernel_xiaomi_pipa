@@ -73,7 +73,7 @@ static void pci_fixup_video(struct pci_dev *pdev)
 			res->end = res->start + 0x20000 - 1;
 			res->flags = IORESOURCE_MEM | IORESOURCE_ROM_SHADOW |
 				     IORESOURCE_PCI_FIXED;
-			dev_info(&pdev->dev, "Video device with shadowed ROM at %pR\n",
+			dev_dbg(&pdev->dev, "Video device with shadowed ROM at %pR\n",
 				 res);
 		}
 	}

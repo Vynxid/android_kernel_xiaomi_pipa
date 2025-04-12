@@ -79,7 +79,7 @@ int ssusb_wakeup_of_property_parse(struct ssusb_mtk *ssusb,
 	ssusb->uwk_vers = args.args[1];
 	ssusb->uwk = syscon_node_to_regmap(args.np);
 	of_node_put(args.np);
-	dev_info(ssusb->dev, "uwk - reg:0x%x, version:%d\n",
+	dev_dbg(ssusb->dev, "uwk - reg:0x%x, version:%d\n",
 			ssusb->uwk_reg_base, ssusb->uwk_vers);
 
 	return PTR_ERR_OR_ZERO(ssusb->uwk);
@@ -236,7 +236,7 @@ int ssusb_host_init(struct ssusb_mtk *ssusb, struct device_node *parent_dn)
 		return ret;
 	}
 
-	dev_info(parent_dev, "xHCI platform device register success...\n");
+	dev_dbg(parent_dev, "xHCI platform device register success...\n");
 
 	return 0;
 }

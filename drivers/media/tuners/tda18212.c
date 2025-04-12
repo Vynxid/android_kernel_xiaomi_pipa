@@ -240,7 +240,7 @@ static int tda18212_probe(struct i2c_client *client,
 		goto err;
 	}
 
-	dev_info(&dev->client->dev,
+	dev_dbg(&dev->client->dev,
 			"NXP TDA18212HN/%s successfully identified\n", version);
 
 	fe->tuner_priv = dev;

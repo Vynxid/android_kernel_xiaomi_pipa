@@ -877,7 +877,7 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
 	if (rtc_nvmem_register(cmos_rtc.rtc, &nvmem_cfg))
 		dev_err(dev, "nvmem registration failed\n");
 
-	dev_info(dev, "%s%s, %d bytes nvram%s\n",
+	dev_dbg(dev, "%s%s, %d bytes nvram%s\n",
 		 !is_valid_irq(rtc_irq) ? "no alarms" :
 		 cmos_rtc.mon_alrm ? "alarms up to one year" :
 		 cmos_rtc.day_alrm ? "alarms up to one month" :
@@ -1251,7 +1251,7 @@ static void cmos_wake_setup(struct device *dev)
 
 	/* NOTE:  S4_RTC_WAKE is NOT currently useful to Linux */
 	if (acpi_gbl_FADT.flags & ACPI_FADT_S4_RTC_WAKE)
-		dev_info(dev, "RTC can wake from S4\n");
+		dev_dbg(dev, "RTC can wake from S4\n");
 
 	dev->platform_data = &acpi_rtc_info;
 

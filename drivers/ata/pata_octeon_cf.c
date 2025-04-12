@@ -1002,7 +1002,7 @@ static int octeon_cf_probe(struct platform_device *pdev)
 
 	ata_port_desc(ap, "cmd %p ctl %p", base, ap->ioaddr.ctl_addr);
 
-	dev_info(&pdev->dev, "version " DRV_VERSION" %d bit%s.\n",
+	dev_dbg(&pdev->dev, "version " DRV_VERSION" %d bit%s.\n",
 		 is_16bit ? 16 : 8,
 		 cf_port->is_true_ide ? ", True IDE" : "");
 

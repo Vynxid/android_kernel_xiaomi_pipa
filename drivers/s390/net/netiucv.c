@@ -858,7 +858,7 @@ static void conn_action_connsever(fsm_instance *fi, int event, void *arg)
 
 	fsm_deltimer(&conn->timer);
 	iucv_path_sever(conn->path, conn->userdata);
-	dev_info(privptr->dev, "The peer z/VM guest %s has closed the "
+	dev_dbg(privptr->dev, "The peer z/VM guest %s has closed the "
 			       "connection\n", netiucv_printuser(conn));
 	IUCV_DBF_TEXT(data, 2,
 		      "conn_action_connsever: Remote dropped connection\n");
@@ -1079,7 +1079,7 @@ dev_action_connup(fsm_instance *fi, int event, void *arg)
 	switch (fsm_getstate(fi)) {
 		case DEV_STATE_STARTWAIT:
 			fsm_newstate(fi, DEV_STATE_RUNNING);
-			dev_info(privptr->dev,
+			dev_dbg(privptr->dev,
 				"The IUCV device has been connected"
 				" successfully to %s\n",
 				netiucv_printuser(privptr->conn));
@@ -2047,7 +2047,7 @@ static ssize_t connection_store(struct device_driver *drv, const char *buf,
 	if (rc)
 		goto out_unreg;
 
-	dev_info(priv->dev, "The IUCV interface to %s has been established "
+	dev_dbg(priv->dev, "The IUCV interface to %s has been established "
 			    "successfully\n",
 		netiucv_printuser(priv->conn));
 
@@ -2127,7 +2127,7 @@ static const struct attribute_group *netiucv_drv_attr_groups[] = {
 
 static void netiucv_banner(void)
 {
-	pr_info("driver initialized\n");
+	pr_debug("driver initialized\n");
 }
 
 static void __exit netiucv_exit(void)
@@ -2154,7 +2154,7 @@ static void __exit netiucv_exit(void)
 	iucv_unregister(&netiucv_handler, 1);
 	iucv_unregister_dbf_views();
 
-	pr_info("driver unloaded\n");
+	pr_debug("driver unloaded\n");
 	return;
 }
 

@@ -235,19 +235,19 @@ int of_flash_probe_versatile(struct platform_device *pdev,
 		if (ret)
 			return ret;
 		map->set_vpp = ap_flash_set_vpp;
-		dev_info(&pdev->dev, "Integrator/AP flash protection\n");
+		dev_dbg(&pdev->dev, "Integrator/AP flash protection\n");
 		break;
 	case INTEGRATOR_CP_FLASHPROT:
 		map->set_vpp = cp_flash_set_vpp;
-		dev_info(&pdev->dev, "Integrator/CP flash protection\n");
+		dev_dbg(&pdev->dev, "Integrator/CP flash protection\n");
 		break;
 	case VERSATILE_FLASHPROT:
 	case REALVIEW_FLASHPROT:
 		map->set_vpp = versatile_flash_set_vpp;
-		dev_info(&pdev->dev, "versatile/realview flash protection\n");
+		dev_dbg(&pdev->dev, "versatile/realview flash protection\n");
 		break;
 	default:
-		dev_info(&pdev->dev, "device marked as Versatile flash "
+		dev_dbg(&pdev->dev, "device marked as Versatile flash "
 			 "but no system controller was found\n");
 		break;
 	}

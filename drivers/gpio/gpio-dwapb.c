@@ -406,7 +406,7 @@ static void dwapb_configure_irqs(struct dwapb_gpio *gpio,
 					     IRQ_NOREQUEST, 0,
 					     IRQ_GC_INIT_NESTED_LOCK);
 	if (err) {
-		dev_info(gpio->dev, "irq_alloc_domain_generic_chips failed\n");
+		dev_dbg(gpio->dev, "irq_alloc_domain_generic_chips failed\n");
 		irq_domain_remove(gpio->domain);
 		gpio->domain = NULL;
 		return;
@@ -606,7 +606,7 @@ dwapb_gpio_get_pdata(struct device *dev)
 
 		if (fwnode_property_read_u32(fwnode, "snps,nr-gpios",
 					 &pp->ngpio)) {
-			dev_info(dev,
+			dev_dbg(dev,
 				 "failed to get number of gpios for port%d\n",
 				 i);
 			pp->ngpio = 32;
@@ -707,7 +707,7 @@ static int dwapb_gpio_probe(struct platform_device *pdev)
 	if (!IS_ERR(gpio->clk)) {
 		err = clk_prepare_enable(gpio->clk);
 		if (err) {
-			dev_info(&pdev->dev, "Cannot enable clock\n");
+			dev_dbg(&pdev->dev, "Cannot enable clock\n");
 			return err;
 		}
 	}

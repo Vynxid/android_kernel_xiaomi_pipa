@@ -144,7 +144,7 @@ static int queuecommand_lck(struct scsi_cmnd *srb,
 
 	/* fail the command if we are disconnecting */
 	if (rtsx_chk_stat(chip, RTSX_STAT_DISCONNECT)) {
-		dev_info(&dev->pci->dev, "Fail command during disconnect\n");
+		dev_dbg(&dev->pci->dev, "Fail command during disconnect\n");
 		srb->result = DID_NO_CONNECT << 16;
 		done(srb);
 		return 0;
@@ -171,14 +171,14 @@ static int command_abort(struct scsi_cmnd *srb)
 	struct rtsx_dev *dev = host_to_rtsx(host);
 	struct rtsx_chip *chip = dev->chip;
 
-	dev_info(&dev->pci->dev, "%s called\n", __func__);
+	dev_dbg(&dev->pci->dev, "%s called\n", __func__);
 
 	scsi_lock(host);
 
 	/* Is this command still active? */
 	if (chip->srb != srb) {
 		scsi_unlock(host);
-		dev_info(&dev->pci->dev, "-- nothing to abort\n");
+		dev_dbg(&dev->pci->dev, "-- nothing to abort\n");
 		return FAILED;
 	}
 
@@ -200,7 +200,7 @@ static int device_reset(struct scsi_cmnd *srb)
 {
 	struct rtsx_dev *dev = host_to_rtsx(srb->device->host);
 
-	dev_info(&dev->pci->dev, "%s called\n", __func__);
+	dev_dbg(&dev->pci->dev, "%s called\n", __func__);
 
 	return SUCCESS;
 }
@@ -257,7 +257,7 @@ static int rtsx_acquire_irq(struct rtsx_dev *dev)
 {
 	struct rtsx_chip *chip = dev->chip;
 
-	dev_info(&dev->pci->dev, "%s: chip->msi_en = %d, pci->irq = %d\n",
+	dev_dbg(&dev->pci->dev, "%s: chip->msi_en = %d, pci->irq = %d\n",
 		 __func__, chip->msi_en, dev->pci->irq);
 
 	if (request_irq(dev->pci->irq, rtsx_interrupt,
@@ -397,7 +397,7 @@ static int rtsx_control_thread(void *__dev)
 
 		/* if the device has disconnected, we are free to exit */
 		if (rtsx_chk_stat(chip, RTSX_STAT_DISCONNECT)) {
-			dev_info(&dev->pci->dev, "-- rtsx-control exiting\n");
+			dev_dbg(&dev->pci->dev, "-- rtsx-control exiting\n");
 			mutex_unlock(&dev->dev_mutex);
 			break;
 		}
@@ -514,7 +514,7 @@ static int rtsx_polling_thread(void *__dev)
 
 		/* if the device has disconnected, we are free to exit */
 		if (rtsx_chk_stat(chip, RTSX_STAT_DISCONNECT)) {
-			dev_info(&dev->pci->dev, "-- rtsx-polling exiting\n");
+			dev_dbg(&dev->pci->dev, "-- rtsx-polling exiting\n");
 			mutex_unlock(&dev->dev_mutex);
 			break;
 		}
@@ -601,13 +601,13 @@ exit:
 /* Release all our dynamic resources */
 static void rtsx_release_resources(struct rtsx_dev *dev)
 {
-	dev_info(&dev->pci->dev, "-- %s\n", __func__);
+	dev_dbg(&dev->pci->dev, "-- %s\n", __func__);
 
 	/* Tell the control thread to exit.  The SCSI host must
 	 * already have been removed so it won't try to queue
 	 * any more commands.
 	 */
-	dev_info(&dev->pci->dev, "-- sending exit command to thread\n");
+	dev_dbg(&dev->pci->dev, "-- sending exit command to thread\n");
 	complete(&dev->cmnd_ready);
 	if (dev->ctl_thread)
 		wait_for_completion(&dev->control_exit);
@@ -695,7 +695,7 @@ static int rtsx_scan_thread(void *__dev)
 
 	/* Wait for the timeout to expire or for a disconnect */
 	if (delay_use > 0) {
-		dev_info(&dev->pci->dev,
+		dev_dbg(&dev->pci->dev,
 			 "%s: waiting for device to settle before scanning\n",
 			 CR_DRIVER_NAME);
 		wait_event_interruptible_timeout
@@ -707,7 +707,7 @@ static int rtsx_scan_thread(void *__dev)
 	/* If the device is still connected, perform the scanning */
 	if (!rtsx_chk_stat(chip, RTSX_STAT_DISCONNECT)) {
 		scsi_scan_host(rtsx_to_host(dev));
-		dev_info(&dev->pci->dev, "%s: device scan complete\n",
+		dev_dbg(&dev->pci->dev, "%s: device scan complete\n",
 			 CR_DRIVER_NAME);
 
 		/* Should we unbind if no devices were detected? */
@@ -872,7 +872,7 @@ static int rtsx_probe(struct pci_dev *pci,
 	dev->pci = pci;
 	dev->irq = -1;
 
-	dev_info(&pci->dev, "Resource length: 0x%x\n",
+	dev_dbg(&pci->dev, "Resource length: 0x%x\n",
 		 (unsigned int)pci_resource_len(pci, 0));
 	dev->addr = pci_resource_start(pci, 0);
 	dev->remap_addr = ioremap_nocache(dev->addr, pci_resource_len(pci, 0));
@@ -886,7 +886,7 @@ static int rtsx_probe(struct pci_dev *pci,
 	 * Using "unsigned long" cast here to eliminate gcc warning in
 	 * 64-bit system
 	 */
-	dev_info(&pci->dev, "Original address: 0x%lx, remapped address: 0x%lx\n",
+	dev_dbg(&pci->dev, "Original address: 0x%lx, remapped address: 0x%lx\n",
 		 (unsigned long)(dev->addr), (unsigned long)(dev->remap_addr));
 
 	dev->rtsx_resv_buf = dmam_alloc_coherent(&pci->dev, RTSX_RESV_BUF_LEN,
@@ -906,7 +906,7 @@ static int rtsx_probe(struct pci_dev *pci,
 
 	rtsx_init_options(dev->chip);
 
-	dev_info(&pci->dev, "pci->irq = %d\n", pci->irq);
+	dev_dbg(&pci->dev, "pci->irq = %d\n", pci->irq);
 
 	if (dev->chip->msi_en) {
 		if (pci_enable_msi(pci) < 0)
@@ -995,7 +995,7 @@ static void rtsx_remove(struct pci_dev *pci)
 {
 	struct rtsx_dev *dev = pci_get_drvdata(pci);
 
-	dev_info(&pci->dev, "%s called\n", __func__);
+	dev_dbg(&pci->dev, "%s called\n", __func__);
 
 	quiesce_and_remove_host(dev);
 	release_everything(dev);

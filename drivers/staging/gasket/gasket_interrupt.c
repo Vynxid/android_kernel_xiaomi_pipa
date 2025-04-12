@@ -398,7 +398,7 @@ int gasket_interrupt_init(struct gasket_dev *gasket_dev, const char *name,
 	}
 
 	gasket_interrupt_setup(gasket_dev);
-	gasket_sysfs_create_entries(gasket_dev->dev_info.device,
+	gasket_sysfs_create_entries(gasket_dev->dev_dbg.device,
 				    interrupt_sysfs_attrs);
 
 	return 0;

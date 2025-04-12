@@ -1010,7 +1010,7 @@ static int ifi_canfd_plat_probe(struct platform_device *pdev)
 
 	devm_can_led_init(ndev);
 
-	dev_info(dev, "Driver registered: regs=%p, irq=%d, clock=%d\n",
+	dev_dbg(dev, "Driver registered: regs=%p, irq=%d, clock=%d\n",
 		 priv->base, ndev->irq, priv->can.clock.freq);
 
 	return 0;

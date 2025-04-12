@@ -85,7 +85,7 @@ static int ab3100_rtc_read_time(struct device *dev, struct rtc_time *tm)
 		return err;
 
 	if (!(rtcval & 0x01)) {
-		dev_info(dev, "clock not set (lost power)");
+		dev_dbg(dev, "clock not set (lost power)");
 		return -EINVAL;
 	} else {
 		u64 hw_counter;

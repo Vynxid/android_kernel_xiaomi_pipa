@@ -983,7 +983,7 @@ struct __packed atto_hba_get_device_info {
 	#define ATTO_GDI_IT_FCOE         0x03
 
 	u8 reserved[11];
-	union atto_hba_device_info dev_info;
+	union atto_hba_device_info dev_dbg;
 };
 
 struct atto_ioctl {
@@ -1120,7 +1120,7 @@ struct __packed atto_ioctl_vda_mgt_cmd {
 	u8 reserved[8];
 	union {
 		u8 bytes[112];
-		struct atto_vda_devinfo dev_info;
+		struct atto_vda_devinfo dev_dbg;
 		struct atto_vda_grp_info grp_info;
 		struct atto_vdapart_info part_info;
 		struct atto_vda_dh_info dh_info;

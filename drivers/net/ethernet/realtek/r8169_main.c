@@ -2169,7 +2169,7 @@ static void rtl8169_get_mac_version(struct rtl8169_private *tp,
 	tp->mac_version = p->mac_version;
 
 	if (tp->mac_version == RTL_GIGA_MAC_NONE) {
-		dev_notice(tp_to_dev(tp),
+		dev_dbg(tp_to_dev(tp),
 			   "unknown MAC, using family default\n");
 		tp->mac_version = default_version;
 	} else if (tp->mac_version == RTL_GIGA_MAC_VER_42) {
@@ -7496,7 +7496,7 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	}
 
 	if (pcim_set_mwi(pdev) < 0)
-		dev_info(&pdev->dev, "Mem-Wr-Inval unavailable\n");
+		dev_dbg(&pdev->dev, "Mem-Wr-Inval unavailable\n");
 
 	/* use first MMIO region */
 	region = ffs(pci_select_bars(pdev, IORESOURCE_MEM)) - 1;
@@ -7520,7 +7520,7 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	tp->mmio_addr = pcim_iomap_table(pdev)[region];
 
 	if (!pci_is_pcie(pdev))
-		dev_info(&pdev->dev, "not PCI Express\n");
+		dev_dbg(&pdev->dev, "not PCI Express\n");
 
 	/* Identify chip attached to board */
 	rtl8169_get_mac_version(tp, cfg->default_ver);

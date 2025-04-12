@@ -406,7 +406,7 @@ static int pcf857x_probe(struct i2c_client *client,
 			dev_warn(&client->dev, "setup --> %d\n", status);
 	}
 
-	dev_info(&client->dev, "probed\n");
+	dev_dbg(&client->dev, "probed\n");
 
 	return 0;
 

@@ -700,7 +700,7 @@ static int dprc_probe(struct fsl_mc_device *mc_dev)
 	if (error < 0)
 		goto error_cleanup_open;
 
-	dev_info(&mc_dev->dev, "DPRC device bound to driver");
+	dev_dbg(&mc_dev->dev, "DPRC device bound to driver");
 	return 0;
 
 error_cleanup_open:
@@ -776,7 +776,7 @@ static int dprc_remove(struct fsl_mc_device *mc_dev)
 		mc_dev->mc_io = NULL;
 	}
 
-	dev_info(&mc_dev->dev, "DPRC device unbound from driver");
+	dev_dbg(&mc_dev->dev, "DPRC device unbound from driver");
 	return 0;
 }
 

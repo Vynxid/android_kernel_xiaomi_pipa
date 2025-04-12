@@ -20,7 +20,7 @@ static int __init rtmm_init(void)
 
 	rtmm_reclaim_init(rtmm_kobj);
 
-	pr_info("rtmm init OK\n");
+	pr_debug("rtmm init OK\n");
 
 	return 0;
 }

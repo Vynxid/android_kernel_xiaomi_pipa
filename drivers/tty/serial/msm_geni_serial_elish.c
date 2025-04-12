@@ -2944,7 +2944,7 @@ static int console_register(struct uart_driver *drv)
 
 #ifdef CONFIG_FASTBOOT_CMD_CTRL_UART
 	if (!is_early_cons_enabled) {
-		pr_info("ignore console register\n");
+		pr_debug("ignore console register\n");
 		return 0;
 	}
 #endif
@@ -2956,7 +2956,7 @@ static void console_unregister(struct uart_driver *drv)
 
 #ifdef CONFIG_FASTBOOT_CMD_CTRL_UART
 	if (!is_early_cons_enabled) {
-		pr_info("ignore console unregister\n");
+		pr_debug("ignore console unregister\n");
 		return;
 	}
 #endif
@@ -3009,7 +3009,7 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 			msm_port->ipc_log_rx = ipc_log_context_create(
 					IPC_LOG_TX_RX_PAGES, name, 0);
 			if (!msm_port->ipc_log_rx)
-				dev_info(uport->dev, "Err in Rx IPC Log\n");
+				dev_dbg(uport->dev, "Err in Rx IPC Log\n");
 		}
 		memset(name, 0, sizeof(name));
 		if (!msm_port->ipc_log_tx) {
@@ -3018,7 +3018,7 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 			msm_port->ipc_log_tx = ipc_log_context_create(
 					IPC_LOG_TX_RX_PAGES, name, 0);
 			if (!msm_port->ipc_log_tx)
-				dev_info(uport->dev, "Err in Tx IPC Log\n");
+				dev_dbg(uport->dev, "Err in Tx IPC Log\n");
 		}
 		memset(name, 0, sizeof(name));
 		if (!msm_port->ipc_log_pwr) {
@@ -3027,7 +3027,7 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 			msm_port->ipc_log_pwr = ipc_log_context_create(
 					IPC_LOG_PWR_PAGES, name, 0);
 			if (!msm_port->ipc_log_pwr)
-				dev_info(uport->dev, "Err in Pwr IPC Log\n");
+				dev_dbg(uport->dev, "Err in Pwr IPC Log\n");
 		}
 		memset(name, 0, sizeof(name));
 		if (!msm_port->ipc_log_misc) {
@@ -3036,7 +3036,7 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 			msm_port->ipc_log_misc = ipc_log_context_create(
 					IPC_LOG_MISC_PAGES, name, 0);
 			if (!msm_port->ipc_log_misc)
-				dev_info(uport->dev, "Err in Misc IPC Log\n");
+				dev_dbg(uport->dev, "Err in Misc IPC Log\n");
 		}
 		/* New set of UART IPC log for RX Invalid case */
 		memset(name, 0, sizeof(name));
@@ -3046,7 +3046,7 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 			msm_port->ipc_log_single = ipc_log_context_create(
 					IPC_LOG_MISC_PAGES, name, 0);
 			if (!msm_port->ipc_log_single)
-				dev_info(uport->dev, "Err in single IPC Log\n");
+				dev_dbg(uport->dev, "Err in single IPC Log\n");
 		}
 		memset(name, 0, sizeof(name));
 		if (!msm_port->ipc_log_irqstatus) {
@@ -3055,7 +3055,7 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 			msm_port->ipc_log_irqstatus = ipc_log_context_create(
 					IPC_LOG_MISC_PAGES, name, 0);
 			if (!msm_port->ipc_log_irqstatus)
-				dev_info(uport->dev, "Err in irqstatus IPC Log\n");
+				dev_dbg(uport->dev, "Err in irqstatus IPC Log\n");
 		}
 	} else {
 		memset(name, 0, sizeof(name));
@@ -3065,7 +3065,7 @@ static void msm_geni_serial_debug_init(struct uart_port *uport, bool console)
 			msm_port->console_log = ipc_log_context_create(
 					IPC_LOG_MISC_PAGES, name, 0);
 			if (!msm_port->console_log)
-				dev_info(uport->dev, "Err in Misc IPC Log\n");
+				dev_dbg(uport->dev, "Err in Misc IPC Log\n");
 		}
 	}
 }
@@ -3206,7 +3206,7 @@ static int msm_geni_serial_probe(struct platform_device *pdev)
 	driver prob*/
 	if (!is_early_cons_enabled &&
 		(!strcmp(id->compatible, "qcom,msm-geni-console"))) {
-			pr_info("ignore cons prob\n");
+			pr_debug("ignore cons prob\n");
 			return -ENODEV;
 	}
 #endif
@@ -3285,7 +3285,7 @@ static int msm_geni_serial_probe(struct platform_device *pdev)
 		dev_dbg(&pdev->dev, "No Wakeup byte specified\n");
 	} else {
 		dev_port->wakeup_byte = (u8)wake_char;
-		dev_info(&pdev->dev, "Wakeup byte 0x%x\n",
+		dev_dbg(&pdev->dev, "Wakeup byte 0x%x\n",
 					dev_port->wakeup_byte);
 	}
 
@@ -3330,7 +3330,7 @@ static int msm_geni_serial_probe(struct platform_device *pdev)
 	/* Optional to use the Rx pin as wakeup irq */
 	dev_port->wakeup_irq = platform_get_irq(pdev, 1);
 	if ((dev_port->wakeup_irq < 0 && !is_console))
-		dev_info(&pdev->dev, "No wakeup IRQ configured\n");
+		dev_dbg(&pdev->dev, "No wakeup IRQ configured\n");
 
 	dev_port->serial_rsc.geni_pinctrl = devm_pinctrl_get(&pdev->dev);
 	if (IS_ERR_OR_NULL(dev_port->serial_rsc.geni_pinctrl)) {
@@ -3438,7 +3438,7 @@ static int msm_geni_serial_probe(struct platform_device *pdev)
 		geni_read_reg_nolog(uport->membase, GENI_SER_M_CLK_CFG);
 	}
 
-	dev_info(&pdev->dev, "Serial port%d added.FifoSize %d is_console%d\n",
+	dev_dbg(&pdev->dev, "Serial port%d added.FifoSize %d is_console%d\n",
 				line, uport->fifosize, is_console);
 
 	device_create_file(uport->dev, &dev_attr_loopback);
@@ -3718,7 +3718,7 @@ static int __init msm_geni_serial_init(void)
 		return ret;
 	}
 
-	pr_info("%s: Driver initialized\n", __func__);
+	pr_debug("%s: Driver initialized\n", __func__);
 
 	return ret;
 }

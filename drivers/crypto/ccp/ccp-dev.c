@@ -620,14 +620,14 @@ int ccp_dev_init(struct sp_device *sp)
 	if (ret)
 		goto e_err;
 
-	dev_notice(dev, "ccp enabled\n");
+	dev_dbg(dev, "ccp enabled\n");
 
 	return 0;
 
 e_err:
 	sp->ccp_data = NULL;
 
-	dev_notice(dev, "ccp initialization failed\n");
+	dev_dbg(dev, "ccp initialization failed\n");
 
 	return ret;
 }

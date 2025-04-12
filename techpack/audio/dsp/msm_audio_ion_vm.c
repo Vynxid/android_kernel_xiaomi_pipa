@@ -917,7 +917,7 @@ static int msm_audio_ion_probe(struct platform_device *pdev)
 		return rc;
 	}
 
-	dev_info(dev, "%s: msm_audio_ion_hab_handle %x\n",
+	dev_dbg(dev, "%s: msm_audio_ion_hab_handle %x\n",
 		__func__, msm_audio_ion_hab_handle);
 
 exit:

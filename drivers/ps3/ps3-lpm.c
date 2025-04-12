@@ -1190,7 +1190,7 @@ static int ps3_lpm_probe(struct ps3_system_bus_device *dev)
 	dev_dbg(&dev->core, " -> %s:%u\n", __func__, __LINE__);
 
 	if (lpm_priv) {
-		dev_info(&dev->core, "%s:%u: called twice\n",
+		dev_dbg(&dev->core, "%s:%u: called twice\n",
 			__func__, __LINE__);
 		return -EBUSY;
 	}
@@ -1205,7 +1205,7 @@ static int ps3_lpm_probe(struct ps3_system_bus_device *dev)
 	lpm_priv->pu_id = dev->lpm.pu_id;
 	lpm_priv->rights = dev->lpm.rights;
 
-	dev_info(&dev->core, " <- %s:%u:\n", __func__, __LINE__);
+	dev_dbg(&dev->core, " <- %s:%u:\n", __func__, __LINE__);
 
 	return 0;
 }
@@ -1219,7 +1219,7 @@ static int ps3_lpm_remove(struct ps3_system_bus_device *dev)
 	kfree(lpm_priv);
 	lpm_priv = NULL;
 
-	dev_info(&dev->core, " <- %s:%u:\n", __func__, __LINE__);
+	dev_dbg(&dev->core, " <- %s:%u:\n", __func__, __LINE__);
 	return 0;
 }
 

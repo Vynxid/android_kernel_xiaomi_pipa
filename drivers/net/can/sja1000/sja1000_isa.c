@@ -216,7 +216,7 @@ static int sja1000_isa_probe(struct platform_device *pdev)
 		goto exit_free;
 	}
 
-	dev_info(&pdev->dev, "%s device registered (reg_base=0x%p, irq=%d)\n",
+	dev_dbg(&pdev->dev, "%s device registered (reg_base=0x%p, irq=%d)\n",
 		 DRV_NAME, priv->reg_base, dev->irq);
 	return 0;
 
@@ -296,7 +296,7 @@ static int __init sja1000_isa_init(void)
 	if (err)
 		goto exit_free_devices;
 
-	pr_info("Legacy %s driver for max. %d devices registered\n",
+	pr_debug("Legacy %s driver for max. %d devices registered\n",
 		DRV_NAME, MAXDEV);
 
 	return 0;

@@ -318,7 +318,7 @@ static int powernv_led_remove(struct platform_device *pdev)
 	/* Destroy lock */
 	mutex_destroy(&powernv_led_common->lock);
 
-	dev_info(&pdev->dev, "PowerNV led module unregistered\n");
+	dev_dbg(&pdev->dev, "PowerNV led module unregistered\n");
 	return 0;
 }
 

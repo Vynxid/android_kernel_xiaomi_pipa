@@ -833,7 +833,7 @@ static int isp_pipeline_disable(struct isp_pipeline *pipe)
 		 * it from being started.
 		 */
 		if (ret) {
-			dev_info(isp->dev, "Unable to stop %s\n", subdev->name);
+			dev_dbg(isp->dev, "Unable to stop %s\n", subdev->name);
 			isp->stop_failure = true;
 			if (subdev == &isp->isp_prev.subdev)
 				media_entity_enum_set(&isp->crashed,
@@ -1000,7 +1000,7 @@ static int __maybe_unused isp_suspend_modules(struct isp_device *isp)
 	    || omap3isp_resizer_busy(&isp->isp_res)
 	    || omap3isp_ccdc_busy(&isp->isp_ccdc)) {
 		if (time_after(jiffies, timeout)) {
-			dev_info(isp->dev, "can't stop modules.\n");
+			dev_dbg(isp->dev, "can't stop modules.\n");
 			return 1;
 		}
 		msleep(1);
@@ -2289,7 +2289,7 @@ static int isp_probe(struct platform_device *pdev)
 		goto error;
 
 	isp->revision = isp_reg_readl(isp, OMAP3_ISP_IOMEM_MAIN, ISP_REVISION);
-	dev_info(isp->dev, "Revision %d.%d found\n",
+	dev_dbg(isp->dev, "Revision %d.%d found\n",
 		 (isp->revision & 0xf0) >> 4, isp->revision & 0x0f);
 
 	clk_disable(isp->clock[ISP_CLK_CAM_ICK]);

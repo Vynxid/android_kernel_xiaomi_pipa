@@ -724,7 +724,7 @@ static int sunxi_rsb_probe(struct platform_device *pdev)
 	if (!clk_delay)
 		clk_delay = 1;
 
-	dev_info(dev, "RSB running at %lu Hz\n", p_clk_freq / clk_div / 2);
+	dev_dbg(dev, "RSB running at %lu Hz\n", p_clk_freq / clk_div / 2);
 	writel(RSB_CCR_SDA_OUT_DELAY(clk_delay) | RSB_CCR_CLK_DIV(clk_div - 1),
 	       rsb->regs + RSB_CCR);
 

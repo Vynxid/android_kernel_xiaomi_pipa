@@ -242,10 +242,10 @@ static int at_compat_reg_broken;
 #define LEGACY_NR_PORTS	1
 
 /* device-specific methods for amd8111 LPC Bridge device */
-static void amd8111_lpc_bridge_init(struct amd8111_dev_info *dev_info)
+static void amd8111_lpc_bridge_init(struct amd8111_dev_info *dev_dbg)
 {
 	u8 val8;
-	struct pci_dev *dev = dev_info->dev;
+	struct pci_dev *dev = dev_dbg->dev;
 
 	/* First clear REG_AT_COMPAT[SERR, IOCHK] if necessary */
 	legacy_io_res = request_region(REG_AT_COMPAT, LEGACY_NR_PORTS,
@@ -279,7 +279,7 @@ static void amd8111_lpc_bridge_init(struct amd8111_dev_info *dev_info)
 		edac_pci_write_byte(dev, REG_IO_CTRL_1, val8);
 }
 
-static void amd8111_lpc_bridge_exit(struct amd8111_dev_info *dev_info)
+static void amd8111_lpc_bridge_exit(struct amd8111_dev_info *dev_dbg)
 {
 	if (legacy_io_res)
 		release_region(REG_AT_COMPAT, LEGACY_NR_PORTS);
@@ -287,15 +287,15 @@ static void amd8111_lpc_bridge_exit(struct amd8111_dev_info *dev_info)
 
 static void amd8111_lpc_bridge_check(struct edac_device_ctl_info *edac_dev)
 {
-	struct amd8111_dev_info *dev_info = edac_dev->pvt_info;
-	struct pci_dev *dev = dev_info->dev;
+	struct amd8111_dev_info *dev_dbg = edac_dev->pvt_info;
+	struct pci_dev *dev = dev_dbg->dev;
 	u8 val8;
 
 	edac_pci_read_byte(dev, REG_IO_CTRL_1, &val8);
 	if (val8 & IO_CTRL_1_CLEAR_MASK) {
 		printk(KERN_INFO
 			"Error(s) in IO control register on %s device\n",
-			dev_info->ctl_name);
+			dev_dbg->ctl_name);
 		printk(KERN_INFO "LPC ERR: %d, PW2LPC: %d\n",
 			(val8 & IO_CTRL_1_LPC_ERR) != 0,
 			(val8 & IO_CTRL_1_PW2LPC) != 0);
@@ -348,25 +348,25 @@ static struct amd8111_pci_info amd8111_pcis[] = {
 static int amd8111_dev_probe(struct pci_dev *dev,
 				const struct pci_device_id *id)
 {
-	struct amd8111_dev_info *dev_info = &amd8111_devices[id->driver_data];
+	struct amd8111_dev_info *dev_dbg = &amd8111_devices[id->driver_data];
 	int ret = -ENODEV;
 
-	dev_info->dev = pci_get_device(PCI_VENDOR_ID_AMD,
-					dev_info->err_dev, NULL);
+	dev_dbg->dev = pci_get_device(PCI_VENDOR_ID_AMD,
+					dev_dbg->err_dev, NULL);
 
-	if (!dev_info->dev) {
+	if (!dev_dbg->dev) {
 		printk(KERN_ERR "EDAC device not found:"
 			"vendor %x, device %x, name %s\n",
-			PCI_VENDOR_ID_AMD, dev_info->err_dev,
-			dev_info->ctl_name);
+			PCI_VENDOR_ID_AMD, dev_dbg->err_dev,
+			dev_dbg->ctl_name);
 		goto err;
 	}
 
-	if (pci_enable_device(dev_info->dev)) {
+	if (pci_enable_device(dev_dbg->dev)) {
 		printk(KERN_ERR "failed to enable:"
 			"vendor %x, device %x, name %s\n",
-			PCI_VENDOR_ID_AMD, dev_info->err_dev,
-			dev_info->ctl_name);
+			PCI_VENDOR_ID_AMD, dev_dbg->err_dev,
+			dev_dbg->ctl_name);
 		goto err_dev_put;
 	}
 
@@ -375,69 +375,69 @@ static int amd8111_dev_probe(struct pci_dev *dev,
 	 * edac_device_ctl_info, but make use of existing
 	 * one instead.
 	*/
-	dev_info->edac_idx = edac_device_alloc_index();
-	dev_info->edac_dev =
-		edac_device_alloc_ctl_info(0, dev_info->ctl_name, 1,
+	dev_dbg->edac_idx = edac_device_alloc_index();
+	dev_dbg->edac_dev =
+		edac_device_alloc_ctl_info(0, dev_dbg->ctl_name, 1,
 					   NULL, 0, 0,
-					   NULL, 0, dev_info->edac_idx);
-	if (!dev_info->edac_dev) {
+					   NULL, 0, dev_dbg->edac_idx);
+	if (!dev_dbg->edac_dev) {
 		ret = -ENOMEM;
 		goto err_dev_put;
 	}
 
-	dev_info->edac_dev->pvt_info = dev_info;
-	dev_info->edac_dev->dev = &dev_info->dev->dev;
-	dev_info->edac_dev->mod_name = AMD8111_EDAC_MOD_STR;
-	dev_info->edac_dev->ctl_name = dev_info->ctl_name;
-	dev_info->edac_dev->dev_name = dev_name(&dev_info->dev->dev);
+	dev_dbg->edac_dev->pvt_info = dev_dbg;
+	dev_dbg->edac_dev->dev = &dev_dbg->dev->dev;
+	dev_dbg->edac_dev->mod_name = AMD8111_EDAC_MOD_STR;
+	dev_dbg->edac_dev->ctl_name = dev_dbg->ctl_name;
+	dev_dbg->edac_dev->dev_name = dev_name(&dev_dbg->dev->dev);
 
 	if (edac_op_state == EDAC_OPSTATE_POLL)
-		dev_info->edac_dev->edac_check = dev_info->check;
+		dev_dbg->edac_dev->edac_check = dev_dbg->check;
 
-	if (dev_info->init)
-		dev_info->init(dev_info);
+	if (dev_dbg->init)
+		dev_dbg->init(dev_dbg);
 
-	if (edac_device_add_device(dev_info->edac_dev) > 0) {
+	if (edac_device_add_device(dev_dbg->edac_dev) > 0) {
 		printk(KERN_ERR "failed to add edac_dev for %s\n",
-			dev_info->ctl_name);
+			dev_dbg->ctl_name);
 		goto err_edac_free_ctl;
 	}
 
 	printk(KERN_INFO "added one edac_dev on AMD8111 "
 		"vendor %x, device %x, name %s\n",
-		PCI_VENDOR_ID_AMD, dev_info->err_dev,
-		dev_info->ctl_name);
+		PCI_VENDOR_ID_AMD, dev_dbg->err_dev,
+		dev_dbg->ctl_name);
 
 	return 0;
 
 err_edac_free_ctl:
-	edac_device_free_ctl_info(dev_info->edac_dev);
+	edac_device_free_ctl_info(dev_dbg->edac_dev);
 err_dev_put:
-	pci_dev_put(dev_info->dev);
+	pci_dev_put(dev_dbg->dev);
 err:
 	return ret;
 }
 
 static void amd8111_dev_remove(struct pci_dev *dev)
 {
-	struct amd8111_dev_info *dev_info;
+	struct amd8111_dev_info *dev_dbg;
 
-	for (dev_info = amd8111_devices; dev_info->err_dev; dev_info++)
-		if (dev_info->dev->device == dev->device)
+	for (dev_dbg = amd8111_devices; dev_dbg->err_dev; dev_dbg++)
+		if (dev_dbg->dev->device == dev->device)
 			break;
 
-	if (!dev_info->err_dev)	/* should never happen */
+	if (!dev_dbg->err_dev)	/* should never happen */
 		return;
 
-	if (dev_info->edac_dev) {
-		edac_device_del_device(dev_info->edac_dev->dev);
-		edac_device_free_ctl_info(dev_info->edac_dev);
+	if (dev_dbg->edac_dev) {
+		edac_device_del_device(dev_dbg->edac_dev->dev);
+		edac_device_free_ctl_info(dev_dbg->edac_dev);
 	}
 
-	if (dev_info->exit)
-		dev_info->exit(dev_info);
+	if (dev_dbg->exit)
+		dev_dbg->exit(dev_dbg);
 
-	pci_dev_put(dev_info->dev);
+	pci_dev_put(dev_dbg->dev);
 }
 
 static int amd8111_pci_probe(struct pci_dev *dev,

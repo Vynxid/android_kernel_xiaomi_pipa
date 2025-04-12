@@ -481,7 +481,7 @@ int hsu_dma_probe(struct hsu_dma_chip *chip)
 	if (ret)
 		return ret;
 
-	dev_info(chip->dev, "Found HSU DMA, %d channels\n", hsu->nr_channels);
+	dev_dbg(chip->dev, "Found HSU DMA, %d channels\n", hsu->nr_channels);
 	return 0;
 }
 EXPORT_SYMBOL_GPL(hsu_dma_probe);

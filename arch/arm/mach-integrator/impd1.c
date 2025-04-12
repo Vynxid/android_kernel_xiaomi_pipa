@@ -363,7 +363,7 @@ static int __ref impd1_probe(struct lm_device *dev)
 
 	lm_set_drvdata(dev, impd1);
 
-	dev_info(&dev->dev, "IM-PD1 found at 0x%08lx\n",
+	dev_dbg(&dev->dev, "IM-PD1 found at 0x%08lx\n",
 		 (unsigned long)dev->resource.start);
 
 	for (i = 0; i < ARRAY_SIZE(impd1_devs); i++) {

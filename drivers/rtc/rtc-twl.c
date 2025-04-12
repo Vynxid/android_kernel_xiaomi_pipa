@@ -546,7 +546,7 @@ static int twl_rtc_probe(struct platform_device *pdev)
 			REG_INT_MSK_STS_A);
 	}
 
-	dev_info(&pdev->dev, "Enabling TWL-RTC\n");
+	dev_dbg(&pdev->dev, "Enabling TWL-RTC\n");
 	ret = twl_rtc_write_u8(twl_rtc, BIT_RTC_CTRL_REG_STOP_RTC_M,
 			       REG_RTC_CTRL_REG);
 	if (ret < 0)

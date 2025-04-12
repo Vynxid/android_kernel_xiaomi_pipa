@@ -195,7 +195,7 @@ static void __cam_req_mgr_find_dev_name(
 
 	for (i = 0; i < link->num_devs; i++) {
 		dev = &link->l_dev[i];
-		if (dev->dev_info.p_delay == pd) {
+		if (dev->dev_dbg.p_delay == pd) {
 			if (masked_val & (1 << dev->dev_bit))
 				continue;
 
@@ -203,12 +203,12 @@ static void __cam_req_mgr_find_dev_name(
 				CAM_INFO_RATE_LIMIT(CAM_CRM,
 					"WQ congestion, Skip Frame: req: %lld not ready on link: 0x%x for pd: %d dev: %s open_req count: %d",
 					req_id, link->link_hdl, pd,
-					dev->dev_info.name, link->open_req_cnt);
+					dev->dev_dbg.name, link->open_req_cnt);
 			else
 				CAM_INFO(CAM_CRM,
 					"Skip Frame: req: %lld not ready on link: 0x%x for pd: %d dev: %s open_req count: %d",
 					req_id, link->link_hdl, pd,
-					dev->dev_info.name, link->open_req_cnt);
+					dev->dev_dbg.name, link->open_req_cnt);
 		}
 	}
 }
@@ -231,7 +231,7 @@ static int __cam_req_mgr_notify_error_on_link(
 
 	session = (struct cam_req_mgr_core_session *)link->parent;
 
-	pd = dev->dev_info.p_delay;
+	pd = dev->dev_dbg.p_delay;
 	if (pd >= CAM_PIPELINE_DELAY_MAX) {
 		CAM_ERR(CAM_CRM, "pd : %d is more than expected", pd);
 		return -EINVAL;
@@ -250,7 +250,7 @@ static int __cam_req_mgr_notify_error_on_link(
 	msg.u.err_msg.link_hdl   = link->link_hdl;
 
 	CAM_DBG(CAM_CRM, "Failed for device: %s while applying request: %lld",
-		dev->dev_info.name, link->req.apply_data[pd].req_id);
+		dev->dev_dbg.name, link->req.apply_data[pd].req_id);
 
 	rc = cam_req_mgr_notify_message(&msg,
 		V4L_EVENT_CAM_REQ_MGR_ERROR,
@@ -596,7 +596,7 @@ static int __cam_req_mgr_check_for_lower_pd_devices(
 
 	for (i = 0; i < link->num_devs; i++) {
 		dev = &link->l_dev[i];
-		if (dev->dev_info.p_delay < link->max_delay)
+		if (dev->dev_dbg.p_delay < link->max_delay)
 			return 0;
 	}
 
@@ -672,7 +672,7 @@ static int __cam_req_mgr_send_req(struct cam_req_mgr_core_link *link,
 		dev = &link->l_dev[i];
 		if (!dev)
 			continue;
-		pd = dev->dev_info.p_delay;
+		pd = dev->dev_dbg.p_delay;
 		if (pd >= CAM_PIPELINE_DELAY_MAX) {
 			CAM_WARN(CAM_CRM, "pd %d greater than max",
 				pd);
@@ -690,7 +690,7 @@ static int __cam_req_mgr_send_req(struct cam_req_mgr_core_link *link,
 			(slot->dev_hdl != dev->dev_hdl))
 			continue;
 
-		if (!(dev->dev_info.trigger & trigger))
+		if (!(dev->dev_dbg.trigger & trigger))
 			continue;
 
 		apply_req.dev_hdl = dev->dev_hdl;
@@ -715,7 +715,7 @@ static int __cam_req_mgr_send_req(struct cam_req_mgr_core_link *link,
 	for (i = 0; i < link->num_devs; i++) {
 		dev = &link->l_dev[i];
 		if (dev) {
-			pd = dev->dev_info.p_delay;
+			pd = dev->dev_dbg.p_delay;
 			if (pd >= CAM_PIPELINE_DELAY_MAX) {
 				CAM_WARN(CAM_CRM, "pd %d greater than max",
 					pd);
@@ -728,7 +728,7 @@ static int __cam_req_mgr_send_req(struct cam_req_mgr_core_link *link,
 					link->req.apply_data[pd].req_id);
 				continue;
 			}
-			if (!(dev->dev_info.trigger & trigger))
+			if (!(dev->dev_dbg.trigger & trigger))
 				continue;
 
 			apply_req.dev_hdl = dev->dev_hdl;
@@ -761,7 +761,7 @@ static int __cam_req_mgr_send_req(struct cam_req_mgr_core_link *link,
 	}
 	if (rc < 0) {
 		CAM_WARN_RATE_LIMIT(CAM_CRM, "APPLY FAILED pd %d req_id %lld",
-			dev->dev_info.p_delay, apply_req.request_id);
+			dev->dev_dbg.p_delay, apply_req.request_id);
 		/* Apply req failed notify already applied devs */
 		for (; i >= 0; i--) {
 			dev = &link->l_dev[i];
@@ -1892,7 +1892,7 @@ static int __cam_req_mgr_disconnect_link(struct cam_req_mgr_core_link *link)
 			if (rc)
 				CAM_ERR(CAM_CRM,
 					"Unlink failed dev name %s hdl %x",
-					dev->dev_info.name,
+					dev->dev_dbg.name,
 					dev->dev_hdl);
 		}
 		dev->dev_hdl = 0;
@@ -2329,7 +2329,7 @@ int cam_req_mgr_process_add_req(void *priv, void *data)
 	if (idx < 0) {
 		CAM_ERR(CAM_CRM,
 			"req %lld not found in in_q for dev %s on link 0x%x",
-			add_req->req_id, device->dev_info.name, link->link_hdl);
+			add_req->req_id, device->dev_dbg.name, link->link_hdl);
 		rc = -EBADSLT;
 		mutex_unlock(&link->req.lock);
 		goto end;
@@ -2352,7 +2352,7 @@ int cam_req_mgr_process_add_req(void *priv, void *data)
 		CAM_WARN(CAM_CRM,
 			"Unexpected state %d for slot %d map %x for dev %s on link 0x%x",
 			slot->state, idx, slot->req_ready_map,
-			device->dev_info.name, link->link_hdl);
+			device->dev_dbg.name, link->link_hdl);
 	}
 
 	slot->state = CRM_REQ_STATE_PENDING;
@@ -2651,7 +2651,7 @@ static const char *__cam_req_mgr_dev_handle_to_name(
 		dev = &link->l_dev[i];
 
 		if (dev_hdl == dev->dev_hdl)
-			return dev->dev_info.name;
+			return dev->dev_dbg.name;
 	}
 
 	return "Invalid dev_hdl";
@@ -3042,28 +3042,28 @@ static int __cam_req_mgr_setup_link_info(struct cam_req_mgr_core_link *link,
 		else if (link_info->version == VERSION_2)
 			dev->dev_hdl = link_info->u.link_info_v2.dev_hdls[i];
 		dev->parent = (void *)link;
-		dev->dev_info.dev_hdl = dev->dev_hdl;
-		rc = dev->ops->get_dev_info(&dev->dev_info);
+		dev->dev_dbg.dev_hdl = dev->dev_hdl;
+		rc = dev->ops->get_dev_info(&dev->dev_dbg);
 
-		trace_cam_req_mgr_connect_device(link, &dev->dev_info);
+		trace_cam_req_mgr_connect_device(link, &dev->dev_dbg);
 		if (link_info->version == VERSION_1)
 			CAM_DBG(CAM_CRM,
 				"%x: connected: %s, id %d, delay %d, trigger %x",
 				link_info->u.link_info_v1.session_hdl,
-				dev->dev_info.name,
-				dev->dev_info.dev_id, dev->dev_info.p_delay,
-				dev->dev_info.trigger);
+				dev->dev_dbg.name,
+				dev->dev_dbg.dev_id, dev->dev_dbg.p_delay,
+				dev->dev_dbg.trigger);
 		else if (link_info->version == VERSION_2)
 			CAM_DBG(CAM_CRM,
 				"%x: connected: %s, id %d, delay %d, trigger %x",
 				link_info->u.link_info_v2.session_hdl,
-				dev->dev_info.name,
-				dev->dev_info.dev_id, dev->dev_info.p_delay,
-				dev->dev_info.trigger);
+				dev->dev_dbg.name,
+				dev->dev_dbg.dev_id, dev->dev_dbg.p_delay,
+				dev->dev_dbg.trigger);
 		if (rc < 0 ||
-			dev->dev_info.p_delay >=
+			dev->dev_dbg.p_delay >=
 			CAM_PIPELINE_DELAY_MAX ||
-			dev->dev_info.p_delay <
+			dev->dev_dbg.p_delay <
 			CAM_PIPELINE_DELAY_0) {
 			CAM_ERR(CAM_CRM, "get device info failed");
 			goto error;
@@ -3071,19 +3071,19 @@ static int __cam_req_mgr_setup_link_info(struct cam_req_mgr_core_link *link,
 			if (link_info->version == VERSION_1) {
 				CAM_DBG(CAM_CRM, "%x: connected: %s, delay %d",
 					link_info->u.link_info_v1.session_hdl,
-					dev->dev_info.name,
-					dev->dev_info.p_delay);
+					dev->dev_dbg.name,
+					dev->dev_dbg.p_delay);
 				}
 			else if (link_info->version == VERSION_2) {
 				CAM_DBG(CAM_CRM, "%x: connected: %s, delay %d",
 					link_info->u.link_info_v2.session_hdl,
-					dev->dev_info.name,
-					dev->dev_info.p_delay);
+					dev->dev_dbg.name,
+					dev->dev_dbg.p_delay);
 				}
-			if (dev->dev_info.p_delay > max_delay)
-				max_delay = dev->dev_info.p_delay;
+			if (dev->dev_dbg.p_delay > max_delay)
+				max_delay = dev->dev_dbg.p_delay;
 
-			subscribe_event |= (uint32_t)dev->dev_info.trigger;
+			subscribe_event |= (uint32_t)dev->dev_dbg.trigger;
 		}
 	}
 
@@ -3102,24 +3102,24 @@ static int __cam_req_mgr_setup_link_info(struct cam_req_mgr_core_link *link,
 		 * For unique pipeline delay table create request
 		 * tracking table
 		 */
-		if (link->pd_mask & (1 << dev->dev_info.p_delay)) {
+		if (link->pd_mask & (1 << dev->dev_dbg.p_delay)) {
 			pd_tbl = __cam_req_mgr_find_pd_tbl(link->req.l_tbl,
-				dev->dev_info.p_delay);
+				dev->dev_dbg.p_delay);
 			if (!pd_tbl) {
 				CAM_ERR(CAM_CRM, "pd %d tbl not found",
-					dev->dev_info.p_delay);
+					dev->dev_dbg.p_delay);
 				rc = -ENXIO;
 				goto error;
 			}
 		} else {
 			pd_tbl = __cam_req_mgr_create_pd_tbl(
-				dev->dev_info.p_delay);
+				dev->dev_dbg.p_delay);
 			if (pd_tbl == NULL) {
 				CAM_ERR(CAM_CRM, "create new pd tbl failed");
 				rc = -ENXIO;
 				goto error;
 			}
-			pd_tbl->pd = dev->dev_info.p_delay;
+			pd_tbl->pd = dev->dev_dbg.p_delay;
 			link->pd_mask |= (1 << pd_tbl->pd);
 			/*
 			 * Add table to list and also sort list
@@ -3131,13 +3131,13 @@ static int __cam_req_mgr_setup_link_info(struct cam_req_mgr_core_link *link,
 		dev->pd_tbl = pd_tbl;
 		pd_tbl->dev_mask |= (1 << dev->dev_bit);
 		CAM_DBG(CAM_CRM, "dev_bit %u name %s pd %u mask %d",
-			dev->dev_bit, dev->dev_info.name, pd_tbl->pd,
+			dev->dev_bit, dev->dev_dbg.name, pd_tbl->pd,
 			pd_tbl->dev_mask);
 		/* Communicate with dev to establish the link */
 		dev->ops->link_setup(&link_data);
 
-		if (link->max_delay < dev->dev_info.p_delay)
-			link->max_delay = dev->dev_info.p_delay;
+		if (link->max_delay < dev->dev_dbg.p_delay)
+			link->max_delay = dev->dev_dbg.p_delay;
 	}
 	link->num_devs = num_devices;
 

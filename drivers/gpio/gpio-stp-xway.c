@@ -275,7 +275,7 @@ static int xway_stp_probe(struct platform_device *pdev)
 		ret = devm_gpiochip_add_data(&pdev->dev, &chip->gc, chip);
 
 	if (!ret)
-		dev_info(&pdev->dev, "Init done\n");
+		dev_dbg(&pdev->dev, "Init done\n");
 
 	return ret;
 }

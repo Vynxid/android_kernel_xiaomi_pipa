@@ -1299,7 +1299,7 @@ static int adf7242_probe(struct spi_device *spi)
 
 	adf7242_debugfs_init(lp);
 
-	dev_info(&spi->dev, "mac802154 IRQ-%d registered\n", spi->irq);
+	dev_dbg(&spi->dev, "mac802154 IRQ-%d registered\n", spi->irq);
 
 	return ret;
 

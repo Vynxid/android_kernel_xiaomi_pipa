@@ -292,9 +292,9 @@ static int tw5864_initdev(struct pci_dev *pci_dev,
 
 	spin_lock_init(&dev->slock);
 
-	dev_info(&pci_dev->dev, "TW5864 hardware version: %04x\n",
+	dev_dbg(&pci_dev->dev, "TW5864 hardware version: %04x\n",
 		 tw_readl(TW5864_HW_VERSION));
-	dev_info(&pci_dev->dev, "TW5864 H.264 core version: %04x:%04x\n",
+	dev_dbg(&pci_dev->dev, "TW5864 H.264 core version: %04x:%04x\n",
 		 tw_readl(TW5864_H264REV),
 		 tw_readl(TW5864_UNDECLARED_H264REV_PART2));
 
@@ -310,8 +310,8 @@ static int tw5864_initdev(struct pci_dev *pci_dev,
 		goto fini_video;
 	}
 
-	dev_info(&pci_dev->dev, "Note: there are known video quality issues. For details\n");
-	dev_info(&pci_dev->dev, "see the comment in drivers/media/pci/tw5864/tw5864-core.c.\n");
+	dev_dbg(&pci_dev->dev, "Note: there are known video quality issues. For details\n");
+	dev_dbg(&pci_dev->dev, "see the comment in drivers/media/pci/tw5864/tw5864-core.c.\n");
 
 	return 0;
 

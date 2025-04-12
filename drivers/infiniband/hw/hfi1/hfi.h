@@ -2157,7 +2157,7 @@ static inline u64 hfi1_pkt_base_sdma_integrity(struct hfi1_devdata *dd)
 	dev_err(dev, fmt, ##__VA_ARGS__)
 
 #define hfi1_early_info(dev, fmt, ...) \
-	dev_info(dev, fmt, ##__VA_ARGS__)
+	dev_dbg(dev, fmt, ##__VA_ARGS__)
 
 #define dd_dev_emerg(dd, fmt, ...) \
 	dev_emerg(&(dd)->pcidev->dev, "%s: " fmt, \
@@ -2182,7 +2182,7 @@ static inline u64 hfi1_pkt_base_sdma_integrity(struct hfi1_devdata *dd)
 			     ##__VA_ARGS__)
 
 #define dd_dev_info(dd, fmt, ...) \
-	dev_info(&(dd)->pcidev->dev, "%s: " fmt, \
+	dev_dbg(&(dd)->pcidev->dev, "%s: " fmt, \
 		 rvt_get_ibdev_name(&(dd)->verbs_dev.rdi), ##__VA_ARGS__)
 
 #define dd_dev_info_ratelimited(dd, fmt, ...) \

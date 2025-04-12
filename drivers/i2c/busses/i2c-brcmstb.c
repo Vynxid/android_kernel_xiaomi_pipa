@@ -666,7 +666,7 @@ static int brcmstb_i2c_probe(struct platform_device *pdev)
 	if (rc)
 		goto probe_errorout;
 
-	dev_info(dev->device, "%s@%dhz registered in %s mode\n",
+	dev_dbg(dev->device, "%s@%dhz registered in %s mode\n",
 		 int_name ? int_name : " ", dev->clk_freq_hz,
 		 (dev->irq >= 0) ? "interrupt" : "polling");
 

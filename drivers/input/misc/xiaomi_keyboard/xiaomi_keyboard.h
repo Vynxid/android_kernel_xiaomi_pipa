@@ -10,7 +10,7 @@
 
 #define XIAOMI_KB_TAG "xiaomi-keyboard"
 #define MI_KB_INFO(fmt, args...)                                               \
-	pr_info("[%s] %s %d: " fmt, XIAOMI_KB_TAG, __func__, __LINE__, ##args)
+	pr_debug("[%s] %s %d: " fmt, XIAOMI_KB_TAG, __func__, __LINE__, ##args)
 #define MI_KB_ERR(fmt, args...)                                                \
 	pr_err("[%s] %s %d: " fmt, XIAOMI_KB_TAG, __func__, __LINE__, ##args)
 

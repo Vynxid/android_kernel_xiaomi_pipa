@@ -399,7 +399,7 @@ static int ps3flash_probe(struct ps3_system_bus_device *_dev)
 		goto fail_teardown;
 	}
 
-	dev_info(&dev->sbd.core, "%s:%u: registered misc device %d\n",
+	dev_dbg(&dev->sbd.core, "%s:%u: registered misc device %d\n",
 		 __func__, __LINE__, ps3flash_misc.minor);
 
 	ps3_os_area_flash_register(&ps3flash_kernel_ops);

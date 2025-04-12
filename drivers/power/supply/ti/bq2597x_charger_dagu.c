@@ -1488,7 +1488,7 @@ static int bq2597x_get_dev_role(struct i2c_client *client)
 		return -EINVAL;
 	}
 
-	dev_info(&client->dev, "%s: matched to %s, dev_role: %d.\n", __func__,
+	dev_dbg(&client->dev, "%s: matched to %s, dev_role: %d.\n", __func__,
 		 of_id->compatible, (int)of_id->data);
 
 	return (int)of_id->data;

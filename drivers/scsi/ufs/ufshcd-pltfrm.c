@@ -77,7 +77,7 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
 
 	cnt = of_property_count_strings(np, "clock-names");
 	if (!cnt || (cnt == -EINVAL)) {
-		dev_info(dev, "%s: Unable to find clocks, assuming enabled\n",
+		dev_dbg(dev, "%s: Unable to find clocks, assuming enabled\n",
 				__func__);
 	} else if (cnt < 0) {
 		dev_err(dev, "%s: count clock strings failed, err %d\n",
@@ -89,7 +89,7 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
 		goto out;
 
 	if (!of_get_property(np, "freq-table-hz", &len)) {
-		dev_info(dev, "freq-table-hz property not specified\n");
+		dev_dbg(dev, "freq-table-hz property not specified\n");
 		goto out;
 	}
 
@@ -178,7 +178,7 @@ static int ufshcd_populate_vreg(struct device *dev, const char *name,
 
 	snprintf(prop_name, MAX_PROP_SIZE, "%s-supply", name);
 	if (!phandle_exists(np, prop_name, 0)) {
-		dev_info(dev, "%s: Unable to find %s regulator, assuming enabled\n",
+		dev_dbg(dev, "%s: Unable to find %s regulator, assuming enabled\n",
 				__func__, prop_name);
 		goto out;
 	}

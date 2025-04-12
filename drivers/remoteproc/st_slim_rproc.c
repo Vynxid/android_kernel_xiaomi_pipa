@@ -148,7 +148,7 @@ static int slim_rproc_start(struct rproc *rproc)
 	fw_rev = readl(slim_rproc->mem[ST_SLIM_DMEM].cpu_addr +
 			SLIM_REV_ID_OFST);
 
-	dev_info(dev, "fw rev:%ld.%ld on SLIM %ld.%ld\n",
+	dev_dbg(dev, "fw rev:%ld.%ld on SLIM %ld.%ld\n",
 		 SLIM_REV_ID_MAJ(fw_rev), SLIM_REV_ID_MIN(fw_rev),
 		 hw_id, hw_ver);
 

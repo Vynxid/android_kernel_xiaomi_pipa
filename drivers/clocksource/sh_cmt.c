@@ -704,7 +704,7 @@ static int sh_cmt_register_clocksource(struct sh_cmt_channel *ch,
 	cs->mask = CLOCKSOURCE_MASK(ch->cmt->info->width);
 	cs->flags = CLOCK_SOURCE_IS_CONTINUOUS;
 
-	dev_info(&ch->cmt->pdev->dev, "ch%u: used as clock source\n",
+	dev_dbg(&ch->cmt->pdev->dev, "ch%u: used as clock source\n",
 		 ch->index);
 
 	clocksource_register_hz(cs, ch->cmt->rate);
@@ -743,7 +743,7 @@ static int sh_cmt_clock_event_set_state(struct clock_event_device *ced,
 	if (clockevent_state_oneshot(ced) || clockevent_state_periodic(ced))
 		sh_cmt_stop(ch, FLAG_CLOCKEVENT);
 
-	dev_info(&ch->cmt->pdev->dev, "ch%u: used for %s clock events\n",
+	dev_dbg(&ch->cmt->pdev->dev, "ch%u: used for %s clock events\n",
 		 ch->index, periodic ? "periodic" : "oneshot");
 	sh_cmt_clock_event_start(ch, periodic);
 	return 0;
@@ -838,7 +838,7 @@ static int sh_cmt_register_clockevent(struct sh_cmt_channel *ch,
 	ced->min_delta_ns = clockevent_delta2ns(0x1f, ced);
 	ced->min_delta_ticks = 0x1f;
 
-	dev_info(&ch->cmt->pdev->dev, "ch%u: used for clock events\n",
+	dev_dbg(&ch->cmt->pdev->dev, "ch%u: used for clock events\n",
 		 ch->index);
 	clockevents_register_device(ced);
 
@@ -1070,7 +1070,7 @@ static int sh_cmt_probe(struct platform_device *pdev)
 	}
 
 	if (cmt) {
-		dev_info(&pdev->dev, "kept as earlytimer\n");
+		dev_dbg(&pdev->dev, "kept as earlytimer\n");
 		goto out;
 	}
 

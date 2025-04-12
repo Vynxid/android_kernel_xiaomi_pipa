@@ -514,7 +514,7 @@ static int ks8995_probe(struct spi_device *spi)
 		return err;
 	}
 
-	dev_info(&spi->dev, "%s device found, Chip ID:%x, Revision:%x\n",
+	dev_dbg(&spi->dev, "%s device found, Chip ID:%x, Revision:%x\n",
 		 ks->chip->name, ks->chip->chip_id, ks->revision_id);
 
 	return 0;

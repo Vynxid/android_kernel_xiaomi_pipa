@@ -471,7 +471,7 @@ static void hsw_fw_ready(struct sst_hsw *hsw, u32 header)
 		pinfo = &fw_info[0];
 		for (i = 0; i < ARRAY_SIZE(tmp); i++)
 			tmp[i] = strsep(&pinfo, " ");
-		dev_info(hsw->dev, "FW loaded, mailbox readback FW info: type %s, - "
+		dev_dbg(hsw->dev, "FW loaded, mailbox readback FW info: type %s, - "
 			"version: %s.%s, build %s, source commit id: %s\n",
 			tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
 	}
@@ -1858,11 +1858,11 @@ int sst_hsw_module_load(struct sst_hsw *hsw,
 			}
 		} else {
 			/* try and load any other optional modules if they are
-			 * available. Use dev_info instead of dev_err in case
+			 * available. Use dev_dbg instead of dev_err in case
 			 * request firmware failed */
 			ret = request_firmware(&fw, name, dev);
 			if (ret) {
-				dev_info(dev, "fw image %s not available(%d)\n",
+				dev_dbg(dev, "fw image %s not available(%d)\n",
 						name, ret);
 				return ret;
 			}
@@ -1879,7 +1879,7 @@ int sst_hsw_module_load(struct sst_hsw *hsw,
 					module_id, name);
 		}
 	} else
-		dev_info(dev, "module %d (%s) already loaded\n",
+		dev_dbg(dev, "module %d (%s) already loaded\n",
 				module_id, name);
 out:
 	/* release fw, but base fw should be released by acpi driver */
@@ -1906,7 +1906,7 @@ int sst_hsw_module_enable(struct sst_hsw *hsw,
 	}
 
 	if (sst_hsw_is_module_active(hsw, module_id)) {
-		dev_info(dev, "module %d already enabled\n", module_id);
+		dev_dbg(dev, "module %d already enabled\n", module_id);
 		return 0;
 	}
 
@@ -1972,7 +1972,7 @@ int sst_hsw_module_disable(struct sst_hsw *hsw,
 	}
 
 	if (!sst_hsw_is_module_active(hsw, module_id)) {
-		dev_info(dev, "module %d already disabled\n", module_id);
+		dev_dbg(dev, "module %d already disabled\n", module_id);
 		return 0;
 	}
 

@@ -505,7 +505,7 @@ static void print_vmalloc_lowmem_info(void)
 {
 	struct memblock_region *reg, *prev_reg = NULL;
 
-	pr_notice(
+	pr_debug(
 		"	   vmalloc : 0x%08lx - 0x%08lx   (%4ld MB)\n",
 		MLM((unsigned long)high_memory, VMALLOC_END));
 
@@ -522,7 +522,7 @@ static void print_vmalloc_lowmem_info(void)
 		if (prev_reg == NULL) {
 			prev_reg = reg;
 
-			pr_notice(
+			pr_debug(
 			"	   lowmem  : 0x%08lx - 0x%08lx   (%4ld MB)\n",
 			MLM((unsigned long)__va(start_phys),
 			(unsigned long)__va(end_phys)));
@@ -530,13 +530,13 @@ static void print_vmalloc_lowmem_info(void)
 			continue;
 		}
 
-		pr_notice(
+		pr_debug(
 		"	   vmalloc : 0x%08lx - 0x%08lx   (%4ld MB)\n",
 		MLM((unsigned long)__va(end_phys),
 		(unsigned long)__va(prev_reg->base)));
 
 
-		pr_notice(
+		pr_debug(
 		"	   lowmem  : 0x%08lx - 0x%08lx   (%4ld MB)\n",
 		MLM((unsigned long)__va(start_phys),
 		(unsigned long)__va(end_phys)));
@@ -575,7 +575,7 @@ void __init mem_init(void)
 	mem_init_print_info(NULL);
 
 
-	pr_notice("Virtual kernel memory layout:\n"
+	pr_debug("Virtual kernel memory layout:\n"
 			"    vector  : 0x%08lx - 0x%08lx   (%4ld kB)\n"
 #ifdef CONFIG_HAVE_TCM
 			"    DTCM    : 0x%08lx - 0x%08lx   (%4ld kB)\n"
@@ -591,13 +591,13 @@ void __init mem_init(void)
 #ifdef CONFIG_ENABLE_VMALLOC_SAVING
 	print_vmalloc_lowmem_info();
 #else
-	pr_notice(
+	pr_debug(
 		   "    vmalloc : 0x%08lx - 0x%08lx   (%4ld MB)\n"
 		   "    lowmem  : 0x%08lx - 0x%08lx   (%4ld MB)\n",
 			MLM(VMALLOC_START, VMALLOC_END),
 			MLM(PAGE_OFFSET, (unsigned long)high_memory));
 #endif
-	pr_notice(
+	pr_debug(
 #ifdef CONFIG_HIGHMEM
 		   "    pkmap   : 0x%08lx - 0x%08lx   (%4ld MB)\n"
 #endif

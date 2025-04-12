@@ -599,7 +599,7 @@ static int mpc5121_nfc_read_hw_config(struct mtd_info *mtd)
 	if (rcw_width == 2)
 		chip->options |= NAND_BUSWIDTH_16;
 
-	dev_notice(prv->dev, "Configured for "
+	dev_dbg(prv->dev, "Configured for "
 				"%u-bit NAND, page size %u "
 				"with %u spare.\n",
 				rcw_width * 8, rcw_pagesize,

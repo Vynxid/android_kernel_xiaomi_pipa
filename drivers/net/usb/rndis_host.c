@@ -79,13 +79,13 @@ static void rndis_msg_indicate(struct usbnet *dev, struct rndis_indicate *msg,
 
 		switch (status) {
 		case RNDIS_STATUS_MEDIA_CONNECT:
-			dev_info(udev, "rndis media connect\n");
+			dev_dbg(udev, "rndis media connect\n");
 			break;
 		case RNDIS_STATUS_MEDIA_DISCONNECT:
-			dev_info(udev, "rndis media disconnect\n");
+			dev_dbg(udev, "rndis media disconnect\n");
 			break;
 		default:
-			dev_info(udev, "rndis indication: 0x%08x\n", status);
+			dev_dbg(udev, "rndis indication: 0x%08x\n", status);
 		}
 	}
 }

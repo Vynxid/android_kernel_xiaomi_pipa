@@ -59,7 +59,7 @@ static void xilinx_pci_fixup_bridge(struct pci_dev *dev)
 		dev->resource[i].flags = 0;
 	}
 
-	dev_info(&dev->dev, "Hiding Xilinx plb-pci host bridge resources %s\n",
+	dev_dbg(&dev->dev, "Hiding Xilinx plb-pci host bridge resources %s\n",
 		 pci_name(dev));
 }
 DECLARE_PCI_FIXUP_HEADER(PCI_ANY_ID, PCI_ANY_ID, xilinx_pci_fixup_bridge);
@@ -128,5 +128,5 @@ void __init xilinx_pci_init(void)
 	/* Register the host bridge with the linux kernel! */
 	pci_process_bridge_OF_ranges(hose, pci_node, 1);
 
-	pr_info("xilinx-pci: Registered PCI host bridge\n");
+	pr_debug("xilinx-pci: Registered PCI host bridge\n");
 }

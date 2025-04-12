@@ -934,13 +934,13 @@ void phy_attached_print(struct phy_device *phydev, const char *fmt, ...)
 
 
 	if (!fmt) {
-		dev_info(&phydev->mdio.dev, ATTACHED_FMT "\n",
+		dev_dbg(&phydev->mdio.dev, ATTACHED_FMT "\n",
 			 drv_name, phydev_name(phydev),
 			 irq_str);
 	} else {
 		va_list ap;
 
-		dev_info(&phydev->mdio.dev, ATTACHED_FMT,
+		dev_dbg(&phydev->mdio.dev, ATTACHED_FMT,
 			 drv_name, phydev_name(phydev),
 			 irq_str);
 

@@ -2065,14 +2065,14 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
 	packets *= param->iterations;
 
 	if (context.is_iso) {
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			"iso period %d %sframes, wMaxPacket %d, transactions: %d\n",
 			1 << (desc->bInterval - 1),
 			(udev->speed == USB_SPEED_HIGH) ? "micro" : "",
 			usb_endpoint_maxp(desc),
 			usb_endpoint_maxp_mult(desc));
 
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			"total %lu msec (%lu packets)\n",
 			(packets * (1 << (desc->bInterval - 1)))
 				/ ((udev->speed == USB_SPEED_HIGH) ? 8 : 1),
@@ -2175,7 +2175,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	switch (param->test_num) {
 
 	case 0:
-		dev_info(&intf->dev, "TEST 0:  NOP\n");
+		dev_dbg(&intf->dev, "TEST 0:  NOP\n");
 		retval = 0;
 		break;
 
@@ -2183,7 +2183,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 1:
 		if (dev->out_pipe == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 				"TEST 1:  write %d bytes %u times\n",
 				param->length, param->iterations);
 		urb = simple_alloc_urb(udev, dev->out_pipe, param->length, 0);
@@ -2198,7 +2198,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 2:
 		if (dev->in_pipe == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 				"TEST 2:  read %d bytes %u times\n",
 				param->length, param->iterations);
 		urb = simple_alloc_urb(udev, dev->in_pipe, param->length, 0);
@@ -2213,7 +2213,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 3:
 		if (dev->out_pipe == 0 || param->vary == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 				"TEST 3:  write/%d 0..%d bytes %u times\n",
 				param->vary, param->length, param->iterations);
 		urb = simple_alloc_urb(udev, dev->out_pipe, param->length, 0);
@@ -2229,7 +2229,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 4:
 		if (dev->in_pipe == 0 || param->vary == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 				"TEST 4:  read/%d 0..%d bytes %u times\n",
 				param->vary, param->length, param->iterations);
 		urb = simple_alloc_urb(udev, dev->in_pipe, param->length, 0);
@@ -2247,7 +2247,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 5:
 		if (dev->out_pipe == 0 || param->sglen == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 5:  write %d sglists %d entries of %d bytes\n",
 				param->iterations,
 				param->sglen, param->length);
@@ -2266,7 +2266,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 6:
 		if (dev->in_pipe == 0 || param->sglen == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 6:  read %d sglists %d entries of %d bytes\n",
 				param->iterations,
 				param->sglen, param->length);
@@ -2284,7 +2284,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 7:
 		if (dev->out_pipe == 0 || param->sglen == 0 || param->vary == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 7:  write/%d %d sglists %d entries 0..%d bytes\n",
 				param->vary, param->iterations,
 				param->sglen, param->length);
@@ -2302,7 +2302,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 8:
 		if (dev->in_pipe == 0 || param->sglen == 0 || param->vary == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 8:  read/%d %d sglists %d entries 0..%d bytes\n",
 				param->vary, param->iterations,
 				param->sglen, param->length);
@@ -2321,7 +2321,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	/* non-queued sanity tests for control (chapter 9 subset) */
 	case 9:
 		retval = 0;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 9:  ch9 (subset) control tests, %d times\n",
 				param->iterations);
 		for (i = param->iterations; retval == 0 && i--; /* NOP */)
@@ -2334,7 +2334,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	/* queued control messaging */
 	case 10:
 		retval = 0;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 				"TEST 10:  queue %d control calls, %d times\n",
 				param->sglen,
 				param->iterations);
@@ -2346,7 +2346,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 		if (dev->in_pipe == 0 || !param->length)
 			break;
 		retval = 0;
-		dev_info(&intf->dev, "TEST 11:  unlink %d reads of %d\n",
+		dev_dbg(&intf->dev, "TEST 11:  unlink %d reads of %d\n",
 				param->iterations, param->length);
 		for (i = param->iterations; retval == 0 && i--; /* NOP */)
 			retval = unlink_simple(dev, dev->in_pipe,
@@ -2359,7 +2359,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 		if (dev->out_pipe == 0 || !param->length)
 			break;
 		retval = 0;
-		dev_info(&intf->dev, "TEST 12:  unlink %d writes of %d\n",
+		dev_dbg(&intf->dev, "TEST 12:  unlink %d writes of %d\n",
 				param->iterations, param->length);
 		for (i = param->iterations; retval == 0 && i--; /* NOP */)
 			retval = unlink_simple(dev, dev->out_pipe,
@@ -2374,7 +2374,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 		if (dev->out_pipe == 0 && dev->in_pipe == 0)
 			break;
 		retval = 0;
-		dev_info(&intf->dev, "TEST 13:  set/clear %d halts\n",
+		dev_dbg(&intf->dev, "TEST 13:  set/clear %d halts\n",
 				param->iterations);
 		for (i = param->iterations; retval == 0 && i--; /* NOP */)
 			retval = halt_simple(dev);
@@ -2387,7 +2387,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 14:
 		if (!dev->info->ctrl_out)
 			break;
-		dev_info(&intf->dev, "TEST 14:  %d ep0out, %d..%d vary %d\n",
+		dev_dbg(&intf->dev, "TEST 14:  %d ep0out, %d..%d vary %d\n",
 				param->iterations,
 				realworld ? 1 : 0, param->length,
 				param->vary);
@@ -2399,7 +2399,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 15:
 		if (dev->out_iso_pipe == 0 || param->sglen == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 15:  write %d iso, %d entries of %d bytes\n",
 				param->iterations,
 				param->sglen, param->length);
@@ -2412,7 +2412,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 16:
 		if (dev->in_iso_pipe == 0 || param->sglen == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 16:  read %d iso, %d entries of %d bytes\n",
 				param->iterations,
 				param->sglen, param->length);
@@ -2427,7 +2427,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 17:
 		if (dev->out_pipe == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 17:  write odd addr %d bytes %u times core map\n",
 			param->length, param->iterations);
 
@@ -2440,7 +2440,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 18:
 		if (dev->in_pipe == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 18:  read odd addr %d bytes %u times core map\n",
 			param->length, param->iterations);
 
@@ -2454,7 +2454,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 19:
 		if (dev->out_pipe == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 19:  write odd addr %d bytes %u times premapped\n",
 			param->length, param->iterations);
 
@@ -2467,7 +2467,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 20:
 		if (dev->in_pipe == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 20:  read odd addr %d bytes %u times premapped\n",
 			param->length, param->iterations);
 
@@ -2481,7 +2481,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 21:
 		if (!dev->info->ctrl_out)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 				"TEST 21:  %d ep0out odd addr, %d..%d vary %d\n",
 				param->iterations,
 				realworld ? 1 : 0, param->length,
@@ -2494,7 +2494,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 22:
 		if (dev->out_iso_pipe == 0 || param->sglen == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 22:  write %d iso odd, %d entries of %d bytes\n",
 				param->iterations,
 				param->sglen, param->length);
@@ -2505,7 +2505,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 23:
 		if (dev->in_iso_pipe == 0 || param->sglen == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 23:  read %d iso odd, %d entries of %d bytes\n",
 				param->iterations,
 				param->sglen, param->length);
@@ -2518,7 +2518,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 		if (dev->out_pipe == 0 || !param->length || param->sglen < 4)
 			break;
 		retval = 0;
-		dev_info(&intf->dev, "TEST 24:  unlink from %d queues of "
+		dev_dbg(&intf->dev, "TEST 24:  unlink from %d queues of "
 				"%d %d-byte writes\n",
 				param->iterations, param->sglen, param->length);
 		for (i = param->iterations; retval == 0 && i > 0; --i) {
@@ -2537,7 +2537,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 25:
 		if (dev->out_int_pipe == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 				"TEST 25: write %d bytes %u times\n",
 				param->length, param->iterations);
 		urb = simple_alloc_urb(udev, dev->out_int_pipe, param->length,
@@ -2553,7 +2553,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 26:
 		if (dev->in_int_pipe == 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 				"TEST 26: read %d bytes %u times\n",
 				param->length, param->iterations);
 		urb = simple_alloc_urb(udev, dev->in_int_pipe, param->length,
@@ -2570,7 +2570,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 		/* We do performance test, so ignore data compare */
 		if (dev->out_pipe == 0 || param->sglen == 0 || pattern != 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 27: bulk write %dMbytes\n", (param->iterations *
 			param->sglen * param->length) / (1024 * 1024));
 		retval = test_queue(dev, param,
@@ -2579,7 +2579,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 	case 28:
 		if (dev->in_pipe == 0 || param->sglen == 0 || pattern != 0)
 			break;
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			"TEST 28: bulk read %dMbytes\n", (param->iterations *
 			param->sglen * param->length) / (1024 * 1024));
 		retval = test_queue(dev, param,
@@ -2590,7 +2590,7 @@ usbtest_do_ioctl(struct usb_interface *intf, struct usbtest_param_32 *param)
 		if (dev->out_pipe == 0)
 			break;
 		retval = 0;
-		dev_info(&intf->dev, "TEST 29: Clear toggle between bulk writes %d times\n",
+		dev_dbg(&intf->dev, "TEST 29: Clear toggle between bulk writes %d times\n",
 				param->iterations);
 		for (i = param->iterations; retval == 0 && i > 0; --i)
 			retval = toggle_sync_simple(dev);
@@ -2750,7 +2750,7 @@ usbtest_probe(struct usb_interface *intf, const struct usb_device_id *id)
 			return -ENODEV;
 		if (product && le16_to_cpu(udev->descriptor.idProduct) != (u16)product)
 			return -ENODEV;
-		dev_info(&intf->dev, "matched module params, "
+		dev_dbg(&intf->dev, "matched module params, "
 					"vend=0x%04x prod=0x%04x\n",
 				le16_to_cpu(udev->descriptor.idVendor),
 				le16_to_cpu(udev->descriptor.idProduct));
@@ -2825,8 +2825,8 @@ usbtest_probe(struct usb_interface *intf, const struct usb_device_id *id)
 	}
 
 	usb_set_intfdata(intf, dev);
-	dev_info(&intf->dev, "%s\n", info->name);
-	dev_info(&intf->dev, "%s {control%s%s%s%s%s%s%s} tests%s\n",
+	dev_dbg(&intf->dev, "%s\n", info->name);
+	dev_dbg(&intf->dev, "%s {control%s%s%s%s%s%s%s} tests%s\n",
 			usb_speed_string(udev->speed),
 			info->ctrl_out ? " in/out" : "",
 			rtest, wtest,

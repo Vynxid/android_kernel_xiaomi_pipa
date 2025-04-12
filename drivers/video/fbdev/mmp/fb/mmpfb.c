@@ -586,7 +586,7 @@ static int mmpfb_probe(struct platform_device *pdev)
 		goto failed_destroy_mutex;
 	}
 
-	dev_info(fbi->dev, "path %s get\n", fbi->path->name);
+	dev_dbg(fbi->dev, "path %s get\n", fbi->path->name);
 
 	/* get overlay */
 	fbi->overlay = mmp_path_get_overlay(fbi->path, mi->overlay_id);
@@ -626,7 +626,7 @@ static int mmpfb_probe(struct platform_device *pdev)
 		goto failed_destroy_mutex;
 	}
 	memset(fbi->fb_start, 0, fbi->fb_size);
-	dev_info(fbi->dev, "fb %dk allocated\n", fbi->fb_size/1024);
+	dev_dbg(fbi->dev, "fb %dk allocated\n", fbi->fb_size/1024);
 
 	/* fb power on */
 	if (modes_num > 0)
@@ -643,7 +643,7 @@ static int mmpfb_probe(struct platform_device *pdev)
 		goto failed_clear_info;
 	}
 
-	dev_info(fbi->dev, "loaded to /dev/fb%d <%s>.\n",
+	dev_dbg(fbi->dev, "loaded to /dev/fb%d <%s>.\n",
 		info->node, info->fix.id);
 
 #ifdef CONFIG_LOGO

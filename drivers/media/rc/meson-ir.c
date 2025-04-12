@@ -184,7 +184,7 @@ static int meson_ir_probe(struct platform_device *pdev)
 	/* Enable the decoder */
 	meson_ir_set_mask(ir, IR_DEC_REG1, REG1_ENABLE, REG1_ENABLE);
 
-	dev_info(dev, "receiver initialized\n");
+	dev_dbg(dev, "receiver initialized\n");
 
 	return 0;
 }

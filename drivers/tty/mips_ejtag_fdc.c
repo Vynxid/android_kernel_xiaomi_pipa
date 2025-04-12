@@ -1008,7 +1008,7 @@ static int mips_ejtag_fdc_tty_probe(struct mips_cdmm_device *dev)
 		 */
 		add_timer_on(&priv->poll_timer, dev->cpu);
 
-		dev_info(priv->dev, "No usable IRQ, polling enabled\n");
+		dev_dbg(priv->dev, "No usable IRQ, polling enabled\n");
 	}
 
 	ret = tty_register_driver(driver);

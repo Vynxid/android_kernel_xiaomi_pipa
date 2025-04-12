@@ -661,12 +661,12 @@ static int ds3234_probe(struct spi_device *spi)
 	res = regmap_read(regmap, DS3232_REG_CR, &tmp);
 	if (res)
 		return res;
-	dev_info(&spi->dev, "Control Reg: 0x%02x\n", tmp);
+	dev_dbg(&spi->dev, "Control Reg: 0x%02x\n", tmp);
 
 	res = regmap_read(regmap, DS3232_REG_SR, &tmp);
 	if (res)
 		return res;
-	dev_info(&spi->dev, "Ctrl/Stat Reg: 0x%02x\n", tmp);
+	dev_dbg(&spi->dev, "Ctrl/Stat Reg: 0x%02x\n", tmp);
 
 	return ds3232_probe(&spi->dev, regmap, spi->irq, "ds3234");
 }

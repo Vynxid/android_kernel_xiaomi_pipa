@@ -124,7 +124,7 @@ struct adv7533 {
 	u8 audio_spkr_data[AUDIO_DATA_SIZE];
 	struct workqueue_struct *workq;
 	struct delayed_work adv7533_intr_work_id;
-	struct msm_dba_device_info dev_info;
+	struct msm_dba_device_info dev_dbg;
 	struct adv7533_cec_msg cec_msg[ADV7533_CEC_BUF_MAX];
 	struct i2c_client *i2c_client;
 	struct mutex ops_mutex;
@@ -309,7 +309,7 @@ static int adv7533_dump_debug_info(struct msm_dba_device_info *dev, u32 flags)
 		pr_err("%s: dev is NULL\n", __func__);
 		return -EINVAL;
 	}
-	pdata = container_of(dev, struct adv7533, dev_info);
+	pdata = container_of(dev, struct adv7533, dev_dbg);
 	if (!pdata) {
 		pr_err("%s: pdata is NULL\n", __func__);
 		return -EINVAL;
@@ -547,7 +547,7 @@ static int adv7533_parse_dt(struct device *dev,
 		temp_val);
 	if (ret)
 		goto end;
-	pdata->dev_info.instance_id = temp_val;
+	pdata->dev_dbg.instance_id = temp_val;
 
 	ret = of_property_read_u32(np, "adi,main-addr", &temp_val);
 	pr_debug("%s: DT property %s is %X\n", __func__, "adi,main-addr",
@@ -915,7 +915,7 @@ static void adv7533_handle_cec_intr(struct adv7533 *pdata, u8 cec_status)
 		pdata->cec_msg[ADV7533_CEC_BUF1].timestamp =
 			cec_rx_timestamp & (BIT(0) | BIT(1));
 
-		adv7533_notify_clients(&pdata->dev_info,
+		adv7533_notify_clients(&pdata->dev_dbg,
 			MSM_DBA_CB_CEC_READ_PENDING);
 	}
 
@@ -930,7 +930,7 @@ static void adv7533_handle_cec_intr(struct adv7533 *pdata, u8 cec_status)
 		pdata->cec_msg[ADV7533_CEC_BUF2].timestamp =
 			cec_rx_timestamp & (BIT(2) | BIT(3));
 
-		adv7533_notify_clients(&pdata->dev_info,
+		adv7533_notify_clients(&pdata->dev_dbg,
 			MSM_DBA_CB_CEC_READ_PENDING);
 	}
 
@@ -945,7 +945,7 @@ static void adv7533_handle_cec_intr(struct adv7533 *pdata, u8 cec_status)
 		pdata->cec_msg[ADV7533_CEC_BUF3].timestamp =
 			cec_rx_timestamp & (BIT(4) | BIT(5));
 
-		adv7533_notify_clients(&pdata->dev_info,
+		adv7533_notify_clients(&pdata->dev_dbg,
 			MSM_DBA_CB_CEC_READ_PENDING);
 	}
 
@@ -994,7 +994,7 @@ static void *adv7533_handle_hpd_intr(struct adv7533 *pdata)
 	} else if (disconnected) {
 		pr_debug("%s: Rx DISCONNECTED\n", __func__);
 
-		adv7533_notify_clients(&pdata->dev_info,
+		adv7533_notify_clients(&pdata->dev_dbg,
 			MSM_DBA_CB_HPD_DISCONNECT);
 	} else {
 		pr_debug("%s: HPD Intermediate state\n", __func__);
@@ -1137,7 +1137,7 @@ static void adv7533_intr_work(struct work_struct *work)
 		if (ret)
 			pr_err("%s: edid read failed\n", __func__);
 
-		adv7533_notify_clients(&pdata->dev_info,
+		adv7533_notify_clients(&pdata->dev_dbg,
 			MSM_DBA_CB_HPD_CONNECT);
 	}
 
@@ -1230,7 +1230,7 @@ static struct adv7533 *adv7533_get_platform_data(void *client)
 		goto end;
 	}
 
-	pdata = container_of(dev, struct adv7533, dev_info);
+	pdata = container_of(dev, struct adv7533, dev_dbg);
 	if (!pdata)
 		pr_err("%s: invalid platform data\n", __func__);
 
@@ -1372,7 +1372,7 @@ static int adv7533_power_on(void *client, bool on, u32 flags)
 		adv7533_write(pdata, I2C_ADDR_MAIN, 0x41, 0x50);
 		pdata->is_power_on = false;
 
-		adv7533_notify_clients(&pdata->dev_info,
+		adv7533_notify_clients(&pdata->dev_dbg,
 			MSM_DBA_CB_HPD_DISCONNECT);
 	}
 end:
@@ -1851,7 +1851,7 @@ static int adv7533_write_reg(struct msm_dba_device_info *dev,
 	if (!dev)
 		goto end;
 
-	pdata = container_of(dev, struct adv7533, dev_info);
+	pdata = container_of(dev, struct adv7533, dev_dbg);
 	if (!pdata)
 		goto end;
 
@@ -1872,7 +1872,7 @@ static int adv7533_read_reg(struct msm_dba_device_info *dev,
 	if (!dev)
 		goto end;
 
-	pdata = container_of(dev, struct adv7533, dev_info);
+	pdata = container_of(dev, struct adv7533, dev_dbg);
 	if (!pdata)
 		goto end;
 
@@ -1894,8 +1894,8 @@ static int adv7533_register_dba(struct adv7533 *pdata)
 	if (!pdata)
 		return -EINVAL;
 
-	client_ops = &pdata->dev_info.client_ops;
-	dev_ops = &pdata->dev_info.dev_ops;
+	client_ops = &pdata->dev_dbg.client_ops;
+	dev_ops = &pdata->dev_dbg.dev_ops;
 
 	client_ops->power_on        = adv7533_power_on;
 	client_ops->video_on        = adv7533_video_on;
@@ -1914,14 +1914,14 @@ static int adv7533_register_dba(struct adv7533 *pdata)
 	dev_ops->read_reg = adv7533_read_reg;
 	dev_ops->dump_debug_info = adv7533_dump_debug_info;
 
-	strlcpy(pdata->dev_info.chip_name, "adv7533",
-		sizeof(pdata->dev_info.chip_name));
+	strlcpy(pdata->dev_dbg.chip_name, "adv7533",
+		sizeof(pdata->dev_dbg.chip_name));
 
-	mutex_init(&pdata->dev_info.dev_mutex);
+	mutex_init(&pdata->dev_dbg.dev_mutex);
 
-	INIT_LIST_HEAD(&pdata->dev_info.client_list);
+	INIT_LIST_HEAD(&pdata->dev_dbg.client_list);
 
-	return msm_dba_add_probed_device(&pdata->dev_info);
+	return msm_dba_add_probed_device(&pdata->dev_dbg);
 }
 
 static void adv7533_unregister_dba(struct adv7533 *pdata)
@@ -1929,7 +1929,7 @@ static void adv7533_unregister_dba(struct adv7533 *pdata)
 	if (!pdata)
 		return;
 
-	msm_dba_remove_probed_device(&pdata->dev_info);
+	msm_dba_remove_probed_device(&pdata->dev_dbg);
 }
 
 
@@ -2009,7 +2009,7 @@ static int adv7533_probe(struct i2c_client *client,
 		goto err_irq;
 	}
 
-	dev_set_drvdata(&client->dev, &pdata->dev_info);
+	dev_set_drvdata(&client->dev, &pdata->dev_dbg);
 	ret = msm_dba_helper_sysfs_init(&client->dev);
 	if (ret) {
 		pr_err("%s: sysfs init failed\n", __func__);
@@ -2068,7 +2068,7 @@ static int adv7533_remove(struct i2c_client *client)
 	if (!dev)
 		goto end;
 
-	pdata = container_of(dev, struct adv7533, dev_info);
+	pdata = container_of(dev, struct adv7533, dev_dbg);
 	if (!pdata)
 		goto end;
 

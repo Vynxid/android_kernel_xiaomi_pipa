@@ -53,7 +53,7 @@ module_param_named(debug_mask, debug_mask, int, 0600);
 #define bq_dbg(reason, fmt, ...)                                               \
 	do {                                                                   \
 		if (debug_mask & (reason))                                     \
-			pr_info(fmt, ##__VA_ARGS__);                           \
+			pr_debug(fmt, ##__VA_ARGS__);                           \
 		else                                                           \
 			pr_debug(fmt, ##__VA_ARGS__);                          \
 	} while (0)

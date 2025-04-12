@@ -39,7 +39,7 @@
 
 #if defined(CONFIG_TOUCHSCREEN_HIMAX_DEBUG)
 #define D(x...) pr_debug("[HXTP] " x)
-#define I(x...) pr_info("[HXTP] " x)
+#define I(x...) pr_debug("[HXTP] " x)
 #define W(x...) pr_warn("[HXTP][WARNING] " x)
 #define E(x...) pr_err("[HXTP][ERROR] " x)
 #define DIF(x...)                                                              \

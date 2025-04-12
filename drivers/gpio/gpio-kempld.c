@@ -184,7 +184,7 @@ static int kempld_gpio_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(dev, "GPIO functionality initialized with %d pins\n",
+	dev_dbg(dev, "GPIO functionality initialized with %d pins\n",
 		 chip->ngpio);
 
 	return 0;

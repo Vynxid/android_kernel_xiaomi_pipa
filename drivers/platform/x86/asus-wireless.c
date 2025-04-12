@@ -117,7 +117,7 @@ static void asus_wireless_notify(struct acpi_device *adev, u32 event)
 
 	dev_dbg(&adev->dev, "event=%#x\n", event);
 	if (event != 0x88) {
-		dev_notice(&adev->dev, "Unknown ASHS event: %#x\n", event);
+		dev_dbg(&adev->dev, "Unknown ASHS event: %#x\n", event);
 		return;
 	}
 	input_report_key(data->idev, KEY_RFKILL, 1);

@@ -2260,7 +2260,7 @@ static void fix_recovery_read_error(struct r10bio *r10_bio)
 				ok = rdev_set_badblocks(rdev2, addr, s, 0);
 				if (!ok) {
 					/* just abort the recovery */
-					pr_notice("md/raid10:%s: recovery aborted due to read error\n",
+					pr_debug("md/raid10:%s: recovery aborted due to read error\n",
 						  mdname(mddev));
 
 					conf->mirrors[dw].recovery_disabled
@@ -2411,10 +2411,10 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
 		char b[BDEVNAME_SIZE];
 		bdevname(rdev->bdev, b);
 
-		pr_notice("md/raid10:%s: %s: Raid device exceeded read_error threshold [cur %d:max %d]\n",
+		pr_debug("md/raid10:%s: %s: Raid device exceeded read_error threshold [cur %d:max %d]\n",
 			  mdname(mddev), b,
 			  atomic_read(&rdev->read_errors), max_read_errors);
-		pr_notice("md/raid10:%s: %s: Failing raid device\n",
+		pr_debug("md/raid10:%s: %s: Failing raid device\n",
 			  mdname(mddev), b);
 		md_error(mddev, rdev);
 		r10_bio->devs[r10_bio->read_slot].bio = IO_BLOCKED;
@@ -2505,14 +2505,14 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
 					     s, conf->tmppage, WRITE)
 			    == 0) {
 				/* Well, this device is dead */
-				pr_notice("md/raid10:%s: read correction write failed (%d sectors at %llu on %s)\n",
+				pr_debug("md/raid10:%s: read correction write failed (%d sectors at %llu on %s)\n",
 					  mdname(mddev), s,
 					  (unsigned long long)(
 						  sect +
 						  choose_data_offset(r10_bio,
 								     rdev)),
 					  bdevname(rdev->bdev, b));
-				pr_notice("md/raid10:%s: %s: failing drive\n",
+				pr_debug("md/raid10:%s: %s: failing drive\n",
 					  mdname(mddev),
 					  bdevname(rdev->bdev, b));
 			}
@@ -2542,18 +2542,18 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
 						 READ)) {
 			case 0:
 				/* Well, this device is dead */
-				pr_notice("md/raid10:%s: unable to read back corrected sectors (%d sectors at %llu on %s)\n",
+				pr_debug("md/raid10:%s: unable to read back corrected sectors (%d sectors at %llu on %s)\n",
 				       mdname(mddev), s,
 				       (unsigned long long)(
 					       sect +
 					       choose_data_offset(r10_bio, rdev)),
 				       bdevname(rdev->bdev, b));
-				pr_notice("md/raid10:%s: %s: failing drive\n",
+				pr_debug("md/raid10:%s: %s: failing drive\n",
 				       mdname(mddev),
 				       bdevname(rdev->bdev, b));
 				break;
 			case 1:
-				pr_info("md/raid10:%s: read error corrected (%d sectors at %llu on %s)\n",
+				pr_debug("md/raid10:%s: read error corrected (%d sectors at %llu on %s)\n",
 				       mdname(mddev), s,
 				       (unsigned long long)(
 					       sect +
@@ -3943,9 +3943,9 @@ static int raid10_run(struct mddev *mddev)
 	}
 
 	if (mddev->recovery_cp != MaxSector)
-		pr_notice("md/raid10:%s: not clean -- starting background reconstruction\n",
+		pr_debug("md/raid10:%s: not clean -- starting background reconstruction\n",
 			  mdname(mddev));
-	pr_info("md/raid10:%s: active with %d out of %d devices\n",
+	pr_debug("md/raid10:%s: active with %d out of %d devices\n",
 		mdname(mddev), conf->geo.raid_disks - mddev->degraded,
 		conf->geo.raid_disks);
 	/*

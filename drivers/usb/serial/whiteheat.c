@@ -280,7 +280,7 @@ static int whiteheat_attach(struct usb_serial *serial)
 
 	hw_info = (struct whiteheat_hw_info *)&result[1];
 
-	dev_info(&serial->dev->dev, "%s: Firmware v%d.%02d\n",
+	dev_dbg(&serial->dev->dev, "%s: Firmware v%d.%02d\n",
 		 serial->type->description,
 		 hw_info->sw_major_rev, hw_info->sw_minor_rev);
 

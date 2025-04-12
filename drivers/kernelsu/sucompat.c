@@ -77,7 +77,7 @@ int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 	ksu_strncpy_from_user_nofault(path, *filename_user, sizeof(path));
 
 	if (unlikely(!memcmp(path, su, sizeof(su)))) {
-		pr_info("faccessat su->sh!\n");
+		pr_debug("faccessat su->sh!\n");
 		*filename_user = sh_user_path();
 	}
 
@@ -103,7 +103,7 @@ struct filename* susfs_ksu_handle_stat(int *dfd, const char __user **filename_us
 	}
 
 	const char sh[] = SH_PATH;
-	pr_info("vfs_fstatat su->sh!\n");
+	pr_debug("vfs_fstatat su->sh!\n");
 	memcpy((void *)name->name, sh, sizeof(sh));
 	return name;
 }
@@ -141,13 +141,13 @@ int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags)
 	}
 	if (likely(memcmp(filename->name, su, sizeof(su))))
 		return 0;
-	pr_info("vfs_statx su->sh!\n");
+	pr_debug("vfs_statx su->sh!\n");
 	memcpy((void *)filename->name, sh, sizeof(sh));
 #else
 	ksu_strncpy_from_user_nofault(path, *filename_user, sizeof(path));
 
 	if (unlikely(!memcmp(path, su, sizeof(su)))) {
-		pr_info("newfstatat su->sh!\n");
+		pr_debug("newfstatat su->sh!\n");
 		*filename_user = sh_user_path();
 	}
 #endif
@@ -184,7 +184,7 @@ int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
 	if (!ksu_is_allow_uid(current_uid().val))
 		return 0;
 
-	pr_info("do_execveat_common su found\n");
+	pr_debug("do_execveat_common su found\n");
 	memcpy((void *)filename->name, sh, sizeof(sh));
 
 	ksu_escape_to_root();
@@ -217,7 +217,7 @@ int ksu_handle_execve_sucompat(int *fd, const char __user **filename_user,
 	if (!ksu_is_allow_uid(current_uid().val))
 		return 0;
 
-	pr_info("sys_execve su found\n");
+	pr_debug("sys_execve su found\n");
 	*filename_user = ksud_user_path();
 
 	ksu_escape_to_root();
@@ -373,7 +373,7 @@ static struct kprobe *init_kprobe(const char *name,
 	kp->pre_handler = handler;
 
 	int ret = register_kprobe(kp);
-	pr_info("sucompat: register_%s kprobe: %d\n", name, ret);
+	pr_debug("sucompat: register_%s kprobe: %d\n", name, ret);
 	if (ret) {
 		kfree(kp);
 		return NULL;
@@ -410,7 +410,7 @@ void ksu_sucompat_init()
 	ksu_execve_sucompat_hook = true;
 	ksu_execveat_sucompat_hook = true;
 	ksu_devpts_hook = true;
-	pr_info("ksu_sucompat_init: hooks enabled: execve/execveat_su, faccessat, stat, devpts\n");
+	pr_debug("ksu_sucompat_init: hooks enabled: execve/execveat_su, faccessat, stat, devpts\n");
 #endif
 }
 
@@ -426,7 +426,7 @@ void ksu_sucompat_exit()
 	ksu_execve_sucompat_hook = false;
 	ksu_execveat_sucompat_hook = false;
 	ksu_devpts_hook = false;
-	pr_info("ksu_sucompat_exit: hooks disabled: execve/execveat_su, faccessat, stat, devpts\n");
+	pr_debug("ksu_sucompat_exit: hooks disabled: execve/execveat_su, faccessat, stat, devpts\n");
 #endif
 }
 

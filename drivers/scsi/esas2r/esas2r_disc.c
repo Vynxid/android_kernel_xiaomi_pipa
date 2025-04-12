@@ -799,7 +799,7 @@ static bool esas2r_disc_passthru_dev_info(struct esas2r_adapter *a,
 
 	esas2r_rq_init_request(rq, a);
 
-	devinfo = &rq->vda_rsp_data->mgt_data.data.dev_info;
+	devinfo = &rq->vda_rsp_data->mgt_data.data.dev_dbg;
 
 	memset(devinfo, 0, sizeof(struct atto_vda_devinfo));
 
@@ -839,7 +839,7 @@ static void esas2r_disc_passthru_dev_info_cb(struct esas2r_adapter *a,
 		dc->dev_ix = 0;
 		dc->state = DCS_PT_DEV_INFO;
 	} else if (rq->req_stat == RS_SUCCESS) {
-		devinfo = &rq->vda_rsp_data->mgt_data.data.dev_info;
+		devinfo = &rq->vda_rsp_data->mgt_data.data.dev_dbg;
 
 		dc->dev_ix = le16_to_cpu(rq->func_rsp.mgt_rsp.dev_index);
 

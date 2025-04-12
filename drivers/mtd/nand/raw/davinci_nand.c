@@ -821,7 +821,7 @@ static int nand_davinci_probe(struct platform_device *pdev)
 		goto err_cleanup_nand;
 
 	val = davinci_nand_readl(info, NRCSR_OFFSET);
-	dev_info(&pdev->dev, "controller rev. %d.%d\n",
+	dev_dbg(&pdev->dev, "controller rev. %d.%d\n",
 	       (val >> 8) & 0xff, val & 0xff);
 
 	return 0;

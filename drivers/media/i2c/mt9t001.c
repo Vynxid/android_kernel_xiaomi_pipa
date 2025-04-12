@@ -790,7 +790,7 @@ static int mt9t001_registered(struct v4l2_subdev *subdev)
 		return -ENODEV;
 	}
 
-	dev_info(&client->dev, "MT9T001 detected at address 0x%02x\n",
+	dev_dbg(&client->dev, "MT9T001 detected at address 0x%02x\n",
 		 client->addr);
 
 	return 0;

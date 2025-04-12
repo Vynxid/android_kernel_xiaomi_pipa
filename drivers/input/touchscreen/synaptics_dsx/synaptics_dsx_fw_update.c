@@ -2738,7 +2738,7 @@ static enum flash_area fwu_go_nogo(void)
 
 	/* Get device firmware ID */
 	device_fw_id = rmi4_data->firmware_id;
-	dev_info(rmi4_data->pdev->dev.parent,
+	dev_dbg(rmi4_data->pdev->dev.parent,
 			"%s: Device firmware ID = %d\n",
 			__func__, device_fw_id);
 
@@ -2748,7 +2748,7 @@ static enum flash_area fwu_go_nogo(void)
 		flash_area = NONE;
 		goto exit;
 	}
-	dev_info(rmi4_data->pdev->dev.parent,
+	dev_dbg(rmi4_data->pdev->dev.parent,
 			"%s: Image firmware ID = %d\n",
 			__func__, image_fw_id);
 
@@ -2756,7 +2756,7 @@ static enum flash_area fwu_go_nogo(void)
 		flash_area = UI_FIRMWARE;
 		goto exit;
 	} else if (image_fw_id < device_fw_id) {
-		dev_info(rmi4_data->pdev->dev.parent,
+		dev_dbg(rmi4_data->pdev->dev.parent,
 				"%s: Image firmware ID older than device firmware ID\n",
 				__func__);
 		flash_area = NONE;
@@ -2792,11 +2792,11 @@ static enum flash_area fwu_go_nogo(void)
 
 exit:
 	if (flash_area == NONE) {
-		dev_info(rmi4_data->pdev->dev.parent,
+		dev_dbg(rmi4_data->pdev->dev.parent,
 				"%s: No need to do reflash\n",
 				__func__);
 	} else {
-		dev_info(rmi4_data->pdev->dev.parent,
+		dev_dbg(rmi4_data->pdev->dev.parent,
 				"%s: Updating %s\n",
 				__func__,
 				flash_area == UI_FIRMWARE ?
@@ -3366,7 +3366,7 @@ static int fwu_write_utility_parameter(void)
 #ifdef F51_DISCRETE_FORCE
 		if (fwu->img.utility_param_id[ii] == FORCE_PARAMETER) {
 			if (fwu->bl_mode_device) {
-				dev_info(rmi4_data->pdev->dev.parent,
+				dev_dbg(rmi4_data->pdev->dev.parent,
 						"%s: Device in bootloader mode, skipping calibration data restoration\n",
 						__func__);
 				goto image_param;
@@ -3725,17 +3725,17 @@ static int fwu_do_reflash(void)
 		retval = fwu_write_bl_area_v7();
 		if (retval < 0)
 			return retval;
-		pr_notice("%s: Bootloader area programmed\n", __func__);
+		pr_debug("%s: Bootloader area programmed\n", __func__);
 	} else if (fwu->bl_version == BL_V7 && fwu->new_partition_table) {
 		retval = fwu_write_partition_table_v7();
 		if (retval < 0)
 			return retval;
-		pr_notice("%s: Partition table programmed\n", __func__);
+		pr_debug("%s: Partition table programmed\n", __func__);
 	} else if (fwu->bl_version == BL_V8) {
 		retval = fwu_write_partition_table_v8();
 		if (retval < 0)
 			return retval;
-		pr_notice("%s: Partition table programmed\n", __func__);
+		pr_debug("%s: Partition table programmed\n", __func__);
 	}
 
 	fwu->config_area = UI_CONFIG_AREA;
@@ -3744,25 +3744,25 @@ static int fwu_do_reflash(void)
 		retval = fwu_write_dp_configuration();
 		if (retval < 0)
 			return retval;
-		pr_notice("%s: Display configuration programmed\n", __func__);
+		pr_debug("%s: Display configuration programmed\n", __func__);
 	}
 
 	retval = fwu_write_ui_configuration();
 	if (retval < 0)
 		return retval;
-	pr_notice("%s: Configuration programmed\n", __func__);
+	pr_debug("%s: Configuration programmed\n", __func__);
 
 	if (fwu->has_guest_code && fwu->img.contains_guest_code) {
 		retval = fwu_write_guest_code();
 		if (retval < 0)
 			return retval;
-		pr_notice("%s: Guest code programmed\n", __func__);
+		pr_debug("%s: Guest code programmed\n", __func__);
 	}
 
 	retval = fwu_write_firmware();
 	if (retval < 0)
 		return retval;
-	pr_notice("%s: Firmware programmed\n", __func__);
+	pr_debug("%s: Firmware programmed\n", __func__);
 
 	return retval;
 }
@@ -4019,7 +4019,7 @@ static int fwu_do_lockdown_v7(void)
 	}
 
 	if (status.device_cfg_status == 2) {
-		dev_info(rmi4_data->pdev->dev.parent,
+		dev_dbg(rmi4_data->pdev->dev.parent,
 				"%s: Device already locked down\n",
 				__func__);
 		return 0;
@@ -4029,7 +4029,7 @@ static int fwu_do_lockdown_v7(void)
 	if (retval < 0)
 		return retval;
 
-	pr_notice("%s: Lockdown programmed\n", __func__);
+	pr_debug("%s: Lockdown programmed\n", __func__);
 
 	return retval;
 }
@@ -4069,7 +4069,7 @@ static int fwu_do_lockdown_v5v6(void)
 	}
 
 	if (fwu->flash_properties.unlocked == 0) {
-		dev_info(rmi4_data->pdev->dev.parent,
+		dev_dbg(rmi4_data->pdev->dev.parent,
 				"%s: Device already locked down\n",
 				__func__);
 		return 0;
@@ -4079,7 +4079,7 @@ static int fwu_do_lockdown_v5v6(void)
 	if (retval < 0)
 		return retval;
 
-	pr_notice("%s: Lockdown programmed\n", __func__);
+	pr_debug("%s: Lockdown programmed\n", __func__);
 
 	return retval;
 }
@@ -4181,7 +4181,7 @@ static int fwu_start_write_guest_code(void)
 
 	mutex_lock(&rmi4_data->rmi4_exp_init_mutex);
 
-	pr_notice("%s: Start of write guest code process\n", __func__);
+	pr_debug("%s: Start of write guest code process\n", __func__);
 
 	retval = fwu_enter_flash_prog();
 	if (retval < 0)
@@ -4199,12 +4199,12 @@ static int fwu_start_write_guest_code(void)
 	if (retval < 0)
 		goto exit;
 
-	pr_notice("%s: Guest code programmed\n", __func__);
+	pr_debug("%s: Guest code programmed\n", __func__);
 
 exit:
 	rmi4_data->reset_device(rmi4_data, false);
 
-	pr_notice("%s: End of write guest code process\n", __func__);
+	pr_debug("%s: End of write guest code process\n", __func__);
 
 	mutex_unlock(&rmi4_data->rmi4_exp_init_mutex);
 
@@ -4293,7 +4293,7 @@ static int fwu_start_write_config(void)
 
 	mutex_lock(&rmi4_data->rmi4_exp_init_mutex);
 
-	pr_notice("%s: Start of write config process\n", __func__);
+	pr_debug("%s: Start of write config process\n", __func__);
 
 	config_area = fwu->config_area;
 
@@ -4331,7 +4331,7 @@ static int fwu_start_write_config(void)
 		break;
 	}
 
-	pr_notice("%s: Config written\n", __func__);
+	pr_debug("%s: Config written\n", __func__);
 
 exit:
 	switch (fwu->config_area) {
@@ -4344,7 +4344,7 @@ exit:
 		break;
 	}
 
-	pr_notice("%s: End of write config process\n", __func__);
+	pr_debug("%s: End of write config process\n", __func__);
 
 	mutex_unlock(&rmi4_data->rmi4_exp_init_mutex);
 
@@ -4373,7 +4373,7 @@ static int fwu_start_reflash(void)
 
 	mutex_lock(&rmi4_data->rmi4_exp_init_mutex);
 
-	pr_notice("%s: Start of reflash process\n", __func__);
+	pr_debug("%s: Start of reflash process\n", __func__);
 
 	if (fwu->image == NULL) {
 		retval = secure_memcpy(fwu->image_name, MAX_IMAGE_NAME_LEN,
@@ -4432,7 +4432,7 @@ static int fwu_start_reflash(void)
 
 	if (fwu->in_bl_mode) {
 		fwu->bl_mode_device = true;
-		dev_info(rmi4_data->pdev->dev.parent,
+		dev_dbg(rmi4_data->pdev->dev.parent,
 				"%s: Device in bootloader mode\n",
 				__func__);
 	} else {
@@ -4494,7 +4494,7 @@ static int fwu_start_reflash(void)
 		rmi4_data->reset_device(rmi4_data, false);
 
 		if (fwu->bl_mode_device || fwu->in_bl_mode) {
-			dev_info(rmi4_data->pdev->dev.parent,
+			dev_dbg(rmi4_data->pdev->dev.parent,
 					"%s: Device in bootloader mode, skipping calibration data restoration\n",
 					__func__);
 			break;
@@ -4571,7 +4571,7 @@ exit:
 	if (do_rebuild)
 		rmi4_data->reset_device(rmi4_data, true);
 
-	pr_notice("%s: End of reflash process\n", __func__);
+	pr_debug("%s: End of reflash process\n", __func__);
 
 	mutex_unlock(&rmi4_data->rmi4_exp_init_mutex);
 
@@ -4834,7 +4834,7 @@ static int fwu_start_recovery(void)
 
 	mutex_lock(&rmi4_data->rmi4_exp_init_mutex);
 
-	pr_notice("%s: Start of recovery process\n", __func__);
+	pr_debug("%s: Start of recovery process\n", __func__);
 
 	if (fwu->image == NULL) {
 		retval = secure_memcpy(fwu->image_name, MAX_IMAGE_NAME_LEN,
@@ -4884,7 +4884,7 @@ static int fwu_start_recovery(void)
 		goto exit;
 	}
 
-	pr_notice("%s: External flash erased\n", __func__);
+	pr_debug("%s: External flash erased\n", __func__);
 
 	retval = fwu_recovery_write_chunk();
 	if (retval < 0) {
@@ -4894,7 +4894,7 @@ static int fwu_start_recovery(void)
 		goto exit;
 	}
 
-	pr_notice("%s: Chunk data programmed\n", __func__);
+	pr_debug("%s: Chunk data programmed\n", __func__);
 
 	retval = fwu_recovery_reset();
 	if (retval < 0) {
@@ -4904,7 +4904,7 @@ static int fwu_start_recovery(void)
 		goto exit;
 	}
 
-	pr_notice("%s: Recovery mode reset issued\n", __func__);
+	pr_debug("%s: Recovery mode reset issued\n", __func__);
 
 	rmi4_data->reset_device(rmi4_data, true);
 
@@ -4914,7 +4914,7 @@ exit:
 	if (fw_entry)
 		release_firmware(fw_entry);
 
-	pr_notice("%s: End of recovery process\n", __func__);
+	pr_debug("%s: End of recovery process\n", __func__);
 
 	mutex_unlock(&rmi4_data->rmi4_exp_init_mutex);
 

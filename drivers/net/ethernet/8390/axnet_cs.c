@@ -297,8 +297,8 @@ static int axnet_config(struct pcmcia_device *link)
     dev->base_addr = link->resource[0]->start;
 
     if (!get_prom(link)) {
-	pr_notice("this is not an AX88190 card!\n");
-	pr_notice("use pcnet_cs instead.\n");
+	pr_debug("this is not an AX88190 card!\n");
+	pr_debug("use pcnet_cs instead.\n");
 	goto failed;
     }
 
@@ -348,7 +348,7 @@ static int axnet_config(struct pcmcia_device *link)
     SET_NETDEV_DEV(dev, &link->dev);
 
     if (register_netdev(dev) != 0) {
-	pr_notice("register_netdev() failed\n");
+	pr_debug("register_netdev() failed\n");
 	goto failed;
     }
 

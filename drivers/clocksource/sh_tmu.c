@@ -328,7 +328,7 @@ static int sh_tmu_register_clocksource(struct sh_tmu_channel *ch,
 	cs->mask = CLOCKSOURCE_MASK(32);
 	cs->flags = CLOCK_SOURCE_IS_CONTINUOUS;
 
-	dev_info(&ch->tmu->pdev->dev, "ch%u: used as clock source\n",
+	dev_dbg(&ch->tmu->pdev->dev, "ch%u: used as clock source\n",
 		 ch->index);
 
 	clocksource_register_hz(cs, ch->tmu->rate);
@@ -368,7 +368,7 @@ static int sh_tmu_clock_event_set_state(struct clock_event_device *ced,
 	if (clockevent_state_oneshot(ced) || clockevent_state_periodic(ced))
 		sh_tmu_disable(ch);
 
-	dev_info(&ch->tmu->pdev->dev, "ch%u: used for %s clock events\n",
+	dev_dbg(&ch->tmu->pdev->dev, "ch%u: used for %s clock events\n",
 		 ch->index, periodic ? "periodic" : "oneshot");
 	sh_tmu_clock_event_start(ch, periodic);
 	return 0;
@@ -424,7 +424,7 @@ static void sh_tmu_register_clockevent(struct sh_tmu_channel *ch,
 	ced->suspend = sh_tmu_clock_event_suspend;
 	ced->resume = sh_tmu_clock_event_resume;
 
-	dev_info(&ch->tmu->pdev->dev, "ch%u: used for clock events\n",
+	dev_dbg(&ch->tmu->pdev->dev, "ch%u: used for clock events\n",
 		 ch->index);
 
 	clockevents_config_and_register(ced, ch->tmu->rate, 0x300, 0xffffffff);
@@ -612,7 +612,7 @@ static int sh_tmu_probe(struct platform_device *pdev)
 	}
 
 	if (tmu) {
-		dev_info(&pdev->dev, "kept as earlytimer\n");
+		dev_dbg(&pdev->dev, "kept as earlytimer\n");
 		goto out;
 	}
 

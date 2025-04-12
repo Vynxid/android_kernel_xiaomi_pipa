@@ -286,7 +286,7 @@ int dsi_bridge_interface_enable(int timeout)
 		!atomic_read(&resume_pending),
 		msecs_to_jiffies(WAIT_RESUME_TIMEOUT));
 	if (!ret) {
-		pr_info("Primary fb resume timeout\n");
+		pr_debug("Primary fb resume timeout\n");
 		return -ETIMEDOUT;
 	}
 

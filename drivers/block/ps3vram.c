@@ -413,7 +413,7 @@ static int ps3vram_cache_init(struct ps3_system_bus_device *dev)
 	if (!priv->cache.tags)
 		return -ENOMEM;
 
-	dev_info(&dev->core, "Created ram cache: %d entries, %d KiB each\n",
+	dev_dbg(&dev->core, "Created ram cache: %d entries, %d KiB each\n",
 		CACHE_PAGE_COUNT, CACHE_PAGE_SIZE / 1024);
 
 	return 0;
@@ -766,7 +766,7 @@ static int ps3vram_probe(struct ps3_system_bus_device *dev)
 	strscpy(gendisk->disk_name, DEVICE_NAME, sizeof(gendisk->disk_name));
 	set_capacity(gendisk, priv->size >> 9);
 
-	dev_info(&dev->core, "%s: Using %lu MiB of GPU memory\n",
+	dev_dbg(&dev->core, "%s: Using %lu MiB of GPU memory\n",
 		 gendisk->disk_name, get_capacity(gendisk) >> 11);
 
 	device_add_disk(&dev->core, gendisk);
@@ -847,7 +847,7 @@ static int __init ps3vram_init(void)
 	}
 	ps3vram_major = error;
 
-	pr_info("%s: registered block device major %d\n", DEVICE_NAME,
+	pr_debug("%s: registered block device major %d\n", DEVICE_NAME,
 		ps3vram_major);
 
 	error = ps3_system_bus_driver_register(&ps3vram);

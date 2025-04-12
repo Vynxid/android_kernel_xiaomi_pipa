@@ -218,7 +218,7 @@ static int fsl_ifc_ctrl_probe(struct platform_device *dev)
 	int version, banks;
 	void __iomem *addr;
 
-	dev_info(&dev->dev, "Freescale Integrated Flash Controller\n");
+	dev_dbg(&dev->dev, "Freescale Integrated Flash Controller\n");
 
 	fsl_ifc_ctrl_dev = devm_kzalloc(&dev->dev, sizeof(*fsl_ifc_ctrl_dev),
 					GFP_KERNEL);
@@ -246,7 +246,7 @@ static int fsl_ifc_ctrl_probe(struct platform_device *dev)
 			FSL_IFC_VERSION_MASK;
 
 	banks = (version == FSL_IFC_VERSION_1_0_0) ? 4 : 8;
-	dev_info(&dev->dev, "IFC version %d.%d, %d banks\n",
+	dev_dbg(&dev->dev, "IFC version %d.%d, %d banks\n",
 		version >> 24, (version >> 16) & 0xf, banks);
 
 	fsl_ifc_ctrl_dev->version = version;

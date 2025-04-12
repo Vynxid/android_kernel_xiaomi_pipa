@@ -1058,7 +1058,7 @@ static int __init caam_pkc_init(void)
 		dev_warn(ctrldev, "%s alg registration failed\n",
 			 caam_rsa.base.cra_driver_name);
 	else
-		dev_info(ctrldev, "caam pkc algorithms registered in /proc/crypto\n");
+		dev_dbg(ctrldev, "caam pkc algorithms registered in /proc/crypto\n");
 
 	return err;
 }

@@ -94,7 +94,7 @@ void mmp_register_panel(struct mmp_panel *panel)
 	/* try to register to path */
 	list_for_each_entry(path, &path_list, node) {
 		if (!strcmp(panel->plat_path_name, path->name)) {
-			dev_info(panel->dev, "connect to path %s\n",
+			dev_dbg(panel->dev, "connect to path %s\n",
 				path->name);
 			path->panel = panel;
 			break;
@@ -121,7 +121,7 @@ void mmp_unregister_panel(struct mmp_panel *panel)
 
 	list_for_each_entry(path, &path_list, node) {
 		if (path->panel && path->panel == panel) {
-			dev_info(panel->dev, "disconnect from path %s\n",
+			dev_dbg(panel->dev, "disconnect from path %s\n",
 				path->name);
 			path->panel = NULL;
 			break;
@@ -190,13 +190,13 @@ struct mmp_path *mmp_register_path(struct mmp_path_info *info)
 	/* get panel */
 	list_for_each_entry(panel, &panel_list, node) {
 		if (!strcmp(info->name, panel->plat_path_name)) {
-			dev_info(path->dev, "get panel %s\n", panel->name);
+			dev_dbg(path->dev, "get panel %s\n", panel->name);
 			path->panel = panel;
 			break;
 		}
 	}
 
-	dev_info(path->dev, "register %s, overlay_num %d\n",
+	dev_dbg(path->dev, "register %s, overlay_num %d\n",
 			path->name, path->overlay_num);
 
 	/* default op set: if already set by driver, never cover it */

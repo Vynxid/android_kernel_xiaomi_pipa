@@ -863,7 +863,7 @@ static int rtl2830_probe(struct i2c_client *client,
 	pdata->pid_filter = rtl2830_pid_filter;
 	pdata->pid_filter_ctrl = rtl2830_pid_filter_ctrl;
 
-	dev_info(&client->dev, "Realtek RTL2830 successfully attached\n");
+	dev_dbg(&client->dev, "Realtek RTL2830 successfully attached\n");
 
 	return 0;
 err_regmap_exit:

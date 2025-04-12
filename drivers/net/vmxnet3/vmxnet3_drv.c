@@ -3166,7 +3166,7 @@ vmxnet3_alloc_intr_resources(struct vmxnet3_adapter *adapter)
 
 msix_err:
 		/* If we cannot allocate MSIx vectors use only one rx queue */
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "Failed to enable MSI-X, error %d. "
 			 "Limiting #rx queues to 1, try MSI.\n", nvec);
 
@@ -3183,7 +3183,7 @@ msix_err:
 #endif /* CONFIG_PCI_MSI */
 
 	adapter->num_rx_queues = 1;
-	dev_info(&adapter->netdev->dev,
+	dev_dbg(&adapter->netdev->dev,
 		 "Using INTx interrupt, #Rx queues: 1.\n");
 	adapter->intr.type = VMXNET3_IT_INTX;
 
@@ -3294,7 +3294,7 @@ vmxnet3_probe_device(struct pci_dev *pdev,
 	num_tx_queues = rounddown_pow_of_two(num_tx_queues);
 	netdev = alloc_etherdev_mq(sizeof(struct vmxnet3_adapter),
 				   max(num_tx_queues, num_rx_queues));
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "# of Tx queues : %d, # of Rx queues : %d\n",
 		 num_tx_queues, num_rx_queues);
 
@@ -3796,7 +3796,7 @@ static struct pci_driver vmxnet3_driver = {
 static int __init
 vmxnet3_init_module(void)
 {
-	pr_info("%s - version %s\n", VMXNET3_DRIVER_DESC,
+	pr_debug("%s - version %s\n", VMXNET3_DRIVER_DESC,
 		VMXNET3_DRIVER_VERSION_REPORT);
 	return pci_register_driver(&vmxnet3_driver);
 }

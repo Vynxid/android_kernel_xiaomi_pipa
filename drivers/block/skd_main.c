@@ -1417,7 +1417,7 @@ static void skd_resolve_req_exception(struct skd_device *skdev,
 	case SKD_CHECK_STATUS_BUSY_IMMINENT:
 		skd_log_skreq(skdev, skreq, "retry(busy)");
 		blk_mq_requeue_request(req, true);
-		dev_info(&skdev->pdev->dev, "drive BUSY imminent\n");
+		dev_dbg(&skdev->pdev->dev, "drive BUSY imminent\n");
 		skdev->state = SKD_DRVR_STATE_BUSY_IMMINENT;
 		skdev->timer_countdown = SKD_TIMER_MINUTES(20);
 		skd_quiesce_dev(skdev);
@@ -1810,7 +1810,7 @@ static void skd_isr_fwstate(struct skd_device *skdev)
 			skdev->cur_max_queue_depth * 2 / 3 + 1;
 		if (skdev->queue_low_water_mark < 1)
 			skdev->queue_low_water_mark = 1;
-		dev_info(&skdev->pdev->dev,
+		dev_dbg(&skdev->pdev->dev,
 			 "Queue depth limit=%d dev=%d lowat=%d\n",
 			 skdev->cur_max_queue_depth,
 			 skdev->dev_max_queue_depth,
@@ -1869,7 +1869,7 @@ static void skd_isr_fwstate(struct skd_device *skdev)
 
 	/* PCIe bus returned all Fs? */
 	case 0xFF:
-		dev_info(&skdev->pdev->dev, "state=0x%x sense=0x%x\n", state,
+		dev_dbg(&skdev->pdev->dev, "state=0x%x sense=0x%x\n", state,
 			 sense);
 		skd_drive_disappeared(skdev);
 		skd_recover_requests(skdev);
@@ -2090,13 +2090,13 @@ static void skd_start_device(struct skd_device *skdev)
 		break;
 
 	case FIT_SR_DRIVE_BUSY_SANITIZE:
-		dev_info(&skdev->pdev->dev, "Start: BUSY_SANITIZE\n");
+		dev_dbg(&skdev->pdev->dev, "Start: BUSY_SANITIZE\n");
 		skdev->state = SKD_DRVR_STATE_BUSY_SANITIZE;
 		skdev->timer_countdown = SKD_STARTED_BUSY_TIMO;
 		break;
 
 	case FIT_SR_DRIVE_BUSY_ERASE:
-		dev_info(&skdev->pdev->dev, "Start: BUSY_ERASE\n");
+		dev_dbg(&skdev->pdev->dev, "Start: BUSY_ERASE\n");
 		skdev->state = SKD_DRVR_STATE_BUSY_ERASE;
 		skdev->timer_countdown = SKD_STARTED_BUSY_TIMO;
 		break;
@@ -2333,7 +2333,7 @@ static int skd_unquiesce_dev(struct skd_device *skdev)
 		dev_dbg(&skdev->pdev->dev,
 			"**** device ONLINE...starting block queue\n");
 		dev_dbg(&skdev->pdev->dev, "starting queue\n");
-		dev_info(&skdev->pdev->dev, "STEC s1120 ONLINE\n");
+		dev_dbg(&skdev->pdev->dev, "STEC s1120 ONLINE\n");
 		schedule_work(&skdev->start_queue);
 		skdev->gendisk_on = 1;
 		wake_up_interruptible(&skdev->waitq);
@@ -3201,7 +3201,7 @@ static int skd_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	}
 
 	skd_pci_info(skdev, pci_str);
-	dev_info(&pdev->dev, "%s 64bit\n", pci_str);
+	dev_dbg(&pdev->dev, "%s 64bit\n", pci_str);
 
 	pci_set_master(pdev);
 	rc = pci_enable_pcie_error_reporting(pdev);

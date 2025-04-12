@@ -169,7 +169,7 @@ static int platform_mhu_probe(struct platform_device *pdev)
 		return err;
 	}
 
-	dev_info(dev, "Platform MHU Mailbox registered\n");
+	dev_dbg(dev, "Platform MHU Mailbox registered\n");
 	return 0;
 }
 

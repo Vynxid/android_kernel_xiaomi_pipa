@@ -596,7 +596,7 @@ static void dsi_pll_setup_config(struct dsi_pll_7nm *pll,
 
 	if (pll->cphy_enabled) {
 		config->enable_ssc = false;
-		pr_info("[7nm] disable pll ssc %d\n", config->enable_ssc);
+		pr_debug("[7nm] disable pll ssc %d\n", config->enable_ssc);
 	}
 
 	if (config->enable_ssc) {
@@ -2830,7 +2830,7 @@ int dsi_pll_clock_register_7nm(struct platform_device *pdev,
 				of_clk_src_onecell_get, clk_data);
 	}
 	if (!rc) {
-		pr_info("Registered DSI PLL ndx=%d, clocks successfully\n",
+		pr_debug("Registered DSI PLL ndx=%d, clocks successfully\n",
 				ndx);
 
 		return rc;

@@ -893,7 +893,7 @@ static int ims_pcu_handle_firmware_update(struct ims_pcu *pcu,
 	unsigned int n_fw_records;
 	int retval;
 
-	dev_info(pcu->dev, "Updating firmware %s, size: %zu\n",
+	dev_dbg(pcu->dev, "Updating firmware %s, size: %zu\n",
 		 IMS_PCU_FIRMWARE_NAME, fw->size);
 
 	n_fw_records = ims_pcu_count_fw_records(fw);
@@ -1146,11 +1146,11 @@ static ssize_t ims_pcu_reset_device(struct device *dev,
 	if (value != 1)
 		return -EINVAL;
 
-	dev_info(pcu->dev, "Attempting to reset device\n");
+	dev_dbg(pcu->dev, "Attempting to reset device\n");
 
 	error = ims_pcu_execute_command(pcu, PCU_RESET, &reset_byte, 1);
 	if (error) {
-		dev_info(pcu->dev,
+		dev_dbg(pcu->dev,
 			 "Failed to reset device, error: %d\n",
 			 error);
 		return error;
@@ -1973,7 +1973,7 @@ static int ims_pcu_init_bootloader_mode(struct ims_pcu *pcu)
 	pcu->fw_end_addr =
 		get_unaligned_le32(&pcu->cmd_buf[IMS_PCU_DATA_OFFSET + 15]);
 
-	dev_info(pcu->dev,
+	dev_dbg(pcu->dev,
 		 "Device is in bootloader mode (addr 0x%08x-0x%08x), requesting firmware\n",
 		 pcu->fw_start_addr, pcu->fw_end_addr);
 

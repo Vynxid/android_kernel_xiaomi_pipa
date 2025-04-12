@@ -1027,7 +1027,7 @@ static int txx9dmac_alloc_chan_resources(struct dma_chan *chan)
 
 		desc = txx9dmac_desc_alloc(dc, GFP_KERNEL);
 		if (!desc) {
-			dev_info(chan2dev(chan),
+			dev_dbg(chan2dev(chan),
 				"only allocated %d descriptors\n", i);
 			spin_lock_bh(&dc->lock);
 			break;

@@ -583,7 +583,7 @@ static int msm_mdf_cb_probe(struct device *dev)
 	smmu->enabled = of_property_read_bool(dev->of_node,
 						"qcom,smmu-enabled");
 
-	dev_info(dev, "%s: SMMU is %s for %s\n", __func__,
+	dev_dbg(dev, "%s: SMMU is %s for %s\n", __func__,
 		(smmu->enabled) ? "enabled" : "disabled",
 		smmu->subsys);
 
@@ -667,7 +667,7 @@ static int msm_mdf_probe(struct platform_device *pdev)
 		}
 
 		mdf_mem_data.size = mdf_mem_data_size;
-		dev_info(dev, "%s: mem region size %zd\n",
+		dev_dbg(dev, "%s: mem region size %zd\n",
 			__func__, mdf_mem_data.size);
 		msm_mdf_alloc_dma_buf(&mdf_mem_data);
 		return 0;

@@ -1008,7 +1008,7 @@ pci224_auto_attach(struct comedi_device *dev, unsigned long context_model)
 	dev->board_ptr = board;
 	dev->board_name = board->name;
 
-	dev_info(dev->class_dev, "amplc_pci224: attach pci %s - %s\n",
+	dev_dbg(dev->class_dev, "amplc_pci224: attach pci %s - %s\n",
 		 pci_name(pci_dev), dev->board_name);
 
 	devpriv = comedi_alloc_devpriv(dev, sizeof(*devpriv));

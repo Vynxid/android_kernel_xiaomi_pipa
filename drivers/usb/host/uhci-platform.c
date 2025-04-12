@@ -108,7 +108,7 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
 
 		if (of_property_read_u32(np, "#ports", &num_ports) == 0) {
 			uhci->rh_numports = num_ports;
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				"Detected %d ports from device-tree\n",
 				num_ports);
 		}
@@ -116,7 +116,7 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
 		    of_device_is_compatible(np, "aspeed,ast2500-uhci") ||
 		    of_device_is_compatible(np, "aspeed,ast2600-uhci")) {
 			uhci->is_aspeed = 1;
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Enabled Aspeed implementation workarounds\n");
 		}
 	}

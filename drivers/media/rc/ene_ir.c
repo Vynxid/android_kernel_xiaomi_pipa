@@ -121,10 +121,10 @@ static int ene_hw_detect(struct ene_device *dev)
 		return -ENODEV;
 	}
 
-	pr_notice("chip is 0x%02x%02x - kbver = 0x%02x, rev = 0x%02x\n",
+	pr_debug("chip is 0x%02x%02x - kbver = 0x%02x, rev = 0x%02x\n",
 		  chip_major, chip_minor, old_ver, hw_revision);
 
-	pr_notice("PLL freq = %d\n", dev->pll_freq);
+	pr_debug("PLL freq = %d\n", dev->pll_freq);
 
 	if (chip_major == 0x33) {
 		pr_warn("chips 0x33xx aren't supported\n");
@@ -133,13 +133,13 @@ static int ene_hw_detect(struct ene_device *dev)
 
 	if (chip_major == 0x39 && chip_minor == 0x26 && hw_revision == 0xC0) {
 		dev->hw_revision = ENE_HW_C;
-		pr_notice("KB3926C detected\n");
+		pr_debug("KB3926C detected\n");
 	} else if (old_ver == 0x24 && hw_revision == 0xC0) {
 		dev->hw_revision = ENE_HW_B;
-		pr_notice("KB3926B detected\n");
+		pr_debug("KB3926B detected\n");
 	} else {
 		dev->hw_revision = ENE_HW_D;
-		pr_notice("KB3926D or higher detected\n");
+		pr_debug("KB3926D or higher detected\n");
 	}
 
 	/* detect features hardware supports */
@@ -149,7 +149,7 @@ static int ene_hw_detect(struct ene_device *dev)
 	fw_reg1 = ene_read_reg(dev, ENE_FW1);
 	fw_reg2 = ene_read_reg(dev, ENE_FW2);
 
-	pr_notice("Firmware regs: %02x %02x\n", fw_reg1, fw_reg2);
+	pr_debug("Firmware regs: %02x %02x\n", fw_reg1, fw_reg2);
 
 	dev->hw_use_gpio_0a = !!(fw_reg2 & ENE_FW2_GP0A);
 	dev->hw_learning_and_tx_capable = !!(fw_reg2 & ENE_FW2_LEARNING);
@@ -158,29 +158,29 @@ static int ene_hw_detect(struct ene_device *dev)
 	if (dev->hw_learning_and_tx_capable)
 		dev->hw_fan_input = !!(fw_reg2 & ENE_FW2_FAN_INPUT);
 
-	pr_notice("Hardware features:\n");
+	pr_debug("Hardware features:\n");
 
 	if (dev->hw_learning_and_tx_capable) {
-		pr_notice("* Supports transmitting & learning mode\n");
-		pr_notice("   This feature is rare and therefore,\n");
-		pr_notice("   you are welcome to test it,\n");
-		pr_notice("   and/or contact the author via:\n");
-		pr_notice("   lirc-list@lists.sourceforge.net\n");
-		pr_notice("   or maximlevitsky@gmail.com\n");
+		pr_debug("* Supports transmitting & learning mode\n");
+		pr_debug("   This feature is rare and therefore,\n");
+		pr_debug("   you are welcome to test it,\n");
+		pr_debug("   and/or contact the author via:\n");
+		pr_debug("   lirc-list@lists.sourceforge.net\n");
+		pr_debug("   or maximlevitsky@gmail.com\n");
 
-		pr_notice("* Uses GPIO %s for IR raw input\n",
+		pr_debug("* Uses GPIO %s for IR raw input\n",
 			  dev->hw_use_gpio_0a ? "40" : "0A");
 
 		if (dev->hw_fan_input)
-			pr_notice("* Uses unused fan feedback input as source of demodulated IR data\n");
+			pr_debug("* Uses unused fan feedback input as source of demodulated IR data\n");
 	}
 
 	if (!dev->hw_fan_input)
-		pr_notice("* Uses GPIO %s for IR demodulated input\n",
+		pr_debug("* Uses GPIO %s for IR demodulated input\n",
 			  dev->hw_use_gpio_0a ? "0A" : "40");
 
 	if (dev->hw_extra_buffer)
-		pr_notice("* Uses new style input buffer\n");
+		pr_debug("* Uses new style input buffer\n");
 	return 0;
 }
 
@@ -211,13 +211,13 @@ static void ene_rx_setup_hw_buffer(struct ene_device *dev)
 
 	dev->buffer_len = dev->extra_buf1_len + dev->extra_buf2_len + 8;
 
-	pr_notice("Hardware uses 2 extended buffers:\n");
-	pr_notice("  0x%04x - len : %d\n",
+	pr_debug("Hardware uses 2 extended buffers:\n");
+	pr_debug("  0x%04x - len : %d\n",
 		  dev->extra_buf1_address, dev->extra_buf1_len);
-	pr_notice("  0x%04x - len : %d\n",
+	pr_debug("  0x%04x - len : %d\n",
 		  dev->extra_buf2_address, dev->extra_buf2_len);
 
-	pr_notice("Total buffer len = %d\n", dev->buffer_len);
+	pr_debug("Total buffer len = %d\n", dev->buffer_len);
 
 	if (dev->buffer_len > 64 || dev->buffer_len < 16)
 		goto error;
@@ -1096,7 +1096,7 @@ static int ene_probe(struct pnp_dev *pnp_dev, const struct pnp_device_id *id)
 		goto exit_release_hw_io;
 	}
 
-	pr_notice("driver has been successfully loaded\n");
+	pr_debug("driver has been successfully loaded\n");
 	return 0;
 
 exit_release_hw_io:

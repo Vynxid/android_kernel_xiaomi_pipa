@@ -624,11 +624,11 @@ static int imx8_sata_enable(struct ahci_host_priv *hpriv)
 		reg = readb(imxpriv->phy_base +
 				IMX8QM_SATA_PHY_RX_IMPED_RATIO_OFFSET);
 		if (unlikely(reg != imxpriv->imped_ratio))
-			dev_info(dev, "Can't set PHY RX impedance ratio.\n");
+			dev_dbg(dev, "Can't set PHY RX impedance ratio.\n");
 		reg = readb(imxpriv->phy_base +
 				IMX8QM_SATA_PHY_TX_IMPED_RATIO_OFFSET);
 		if (unlikely(reg != imxpriv->imped_ratio))
-			dev_info(dev, "Can't set PHY TX impedance ratio.\n");
+			dev_dbg(dev, "Can't set PHY TX impedance ratio.\n");
 		usleep_range(50, 100);
 
 		/*
@@ -782,8 +782,8 @@ static void ahci_imx_error_handler(struct ata_port *ap)
 	imx_sata_disable(hpriv);
 	imxpriv->no_device = true;
 
-	dev_info(ap->dev, "no device found, disabling link.\n");
-	dev_info(ap->dev, "pass " MODULE_PARAM_PREFIX ".hotplug=1 to enable hotplug\n");
+	dev_dbg(ap->dev, "no device found, disabling link.\n");
+	dev_dbg(ap->dev, "pass " MODULE_PARAM_PREFIX ".hotplug=1 to enable hotplug\n");
 }
 
 static int ahci_imx_softreset(struct ata_link *link, unsigned int *class,
@@ -960,7 +960,7 @@ static u32 imx_ahci_parse_props(struct device *dev,
 		}
 
 		if (of_property_read_u32(np, prop->name, &of_val)) {
-			dev_info(dev, "%s not specified, using %08x\n",
+			dev_dbg(dev, "%s not specified, using %08x\n",
 				prop->name, prop->def_value);
 			reg_value |= prop->def_value;
 			continue;
@@ -968,7 +968,7 @@ static u32 imx_ahci_parse_props(struct device *dev,
 
 		for (j = 0; j < prop->num_values; j++) {
 			if (prop->values[j].of_value == of_val) {
-				dev_info(dev, "%s value %u, using %08x\n",
+				dev_dbg(dev, "%s value %u, using %08x\n",
 					prop->name, of_val, prop->values[j].reg_value);
 				reg_value |= prop->values[j].reg_value;
 				break;
@@ -1050,7 +1050,7 @@ static int imx8_sata_probe(struct device *dev, struct imx_ahci_priv *imxpriv)
 					    GPIOF_OUT_INIT_LOW,
 					    "SATA CLKREQ");
 		if (ret == -EBUSY) {
-			dev_info(dev, "clkreq had been initialized.\n");
+			dev_dbg(dev, "clkreq had been initialized.\n");
 		} else if (ret) {
 			dev_err(dev, "%d unable to get clkreq.\n", ret);
 			return ret;
@@ -1153,7 +1153,7 @@ static int imx_ahci_probe(struct platform_device *pdev)
 		}
 		devm_thermal_zone_of_sensor_register(hwmon_dev, 0, hwmon_dev,
 					     &fsl_sata_ahci_of_thermal_ops);
-		dev_info(dev, "%s: sensor 'sata_ahci'\n", dev_name(hwmon_dev));
+		dev_dbg(dev, "%s: sensor 'sata_ahci'\n", dev_name(hwmon_dev));
 	}
 
 	ret = imx_sata_enable(hpriv);

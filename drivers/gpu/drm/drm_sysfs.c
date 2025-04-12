@@ -407,7 +407,7 @@ static ssize_t disp_pcc_store(struct device *device,
 	int ret;
 	ssize_t result;
 
-	pr_info("[LCD] %s: begin\n", __func__);
+	pr_debug("[LCD] %s: begin\n", __func__);
 
 	result = sscanf(buf,
 		"pcc_cfg_r_c=%d\n"
@@ -436,7 +436,7 @@ static ssize_t disp_pcc_store(struct device *device,
 		&color_transform_pcc_cfg.b.b);
 
 	ret = 0;
-	pr_info("set pcc r_c=%d r_r=%d r_g=%d r_b=%d g_c=%d g_r=%d g_g=%d g_b=%d b_c=%d b_r=%d b_g=%d b_b=%d",
+	pr_debug("set pcc r_c=%d r_r=%d r_g=%d r_b=%d g_c=%d g_r=%d g_g=%d g_b=%d b_c=%d b_r=%d b_g=%d b_b=%d",
 		color_transform_pcc_cfg.r.c,
 		color_transform_pcc_cfg.r.r,
 		color_transform_pcc_cfg.r.g,

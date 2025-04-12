@@ -200,7 +200,7 @@ static void path_enabledisable(struct mmp_path *path, int on)
 static void path_onoff(struct mmp_path *path, int on)
 {
 	if (path->status == on) {
-		dev_info(path->dev, "path %s is already %s\n",
+		dev_dbg(path->dev, "path %s is already %s\n",
 				path->name, stat_name(path->status));
 		return;
 	}
@@ -222,7 +222,7 @@ static void path_onoff(struct mmp_path *path, int on)
 static void overlay_set_onoff(struct mmp_overlay *overlay, int on)
 {
 	if (overlay->status == on) {
-		dev_info(overlay_to_ctrl(overlay)->dev, "overlay %s is already %s\n",
+		dev_dbg(overlay_to_ctrl(overlay)->dev, "overlay %s is already %s\n",
 			overlay->path->name, stat_name(overlay->status));
 		return;
 	}
@@ -306,7 +306,7 @@ static void path_set_mode(struct mmp_path *path, struct mmp_mode *mode)
 	if (sclk_div * mode->pixclock_freq < sclk_src)
 		sclk_div++;
 
-	dev_info(path->dev, "%s sclk_src %d sclk_div 0x%x pclk %d\n",
+	dev_dbg(path->dev, "%s sclk_src %d sclk_div 0x%x pclk %d\n",
 			__func__, sclk_src, sclk_div, mode->pixclock_freq);
 
 	tmp = readl_relaxed(ctrl_regs(path) + LCD_SCLK(path));
@@ -403,7 +403,7 @@ static int path_init(struct mmphw_path_plat *path_plat,
 	struct mmp_path_info *path_info;
 	struct mmp_path *path = NULL;
 
-	dev_info(ctrl->dev, "%s: %s\n", __func__, config->name);
+	dev_dbg(ctrl->dev, "%s: %s\n", __func__, config->name);
 
 	/* init driver data */
 	path_info = kzalloc(sizeof(*path_info), GFP_KERNEL);
@@ -550,7 +550,7 @@ static int mmphw_probe(struct platform_device *pdev)
 		goto failed_path_init;
 #endif
 
-	dev_info(ctrl->dev, "device init done\n");
+	dev_dbg(ctrl->dev, "device init done\n");
 
 	return 0;
 

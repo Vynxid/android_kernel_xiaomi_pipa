@@ -245,7 +245,7 @@ static int zip_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	if (!zip)
 		return -ENOMEM;
 
-	dev_info(dev, "Found ZIP device %d %x:%x on Node %d\n", zip->index,
+	dev_dbg(dev, "Found ZIP device %d %x:%x on Node %d\n", zip->index,
 		 pdev->vendor, pdev->device, dev_to_node(dev));
 
 	pci_set_drvdata(pdev, zip);

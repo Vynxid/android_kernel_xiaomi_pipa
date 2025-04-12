@@ -2315,7 +2315,7 @@ static int mvneta_tx_tso(struct sk_buff *skb, struct net_device *dev,
 		return 0;
 
 	if (skb_headlen(skb) < (skb_transport_offset(skb) + tcp_hdrlen(skb))) {
-		pr_info("*** Is this even  possible???!?!?\n");
+		pr_debug("*** Is this even  possible???!?!?\n");
 		return 0;
 	}
 
@@ -4560,7 +4560,7 @@ static int mvneta_probe(struct platform_device *pdev)
 		if (tx_csum_limit < 0 ||
 		    tx_csum_limit > MVNETA_TX_CSUM_MAX_SIZE) {
 			tx_csum_limit = MVNETA_TX_CSUM_DEF_SIZE;
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Wrong TX csum limit in DT, set to %dB\n",
 				 MVNETA_TX_CSUM_DEF_SIZE);
 		}
@@ -4596,7 +4596,7 @@ static int mvneta_probe(struct platform_device *pdev)
 		if (pp->bm_priv) {
 			err = mvneta_bm_port_init(pdev, pp);
 			if (err < 0) {
-				dev_info(&pdev->dev,
+				dev_dbg(&pdev->dev,
 					 "use SW buffer management\n");
 				mvneta_bm_put(pp->bm_priv);
 				pp->bm_priv = NULL;
@@ -4770,7 +4770,7 @@ static int mvneta_resume(struct device *device)
 	if (pp->bm_priv) {
 		err = mvneta_bm_port_init(pdev, pp);
 		if (err < 0) {
-			dev_info(&pdev->dev, "use SW buffer management\n");
+			dev_dbg(&pdev->dev, "use SW buffer management\n");
 			pp->bm_priv = NULL;
 		}
 	}

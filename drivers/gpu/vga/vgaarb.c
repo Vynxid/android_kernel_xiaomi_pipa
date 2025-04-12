@@ -32,7 +32,7 @@
 #define pr_fmt(fmt) "vgaarb: " fmt
 
 #define vgaarb_dbg(dev, fmt, arg...)	dev_dbg(dev, "vgaarb: " fmt, ##arg)
-#define vgaarb_info(dev, fmt, arg...)	dev_info(dev, "vgaarb: " fmt, ##arg)
+#define vgaarb_info(dev, fmt, arg...)	dev_dbg(dev, "vgaarb: " fmt, ##arg)
 #define vgaarb_err(dev, fmt, arg...)	dev_err(dev, "vgaarb: " fmt, ##arg)
 
 #include <linux/module.h>
@@ -1506,7 +1506,7 @@ static int __init vga_arb_device_init(void)
 
 	vga_arb_select_default_device();
 
-	pr_info("loaded\n");
+	pr_debug("loaded\n");
 	return rc;
 }
 subsys_initcall(vga_arb_device_init);

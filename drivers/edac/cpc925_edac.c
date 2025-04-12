@@ -287,8 +287,8 @@ struct cpc925_dev_info {
 	char *ctl_name;
 	int edac_idx;
 	struct edac_device_ctl_info *edac_dev;
-	void (*init)(struct cpc925_dev_info *dev_info);
-	void (*exit)(struct cpc925_dev_info *dev_info);
+	void (*init)(struct cpc925_dev_info *dev_dbg);
+	void (*exit)(struct cpc925_dev_info *dev_dbg);
 	void (*check)(struct edac_device_ctl_info *edac_dev);
 };
 
@@ -640,12 +640,12 @@ static u32 cpc925_cpu_mask_disabled(void)
 }
 
 /* Enable CPU Errors detection */
-static void cpc925_cpu_init(struct cpc925_dev_info *dev_info)
+static void cpc925_cpu_init(struct cpc925_dev_info *dev_dbg)
 {
 	u32 apimask;
 	u32 cpumask;
 
-	apimask = __raw_readl(dev_info->vbase + REG_APIMASK_OFFSET);
+	apimask = __raw_readl(dev_dbg->vbase + REG_APIMASK_OFFSET);
 
 	cpumask = cpc925_cpu_mask_disabled();
 	if (apimask & cpumask) {
@@ -657,11 +657,11 @@ static void cpc925_cpu_init(struct cpc925_dev_info *dev_info)
 	if ((apimask & CPU_MASK_ENABLE) == 0)
 		apimask |= CPU_MASK_ENABLE;
 
-	__raw_writel(apimask, dev_info->vbase + REG_APIMASK_OFFSET);
+	__raw_writel(apimask, dev_dbg->vbase + REG_APIMASK_OFFSET);
 }
 
 /* Disable CPU Errors detection */
-static void cpc925_cpu_exit(struct cpc925_dev_info *dev_info)
+static void cpc925_cpu_exit(struct cpc925_dev_info *dev_dbg)
 {
 	/*
 	 * WARNING:
@@ -680,19 +680,19 @@ static void cpc925_cpu_exit(struct cpc925_dev_info *dev_info)
 /* Check for CPU Errors */
 static void cpc925_cpu_check(struct edac_device_ctl_info *edac_dev)
 {
-	struct cpc925_dev_info *dev_info = edac_dev->pvt_info;
+	struct cpc925_dev_info *dev_dbg = edac_dev->pvt_info;
 	u32 apiexcp;
 	u32 apimask;
 
 	/* APIEXCP is cleared when read */
-	apiexcp = __raw_readl(dev_info->vbase + REG_APIEXCP_OFFSET);
+	apiexcp = __raw_readl(dev_dbg->vbase + REG_APIEXCP_OFFSET);
 	if ((apiexcp & CPU_EXCP_DETECTED) == 0)
 		return;
 
 	if ((apiexcp & ~cpc925_cpu_mask_disabled()) == 0)
 		return;
 
-	apimask = __raw_readl(dev_info->vbase + REG_APIMASK_OFFSET);
+	apimask = __raw_readl(dev_dbg->vbase + REG_APIMASK_OFFSET);
 	cpc925_printk(KERN_INFO, "Processor Interface Fault\n"
 				 "Processor Interface register dump:\n");
 	cpc925_printk(KERN_INFO, "APIMASK		0x%08x\n", apimask);
@@ -703,35 +703,35 @@ static void cpc925_cpu_check(struct edac_device_ctl_info *edac_dev)
 
 /******************** HT Link err device****************************/
 /* Enable HyperTransport Link Error detection */
-static void cpc925_htlink_init(struct cpc925_dev_info *dev_info)
+static void cpc925_htlink_init(struct cpc925_dev_info *dev_dbg)
 {
 	u32 ht_errctrl;
 
-	ht_errctrl = __raw_readl(dev_info->vbase + REG_ERRCTRL_OFFSET);
+	ht_errctrl = __raw_readl(dev_dbg->vbase + REG_ERRCTRL_OFFSET);
 	if ((ht_errctrl & HT_ERRCTRL_ENABLE) == 0) {
 		ht_errctrl |= HT_ERRCTRL_ENABLE;
-		__raw_writel(ht_errctrl, dev_info->vbase + REG_ERRCTRL_OFFSET);
+		__raw_writel(ht_errctrl, dev_dbg->vbase + REG_ERRCTRL_OFFSET);
 	}
 }
 
 /* Disable HyperTransport Link Error detection */
-static void cpc925_htlink_exit(struct cpc925_dev_info *dev_info)
+static void cpc925_htlink_exit(struct cpc925_dev_info *dev_dbg)
 {
 	u32 ht_errctrl;
 
-	ht_errctrl = __raw_readl(dev_info->vbase + REG_ERRCTRL_OFFSET);
+	ht_errctrl = __raw_readl(dev_dbg->vbase + REG_ERRCTRL_OFFSET);
 	ht_errctrl &= ~HT_ERRCTRL_ENABLE;
-	__raw_writel(ht_errctrl, dev_info->vbase + REG_ERRCTRL_OFFSET);
+	__raw_writel(ht_errctrl, dev_dbg->vbase + REG_ERRCTRL_OFFSET);
 }
 
 /* Check for HyperTransport Link errors */
 static void cpc925_htlink_check(struct edac_device_ctl_info *edac_dev)
 {
-	struct cpc925_dev_info *dev_info = edac_dev->pvt_info;
-	u32 brgctrl = __raw_readl(dev_info->vbase + REG_BRGCTRL_OFFSET);
-	u32 linkctrl = __raw_readl(dev_info->vbase + REG_LINKCTRL_OFFSET);
-	u32 errctrl = __raw_readl(dev_info->vbase + REG_ERRCTRL_OFFSET);
-	u32 linkerr = __raw_readl(dev_info->vbase + REG_LINKERR_OFFSET);
+	struct cpc925_dev_info *dev_dbg = edac_dev->pvt_info;
+	u32 brgctrl = __raw_readl(dev_dbg->vbase + REG_BRGCTRL_OFFSET);
+	u32 linkctrl = __raw_readl(dev_dbg->vbase + REG_LINKCTRL_OFFSET);
+	u32 errctrl = __raw_readl(dev_dbg->vbase + REG_ERRCTRL_OFFSET);
+	u32 linkerr = __raw_readl(dev_dbg->vbase + REG_LINKERR_OFFSET);
 
 	if (!((brgctrl & BRGCTRL_DETSERR) ||
 	      (linkctrl & HT_LINKCTRL_DETECTED) ||
@@ -753,24 +753,24 @@ static void cpc925_htlink_check(struct edac_device_ctl_info *edac_dev)
 	/* Clear by write 1 */
 	if (brgctrl & BRGCTRL_DETSERR)
 		__raw_writel(BRGCTRL_DETSERR,
-				dev_info->vbase + REG_BRGCTRL_OFFSET);
+				dev_dbg->vbase + REG_BRGCTRL_OFFSET);
 
 	if (linkctrl & HT_LINKCTRL_DETECTED)
 		__raw_writel(HT_LINKCTRL_DETECTED,
-				dev_info->vbase + REG_LINKCTRL_OFFSET);
+				dev_dbg->vbase + REG_LINKCTRL_OFFSET);
 
 	/* Initiate Secondary Bus Reset to clear the chain failure */
 	if (errctrl & ERRCTRL_CHN_FAL)
 		__raw_writel(BRGCTRL_SECBUSRESET,
-				dev_info->vbase + REG_BRGCTRL_OFFSET);
+				dev_dbg->vbase + REG_BRGCTRL_OFFSET);
 
 	if (errctrl & ERRCTRL_RSP_ERR)
 		__raw_writel(ERRCTRL_RSP_ERR,
-				dev_info->vbase + REG_ERRCTRL_OFFSET);
+				dev_dbg->vbase + REG_ERRCTRL_OFFSET);
 
 	if (linkerr & HT_LINKERR_DETECTED)
 		__raw_writel(HT_LINKERR_DETECTED,
-				dev_info->vbase + REG_LINKERR_OFFSET);
+				dev_dbg->vbase + REG_LINKERR_OFFSET);
 
 	edac_device_handle_ce(edac_dev, 0, 0, edac_dev->ctl_name);
 }
@@ -800,21 +800,21 @@ static struct cpc925_dev_info cpc925_devs[] = {
  */
 static void cpc925_add_edac_devices(void __iomem *vbase)
 {
-	struct cpc925_dev_info *dev_info;
+	struct cpc925_dev_info *dev_dbg;
 
 	if (!vbase) {
 		cpc925_printk(KERN_ERR, "MMIO not established yet\n");
 		return;
 	}
 
-	for (dev_info = &cpc925_devs[0]; dev_info->init; dev_info++) {
-		dev_info->vbase = vbase;
-		dev_info->pdev = platform_device_register_simple(
-					dev_info->ctl_name, 0, NULL, 0);
-		if (IS_ERR(dev_info->pdev)) {
+	for (dev_dbg = &cpc925_devs[0]; dev_dbg->init; dev_dbg++) {
+		dev_dbg->vbase = vbase;
+		dev_dbg->pdev = platform_device_register_simple(
+					dev_dbg->ctl_name, 0, NULL, 0);
+		if (IS_ERR(dev_dbg->pdev)) {
 			cpc925_printk(KERN_ERR,
 				"Can't register platform device for %s\n",
-				dev_info->ctl_name);
+				dev_dbg->ctl_name);
 			continue;
 		}
 
@@ -822,45 +822,45 @@ static void cpc925_add_edac_devices(void __iomem *vbase)
 		 * Don't have to allocate private structure but
 		 * make use of cpc925_devs[] instead.
 		 */
-		dev_info->edac_idx = edac_device_alloc_index();
-		dev_info->edac_dev =
-			edac_device_alloc_ctl_info(0, dev_info->ctl_name,
-				1, NULL, 0, 0, NULL, 0, dev_info->edac_idx);
-		if (!dev_info->edac_dev) {
+		dev_dbg->edac_idx = edac_device_alloc_index();
+		dev_dbg->edac_dev =
+			edac_device_alloc_ctl_info(0, dev_dbg->ctl_name,
+				1, NULL, 0, 0, NULL, 0, dev_dbg->edac_idx);
+		if (!dev_dbg->edac_dev) {
 			cpc925_printk(KERN_ERR, "No memory for edac device\n");
 			goto err1;
 		}
 
-		dev_info->edac_dev->pvt_info = dev_info;
-		dev_info->edac_dev->dev = &dev_info->pdev->dev;
-		dev_info->edac_dev->ctl_name = dev_info->ctl_name;
-		dev_info->edac_dev->mod_name = CPC925_EDAC_MOD_STR;
-		dev_info->edac_dev->dev_name = dev_name(&dev_info->pdev->dev);
+		dev_dbg->edac_dev->pvt_info = dev_dbg;
+		dev_dbg->edac_dev->dev = &dev_dbg->pdev->dev;
+		dev_dbg->edac_dev->ctl_name = dev_dbg->ctl_name;
+		dev_dbg->edac_dev->mod_name = CPC925_EDAC_MOD_STR;
+		dev_dbg->edac_dev->dev_name = dev_name(&dev_dbg->pdev->dev);
 
 		if (edac_op_state == EDAC_OPSTATE_POLL)
-			dev_info->edac_dev->edac_check = dev_info->check;
+			dev_dbg->edac_dev->edac_check = dev_dbg->check;
 
-		if (dev_info->init)
-			dev_info->init(dev_info);
+		if (dev_dbg->init)
+			dev_dbg->init(dev_dbg);
 
-		if (edac_device_add_device(dev_info->edac_dev) > 0) {
+		if (edac_device_add_device(dev_dbg->edac_dev) > 0) {
 			cpc925_printk(KERN_ERR,
 				"Unable to add edac device for %s\n",
-				dev_info->ctl_name);
+				dev_dbg->ctl_name);
 			goto err2;
 		}
 
 		edac_dbg(0, "Successfully added edac device for %s\n",
-			 dev_info->ctl_name);
+			 dev_dbg->ctl_name);
 
 		continue;
 
 err2:
-		if (dev_info->exit)
-			dev_info->exit(dev_info);
-		edac_device_free_ctl_info(dev_info->edac_dev);
+		if (dev_dbg->exit)
+			dev_dbg->exit(dev_dbg);
+		edac_device_free_ctl_info(dev_dbg->edac_dev);
 err1:
-		platform_device_unregister(dev_info->pdev);
+		platform_device_unregister(dev_dbg->pdev);
 	}
 }
 
@@ -870,20 +870,20 @@ err1:
  */
 static void cpc925_del_edac_devices(void)
 {
-	struct cpc925_dev_info *dev_info;
+	struct cpc925_dev_info *dev_dbg;
 
-	for (dev_info = &cpc925_devs[0]; dev_info->init; dev_info++) {
-		if (dev_info->edac_dev) {
-			edac_device_del_device(dev_info->edac_dev->dev);
-			edac_device_free_ctl_info(dev_info->edac_dev);
-			platform_device_unregister(dev_info->pdev);
+	for (dev_dbg = &cpc925_devs[0]; dev_dbg->init; dev_dbg++) {
+		if (dev_dbg->edac_dev) {
+			edac_device_del_device(dev_dbg->edac_dev->dev);
+			edac_device_free_ctl_info(dev_dbg->edac_dev);
+			platform_device_unregister(dev_dbg->pdev);
 		}
 
-		if (dev_info->exit)
-			dev_info->exit(dev_info);
+		if (dev_dbg->exit)
+			dev_dbg->exit(dev_dbg);
 
 		edac_dbg(0, "Successfully deleted edac device for %s\n",
-			 dev_info->ctl_name);
+			 dev_dbg->ctl_name);
 	}
 }
 

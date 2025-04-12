@@ -207,7 +207,7 @@ static void *usbpd_ipc_log;
 #define usbpd_info(dev, fmt, ...) do { \
 	ipc_log_string(usbpd_ipc_log, "%s: %s: " fmt, dev_name(dev), __func__, \
 			##__VA_ARGS__); \
-	dev_info(dev, fmt, ##__VA_ARGS__); \
+	dev_dbg(dev, fmt, ##__VA_ARGS__); \
 	} while (0)
 
 #define usbpd_warn(dev, fmt, ...) do { \

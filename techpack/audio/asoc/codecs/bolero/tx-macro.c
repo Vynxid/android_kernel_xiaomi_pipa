@@ -580,7 +580,7 @@ static void tx_macro_hs_unmute_dwork(struct work_struct *work)
 	snd_soc_component_update_bits(component, BOLERO_CDC_TX0_TX_VOL_CTL,
 			0xff, tx_priv->reg_before_mute);
 	reg_val = snd_soc_component_read32(component, BOLERO_CDC_TX0_TX_VOL_CTL);
-	dev_info(tx_priv->dev, "%s: the reg value after unmute is: %#x \n", __func__, reg_val);
+	dev_dbg(tx_priv->dev, "%s: the reg value after unmute is: %#x \n", __func__, reg_val);
 }
 
 static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
@@ -957,11 +957,11 @@ void bolero_tx_macro_mute_hs(void)
 	}
 
 	g_tx_priv->reg_before_mute = snd_soc_component_read32(component, BOLERO_CDC_TX0_TX_VOL_CTL);
-	dev_info(component->dev, "%s: the reg value before mute is: %#x \n",
+	dev_dbg(component->dev, "%s: the reg value before mute is: %#x \n",
 			__func__, g_tx_priv->reg_before_mute);
 	snd_soc_component_update_bits(component, BOLERO_CDC_TX0_TX_VOL_CTL, 0xff, 0xac);
 	reg_val = snd_soc_component_read32(component, BOLERO_CDC_TX0_TX_VOL_CTL);
-	dev_info(component->dev, "%s: the reg value after mute is: %#x \n",
+	dev_dbg(component->dev, "%s: the reg value after mute is: %#x \n",
 			__func__, reg_val);
 	schedule_delayed_work(&g_tx_priv->tx_hs_unmute_dwork,
 			msecs_to_jiffies(tx_unmute_delay));

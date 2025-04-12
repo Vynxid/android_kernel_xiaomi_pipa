@@ -32,7 +32,7 @@ static unsigned int refresh_rate;
 #ifdef DEBUG
 static void dumpVGAReg(struct xgifb_video_info *xgifb_info)
 {
-	struct vb_device_info *vb = &xgifb_info->dev_info;
+	struct vb_device_info *vb = &xgifb_info->dev_dbg;
 	u8 i, reg;
 
 	xgifb_reg_set(vb->P3c4, 0x05, 0x86);
@@ -268,7 +268,7 @@ static void XGIfb_search_mode(struct xgifb_video_info *xgifb_info,
 			return;
 		}
 invalid_mode:
-	pr_info("Invalid mode '%s'\n", name);
+	pr_debug("Invalid mode '%s'\n", name);
 }
 
 static void XGIfb_search_vesamode(struct xgifb_video_info *xgifb_info,
@@ -291,7 +291,7 @@ static void XGIfb_search_vesamode(struct xgifb_video_info *xgifb_info,
 	}
 
 invalid:
-	pr_info("Invalid VESA mode 0x%x'\n", vesamode);
+	pr_debug("Invalid VESA mode 0x%x'\n", vesamode);
 }
 
 static int XGIfb_validate_mode(struct xgifb_video_info *xgifb_info, int myindex)
@@ -531,7 +531,7 @@ static void XGIfb_search_crt2type(const char *name)
 		i++;
 	}
 	if (XGIfb_crt2type < 0)
-		pr_info("Invalid CRT2 type: %s\n", name);
+		pr_debug("Invalid CRT2 type: %s\n", name);
 }
 
 static u8 XGIfb_search_refresh_rate(struct xgifb_video_info *xgifb_info,
@@ -582,7 +582,7 @@ static u8 XGIfb_search_refresh_rate(struct xgifb_video_info *xgifb_info,
 
 	if (xgifb_info->rate_idx > 0)
 		return xgifb_info->rate_idx;
-	pr_info("Unsupported rate %d for %dx%d\n",
+	pr_debug("Unsupported rate %d for %dx%d\n",
 		rate, xres, yres);
 	return 0;
 }
@@ -647,7 +647,7 @@ static void XGIfb_bpp_to_var(struct xgifb_video_info *xgifb_info,
 
 static void XGIfb_pre_setmode(struct xgifb_video_info *xgifb_info)
 {
-	struct vb_device_info *vb = &xgifb_info->dev_info;
+	struct vb_device_info *vb = &xgifb_info->dev_dbg;
 	u8 cr30 = 0, cr31 = 0;
 
 	cr31 = xgifb_reg_get(vb->P3d4, 0x31);
@@ -695,7 +695,7 @@ static void XGIfb_pre_setmode(struct xgifb_video_info *xgifb_info)
 
 static void XGIfb_post_setmode(struct xgifb_video_info *xgifb_info)
 {
-	struct vb_device_info *vb = &xgifb_info->dev_info;
+	struct vb_device_info *vb = &xgifb_info->dev_dbg;
 	u8 reg;
 	unsigned char doit = 1;
 
@@ -898,7 +898,7 @@ static int XGIfb_do_set_var(struct fb_var_screeninfo *var, int isactive,
 			    struct fb_info *info)
 {
 	struct xgifb_video_info *xgifb_info = info->par;
-	struct vb_device_info *vb = &xgifb_info->dev_info;
+	struct vb_device_info *vb = &xgifb_info->dev_dbg;
 	struct xgi_hw_device_info *hw_info = &xgifb_info->hw_info;
 	unsigned int htotal = var->left_margin + var->xres + var->right_margin
 			+ var->hsync_len;
@@ -1054,7 +1054,7 @@ static int XGIfb_do_set_var(struct fb_var_screeninfo *var, int isactive,
 static int XGIfb_pan_var(struct fb_var_screeninfo *var, struct fb_info *info)
 {
 	struct xgifb_video_info *xgifb_info = info->par;
-	struct vb_device_info *vb = &xgifb_info->dev_info;
+	struct vb_device_info *vb = &xgifb_info->dev_dbg;
 	unsigned int base;
 
 	base = var->yoffset * info->var.xres_virtual + var->xoffset;
@@ -1112,7 +1112,7 @@ static int XGIfb_setcolreg(unsigned int regno, unsigned int red,
 			   unsigned int transp, struct fb_info *info)
 {
 	struct xgifb_video_info *xgifb_info = info->par;
-	struct vb_device_info *vb = &xgifb_info->dev_info;
+	struct vb_device_info *vb = &xgifb_info->dev_dbg;
 
 	if (regno >= XGIfb_get_cmap_len(&info->var))
 		return 1;
@@ -1347,7 +1347,7 @@ static int XGIfb_pan_display(struct fb_var_screeninfo *var,
 static int XGIfb_blank(int blank, struct fb_info *info)
 {
 	struct xgifb_video_info *xgifb_info = info->par;
-	struct vb_device_info *vb = &xgifb_info->dev_info;
+	struct vb_device_info *vb = &xgifb_info->dev_dbg;
 	u8 reg;
 
 	reg = xgifb_reg_get(vb->P3d4, 0x17);
@@ -1383,7 +1383,7 @@ static struct fb_ops XGIfb_ops = {
 
 static int XGIfb_get_dram_size(struct xgifb_video_info *xgifb_info)
 {
-	struct vb_device_info *vb = &xgifb_info->dev_info;
+	struct vb_device_info *vb = &xgifb_info->dev_dbg;
 	u8 ChannelNum, tmp;
 	u8 reg = 0;
 
@@ -1455,14 +1455,14 @@ static int XGIfb_get_dram_size(struct xgifb_video_info *xgifb_info)
 
 	xgifb_info->video_size = xgifb_info->video_size * ChannelNum;
 
-	pr_info("SR14=%x DramSzie %x ChannelNum %x\n",
+	pr_debug("SR14=%x DramSzie %x ChannelNum %x\n",
 		reg, xgifb_info->video_size, ChannelNum);
 	return 0;
 }
 
 static void XGIfb_detect_VB(struct xgifb_video_info *xgifb_info)
 {
-	struct vb_device_info *vb = &xgifb_info->dev_info;
+	struct vb_device_info *vb = &xgifb_info->dev_dbg;
 	u8 cr32, temp = 0;
 
 	xgifb_info->TV_plug = 0;
@@ -1525,7 +1525,7 @@ static bool XGIfb_has_VB(struct xgifb_video_info *xgifb_info)
 {
 	u8 vb_chipid;
 
-	vb_chipid = xgifb_reg_get(xgifb_info->dev_info.Part4Port, 0x00);
+	vb_chipid = xgifb_reg_get(xgifb_info->dev_dbg.Part4Port, 0x00);
 	switch (vb_chipid) {
 	case 0x01:
 		xgifb_info->hasVB = HASVB_301;
@@ -1545,7 +1545,7 @@ static void XGIfb_get_VB_type(struct xgifb_video_info *xgifb_info)
 	u8 reg;
 
 	if (!XGIfb_has_VB(xgifb_info)) {
-		reg = xgifb_reg_get(xgifb_info->dev_info.P3d4,
+		reg = xgifb_reg_get(xgifb_info->dev_dbg.P3d4,
 				    IND_XGI_SCRATCH_REG_CR37);
 		switch ((reg & SIS_EXTERNAL_CHIP_MASK) >> 1) {
 		case SIS_EXTERNAL_CHIP_LVDS:
@@ -1578,7 +1578,7 @@ static int __init XGIfb_setup(char *options)
 	if (!options || !*options)
 		return 0;
 
-	pr_info("Options: %s\n", options);
+	pr_debug("Options: %s\n", options);
 
 	while ((this_opt = strsep(&options, ",")) != NULL) {
 		if (!*this_opt)
@@ -1633,7 +1633,7 @@ static int xgifb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 		return -ENOMEM;
 
 	xgifb_info = fb_info->par;
-	vb = &xgifb_info->dev_info;
+	vb = &xgifb_info->dev_dbg;
 	hw_info = &xgifb_info->hw_info;
 	xgifb_info->fb_info = fb_info;
 	xgifb_info->chip_id = pdev->device;
@@ -1653,7 +1653,7 @@ static int xgifb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	xgifb_info->mmio_base = pci_resource_start(pdev, 1);
 	xgifb_info->mmio_size = pci_resource_len(pdev, 1);
 	xgifb_info->vga_base = pci_resource_start(pdev, 2) + 0x30;
-	dev_info(&pdev->dev, "Relocate IO address: %llx [%08lx]\n",
+	dev_dbg(&pdev->dev, "Relocate IO address: %llx [%08lx]\n",
 		 (u64)pci_resource_start(pdev, 2),
 		 xgifb_info->vga_base);
 
@@ -1704,7 +1704,7 @@ static int xgifb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 		goto error_disable;
 	}
 
-	dev_info(&pdev->dev, "chipid = %x\n", xgifb_info->chip);
+	dev_dbg(&pdev->dev, "chipid = %x\n", xgifb_info->chip);
 	hw_info->jChipType = xgifb_info->chip;
 
 	if (XGIfb_get_dram_size(xgifb_info)) {
@@ -1751,13 +1751,13 @@ static int xgifb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	xgifb_info->mmio_vbase = ioremap(xgifb_info->mmio_base,
 					 xgifb_info->mmio_size);
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "Framebuffer at 0x%llx, mapped to 0x%p, size %dk\n",
 		 (u64)xgifb_info->video_base,
 		 xgifb_info->video_vbase,
 		 xgifb_info->video_size / 1024);
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "MMIO at 0x%llx, mapped to 0x%p, size %ldk\n",
 		 (u64)xgifb_info->mmio_base, xgifb_info->mmio_vbase,
 		 xgifb_info->mmio_size / 1024);
@@ -1793,29 +1793,29 @@ static int xgifb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 		reg = xgifb_reg_get(vb->Part4Port, 0x01);
 		if (reg >= 0xE0) {
 			hw_info->ujVBChipID = VB_CHIP_302LV;
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "XGI302LV bridge detected (revision 0x%02x)\n",
 				 reg);
 		} else if (reg >= 0xD0) {
 			hw_info->ujVBChipID = VB_CHIP_301LV;
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "XGI301LV bridge detected (revision 0x%02x)\n",
 				 reg);
 		} else {
 			hw_info->ujVBChipID = VB_CHIP_301;
-			dev_info(&pdev->dev, "XGI301 bridge detected\n");
+			dev_dbg(&pdev->dev, "XGI301 bridge detected\n");
 		}
 		break;
 	case HASVB_302:
 		reg = xgifb_reg_get(vb->Part4Port, 0x01);
 		if (reg >= 0xE0) {
 			hw_info->ujVBChipID = VB_CHIP_302LV;
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "XGI302LV bridge detected (revision 0x%02x)\n",
 				 reg);
 		} else if (reg >= 0xD0) {
 			hw_info->ujVBChipID = VB_CHIP_301LV;
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "XGI302LV bridge detected (revision 0x%02x)\n",
 				 reg);
 		} else if (reg >= 0xB0) {
@@ -1826,28 +1826,28 @@ static int xgifb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 
 		} else {
 			hw_info->ujVBChipID = VB_CHIP_302;
-			dev_info(&pdev->dev, "XGI302 bridge detected\n");
+			dev_dbg(&pdev->dev, "XGI302 bridge detected\n");
 		}
 		break;
 	case HASVB_LVDS:
 		hw_info->ulExternalChip = 0x1;
-		dev_info(&pdev->dev, "LVDS transmitter detected\n");
+		dev_dbg(&pdev->dev, "LVDS transmitter detected\n");
 		break;
 	case HASVB_TRUMPION:
 		hw_info->ulExternalChip = 0x2;
-		dev_info(&pdev->dev, "Trumpion Zurac LVDS scaler detected\n");
+		dev_dbg(&pdev->dev, "Trumpion Zurac LVDS scaler detected\n");
 		break;
 	case HASVB_CHRONTEL:
 		hw_info->ulExternalChip = 0x4;
-		dev_info(&pdev->dev, "Chrontel TV encoder detected\n");
+		dev_dbg(&pdev->dev, "Chrontel TV encoder detected\n");
 		break;
 	case HASVB_LVDS_CHRONTEL:
 		hw_info->ulExternalChip = 0x5;
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "LVDS transmitter and Chrontel TV encoder detected\n");
 		break;
 	default:
-		dev_info(&pdev->dev, "No or unknown bridge type detected\n");
+		dev_dbg(&pdev->dev, "No or unknown bridge type detected\n");
 		break;
 	}
 
@@ -1930,12 +1930,12 @@ static int xgifb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 		break;
 	default:
 		xgifb_info->video_cmap_len = 16;
-		pr_info("Unsupported depth %d\n",
+		pr_debug("Unsupported depth %d\n",
 			xgifb_info->video_bpp);
 		break;
 	}
 
-	pr_info("Default mode is %dx%dx%d (%dHz)\n",
+	pr_debug("Default mode is %dx%dx%d (%dHz)\n",
 		xgifb_info->video_width, xgifb_info->video_height,
 		xgifb_info->video_bpp, xgifb_info->refresh_rate);
 

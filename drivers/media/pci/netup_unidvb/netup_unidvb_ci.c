@@ -227,7 +227,7 @@ int netup_unidvb_ci_register(struct netup_unidvb_dev *dev,
 		return result;
 	}
 	writew(NETUP_UNIDVB_IRQ_CI, dev->bmmio0 + REG_IMASK_SET);
-	dev_info(&pci_dev->dev,
+	dev_dbg(&pci_dev->dev,
 		"%s(): CI adapter %d init done\n", __func__, num);
 	return 0;
 }

@@ -553,7 +553,7 @@ int cs42l51_probe(struct device *dev, struct regmap *regmap)
 		ret = -ENODEV;
 		goto error;
 	}
-	dev_info(dev, "Cirrus Logic CS42L51, Revision: %02X\n",
+	dev_dbg(dev, "Cirrus Logic CS42L51, Revision: %02X\n",
 		 val & CS42L51_CHIP_REV_MASK);
 
 	ret = devm_snd_soc_register_component(dev,

@@ -4516,7 +4516,7 @@ static int bnx2x_alloc_fp_mem_at(struct bnx2x *bp, int index)
 
 		if (CHIP_IS_E3(bp)) {
 			u32 cfg = SHMEM_RD(bp,
-					   dev_info.port_hw_config[BP_PORT(bp)].
+					   dev_dbg.port_hw_config[BP_PORT(bp)].
 					   default_cfg);
 
 			/* Decrease ring size for 1G functions */

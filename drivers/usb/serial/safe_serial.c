@@ -213,7 +213,7 @@ static void safe_process_read_urb(struct urb *urb)
 				__func__, actual_length, length);
 		return;
 	}
-	dev_info(&urb->dev->dev, "%s - actual: %d\n", __func__, actual_length);
+	dev_dbg(&urb->dev->dev, "%s - actual: %d\n", __func__, actual_length);
 	length = actual_length;
 out:
 	tty_insert_flip_string(&port->port, data, length);

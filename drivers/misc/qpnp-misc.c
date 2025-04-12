@@ -432,7 +432,7 @@ static int qpnp_misc_probe(struct platform_device *pdev)
 		return rc;
 	}
 
-	dev_info(mdev->dev, "probe successful\n");
+	dev_dbg(mdev->dev, "probe successful\n");
 	return 0;
 }
 

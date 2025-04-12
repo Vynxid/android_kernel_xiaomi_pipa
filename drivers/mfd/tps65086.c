@@ -95,7 +95,7 @@ static int tps65086_probe(struct i2c_client *client,
 		return ret;
 	}
 
-	dev_info(tps->dev, "Device: TPS65086%01lX, OTP: %c, Rev: %ld\n",
+	dev_dbg(tps->dev, "Device: TPS65086%01lX, OTP: %c, Rev: %ld\n",
 		 (version & TPS65086_DEVICEID_PART_MASK),
 		 (char)((version & TPS65086_DEVICEID_OTP_MASK) >> 4) + 'A',
 		 (version & TPS65086_DEVICEID_REV_MASK) >> 6);

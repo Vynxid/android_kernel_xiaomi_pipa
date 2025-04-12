@@ -491,7 +491,7 @@ int ppc_iommu_map_sg(struct device *dev, struct iommu_table *tbl,
 		if (unlikely(entry == IOMMU_MAPPING_ERROR)) {
 			if (!(attrs & DMA_ATTR_NO_WARN) &&
 			    printk_ratelimit())
-				dev_info(dev, "iommu_alloc failed, tbl %p "
+				dev_dbg(dev, "iommu_alloc failed, tbl %p "
 					 "vaddr %lx npages %lu\n", tbl, vaddr,
 					 npages);
 			goto failure;
@@ -810,7 +810,7 @@ dma_addr_t iommu_map_page(struct device *dev, struct iommu_table *tbl,
 		if (dma_handle == IOMMU_MAPPING_ERROR) {
 			if (!(attrs & DMA_ATTR_NO_WARN) &&
 			    printk_ratelimit())  {
-				dev_info(dev, "iommu_alloc failed, tbl %p "
+				dev_dbg(dev, "iommu_alloc failed, tbl %p "
 					 "vaddr %p npages %d\n", tbl, vaddr,
 					 npages);
 			}
@@ -859,7 +859,7 @@ void *iommu_alloc_coherent(struct device *dev, struct iommu_table *tbl,
 	 * the tce tables.
 	 */
 	if (order >= IOMAP_MAX_ORDER) {
-		dev_info(dev, "iommu_alloc_consistent size too large: 0x%lx\n",
+		dev_dbg(dev, "iommu_alloc_consistent size too large: 0x%lx\n",
 			 size);
 		return NULL;
 	}

@@ -704,7 +704,7 @@ static void pmcraid_timeout_handler(struct timer_list *t)
 	struct pmcraid_instance *pinstance = cmd->drv_inst;
 	unsigned long lock_flags;
 
-	dev_info(&pinstance->pdev->dev,
+	dev_dbg(&pinstance->pdev->dev,
 		"Adapter being reset due to cmd(CDB[0] = %x) timeout\n",
 		cmd->ioa_cb->ioarcb.cdb[0]);
 
@@ -1740,13 +1740,13 @@ static void pmcraid_handle_error_log(struct pmcraid_instance *pinstance)
 
 	if (pinstance->ldn.hcam->notification_lost ==
 	    HOSTRCB_NOTIFICATIONS_LOST)
-		dev_info(&pinstance->pdev->dev, "Error notifications lost\n");
+		dev_dbg(&pinstance->pdev->dev, "Error notifications lost\n");
 
 	ioasc = le32_to_cpu(hcam_ldn->error_log.fd_ioasc);
 
 	if (ioasc == PMCRAID_IOASC_UA_BUS_WAS_RESET ||
 		ioasc == PMCRAID_IOASC_UA_BUS_WAS_RESET_BY_OTHER) {
-		dev_info(&pinstance->pdev->dev,
+		dev_dbg(&pinstance->pdev->dev,
 			"UnitAttention due to IOA Bus Reset\n");
 		scsi_report_bus_reset(
 			pinstance->host,
@@ -1783,7 +1783,7 @@ static void pmcraid_process_ccn(struct pmcraid_cmd *cmd)
 	    atomic_read(&pinstance->ccn.ignore) == 1) {
 		return;
 	} else if (ioasc) {
-		dev_info(&pinstance->pdev->dev,
+		dev_dbg(&pinstance->pdev->dev,
 			"Host RCB (CCN) failed with IOASC: 0x%08X\n", ioasc);
 		spin_lock_irqsave(pinstance->host->host_lock, lock_flags);
 		pmcraid_send_hcam(pinstance, PMCRAID_HCAM_CODE_CONFIG_CHANGE);
@@ -1838,7 +1838,7 @@ static void pmcraid_process_ldn(struct pmcraid_cmd *cmd)
 			pmcraid_set_timestamp(cmd);
 		}
 	} else {
-		dev_info(&pinstance->pdev->dev,
+		dev_dbg(&pinstance->pdev->dev,
 			"Host RCB(LDN) failed with IOASC: 0x%08X\n", ioasc);
 	}
 	/* send netlink message for HCAM notification if enabled */
@@ -5707,7 +5707,7 @@ static int pmcraid_probe(struct pci_dev *pdev,
 		return rc;
 	}
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"Found new IOA(%x:%x), Total IOA count: %d\n",
 		 pdev->vendor, pdev->device,
 		 atomic_read(&pmcraid_adapter_count));

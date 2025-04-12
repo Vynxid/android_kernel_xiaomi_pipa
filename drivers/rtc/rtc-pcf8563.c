@@ -288,7 +288,7 @@ static int pcf8563_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long
 	switch (cmd) {
 	case RTC_VL_READ:
 		if (pcf8563->voltage_low)
-			dev_info(dev, "low voltage detected, date/time is not reliable.\n");
+			dev_dbg(dev, "low voltage detected, date/time is not reliable.\n");
 
 		if (copy_to_user((void __user *)arg, &pcf8563->voltage_low,
 					sizeof(int)))

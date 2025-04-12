@@ -98,7 +98,7 @@ static int a8293_probe(struct i2c_client *client,
 	fe->sec_priv = dev;
 	i2c_set_clientdata(client, dev);
 
-	dev_info(&client->dev, "Allegro A8293 SEC successfully attached\n");
+	dev_dbg(&client->dev, "Allegro A8293 SEC successfully attached\n");
 	return 0;
 err_kfree:
 	kfree(dev);

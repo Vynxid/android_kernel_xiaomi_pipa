@@ -375,7 +375,7 @@ static int tps65217_probe(struct i2c_client *client)
 			dev_warn(tps->dev, "unable to set the status OFF\n");
 	}
 
-	dev_info(tps->dev, "TPS65217 ID %#x version 1.%d\n",
+	dev_dbg(tps->dev, "TPS65217 ID %#x version 1.%d\n",
 			(version & TPS65217_CHIPID_CHIP_MASK) >> 4,
 			version & TPS65217_CHIPID_REV_MASK);
 

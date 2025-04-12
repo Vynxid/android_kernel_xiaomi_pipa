@@ -88,7 +88,7 @@ static int regulator_quirk_notify(struct notifier_block *nb,
 		/* There are two DA9210 on Stout, one on the other boards. */
 		len = of_machine_is_compatible("renesas,stout") ? 3 : 2;
 
-		dev_info(&client->dev, "clearing da9063/da9210 interrupts\n");
+		dev_dbg(&client->dev, "clearing da9063/da9210 interrupts\n");
 		ret = i2c_transfer(client->adapter, da9xxx_msgs, len);
 		if (ret != len)
 			dev_err(&client->dev, "i2c error %d\n", ret);
@@ -101,7 +101,7 @@ static int regulator_quirk_notify(struct notifier_block *nb,
 	return 0;
 
 remove:
-	dev_info(dev, "IRQ2 is not asserted, removing quirk\n");
+	dev_dbg(dev, "IRQ2 is not asserted, removing quirk\n");
 
 	done = true;
 	iounmap(irqc);
@@ -134,7 +134,7 @@ static int __init rcar_gen2_regulator_quirk(void)
 		return 0;
 	}
 
-	pr_info("IRQ2 is asserted, installing da9063/da9210 regulator quirk\n");
+	pr_debug("IRQ2 is asserted, installing da9063/da9210 regulator quirk\n");
 
 	bus_register_notifier(&i2c_bus_type, &regulator_quirk_nb);
 	return 0;

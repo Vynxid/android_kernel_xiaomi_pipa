@@ -372,7 +372,7 @@ static int ali1563_setup(struct pci_dev *dev)
 			ali1563_smba);
 		goto Err;
 	}
-	dev_info(&dev->dev, "Found ALi1563 SMBus at 0x%04x\n", ali1563_smba);
+	dev_dbg(&dev->dev, "Found ALi1563 SMBus at 0x%04x\n", ali1563_smba);
 
 	return 0;
 Err:

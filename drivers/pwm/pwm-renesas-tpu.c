@@ -432,7 +432,7 @@ static int tpu_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "TPU PWM %d registered\n", tpu->pdev->id);
+	dev_dbg(&pdev->dev, "TPU PWM %d registered\n", tpu->pdev->id);
 
 	return 0;
 }

@@ -943,9 +943,9 @@ vt6656_probe(struct usb_interface *intf, const struct usb_device_id *id)
 
 	udev = usb_get_dev(interface_to_usbdev(intf));
 
-	dev_notice(&udev->dev, "%s Ver. %s\n",
+	dev_dbg(&udev->dev, "%s Ver. %s\n",
 		   DEVICE_FULL_DRV_NAM, DEVICE_VERSION);
-	dev_notice(&udev->dev,
+	dev_dbg(&udev->dev,
 		   "Copyright (c) 2004 VIA Networking Technologies, Inc.\n");
 
 	hw = ieee80211_alloc_hw(sizeof(struct vnt_private), &vnt_mac_ops);

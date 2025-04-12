@@ -180,7 +180,7 @@ static void line6_variax_process_message(struct usb_line6 *line6)
 
 	switch (buf[0]) {
 	case LINE6_RESET:
-		dev_info(variax->line6.ifcdev, "VARIAX reset\n");
+		dev_dbg(variax->line6.ifcdev, "VARIAX reset\n");
 		break;
 
 	case LINE6_SYSEX_BEGIN:

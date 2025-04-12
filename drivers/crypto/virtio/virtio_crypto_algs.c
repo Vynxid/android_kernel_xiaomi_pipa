@@ -657,7 +657,7 @@ int virtio_crypto_algs_register(struct virtio_crypto *vcrypto)
 		}
 
 		virtio_crypto_algs[i].active_devs++;
-		dev_info(&vcrypto->vdev->dev, "Registered algo %s\n",
+		dev_dbg(&vcrypto->vdev->dev, "Registered algo %s\n",
 			 virtio_crypto_algs[i].algo.cra_name);
 	}
 

@@ -807,7 +807,7 @@ static int msb_set_overwrite_flag(struct msb_data *msb,
 
 static int msb_mark_bad(struct msb_data *msb, int pba)
 {
-	pr_notice("marking pba %d as bad", pba);
+	pr_debug("marking pba %d as bad", pba);
 	msb_reset(msb, true);
 	return msb_set_overwrite_flag(
 			msb, pba, 0, 0xFF & ~MEMSTICK_OVERWRITE_BKST);
@@ -914,7 +914,7 @@ static int msb_read_page(struct msb_data *msb,
 
 
 		if (error == -EUCLEAN) {
-			pr_notice("correctable error on pba %d, page %d",
+			pr_debug("correctable error on pba %d, page %d",
 				pba, page);
 			error = 0;
 		}
@@ -964,7 +964,7 @@ static int msb_read_oob(struct msb_data *msb, u16 pba, u16 page,
 	*extra = msb->regs.extra_data;
 
 	if (error == -EUCLEAN) {
-		pr_notice("correctable error on pba %d, page %d",
+		pr_debug("correctable error on pba %d, page %d",
 			pba, page);
 		return 0;
 	}
@@ -1397,7 +1397,7 @@ static int msb_ftl_scan(struct msb_data *msb)
 
 		/* can't trust the page if we can't read the oob */
 		if (error == -EBADMSG) {
-			pr_notice(
+			pr_debug(
 			"oob of pba %d damaged, will try to erase it", pba);
 			msb_mark_block_used(msb, pba);
 			msb_erase_block(msb, pba);
@@ -1449,7 +1449,7 @@ static int msb_ftl_scan(struct msb_data *msb)
 
 		/* Block has LBA not according to zoning*/
 		if (msb_get_zone_from_lba(lba) != msb_get_zone_from_pba(pba)) {
-			pr_notice("pba %05d -> [bad lba %05d] - will erase",
+			pr_debug("pba %05d -> [bad lba %05d] - will erase",
 								pba, lba);
 			msb_erase_block(msb, pba);
 			continue;
@@ -1465,24 +1465,24 @@ static int msb_ftl_scan(struct msb_data *msb)
 		other_block = msb->lba_to_pba_table[lba];
 		other_overwrite_flag = overwrite_flags[other_block];
 
-		pr_notice("Collision between pba %d and pba %d",
+		pr_debug("Collision between pba %d and pba %d",
 			pba, other_block);
 
 		if (!(overwrite_flag & MEMSTICK_OVERWRITE_UDST)) {
-			pr_notice("pba %d is marked as stable, use it", pba);
+			pr_debug("pba %d is marked as stable, use it", pba);
 			msb_erase_block(msb, other_block);
 			msb->lba_to_pba_table[lba] = pba;
 			continue;
 		}
 
 		if (!(other_overwrite_flag & MEMSTICK_OVERWRITE_UDST)) {
-			pr_notice("pba %d is marked as stable, use it",
+			pr_debug("pba %d is marked as stable, use it",
 								other_block);
 			msb_erase_block(msb, pba);
 			continue;
 		}
 
-		pr_notice("collision between blocks %d and %d, without stable flag set on both, erasing pba %d",
+		pr_debug("collision between blocks %d and %d, without stable flag set on both, erasing pba %d",
 				pba, other_block, other_block);
 
 		msb_erase_block(msb, other_block);

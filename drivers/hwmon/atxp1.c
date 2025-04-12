@@ -185,7 +185,7 @@ static ssize_t gpio1_store(struct device *dev, struct device_attribute *attr,
 	value &= ATXP1_GPIO1MASK;
 
 	if (value != (data->reg.gpio1 & ATXP1_GPIO1MASK)) {
-		dev_info(dev, "Writing 0x%x to GPIO1.\n", (unsigned int)value);
+		dev_dbg(dev, "Writing 0x%x to GPIO1.\n", (unsigned int)value);
 
 		i2c_smbus_write_byte_data(client, ATXP1_GPIO1, value);
 
@@ -229,7 +229,7 @@ static ssize_t gpio2_store(struct device *dev, struct device_attribute *attr,
 	value &= 0xff;
 
 	if (value != data->reg.gpio2) {
-		dev_info(dev, "Writing 0x%x to GPIO1.\n", (unsigned int)value);
+		dev_dbg(dev, "Writing 0x%x to GPIO1.\n", (unsigned int)value);
 
 		i2c_smbus_write_byte_data(client, ATXP1_GPIO2, value);
 
@@ -281,7 +281,7 @@ static int atxp1_probe(struct i2c_client *client,
 	if (IS_ERR(hwmon_dev))
 		return PTR_ERR(hwmon_dev);
 
-	dev_info(dev, "Using VRM: %d.%d\n", data->vrm / 10, data->vrm % 10);
+	dev_dbg(dev, "Using VRM: %d.%d\n", data->vrm / 10, data->vrm % 10);
 
 	return 0;
 };

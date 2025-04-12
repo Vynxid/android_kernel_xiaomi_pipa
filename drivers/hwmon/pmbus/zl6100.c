@@ -334,7 +334,7 @@ static int zl6100_probe(struct i2c_client *client,
 		return ret;
 	}
 	device_id[ret] = '\0';
-	dev_info(&client->dev, "Device ID %s\n", device_id);
+	dev_dbg(&client->dev, "Device ID %s\n", device_id);
 
 	mid = NULL;
 	for (mid = zl6100_id; mid->name[0]; mid++) {
@@ -346,7 +346,7 @@ static int zl6100_probe(struct i2c_client *client,
 		return -ENODEV;
 	}
 	if (id->driver_data != mid->driver_data)
-		dev_notice(&client->dev,
+		dev_dbg(&client->dev,
 			   "Device mismatch: Configured %s, detected %s\n",
 			   id->name, mid->name);
 

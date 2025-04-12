@@ -831,7 +831,7 @@ static void bchannel_down(struct bc_state *bcs)
 static void bchannel_up(struct bc_state *bcs)
 {
 	if (bcs->chstate & CHS_B_UP) {
-		dev_notice(bcs->cs->dev, "%s: B channel already up\n",
+		dev_dbg(bcs->cs->dev, "%s: B channel already up\n",
 			   __func__);
 		return;
 	}

@@ -774,14 +774,14 @@ static int i40e_alloc_vsi_res(struct i40e_vf *vf, u8 idx)
 			f = i40e_add_mac_filter(vsi,
 						vf->default_lan_addr.addr);
 			if (!f)
-				dev_info(&pf->pdev->dev,
+				dev_dbg(&pf->pdev->dev,
 					 "Could not add MAC filter %pM for VF %d\n",
 					vf->default_lan_addr.addr, vf->vf_id);
 		}
 		eth_broadcast_addr(broadcast);
 		f = i40e_add_mac_filter(vsi, broadcast);
 		if (!f)
-			dev_info(&pf->pdev->dev,
+			dev_dbg(&pf->pdev->dev,
 				 "Could not allocate VF broadcast filter\n");
 		spin_unlock_bh(&vsi->mac_filter_hash_lock);
 		wr32(&pf->hw, I40E_VFQF_HENA1(0, vf->vf_id), (u32)hena);
@@ -1072,7 +1072,7 @@ static int i40e_alloc_vf_res(struct i40e_vf *vf)
 			/* send correct number of queues */
 			total_queue_pairs = I40E_MAX_VF_QUEUES;
 		} else {
-			dev_info(&pf->pdev->dev, "VF %d: Not enough queues to allocate, disabling ADq\n",
+			dev_dbg(&pf->pdev->dev, "VF %d: Not enough queues to allocate, disabling ADq\n",
 				 vf->vf_id);
 			vf->adq_enabled = false;
 		}
@@ -1595,7 +1595,7 @@ static int i40e_pci_sriov_enable(struct pci_dev *pdev, int num_vfs)
 		goto err_out;
 	}
 
-	dev_info(&pdev->dev, "Allocating %d VFs.\n", num_vfs);
+	dev_dbg(&pdev->dev, "Allocating %d VFs.\n", num_vfs);
 	err = i40e_alloc_vfs(pf, num_vfs);
 	if (err) {
 		dev_warn(&pdev->dev, "Failed to enable SR-IOV: %d\n", err);
@@ -1673,7 +1673,7 @@ static int i40e_vc_send_msg_to_vf(struct i40e_vf *vf, u32 v_opcode,
 	/* single place to detect unsuccessful return values */
 	if (v_retval) {
 		vf->num_invalid_msgs++;
-		dev_info(&pf->pdev->dev, "VF %d failed opcode %d, retval: %d\n",
+		dev_dbg(&pf->pdev->dev, "VF %d failed opcode %d, retval: %d\n",
 			 vf->vf_id, v_opcode, v_retval);
 		if (vf->num_invalid_msgs >
 		    I40E_DEFAULT_NUM_INVALID_MSGS_ALLOWED) {
@@ -1692,7 +1692,7 @@ static int i40e_vc_send_msg_to_vf(struct i40e_vf *vf, u32 v_opcode,
 	aq_ret = i40e_aq_send_msg_to_vf(hw, abs_vf_id,	v_opcode, v_retval,
 					msg, msglen, NULL);
 	if (aq_ret) {
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "Unable to send the message to VF %d aq_err %d\n",
 			 vf->vf_id, pf->hw.aq.asq_last_status);
 		return -EIO;
@@ -2018,7 +2018,7 @@ static int i40e_vc_config_promiscuous_mode_msg(struct i40e_vf *vf,
 	}
 
 	if (!aq_ret) {
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "VF %d successfully set multicast promiscuous mode\n",
 			 vf->vf_id);
 		if (allmulti)
@@ -2067,7 +2067,7 @@ static int i40e_vc_config_promiscuous_mode_msg(struct i40e_vf *vf,
 	}
 
 	if (!aq_ret) {
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "VF %d successfully set unicast promiscuous mode\n",
 			 vf->vf_id);
 		if (alluni)
@@ -3168,7 +3168,7 @@ static int i40e_validate_cloud_filter(struct i40e_vf *vf,
 	int bkt;
 
 	if (tc_filter->action != VIRTCHNL_ACTION_TC_REDIRECT) {
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "VF %d: ADQ doesn't support this action (%d)\n",
 			 vf->vf_id, tc_filter->action);
 		goto err;
@@ -3177,7 +3177,7 @@ static int i40e_validate_cloud_filter(struct i40e_vf *vf,
 	/* action_meta is TC number here to which the filter is applied */
 	if (!tc_filter->action_meta ||
 	    tc_filter->action_meta > vf->num_tc) {
-		dev_info(&pf->pdev->dev, "VF %d: Invalid TC number %u\n",
+		dev_dbg(&pf->pdev->dev, "VF %d: Invalid TC number %u\n",
 			 vf->vf_id, tc_filter->action_meta);
 		goto err;
 	}
@@ -3196,7 +3196,7 @@ static int i40e_validate_cloud_filter(struct i40e_vf *vf,
 		f = i40e_find_mac(vsi, data.dst_mac);
 
 		if (!f) {
-			dev_info(&pf->pdev->dev,
+			dev_dbg(&pf->pdev->dev,
 				 "Destination MAC %pM doesn't belong to VF %d\n",
 				 data.dst_mac, vf->vf_id);
 			goto err;
@@ -3211,7 +3211,7 @@ static int i40e_validate_cloud_filter(struct i40e_vf *vf,
 				}
 			}
 			if (!found) {
-				dev_info(&pf->pdev->dev,
+				dev_dbg(&pf->pdev->dev,
 					 "VF %d doesn't have any VLAN id %u\n",
 					 vf->vf_id, ntohs(data.vlan_id));
 				goto err;
@@ -3230,7 +3230,7 @@ static int i40e_validate_cloud_filter(struct i40e_vf *vf,
 	if (mask.dst_mac[0] & data.dst_mac[0]) {
 		if (is_broadcast_ether_addr(data.dst_mac) ||
 		    is_zero_ether_addr(data.dst_mac)) {
-			dev_info(&pf->pdev->dev, "VF %d: Invalid Dest MAC addr %pM\n",
+			dev_dbg(&pf->pdev->dev, "VF %d: Invalid Dest MAC addr %pM\n",
 				 vf->vf_id, data.dst_mac);
 			goto err;
 		}
@@ -3239,7 +3239,7 @@ static int i40e_validate_cloud_filter(struct i40e_vf *vf,
 	if (mask.src_mac[0] & data.src_mac[0]) {
 		if (is_broadcast_ether_addr(data.src_mac) ||
 		    is_zero_ether_addr(data.src_mac)) {
-			dev_info(&pf->pdev->dev, "VF %d: Invalid Source MAC addr %pM\n",
+			dev_dbg(&pf->pdev->dev, "VF %d: Invalid Source MAC addr %pM\n",
 				 vf->vf_id, data.src_mac);
 			goto err;
 		}
@@ -3247,7 +3247,7 @@ static int i40e_validate_cloud_filter(struct i40e_vf *vf,
 
 	if (mask.dst_port & data.dst_port) {
 		if (!data.dst_port || be16_to_cpu(data.dst_port) > 0xFFFF) {
-			dev_info(&pf->pdev->dev, "VF %d: Invalid Dest port\n",
+			dev_dbg(&pf->pdev->dev, "VF %d: Invalid Dest port\n",
 				 vf->vf_id);
 			goto err;
 		}
@@ -3255,7 +3255,7 @@ static int i40e_validate_cloud_filter(struct i40e_vf *vf,
 
 	if (mask.src_port & data.src_port) {
 		if (!data.src_port || be16_to_cpu(data.src_port) > 0xFFFF) {
-			dev_info(&pf->pdev->dev, "VF %d: Invalid Source port\n",
+			dev_dbg(&pf->pdev->dev, "VF %d: Invalid Source port\n",
 				 vf->vf_id);
 			goto err;
 		}
@@ -3263,14 +3263,14 @@ static int i40e_validate_cloud_filter(struct i40e_vf *vf,
 
 	if (tc_filter->flow_type != VIRTCHNL_TCP_V6_FLOW &&
 	    tc_filter->flow_type != VIRTCHNL_TCP_V4_FLOW) {
-		dev_info(&pf->pdev->dev, "VF %d: Invalid Flow type\n",
+		dev_dbg(&pf->pdev->dev, "VF %d: Invalid Flow type\n",
 			 vf->vf_id);
 		goto err;
 	}
 
 	if (mask.vlan_id & data.vlan_id) {
 		if (ntohs(data.vlan_id) > I40E_MAX_VLANID) {
-			dev_info(&pf->pdev->dev, "VF %d: invalid VLAN ID\n",
+			dev_dbg(&pf->pdev->dev, "VF %d: invalid VLAN ID\n",
 				 vf->vf_id);
 			goto err;
 		}
@@ -3367,7 +3367,7 @@ static int i40e_vc_del_cloud_filter(struct i40e_vf *vf, u8 *msg)
 	}
 
 	if (!vf->adq_enabled) {
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "VF %d: ADq not enabled, can't apply cloud filter\n",
 			 vf->vf_id);
 		aq_ret = I40E_ERR_PARAM;
@@ -3375,7 +3375,7 @@ static int i40e_vc_del_cloud_filter(struct i40e_vf *vf, u8 *msg)
 	}
 
 	if (i40e_validate_cloud_filter(vf, vcf)) {
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "VF %d: Invalid input, can't apply cloud filter\n",
 			 vf->vf_id);
 		aq_ret = I40E_ERR_PARAM;
@@ -3418,7 +3418,7 @@ static int i40e_vc_del_cloud_filter(struct i40e_vf *vf, u8 *msg)
 		/* TC filter can be configured based on different combinations
 		 * and in this case IP is not a part of filter config
 		 */
-		dev_info(&pf->pdev->dev, "VF %d: Flow type not configured\n",
+		dev_dbg(&pf->pdev->dev, "VF %d: Flow type not configured\n",
 			 vf->vf_id);
 	}
 
@@ -3498,7 +3498,7 @@ static int i40e_vc_add_cloud_filter(struct i40e_vf *vf, u8 *msg)
 	}
 
 	if (!vf->adq_enabled) {
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "VF %d: ADq is not enabled, can't apply cloud filter\n",
 			 vf->vf_id);
 		aq_ret = I40E_ERR_PARAM;
@@ -3506,7 +3506,7 @@ static int i40e_vc_add_cloud_filter(struct i40e_vf *vf, u8 *msg)
 	}
 
 	if (i40e_validate_cloud_filter(vf, vcf)) {
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "VF %d: Invalid input/s, can't apply cloud filter\n",
 			 vf->vf_id);
 		aq_ret = I40E_ERR_PARAM;
@@ -3552,7 +3552,7 @@ static int i40e_vc_add_cloud_filter(struct i40e_vf *vf, u8 *msg)
 		/* TC filter can be configured based on different combinations
 		 * and in this case IP is not a part of filter config
 		 */
-		dev_info(&pf->pdev->dev, "VF %d: Flow type not configured\n",
+		dev_dbg(&pf->pdev->dev, "VF %d: Flow type not configured\n",
 			 vf->vf_id);
 	}
 
@@ -3739,11 +3739,11 @@ static int i40e_vc_del_qch_msg(struct i40e_vf *vf, u8 *msg)
 		i40e_del_qch(vf);
 		vf->adq_enabled = false;
 		vf->num_tc = 0;
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "Deleting Queue Channels and cloud filters for ADq on VF %d\n",
 			 vf->vf_id);
 	} else {
-		dev_info(&pf->pdev->dev, "VF %d trying to delete queue channels but ADq isn't enabled\n",
+		dev_dbg(&pf->pdev->dev, "VF %d trying to delete queue channels but ADq isn't enabled\n",
 			 vf->vf_id);
 		aq_ret = I40E_ERR_PARAM;
 	}
@@ -4036,10 +4036,10 @@ int i40e_ndo_set_vf_mac(struct net_device *netdev, int vf_id, u8 *mac)
 
 	if (is_zero_ether_addr(mac)) {
 		vf->pf_set_mac = false;
-		dev_info(&pf->pdev->dev, "Removing MAC on VF %d\n", vf_id);
+		dev_dbg(&pf->pdev->dev, "Removing MAC on VF %d\n", vf_id);
 	} else {
 		vf->pf_set_mac = true;
-		dev_info(&pf->pdev->dev, "Setting MAC %pM on VF %d\n",
+		dev_dbg(&pf->pdev->dev, "Setting MAC %pM on VF %d\n",
 			 mac, vf_id);
 	}
 
@@ -4047,7 +4047,7 @@ int i40e_ndo_set_vf_mac(struct net_device *netdev, int vf_id, u8 *mac)
 	 * address
 	 */
 	i40e_vc_disable_vf(vf);
-	dev_info(&pf->pdev->dev, "Bring down and up the VF interface to make this change effective.\n");
+	dev_dbg(&pf->pdev->dev, "Bring down and up the VF interface to make this change effective.\n");
 
 error_param:
 	return ret;
@@ -4124,7 +4124,7 @@ int i40e_ndo_set_vf_port_vlan(struct net_device *netdev, int vf_id,
 	    vsi->info.pvid) {
 		ret = i40e_add_vlan_all_mac(vsi, I40E_VLAN_ANY);
 		if (ret) {
-			dev_info(&vsi->back->pdev->dev,
+			dev_dbg(&vsi->back->pdev->dev,
 				 "add VF VLAN failed, ret=%d aq_err=%d\n", ret,
 				 vsi->back->hw.aq.asq_last_status);
 			spin_unlock_bh(&vsi->mac_filter_hash_lock);
@@ -4146,13 +4146,13 @@ int i40e_ndo_set_vf_port_vlan(struct net_device *netdev, int vf_id,
 	spin_lock_bh(&vsi->mac_filter_hash_lock);
 
 	if (vlan_id) {
-		dev_info(&pf->pdev->dev, "Setting VLAN %d, QOS 0x%x on VF %d\n",
+		dev_dbg(&pf->pdev->dev, "Setting VLAN %d, QOS 0x%x on VF %d\n",
 			 vlan_id, qos, vf_id);
 
 		/* add new VLAN filter for each MAC */
 		ret = i40e_add_vlan_all_mac(vsi, vlan_id);
 		if (ret) {
-			dev_info(&vsi->back->pdev->dev,
+			dev_dbg(&vsi->back->pdev->dev,
 				 "add VF VLAN failed, ret=%d aq_err=%d\n", ret,
 				 vsi->back->hw.aq.asq_last_status);
 			spin_unlock_bh(&vsi->mac_filter_hash_lock);
@@ -4440,12 +4440,12 @@ int i40e_ndo_set_vf_trust(struct net_device *netdev, int vf_id, bool setting)
 
 	vf->trusted = setting;
 	i40e_vc_disable_vf(vf);
-	dev_info(&pf->pdev->dev, "VF %u is now %strusted\n",
+	dev_dbg(&pf->pdev->dev, "VF %u is now %strusted\n",
 		 vf_id, setting ? "" : "un");
 
 	if (vf->adq_enabled) {
 		if (!vf->trusted) {
-			dev_info(&pf->pdev->dev,
+			dev_dbg(&pf->pdev->dev,
 				 "VF %u no longer Trusted, deleting all cloud filters\n",
 				 vf_id);
 			i40e_del_all_cloud_filters(vf);

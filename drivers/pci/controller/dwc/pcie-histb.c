@@ -171,7 +171,7 @@ static int histb_pcie_establish_link(struct pcie_port *pp)
 	u32 regval;
 
 	if (dw_pcie_link_up(pci)) {
-		dev_info(pci->dev, "Link already up\n");
+		dev_dbg(pci->dev, "Link already up\n");
 		return 0;
 	}
 
@@ -410,7 +410,7 @@ static int histb_pcie_probe(struct platform_device *pdev)
 
 	hipcie->phy = devm_phy_get(dev, "phy");
 	if (IS_ERR(hipcie->phy)) {
-		dev_info(dev, "no pcie-phy found\n");
+		dev_dbg(dev, "no pcie-phy found\n");
 		hipcie->phy = NULL;
 		/* fall through here!
 		 * if no pcie-phy found, phy init

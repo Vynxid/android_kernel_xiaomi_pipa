@@ -706,7 +706,7 @@ static int ssd1307fb_probe(struct i2c_client *client,
 	bl->props.max_brightness = MAX_CONTRAST;
 	info->bl_dev = bl;
 
-	dev_info(&client->dev, "fb%d: %s framebuffer device registered, using %d bytes of video memory\n", info->node, info->fix.id, vmem_size);
+	dev_dbg(&client->dev, "fb%d: %s framebuffer device registered, using %d bytes of video memory\n", info->node, info->fix.id, vmem_size);
 
 	return 0;
 

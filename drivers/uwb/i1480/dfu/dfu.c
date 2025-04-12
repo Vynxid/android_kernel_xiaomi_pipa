@@ -163,7 +163,7 @@ int i1480_print_state(struct i1480 *i1480)
 		dev_err(i1480->dev, "cannot read U & L states: %d\n", result);
 		goto error;
 	}
-	dev_info(i1480->dev, "state U 0x%08x, L 0x%08x\n", buf[0], buf[1]);
+	dev_dbg(i1480->dev, "state U 0x%08x, L 0x%08x\n", buf[0], buf[1]);
 error:
 	return result;
 }
@@ -201,7 +201,7 @@ int i1480_fw_upload(struct i1480 *i1480)
 	 * FIXME: find some reliable way to check whether firmware is running
 	 * properly. Maybe use some standard request that has no side effects?
 	 */
-	dev_info(i1480->dev, "firmware uploaded successfully\n");
+	dev_dbg(i1480->dev, "firmware uploaded successfully\n");
 error_rc_release:
 	if (i1480->rc_release)
 		i1480->rc_release(i1480);

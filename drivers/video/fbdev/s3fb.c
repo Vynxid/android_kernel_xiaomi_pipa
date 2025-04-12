@@ -1124,7 +1124,7 @@ static int s3_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
 	/* Ignore secondary VGA device because there is no VGA arbitration */
 	if (! svga_primary_device(dev)) {
-		dev_info(&(dev->dev), "ignoring secondary device\n");
+		dev_dbg(&(dev->dev), "ignoring secondary device\n");
 		return -ENODEV;
 	}
 
@@ -1419,7 +1419,7 @@ static int s3_pci_suspend(struct pci_dev* dev, pm_message_t state)
 	struct fb_info *info = pci_get_drvdata(dev);
 	struct s3fb_info *par = info->par;
 
-	dev_info(info->device, "suspend\n");
+	dev_dbg(info->device, "suspend\n");
 
 	console_lock();
 	mutex_lock(&(par->open_lock));
@@ -1451,7 +1451,7 @@ static int s3_pci_resume(struct pci_dev* dev)
 	struct s3fb_info *par = info->par;
 	int err;
 
-	dev_info(info->device, "resume\n");
+	dev_dbg(info->device, "resume\n");
 
 	console_lock();
 	mutex_lock(&(par->open_lock));

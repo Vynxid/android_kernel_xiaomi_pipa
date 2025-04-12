@@ -509,7 +509,7 @@ static irqreturn_t mpu3050_trigger_handler(int irq, void *p)
 		fifocnt = be16_to_cpu(raw_fifocnt);
 
 		if (fifocnt == 512) {
-			dev_info(mpu3050->dev,
+			dev_dbg(mpu3050->dev,
 				 "FIFO overflow! Emptying and resetting FIFO\n");
 			fifo_overflow = true;
 			/* Reset and enable the FIFO */
@@ -520,7 +520,7 @@ static irqreturn_t mpu3050_trigger_handler(int irq, void *p)
 						 MPU3050_USR_CTRL_FIFO_EN |
 						 MPU3050_USR_CTRL_FIFO_RST);
 			if (ret) {
-				dev_info(mpu3050->dev, "error resetting FIFO\n");
+				dev_dbg(mpu3050->dev, "error resetting FIFO\n");
 				goto out_trigger_unlock;
 			}
 			mpu3050->pending_fifo_footer = false;
@@ -835,7 +835,7 @@ static int mpu3050_hw_init(struct mpu3050 *mpu3050)
 	/* This is device-unique data so it goes into the entropy pool */
 	add_device_randomness(otp, sizeof(otp));
 
-	dev_info(mpu3050->dev,
+	dev_dbg(mpu3050->dev,
 		 "die ID: %04X, wafer ID: %02X, A lot ID: %04X, "
 		 "W lot ID: %03X, WP ID: %01X, rev ID: %02X\n",
 		 /* Die ID, bits 0-12 */
@@ -1072,17 +1072,17 @@ static int mpu3050_trigger_probe(struct iio_dev *indio_dev, int irq)
 	 */
 	switch (irq_trig) {
 	case IRQF_TRIGGER_RISING:
-		dev_info(&indio_dev->dev,
+		dev_dbg(&indio_dev->dev,
 			 "pulse interrupts on the rising edge\n");
 		break;
 	case IRQF_TRIGGER_FALLING:
 		mpu3050->irq_actl = true;
-		dev_info(&indio_dev->dev,
+		dev_dbg(&indio_dev->dev,
 			 "pulse interrupts on the falling edge\n");
 		break;
 	case IRQF_TRIGGER_HIGH:
 		mpu3050->irq_latch = true;
-		dev_info(&indio_dev->dev,
+		dev_dbg(&indio_dev->dev,
 			 "interrupts active high level\n");
 		/*
 		 * With level IRQs, we mask the IRQ until it is processed,
@@ -1095,7 +1095,7 @@ static int mpu3050_trigger_probe(struct iio_dev *indio_dev, int irq)
 		mpu3050->irq_latch = true;
 		mpu3050->irq_actl = true;
 		irq_trig |= IRQF_ONESHOT;
-		dev_info(&indio_dev->dev,
+		dev_dbg(&indio_dev->dev,
 			 "interrupts active low level\n");
 		break;
 	default:
@@ -1203,7 +1203,7 @@ int mpu3050_common_probe(struct device *dev,
 
 		goto err_power_down;
 	}
-	dev_info(dev, "found MPU-3050 part no: %d, version: %d\n",
+	dev_dbg(dev, "found MPU-3050 part no: %d, version: %d\n",
 		 ((val >> 4) & 0xf), (val & 0xf));
 
 	ret = mpu3050_hw_init(mpu3050);

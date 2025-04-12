@@ -901,11 +901,11 @@ static void sci_receive_chars(struct uart_port *port)
 				if (status & SCxSR_FER(port)) {
 					flag = TTY_FRAME;
 					port->icount.frame++;
-					dev_notice(port->dev, "frame error\n");
+					dev_dbg(port->dev, "frame error\n");
 				} else if (status & SCxSR_PER(port)) {
 					flag = TTY_PARITY;
 					port->icount.parity++;
-					dev_notice(port->dev, "parity error\n");
+					dev_dbg(port->dev, "parity error\n");
 				} else
 					flag = TTY_NORMAL;
 
@@ -946,7 +946,7 @@ static int sci_handle_errors(struct uart_port *port)
 		if (tty_insert_flip_char(tport, 0, TTY_OVERRUN))
 			copied++;
 
-		dev_notice(port->dev, "overrun error\n");
+		dev_dbg(port->dev, "overrun error\n");
 	}
 
 	if (status & SCxSR_FER(port)) {
@@ -956,7 +956,7 @@ static int sci_handle_errors(struct uart_port *port)
 		if (tty_insert_flip_char(tport, 0, TTY_FRAME))
 			copied++;
 
-		dev_notice(port->dev, "frame error\n");
+		dev_dbg(port->dev, "frame error\n");
 	}
 
 	if (status & SCxSR_PER(port)) {
@@ -966,7 +966,7 @@ static int sci_handle_errors(struct uart_port *port)
 		if (tty_insert_flip_char(tport, 0, TTY_PARITY))
 			copied++;
 
-		dev_notice(port->dev, "parity error\n");
+		dev_dbg(port->dev, "parity error\n");
 	}
 
 	if (copied)
@@ -3292,9 +3292,9 @@ static int sci_probe_single(struct platform_device *dev,
 
 	/* Sanity check */
 	if (unlikely(index >= SCI_NPORTS)) {
-		dev_notice(&dev->dev, "Attempting to register port %d when only %d are available\n",
+		dev_dbg(&dev->dev, "Attempting to register port %d when only %d are available\n",
 			   index+1, SCI_NPORTS);
-		dev_notice(&dev->dev, "Consider bumping CONFIG_SERIAL_SH_SCI_NR_UARTS!\n");
+		dev_dbg(&dev->dev, "Consider bumping CONFIG_SERIAL_SH_SCI_NR_UARTS!\n");
 		return -EINVAL;
 	}
 	BUILD_BUG_ON(SCI_NPORTS > sizeof(sci_ports_in_use) * 8);
@@ -3457,7 +3457,7 @@ static struct platform_driver sci_driver = {
 
 static int __init sci_init(void)
 {
-	pr_info("%s\n", banner);
+	pr_debug("%s\n", banner);
 
 	return platform_driver_register(&sci_driver);
 }

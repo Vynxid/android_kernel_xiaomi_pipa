@@ -945,7 +945,7 @@ static int dw_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_pm_disable;
 
-	dev_info(chip->dev, "DesignWare AXI DMA Controller, %d channels\n",
+	dev_dbg(chip->dev, "DesignWare AXI DMA Controller, %d channels\n",
 		 dw->hdata->nr_channels);
 
 	return 0;

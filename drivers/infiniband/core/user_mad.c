@@ -681,7 +681,7 @@ static int ib_umad_reg_agent(struct ib_umad_file *file, void __user *arg,
 	mutex_lock(&file->mutex);
 
 	if (!file->port->ib_dev) {
-		dev_notice(file->port->dev,
+		dev_dbg(file->port->dev,
 			   "ib_umad_reg_agent: invalid device\n");
 		ret = -EPIPE;
 		goto out;
@@ -693,7 +693,7 @@ static int ib_umad_reg_agent(struct ib_umad_file *file, void __user *arg,
 	}
 
 	if (ureq.qpn != 0 && ureq.qpn != 1) {
-		dev_notice(file->port->dev,
+		dev_dbg(file->port->dev,
 			   "ib_umad_reg_agent: invalid QPN %d specified\n",
 			   ureq.qpn);
 		ret = -EINVAL;
@@ -704,7 +704,7 @@ static int ib_umad_reg_agent(struct ib_umad_file *file, void __user *arg,
 		if (!__get_agent(file, agent_id))
 			goto found;
 
-	dev_notice(file->port->dev,
+	dev_dbg(file->port->dev,
 		   "ib_umad_reg_agent: Max Agents (%u) reached\n",
 		   IB_UMAD_MAX_AGENTS);
 	ret = -ENOMEM;
@@ -783,7 +783,7 @@ static int ib_umad_reg_agent2(struct ib_umad_file *file, void __user *arg)
 	mutex_lock(&file->mutex);
 
 	if (!file->port->ib_dev) {
-		dev_notice(file->port->dev,
+		dev_dbg(file->port->dev,
 			   "ib_umad_reg_agent2: invalid device\n");
 		ret = -EPIPE;
 		goto out;
@@ -795,7 +795,7 @@ static int ib_umad_reg_agent2(struct ib_umad_file *file, void __user *arg)
 	}
 
 	if (ureq.qpn != 0 && ureq.qpn != 1) {
-		dev_notice(file->port->dev,
+		dev_dbg(file->port->dev,
 			   "ib_umad_reg_agent2: invalid QPN %d specified\n",
 			   ureq.qpn);
 		ret = -EINVAL;
@@ -803,7 +803,7 @@ static int ib_umad_reg_agent2(struct ib_umad_file *file, void __user *arg)
 	}
 
 	if (ureq.flags & ~IB_USER_MAD_REG_FLAGS_CAP) {
-		dev_notice(file->port->dev,
+		dev_dbg(file->port->dev,
 			   "ib_umad_reg_agent2 failed: invalid registration flags specified 0x%x; supported 0x%x\n",
 			   ureq.flags, IB_USER_MAD_REG_FLAGS_CAP);
 		ret = -EINVAL;
@@ -820,7 +820,7 @@ static int ib_umad_reg_agent2(struct ib_umad_file *file, void __user *arg)
 		if (!__get_agent(file, agent_id))
 			goto found;
 
-	dev_notice(file->port->dev,
+	dev_dbg(file->port->dev,
 		   "ib_umad_reg_agent2: Max Agents (%u) reached\n",
 		   IB_UMAD_MAX_AGENTS);
 	ret = -ENOMEM;
@@ -832,7 +832,7 @@ found:
 		req.mgmt_class         = ureq.mgmt_class;
 		req.mgmt_class_version = ureq.mgmt_class_version;
 		if (ureq.oui & 0xff000000) {
-			dev_notice(file->port->dev,
+			dev_dbg(file->port->dev,
 				   "ib_umad_reg_agent2 failed: oui invalid 0x%08x\n",
 				   ureq.oui);
 			ret = -EINVAL;

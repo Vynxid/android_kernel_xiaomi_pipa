@@ -1123,7 +1123,7 @@ dasd_3990_erp_equip_check(struct dasd_ccw_req * erp, char *sense)
 	erp->function = dasd_3990_erp_equip_check;
 
 	if (sense[1] & SNS1_WRITE_INHIBITED) {
-		dev_info(&device->cdev->dev,
+		dev_dbg(&device->cdev->dev,
 			    "Write inhibited path encountered\n");
 
 		/* vary path offline

@@ -319,7 +319,7 @@ int simtec_audio_core_probe(struct platform_device *pdev,
 		return -EINVAL;
 	}
 
-	dev_info(&pdev->dev, "xtal rate is %ld\n", clk_get_rate(xtal_clk));
+	dev_dbg(&pdev->dev, "xtal rate is %ld\n", clk_get_rate(xtal_clk));
 
 	ret = attach_gpio_amp(&pdev->dev, pdata);
 	if (ret)

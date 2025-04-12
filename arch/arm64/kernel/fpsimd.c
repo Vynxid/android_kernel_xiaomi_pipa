@@ -774,9 +774,9 @@ void __init sve_setup(void)
 	 */
 	sve_default_vl = find_supported_vector_length(64);
 
-	pr_info("SVE: maximum available vector length %u bytes per vector\n",
+	pr_debug("SVE: maximum available vector length %u bytes per vector\n",
 		sve_max_vl);
-	pr_info("SVE: default vector length %u bytes per vector\n",
+	pr_debug("SVE: default vector length %u bytes per vector\n",
 		sve_default_vl);
 
 	sve_efi_setup();
@@ -1282,11 +1282,11 @@ static int __init fpsimd_init(void)
 		fpsimd_pm_init();
 		fpsimd_hotplug_init();
 	} else {
-		pr_notice("Floating-point is not implemented\n");
+		pr_debug("Floating-point is not implemented\n");
 	}
 
 	if (!(elf_hwcap & HWCAP_ASIMD))
-		pr_notice("Advanced SIMD is not implemented\n");
+		pr_debug("Advanced SIMD is not implemented\n");
 
 	return sve_sysctl_init();
 }

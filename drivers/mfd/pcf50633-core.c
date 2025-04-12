@@ -227,7 +227,7 @@ static int pcf50633_probe(struct i2c_client *client,
 		return ret;
 	}
 
-	dev_info(pcf->dev, "Probed device version %d variant %d\n",
+	dev_dbg(pcf->dev, "Probed device version %d variant %d\n",
 							version, variant);
 
 	pcf50633_irq_init(pcf, client->irq);

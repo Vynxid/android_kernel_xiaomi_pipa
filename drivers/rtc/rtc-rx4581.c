@@ -146,7 +146,7 @@ static int rx4581_get_datetime(struct device *dev, struct rtc_time *tm)
 	} while (data & RX4581_FLAG_UF);
 
 	if (data & RX4581_FLAG_VLF)
-		dev_info(dev,
+		dev_dbg(dev,
 			"low voltage detected, date/time is not reliable.\n");
 
 	dev_dbg(dev,

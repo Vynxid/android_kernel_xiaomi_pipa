@@ -92,7 +92,7 @@ int mtk_connect_phy_node(struct mtk_eth *eth, struct mtk_mac *mac,
 	phydev->supported &= PHY_GBIT_FEATURES;
 	phydev->advertising = phydev->supported;
 
-	dev_info(eth->dev,
+	dev_dbg(eth->dev,
 		 "connected port %d to PHY at %s [uid=%08x, driver=%s]\n",
 		 port, phydev_name(phydev), phydev->phy_id,
 		 phydev->drv->name);

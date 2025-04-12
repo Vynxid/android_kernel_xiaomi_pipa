@@ -251,7 +251,7 @@ static int pci_acpi_root_get_node(struct acpi_pci_root *root)
 	if (node == NUMA_NO_NODE) {
 		node = x86_pci_root_bus_node(busnum);
 		if (node != 0 && node != NUMA_NO_NODE)
-			dev_info(&device->dev, FW_BUG "no _PXM; falling back to node %d from hardware (may be inconsistent with ACPI node numbers)\n",
+			dev_dbg(&device->dev, FW_BUG "no _PXM; falling back to node %d from hardware (may be inconsistent with ACPI node numbers)\n",
 				node);
 	}
 	if (node != NUMA_NO_NODE && !node_online(node))

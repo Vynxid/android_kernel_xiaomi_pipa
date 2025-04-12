@@ -207,7 +207,7 @@ static int qlcnic_sriov_get_pf_info(struct qlcnic_adapter *adapter,
 
 	qlcnic_sriov_set_vf_max_vlan(adapter, npar_info);
 	qlcnic_sriov_pf_set_ff_max_res(adapter, npar_info);
-	dev_info(&adapter->pdev->dev,
+	dev_dbg(&adapter->pdev->dev,
 		 "\n\ttotal_pf: %d,\n"
 		 "\n\ttotal_rss_engines: %d max_vports: %d max_tx_ques %d,\n"
 		 "\tmax_tx_mac_filters: %d max_rx_mcast_mac_filters: %d,\n"
@@ -1799,7 +1799,7 @@ int qlcnic_sriov_pf_reinit(struct qlcnic_adapter *adapter)
 	if (err)
 		return err;
 
-	dev_info(&adapter->pdev->dev, "%s: op_mode %d\n",
+	dev_dbg(&adapter->pdev->dev, "%s: op_mode %d\n",
 		 __func__, ahw->op_mode);
 	return err;
 }

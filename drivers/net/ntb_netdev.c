@@ -453,7 +453,7 @@ static int ntb_netdev_probe(struct device *client_dev)
 		goto err1;
 
 	list_add(&dev->list, &dev_list);
-	dev_info(&pdev->dev, "%s created\n", ndev->name);
+	dev_dbg(&pdev->dev, "%s created\n", ndev->name);
 	return 0;
 
 err1:

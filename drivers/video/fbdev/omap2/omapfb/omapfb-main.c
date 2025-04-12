@@ -2605,7 +2605,7 @@ static int omapfb_probe(struct platform_device *pdev)
 
 		def_display->driver->get_resolution(def_display, &w, &h);
 
-		dev_info(fbdev->dev, "using display '%s' mode %dx%d\n",
+		dev_dbg(fbdev->dev, "using display '%s' mode %dx%d\n",
 			def_display->name, w, h);
 	}
 

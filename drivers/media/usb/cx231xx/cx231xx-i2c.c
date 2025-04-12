@@ -509,7 +509,7 @@ void cx231xx_do_i2c_scan(struct cx231xx *dev, int i2c_port)
 
 		if (rc < 0)
 			continue;
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "i2c scan: found device @ port %d addr 0x%x  [%s]\n",
 			 i2c_port,
 			 i << 1,

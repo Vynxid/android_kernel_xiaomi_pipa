@@ -247,7 +247,7 @@ static int max1619_detect(struct i2c_client *client,
 	man_id = i2c_smbus_read_byte_data(client, MAX1619_REG_R_MAN_ID);
 	chip_id = i2c_smbus_read_byte_data(client, MAX1619_REG_R_CHIP_ID);
 	if (man_id != 0x4D || chip_id != 0x04) {
-		dev_info(&adapter->dev,
+		dev_dbg(&adapter->dev,
 			 "Unsupported chip (man_id=0x%02X, chip_id=0x%02X).\n",
 			 man_id, chip_id);
 		return -ENODEV;

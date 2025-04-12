@@ -905,7 +905,7 @@ int axp20x_match_device(struct axp20x_dev *axp20x)
 		dev_err(dev, "unsupported AXP20X ID %lu\n", axp20x->variant);
 		return -EINVAL;
 	}
-	dev_info(dev, "AXP20x variant %s found\n",
+	dev_dbg(dev, "AXP20x variant %s found\n",
 		 axp20x_model_names[axp20x->variant]);
 
 	return 0;
@@ -968,7 +968,7 @@ int axp20x_device_probe(struct axp20x_dev *axp20x)
 		pm_power_off = axp20x_power_off;
 	}
 
-	dev_info(axp20x->dev, "AXP20X driver loaded\n");
+	dev_dbg(axp20x->dev, "AXP20X driver loaded\n");
 
 	return 0;
 }

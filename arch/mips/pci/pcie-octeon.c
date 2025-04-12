@@ -1179,7 +1179,7 @@ static int __cvmx_pcie_rc_initialize_gen2(int pcie_port)
 			qlmx_cfg.u64 = cvmx_read_csr(CVMX_MIO_QLMX_CFG(pcie_port));
 
 			if (qlmx_cfg.s.qlm_spd == 15) {
-				pr_notice("PCIe: Port %d is disabled, skipping.\n", pcie_port);
+				pr_debug("PCIe: Port %d is disabled, skipping.\n", pcie_port);
 				return -1;
 			}
 
@@ -1188,13 +1188,13 @@ static int __cvmx_pcie_rc_initialize_gen2(int pcie_port)
 			case 0x3: /* SRIO 1x4 long */
 			case 0x4: /* SRIO 2x2 short */
 			case 0x6: /* SRIO 2x2 long */
-				pr_notice("PCIe: Port %d is SRIO, skipping.\n", pcie_port);
+				pr_debug("PCIe: Port %d is SRIO, skipping.\n", pcie_port);
 				return -1;
 			case 0x9: /* SGMII */
-				pr_notice("PCIe: Port %d is SGMII, skipping.\n", pcie_port);
+				pr_debug("PCIe: Port %d is SGMII, skipping.\n", pcie_port);
 				return -1;
 			case 0xb: /* XAUI */
-				pr_notice("PCIe: Port %d is XAUI, skipping.\n", pcie_port);
+				pr_debug("PCIe: Port %d is XAUI, skipping.\n", pcie_port);
 				return -1;
 			case 0x0: /* PCIE gen2 */
 			case 0x8: /* PCIE gen2 (alias) */
@@ -1202,13 +1202,13 @@ static int __cvmx_pcie_rc_initialize_gen2(int pcie_port)
 			case 0xa: /* PCIE gen1 (alias) */
 				break;
 			default:
-				pr_notice("PCIe: Port %d is unknown, skipping.\n", pcie_port);
+				pr_debug("PCIe: Port %d is unknown, skipping.\n", pcie_port);
 				return -1;
 			}
 		} else {
 			sriox_status_reg.u64 = cvmx_read_csr(CVMX_SRIOX_STATUS_REG(pcie_port));
 			if (sriox_status_reg.s.srio) {
-				pr_notice("PCIe: Port %d is SRIO, skipping.\n", pcie_port);
+				pr_debug("PCIe: Port %d is SRIO, skipping.\n", pcie_port);
 				return -1;
 			}
 		}
@@ -1216,7 +1216,7 @@ static int __cvmx_pcie_rc_initialize_gen2(int pcie_port)
 
 #if 0
     /* This code is so that the PCIe analyzer is able to see 63XX traffic */
-	pr_notice("PCIE : init for pcie analyzer.\n");
+	pr_debug("PCIE : init for pcie analyzer.\n");
 	cvmx_helper_qlm_jtag_init();
 	cvmx_helper_qlm_jtag_shift_zeros(pcie_port, 85);
 	cvmx_helper_qlm_jtag_shift(pcie_port, 1, 1);
@@ -1236,7 +1236,7 @@ static int __cvmx_pcie_rc_initialize_gen2(int pcie_port)
 	/* Make sure we aren't trying to setup a target mode interface in host mode */
 	mio_rst_ctl.u64 = cvmx_read_csr(CVMX_MIO_RST_CTLX(pcie_port));
 	if (!mio_rst_ctl.s.host_mode) {
-		pr_notice("PCIe: Port %d in endpoint mode.\n", pcie_port);
+		pr_debug("PCIe: Port %d in endpoint mode.\n", pcie_port);
 		return -1;
 	}
 
@@ -1297,20 +1297,20 @@ static int __cvmx_pcie_rc_initialize_gen2(int pcie_port)
 	 * interface should be skipped.
 	 */
 	if (CVMX_WAIT_FOR_FIELD64(CVMX_MIO_RST_CTLX(pcie_port), union cvmx_mio_rst_ctlx, rst_done, ==, 1, 10000)) {
-		pr_notice("PCIe: Port %d stuck in reset, skipping.\n", pcie_port);
+		pr_debug("PCIe: Port %d stuck in reset, skipping.\n", pcie_port);
 		return -1;
 	}
 
 	/* Check BIST status */
 	pemx_bist_status.u64 = cvmx_read_csr(CVMX_PEMX_BIST_STATUS(pcie_port));
 	if (pemx_bist_status.u64)
-		pr_notice("PCIe: BIST FAILED for port %d (0x%016llx)\n", pcie_port, CAST64(pemx_bist_status.u64));
+		pr_debug("PCIe: BIST FAILED for port %d (0x%016llx)\n", pcie_port, CAST64(pemx_bist_status.u64));
 	pemx_bist_status2.u64 = cvmx_read_csr(CVMX_PEMX_BIST_STATUS2(pcie_port));
 	/* Errata PCIE-14766 may cause the lower 6 bits to be randomly set on CN63XXp1 */
 	if (OCTEON_IS_MODEL(OCTEON_CN63XX_PASS1_X))
 		pemx_bist_status2.u64 &= ~0x3full;
 	if (pemx_bist_status2.u64)
-		pr_notice("PCIe: BIST2 FAILED for port %d (0x%016llx)\n", pcie_port, CAST64(pemx_bist_status2.u64));
+		pr_debug("PCIe: BIST2 FAILED for port %d (0x%016llx)\n", pcie_port, CAST64(pemx_bist_status2.u64));
 
 	/* Initialize the config space CSRs */
 	__cvmx_pcie_rc_initialize_config_space(pcie_port);
@@ -1332,7 +1332,7 @@ static int __cvmx_pcie_rc_initialize_gen2(int pcie_port)
 		pciercx_cfg031.s.mls = 1;
 		cvmx_pcie_cfgx_write(pcie_port, CVMX_PCIERCX_CFG031(pcie_port), pciercx_cfg031.u32);
 		if (__cvmx_pcie_rc_initialize_link_gen2(pcie_port)) {
-			pr_notice("PCIe: Link timeout on port %d, probably the slot is empty\n", pcie_port);
+			pr_debug("PCIe: Link timeout on port %d, probably the slot is empty\n", pcie_port);
 			return -1;
 		}
 	}
@@ -1433,7 +1433,7 @@ static int __cvmx_pcie_rc_initialize_gen2(int pcie_port)
 
 	/* Display the link status */
 	pciercx_cfg032.u32 = cvmx_pcie_cfgx_read(pcie_port, CVMX_PCIERCX_CFG032(pcie_port));
-	pr_notice("PCIe: Port %d link active, %d lanes, speed gen%d\n", pcie_port, pciercx_cfg032.s.nlw, pciercx_cfg032.s.ls);
+	pr_debug("PCIe: Port %d link active, %d lanes, speed gen%d\n", pcie_port, pciercx_cfg032.s.nlw, pciercx_cfg032.s.ls);
 
 	return 0;
 }
@@ -1920,7 +1920,7 @@ static int __init octeon_pcie_setup(void)
 	}
 
 	if (host_mode) {
-		pr_notice("PCIe: Initializing port 0\n");
+		pr_debug("PCIe: Initializing port 0\n");
 		/* CN63XX pass 1_x/2.0 errata PCIe-15205 */
 		if (OCTEON_IS_MODEL(OCTEON_CN63XX_PASS1_X) ||
 			OCTEON_IS_MODEL(OCTEON_CN63XX_PASS2_0)) {
@@ -1968,7 +1968,7 @@ static int __init octeon_pcie_setup(void)
 				device_needs_bus_num_war(device0);
 		}
 	} else {
-		pr_notice("PCIe: Port 0 in endpoint mode, skipping.\n");
+		pr_debug("PCIe: Port 0 in endpoint mode, skipping.\n");
 		/* CN63XX pass 1_x/2.0 errata PCIe-15205 */
 		if (OCTEON_IS_MODEL(OCTEON_CN63XX_PASS1_X) ||
 			OCTEON_IS_MODEL(OCTEON_CN63XX_PASS2_0)) {
@@ -1993,7 +1993,7 @@ static int __init octeon_pcie_setup(void)
 	}
 
 	if (host_mode) {
-		pr_notice("PCIe: Initializing port 1\n");
+		pr_debug("PCIe: Initializing port 1\n");
 		/* CN63XX pass 1_x/2.0 errata PCIe-15205 */
 		if (OCTEON_IS_MODEL(OCTEON_CN63XX_PASS1_X) ||
 			OCTEON_IS_MODEL(OCTEON_CN63XX_PASS2_0)) {
@@ -2053,7 +2053,7 @@ static int __init octeon_pcie_setup(void)
 				device_needs_bus_num_war(device0);
 		}
 	} else {
-		pr_notice("PCIe: Port 1 not in root complex mode, skipping.\n");
+		pr_debug("PCIe: Port 1 not in root complex mode, skipping.\n");
 		/* CN63XX pass 1_x/2.0 errata PCIe-15205  */
 		if (OCTEON_IS_MODEL(OCTEON_CN63XX_PASS1_X) ||
 			OCTEON_IS_MODEL(OCTEON_CN63XX_PASS2_0)) {

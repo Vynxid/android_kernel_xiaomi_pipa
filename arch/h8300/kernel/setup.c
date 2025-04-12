@@ -105,8 +105,8 @@ void __init setup_arch(char **cmdline_p)
 	init_mm.end_data = (unsigned long) _edata;
 	init_mm.brk = (unsigned long) 0;
 
-	pr_notice("\r\n\nuClinux " CPU "\n");
-	pr_notice("Flat model support (C) 1998,1999 Kenneth Albanowski, D. Jeff Dionne\n");
+	pr_debug("\r\n\nuClinux " CPU "\n");
+	pr_debug("Flat model support (C) 1998,1999 Kenneth Albanowski, D. Jeff Dionne\n");
 
 	if (*command_line)
 		strcpy(boot_command_line, command_line);

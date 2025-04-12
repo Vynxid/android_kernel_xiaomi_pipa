@@ -149,7 +149,7 @@ static void palmas_pwron_params_ofinit(struct device *dev,
 		}
 	}
 
-	dev_info(dev, "h/w controlled shutdown duration=%d seconds\n",
+	dev_dbg(dev, "h/w controlled shutdown duration=%d seconds\n",
 		 lpk_times[config->long_press_time_val]);
 }
 

@@ -668,11 +668,11 @@ static int get_num_of_incomplete_fibs(struct aac_dev *aac)
 
 	ctrl_dev = &aac->pdev->dev;
 
-	dev_info(ctrl_dev, "outstanding cmd: midlevel-%d\n", mlcnt);
-	dev_info(ctrl_dev, "outstanding cmd: lowlevel-%d\n", llcnt);
-	dev_info(ctrl_dev, "outstanding cmd: error handler-%d\n", ehcnt);
-	dev_info(ctrl_dev, "outstanding cmd: firmware-%d\n", fwcnt);
-	dev_info(ctrl_dev, "outstanding cmd: kernel-%d\n", krlcnt);
+	dev_dbg(ctrl_dev, "outstanding cmd: midlevel-%d\n", mlcnt);
+	dev_dbg(ctrl_dev, "outstanding cmd: lowlevel-%d\n", llcnt);
+	dev_dbg(ctrl_dev, "outstanding cmd: error handler-%d\n", ehcnt);
+	dev_dbg(ctrl_dev, "outstanding cmd: firmware-%d\n", fwcnt);
+	dev_dbg(ctrl_dev, "outstanding cmd: kernel-%d\n", krlcnt);
 
 	return mlcnt + llcnt + ehcnt + fwcnt;
 }

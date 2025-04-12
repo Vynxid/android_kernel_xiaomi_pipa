@@ -533,7 +533,7 @@ static ssize_t ab3100_get_set_reg(struct file *file,
 
 		ab3100_get_register_interruptible(ab3100, user_reg, &regvalue);
 
-		dev_info(ab3100->dev,
+		dev_dbg(ab3100->dev,
 			 "debug read AB3100 reg[0x%02x]: 0x%02x\n",
 			 user_reg, regvalue);
 	} else {
@@ -561,7 +561,7 @@ static ssize_t ab3100_get_set_reg(struct file *file,
 		ab3100_set_register_interruptible(ab3100, user_reg, user_value);
 		ab3100_get_register_interruptible(ab3100, user_reg, &regvalue);
 
-		dev_info(ab3100->dev,
+		dev_dbg(ab3100->dev,
 			 "debug write reg[0x%02x]\n"
 			 "  with 0x%02x, after readback: 0x%02x\n",
 			 user_reg, user_value, regvalue);
@@ -892,7 +892,7 @@ static int ab3100_probe(struct i2c_client *client,
 		goto exit_no_detect;
 	}
 
-	dev_info(&client->dev, "Detected chip: %s\n",
+	dev_dbg(&client->dev, "Detected chip: %s\n",
 		 &ab3100->chip_name[0]);
 
 	/* Attach a second dummy i2c_client to the test register address */

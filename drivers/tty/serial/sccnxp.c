@@ -900,7 +900,7 @@ static int sccnxp_probe(struct platform_device *pdev)
 	}
 
 	if (!uartclk) {
-		dev_notice(&pdev->dev, "Using default clock frequency\n");
+		dev_dbg(&pdev->dev, "Using default clock frequency\n");
 		uartclk = s->chip->freq_std;
 	}
 
@@ -915,7 +915,7 @@ static int sccnxp_probe(struct platform_device *pdev)
 		memcpy(&s->pdata, pdata, sizeof(struct sccnxp_pdata));
 
 	if (s->pdata.poll_time_us) {
-		dev_info(&pdev->dev, "Using poll mode, resolution %u usecs\n",
+		dev_dbg(&pdev->dev, "Using poll mode, resolution %u usecs\n",
 			 s->pdata.poll_time_us);
 		s->poll = 1;
 	}

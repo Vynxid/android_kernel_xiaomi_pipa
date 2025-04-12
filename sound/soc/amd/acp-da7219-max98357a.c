@@ -56,7 +56,7 @@ static int cz_da7219_init(struct snd_soc_pcm_runtime *rtd)
 	struct snd_soc_dai *codec_dai = rtd->codec_dai;
 	struct snd_soc_component *component = codec_dai->component;
 
-	dev_info(rtd->dev, "codec dai name = %s\n", codec_dai->name);
+	dev_dbg(rtd->dev, "codec dai name = %s\n", codec_dai->name);
 
 	ret = snd_soc_dai_set_sysclk(codec_dai, DA7219_CLKSRC_MCLK,
 				     CZ_PLAT_CLK, SND_SOC_CLOCK_IN);

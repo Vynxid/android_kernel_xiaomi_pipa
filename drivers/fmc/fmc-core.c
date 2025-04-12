@@ -26,7 +26,7 @@ static int fmc_check_version(unsigned long version, const char *name)
 	}
 
 	if (__FMC_MINOR(version) != FMC_MINOR)
-		pr_info("%s: \"%s\" has wrong minor (has %li, expected %i)\n",
+		pr_debug("%s: \"%s\" has wrong minor (has %li, expected %i)\n",
 		       __func__, name, __FMC_MINOR(version), FMC_MINOR);
 	return 0;
 }
@@ -227,7 +227,7 @@ int fmc_device_register_n_gw(struct fmc_device **devs, int n,
 			break;
 		}
 		if (fmc->flags & FMC_DEVICE_NO_MEZZANINE) {
-			dev_info(fmc->hwdev, "absent mezzanine in slot %d\n",
+			dev_dbg(fmc->hwdev, "absent mezzanine in slot %d\n",
 				 fmc->slot_id);
 			continue;
 		}

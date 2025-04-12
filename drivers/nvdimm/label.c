@@ -842,7 +842,7 @@ static int __blk_label_update(struct nd_region *nd_region,
 
 	/* don't allow updates that consume the last label */
 	if (nfree - alloc < 0 || nfree - alloc + victims < 1) {
-		dev_info(&nsblk->common.dev, "insufficient label space\n");
+		dev_dbg(&nsblk->common.dev, "insufficient label space\n");
 		kfree(victim_map);
 		return -ENOSPC;
 	}

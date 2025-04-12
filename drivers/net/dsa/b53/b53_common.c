@@ -1063,7 +1063,7 @@ static void b53_adjust_link(struct dsa_switch *ds, int port,
 		rgmii_ctrl |= RGMII_CTRL_TIMING_SEL;
 		b53_write8(dev, B53_CTRL_PAGE, off, rgmii_ctrl);
 
-		dev_info(ds->dev, "Configured port %d for %s\n", port,
+		dev_dbg(ds->dev, "Configured port %d for %s\n", port,
 			 phy_modes(phydev->interface));
 	}
 
@@ -2281,7 +2281,7 @@ int b53_switch_register(struct b53_device *dev)
 	if (ret)
 		return ret;
 
-	pr_info("found switch: %s, rev %i\n", dev->name, dev->core_rev);
+	pr_debug("found switch: %s, rev %i\n", dev->name, dev->core_rev);
 
 	return dsa_register_switch(dev->ds);
 }

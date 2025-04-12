@@ -2363,10 +2363,10 @@ static int nv_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 
 	/* determine type and allocate host */
 	if (type == CK804 && adma_enabled) {
-		dev_notice(&pdev->dev, "Using ADMA mode\n");
+		dev_dbg(&pdev->dev, "Using ADMA mode\n");
 		type = ADMA;
 	} else if (type == MCP5x && swncq_enabled) {
-		dev_notice(&pdev->dev, "Using SWNCQ mode\n");
+		dev_dbg(&pdev->dev, "Using SWNCQ mode\n");
 		type = SWNCQ;
 	}
 
@@ -2410,7 +2410,7 @@ static int nv_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 		nv_swncq_host_init(host);
 
 	if (msi_enabled) {
-		dev_notice(&pdev->dev, "Using MSI\n");
+		dev_dbg(&pdev->dev, "Using MSI\n");
 		pci_enable_msi(pdev);
 	}
 

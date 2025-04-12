@@ -1026,7 +1026,7 @@ static void gtco_disconnect(struct usb_interface *interface)
 		kfree(gtco);
 	}
 
-	dev_info(&interface->dev, "gtco driver disconnected\n");
+	dev_dbg(&interface->dev, "gtco driver disconnected\n");
 }
 
 /*   STANDARD MODULE LOAD ROUTINES  */

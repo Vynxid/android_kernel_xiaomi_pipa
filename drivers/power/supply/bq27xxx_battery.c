@@ -1083,7 +1083,7 @@ static void bq27xxx_battery_update_dm_block(struct bq27xxx_device_info *di,
 		return;
 
 	if (be16_to_cpup(prev) == val) {
-		dev_info(di->dev, "%s has %u\n", str, val);
+		dev_dbg(di->dev, "%s has %u\n", str, val);
 		return;
 	}
 
@@ -1103,7 +1103,7 @@ static void bq27xxx_battery_update_dm_block(struct bq27xxx_device_info *di,
 		return;
 	}
 
-	dev_info(di->dev, "update %s to %u\n", str, val);
+	dev_dbg(di->dev, "update %s to %u\n", str, val);
 
 	*prev = cpu_to_be16(val);
 	buf->dirty = true;

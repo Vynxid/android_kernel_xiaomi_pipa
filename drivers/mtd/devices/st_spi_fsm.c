@@ -2113,7 +2113,7 @@ static int stfsm_probe(struct platform_device *pdev)
 	fsm->mtd._write = stfsm_mtd_write;
 	fsm->mtd._erase = stfsm_mtd_erase;
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"Found serial flash device: %s\n"
 		" size = %llx (%lldMiB) erasesize = 0x%08x (%uKiB)\n",
 		info->name,

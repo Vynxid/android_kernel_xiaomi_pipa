@@ -511,7 +511,7 @@ static int omap_rng_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_register;
 
-	dev_info(&pdev->dev, "Random Number Generator ver. %02x\n",
+	dev_dbg(&pdev->dev, "Random Number Generator ver. %02x\n",
 		 omap_rng_read(priv, RNG_REV_REG));
 
 	return 0;

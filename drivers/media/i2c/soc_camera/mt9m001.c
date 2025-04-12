@@ -536,7 +536,7 @@ static int mt9m001_video_probe(struct soc_camera_subdev_desc *ssdd,
 
 	mt9m001->fmt = &mt9m001->fmts[0];
 
-	dev_info(&client->dev, "Detected a MT9M001 chip ID %x (%s)\n", data,
+	dev_dbg(&client->dev, "Detected a MT9M001 chip ID %x (%s)\n", data,
 		 data == 0x8431 ? "C12STM" : "C12ST");
 
 	ret = mt9m001_init(client);

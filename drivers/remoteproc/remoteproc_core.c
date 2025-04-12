@@ -960,7 +960,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
 
 	rproc->state = RPROC_RUNNING;
 
-	dev_info(dev, "remote processor %s is now up\n", rproc->name);
+	dev_dbg(dev, "remote processor %s is now up\n", rproc->name);
 
 	return 0;
 
@@ -987,7 +987,7 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
 	if (ret)
 		return ret;
 
-	dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
+	dev_dbg(dev, "Booting fw image %s, size %zd\n", name, fw->size);
 
 	/*
 	 * if enabling an IOMMU isn't relevant for this rproc, this is
@@ -1088,7 +1088,7 @@ static int rproc_stop(struct rproc *rproc, bool crashed)
 
 	rproc->state = RPROC_OFFLINE;
 
-	dev_info(dev, "stopped remote processor %s\n", rproc->name);
+	dev_dbg(dev, "stopped remote processor %s\n", rproc->name);
 
 	return 0;
 }
@@ -1319,7 +1319,7 @@ int rproc_boot(struct rproc *rproc)
 		goto unlock_mutex;
 	}
 
-	dev_info(dev, "powering up %s\n", rproc->name);
+	dev_dbg(dev, "powering up %s\n", rproc->name);
 
 	/* load firmware */
 	ret = request_firmware(&firmware_p, rproc->firmware, dev);
@@ -1474,7 +1474,7 @@ int rproc_add(struct rproc *rproc)
 	if (ret < 0)
 		return ret;
 
-	dev_info(dev, "%s is available\n", rproc->name);
+	dev_dbg(dev, "%s is available\n", rproc->name);
 
 	/* create debugfs entries */
 	rproc_create_debug_dir(rproc);
@@ -1508,7 +1508,7 @@ static void rproc_type_release(struct device *dev)
 {
 	struct rproc *rproc = container_of(dev, struct rproc, dev);
 
-	dev_info(&rproc->dev, "releasing %s\n", rproc->name);
+	dev_dbg(&rproc->dev, "releasing %s\n", rproc->name);
 
 	idr_destroy(&rproc->notifyids);
 

@@ -47,7 +47,7 @@ int mmc_pwrseq_alloc(struct mmc_host *host)
 	if (!host->pwrseq)
 		return -EPROBE_DEFER;
 
-	dev_info(host->parent, "allocated mmc-pwrseq\n");
+	dev_dbg(host->parent, "allocated mmc-pwrseq\n");
 
 	return 0;
 }

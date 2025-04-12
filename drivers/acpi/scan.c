@@ -372,7 +372,7 @@ static int acpi_generic_hotplug_event(struct acpi_device *adev, u32 type)
 	case ACPI_NOTIFY_EJECT_REQUEST:
 	case ACPI_OST_EC_OSPM_EJECT:
 		if (adev->handler && !adev->handler->hotplug.enabled) {
-			dev_info(&adev->dev, "Eject disabled\n");
+			dev_dbg(&adev->dev, "Eject disabled\n");
 			return -EPERM;
 		}
 		acpi_evaluate_ost(adev->handle, ACPI_NOTIFY_EJECT_REQUEST,

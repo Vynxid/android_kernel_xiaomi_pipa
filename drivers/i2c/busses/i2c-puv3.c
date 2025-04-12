@@ -215,7 +215,7 @@ static int puv3_i2c_probe(struct platform_device *pdev)
 	if (rc)
 		goto fail_add_adapter;
 
-	dev_info(&pdev->dev, "PKUnity v3 i2c bus adapter.\n");
+	dev_dbg(&pdev->dev, "PKUnity v3 i2c bus adapter.\n");
 	return 0;
 
 fail_add_adapter:

@@ -559,7 +559,7 @@ static int okl4_vipc_probe(struct platform_device *pdev)
 		ret = PTR_ERR(clsdev);
 		goto err_dev_create;
 	}
-	dev_info(parent, "using /dev/vipc%d\n", dev->minor);
+	dev_dbg(parent, "using /dev/vipc%d\n", dev->minor);
 	dev_set_drvdata(parent, dev);
 
 	return 0;

@@ -219,7 +219,7 @@ static int apr_tal_rpmsg_probe(struct rpmsg_device *rpdev)
 	}
 
 	if (!strcmp(rpdev->id.name, "apr_audio_svc")) {
-		dev_info(&rpdev->dev, "%s: Channel[%s] state[Up]\n",
+		dev_dbg(&rpdev->dev, "%s: Channel[%s] state[Up]\n",
 			 __func__, rpdev->id.name);
 	} else {
 		dev_err(&rpdev->dev, "%s, Invalid Channel [%s]\n",
@@ -258,7 +258,7 @@ static void apr_tal_rpmsg_remove(struct rpmsg_device *rpdev)
 		return;
 	}
 
-	dev_info(&rpdev->dev, "%s: Channel[%s] state[Down]\n",
+	dev_dbg(&rpdev->dev, "%s: Channel[%s] state[Down]\n",
 		 __func__, rpdev->id.name);
 	apr_ch->handle = NULL;
 	apr_ch->channel_state = APR_CH_DISCONNECTED;

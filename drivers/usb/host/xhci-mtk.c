@@ -331,7 +331,7 @@ static int usb_wakeup_of_property_parse(struct xhci_hcd_mtk *mtk,
 	mtk->uwk_vers = args.args[1];
 	mtk->uwk = syscon_node_to_regmap(args.np);
 	of_node_put(args.np);
-	dev_info(mtk->dev, "uwk - reg:0x%x, version:%d\n",
+	dev_dbg(mtk->dev, "uwk - reg:0x%x, version:%d\n",
 			mtk->uwk_reg_base, mtk->uwk_vers);
 
 	return PTR_ERR_OR_ZERO(mtk->uwk);

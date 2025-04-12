@@ -203,14 +203,14 @@ static void ch101_read_range_data(struct ch101_data *data,
 	int ind, int *range)
 {
 	*range = data->buffer.distance[ind];
-	pr_info(TAG "%s: %d: range: %d\n", __func__, ind, *range);
+	pr_debug(TAG "%s: %d: range: %d\n", __func__, ind, *range);
 }
 
 static void ch101_read_amplitude_data(struct ch101_data *data,
 	int ind, int *amplitude)
 {
 	*amplitude = data->buffer.amplitude[ind];
-	pr_info(TAG "%s: %d: amplitude: %d\n", __func__, ind, *amplitude);
+	pr_debug(TAG "%s: %d: amplitude: %d\n", __func__, ind, *amplitude);
 }
 
 static void ch101_set_freq(struct ch101_data *data, int freq)
@@ -329,7 +329,7 @@ static int ch101_write_raw(struct iio_dev *indio_dev,
 	struct ch101_data *data = iio_priv(indio_dev);
 	int ind;
 
-	pr_info(TAG "%s: type: %d, mask: %lu val: %d val2: %d\n", __func__,
+	pr_debug(TAG "%s: type: %d, mask: %lu val: %d val2: %d\n", __func__,
 		chan->type, mask, val, val2);
 
 	switch (mask) {
@@ -383,7 +383,7 @@ static int ch101_trig_set_state(struct iio_trigger *trig, bool state)
 	struct ch101_data *data = iio_priv(indio_dev);
 	struct device *dev = data->dev;
 
-	dev_info(dev, "%s: state: %d\n", __func__, state);
+	dev_dbg(dev, "%s: state: %d\n", __func__, state);
 
 	init_fw(data);
 
@@ -405,7 +405,7 @@ static irqreturn_t ch101_store_time(int irq, void *p)
 	struct iio_poll_func *pf = p;
 
 	pf->timestamp = ktime_get_boot_ns();
-	pr_info(TAG "%s: t: %llu\n", __func__, pf->timestamp);
+	pr_debug(TAG "%s: t: %llu\n", __func__, pf->timestamp);
 
 	return IRQ_WAKE_THREAD;
 }
@@ -436,7 +436,7 @@ static int ch101_push_to_buffer(void *input_data)
 	u8 mode;
 	int cur_max_samples;
 
-	pr_info(TAG "%s: mask: %02x\n", __func__,
+	pr_debug(TAG "%s: mask: %02x\n", __func__,
 			*indio_dev->active_scan_mask);
 
 	mutex_lock(&data->lock);
@@ -456,7 +456,7 @@ static int ch101_push_to_buffer(void *input_data)
 		goto out;
 
 	buf = ch101_iio_buffer;
-	pr_info(TAG "scan bytes: %d, ts=%lld\n", indio_dev->scan_bytes,
+	pr_debug(TAG "scan bytes: %d, ts=%lld\n", indio_dev->scan_bytes,
 						starting_ts);
 
 	for (i = 0; i < cur_max_samples; i += CH101_IQ_PACK) {
@@ -473,7 +473,7 @@ static int ch101_push_to_buffer(void *input_data)
 				ind = bit - IQ_0;
 				memcpy(pbuf, &(buffer->iq_data[ind][i]), len);
 				pbuf += CH101_IQ_PACK_BYTES;
-				//pr_info("iq_data: %d %d\n",
+				//pr_debug("iq_data: %d %d\n",
 					//buffer->iq_data[ind][i].I,
 					//buffer->iq_data[ind][i].Q);
 			} else if (bit >= DISTANCE_0 && bit < INTENSITY_0) {
@@ -489,14 +489,14 @@ static int ch101_push_to_buffer(void *input_data)
 				mode = buffer->mode[ind];
 				memcpy(pbuf, &mode, 1);
 				pbuf += sizeof(u8);
-				//pr_info("mode copy=%d, %d\n", ind, mode);
+				//pr_debug("mode copy=%d, %d\n", ind, mode);
 			}
 		}
 		pbuf += sizeof(u64);
 		ret = iio_push_to_buffers_with_timestamp(indio_dev, buf,
 						starting_ts);
 
-		pr_info(TAG "push tobuffer=%d, size=%d\n", i,
+		pr_debug(TAG "push tobuffer=%d, size=%d\n", i,
 			(int)(pbuf-buf));
 	}
 out:
@@ -514,12 +514,12 @@ static int control_thread_fn(void *input_data)
 	start = true;
 	stop = false;
 
-	dev_info(dev, "%s: Start", __func__);
+	dev_dbg(dev, "%s: Start", __func__);
 
 	while (start) {
 		wait_for_completion(&data->data_completion);
 
-		dev_info(dev, "%s: , mode: %02x",
+		dev_dbg(dev, "%s: , mode: %02x",
 				__func__, indio_dev->currentmode);
 
 		starting_ts = iio_get_time_ns(indio_dev);
@@ -528,7 +528,7 @@ static int control_thread_fn(void *input_data)
 			ch101_push_to_buffer(input_data);
 		//iio_trigger_poll(indio_dev->trig);
 		if (int_cal_request || prog_cal_request) {
-			dev_info(dev, "%s: cal_request", __func__);
+			dev_dbg(dev, "%s: cal_request", __func__);
 			test_gpios(data);
 			int_cal_request = false;
 			prog_cal_request = false;
@@ -547,14 +547,14 @@ static enum hrtimer_restart ch101_hrtimer_handler(struct hrtimer *t)
 	if (!data)
 		return HRTIMER_NORESTART;
 
-	pr_info(TAG "%s: %d\n", __func__, data->counter);
+	pr_debug(TAG "%s: %d\n", __func__, data->counter);
 	if (data->counter-- <= 0) {
 		data->counter = ss_count;
-		pr_info(TAG "%s: Stop\n", __func__);
+		pr_debug(TAG "%s: Stop\n", __func__);
 		return HRTIMER_NORESTART;
 	}
 
-	pr_info(TAG "%s: t: %lld, counter: %d\n",
+	pr_debug(TAG "%s: t: %lld, counter: %d\n",
 		__func__, ktime_get_boot_ns(), data->counter);
 
 	complete(&data->data_completion);
@@ -572,7 +572,7 @@ static void set_gpios_bus(struct device *dev, struct ch101_i2c_bus *bus)
 		of_property_read_u32_index(dev->of_node, "prg-gpios", i,
 					&(bus->gpio_exp_prog_pin[i]));
 
-		dev_info(dev, "gpio exp prog pin %d is %d\n",
+		dev_dbg(dev, "gpio exp prog pin %d is %d\n",
 			i, bus->gpio_exp_prog_pin[i]);
 
 
@@ -585,7 +585,7 @@ static void set_gpios_bus(struct device *dev, struct ch101_i2c_bus *bus)
 			}
 		}
 
-		dev_info(dev, "%s: %08p %d\n", __func__,
+		dev_dbg(dev, "%s: %08p %d\n", __func__,
 			bus->gpiod_int[i],
 			bus->gpio_exp_prog_pin[i]);
 	}
@@ -609,11 +609,11 @@ static void set_gpios(int bus_index, struct ch101_data *data, int rst_pin)
 			gpios->gpiod_rst = NULL;
 		} else {
 			gpiod_set_value(gpios->gpiod_rst, 1);
-			dev_info(dev, "%s: Reset found and disabled.\n",
+			dev_dbg(dev, "%s: Reset found and disabled.\n",
 				__func__);
 		}
 	} else {
-		dev_info(dev, "%s: Reset pin already found.\n", __func__);
+		dev_dbg(dev, "%s: Reset pin already found.\n", __func__);
 	}
 
 	/* Get timer pulse reset control */
@@ -625,14 +625,14 @@ static void set_gpios(int bus_index, struct ch101_data *data, int rst_pin)
 			gpios->gpiod_rst_pulse = NULL;
 		} else {
 			gpiod_set_value(gpios->gpiod_rst_pulse, 1);
-			dev_info(dev, "%s: Timer Reset found and disabled.\n",
+			dev_dbg(dev, "%s: Timer Reset found and disabled.\n",
 					__func__);
 		}
 	} else {
-		dev_info(dev, "%s: Timer Reset pin already found.\n", __func__);
+		dev_dbg(dev, "%s: Timer Reset pin already found.\n", __func__);
 	}
 
-	dev_info(dev, "%s: Reset: %08p Pulse: %08p\n", __func__,
+	dev_dbg(dev, "%s: Reset: %08p Pulse: %08p\n", __func__,
 			gpios->gpiod_rst, gpios->gpiod_rst_pulse);
 
 	for (i = 0; i < MAX_DEVICES; i++) {
@@ -641,7 +641,7 @@ static void set_gpios(int bus_index, struct ch101_data *data, int rst_pin)
 		of_property_read_u32_index(dev->of_node, "prg-gpios", index,
 					&(bus->gpio_exp_prog_pin[i]));
 
-		dev_info(dev, "gpio exp prog pin %d is %d\n",
+		dev_dbg(dev, "gpio exp prog pin %d is %d\n",
 			index, bus->gpio_exp_prog_pin[i]);
 
 
@@ -654,7 +654,7 @@ static void set_gpios(int bus_index, struct ch101_data *data, int rst_pin)
 			}
 		}
 
-		dev_info(dev, "%s: %08p %d\n", __func__,
+		dev_dbg(dev, "%s: %08p %d\n", __func__,
 				bus->gpiod_int[i], bus->gpio_exp_prog_pin[i]);
 	}
 }
@@ -666,7 +666,7 @@ static irqreturn_t ch101_event_handler(int irq, void *private)
 	struct device *dev = data->dev;
 	int i = 0;
 
-	dev_info(dev, "%s: irq: %d\n", __func__, irq);
+	dev_dbg(dev, "%s: irq: %d\n", __func__, irq);
 
 	for (i = 0; i < CHBSP_MAX_DEVICES; i++) {
 		if (data->irq[i] == irq)
@@ -674,7 +674,7 @@ static irqreturn_t ch101_event_handler(int irq, void *private)
 	}
 
 	if (i < CHBSP_MAX_DEVICES) {
-//		dev_info(dev, "%s: irq: %d i: %d\n", __func__, irq, i);
+//		dev_dbg(dev, "%s: irq: %d i: %d\n", __func__, irq, i);
 		ext_ChirpINT0_handler(i);
 	}
 
@@ -756,7 +756,7 @@ static int setup_int_gpio(struct ch101_client *client_drv, uint32_t pin)
 		return -EPERM;
 
 	snprintf(devname, sizeof(devname), "%s%d", CH101_IRQ_NAME, index);
-	dev_info(dev, "%s: IRQ: %d %s\n", __func__, data->irq[index], devname);
+	dev_dbg(dev, "%s: IRQ: %d %s\n", __func__, data->irq[index], devname);
 
 	ret = gpiod_direction_input(bus->gpiod_int[dev_index]);
 	if (ret < 0)
@@ -795,7 +795,7 @@ static int free_int_gpio(struct ch101_client *client_drv, uint32_t pin)
 	indio_dev = dev_get_drvdata(dev);
 	bus = &data->client.bus[bus_index];
 
-//	dev_info(dev, "%s: IRQ: %d, set: %d\n",
+//	dev_dbg(dev, "%s: IRQ: %d, set: %d\n",
 //		__func__, data->irq[index], data->irq_set[index]);
 
 	if (data->irq_set[index] == 0)
@@ -804,7 +804,7 @@ static int free_int_gpio(struct ch101_client *client_drv, uint32_t pin)
 	if (data->irq[index] == 0)
 		return -EPERM;
 
-	dev_info(dev, "%s: IRQ: %d\n", __func__, data->irq[index]);
+	dev_dbg(dev, "%s: IRQ: %d\n", __func__, data->irq[index]);
 
 	free_irq(data->irq[index], indio_dev);
 
@@ -863,12 +863,12 @@ static void test_gpios(struct ch101_data *data)
 
 			if (int_cal_request) {
 
-				dev_info(data->dev, "%s: %d %d\n",
+				dev_dbg(data->dev, "%s: %d %d\n",
 					__func__, index, data->irq_map[index]);
 
 				set_value = (cycle_cnt % 2);
 
-				dev_info(data->dev, "%s: INT set to %d\n",
+				dev_dbg(data->dev, "%s: INT set to %d\n",
 					__func__, set_value);
 				gpiod_set_value(gpio_int, set_value);
 
@@ -881,7 +881,7 @@ static void test_gpios(struct ch101_data *data)
 
 				if (set_value == raw_value &&
 					set_value == value) {
-					dev_info(data->dev,
+					dev_dbg(data->dev,
 			"%s: Current INT pin state: rv: %i v: %i d: %i al: %i\n",
 			__func__, raw_value, value, dir, is_active_low);
 				} else {
@@ -894,12 +894,12 @@ static void test_gpios(struct ch101_data *data)
 			if (prog_cal_request) {
 				int pin = bus->gpio_exp_prog_pin[dev_index];
 
-				dev_info(data->dev, "%s: %d pin: %d\n",
+				dev_dbg(data->dev, "%s: %d pin: %d\n",
 					__func__, index, pin);
 
 				set_value = (cycle_cnt % 2);
 
-				dev_info(data->dev, "%s: PROG set to %d\n",
+				dev_dbg(data->dev, "%s: PROG set to %d\n",
 					__func__, set_value);
 				cbk->set_pin_level(pin, set_value);
 
@@ -925,7 +925,7 @@ static int test_rst_gpio(struct ch101_data *data, struct gpio_desc *rst)
 
 		set_value = i % 2;
 
-		dev_info(data->dev, "%s: RST set to %d\n", __func__, set_value);
+		dev_dbg(data->dev, "%s: RST set to %d\n", __func__, set_value);
 		gpiod_set_value(rst, set_value);
 
 		msleep(100);
@@ -937,7 +937,7 @@ static int test_rst_gpio(struct ch101_data *data, struct gpio_desc *rst)
 
 		if (set_value == raw_value &&
 		     set_value == value) {
-			dev_info(data->dev,
+			dev_dbg(data->dev,
 			"%s: Current RST pin state: rv: %i v: %i d: %i al: %i\n",
 			__func__, raw_value, value, dir, is_active_low);
 		} else {
@@ -976,7 +976,7 @@ int ch101_core_probe(struct i2c_client *client, struct regmap *regmap,
 
 	dev = &client->dev;
 
-	dev_info(dev, "%s: Start v.1.60 s: %d", __func__, sizeof(*data));
+	dev_dbg(dev, "%s: Start v.1.60 s: %d", __func__, sizeof(*data));
 
 	if (ch101_store.i2c_client == NULL) {
 		ch101_store.i2c_client = client;
@@ -988,7 +988,7 @@ int ch101_core_probe(struct i2c_client *client, struct regmap *regmap,
 	if (!indio_dev)
 		return -ENOMEM;
 
-	dev_info(dev, "%s: indio_dev: %p, client: %p",
+	dev_dbg(dev, "%s: indio_dev: %p, client: %p",
 		__func__, indio_dev, client);
 
 	data = iio_priv(indio_dev);
@@ -1010,7 +1010,7 @@ int ch101_core_probe(struct i2c_client *client, struct regmap *regmap,
 				ch101_store.gpiod_int[i];
 			bus->gpio_exp_prog_pin[i] =
 				ch101_store.gpio_exp_prog_pin[i];
-			dev_info(dev, "%s: %08p %d\n", __func__,
+			dev_dbg(dev, "%s: %08p %d\n", __func__,
 				bus->gpiod_int[i], bus->gpio_exp_prog_pin[i]);
 		}
 	}
@@ -1053,7 +1053,7 @@ int ch101_core_probe(struct i2c_client *client, struct regmap *regmap,
 
 		if (gpiod_int != NULL) {
 			data->irq[i] = gpiod_to_irq(gpiod_int);
-			dev_info(dev, "%s: IRQ: %d\n", __func__, data->irq[i]);
+			dev_dbg(dev, "%s: IRQ: %d\n", __func__, data->irq[i]);
 		} else {
 			data->irq[i] = 0;
 		}
@@ -1125,7 +1125,7 @@ int ch101_core_probe(struct i2c_client *client, struct regmap *regmap,
 	ch101_set_freq(data, CH101_DEFAULT_FREQ);
 	data->timer.function = ch101_hrtimer_handler;
 
-	dev_info(dev, "%s: data->period: %d\n", __func__, data->period);
+	dev_dbg(dev, "%s: data->period: %d\n", __func__, data->period);
 
 	{
 	static struct task_struct *thread_st;
@@ -1134,7 +1134,7 @@ int ch101_core_probe(struct i2c_client *client, struct regmap *regmap,
 		"CH101 Control Thread");
 	}
 
-	dev_info(dev, "%s: End\n", __func__);
+	dev_dbg(dev, "%s: End\n", __func__);
 
 	return ret;
 
@@ -1165,7 +1165,7 @@ int ch101_core_remove(struct i2c_client *client)
 	struct ch101_data *data = iio_priv(indio_dev);
 	struct ch101_callbacks *cbk = data->client.cbk;
 
-	dev_info(dev, "%s: Start: %p\n", __func__, data);
+	dev_dbg(dev, "%s: Start: %p\n", __func__, data);
 
 	start = false;
 	while (!stop)
@@ -1179,7 +1179,7 @@ int ch101_core_remove(struct i2c_client *client)
 		setup_int_gpio(&data->client, data->irq_map[i]);
 	}
 
-	dev_info(dev, "%s: trig: %p\n", __func__, data->trig);
+	dev_dbg(dev, "%s: trig: %p\n", __func__, data->trig);
 	iio_trigger_unregister(data->trig);
 	iio_trigger_free(data->trig);
 
@@ -1187,7 +1187,7 @@ int ch101_core_remove(struct i2c_client *client)
 	devm_iio_device_free(dev, indio_dev);
 	devm_kfree(dev, cbk);
 
-	dev_info(dev, "%s: End\n", __func__);
+	dev_dbg(dev, "%s: End\n", __func__);
 
 	return ret;
 }

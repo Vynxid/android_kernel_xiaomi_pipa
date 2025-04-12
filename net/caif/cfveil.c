@@ -23,13 +23,13 @@
 static int cfvei_receive(struct cflayer *layr, struct cfpkt *pkt);
 static int cfvei_transmit(struct cflayer *layr, struct cfpkt *pkt);
 
-struct cflayer *cfvei_create(u8 channel_id, struct dev_info *dev_info)
+struct cflayer *cfvei_create(u8 channel_id, struct dev_dbg *dev_dbg)
 {
 	struct cfsrvl *vei = kzalloc(sizeof(struct cfsrvl), GFP_ATOMIC);
 	if (!vei)
 		return NULL;
 	caif_assert(offsetof(struct cfsrvl, layer) == 0);
-	cfsrvl_init(vei, channel_id, dev_info, true);
+	cfsrvl_init(vei, channel_id, dev_dbg, true);
 	vei->layer.receive = cfvei_receive;
 	vei->layer.transmit = cfvei_transmit;
 	snprintf(vei->layer.name, CAIF_LAYER_NAME_SZ - 1, "vei%d", channel_id);
@@ -93,7 +93,7 @@ static int cfvei_transmit(struct cflayer *layr, struct cfpkt *pkt)
 	info = cfpkt_info(pkt);
 	info->channel_id = service->layer.id;
 	info->hdr_len = 1;
-	info->dev_info = &service->dev_info;
+	info->dev_dbg = &service->dev_dbg;
 	return layr->dn->transmit(layr->dn, pkt);
 err:
 	cfpkt_destroy(pkt);

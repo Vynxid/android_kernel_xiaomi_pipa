@@ -323,13 +323,13 @@ int rtl8366_init_vlan(struct realtek_smi *smi)
 		 * member of VLAN 6 and so are ALL the other ports as well.
 		 * Use filter 0 (no filter).
 		 */
-		dev_info(smi->dev, "VLAN%d port mask for port %d, %08x\n",
+		dev_dbg(smi->dev, "VLAN%d port mask for port %d, %08x\n",
 			 (port + 1), port, mask);
 		ret = rtl8366_set_vlan(smi, (port + 1), mask, mask, 0);
 		if (ret)
 			return ret;
 
-		dev_info(smi->dev, "VLAN%d port %d, PVID set to %d\n",
+		dev_dbg(smi->dev, "VLAN%d port %d, PVID set to %d\n",
 			 (port + 1), port, (port + 1));
 		ret = rtl8366_set_pvid(smi, port, (port + 1));
 		if (ret)
@@ -350,7 +350,7 @@ int rtl8366_vlan_filtering(struct dsa_switch *ds, int port, bool vlan_filtering)
 	if (!smi->ops->is_vlan_valid(smi, port + 1))
 		return -EINVAL;
 
-	dev_info(smi->dev, "%s filtering on port %d\n",
+	dev_dbg(smi->dev, "%s filtering on port %d\n",
 		 vlan_filtering ? "enable" : "disable",
 		 port);
 
@@ -385,7 +385,7 @@ int rtl8366_vlan_prepare(struct dsa_switch *ds, int port,
 		if (!smi->ops->is_vlan_valid(smi, vid))
 			return -EINVAL;
 
-	dev_info(smi->dev, "prepare VLANs %04x..%04x\n",
+	dev_dbg(smi->dev, "prepare VLANs %04x..%04x\n",
 		 vlan->vid_begin, vlan->vid_end);
 
 	/* Enable VLAN in the hardware
@@ -415,7 +415,7 @@ void rtl8366_vlan_add(struct dsa_switch *ds, int port,
 		if (!smi->ops->is_vlan_valid(smi, vid))
 			return;
 
-	dev_info(smi->dev, "add VLAN %d on port %d, %s, %s\n",
+	dev_dbg(smi->dev, "add VLAN %d on port %d, %s, %s\n",
 		 vlan->vid_begin,
 		 port,
 		 untagged ? "untagged" : "tagged",
@@ -459,12 +459,12 @@ int rtl8366_vlan_del(struct dsa_switch *ds, int port,
 	u16 vid;
 	int ret;
 
-	dev_info(smi->dev, "del VLAN on port %d\n", port);
+	dev_dbg(smi->dev, "del VLAN on port %d\n", port);
 
 	for (vid = vlan->vid_begin; vid <= vlan->vid_end; ++vid) {
 		int i;
 
-		dev_info(smi->dev, "del VLAN %04x\n", vid);
+		dev_dbg(smi->dev, "del VLAN %04x\n", vid);
 
 		for (i = 0; i < smi->num_vlan_mc; i++) {
 			struct rtl8366_vlan_mc vlanmc;

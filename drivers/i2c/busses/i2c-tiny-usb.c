@@ -242,7 +242,7 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
 	usb_set_intfdata(interface, dev);
 
 	version = le16_to_cpu(dev->usb_dev->descriptor.bcdDevice);
-	dev_info(&interface->dev,
+	dev_dbg(&interface->dev,
 		 "version %x.%02x found at bus %03d address %03d\n",
 		 version >> 8, version & 0xff,
 		 dev->usb_dev->bus->busnum, dev->usb_dev->devnum);
@@ -269,7 +269,7 @@ static int i2c_tiny_usb_probe(struct usb_interface *interface,
 	i2c_add_adapter(&dev->adapter);
 
 	/* inform user about successful attachment to i2c layer */
-	dev_info(&dev->adapter.dev, "connected i2c-tiny-usb device\n");
+	dev_dbg(&dev->adapter.dev, "connected i2c-tiny-usb device\n");
 
 	return 0;
 

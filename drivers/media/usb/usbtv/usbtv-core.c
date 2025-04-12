@@ -108,7 +108,7 @@ static int usbtv_probe(struct usb_interface *intf,
 	/* for simplicity we exploit the v4l2_device reference counting */
 	v4l2_device_get(&usbtv->v4l2_dev);
 
-	dev_info(dev, "Fushicai USBTV007 Audio-Video Grabber\n");
+	dev_dbg(dev, "Fushicai USBTV007 Audio-Video Grabber\n");
 	return 0;
 
 usbtv_audio_fail:

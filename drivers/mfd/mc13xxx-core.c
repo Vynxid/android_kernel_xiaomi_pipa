@@ -180,7 +180,7 @@ EXPORT_SYMBOL(mc13xxx_irq_free);
 #define maskval(reg, mask)	(((reg) & (mask)) >> __ffs(mask))
 static void mc13xxx_print_revision(struct mc13xxx *mc13xxx, u32 revision)
 {
-	dev_info(mc13xxx->dev, "%s: rev: %d.%d, "
+	dev_dbg(mc13xxx->dev, "%s: rev: %d.%d, "
 			"fin: %d, fab: %d, icid: %d/%d\n",
 			mc13xxx->variant->name,
 			maskval(revision, MC13XXX_REVISION_REVFULL),
@@ -193,7 +193,7 @@ static void mc13xxx_print_revision(struct mc13xxx *mc13xxx, u32 revision)
 
 static void mc34708_print_revision(struct mc13xxx *mc13xxx, u32 revision)
 {
-	dev_info(mc13xxx->dev, "%s: rev %d.%d, fin: %d, fab: %d\n",
+	dev_dbg(mc13xxx->dev, "%s: rev %d.%d, fin: %d, fab: %d\n",
 			mc13xxx->variant->name,
 			maskval(revision, MC34708_REVISION_REVFULL),
 			maskval(revision, MC34708_REVISION_REVMETAL),

@@ -642,7 +642,7 @@ static int qcom_iommu_sec_ptbl_init(struct device *dev)
 		return ret;
 	}
 
-	dev_info(dev, "iommu sec: pgtable size: %zu\n", psize);
+	dev_dbg(dev, "iommu sec: pgtable size: %zu\n", psize);
 
 	attrs = DMA_ATTR_NO_KERNEL_MAPPING;
 

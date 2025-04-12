@@ -877,28 +877,28 @@ static int ad714x_hw_detect(struct ad714x_chip *ad714x)
 	case AD7142_PARTID:
 		ad714x->product = 0x7142;
 		ad714x->version = data & 0xF;
-		dev_info(ad714x->dev, "found AD7142 captouch, rev:%d\n",
+		dev_dbg(ad714x->dev, "found AD7142 captouch, rev:%d\n",
 				ad714x->version);
 		return 0;
 
 	case AD7143_PARTID:
 		ad714x->product = 0x7143;
 		ad714x->version = data & 0xF;
-		dev_info(ad714x->dev, "found AD7143 captouch, rev:%d\n",
+		dev_dbg(ad714x->dev, "found AD7143 captouch, rev:%d\n",
 				ad714x->version);
 		return 0;
 
 	case AD7147_PARTID:
 		ad714x->product = 0x7147;
 		ad714x->version = data & 0xF;
-		dev_info(ad714x->dev, "found AD7147(A) captouch, rev:%d\n",
+		dev_dbg(ad714x->dev, "found AD7147(A) captouch, rev:%d\n",
 				ad714x->version);
 		return 0;
 
 	case AD7148_PARTID:
 		ad714x->product = 0x7148;
 		ad714x->version = data & 0xF;
-		dev_info(ad714x->dev, "found AD7148 captouch, rev:%d\n",
+		dev_dbg(ad714x->dev, "found AD7148 captouch, rev:%d\n",
 				ad714x->version);
 		return 0;
 

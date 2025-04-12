@@ -103,7 +103,7 @@ static int thunder_mdiobus_pci_probe(struct pci_dev *pdev,
 		if (err)
 			dev_err(&pdev->dev, "of_mdiobus_register failed\n");
 
-		dev_info(&pdev->dev, "Added bus at %llx\n", r.start);
+		dev_dbg(&pdev->dev, "Added bus at %llx\n", r.start);
 		if (i >= ARRAY_SIZE(nexus->buses))
 			break;
 	}

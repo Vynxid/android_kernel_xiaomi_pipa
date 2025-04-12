@@ -89,7 +89,7 @@ static void xhci_dbc_init_contexts(struct xhci_hcd *xhci, u32 string_length)
 	struct xhci_dbc		*dbc;
 	struct dbc_info_context	*info;
 	struct xhci_ep_ctx	*ep_ctx;
-	u32			dev_info;
+	u32			dev_dbg;
 	dma_addr_t		deq, dma;
 	unsigned int		max_burst;
 
@@ -124,11 +124,11 @@ static void xhci_dbc_init_contexts(struct xhci_hcd *xhci, u32 string_length)
 	/* Set DbC context and info registers: */
 	xhci_write_64(xhci, dbc->ctx->dma, &dbc->regs->dccp);
 
-	dev_info = cpu_to_le32((DBC_VENDOR_ID << 16) | DBC_PROTOCOL);
-	writel(dev_info, &dbc->regs->devinfo1);
+	dev_dbg = cpu_to_le32((DBC_VENDOR_ID << 16) | DBC_PROTOCOL);
+	writel(dev_dbg, &dbc->regs->devinfo1);
 
-	dev_info = cpu_to_le32((DBC_DEVICE_REV << 16) | DBC_PRODUCT_ID);
-	writel(dev_info, &dbc->regs->devinfo2);
+	dev_dbg = cpu_to_le32((DBC_DEVICE_REV << 16) | DBC_PRODUCT_ID);
+	writel(dev_dbg, &dbc->regs->devinfo2);
 }
 
 static void xhci_dbc_giveback(struct dbc_request *req, int status)

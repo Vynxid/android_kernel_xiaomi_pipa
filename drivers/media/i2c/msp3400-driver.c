@@ -574,7 +574,7 @@ static int msp_log_status(struct v4l2_subdev *sd)
 
 	if (state->opmode == OPMODE_AUTOSELECT)
 		msp_detect_stereo(client);
-	dev_info(&client->dev, "%s rev1 = 0x%04x rev2 = 0x%04x\n",
+	dev_dbg(&client->dev, "%s rev1 = 0x%04x rev2 = 0x%04x\n",
 			client->name, state->rev1, state->rev2);
 	snprintf(prefix, sizeof(prefix), "%s: Audio:    ", sd->name);
 	v4l2_ctrl_handler_log_status(&state->hdl, prefix);
@@ -591,23 +591,23 @@ static int msp_log_status(struct v4l2_subdev *sd)
 		default: p = "unknown"; break;
 	}
 	if (state->mode == MSP_MODE_EXTERN) {
-		dev_info(&client->dev, "Mode:     %s\n", p);
+		dev_dbg(&client->dev, "Mode:     %s\n", p);
 	} else if (state->opmode == OPMODE_MANUAL) {
-		dev_info(&client->dev, "Mode:     %s (%s%s)\n", p,
+		dev_dbg(&client->dev, "Mode:     %s (%s%s)\n", p,
 				(state->rxsubchans & V4L2_TUNER_SUB_STEREO) ? "stereo" : "mono",
 				(state->rxsubchans & V4L2_TUNER_SUB_LANG2) ? ", dual" : "");
 	} else {
 		if (state->opmode == OPMODE_AUTODETECT)
-			dev_info(&client->dev, "Mode:     %s\n", p);
-		dev_info(&client->dev, "Standard: %s (%s%s)\n",
+			dev_dbg(&client->dev, "Mode:     %s\n", p);
+		dev_dbg(&client->dev, "Standard: %s (%s%s)\n",
 				msp_standard_std_name(state->std),
 				(state->rxsubchans & V4L2_TUNER_SUB_STEREO) ? "stereo" : "mono",
 				(state->rxsubchans & V4L2_TUNER_SUB_LANG2) ? ", dual" : "");
 	}
-	dev_info(&client->dev, "Audmode:  0x%04x\n", state->audmode);
-	dev_info(&client->dev, "Routing:  0x%08x (input) 0x%08x (output)\n",
+	dev_dbg(&client->dev, "Audmode:  0x%04x\n", state->audmode);
+	dev_dbg(&client->dev, "Routing:  0x%08x (input) 0x%08x (output)\n",
 			state->route_in, state->route_out);
-	dev_info(&client->dev, "ACB:      0x%04x\n", state->acb);
+	dev_dbg(&client->dev, "ACB:      0x%04x\n", state->acb);
 	return 0;
 }
 
@@ -832,7 +832,7 @@ static int msp_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	v4l2_ctrl_cluster(2, &state->volume);
 	v4l2_ctrl_handler_setup(hdl);
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "MSP%d4%02d%c-%c%d found on %s: supports %s%s%s, mode is %s\n",
 		 msp_family, msp_product,
 		 msp_revision, msp_hard, msp_rom,

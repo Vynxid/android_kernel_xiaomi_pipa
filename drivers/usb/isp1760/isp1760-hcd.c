@@ -1341,7 +1341,7 @@ static int isp1760_run(struct usb_hcd *hcd)
 	add_timer(&errata2_timer);
 
 	chipid = reg_read32(hcd->regs, HC_CHIP_ID_REG);
-	dev_info(hcd->self.controller, "USB ISP %04x HW rev. %d started\n",
+	dev_dbg(hcd->self.controller, "USB ISP %04x HW rev. %d started\n",
 					chipid & 0xffff, chipid >> 16);
 
 	/* PTD Register Init Part 2, Step 28 */
@@ -1794,7 +1794,7 @@ static int check_reset_complete(struct usb_hcd *hcd, int index,
 	/* if reset finished and it's still not enabled -- handoff */
 	if (!(port_status & PORT_PE)) {
 
-		dev_info(hcd->self.controller,
+		dev_dbg(hcd->self.controller,
 					"port %d full speed --> companion\n",
 					index + 1);
 
@@ -1803,7 +1803,7 @@ static int check_reset_complete(struct usb_hcd *hcd, int index,
 		reg_write32(hcd->regs, HC_PORTSC1, port_status);
 
 	} else
-		dev_info(hcd->self.controller, "port %d high speed\n",
+		dev_dbg(hcd->self.controller, "port %d high speed\n",
 								index + 1);
 
 	return port_status;

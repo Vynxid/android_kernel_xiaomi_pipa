@@ -119,7 +119,7 @@ static int usb3503_connect(struct usb3503 *hub)
 		gpio_set_value_cansleep(hub->gpio_connect, 1);
 
 	hub->mode = USB3503_MODE_HUB;
-	dev_info(dev, "switched to HUB mode\n");
+	dev_dbg(dev, "switched to HUB mode\n");
 
 	return 0;
 }
@@ -136,7 +136,7 @@ static int usb3503_switch_mode(struct usb3503 *hub, enum usb3503_mode mode)
 
 	case USB3503_MODE_STANDBY:
 		usb3503_reset(hub, 0);
-		dev_info(dev, "switched to STANDBY mode\n");
+		dev_dbg(dev, "switched to STANDBY mode\n");
 		break;
 
 	default:
@@ -291,7 +291,7 @@ static int usb3503_probe(struct usb3503 *hub)
 
 	usb3503_switch_mode(hub, hub->mode);
 
-	dev_info(dev, "%s: probed in %s mode\n", __func__,
+	dev_dbg(dev, "%s: probed in %s mode\n", __func__,
 			(hub->mode == USB3503_MODE_HUB) ? "hub" : "standby");
 
 	return 0;

@@ -567,7 +567,7 @@ static int ssi_probe(struct platform_device *pd)
 		}
 	}
 
-	dev_info(&pd->dev, "ssi controller %d initialized (%d ports)!\n",
+	dev_dbg(&pd->dev, "ssi controller %d initialized (%d ports)!\n",
 		ssi->id, num_ports);
 	return err;
 out3:

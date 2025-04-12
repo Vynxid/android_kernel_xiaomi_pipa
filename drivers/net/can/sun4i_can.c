@@ -838,7 +838,7 @@ static int sun4ican_probe(struct platform_device *pdev)
 	}
 	devm_can_led_init(dev);
 
-	dev_info(&pdev->dev, "device registered (base=%p, irq=%d)\n",
+	dev_dbg(&pdev->dev, "device registered (base=%p, irq=%d)\n",
 		 priv->base, dev->irq);
 
 	return 0;

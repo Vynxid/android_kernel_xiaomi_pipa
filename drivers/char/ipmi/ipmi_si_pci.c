@@ -77,7 +77,7 @@ static int ipmi_pci_probe(struct pci_dev *pdev,
 
 	memset(&io, 0, sizeof(io));
 	io.addr_source = SI_PCI;
-	dev_info(&pdev->dev, "probing via PCI");
+	dev_dbg(&pdev->dev, "probing via PCI");
 
 	switch (pdev->class) {
 	case PCI_CLASS_SERIAL_IPMI_SMIC:
@@ -93,7 +93,7 @@ static int ipmi_pci_probe(struct pci_dev *pdev,
 		break;
 
 	default:
-		dev_info(&pdev->dev, "Unknown IPMI class: %x\n", pdev->class);
+		dev_dbg(&pdev->dev, "Unknown IPMI class: %x\n", pdev->class);
 		return -ENOMEM;
 	}
 
@@ -125,7 +125,7 @@ static int ipmi_pci_probe(struct pci_dev *pdev,
 	if (io.irq)
 		io.irq_setup = ipmi_std_irq_setup;
 
-	dev_info(&pdev->dev, "%pR regsize %d spacing %d irq %d\n",
+	dev_dbg(&pdev->dev, "%pR regsize %d spacing %d irq %d\n",
 		&pdev->resource[0], io.regsize, io.regspacing, io.irq);
 
 	rv = ipmi_si_add_smi(&io);

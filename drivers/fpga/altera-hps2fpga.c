@@ -171,7 +171,7 @@ static int alt_fpga_bridge_probe(struct platform_device *pdev)
 		if (enable > 1) {
 			dev_warn(dev, "invalid bridge-enable %u > 1\n", enable);
 		} else {
-			dev_info(dev, "%s bridge\n",
+			dev_dbg(dev, "%s bridge\n",
 				 (enable ? "enabling" : "disabling"));
 
 			ret = _alt_hps2fpga_enable_set(priv, enable);

@@ -643,7 +643,7 @@ static int sossi_init(struct omapfb_device *fbdev)
 
 	l = sossi_read_reg(SOSSI_ID_REG); /* Component code */
 	l = sossi_read_reg(SOSSI_ID_REG);
-	dev_info(fbdev->dev, "SoSSI version %d.%d initialized\n",
+	dev_dbg(fbdev->dev, "SoSSI version %d.%d initialized\n",
 		l >> 16, l & 0xffff);
 
 	l = sossi_read_reg(SOSSI_INIT1_REG);

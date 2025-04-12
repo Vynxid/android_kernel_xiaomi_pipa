@@ -1390,7 +1390,7 @@ snd_nm256_peek_for_sig(struct nm256 *chip)
 			return -ENODEV;
 		} else {
 			pointer_found = pointer;
-			dev_info(chip->card->dev,
+			dev_dbg(chip->card->dev,
 				 "found card signature in video RAM: 0x%x\n",
 			       pointer);
 		}
@@ -1592,7 +1592,7 @@ snd_nm256_create(struct snd_card *card, struct pci_dev *pci,
 	chip->buffer_start = chip->buffer_end - chip->buffer_size;
 	chip->buffer_addr += chip->buffer_start;
 
-	dev_info(card->dev, "Mapping port 1 from 0x%x - 0x%x\n",
+	dev_dbg(card->dev, "Mapping port 1 from 0x%x - 0x%x\n",
 	       chip->buffer_start, chip->buffer_end);
 
 	chip->res_buffer = request_mem_region(chip->buffer_addr,
@@ -1674,7 +1674,7 @@ static int snd_nm256_probe(struct pci_dev *pci,
 			    snd_pci_quirk_name(q));
 		switch (q->value) {
 		case NM_BLACKLISTED:
-			dev_info(&pci->dev,
+			dev_dbg(&pci->dev,
 				 "The device is blacklisted. Loading stopped\n");
 			return -ENODEV;
 		case NM_RESET_WORKAROUND_2:

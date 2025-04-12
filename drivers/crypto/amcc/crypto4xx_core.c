@@ -1357,7 +1357,7 @@ static int crypto4xx_probe(struct platform_device *ofdev)
 		u32 min = PVR_MIN(pvr);
 
 		if (min < 4) {
-			dev_info(dev, "RevA detected - disable interrupt coalescing\n");
+			dev_dbg(dev, "RevA detected - disable interrupt coalescing\n");
 			is_revb = false;
 		}
 	}

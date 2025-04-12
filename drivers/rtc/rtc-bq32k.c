@@ -189,7 +189,7 @@ static int trickle_charger_of_init(struct device *dev, struct device_node *node)
 	if (error)
 		return error;
 
-	dev_info(dev, "Enabled trickle RTC battery charge.\n");
+	dev_dbg(dev, "Enabled trickle RTC battery charge.\n");
 	return 0;
 }
 
@@ -225,14 +225,14 @@ static ssize_t bq32k_sysfs_store_tricklecharge_bypass(struct device *dev,
 		if (error)
 			return error;
 
-		dev_info(dev, "Enabled trickle charge FET bypass.\n");
+		dev_dbg(dev, "Enabled trickle charge FET bypass.\n");
 	} else {
 		reg &= ~BQ32K_TCFE;
 		error = bq32k_write(dev, &reg, BQ32K_CFG2, 1);
 		if (error)
 			return error;
 
-		dev_info(dev, "Disabled trickle charge FET bypass.\n");
+		dev_dbg(dev, "Disabled trickle charge FET bypass.\n");
 	}
 
 	return count;

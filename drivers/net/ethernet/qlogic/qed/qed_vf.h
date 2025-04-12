@@ -837,7 +837,7 @@ void qed_vf_get_num_mac_filters(struct qed_hwfn *p_hwfn, u8 *num_mac_filters);
 bool qed_vf_check_mac(struct qed_hwfn *p_hwfn, u8 *mac);
 
 /**
- * @brief Set firmware version information in dev_info from VFs acquire response tlv
+ * @brief Set firmware version information in dev_dbg from VFs acquire response tlv
  *
  * @param p_hwfn
  * @param fw_major

@@ -342,7 +342,7 @@ static int serio_raw_connect(struct serio *serio, struct serio_driver *drv)
 		goto err_unlink;
 	}
 
-	dev_info(&serio->dev, "raw access enabled on %s (%s, minor %d)\n",
+	dev_dbg(&serio->dev, "raw access enabled on %s (%s, minor %d)\n",
 		 serio->phys, serio_raw->name, serio_raw->dev.minor);
 	return 0;
 

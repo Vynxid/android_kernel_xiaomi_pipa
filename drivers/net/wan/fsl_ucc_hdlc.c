@@ -121,7 +121,7 @@ static int uhdlc_init(struct ucc_hdlc_private *priv)
 
 	/* Loopback mode */
 	if (priv->loopback) {
-		dev_info(priv->dev, "Loopback Mode\n");
+		dev_dbg(priv->dev, "Loopback Mode\n");
 		/* use the same clock when work in loopback */
 		qe_setbrg(ut_info->uf_info.rx_clock, 20000000, 1);
 
@@ -148,7 +148,7 @@ static int uhdlc_init(struct ucc_hdlc_private *priv)
 	if (priv->hdlc_bus) {
 		u32 upsmr;
 
-		dev_info(priv->dev, "HDLC bus Mode\n");
+		dev_dbg(priv->dev, "HDLC bus Mode\n");
 		upsmr = ioread32be(&priv->uf_regs->upsmr);
 
 		/* bus mode and retransmit enable, with collision window
@@ -1163,7 +1163,7 @@ static int ucc_hdlc_remove(struct platform_device *pdev)
 	}
 	kfree(priv);
 
-	dev_info(&pdev->dev, "UCC based hdlc module removed\n");
+	dev_dbg(&pdev->dev, "UCC based hdlc module removed\n");
 
 	return 0;
 }

@@ -531,7 +531,7 @@ static int snd_galaxy_probe(struct device *dev, unsigned int n)
 		dev_err(dev, "did not find a Sound Galaxy at %#lx\n", port[n]);
 		goto error;
 	}
-	dev_info(dev, "Sound Galaxy (type %d) found at %#lx\n", type, port[n]);
+	dev_dbg(dev, "Sound Galaxy (type %d) found at %#lx\n", type, port[n]);
 
 	galaxy->res_config_port = request_region(port[n] + GALAXY_PORT_CONFIG,
 						 16, DRV_NAME);

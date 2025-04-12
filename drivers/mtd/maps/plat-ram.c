@@ -191,7 +191,7 @@ static int platram_probe(struct platform_device *pdev)
 					pdata->partitions,
 					pdata->nr_partitions);
 	if (!err)
-		dev_info(&pdev->dev, "registered mtd device\n");
+		dev_dbg(&pdev->dev, "registered mtd device\n");
 
 	if (pdata->nr_partitions) {
 		/* add the whole device. */

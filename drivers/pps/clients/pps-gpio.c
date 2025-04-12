@@ -185,7 +185,7 @@ static int pps_gpio_remove(struct platform_device *pdev)
 	struct pps_gpio_device_data *data = platform_get_drvdata(pdev);
 
 	pps_unregister_source(data->pps);
-	dev_info(&pdev->dev, "removed IRQ %d as PPS source\n", data->irq);
+	dev_dbg(&pdev->dev, "removed IRQ %d as PPS source\n", data->irq);
 	return 0;
 }
 

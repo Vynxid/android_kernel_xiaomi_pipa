@@ -4691,8 +4691,8 @@ static int ql_init_device(struct pci_dev *pdev, struct net_device *ndev,
 	mutex_init(&qdev->mpi_mutex);
 
 	if (!cards_found) {
-		dev_info(&pdev->dev, "%s\n", DRV_STRING);
-		dev_info(&pdev->dev, "Driver name: %s, Version: %s.\n",
+		dev_dbg(&pdev->dev, "%s\n", DRV_STRING);
+		dev_dbg(&pdev->dev, "Driver name: %s, Version: %s.\n",
 			 DRV_NAME, DRV_VERSION);
 	}
 	return 0;

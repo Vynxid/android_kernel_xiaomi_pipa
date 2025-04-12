@@ -782,17 +782,17 @@ static void comedi_report_boards(struct comedi_driver *driv)
 	unsigned int i;
 	const char *const *name_ptr;
 
-	pr_info("comedi: valid board names for %s driver are:\n",
+	pr_debug("comedi: valid board names for %s driver are:\n",
 		driv->driver_name);
 
 	name_ptr = driv->board_name;
 	for (i = 0; i < driv->num_names; i++) {
-		pr_info(" %s\n", *name_ptr);
+		pr_debug(" %s\n", *name_ptr);
 		name_ptr = (const char **)((char *)name_ptr + driv->offset);
 	}
 
 	if (driv->num_names == 0)
-		pr_info(" %s\n", driv->driver_name);
+		pr_debug(" %s\n", driv->driver_name);
 }
 
 /**
@@ -1052,7 +1052,7 @@ int comedi_auto_config(struct device *hardware_device,
 		 * class_dev should be set properly here
 		 *  after a successful auto config
 		 */
-		dev_info(dev->class_dev,
+		dev_dbg(dev->class_dev,
 			 "driver '%s' has successfully auto-configured '%s'.\n",
 			 driver->driver_name, dev->board_name);
 	}

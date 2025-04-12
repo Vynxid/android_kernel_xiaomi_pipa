@@ -516,7 +516,7 @@ static int anysee_read_config(struct dvb_usb_device *d)
 	/*
 	 * Meaning of these info bytes are guessed.
 	 */
-	dev_info(&d->udev->dev, "%s: firmware version %d.%d hardware id %d\n",
+	dev_dbg(&d->udev->dev, "%s: firmware version %d.%d hardware id %d\n",
 			KBUILD_MODNAME, hw_info[1], hw_info[2], hw_info[0]);
 
 	state->hw = hw_info[0];

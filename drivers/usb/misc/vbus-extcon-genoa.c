@@ -118,7 +118,7 @@ static int genoa_populate_dt_info(struct platform_device *pdev)
 	}
 	gpst->genoa_usb_oe_n_gpio = ret;
 
-	dev_info(&pdev->dev, "genoa vbus_det_gpio:%d usb_id_gpio:%d genoa_usb_oe_n_gpio:%d gpio\n",
+	dev_dbg(&pdev->dev, "genoa vbus_det_gpio:%d usb_id_gpio:%d genoa_usb_oe_n_gpio:%d gpio\n",
 			gpst->vbus_det_gpio, gpst->usb_id_gpio,
 			gpst->genoa_usb_oe_n_gpio);
 	return 0;

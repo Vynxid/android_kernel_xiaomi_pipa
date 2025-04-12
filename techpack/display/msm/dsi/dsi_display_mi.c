@@ -61,7 +61,7 @@ oled_wp_info_setup (char *str)
 	size_t count = ((strlen(str) >= sizeof(oled_wp_info_str)) ?
 					sizeof(oled_wp_info_str) - 1 : strlen(str));
 	strncpy(oled_wp_info_str, str, count);
-	pr_info("androidboot.oled_wp=%s\n", oled_wp_info_str);
+	pr_debug("androidboot.oled_wp=%s\n", oled_wp_info_str);
 	wp_info_cmdline_flag = 1;
 	return 1;
 }

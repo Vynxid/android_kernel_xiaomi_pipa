@@ -226,7 +226,7 @@ static DEFINE_MUTEX(sec_id_lock);
 
 static int sec_queue_map_io(struct sec_queue *queue)
 {
-	struct device *dev = queue->dev_info->dev;
+	struct device *dev = queue->dev_dbg->dev;
 	struct resource *res;
 
 	res = platform_get_resource(to_platform_device(dev),
@@ -650,7 +650,7 @@ static struct sec_queue *sec_alloc_queue(struct sec_dev_info *info)
 
 static int sec_queue_free(struct sec_queue *queue)
 {
-	struct sec_dev_info *info = queue->dev_info;
+	struct sec_dev_info *info = queue->dev_dbg;
 
 	if (queue->queue_id >= SEC_Q_NUM) {
 		dev_err(info->dev, "No queue %d\n", queue->queue_id);
@@ -727,7 +727,7 @@ static irqreturn_t sec_isr_handle(int irq, void *q)
 
 static int sec_queue_irq_init(struct sec_queue *queue)
 {
-	struct sec_dev_info *info = queue->dev_info;
+	struct sec_dev_info *info = queue->dev_dbg;
 	int irq = queue->task_irq;
 	int ret;
 
@@ -820,7 +820,7 @@ unlock:
  */
 int sec_queue_stop_release(struct sec_queue *queue)
 {
-	struct device *dev = queue->dev_info->dev;
+	struct device *dev = queue->dev_dbg->dev;
 	int ret;
 
 	sec_queue_stop(queue);
@@ -1000,7 +1000,7 @@ static void sec_hw_exit(struct sec_dev_info *info)
 static void sec_queue_base_init(struct sec_dev_info *info,
 				struct sec_queue *queue, int queue_id)
 {
-	queue->dev_info = info;
+	queue->dev_dbg = info;
 	queue->queue_id = queue_id;
 	snprintf(queue->name, sizeof(queue->name),
 		 "%s_%d", dev_name(info->dev), queue->queue_id);
@@ -1076,7 +1076,7 @@ static void sec_base_exit(struct sec_dev_info *info)
 
 static int sec_queue_res_cfg(struct sec_queue *queue)
 {
-	struct device *dev = queue->dev_info->dev;
+	struct device *dev = queue->dev_dbg->dev;
 	struct sec_queue_ring_cmd *ring_cmd = &queue->ring_cmd;
 	struct sec_queue_ring_cq *ring_cq = &queue->ring_cq;
 	struct sec_queue_ring_db *ring_db = &queue->ring_db;
@@ -1131,7 +1131,7 @@ err_free_ring_cmd:
 
 static void sec_queue_free_ring_pages(struct sec_queue *queue)
 {
-	struct device *dev = queue->dev_info->dev;
+	struct device *dev = queue->dev_dbg->dev;
 
 	dma_free_coherent(dev, SEC_Q_DB_SIZE, queue->ring_db.vaddr,
 			  queue->ring_db.paddr);

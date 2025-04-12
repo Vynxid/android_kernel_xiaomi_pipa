@@ -390,7 +390,7 @@ static int highlander_i2c_probe(struct platform_device *pdev)
 
 		highlander_i2c_irq_enable(dev);
 	} else {
-		dev_notice(&pdev->dev, "no IRQ, using polling mode\n");
+		dev_dbg(&pdev->dev, "no IRQ, using polling mode\n");
 		highlander_i2c_irq_disable(dev);
 	}
 

@@ -158,7 +158,7 @@ static int ibmpex_ver_check(struct ibmpex_bmc_data *data)
 	data->sensor_major = data->rx_msg_data[0];
 	data->sensor_minor = data->rx_msg_data[1];
 
-	dev_info(data->bmc_device,
+	dev_dbg(data->bmc_device,
 		 "Found BMC with sensor interface v%d.%d %d-%02d-%02d on interface %d\n",
 		 data->sensor_major,
 		 data->sensor_minor,

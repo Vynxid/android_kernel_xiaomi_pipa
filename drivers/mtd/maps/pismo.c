@@ -178,7 +178,7 @@ static void pismo_add_one(struct pismo_data *pismo, int i,
 	 * The memory controller can also tell us the base address as well.
 	 */
 
-	dev_info(dev, "cs%u: %.32s: type %02x access %u00ps size %uK\n",
+	dev_dbg(dev, "cs%u: %.32s: type %02x access %u00ps size %uK\n",
 		i, cs->device, region.type, region.access, region.size / 1024);
 
 	switch (region.type) {
@@ -242,7 +242,7 @@ static int pismo_probe(struct i2c_client *client,
 		goto exit_free;
 	}
 
-	dev_info(&client->dev, "%.15s board found\n", eeprom.board);
+	dev_dbg(&client->dev, "%.15s board found\n", eeprom.board);
 
 	for (i = 0; i < ARRAY_SIZE(eeprom.cs); i++)
 		if (eeprom.cs[i].type != 0xff)

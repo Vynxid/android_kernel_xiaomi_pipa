@@ -932,7 +932,7 @@ static int ab8500_usb_probe(struct platform_device *pdev)
 
 	abx500_usb_link_status_update(ab);
 
-	dev_info(&pdev->dev, "revision 0x%2x driver initialized\n", rev);
+	dev_dbg(&pdev->dev, "revision 0x%2x driver initialized\n", rev);
 
 	return 0;
 }

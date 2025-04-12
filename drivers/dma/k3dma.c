@@ -921,7 +921,7 @@ static int k3_dma_probe(struct platform_device *op)
 	INIT_LIST_HEAD(&d->chan_pending);
 	tasklet_init(&d->task, k3_dma_tasklet, (unsigned long)d);
 	platform_set_drvdata(op, d);
-	dev_info(&op->dev, "initialized\n");
+	dev_dbg(&op->dev, "initialized\n");
 
 	return 0;
 

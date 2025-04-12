@@ -1098,7 +1098,7 @@ static int qlcnic_loopback_test(struct net_device *netdev, u8 mode)
 		return qlcnic_83xx_loopback_test(netdev, mode);
 
 	if (!(ahw->capabilities & QLCNIC_FW_CAPABILITY_MULTI_LOOPBACK)) {
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "Firmware do not support loopback test\n");
 		return -EOPNOTSUPP;
 	}
@@ -1616,7 +1616,7 @@ int qlcnic_enable_fw_dump_state(struct qlcnic_adapter *adapter)
 		fw_dump->enable = true;
 	}
 
-	dev_info(&adapter->pdev->dev, "FW dump enabled\n");
+	dev_dbg(&adapter->pdev->dev, "FW dump enabled\n");
 
 	return 0;
 }
@@ -1639,7 +1639,7 @@ static int qlcnic_disable_fw_dump_state(struct qlcnic_adapter *adapter)
 		fw_dump->enable = false;
 	}
 
-	dev_info(&adapter->pdev->dev, "FW dump disabled\n");
+	dev_dbg(&adapter->pdev->dev, "FW dump disabled\n");
 
 	return 0;
 }

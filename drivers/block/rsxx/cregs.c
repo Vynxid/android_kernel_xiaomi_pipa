@@ -571,16 +571,16 @@ static void hw_log_msg(struct rsxx_cardinfo *card, const char *str, int len)
 		dev_warn(CARD_TO_DEV(card), "HW: %.*s", len, str);
 		break;
 	case '5':
-		dev_notice(CARD_TO_DEV(card), "HW: %.*s", len, str);
+		dev_dbg(CARD_TO_DEV(card), "HW: %.*s", len, str);
 		break;
 	case '6':
-		dev_info(CARD_TO_DEV(card), "HW: %.*s", len, str);
+		dev_dbg(CARD_TO_DEV(card), "HW: %.*s", len, str);
 		break;
 	case '7':
 		dev_dbg(CARD_TO_DEV(card), "HW: %.*s", len, str);
 		break;
 	default:
-		dev_info(CARD_TO_DEV(card), "HW: %.*s", len, str);
+		dev_dbg(CARD_TO_DEV(card), "HW: %.*s", len, str);
 		break;
 	}
 }
@@ -767,7 +767,7 @@ void rsxx_creg_destroy(struct rsxx_cardinfo *card)
 	}
 
 	if (cnt)
-		dev_info(CARD_TO_DEV(card),
+		dev_dbg(CARD_TO_DEV(card),
 			"Canceled %d queue creg commands\n", cnt);
 
 	cmd = card->creg_ctrl.active_cmd;
@@ -778,7 +778,7 @@ void rsxx_creg_destroy(struct rsxx_cardinfo *card)
 
 		if (cmd->cb)
 			cmd->cb(card, cmd, -ECANCELED);
-		dev_info(CARD_TO_DEV(card),
+		dev_dbg(CARD_TO_DEV(card),
 			"Canceled active creg command\n");
 		kmem_cache_free(creg_cmd_pool, cmd);
 	}

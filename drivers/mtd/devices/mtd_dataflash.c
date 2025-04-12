@@ -657,7 +657,7 @@ static int add_dataflash_otp(struct spi_device *spi, char *name, int nr_pages,
 	if (revision >= 'c')
 		otp_tag = otp_setup(device, revision);
 
-	dev_info(&spi->dev, "%s (%lld KBytes) pagesize %d bytes%s\n",
+	dev_dbg(&spi->dev, "%s (%lld KBytes) pagesize %d bytes%s\n",
 			name, (long long)((device->size + 1023) >> 10),
 			pagesize, otp_tag);
 	spi_set_drvdata(spi, priv);
@@ -902,7 +902,7 @@ static int dataflash_probe(struct spi_device *spi)
 		break;
 	/* obsolete AT45DB1282 not (yet?) supported */
 	default:
-		dev_info(&spi->dev, "unsupported device (%x)\n",
+		dev_dbg(&spi->dev, "unsupported device (%x)\n",
 				status & 0x3c);
 		status = -ENODEV;
 	}

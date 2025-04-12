@@ -241,7 +241,7 @@ static int spi_device_configure(struct transport_container *tc,
 	spi_support_dt_only(starget) = scsi_device_dt_only(sdev);
 	spi_support_ius(starget) = scsi_device_ius(sdev);
 	if (bflags & SPI_BLIST_NOIUS) {
-		dev_info(dev, "Information Units disabled by blacklist\n");
+		dev_dbg(dev, "Information Units disabled by blacklist\n");
 		spi_support_ius(starget) = 0;
 	}
 	spi_support_qas(starget) = scsi_device_qas(sdev);
@@ -1174,7 +1174,7 @@ void spi_display_xfer_agreement(struct scsi_target *starget)
 			kb100 *= 2;
 		sprint_frac(tmp, picosec, 1000);
 
-		dev_info(&starget->dev,
+		dev_dbg(&starget->dev,
 			 "%s %sSCSI %d.%d MB/s %s%s%s%s%s%s%s%s (%s ns, offset %d)\n",
 			 scsi, tp->width ? "WIDE " : "", kb100/10, kb100 % 10,
 			 tp->dt ? "DT" : "ST",
@@ -1187,7 +1187,7 @@ void spi_display_xfer_agreement(struct scsi_target *starget)
 			 tp->hold_mcs ? " HMCS" : "",
 			 tmp, tp->offset);
 	} else {
-		dev_info(&starget->dev, "%sasynchronous\n",
+		dev_dbg(&starget->dev, "%sasynchronous\n",
 				tp->width ? "wide " : "");
 	}
 }

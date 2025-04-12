@@ -598,9 +598,9 @@ void camif_hw_dump_regs(struct camif_dev *camif, const char *label)
 	};
 	u32 i;
 
-	pr_info("--- %s ---\n", label);
+	pr_debug("--- %s ---\n", label);
 	for (i = 0; i < ARRAY_SIZE(registers); i++) {
 		u32 cfg = readl(camif->io_base + registers[i].offset);
-		dev_info(camif->dev, "%s:\t0x%08x\n", registers[i].name, cfg);
+		dev_dbg(camif->dev, "%s:\t0x%08x\n", registers[i].name, cfg);
 	}
 }

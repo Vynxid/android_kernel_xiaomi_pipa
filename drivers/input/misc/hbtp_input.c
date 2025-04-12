@@ -563,7 +563,7 @@ static int hbtp_pinctrl_enable(struct hbtp_data *ts, bool on)
 	int rc = 0;
 
 	if (!ts->manage_pin_ctrl) {
-		pr_info("%s: pinctrl info is not available\n", __func__);
+		pr_debug("%s: pinctrl info is not available\n", __func__);
 		return 0;
 	}
 
@@ -916,14 +916,14 @@ static int hbtp_parse_dt(struct device *dev)
 		if (!rc)
 			hbtp->power_on_delay = (u32)temp_val;
 		else
-			dev_info(dev, "Power-On Delay is not specified\n");
+			dev_dbg(dev, "Power-On Delay is not specified\n");
 
 		rc = of_property_read_u32(np,
 				"qcom,afe-power-off-delay-us", &temp_val);
 		if (!rc)
 			hbtp->power_off_delay = (u32)temp_val;
 		else
-			dev_info(dev, "Power-Off Delay is not specified\n");
+			dev_dbg(dev, "Power-Off Delay is not specified\n");
 
 		dev_dbg(dev, "power-on-delay = %u, power-off-delay = %u\n",
 			hbtp->power_on_delay, hbtp->power_off_delay);
@@ -1047,7 +1047,7 @@ static int hbtp_pinctrl_init(struct hbtp_data *data)
 		 *if pinctrl names are not available then,
 		 *power_sync can't be enabled
 		 */
-		dev_info(&data->pdev->dev,
+		dev_dbg(&data->pdev->dev,
 				"pinctrl names are not available\n");
 		rc = -EINVAL;
 		goto error;
@@ -1320,7 +1320,7 @@ static int hbtp_pdev_probe(struct platform_device *pdev)
 
 	error = hbtp_pinctrl_init(hbtp);
 	if (error) {
-		pr_info("%s: pinctrl isn't available, rc=%d\n", __func__,
+		pr_debug("%s: pinctrl isn't available, rc=%d\n", __func__,
 			error);
 	}
 

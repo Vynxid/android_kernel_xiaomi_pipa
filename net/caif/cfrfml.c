@@ -42,7 +42,7 @@ static void cfrfml_release(struct cflayer *layer)
 	kfree(srvl);
 }
 
-struct cflayer *cfrfml_create(u8 channel_id, struct dev_info *dev_info,
+struct cflayer *cfrfml_create(u8 channel_id, struct dev_dbg *dev_dbg,
 			      int mtu_size)
 {
 	int tmp;
@@ -51,7 +51,7 @@ struct cflayer *cfrfml_create(u8 channel_id, struct dev_info *dev_info,
 	if (!this)
 		return NULL;
 
-	cfsrvl_init(&this->serv, channel_id, dev_info, false);
+	cfsrvl_init(&this->serv, channel_id, dev_dbg, false);
 	this->serv.release = cfrfml_release;
 	this->serv.layer.receive = cfrfml_receive;
 	this->serv.layer.transmit = cfrfml_transmit;
@@ -177,11 +177,11 @@ out:
 			cfpkt_destroy(rfml->incomplete_frm);
 		rfml->incomplete_frm = NULL;
 
-		pr_info("Connection error %d triggered on RFM link\n", err);
+		pr_debug("Connection error %d triggered on RFM link\n", err);
 
 		/* Trigger connection error upon failure.*/
 		layr->up->ctrlcmd(layr->up, CAIF_CTRLCMD_REMOTE_SHUTDOWN_IND,
-					rfml->serv.dev_info.id);
+					rfml->serv.dev_dbg.id);
 	}
 	spin_unlock(&rfml->sync);
 
@@ -205,7 +205,7 @@ static int cfrfml_transmit_segment(struct cfrfml *rfml, struct cfpkt *pkt)
 	 * payload.
 	 */
 	cfpkt_info(pkt)->hdr_len = RFM_HEAD_SIZE;
-	cfpkt_info(pkt)->dev_info = &rfml->serv.dev_info;
+	cfpkt_info(pkt)->dev_dbg = &rfml->serv.dev_dbg;
 
 	return rfml->serv.layer.dn->transmit(rfml->serv.layer.dn, pkt);
 }
@@ -285,11 +285,11 @@ static int cfrfml_transmit(struct cflayer *layr, struct cfpkt *pkt)
 out:
 
 	if (err != 0) {
-		pr_info("Connection error %d triggered on RFM link\n", err);
+		pr_debug("Connection error %d triggered on RFM link\n", err);
 		/* Trigger connection error upon failure.*/
 
 		layr->up->ctrlcmd(layr->up, CAIF_CTRLCMD_REMOTE_SHUTDOWN_IND,
-					rfml->serv.dev_info.id);
+					rfml->serv.dev_dbg.id);
 
 		if (rearpkt)
 			cfpkt_destroy(rearpkt);

@@ -336,7 +336,7 @@ mega_query_adapter(adapter_t *adapter)
 		adapter->bios_version[4] = 0;
 	}
 
-	dev_notice(&adapter->dev->dev, "[%s:%s] detected %d logical drives\n",
+	dev_dbg(&adapter->dev->dev, "[%s:%s] detected %d logical drives\n",
 		adapter->fw_version, adapter->bios_version, adapter->numldrv);
 
 	/*
@@ -344,7 +344,7 @@ mega_query_adapter(adapter_t *adapter)
 	 */
 	adapter->support_ext_cdb = mega_support_ext_cdb(adapter);
 	if (adapter->support_ext_cdb)
-		dev_notice(&adapter->dev->dev, "supports extended CDBs\n");
+		dev_dbg(&adapter->dev->dev, "supports extended CDBs\n");
 
 
 	return 0;
@@ -680,7 +680,7 @@ mega_build_cmd(adapter_t *adapter, struct scsi_cmnd *cmd, int *busy)
 
 			if(!(adapter->flag & (1L << cmd->device->channel))) {
 
-				dev_notice(&adapter->dev->dev,
+				dev_dbg(&adapter->dev->dev,
 					"scsi%d: scanning scsi channel %d "
 					"for logical drives\n",
 						adapter->host->host_no,
@@ -985,7 +985,7 @@ mega_prepare_passthru(adapter_t *adapter, scb_t *scb, struct scsi_cmnd *cmd,
 	case READ_CAPACITY:
 		if(!(adapter->flag & (1L << cmd->device->channel))) {
 
-			dev_notice(&adapter->dev->dev,
+			dev_dbg(&adapter->dev->dev,
 				"scsi%d: scanning scsi channel %d [P%d] "
 				"for physical devices\n",
 					adapter->host->host_no,
@@ -1048,7 +1048,7 @@ mega_prepare_extpassthru(adapter_t *adapter, scb_t *scb,
 	case READ_CAPACITY:
 		if(!(adapter->flag & (1L << cmd->device->channel))) {
 
-			dev_notice(&adapter->dev->dev,
+			dev_dbg(&adapter->dev->dev,
 				"scsi%d: scanning scsi channel %d [P%d] "
 				"for physical devices\n",
 					adapter->host->host_no,
@@ -1907,7 +1907,7 @@ megaraid_reset(struct scsi_cmnd *cmd)
 		dev_warn(&adapter->dev->dev, "reservation reset failed\n");
 	}
 	else {
-		dev_info(&adapter->dev->dev, "reservation reset\n");
+		dev_dbg(&adapter->dev->dev, "reservation reset\n");
 	}
 #endif
 
@@ -2842,7 +2842,7 @@ megaraid_biosparam(struct scsi_device *sdev, struct block_device *bdev,
 				return rval;
 		}
 
-		dev_info(&adapter->dev->dev,
+		dev_dbg(&adapter->dev->dev,
 			 "invalid partition on this disk on channel %d\n",
 			 sdev->channel);
 
@@ -3651,11 +3651,11 @@ mega_enum_raid_scsi(adapter_t *adapter)
 
 	for( i = 0; i < adapter->product_info.nchannels; i++ ) { 
 		if( (adapter->mega_ch_class >> i) & 0x01 ) {
-			dev_info(&adapter->dev->dev, "channel[%d] is raid\n",
+			dev_dbg(&adapter->dev->dev, "channel[%d] is raid\n",
 					i);
 		}
 		else {
-			dev_info(&adapter->dev->dev, "channel[%d] is scsi\n",
+			dev_dbg(&adapter->dev->dev, "channel[%d] is scsi\n",
 					i);
 		}
 	}
@@ -4129,7 +4129,7 @@ mega_internal_command(adapter_t *adapter, megacmd_t *mc, mega_passthru *pthru)
 	 * this information.
 	 */
 	if (rval && trace_level) {
-		dev_info(&adapter->dev->dev, "cmd [%x, %x, %x] status:[%x]\n",
+		dev_dbg(&adapter->dev->dev, "cmd [%x, %x, %x] status:[%x]\n",
 			mc->cmd, mc->opcode, mc->subopcode, rval);
 	}
 
@@ -4215,7 +4215,7 @@ megaraid_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	subsysvid = pdev->subsystem_vendor;
 	subsysid = pdev->subsystem_device;
 
-	dev_notice(&pdev->dev, "found 0x%4.04x:0x%4.04x\n",
+	dev_dbg(&pdev->dev, "found 0x%4.04x:0x%4.04x\n",
 		id->vendor, id->device);
 
 	/* Read the base port and IRQ from PCI */
@@ -4252,7 +4252,7 @@ megaraid_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	adapter = (adapter_t *)host->hostdata;
 	memset(adapter, 0, sizeof(adapter_t));
 
-	dev_notice(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"scsi%d:Found MegaRAID controller at 0x%lx, IRQ:%d\n",
 		host->host_no, mega_baseport, irq);
 
@@ -4470,7 +4470,7 @@ megaraid_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	 */
 	adapter->has_cluster = mega_support_cluster(adapter);
 	if (adapter->has_cluster) {
-		dev_notice(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"Cluster driver, initiator id:%d\n",
 			adapter->this_id);
 	}

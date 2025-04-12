@@ -1350,7 +1350,7 @@ mt7530_probe(struct mdio_device *mdiodev)
 	 */
 	priv->mcm = of_property_read_bool(dn, "mediatek,mcm");
 	if (priv->mcm) {
-		dev_info(&mdiodev->dev, "MT7530 adapts as multi-chip module\n");
+		dev_dbg(&mdiodev->dev, "MT7530 adapts as multi-chip module\n");
 
 		priv->rstc = devm_reset_control_get(&mdiodev->dev, "mcm");
 		if (IS_ERR(priv->rstc)) {

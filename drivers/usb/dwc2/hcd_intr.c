@@ -81,10 +81,10 @@ static void dwc2_track_missed_sofs(struct dwc2_hsotg *hsotg)
 	} else if (!hsotg->dumped_frame_num_array) {
 		int i;
 
-		dev_info(hsotg->dev, "Frame     Last Frame\n");
-		dev_info(hsotg->dev, "-----     ----------\n");
+		dev_dbg(hsotg->dev, "Frame     Last Frame\n");
+		dev_dbg(hsotg->dev, "-----     ----------\n");
 		for (i = 0; i < FRAME_NUM_ARRAY_SIZE; i++) {
-			dev_info(hsotg->dev, "0x%04x    0x%04x\n",
+			dev_dbg(hsotg->dev, "0x%04x    0x%04x\n",
 				 hsotg->frame_num_array[i],
 				 hsotg->last_frame_num_array[i]);
 		}
@@ -1969,7 +1969,7 @@ static void dwc2_hc_chhltd_intr_dma(struct dwc2_hsotg *hsotg,
 			}
 		}
 	} else {
-		dev_info(hsotg->dev,
+		dev_dbg(hsotg->dev,
 			 "NYET/NAK/ACK/other in non-error case, 0x%08x\n",
 			 chan->hcint);
 error:

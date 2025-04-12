@@ -1235,7 +1235,7 @@ static int snd_fm801_create(struct snd_card *card,
 
 	if (!(chip->tea575x_tuner & TUNER_ONLY)) {
 		if (reset_codec(chip) < 0) {
-			dev_info(chip->card->dev,
+			dev_dbg(chip->card->dev,
 				 "Primary AC'97 codec not found, assume SF64-PCR (tuner-only)\n");
 			chip->tea575x_tuner = 3 | TUNER_ONLY;
 		} else {
@@ -1286,7 +1286,7 @@ static int snd_fm801_create(struct snd_card *card,
 		for (tea575x_tuner = 1; tea575x_tuner <= 3; tea575x_tuner++) {
 			chip->tea575x_tuner = tea575x_tuner;
 			if (!snd_tea575x_init(&chip->tea, THIS_MODULE)) {
-				dev_info(card->dev,
+				dev_dbg(card->dev,
 					 "detected TEA575x radio type %s\n",
 					   get_tea575x_gpio(chip)->name);
 				break;

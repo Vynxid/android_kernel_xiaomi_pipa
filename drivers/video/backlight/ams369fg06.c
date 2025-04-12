@@ -506,7 +506,7 @@ static int ams369fg06_probe(struct spi_device *spi)
 
 	spi_set_drvdata(spi, lcd);
 
-	dev_info(&spi->dev, "ams369fg06 panel driver has been probed.\n");
+	dev_dbg(&spi->dev, "ams369fg06 panel driver has been probed.\n");
 
 	return 0;
 }

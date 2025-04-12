@@ -855,7 +855,7 @@ static int imxfb_probe(struct platform_device *pdev)
 	int ret, i;
 	int bytes_per_pixel;
 
-	dev_info(&pdev->dev, "i.MX Framebuffer driver\n");
+	dev_dbg(&pdev->dev, "i.MX Framebuffer driver\n");
 
 	ret = imxfb_setup();
 	if (ret < 0)

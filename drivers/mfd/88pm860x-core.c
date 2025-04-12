@@ -997,7 +997,7 @@ static void device_8607_init(struct pm860x_chip *chip,
 	switch (ret & PM8607_VERSION_MASK) {
 	case 0x40:
 	case 0x50:
-		dev_info(chip->dev, "Marvell 88PM8607 (ID: %02x) detected\n",
+		dev_dbg(chip->dev, "Marvell 88PM8607 (ID: %02x) detected\n",
 			 ret);
 		break;
 	default:
@@ -1150,7 +1150,7 @@ static int pm860x_probe(struct i2c_client *client)
 		if (ret)
 			return ret;
 	} else if (!pdata) {
-		pr_info("No platform data in %s!\n", __func__);
+		pr_debug("No platform data in %s!\n", __func__);
 		return -EINVAL;
 	}
 

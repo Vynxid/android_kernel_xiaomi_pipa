@@ -303,7 +303,7 @@ static int electra_cf_probe(struct platform_device *ofdev)
 		goto fail3;
 	}
 
-	dev_info(device, "at mem 0x%lx io 0x%llx irq %d\n",
+	dev_dbg(device, "at mem 0x%lx io 0x%llx irq %d\n",
 		 cf->mem_phys, io.start, cf->irq);
 
 	cf->active = 1;

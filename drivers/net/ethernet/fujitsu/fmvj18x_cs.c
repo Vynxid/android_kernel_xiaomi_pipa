@@ -288,7 +288,7 @@ static int mfc_try_io_port(struct pcmcia_device *link)
 	link->resource[1]->flags |= IO_DATA_PATH_WIDTH_8;
 	if (link->resource[1]->start == 0) {
 	    link->resource[1]->end = 0;
-	    pr_notice("out of resource for serial\n");
+	    pr_debug("out of resource for serial\n");
 	}
 	ret = pcmcia_request_io(link);
 	if (ret == 0)
@@ -496,7 +496,7 @@ static int fmvj18x_config(struct pcmcia_device *link)
     case XXX10304:
 	/* Read MACID from Buggy CIS */
 	if (fmvj18x_get_hwinfo(link, buggybuf) == -1) {
-	    pr_notice("unable to read hardware net address\n");
+	    pr_debug("unable to read hardware net address\n");
 	    goto failed;
 	}
 	for (i = 0 ; i < 6; i++) {
@@ -517,7 +517,7 @@ static int fmvj18x_config(struct pcmcia_device *link)
     SET_NETDEV_DEV(dev, &link->dev);
 
     if (register_netdev(dev) != 0) {
-	pr_notice("register_netdev() failed\n");
+	pr_debug("register_netdev() failed\n");
 	goto failed;
     }
 

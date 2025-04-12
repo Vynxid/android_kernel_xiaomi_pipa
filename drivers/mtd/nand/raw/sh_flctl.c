@@ -659,7 +659,7 @@ static void execmd_read_page_sector(struct mtd_info *mtd, int page_addr)
 
 		switch (ecc_result) {
 		case FL_REPAIRABLE:
-			dev_info(&flctl->pdev->dev,
+			dev_dbg(&flctl->pdev->dev,
 				"applied ecc on page 0x%x", page_addr);
 			mtd->ecc_stats.corrected++;
 			break;

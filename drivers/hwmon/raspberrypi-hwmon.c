@@ -50,7 +50,7 @@ static void rpi_firmware_get_throttled(struct rpi_hwmon_data *data)
 	if (new_uv)
 		dev_crit(data->hwmon_dev, "Undervoltage detected!\n");
 	else
-		dev_info(data->hwmon_dev, "Voltage normalised\n");
+		dev_dbg(data->hwmon_dev, "Voltage normalised\n");
 
 	sysfs_notify(&data->hwmon_dev->kobj, NULL, "in0_lcrit_alarm");
 }

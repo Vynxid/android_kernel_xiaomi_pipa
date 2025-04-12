@@ -3063,7 +3063,7 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
 	}
 
 	/* Learn information crucial for qedf to progress */
-	rc = qed_ops->fill_dev_info(qedf->cdev, &qedf->dev_info);
+	rc = qed_ops->fill_dev_info(qedf->cdev, &qedf->dev_dbg);
 	if (rc) {
 		QEDF_ERR(&(qedf->dbg_ctx), "Failed to dev info.\n");
 		goto err1;
@@ -3085,8 +3085,8 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
 	qed_ops->common->update_pf_params(qedf->cdev, &qedf->pf_params);
 
 	/* Record BDQ producer doorbell addresses */
-	qedf->bdq_primary_prod = qedf->dev_info.primary_dbq_rq_addr;
-	qedf->bdq_secondary_prod = qedf->dev_info.secondary_bdq_rq_addr;
+	qedf->bdq_primary_prod = qedf->dev_dbg.primary_dbq_rq_addr;
+	qedf->bdq_secondary_prod = qedf->dev_dbg.secondary_bdq_rq_addr;
 	QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_DISC,
 	    "BDQ primary_prod=%p secondary_prod=%p.\n", qedf->bdq_primary_prod,
 	    qedf->bdq_secondary_prod);
@@ -3152,10 +3152,10 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
 
 	qed_ops->common->set_power_state(qedf->cdev, PCI_D0);
 
-	/* Now that the dev_info struct has been filled in set the MAC
+	/* Now that the dev_dbg struct has been filled in set the MAC
 	 * address
 	 */
-	ether_addr_copy(qedf->mac, qedf->dev_info.common.hw_mac);
+	ether_addr_copy(qedf->mac, qedf->dev_dbg.common.hw_mac);
 	QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_DISC, "MAC address is %pM.\n",
 		   qedf->mac);
 
@@ -3166,11 +3166,11 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
 	 * WWPN and WWNN. Otherwise fall back to use fcoe_wwn_from_mac() based
 	 * on the MAC address.
 	 */
-	if (qedf->dev_info.wwnn != 0 && qedf->dev_info.wwpn != 0) {
+	if (qedf->dev_dbg.wwnn != 0 && qedf->dev_dbg.wwpn != 0) {
 		QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_DISC,
-		    "Setting WWPN and WWNN from qed dev_info.\n");
-		qedf->wwnn = qedf->dev_info.wwnn;
-		qedf->wwpn = qedf->dev_info.wwpn;
+		    "Setting WWPN and WWNN from qed dev_dbg.\n");
+		qedf->wwnn = qedf->dev_dbg.wwnn;
+		qedf->wwpn = qedf->dev_dbg.wwpn;
 	} else {
 		QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_DISC,
 		    "Setting WWPN and WWNN using fcoe_wwn_from_mac().\n");

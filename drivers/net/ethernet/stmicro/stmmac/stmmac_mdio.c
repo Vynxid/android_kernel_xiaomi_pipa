@@ -362,7 +362,7 @@ int stmmac_mdio_register(struct net_device *ndev)
 	err = of_mdiobus_register(new_bus, mdio_node);
 	if (err == -ENODEV) {
 		err = 0;
-		dev_info(dev, "MDIO bus is disabled\n");
+		dev_dbg(dev, "MDIO bus is disabled\n");
 		goto bus_register_fail;
 	} else if (err) {
 		dev_err(dev, "Cannot register the MDIO bus\n");

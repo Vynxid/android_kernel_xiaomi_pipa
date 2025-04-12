@@ -1261,7 +1261,7 @@ static int mtk_nfc_ecc_init(struct device *dev, struct mtd_info *mtd)
 
 	mtk_ecc_adjust_strength(nfc->ecc, &nand->ecc.strength);
 
-	dev_info(dev, "eccsize %d eccstrength %d\n",
+	dev_dbg(dev, "eccsize %d eccstrength %d\n",
 		 nand->ecc.size, nand->ecc.strength);
 
 	return 0;

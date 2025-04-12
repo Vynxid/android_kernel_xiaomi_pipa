@@ -210,13 +210,13 @@ static int ftgpio_gpio_probe(struct platform_device *pdev)
 				   0, handle_bad_irq,
 				   IRQ_TYPE_NONE);
 	if (ret) {
-		dev_info(dev, "could not add irqchip\n");
+		dev_dbg(dev, "could not add irqchip\n");
 		return ret;
 	}
 	gpiochip_set_chained_irqchip(&g->gc, &ftgpio_gpio_irqchip,
 				     irq, ftgpio_gpio_irq_handler);
 
-	dev_info(dev, "FTGPIO010 @%p registered\n", g->base);
+	dev_dbg(dev, "FTGPIO010 @%p registered\n", g->base);
 
 	return 0;
 }

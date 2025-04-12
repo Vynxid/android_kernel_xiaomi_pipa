@@ -1089,7 +1089,7 @@ static int fsl_ifc_nand_probe(struct platform_device *dev)
 	if (ret)
 		goto cleanup_nand;
 
-	dev_info(priv->dev, "IFC NAND device at 0x%llx, bank %d\n",
+	dev_dbg(priv->dev, "IFC NAND device at 0x%llx, bank %d\n",
 		 (unsigned long long)res.start, priv->bank);
 
 	return 0;

@@ -2590,7 +2590,7 @@ snd_m3_create(struct snd_card *card, struct pci_dev *pci,
 	else {
 		quirk = snd_pci_quirk_lookup(pci, m3_amp_quirk_list);
 		if (quirk) {
-			dev_info(card->dev, "set amp-gpio for '%s'\n",
+			dev_dbg(card->dev, "set amp-gpio for '%s'\n",
 				 snd_pci_quirk_name(quirk));
 			chip->amp_gpio = quirk->value;
 		} else if (chip->allegro_flag)
@@ -2601,7 +2601,7 @@ snd_m3_create(struct snd_card *card, struct pci_dev *pci,
 
 	quirk = snd_pci_quirk_lookup(pci, m3_irda_quirk_list);
 	if (quirk) {
-		dev_info(card->dev, "enabled irda workaround for '%s'\n",
+		dev_dbg(card->dev, "enabled irda workaround for '%s'\n",
 			 snd_pci_quirk_name(quirk));
 		chip->irda_workaround = 1;
 	}

@@ -2847,7 +2847,7 @@ static void intel8x0_measure_ac97_clock(struct intel8x0 *chip)
 
 	pos /= 4;
 	t = ktime_us_delta(stop_time, start_time);
-	dev_info(chip->card->dev,
+	dev_dbg(chip->card->dev,
 		 "%s: measured %lu usecs (%lu samples)\n", __func__, t, pos);
 	if (t == 0) {
 		dev_err(chip->card->dev, "?? calculation error..\n");
@@ -2857,7 +2857,7 @@ static void intel8x0_measure_ac97_clock(struct intel8x0 *chip)
 	pos = (pos / t) * 1000 + ((pos % t) * 1000) / t;
 	if (pos < 40000 || pos >= 60000) {
 		/* abnormal value. hw problem? */
-		dev_info(chip->card->dev, "measured clock %ld rejected\n", pos);
+		dev_dbg(chip->card->dev, "measured clock %ld rejected\n", pos);
 		goto __retry;
 	} else if (pos > 40500 && pos < 41500)
 		/* first exception - 41000Hz reference clock */
@@ -2869,7 +2869,7 @@ static void intel8x0_measure_ac97_clock(struct intel8x0 *chip)
 		/* not 48000Hz, tuning the clock.. */
 		chip->ac97_bus->clock = (chip->ac97_bus->clock * 48000) / pos;
       __end:
-	dev_info(chip->card->dev, "clocking to %d\n", chip->ac97_bus->clock);
+	dev_dbg(chip->card->dev, "clocking to %d\n", chip->ac97_bus->clock);
 	snd_ac97_update_power(chip->ac97[0], AC97_PCM_FRONT_DAC_RATE, 0);
 }
 
@@ -2891,7 +2891,7 @@ static int intel8x0_in_clock_list(struct intel8x0 *chip)
 	wl = snd_pci_quirk_lookup(pci, intel8x0_clock_list);
 	if (!wl)
 		return 0;
-	dev_info(chip->card->dev, "white list rate for %04x:%04x is %i\n",
+	dev_dbg(chip->card->dev, "white list rate for %04x:%04x is %i\n",
 	       pci->subsystem_vendor, pci->subsystem_device, wl->value);
 	chip->ac97_bus->clock = wl->value;
 	return 1;
@@ -2983,7 +2983,7 @@ static int snd_intel8x0_inside_vm(struct pci_dev *pci)
 
 fini:
 	if (msg != NULL)
-		dev_info(&pci->dev, "%s optimization\n", msg);
+		dev_dbg(&pci->dev, "%s optimization\n", msg);
 
 	return result;
 }

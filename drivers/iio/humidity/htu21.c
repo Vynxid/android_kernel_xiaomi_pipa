@@ -225,7 +225,7 @@ static int htu21_probe(struct i2c_client *client,
 	ret = ms_sensors_read_serial(client, &serial_number);
 	if (ret)
 		return ret;
-	dev_info(&client->dev, "Serial number : %llx", serial_number);
+	dev_dbg(&client->dev, "Serial number : %llx", serial_number);
 
 	return devm_iio_device_register(&client->dev, indio_dev);
 }

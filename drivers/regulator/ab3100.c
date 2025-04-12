@@ -197,9 +197,9 @@ static int ab3100_disable_regulator(struct regulator_dev *reg)
 	 * LDO D is a special regulator. When it is disabled, the entire
 	 * system is shut down. So this is handled specially.
 	 */
-	pr_info("Called ab3100_disable_regulator\n");
+	pr_debug("Called ab3100_disable_regulator\n");
 	if (abreg->regreg == AB3100_LDO_D) {
-		dev_info(&reg->dev, "disabling LDO D - shut down system\n");
+		dev_dbg(&reg->dev, "disabling LDO D - shut down system\n");
 		/* Setting LDO D to 0x00 cuts the power to the SoC */
 		return abx500_set_register_interruptible(abreg->dev, 0,
 							 AB3100_LDO_D, 0x00U);
@@ -673,10 +673,10 @@ static int ab3100_regulators_probe(struct platform_device *pdev)
 		return err;
 	}
 	if (data & 0x10)
-		dev_notice(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			   "chip is already in active mode (Warm start)\n");
 	else
-		dev_notice(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			   "chip is in inactive mode (Cold start)\n");
 
 	if (np) {

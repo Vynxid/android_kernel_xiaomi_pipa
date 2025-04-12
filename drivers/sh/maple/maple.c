@@ -362,7 +362,7 @@ static void maple_attach_driver(struct maple_device *mdev)
 
 	function = be32_to_cpu(mdev->devinfo.function);
 
-	dev_info(&mdev->dev, "detected %s: function 0x%lX: at (%d, %d)\n",
+	dev_dbg(&mdev->dev, "detected %s: function 0x%lX: at (%d, %d)\n",
 		mdev->product_name, function, mdev->port, mdev->unit);
 
 	if (function > 0x200) {
@@ -377,7 +377,7 @@ static void maple_attach_driver(struct maple_device *mdev)
 
 		if (matched == 0) {
 			/* Driver does not exist yet */
-			dev_info(&mdev->dev, "no driver found\n");
+			dev_dbg(&mdev->dev, "no driver found\n");
 			mdev->driver = &maple_unsupported_device;
 		}
 		dev_set_name(&mdev->dev, "%d:0%d.%lX", mdev->port,
@@ -554,7 +554,7 @@ static void maple_response_none(struct maple_device *mdev)
 			}
 		}
 
-		dev_info(&mdev->dev, "detaching device at (%d, %d)\n",
+		dev_dbg(&mdev->dev, "detaching device at (%d, %d)\n",
 			mdev->port, mdev->unit);
 		maple_detach_driver(mdev);
 		return;
@@ -563,7 +563,7 @@ static void maple_response_none(struct maple_device *mdev)
 			if (checked[mdev->port] == false) {
 				checked[mdev->port] = true;
 				empty[mdev->port] = true;
-				dev_info(&mdev->dev, "no devices"
+				dev_dbg(&mdev->dev, "no devices"
 					" to port %d\n", mdev->port);
 			}
 			return;
@@ -680,7 +680,7 @@ static void maple_dma_handler(struct work_struct *work)
 				break;
 
 			case MAPLE_RESPONSE_ALLINFO:
-				dev_notice(&mdev->dev, "extended"
+				dev_dbg(&mdev->dev, "extended"
 				" device information request for (%d, %d)"
 				" but call is not supported\n", mdev->port,
 				mdev->unit);
@@ -863,7 +863,7 @@ static int __init maple_bus_init(void)
 	maple_pnp_time = jiffies + HZ;
 	/* prepare initial queue */
 	maple_send();
-	dev_info(&maple_bus, "bus core now registered\n");
+	dev_dbg(&maple_bus, "bus core now registered\n");
 
 	return 0;
 

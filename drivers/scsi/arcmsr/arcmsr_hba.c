@@ -287,7 +287,7 @@ static bool arcmsr_remap_pciregion(struct AdapterControlBlock *acb)
 		flags = pci_resource_flags(pdev, 0);
 		mem_base0 = ioremap(addr, range);
 		if (!mem_base0) {
-			pr_notice("arcmsr%d: memory mapping region fail\n",
+			pr_debug("arcmsr%d: memory mapping region fail\n",
 				acb->host->host_no);
 			return false;
 		}
@@ -298,7 +298,7 @@ static bool arcmsr_remap_pciregion(struct AdapterControlBlock *acb)
 		acb->pmuE = ioremap(pci_resource_start(pdev, 1),
 			pci_resource_len(pdev, 1));
 		if (!acb->pmuE) {
-			pr_notice("arcmsr%d: memory mapping region fail \n",
+			pr_debug("arcmsr%d: memory mapping region fail \n",
 				acb->host->host_no);
 			return false;
 		}
@@ -527,7 +527,7 @@ static void arcmsr_hbaD_flush_cache(struct AdapterControlBlock *pACB)
 			break;
 
 		retry_count--;
-		pr_notice("arcmsr%d: wait 'flush adapter "
+		pr_debug("arcmsr%d: wait 'flush adapter "
 			"cache' timeout, retry count down = %d\n",
 			pACB->host->host_no, retry_count);
 	} while (retry_count != 0);
@@ -545,7 +545,7 @@ static void arcmsr_hbaE_flush_cache(struct AdapterControlBlock *pACB)
 		if (arcmsr_hbaE_wait_msgint_ready(pACB))
 			break;
 		retry_count--;
-		pr_notice("arcmsr%d: wait 'flush adapter "
+		pr_debug("arcmsr%d: wait 'flush adapter "
 			"cache' timeout, retry count down = %d\n",
 			pACB->host->host_no, retry_count);
 	} while (retry_count != 0);
@@ -591,7 +591,7 @@ static bool arcmsr_alloc_io_queue(struct AdapterControlBlock *acb)
 		dma_coherent = dma_zalloc_coherent(&pdev->dev, acb->roundup_ccbsize,
 			&dma_coherent_handle, GFP_KERNEL);
 		if (!dma_coherent) {
-			pr_notice("arcmsr%d: DMA allocation failed\n", acb->host->host_no);
+			pr_debug("arcmsr%d: DMA allocation failed\n", acb->host->host_no);
 			return false;
 		}
 		acb->dma_coherent_handle2 = dma_coherent_handle;
@@ -621,7 +621,7 @@ static bool arcmsr_alloc_io_queue(struct AdapterControlBlock *acb)
 		dma_coherent = dma_zalloc_coherent(&pdev->dev, acb->roundup_ccbsize,
 			&dma_coherent_handle, GFP_KERNEL);
 		if (!dma_coherent) {
-			pr_notice("arcmsr%d: DMA allocation failed\n", acb->host->host_no);
+			pr_debug("arcmsr%d: DMA allocation failed\n", acb->host->host_no);
 			return false;
 		}
 		acb->dma_coherent_handle2 = dma_coherent_handle;
@@ -663,7 +663,7 @@ static bool arcmsr_alloc_io_queue(struct AdapterControlBlock *acb)
 		dma_coherent = dma_zalloc_coherent(&pdev->dev, acb->roundup_ccbsize,
 			&dma_coherent_handle, GFP_KERNEL);
 		if (!dma_coherent){
-			pr_notice("arcmsr%d: DMA allocation failed\n", acb->host->host_no);
+			pr_debug("arcmsr%d: DMA allocation failed\n", acb->host->host_no);
 			return false;
 		}
 		acb->dma_coherent_handle2 = dma_coherent_handle;
@@ -835,14 +835,14 @@ arcmsr_request_irq(struct pci_dev *pdev, struct AdapterControlBlock *acb)
 	nvec = pci_alloc_irq_vectors(pdev, 1, ARCMST_NUM_MSIX_VECTORS,
 			PCI_IRQ_MSIX);
 	if (nvec > 0) {
-		pr_info("arcmsr%d: msi-x enabled\n", acb->host->host_no);
+		pr_debug("arcmsr%d: msi-x enabled\n", acb->host->host_no);
 		flags = 0;
 	} else {
 msi_int0:
 		if (msi_enable == 1) {
 			nvec = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSI);
 			if (nvec == 1) {
-				dev_info(&pdev->dev, "msi enabled\n");
+				dev_dbg(&pdev->dev, "msi enabled\n");
 				goto msi_int1;
 			}
 		}
@@ -1132,7 +1132,7 @@ static uint8_t arcmsr_hbaD_abort_allcmd(struct AdapterControlBlock *pACB)
 
 	writel(ARCMSR_INBOUND_MESG0_ABORT_CMD, reg->inbound_msgaddr0);
 	if (!arcmsr_hbaD_wait_msgint_ready(pACB)) {
-		pr_notice("arcmsr%d: wait 'abort all outstanding "
+		pr_debug("arcmsr%d: wait 'abort all outstanding "
 			"command' timeout\n", pACB->host->host_no);
 		return false;
 	}
@@ -1147,7 +1147,7 @@ static uint8_t arcmsr_hbaE_abort_allcmd(struct AdapterControlBlock *pACB)
 	pACB->out_doorbell ^= ARCMSR_HBEMU_DRV2IOP_MESSAGE_CMD_DONE;
 	writel(pACB->out_doorbell, &reg->iobound_doorbell);
 	if (!arcmsr_hbaE_wait_msgint_ready(pACB)) {
-		pr_notice("arcmsr%d: wait 'abort all outstanding "
+		pr_debug("arcmsr%d: wait 'abort all outstanding "
 			"command' timeout\n", pACB->host->host_no);
 		return false;
 	}
@@ -1837,7 +1837,7 @@ static void arcmsr_hbaD_stop_bgrb(struct AdapterControlBlock *pACB)
 	pACB->acb_flags &= ~ACB_F_MSG_START_BGRB;
 	writel(ARCMSR_INBOUND_MESG0_STOP_BGRB, reg->inbound_msgaddr0);
 	if (!arcmsr_hbaD_wait_msgint_ready(pACB))
-		pr_notice("arcmsr%d: wait 'stop adapter background rebulid' "
+		pr_debug("arcmsr%d: wait 'stop adapter background rebulid' "
 			"timeout\n", pACB->host->host_no);
 }
 
@@ -1850,7 +1850,7 @@ static void arcmsr_hbaE_stop_bgrb(struct AdapterControlBlock *pACB)
 	pACB->out_doorbell ^= ARCMSR_HBEMU_DRV2IOP_MESSAGE_CMD_DONE;
 	writel(pACB->out_doorbell, &reg->iobound_doorbell);
 	if (!arcmsr_hbaE_wait_msgint_ready(pACB)) {
-		pr_notice("arcmsr%d: wait 'stop adapter background rebulid' "
+		pr_debug("arcmsr%d: wait 'stop adapter background rebulid' "
 			"timeout\n", pACB->host->host_no);
 	}
 }
@@ -2704,7 +2704,7 @@ static int arcmsr_iop_message_xfer(struct AdapterControlBlock *acb,
 	transfer_len += sg->length;
 	if (transfer_len > sizeof(struct CMD_MESSAGE_FIELD)) {
 		retvalue = ARCMSR_MESSAGE_FAIL;
-		pr_info("%s: ARCMSR_MESSAGE_FAIL!\n", __func__);
+		pr_debug("%s: ARCMSR_MESSAGE_FAIL!\n", __func__);
 		goto message_out;
 	}
 	pcmdmessagefld = (struct CMD_MESSAGE_FIELD *)buffer;
@@ -2716,7 +2716,7 @@ static int arcmsr_iop_message_xfer(struct AdapterControlBlock *acb,
 		ver_addr = kmalloc(ARCMSR_API_DATA_BUFLEN, GFP_ATOMIC);
 		if (!ver_addr) {
 			retvalue = ARCMSR_MESSAGE_FAIL;
-			pr_info("%s: memory not enough!\n", __func__);
+			pr_debug("%s: memory not enough!\n", __func__);
 			goto message_out;
 		}
 		ptmpQbuffer = ver_addr;
@@ -2924,7 +2924,7 @@ static int arcmsr_iop_message_xfer(struct AdapterControlBlock *acb,
 	}
 	default:
 		retvalue = ARCMSR_MESSAGE_FAIL;
-		pr_info("%s: unknown controlcode!\n", __func__);
+		pr_debug("%s: unknown controlcode!\n", __func__);
 	}
 message_out:
 	if (use_sg) {
@@ -3073,7 +3073,7 @@ static void arcmsr_get_adapter_config(struct AdapterControlBlock *pACB, uint32_t
 	pACB->firm_sdram_size = readl(&rwbuffer[3]);
 	pACB->firm_hd_channels = readl(&rwbuffer[4]);
 	pACB->firm_cfg_version = readl(&rwbuffer[25]);
-	pr_notice("Areca RAID Controller%d: Model %s, F/W %s\n",
+	pr_debug("Areca RAID Controller%d: Model %s, F/W %s\n",
 		pACB->host->host_no,
 		pACB->firm_model,
 		pACB->firm_version);
@@ -3150,7 +3150,7 @@ static bool arcmsr_hbaD_get_config(struct AdapterControlBlock *acb)
 	writel(ARCMSR_INBOUND_MESG0_GET_CONFIG, reg->inbound_msgaddr0);
 	/* wait message ready */
 	if (!arcmsr_hbaD_wait_msgint_ready(acb)) {
-		pr_notice("arcmsr%d: wait get adapter firmware "
+		pr_debug("arcmsr%d: wait get adapter firmware "
 			"miscellaneous data timeout\n", acb->host->host_no);
 		return false;
 	}
@@ -3176,7 +3176,7 @@ static bool arcmsr_hbaE_get_config(struct AdapterControlBlock *pACB)
 	writel(pACB->out_doorbell, &reg->iobound_doorbell);
 	/* wait message ready */
 	if (!arcmsr_hbaE_wait_msgint_ready(pACB)) {
-		pr_notice("arcmsr%d: wait get adapter firmware "
+		pr_debug("arcmsr%d: wait get adapter firmware "
 			"miscellaneous data timeout\n", pACB->host->host_no);
 		return false;
 	}
@@ -3445,7 +3445,7 @@ polling_hbaD_ccb_retry:
 		if ((pCCB->acb != acb) ||
 			(pCCB->startdone != ARCMSR_CCB_START)) {
 			if (pCCB->startdone == ARCMSR_CCB_ABORTED) {
-				pr_notice("arcmsr%d: scsi id = %d "
+				pr_debug("arcmsr%d: scsi id = %d "
 					"lun = %d ccb = '0x%p' poll command "
 					"abort successfully\n"
 					, acb->host->host_no
@@ -3456,7 +3456,7 @@ polling_hbaD_ccb_retry:
 				arcmsr_ccb_complete(pCCB);
 				continue;
 			}
-			pr_notice("arcmsr%d: polling an illegal "
+			pr_debug("arcmsr%d: polling an illegal "
 				"ccb command done ccb = '0x%p' "
 				"ccboutstandingcount = %d\n"
 				, acb->host->host_no
@@ -3513,7 +3513,7 @@ static int arcmsr_hbaE_polling_ccbdone(struct AdapterControlBlock *acb,
 		/* check if command done with no error*/
 		if ((pCCB->acb != acb) || (pCCB->startdone != ARCMSR_CCB_START)) {
 			if (pCCB->startdone == ARCMSR_CCB_ABORTED) {
-				pr_notice("arcmsr%d: scsi id = %d "
+				pr_debug("arcmsr%d: scsi id = %d "
 					"lun = %d ccb = '0x%p' poll command "
 					"abort successfully\n"
 					, acb->host->host_no
@@ -3524,7 +3524,7 @@ static int arcmsr_hbaE_polling_ccbdone(struct AdapterControlBlock *acb,
 				arcmsr_ccb_complete(pCCB);
 				continue;
 			}
-			pr_notice("arcmsr%d: polling an illegal "
+			pr_debug("arcmsr%d: polling an illegal "
 				"ccb command done ccb = '0x%p' "
 				"ccboutstandingcount = %d\n"
 				, acb->host->host_no
@@ -3773,7 +3773,7 @@ static int arcmsr_iop_confirm(struct AdapterControlBlock *acb)
 		writel(0x100, rwbuffer);
 		writel(ARCMSR_INBOUND_MESG0_SET_CONFIG, reg->inbound_msgaddr0);
 		if (!arcmsr_hbaD_wait_msgint_ready(acb)) {
-			pr_notice("arcmsr%d: 'set command Q window' timeout\n",
+			pr_debug("arcmsr%d: 'set command Q window' timeout\n",
 				acb->host->host_no);
 			return 1;
 		}
@@ -3796,7 +3796,7 @@ static int arcmsr_iop_confirm(struct AdapterControlBlock *acb)
 		acb->out_doorbell ^= ARCMSR_HBEMU_DRV2IOP_MESSAGE_CMD_DONE;
 		writel(acb->out_doorbell, &reg->iobound_doorbell);
 		if (!arcmsr_hbaE_wait_msgint_ready(acb)) {
-			pr_notice("arcmsr%d: 'set command Q window' timeout \n",
+			pr_debug("arcmsr%d: 'set command Q window' timeout \n",
 				acb->host->host_no);
 			return 1;
 		}
@@ -3962,7 +3962,7 @@ static void arcmsr_hbaD_start_bgrb(struct AdapterControlBlock *pACB)
 	pACB->acb_flags |= ACB_F_MSG_START_BGRB;
 	writel(ARCMSR_INBOUND_MESG0_START_BGRB, pmu->inbound_msgaddr0);
 	if (!arcmsr_hbaD_wait_msgint_ready(pACB)) {
-		pr_notice("arcmsr%d: wait 'start adapter "
+		pr_debug("arcmsr%d: wait 'start adapter "
 			"background rebulid' timeout\n", pACB->host->host_no);
 	}
 }
@@ -3976,7 +3976,7 @@ static void arcmsr_hbaE_start_bgrb(struct AdapterControlBlock *pACB)
 	pACB->out_doorbell ^= ARCMSR_HBEMU_DRV2IOP_MESSAGE_CMD_DONE;
 	writel(pACB->out_doorbell, &pmu->iobound_doorbell);
 	if (!arcmsr_hbaE_wait_msgint_ready(pACB)) {
-		pr_notice("arcmsr%d: wait 'start adapter "
+		pr_debug("arcmsr%d: wait 'start adapter "
 			"background rebulid' timeout \n", pACB->host->host_no);
 	}
 }
@@ -4272,13 +4272,13 @@ static int arcmsr_bus_reset(struct scsi_cmnd *cmd)
 	acb = (struct AdapterControlBlock *) cmd->device->host->hostdata;
 	if (acb->acb_flags & ACB_F_ADAPTER_REMOVED)
 		return SUCCESS;
-	pr_notice("arcmsr: executing bus reset eh.....num_resets = %d,"
+	pr_debug("arcmsr: executing bus reset eh.....num_resets = %d,"
 		" num_aborts = %d \n", acb->num_resets, acb->num_aborts);
 	acb->num_resets++;
 
 	if (acb->acb_flags & ACB_F_BUS_RESET) {
 		long timeout;
-		pr_notice("arcmsr: there is a bus reset eh proceeding...\n");
+		pr_debug("arcmsr: there is a bus reset eh proceeding...\n");
 		timeout = wait_event_timeout(wait_q, (acb->acb_flags
 			& ACB_F_BUS_RESET) == 0, 220 * HZ);
 		if (timeout)
@@ -4293,7 +4293,7 @@ wait_reset_done:
 		if (arcmsr_reset_in_progress(acb)) {
 			if (retry_count > ARCMSR_RETRYCOUNT) {
 				acb->fw_flag = FW_DEADLOCK;
-				pr_notice("arcmsr%d: waiting for hw bus reset"
+				pr_debug("arcmsr%d: waiting for hw bus reset"
 					" return, RETRY TERMINATED!!\n",
 					acb->host->host_no);
 				return FAILED;
@@ -4309,7 +4309,7 @@ wait_reset_done:
 			msecs_to_jiffies(6 * HZ));
 		acb->acb_flags &= ~ACB_F_BUS_RESET;
 		rtn = SUCCESS;
-		pr_notice("arcmsr: scsi bus reset eh returns with success\n");
+		pr_debug("arcmsr: scsi bus reset eh returns with success\n");
 	} else {
 		acb->acb_flags &= ~ACB_F_BUS_RESET;
 		atomic_set(&acb->rq_map_token, 16);

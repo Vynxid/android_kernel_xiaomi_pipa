@@ -329,7 +329,7 @@ static int kempld_i2c_probe(struct platform_device *pdev)
 	if (ret)
 		return ret;
 
-	dev_info(i2c->dev, "I2C bus initialized at %dkHz\n",
+	dev_dbg(i2c->dev, "I2C bus initialized at %dkHz\n",
 		 bus_frequency);
 
 	return 0;

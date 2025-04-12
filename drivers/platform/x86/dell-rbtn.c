@@ -397,7 +397,7 @@ static int rbtn_add(struct acpi_device *device)
 
 	type = rbtn_check(device);
 	if (type == RBTN_UNKNOWN) {
-		dev_info(&device->dev, "Unknown device type\n");
+		dev_dbg(&device->dev, "Unknown device type\n");
 		return -EINVAL;
 	}
 
@@ -467,7 +467,7 @@ static void rbtn_notify(struct acpi_device *device, u32 event)
 	}
 
 	if (event != 0x80) {
-		dev_info(&device->dev, "Received unknown event (0x%x)\n",
+		dev_dbg(&device->dev, "Received unknown event (0x%x)\n",
 			 event);
 		return;
 	}

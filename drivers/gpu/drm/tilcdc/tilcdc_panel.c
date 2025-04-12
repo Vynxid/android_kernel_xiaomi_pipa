@@ -338,7 +338,7 @@ static int panel_probe(struct platform_device *pdev)
 		if (!panel_mod->backlight)
 			return -EPROBE_DEFER;
 
-		dev_info(&pdev->dev, "found backlight\n");
+		dev_dbg(&pdev->dev, "found backlight\n");
 	}
 
 	panel_mod->enable_gpio = devm_gpiod_get_optional(&pdev->dev, "enable",
@@ -350,7 +350,7 @@ static int panel_probe(struct platform_device *pdev)
 	}
 
 	if (panel_mod->enable_gpio)
-		dev_info(&pdev->dev, "found enable GPIO\n");
+		dev_dbg(&pdev->dev, "found enable GPIO\n");
 
 	mod = &panel_mod->base;
 	pdev->dev.platform_data = mod;

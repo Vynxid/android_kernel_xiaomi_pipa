@@ -231,7 +231,7 @@ static int gx1fb_map_video_memory(struct fb_info *info, struct pci_dev *dev)
 	if (!info->screen_base)
 		return -ENOMEM;
 
-	dev_info(&dev->dev, "%d Kibyte of video memory at 0x%lx\n",
+	dev_dbg(&dev->dev, "%d Kibyte of video memory at 0x%lx\n",
 		 info->fix.smem_len / 1024, info->fix.smem_start);
 
 	return 0;

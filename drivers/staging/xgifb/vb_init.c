@@ -911,7 +911,7 @@ static bool xgifb_read_vbios(struct pci_dev *pdev)
 
 	/* Read the LVDS table index scratch register set by the BIOS. */
 
-	entry = xgifb_reg_get(xgifb_info->dev_info.P3d4, 0x36);
+	entry = xgifb_reg_get(xgifb_info->dev_dbg.P3d4, 0x36);
 	if (entry >= j)
 		entry = 0;
 	i += entry * 25;

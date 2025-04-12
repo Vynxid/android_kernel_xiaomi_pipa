@@ -696,7 +696,7 @@ static int em28xx_i2c_eeprom(struct em28xx *dev, unsigned int bus,
 	/* Check if board has eeprom */
 	err = i2c_master_recv(&dev->i2c_client[bus], &buf, 0);
 	if (err < 0) {
-		dev_info(&dev->intf->dev, "board has no eeprom\n");
+		dev_dbg(&dev->intf->dev, "board has no eeprom\n");
 		return -ENODEV;
 	}
 
@@ -720,7 +720,7 @@ static int em28xx_i2c_eeprom(struct em28xx *dev, unsigned int bus,
 			       16, 1, data, len, true);
 
 		if (dev->eeprom_addrwidth_16bit)
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "eeprom %06x: ... (skipped)\n", 256);
 	}
 
@@ -733,12 +733,12 @@ static int em28xx_i2c_eeprom(struct em28xx *dev, unsigned int bus,
 		dev->hash = em28xx_hash_mem(data, len, 32);
 		mc_start = (data[1] << 8) + 4;	/* usually 0x0004 */
 
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "EEPROM ID = %4ph, EEPROM hash = 0x%08lx\n",
 			 data, dev->hash);
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "EEPROM info:\n");
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "\tmicrocode start address = 0x%04x, boot configuration = 0x%02x\n",
 			 mc_start, data[2]);
 		/*
@@ -787,7 +787,7 @@ static int em28xx_i2c_eeprom(struct em28xx *dev, unsigned int bus,
 		/* NOTE: not all devices provide this type of dataset */
 		if (data[0] != 0x1a || data[1] != 0xeb ||
 		    data[2] != 0x67 || data[3] != 0x95) {
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "\tno hardware configuration dataset found in eeprom\n");
 			kfree(data);
 			return 0;
@@ -802,13 +802,13 @@ static int em28xx_i2c_eeprom(struct em28xx *dev, unsigned int bus,
 		   data[0] == 0x1a && data[1] == 0xeb &&
 		   data[2] == 0x67 && data[3] == 0x95) {
 		dev->hash = em28xx_hash_mem(data, len, 32);
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "EEPROM ID = %4ph, EEPROM hash = 0x%08lx\n",
 			 data, dev->hash);
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "EEPROM info:\n");
 	} else {
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "unknown eeprom format or eeprom corrupted !\n");
 		err = -ENODEV;
 		goto error;
@@ -820,50 +820,50 @@ static int em28xx_i2c_eeprom(struct em28xx *dev, unsigned int bus,
 
 	switch (le16_to_cpu(dev_config->chip_conf) >> 4 & 0x3) {
 	case 0:
-		dev_info(&dev->intf->dev, "\tNo audio on board.\n");
+		dev_dbg(&dev->intf->dev, "\tNo audio on board.\n");
 		break;
 	case 1:
-		dev_info(&dev->intf->dev, "\tAC97 audio (5 sample rates)\n");
+		dev_dbg(&dev->intf->dev, "\tAC97 audio (5 sample rates)\n");
 		break;
 	case 2:
 		if (dev->chip_id < CHIP_ID_EM2860)
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "\tI2S audio, sample rate=32k\n");
 		else
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "\tI2S audio, 3 sample rates\n");
 		break;
 	case 3:
 		if (dev->chip_id < CHIP_ID_EM2860)
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "\tI2S audio, 3 sample rates\n");
 		else
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "\tI2S audio, 5 sample rates\n");
 		break;
 	}
 
 	if (le16_to_cpu(dev_config->chip_conf) & 1 << 3)
-		dev_info(&dev->intf->dev, "\tUSB Remote wakeup capable\n");
+		dev_dbg(&dev->intf->dev, "\tUSB Remote wakeup capable\n");
 
 	if (le16_to_cpu(dev_config->chip_conf) & 1 << 2)
-		dev_info(&dev->intf->dev, "\tUSB Self power capable\n");
+		dev_dbg(&dev->intf->dev, "\tUSB Self power capable\n");
 
 	switch (le16_to_cpu(dev_config->chip_conf) & 0x3) {
 	case 0:
-		dev_info(&dev->intf->dev, "\t500mA max power\n");
+		dev_dbg(&dev->intf->dev, "\t500mA max power\n");
 		break;
 	case 1:
-		dev_info(&dev->intf->dev, "\t400mA max power\n");
+		dev_dbg(&dev->intf->dev, "\t400mA max power\n");
 		break;
 	case 2:
-		dev_info(&dev->intf->dev, "\t300mA max power\n");
+		dev_dbg(&dev->intf->dev, "\t300mA max power\n");
 		break;
 	case 3:
-		dev_info(&dev->intf->dev, "\t200mA max power\n");
+		dev_dbg(&dev->intf->dev, "\t200mA max power\n");
 		break;
 	}
-	dev_info(&dev->intf->dev,
+	dev_dbg(&dev->intf->dev,
 		 "\tTable at offset 0x%02x, strings=0x%04x, 0x%04x, 0x%04x\n",
 		 dev_config->string_idx_table,
 		 le16_to_cpu(dev_config->string1),
@@ -957,7 +957,7 @@ void em28xx_do_i2c_scan(struct em28xx *dev, unsigned int bus)
 		if (rc < 0)
 			continue;
 		i2c_devicelist[i] = i;
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "found i2c device @ 0x%x on bus %d [%s]\n",
 			 i << 1, bus, i2c_devs[i] ? i2c_devs[i] : "???");
 	}

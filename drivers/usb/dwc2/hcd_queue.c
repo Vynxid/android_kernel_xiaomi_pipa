@@ -1207,7 +1207,7 @@ static int dwc2_do_reserve(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh)
 	} else {
 		status = dwc2_periodic_channel_available(hsotg);
 		if (status) {
-			dev_info(hsotg->dev,
+			dev_dbg(hsotg->dev,
 				 "%s: No host channel available for periodic transfer\n",
 				 __func__);
 			return status;

@@ -549,7 +549,7 @@ static int i2c_nuvoton_probe(struct i2c_client *client,
 	if (rc)
 		return rc;
 
-	dev_info(dev, "VID: %04X DID: %02X RID: %02X\n", (u16) vid,
+	dev_dbg(dev, "VID: %04X DID: %02X RID: %02X\n", (u16) vid,
 		 (u8) (vid >> 16), (u8) (vid >> 24));
 
 	chip = tpmm_chip_alloc(dev, &tpm_i2c);

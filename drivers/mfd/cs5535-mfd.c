@@ -159,7 +159,7 @@ static int cs5535_mfd_probe(struct pci_dev *pdev,
 	}
 	cs5535_clone_olpc_cells();
 
-	dev_info(&pdev->dev, "%zu devices registered.\n",
+	dev_dbg(&pdev->dev, "%zu devices registered.\n",
 			ARRAY_SIZE(cs5535_mfd_cells));
 
 	return 0;

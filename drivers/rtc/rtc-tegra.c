@@ -367,7 +367,7 @@ static int __init tegra_rtc_probe(struct platform_device *pdev)
 		goto disable_clk;
 	}
 
-	dev_notice(&pdev->dev, "Tegra internal Real Time Clock\n");
+	dev_dbg(&pdev->dev, "Tegra internal Real Time Clock\n");
 
 	return 0;
 

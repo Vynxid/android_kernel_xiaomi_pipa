@@ -763,7 +763,7 @@ static void sata_dwc_dma_xfer_complete(struct ata_port *ap, u32 check_status)
 
 #ifdef DEBUG_NCQ
 	if (tag > 0) {
-		dev_info(ap->dev,
+		dev_dbg(ap->dev,
 			 "%s tag=%u cmd=0x%02x dma dir=%s proto=%s dmacr=0x%08x\n",
 			 __func__, qc->hw_tag, qc->tf.command,
 			 get_dma_dir_descript(qc->dma_dir),
@@ -1084,7 +1084,7 @@ static unsigned int sata_dwc_qc_issue(struct ata_queued_cmd *qc)
 
 #ifdef DEBUG_NCQ
 	if (qc->hw_tag > 0 || ap->link.sactive > 1)
-		dev_info(ap->dev,
+		dev_dbg(ap->dev,
 			 "%s ap id=%d cmd(0x%02x)=%s qc tag=%d prot=%s ap active_tag=0x%08x ap sactive=0x%08x\n",
 			 __func__, ap->print_id, qc->tf.command,
 			 ata_get_cmd_descript(qc->tf.command),
@@ -1244,7 +1244,7 @@ static int sata_dwc_probe(struct platform_device *ofdev)
 	/* Read the ID and Version Registers */
 	idr = sata_dwc_readl(&hsdev->sata_dwc_regs->idr);
 	versionr = sata_dwc_readl(&hsdev->sata_dwc_regs->versionr);
-	dev_notice(&ofdev->dev, "id %d, controller version %c.%c%c\n",
+	dev_dbg(&ofdev->dev, "id %d, controller version %c.%c%c\n",
 		   idr, ver[0], ver[1], ver[2]);
 
 	/* Save dev for later use in dev_xxx() routines */

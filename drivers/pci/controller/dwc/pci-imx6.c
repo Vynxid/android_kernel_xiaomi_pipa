@@ -608,11 +608,11 @@ static int imx6_pcie_establish_link(struct imx6_pcie *imx6_pcie)
 			goto err_reset_phy;
 		}
 	} else {
-		dev_info(dev, "Link: Gen2 disabled\n");
+		dev_dbg(dev, "Link: Gen2 disabled\n");
 	}
 
 	tmp = dw_pcie_readl_dbi(pci, PCIE_RC_LCSR);
-	dev_info(dev, "Link up, Gen%i\n", (tmp >> 16) & 0xf);
+	dev_dbg(dev, "Link up, Gen%i\n", (tmp >> 16) & 0xf);
 	return 0;
 
 err_reset_phy:

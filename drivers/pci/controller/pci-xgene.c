@@ -590,9 +590,9 @@ static int xgene_pcie_setup(struct xgene_pcie_port *port, struct list_head *res,
 
 	xgene_pcie_linkup(port, &lanes, &speed);
 	if (!port->link_up)
-		dev_info(dev, "(rc) link down\n");
+		dev_dbg(dev, "(rc) link down\n");
 	else
-		dev_info(dev, "(rc) x%d gen-%d link up\n", lanes, speed + 1);
+		dev_dbg(dev, "(rc) x%d gen-%d link up\n", lanes, speed + 1);
 	return 0;
 }
 

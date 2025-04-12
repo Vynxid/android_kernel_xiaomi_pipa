@@ -661,7 +661,7 @@ static void rv3029_trickle_config(struct device *dev)
 				break;
 		}
 		trickle_set_bits = elem->conf;
-		dev_info(dev,
+		dev_dbg(dev,
 			 "Trickle charger enabled at %d ohms resistance.\n",
 			 elem->r);
 	}

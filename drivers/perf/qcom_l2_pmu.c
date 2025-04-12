@@ -814,7 +814,7 @@ static struct cluster_pmu *l2_cache_associate_cpu_with_cluster(
 		if (cluster->cluster_id != cpu_cluster_id)
 			continue;
 
-		dev_info(&l2cache_pmu->pdev->dev,
+		dev_dbg(&l2cache_pmu->pdev->dev,
 			 "CPU%d associated with cluster %d\n", cpu,
 			 cluster->cluster_id);
 		cpumask_set_cpu(cpu, &cluster->cluster_cpus);
@@ -946,7 +946,7 @@ static int l2_cache_pmu_probe_cluster(struct device *dev, void *data)
 		return err;
 	}
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"Registered L2 cache PMU cluster %ld\n", fw_cluster_id);
 
 	spin_lock_init(&cluster->pmu_lock);
@@ -1021,7 +1021,7 @@ static int l2_cache_pmu_probe(struct platform_device *pdev)
 		goto out_unregister;
 	}
 
-	dev_info(&pdev->dev, "Registered L2 cache PMU using %d HW PMUs\n",
+	dev_dbg(&pdev->dev, "Registered L2 cache PMU using %d HW PMUs\n",
 		 l2cache_pmu->num_pmus);
 
 	return err;

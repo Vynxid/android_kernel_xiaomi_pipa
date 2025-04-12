@@ -311,7 +311,7 @@ static void kvaser_usb_read_bulk_callback(struct urb *urb)
 	case -ESHUTDOWN:
 		return;
 	default:
-		dev_info(&dev->intf->dev, "Rx URB aborted (%d)\n", urb->status);
+		dev_dbg(&dev->intf->dev, "Rx URB aborted (%d)\n", urb->status);
 		goto resubmit_urb;
 	}
 

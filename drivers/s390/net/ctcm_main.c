@@ -315,7 +315,7 @@ static void ccw_unit_check(struct channel *ch, __u8 sense)
 	if (sense & SNS0_INTERVENTION_REQ) {
 		if (sense & 0x01) {
 			if (ch->sense_rc != 0x01) {
-				pr_notice(
+				pr_debug(
 					"%s: The communication peer has "
 					"disconnected\n", ch->id);
 				ch->sense_rc = 0x01;
@@ -323,7 +323,7 @@ static void ccw_unit_check(struct channel *ch, __u8 sense)
 			fsm_event(ch->fsm, CTC_EVENT_UC_RCRESET, ch);
 		} else {
 			if (ch->sense_rc != SNS0_INTERVENTION_REQ) {
-				pr_notice(
+				pr_debug(
 					"%s: The remote operating system is "
 					"not available\n", ch->id);
 				ch->sense_rc = SNS0_INTERVENTION_REQ;
@@ -1605,7 +1605,7 @@ static int ctcm_new_device(struct ccwgroup_device *cgdev)
 
 	strlcpy(priv->fsm->name, dev->name, sizeof(priv->fsm->name));
 
-	dev_info(&dev->dev,
+	dev_dbg(&dev->dev,
 		"setup OK : r/w = %s/%s, protocol : %d\n",
 			priv->channel[CTCM_READ]->id,
 			priv->channel[CTCM_WRITE]->id, priv->protocol);
@@ -1804,7 +1804,7 @@ static void __exit ctcm_exit(void)
 	ccw_driver_unregister(&ctcm_ccw_driver);
 	root_device_unregister(ctcm_root_dev);
 	ctcm_unregister_dbf_views();
-	pr_info("CTCM driver unloaded\n");
+	pr_debug("CTCM driver unloaded\n");
 }
 
 /*
@@ -1812,7 +1812,7 @@ static void __exit ctcm_exit(void)
  */
 static void print_banner(void)
 {
-	pr_info("CTCM driver initialized\n");
+	pr_debug("CTCM driver initialized\n");
 }
 
 /**

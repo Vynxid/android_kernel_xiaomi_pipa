@@ -1612,7 +1612,7 @@ static void hpsa_show_volume_status(struct ctlr_info *h,
 	struct hpsa_scsi_dev_t *sd)
 {
 	if (sd->volume_offline == HPSA_VPD_LV_STATUS_UNSUPPORTED)
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume status is not available through vital product data pages.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
@@ -1620,67 +1620,67 @@ static void hpsa_show_volume_status(struct ctlr_info *h,
 	case HPSA_LV_OK:
 		break;
 	case HPSA_LV_UNDERGOING_ERASE:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is undergoing background erase process.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_NOT_AVAILABLE:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is waiting for transforming volume.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_UNDERGOING_RPI:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is undergoing rapid parity init.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_PENDING_RPI:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is queued for rapid parity initialization process.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_ENCRYPTED_NO_KEY:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is encrypted and cannot be accessed because key is not present.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_PLAINTEXT_IN_ENCRYPT_ONLY_CONTROLLER:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is not encrypted and cannot be accessed because controller is in encryption-only mode.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_UNDERGOING_ENCRYPTION:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is undergoing encryption process.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_UNDERGOING_ENCRYPTION_REKEYING:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is undergoing encryption re-keying process.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_ENCRYPTED_IN_NON_ENCRYPTED_CONTROLLER:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is encrypted and cannot be accessed because controller does not have encryption enabled.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_PENDING_ENCRYPTION:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is pending migration to encrypted state, but process has not started.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
 		break;
 	case HPSA_LV_PENDING_ENCRYPTION_REKEYING:
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"C%d:B%d:T%d:L%d Volume is encrypted and is pending encryption rekeying.\n",
 			h->scsi_host->host_no,
 			sd->bus, sd->target, sd->lun);
@@ -3236,54 +3236,54 @@ static void hpsa_debug_map_buff(struct ctlr_info *h, int rc,
 	if (h->raid_offload_debug < 2)
 		return;
 
-	dev_info(&h->pdev->dev, "structure_size = %u\n",
+	dev_dbg(&h->pdev->dev, "structure_size = %u\n",
 				le32_to_cpu(map_buff->structure_size));
-	dev_info(&h->pdev->dev, "volume_blk_size = %u\n",
+	dev_dbg(&h->pdev->dev, "volume_blk_size = %u\n",
 			le32_to_cpu(map_buff->volume_blk_size));
-	dev_info(&h->pdev->dev, "volume_blk_cnt = 0x%llx\n",
+	dev_dbg(&h->pdev->dev, "volume_blk_cnt = 0x%llx\n",
 			le64_to_cpu(map_buff->volume_blk_cnt));
-	dev_info(&h->pdev->dev, "physicalBlockShift = %u\n",
+	dev_dbg(&h->pdev->dev, "physicalBlockShift = %u\n",
 			map_buff->phys_blk_shift);
-	dev_info(&h->pdev->dev, "parity_rotation_shift = %u\n",
+	dev_dbg(&h->pdev->dev, "parity_rotation_shift = %u\n",
 			map_buff->parity_rotation_shift);
-	dev_info(&h->pdev->dev, "strip_size = %u\n",
+	dev_dbg(&h->pdev->dev, "strip_size = %u\n",
 			le16_to_cpu(map_buff->strip_size));
-	dev_info(&h->pdev->dev, "disk_starting_blk = 0x%llx\n",
+	dev_dbg(&h->pdev->dev, "disk_starting_blk = 0x%llx\n",
 			le64_to_cpu(map_buff->disk_starting_blk));
-	dev_info(&h->pdev->dev, "disk_blk_cnt = 0x%llx\n",
+	dev_dbg(&h->pdev->dev, "disk_blk_cnt = 0x%llx\n",
 			le64_to_cpu(map_buff->disk_blk_cnt));
-	dev_info(&h->pdev->dev, "data_disks_per_row = %u\n",
+	dev_dbg(&h->pdev->dev, "data_disks_per_row = %u\n",
 			le16_to_cpu(map_buff->data_disks_per_row));
-	dev_info(&h->pdev->dev, "metadata_disks_per_row = %u\n",
+	dev_dbg(&h->pdev->dev, "metadata_disks_per_row = %u\n",
 			le16_to_cpu(map_buff->metadata_disks_per_row));
-	dev_info(&h->pdev->dev, "row_cnt = %u\n",
+	dev_dbg(&h->pdev->dev, "row_cnt = %u\n",
 			le16_to_cpu(map_buff->row_cnt));
-	dev_info(&h->pdev->dev, "layout_map_count = %u\n",
+	dev_dbg(&h->pdev->dev, "layout_map_count = %u\n",
 			le16_to_cpu(map_buff->layout_map_count));
-	dev_info(&h->pdev->dev, "flags = 0x%x\n",
+	dev_dbg(&h->pdev->dev, "flags = 0x%x\n",
 			le16_to_cpu(map_buff->flags));
-	dev_info(&h->pdev->dev, "encryption = %s\n",
+	dev_dbg(&h->pdev->dev, "encryption = %s\n",
 			le16_to_cpu(map_buff->flags) &
 			RAID_MAP_FLAG_ENCRYPT_ON ?  "ON" : "OFF");
-	dev_info(&h->pdev->dev, "dekindex = %u\n",
+	dev_dbg(&h->pdev->dev, "dekindex = %u\n",
 			le16_to_cpu(map_buff->dekindex));
 	map_cnt = le16_to_cpu(map_buff->layout_map_count);
 	for (map = 0; map < map_cnt; map++) {
-		dev_info(&h->pdev->dev, "Map%u:\n", map);
+		dev_dbg(&h->pdev->dev, "Map%u:\n", map);
 		row_cnt = le16_to_cpu(map_buff->row_cnt);
 		for (row = 0; row < row_cnt; row++) {
-			dev_info(&h->pdev->dev, "  Row%u:\n", row);
+			dev_dbg(&h->pdev->dev, "  Row%u:\n", row);
 			disks_per_row =
 				le16_to_cpu(map_buff->data_disks_per_row);
 			for (col = 0; col < disks_per_row; col++, dd++)
-				dev_info(&h->pdev->dev,
+				dev_dbg(&h->pdev->dev,
 					"    D%02u: h=0x%04x xor=%u,%u\n",
 					col, dd->ioaccel_handle,
 					dd->xor_mult[0], dd->xor_mult[1]);
 			disks_per_row =
 				le16_to_cpu(map_buff->metadata_disks_per_row);
 			for (col = 0; col < disks_per_row; col++, dd++)
-				dev_info(&h->pdev->dev,
+				dev_dbg(&h->pdev->dev,
 					"    M%02u: h=0x%04x xor=%u,%u\n",
 					col, dd->ioaccel_handle,
 					dd->xor_mult[0], dd->xor_mult[1]);
@@ -3592,7 +3592,7 @@ static void hpsa_ext_ctrl_present(struct ctlr_info *h,
 		if (physdev->LUN[i].device_type ==
 			BMIC_DEVICE_TYPE_CONTROLLER
 			&& !is_hba_lunid(physdev->LUN[i].lunid)) {
-			dev_info(&h->pdev->dev,
+			dev_dbg(&h->pdev->dev,
 				"External controller present, activate discovery polling and disable rld caching\n");
 			hpsa_disable_rld_caching(h);
 			h->discovery_polling = 1;
@@ -3993,7 +3993,7 @@ static int hpsa_update_device_info(struct ctlr_info *h,
 			/*
 			 * Legacy boards might not support volume status
 			 */
-			dev_info(&h->pdev->dev,
+			dev_dbg(&h->pdev->dev,
 				 "C0:T%d:L%d Volume status not available, assuming online.\n",
 				 this_device->target, this_device->lun);
 			volume_offline = 0;
@@ -6287,7 +6287,7 @@ static int hpsa_getdrivver_ioctl(struct ctlr_info *h, void __user *argp)
 	rc = sscanf(HPSA_DRIVER_VERSION, "%hhu.%hhu.%hhu",
 		&vmaj, &vmin, &vsubmin);
 	if (rc != 3) {
-		dev_info(&h->pdev->dev, "driver version string '%s' "
+		dev_dbg(&h->pdev->dev, "driver version string '%s' "
 			"unrecognized.", HPSA_DRIVER_VERSION);
 		vmaj = 0;
 		vmin = 0;
@@ -6913,7 +6913,7 @@ static int ignore_bogus_interrupt(struct ctlr_info *h)
 	if (likely(h->interrupts_enabled))
 		return 0;
 
-	dev_info(&h->pdev->dev, "Received interrupt while interrupts disabled "
+	dev_dbg(&h->pdev->dev, "Received interrupt while interrupts disabled "
 		"(known firmware bug.)  Ignoring.\n");
 
 	return 1;
@@ -7091,7 +7091,7 @@ static int hpsa_message(struct pci_dev *pdev, unsigned char opcode,
 		return -EIO;
 	}
 
-	dev_info(&pdev->dev, "controller message %02x:%02x succeeded\n",
+	dev_dbg(&pdev->dev, "controller message %02x:%02x succeeded\n",
 		opcode, type);
 	return 0;
 }
@@ -7107,7 +7107,7 @@ static int hpsa_controller_hard_reset(struct pci_dev *pdev,
 		 * of resetting the controller doesn't work, so we have this
 		 * other way using the doorbell register.
 		 */
-		dev_info(&pdev->dev, "using doorbell to reset controller\n");
+		dev_dbg(&pdev->dev, "using doorbell to reset controller\n");
 		writel(use_doorbell, vaddr + SA5_DOORBELL);
 
 		/* PMC hardware guys tell us we need a 10 second delay after
@@ -7128,7 +7128,7 @@ static int hpsa_controller_hard_reset(struct pci_dev *pdev,
 
 		int rc = 0;
 
-		dev_info(&pdev->dev, "using PCI PM to reset controller\n");
+		dev_dbg(&pdev->dev, "using PCI PM to reset controller\n");
 
 		/* enter the D3hot power management state */
 		rc = pci_set_power_state(pdev, PCI_D3hot);
@@ -7311,7 +7311,7 @@ static int hpsa_kdump_hard_reset_controller(struct pci_dev *pdev, u32 board_id)
 			"controller. Will try soft reset.\n");
 		rc = -ENOTSUPP;
 	} else {
-		dev_info(&pdev->dev, "board ready after hard reset.\n");
+		dev_dbg(&pdev->dev, "board ready after hard reset.\n");
 	}
 
 unmap_cfgtable:
@@ -7333,31 +7333,31 @@ static void print_cfg_table(struct device *dev, struct CfgTable __iomem *tb)
 	int i;
 	char temp_name[17];
 
-	dev_info(dev, "Controller Configuration information\n");
-	dev_info(dev, "------------------------------------\n");
+	dev_dbg(dev, "Controller Configuration information\n");
+	dev_dbg(dev, "------------------------------------\n");
 	for (i = 0; i < 4; i++)
 		temp_name[i] = readb(&(tb->Signature[i]));
 	temp_name[4] = '\0';
-	dev_info(dev, "   Signature = %s\n", temp_name);
-	dev_info(dev, "   Spec Number = %d\n", readl(&(tb->SpecValence)));
-	dev_info(dev, "   Transport methods supported = 0x%x\n",
+	dev_dbg(dev, "   Signature = %s\n", temp_name);
+	dev_dbg(dev, "   Spec Number = %d\n", readl(&(tb->SpecValence)));
+	dev_dbg(dev, "   Transport methods supported = 0x%x\n",
 	       readl(&(tb->TransportSupport)));
-	dev_info(dev, "   Transport methods active = 0x%x\n",
+	dev_dbg(dev, "   Transport methods active = 0x%x\n",
 	       readl(&(tb->TransportActive)));
-	dev_info(dev, "   Requested transport Method = 0x%x\n",
+	dev_dbg(dev, "   Requested transport Method = 0x%x\n",
 	       readl(&(tb->HostWrite.TransportRequest)));
-	dev_info(dev, "   Coalesce Interrupt Delay = 0x%x\n",
+	dev_dbg(dev, "   Coalesce Interrupt Delay = 0x%x\n",
 	       readl(&(tb->HostWrite.CoalIntDelay)));
-	dev_info(dev, "   Coalesce Interrupt Count = 0x%x\n",
+	dev_dbg(dev, "   Coalesce Interrupt Count = 0x%x\n",
 	       readl(&(tb->HostWrite.CoalIntCount)));
-	dev_info(dev, "   Max outstanding commands = %d\n",
+	dev_dbg(dev, "   Max outstanding commands = %d\n",
 	       readl(&(tb->CmdsOutMax)));
-	dev_info(dev, "   Bus Types = 0x%x\n", readl(&(tb->BusTypes)));
+	dev_dbg(dev, "   Bus Types = 0x%x\n", readl(&(tb->BusTypes)));
 	for (i = 0; i < 16; i++)
 		temp_name[i] = readb(&(tb->ServerName[i]));
 	temp_name[16] = '\0';
-	dev_info(dev, "   Server Name = %s\n", temp_name);
-	dev_info(dev, "   Heartbeat Counter = 0x%x\n\n\n",
+	dev_dbg(dev, "   Server Name = %s\n", temp_name);
+	dev_dbg(dev, "   Heartbeat Counter = 0x%x\n\n\n",
 		readl(&(tb->HeartBeat)));
 #endif				/* HPSA_DEBUG */
 }
@@ -7930,7 +7930,7 @@ static int hpsa_init_reset_devices(struct pci_dev *pdev, u32 board_id)
 		goto out_disable;
 
 	/* Now try to get the controller to respond to a no-op */
-	dev_info(&pdev->dev, "Waiting for controller to respond to no-op\n");
+	dev_dbg(&pdev->dev, "Waiting for controller to respond to no-op\n");
 	for (i = 0; i < HPSA_POST_RESET_NOOP_RETRIES; i++) {
 		if (hpsa_noop(pdev) == 0)
 			break;
@@ -8079,14 +8079,14 @@ static int hpsa_kdump_soft_reset(struct ctlr_info *h)
 	int rc;
 	hpsa_send_host_reset(h, RAID_CTLR_LUNID, HPSA_RESET_TYPE_CONTROLLER);
 
-	dev_info(&h->pdev->dev, "Waiting for board to soft reset.\n");
+	dev_dbg(&h->pdev->dev, "Waiting for board to soft reset.\n");
 	rc = hpsa_wait_for_board_state(h->pdev, h->vaddr, BOARD_NOT_READY);
 	if (rc) {
 		dev_warn(&h->pdev->dev, "Soft reset had no effect.\n");
 		return rc;
 	}
 
-	dev_info(&h->pdev->dev, "Board reset, awaiting READY status.\n");
+	dev_dbg(&h->pdev->dev, "Board reset, awaiting READY status.\n");
 	rc = hpsa_wait_for_board_state(h->pdev, h->vaddr, BOARD_READY);
 	if (rc) {
 		dev_warn(&h->pdev->dev, "Board failed to become ready "
@@ -8428,7 +8428,7 @@ static int hpsa_luns_changed(struct ctlr_info *h)
 		goto out;
 	}
 	if (memcmp(logdev, h->lastlogicals, sizeof(*logdev))) {
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"Lun changes detected.\n");
 		memcpy(h->lastlogicals, logdev, sizeof(*logdev));
 		goto out;
@@ -8508,7 +8508,7 @@ static void hpsa_rescan_ctlr_worker(struct work_struct *work)
 		hpsa_perform_rescan(h);
 	} else if (h->discovery_polling) {
 		if (hpsa_luns_changed(h)) {
-			dev_info(&h->pdev->dev,
+			dev_dbg(&h->pdev->dev,
 				"driver discovery polling rescan.\n");
 			hpsa_perform_rescan(h);
 		}
@@ -8748,8 +8748,8 @@ reinit_after_soft_reset:
 			/* Neither hard nor soft reset worked, we're hosed. */
 			goto clean7;
 
-		dev_info(&h->pdev->dev, "Board READY.\n");
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev, "Board READY.\n");
+		dev_dbg(&h->pdev->dev,
 			"Waiting for stale completions to drain.\n");
 		h->access.set_intr_mask(h, HPSA_INTR_ON);
 		msleep(10000);
@@ -8757,7 +8757,7 @@ reinit_after_soft_reset:
 
 		rc = controller_reset_failed(h->cfgtable);
 		if (rc)
-			dev_info(&h->pdev->dev,
+			dev_dbg(&h->pdev->dev,
 				"Soft reset appears to have failed.\n");
 
 		/* since the controller's reset, we have to go back and re-init
@@ -8786,7 +8786,7 @@ reinit_after_soft_reset:
 
 	h->lastlogicals = kzalloc(sizeof(*(h->lastlogicals)), GFP_KERNEL);
 	if (!h->lastlogicals)
-		dev_info(&h->pdev->dev,
+		dev_dbg(&h->pdev->dev,
 			"Can't track change to report lun data\n");
 
 	/* hook into SCSI subsystem */

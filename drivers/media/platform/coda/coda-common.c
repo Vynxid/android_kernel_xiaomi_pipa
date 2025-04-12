@@ -2495,7 +2495,7 @@ static void coda_fw_callback(const struct firmware *fw, void *context)
 		 * firmware requests, report that the fallback firmware was
 		 * found.
 		 */
-		dev_info(&pdev->dev, "Using fallback firmware %s\n",
+		dev_dbg(&pdev->dev, "Using fallback firmware %s\n",
 			 dev->devtype->firmware[dev->firmware]);
 	}
 

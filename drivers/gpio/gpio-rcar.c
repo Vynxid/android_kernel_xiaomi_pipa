@@ -515,7 +515,7 @@ static int gpio_rcar_probe(struct platform_device *pdev)
 		goto err1;
 	}
 
-	dev_info(dev, "driving %d GPIOs\n", npins);
+	dev_dbg(dev, "driving %d GPIOs\n", npins);
 
 	return 0;
 

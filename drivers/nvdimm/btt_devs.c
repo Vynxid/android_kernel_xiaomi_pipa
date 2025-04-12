@@ -270,7 +270,7 @@ bool nd_btt_arena_is_valid(struct nd_btt *nd_btt, struct btt_sb *super)
 
 	/* TODO: figure out action for this */
 	if ((le32_to_cpu(super->flags) & IB_FLAG_ERROR_MASK) != 0)
-		dev_info(&nd_btt->dev, "Found arena with an error flag\n");
+		dev_dbg(&nd_btt->dev, "Found arena with an error flag\n");
 
 	return true;
 }

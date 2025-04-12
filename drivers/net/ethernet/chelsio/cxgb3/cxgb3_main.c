@@ -1089,7 +1089,7 @@ static int upgrade_fw(struct adapter *adap)
 	release_firmware(fw);
 
 	if (ret == 0)
-		dev_info(dev, "successful upgrade to firmware %d.%d.%d\n",
+		dev_dbg(dev, "successful upgrade to firmware %d.%d.%d\n",
 			 FW_VERSION_MAJOR, FW_VERSION_MINOR, FW_VERSION_MICRO);
 	else
 		dev_err(dev, "failed to upgrade to firmware %d.%d.%d\n",
@@ -1141,7 +1141,7 @@ static int update_tpsram(struct adapter *adap)
 
 	ret = t3_set_proto_sram(adap, tpsram->data);
 	if (ret == 0)
-		dev_info(dev,
+		dev_dbg(dev,
 			 "successful update of protocol engine "
 			 "to %d.%d.%d\n",
 			 TP_VERSION_MAJOR, TP_VERSION_MINOR, TP_VERSION_MICRO);
@@ -3111,7 +3111,7 @@ static void set_nqsets(struct adapter *adap)
 		pi->nqsets = nqsets;
 		j = pi->first_qset + nqsets;
 
-		dev_info(&adap->pdev->dev,
+		dev_dbg(&adap->pdev->dev,
 			 "Port %d using %d queue sets.\n", i, nqsets);
 	}
 }
@@ -3168,7 +3168,7 @@ static void print_port_info(struct adapter *adap, const struct adapter_info *ai)
 			    (adap->flags & USING_MSIX) ? " MSI-X" :
 			    (adap->flags & USING_MSI) ? " MSI" : "");
 		if (adap->name == dev->name && adap->params.vpd.mclk)
-			pr_info("%s: %uMB CM, %uMB PMTX, %uMB PMRX, S/N: %s\n",
+			pr_debug("%s: %uMB CM, %uMB PMTX, %uMB PMRX, S/N: %s\n",
 			       adap->name, t3_mc7_size(&adap->cm) >> 20,
 			       t3_mc7_size(&adap->pmtx) >> 20,
 			       t3_mc7_size(&adap->pmrx) >> 20,
@@ -3231,7 +3231,7 @@ static int init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	err = pci_request_regions(pdev, DRV_NAME);
 	if (err) {
 		/* Just info, some other driver may have claimed the device. */
-		dev_info(&pdev->dev, "cannot obtain PCI resources\n");
+		dev_dbg(&pdev->dev, "cannot obtain PCI resources\n");
 		goto out_disable_device;
 	}
 

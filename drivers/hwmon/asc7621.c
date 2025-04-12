@@ -1169,7 +1169,7 @@ static int asc7621_detect(struct i2c_client *client,
 			strlcpy(info->type, asc7621_chips[chip_index].name,
 				I2C_NAME_SIZE);
 
-			dev_info(&adapter->dev, "Matched %s at 0x%02x\n",
+			dev_dbg(&adapter->dev, "Matched %s at 0x%02x\n",
 				 asc7621_chips[chip_index].name, client->addr);
 			return 0;
 		}

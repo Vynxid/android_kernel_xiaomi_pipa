@@ -199,7 +199,7 @@ static struct psmouse_attribute psmouse_attr_##_name = {			\
 	dev_dbg(&(psmouse)->ps2dev.serio->dev,		\
 		psmouse_fmt(format), ##__VA_ARGS__)
 #define psmouse_info(psmouse, format, ...)		\
-	dev_info(&(psmouse)->ps2dev.serio->dev,		\
+	dev_dbg(&(psmouse)->ps2dev.serio->dev,		\
 		 psmouse_fmt(format), ##__VA_ARGS__)
 #define psmouse_warn(psmouse, format, ...)		\
 	dev_warn(&(psmouse)->ps2dev.serio->dev,		\
@@ -208,7 +208,7 @@ static struct psmouse_attribute psmouse_attr_##_name = {			\
 	dev_err(&(psmouse)->ps2dev.serio->dev,		\
 		psmouse_fmt(format), ##__VA_ARGS__)
 #define psmouse_notice(psmouse, format, ...)		\
-	dev_notice(&(psmouse)->ps2dev.serio->dev,	\
+	dev_dbg(&(psmouse)->ps2dev.serio->dev,	\
 		   psmouse_fmt(format), ##__VA_ARGS__)
 #define psmouse_printk(level, psmouse, format, ...)	\
 	dev_printk(level,				\

@@ -222,7 +222,7 @@ failed:
 	kfree(buf);
 	release_firmware(fw);
 	if (ret < 0)
-		dev_info(&card->pdev->dev, "firmware %s failed\n", file);
+		dev_dbg(&card->pdev->dev, "firmware %s failed\n", file);
 	return ret;
 }
 
@@ -320,7 +320,7 @@ int softing_load_app_fw(const char *file, struct softing *card)
 failed:
 	release_firmware(fw);
 	if (ret < 0)
-		dev_info(&card->pdev->dev, "firmware %s failed\n", file);
+		dev_dbg(&card->pdev->dev, "firmware %s failed\n", file);
 	return ret;
 }
 

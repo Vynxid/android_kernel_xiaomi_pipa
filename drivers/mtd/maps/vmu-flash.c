@@ -150,7 +150,7 @@ static int maple_vmu_read_block(unsigned int num, unsigned char *buf,
 			wait_event_interruptible_timeout(mdev->maple_wait,
 				atomic_read(&mdev->busy) == 0, HZ);
 			if (atomic_read(&mdev->busy) == 1) {
-				dev_notice(&mdev->dev, "VMU at (%d, %d)"
+				dev_dbg(&mdev->dev, "VMU at (%d, %d)"
 					" is busy\n", mdev->port, mdev->unit);
 				error = -EAGAIN;
 				goto outB;
@@ -198,7 +198,7 @@ static int maple_vmu_read_block(unsigned int num, unsigned char *buf,
 					" interrupted on block 0x%X\n",
 					mdev->port, mdev->unit, num);
 			} else
-				dev_notice(&mdev->dev, "VMU read on (%d, %d)"
+				dev_dbg(&mdev->dev, "VMU read on (%d, %d)"
 					" timed out on block 0x%X\n",
 					mdev->port, mdev->unit, num);
 			goto outA;
@@ -256,7 +256,7 @@ static int maple_vmu_write_block(unsigned int num, const unsigned char *buf,
 				atomic_read(&mdev->busy) == 0, HZ);
 			if (atomic_read(&mdev->busy) == 1) {
 				error = -EBUSY;
-				dev_notice(&mdev->dev, "VMU write at (%d, %d)"
+				dev_dbg(&mdev->dev, "VMU write at (%d, %d)"
 					"failed - device is busy\n",
 					mdev->port, mdev->unit);
 				goto fail_nolock;
@@ -516,7 +516,7 @@ static void vmu_queryblocks(struct mapleq *mq)
 	card->tempA = res[12];
 	card->tempB = res[6];
 
-	dev_info(&mdev->dev, "VMU device at partition %d has %d user "
+	dev_dbg(&mdev->dev, "VMU device at partition %d has %d user "
 		"blocks with a root block at %d\n", card->partition,
 		card->tempA, card->tempB);
 
@@ -658,7 +658,7 @@ static int vmu_connect(struct maple_device *mdev)
 		wait_event_interruptible_timeout(mdev->maple_wait,
 			atomic_read(&mdev->busy) == 0, HZ);
 		if (atomic_read(&mdev->busy) == 1) {
-			dev_notice(&mdev->dev, "VMU at (%d, %d) is busy\n",
+			dev_dbg(&mdev->dev, "VMU at (%d, %d) is busy\n",
 				mdev->port, mdev->unit);
 			error = -EAGAIN;
 			goto fail_device_busy;
@@ -736,37 +736,37 @@ static void vmu_file_error(struct maple_device *mdev, void *recvbuf)
 	switch (error) {
 
 	case MAPLE_FILEERR_INVALID_PARTITION:
-		dev_notice(&mdev->dev, ERRSTR " invalid partition number\n",
+		dev_dbg(&mdev->dev, ERRSTR " invalid partition number\n",
 			mdev->port, mdev->unit);
 		break;
 
 	case MAPLE_FILEERR_PHASE_ERROR:
-		dev_notice(&mdev->dev, ERRSTR " phase error\n",
+		dev_dbg(&mdev->dev, ERRSTR " phase error\n",
 			mdev->port, mdev->unit);
 		break;
 
 	case MAPLE_FILEERR_INVALID_BLOCK:
-		dev_notice(&mdev->dev, ERRSTR " invalid block number\n",
+		dev_dbg(&mdev->dev, ERRSTR " invalid block number\n",
 			mdev->port, mdev->unit);
 		break;
 
 	case MAPLE_FILEERR_WRITE_ERROR:
-		dev_notice(&mdev->dev, ERRSTR " write error\n",
+		dev_dbg(&mdev->dev, ERRSTR " write error\n",
 			mdev->port, mdev->unit);
 		break;
 
 	case MAPLE_FILEERR_INVALID_WRITE_LENGTH:
-		dev_notice(&mdev->dev, ERRSTR " invalid write length\n",
+		dev_dbg(&mdev->dev, ERRSTR " invalid write length\n",
 			mdev->port, mdev->unit);
 		break;
 
 	case MAPLE_FILEERR_BAD_CRC:
-		dev_notice(&mdev->dev, ERRSTR " bad CRC\n",
+		dev_dbg(&mdev->dev, ERRSTR " bad CRC\n",
 			mdev->port, mdev->unit);
 		break;
 
 	default:
-		dev_notice(&mdev->dev, ERRSTR " 0x%X\n",
+		dev_dbg(&mdev->dev, ERRSTR " 0x%X\n",
 			mdev->port, mdev->unit, error);
 	}
 }

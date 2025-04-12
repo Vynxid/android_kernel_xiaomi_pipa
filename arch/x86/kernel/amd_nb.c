@@ -383,7 +383,7 @@ static void amd_cache_gart(void)
 	flush_words = kmalloc_array(amd_northbridges.num, sizeof(u32), GFP_KERNEL);
 	if (!flush_words) {
 		amd_northbridges.flags &= ~AMD_NB_GART;
-		pr_notice("Cannot initialize GART flush words, GART support disabled\n");
+		pr_debug("Cannot initialize GART flush words, GART support disabled\n");
 		return;
 	}
 
@@ -426,7 +426,7 @@ void amd_flush_garts(void)
 	}
 	spin_unlock_irqrestore(&gart_lock, flags);
 	if (!flushed)
-		pr_notice("nothing to flush?\n");
+		pr_debug("nothing to flush?\n");
 }
 EXPORT_SYMBOL_GPL(amd_flush_garts);
 
@@ -462,7 +462,7 @@ static __init void fix_erratum_688(void)
 
 	on_each_cpu(__fix_erratum_688, NULL, 0);
 
-	pr_info("x86/cpu/AMD: CPU erratum 688 worked around\n");
+	pr_debug("x86/cpu/AMD: CPU erratum 688 worked around\n");
 }
 
 static __init int init_amd_nbs(void)

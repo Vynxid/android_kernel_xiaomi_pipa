@@ -324,7 +324,7 @@ static int usb_add_extcon(struct usb_phy *x)
 		x->id_edev = extcon_get_edev_by_phandle(x->dev, 1);
 		if (IS_ERR(x->id_edev)) {
 			x->id_edev = NULL;
-			dev_info(x->dev, "No separate ID extcon device\n");
+			dev_dbg(x->dev, "No separate ID extcon device\n");
 		}
 
 		if (x->vbus_nb.notifier_call) {

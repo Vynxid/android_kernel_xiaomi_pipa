@@ -1900,7 +1900,7 @@ void qedi_reset_host_mtu(struct qedi_ctx *qedi, u16 mtu)
 	params.mtu = qedi->ll2_mtu + IPV6_HDR_LEN + TCP_HDR_LEN;
 	params.drop_ttl0_packets = 0;
 	params.rx_vlan_stripping = 1;
-	ether_addr_copy(params.ll2_mac_address, qedi->dev_info.common.hw_mac);
+	ether_addr_copy(params.ll2_mac_address, qedi->dev_dbg.common.hw_mac);
 	qedi_ops->ll2->start(qedi->cdev, &params);
 }
 
@@ -1916,7 +1916,7 @@ qedi_get_nvram_block(struct qedi_ctx *qedi)
 	u32 flags;
 	struct nvm_iscsi_block *block;
 
-	pf = qedi->dev_info.common.abs_pf_id;
+	pf = qedi->dev_dbg.common.abs_pf_id;
 	block = &qedi->iscsi_image->iscsi_cfg.block[0];
 	for (i = 0; i < NUM_OF_ISCSI_PF_SUPPORTED; i++, block++) {
 		flags = ((block->id) & NVM_ISCSI_CFG_BLK_CTRL_FLAG_MASK) >>
@@ -2384,7 +2384,7 @@ static int __qedi_probe(struct pci_dev *pdev, int mode)
 
 	atomic_set(&qedi->link_state, QEDI_LINK_DOWN);
 
-	rc = qedi_ops->fill_dev_info(qedi->cdev, &qedi->dev_info);
+	rc = qedi_ops->fill_dev_info(qedi->cdev, &qedi->dev_dbg);
 	if (rc)
 		goto free_host;
 
@@ -2432,13 +2432,13 @@ static int __qedi_probe(struct pci_dev *pdev, int mode)
 	qedi_ops->common->set_power_state(qedi->cdev, PCI_D0);
 
 	/* Learn information crucial for qedi to progress */
-	rc = qedi_ops->fill_dev_info(qedi->cdev, &qedi->dev_info);
+	rc = qedi_ops->fill_dev_info(qedi->cdev, &qedi->dev_dbg);
 	if (rc)
 		goto stop_iscsi_func;
 
 	/* Record BDQ producer doorbell addresses */
-	qedi->bdq_primary_prod = qedi->dev_info.primary_dbq_rq_addr;
-	qedi->bdq_secondary_prod = qedi->dev_info.secondary_bdq_rq_addr;
+	qedi->bdq_primary_prod = qedi->dev_dbg.primary_dbq_rq_addr;
+	qedi->bdq_secondary_prod = qedi->dev_dbg.secondary_bdq_rq_addr;
 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_DISC,
 		  "BDQ primary_prod=%p secondary_prod=%p.\n",
 		  qedi->bdq_primary_prod,
@@ -2458,7 +2458,7 @@ static int __qedi_probe(struct pci_dev *pdev, int mode)
 	writew(qedi->bdq_prod_idx, qedi->bdq_secondary_prod);
 	tmp = readw(qedi->bdq_secondary_prod);
 
-	ether_addr_copy(qedi->mac, qedi->dev_info.common.hw_mac);
+	ether_addr_copy(qedi->mac, qedi->dev_dbg.common.hw_mac);
 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_DISC, "MAC address is %pM.\n",
 		  qedi->mac);
 
@@ -2472,7 +2472,7 @@ static int __qedi_probe(struct pci_dev *pdev, int mode)
 	qedi->ll2_mtu = DEF_PATH_MTU;
 	params.drop_ttl0_packets = 0;
 	params.rx_vlan_stripping = 1;
-	ether_addr_copy(params.ll2_mac_address, qedi->dev_info.common.hw_mac);
+	ether_addr_copy(params.ll2_mac_address, qedi->dev_dbg.common.hw_mac);
 
 	if (mode != QEDI_MODE_RECOVERY) {
 		/* set up rx path */

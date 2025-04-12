@@ -1462,7 +1462,7 @@ static int pxa168_eth_probe(struct platform_device *pdev)
 		/* try reading the mac address, if set by the bootloader */
 		pxa168_eth_get_mac_address(dev, dev->dev_addr);
 		if (!is_valid_ether_addr(dev->dev_addr)) {
-			dev_info(&pdev->dev, "Using random mac address\n");
+			dev_dbg(&pdev->dev, "Using random mac address\n");
 			eth_hw_addr_random(dev);
 		}
 	}

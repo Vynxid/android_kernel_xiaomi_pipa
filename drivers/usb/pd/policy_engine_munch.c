@@ -173,8 +173,8 @@ static const char * const usbpd_ext_msg_strings[] = {
 #define dev_dbg dev_err
 #undef pr_debug
 #define pr_debug pr_err
-#undef pr_info
-#define pr_info pr_err
+#undef pr_debug
+#define pr_debug pr_err
 
 static inline const char *msg_to_string(u8 id, bool is_data, bool is_ext)
 {
@@ -210,7 +210,7 @@ static void *usbpd_ipc_log;
 #define usbpd_info(dev, fmt, ...) do { \
 	ipc_log_string(usbpd_ipc_log, "%s: %s: " fmt, dev_name(dev), __func__, \
 			##__VA_ARGS__); \
-	dev_info(dev, fmt, ##__VA_ARGS__); \
+	dev_dbg(dev, fmt, ##__VA_ARGS__); \
 	} while (0)
 
 #define usbpd_warn(dev, fmt, ...) do { \

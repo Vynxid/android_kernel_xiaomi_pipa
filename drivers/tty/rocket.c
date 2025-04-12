@@ -2130,7 +2130,7 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 	for (aiop = 0; aiop < max_num_aiops; aiop++)
 		ctlp->AiopNumChan[aiop] = ports_per_aiop;
 
-	dev_info(&dev->dev, "comtrol PCI controller #%d found at "
+	dev_dbg(&dev->dev, "comtrol PCI controller #%d found at "
 		"address %04lx, %d AIOP(s) (%s), creating ttyR%d - %ld\n",
 		i, rcktpt_io_addr[i], num_aiops, rocketModel[i].modelString,
 		rocketModel[i].startingPortNumber,

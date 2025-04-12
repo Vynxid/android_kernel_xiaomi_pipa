@@ -292,7 +292,7 @@ static int scr24x_probe(struct pcmcia_device *link)
 	device_create(scr24x_class, NULL, MKDEV(MAJOR(scr24x_devt), dev->devno),
 		      NULL, "scr24x%d", dev->devno);
 
-	dev_info(&link->dev, "SCR24x Chip Card Interface\n");
+	dev_dbg(&link->dev, "SCR24x Chip Card Interface\n");
 	return 0;
 
 err:

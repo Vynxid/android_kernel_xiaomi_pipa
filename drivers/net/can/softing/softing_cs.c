@@ -300,7 +300,7 @@ static int softingcs_probe(struct pcmcia_device *pcmcia)
 	if (ret < 0)
 		goto platform_failed;
 
-	dev_info(&pcmcia->dev, "created %s\n", dev_name(&pdev->dev));
+	dev_dbg(&pcmcia->dev, "created %s\n", dev_name(&pdev->dev));
 	return 0;
 
 platform_failed:

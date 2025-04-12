@@ -438,7 +438,7 @@ static int vpif_probe(struct platform_device *pdev)
 	pm_runtime_get(&pdev->dev);
 
 	spin_lock_init(&vpif_lock);
-	dev_info(&pdev->dev, "vpif probe success\n");
+	dev_dbg(&pdev->dev, "vpif probe success\n");
 
 	/*
 	 * If VPIF Node has endpoints, assume "new" DT support,

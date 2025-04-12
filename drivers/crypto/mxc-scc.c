@@ -725,7 +725,7 @@ static int mxc_scc_probe(struct platform_device *pdev)
 		goto err_out;
 	}
 
-	dev_info(dev, "registered successfully.\n");
+	dev_dbg(dev, "registered successfully.\n");
 
 	return 0;
 

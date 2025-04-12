@@ -431,7 +431,7 @@ static int rmi_spi_probe(struct spi_device *spi)
 		return error;
 	}
 
-	dev_info(&spi->dev, "registering SPI-connected sensor\n");
+	dev_dbg(&spi->dev, "registering SPI-connected sensor\n");
 
 	error = rmi_register_transport_device(&rmi_spi->xport);
 	if (error) {

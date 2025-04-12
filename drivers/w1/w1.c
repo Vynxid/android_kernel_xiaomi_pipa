@@ -436,7 +436,7 @@ static int w1_atoreg_num(struct device *dev, const char *buf, size_t count,
 	rn->crc = w1_calc_crc8((u8 *)&rn64_le, 7);
 
 #if 0
-	dev_info(dev, "With CRC device is %02x.%012llx.%02x.\n",
+	dev_dbg(dev, "With CRC device is %02x.%012llx.%02x.\n",
 		  rn->family, (unsigned long long)rn->id, rn->crc);
 #endif
 
@@ -482,7 +482,7 @@ static ssize_t w1_master_attribute_store_add(struct device *dev,
 	 * current search doesn't support that.
 	 */
 	if (sl) {
-		dev_info(dev, "Device %s already exists\n", sl->name);
+		dev_dbg(dev, "Device %s already exists\n", sl->name);
 		result = -EINVAL;
 	} else {
 		w1_attach_slave_device(md, &rn);
@@ -521,7 +521,7 @@ static ssize_t w1_master_attribute_store_remove(struct device *dev,
 		if (result == 0)
 			result = count;
 	} else {
-		dev_info(dev, "Device %02x-%012llx doesn't exists\n", rn.family,
+		dev_dbg(dev, "Device %02x-%012llx doesn't exists\n", rn.family,
 			(unsigned long long)rn.id);
 		result = -EINVAL;
 	}
@@ -749,7 +749,7 @@ int w1_attach_slave_device(struct w1_master *dev, struct w1_reg_num *rn)
 	atomic_set(&sl->refcnt, 1);
 	atomic_inc(&sl->master->refcnt);
 	dev->slave_count++;
-	dev_info(&dev->dev, "Attaching one wire slave %02x.%012llx crc %02x\n",
+	dev_dbg(&dev->dev, "Attaching one wire slave %02x.%012llx crc %02x\n",
 		  rn->family, (unsigned long long)rn->id, rn->crc);
 
 	/* slave modules need to be loaded in a context with unlocked mutex */
@@ -761,7 +761,7 @@ int w1_attach_slave_device(struct w1_master *dev, struct w1_reg_num *rn)
 	f = w1_family_registered(rn->family);
 	if (!f) {
 		f= &w1_default_family;
-		dev_info(&dev->dev, "Family %x for %02x.%012llx.%02x is not registered.\n",
+		dev_dbg(&dev->dev, "Family %x for %02x.%012llx.%02x is not registered.\n",
 			  rn->family, rn->family,
 			  (unsigned long long)rn->id, rn->crc);
 	}
@@ -1060,7 +1060,7 @@ void w1_search(struct w1_master *dev, u8 search_type, w1_slave_found_callback cb
 			 * last id as the first id (provided it is still on the
 			 * bus).
 			 */
-			dev_info(&dev->dev, "%s: max_slave_count %d reached, "
+			dev_dbg(&dev->dev, "%s: max_slave_count %d reached, "
 				"will continue next search.\n", __func__,
 				dev->max_slave_count);
 			set_bit(W1_WARN_MAX_COUNT, &dev->flags);
@@ -1193,7 +1193,7 @@ static int __init w1_init(void)
 {
 	int retval;
 
-	pr_info("Driver for 1-wire Dallas network protocol.\n");
+	pr_debug("Driver for 1-wire Dallas network protocol.\n");
 
 	w1_init_netlink();
 

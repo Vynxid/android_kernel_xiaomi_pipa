@@ -514,7 +514,7 @@ static int zd1301_demod_probe(struct platform_device *pdev)
 	memcpy(&dev->frontend.ops, &zd1301_demod_ops, sizeof(dev->frontend.ops));
 	dev->frontend.demodulator_priv = dev;
 	platform_set_drvdata(pdev, dev);
-	dev_info(&pdev->dev, "ZyDAS ZD1301 demod attached\n");
+	dev_dbg(&pdev->dev, "ZyDAS ZD1301 demod attached\n");
 
 	return 0;
 err_kfree:

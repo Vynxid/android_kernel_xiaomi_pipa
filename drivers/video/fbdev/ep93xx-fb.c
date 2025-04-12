@@ -557,7 +557,7 @@ static int ep93xxfb_probe(struct platform_device *pdev)
 	if (err)
 		goto failed_check;
 
-	dev_info(info->dev, "registered. Mode = %dx%d-%d\n",
+	dev_dbg(info->dev, "registered. Mode = %dx%d-%d\n",
 		 info->var.xres, info->var.yres, info->var.bits_per_pixel);
 	return 0;
 

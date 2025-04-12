@@ -611,7 +611,7 @@ static int mtk_hsdma_init(struct mtk_hsdam_engine *hsdma)
 
 	/* hardware info */
 	reg = mtk_hsdma_read(hsdma, HSDMA_REG_INFO);
-	dev_info(hsdma->ddev.dev, "rx: %d, tx: %d\n",
+	dev_dbg(hsdma->ddev.dev, "rx: %d, tx: %d\n",
 		 (reg >> HSDMA_INFO_RX_SHIFT) & HSDMA_INFO_RX_MASK,
 		 (reg >> HSDMA_INFO_TX_SHIFT) & HSDMA_INFO_TX_MASK);
 

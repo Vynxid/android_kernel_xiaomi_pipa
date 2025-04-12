@@ -847,7 +847,7 @@ static int rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
 	/* don't trust the remote processor for null terminating the name */
 	msg->name[RPMSG_NAME_SIZE - 1] = '\0';
 
-	dev_info(dev, "%sing channel %s addr 0x%x\n",
+	dev_dbg(dev, "%sing channel %s addr 0x%x\n",
 		 msg->flags & RPMSG_NS_DESTROY ? "destroy" : "creat",
 		 msg->name, msg->addr);
 
@@ -976,7 +976,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
 	if (notify)
 		virtqueue_notify(vrp->rvq);
 
-	dev_info(&vdev->dev, "rpmsg host is online\n");
+	dev_dbg(&vdev->dev, "rpmsg host is online\n");
 
 	return 0;
 

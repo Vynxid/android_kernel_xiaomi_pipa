@@ -1715,7 +1715,7 @@ static int macsec_add_rxsa(struct sk_buff *skb, struct genl_info *info)
 	assoc_num = nla_get_u8(tb_sa[MACSEC_SA_ATTR_AN]);
 
 	if (nla_len(tb_sa[MACSEC_SA_ATTR_KEY]) != secy->key_len) {
-		pr_notice("macsec: nl: add_rxsa: bad key length: %d != %d\n",
+		pr_debug("macsec: nl: add_rxsa: bad key length: %d != %d\n",
 			  nla_len(tb_sa[MACSEC_SA_ATTR_KEY]), secy->key_len);
 		rtnl_unlock();
 		return -EINVAL;
@@ -1870,7 +1870,7 @@ static int macsec_add_txsa(struct sk_buff *skb, struct genl_info *info)
 	assoc_num = nla_get_u8(tb_sa[MACSEC_SA_ATTR_AN]);
 
 	if (nla_len(tb_sa[MACSEC_SA_ATTR_KEY]) != secy->key_len) {
-		pr_notice("macsec: nl: add_txsa: bad key length: %d != %d\n",
+		pr_debug("macsec: nl: add_txsa: bad key length: %d != %d\n",
 			  nla_len(tb_sa[MACSEC_SA_ATTR_KEY]), secy->key_len);
 		rtnl_unlock();
 		return -EINVAL;
@@ -3587,7 +3587,7 @@ static int __init macsec_init(void)
 {
 	int err;
 
-	pr_info("MACsec IEEE 802.1AE\n");
+	pr_debug("MACsec IEEE 802.1AE\n");
 	err = register_netdevice_notifier(&macsec_notifier);
 	if (err)
 		return err;

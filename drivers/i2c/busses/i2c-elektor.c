@@ -237,7 +237,7 @@ static int elektor_match(struct device *dev, unsigned int id)
 					   8.25 MHz (PCI/4) clock
 					   (this can be read from cypress) */
 					clock = I2C_PCF_CLK | I2C_PCF_TRNS90;
-					dev_info(dev, "found API UP2000 like "
+					dev_dbg(dev, "found API UP2000 like "
 						 "board, will probe PCF8584 "
 						 "later\n");
 				}
@@ -269,7 +269,7 @@ static int elektor_probe(struct device *dev, unsigned int id)
 	if (i2c_pcf_add_bus(&pcf_isa_ops) < 0)
 		goto fail;
 
-	dev_info(dev, "found device at %#x\n", base);
+	dev_dbg(dev, "found device at %#x\n", base);
 
 	return 0;
 

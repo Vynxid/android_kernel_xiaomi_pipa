@@ -625,7 +625,7 @@ static int hx8357_probe(struct spi_device *spi)
 			lcd->im_pins[i] = of_get_named_gpio(spi->dev.of_node,
 							    "im-gpios", i);
 			if (lcd->im_pins[i] == -EPROBE_DEFER) {
-				dev_info(&spi->dev, "GPIO requested is not here yet, deferring the probe\n");
+				dev_dbg(&spi->dev, "GPIO requested is not here yet, deferring the probe\n");
 				return -EPROBE_DEFER;
 			}
 			if (!gpio_is_valid(lcd->im_pins[i])) {
@@ -662,7 +662,7 @@ static int hx8357_probe(struct spi_device *spi)
 		return ret;
 	}
 
-	dev_info(&spi->dev, "Panel probed\n");
+	dev_dbg(&spi->dev, "Panel probed\n");
 
 	return 0;
 }

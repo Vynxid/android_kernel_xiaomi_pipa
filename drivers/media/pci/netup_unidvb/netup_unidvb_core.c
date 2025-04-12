@@ -508,7 +508,7 @@ static int netup_unidvb_dvb_init(struct netup_unidvb_dev *ndev,
 			__func__, num);
 		goto frontend_detach;
 	}
-	dev_info(&ndev->pci_dev->dev, "DVB init done, num=%d\n", num);
+	dev_dbg(&ndev->pci_dev->dev, "DVB init done, num=%d\n", num);
 	return 0;
 frontend_detach:
 	vb2_dvb_dealloc_frontends(&ndev->frontends[num]);
@@ -524,7 +524,7 @@ static void netup_unidvb_dvb_fini(struct netup_unidvb_dev *ndev, int num)
 		return;
 	}
 	vb2_dvb_unregister_bus(&ndev->frontends[num]);
-	dev_info(&ndev->pci_dev->dev,
+	dev_dbg(&ndev->pci_dev->dev,
 		"%s(): DVB bus %d unregistered\n", __func__, num);
 }
 
@@ -663,7 +663,7 @@ static int netup_unidvb_dma_init(struct netup_unidvb_dev *ndev, int num)
 		return -ENODEV;
 	}
 	dma = &ndev->dma[num];
-	dev_info(dev, "%s(): starting DMA%d\n", __func__, num);
+	dev_dbg(dev, "%s(): starting DMA%d\n", __func__, num);
 	dma->num = num;
 	dma->ndev = ndev;
 	spin_lock_init(&dma->lock);
@@ -674,7 +674,7 @@ static int netup_unidvb_dma_init(struct netup_unidvb_dev *ndev, int num)
 	dma->addr_virt = ndev->dma_virt + dma->ring_buffer_size * num;
 	dma->addr_phys = (dma_addr_t)((u64)ndev->dma_phys +
 		dma->ring_buffer_size * num);
-	dev_info(dev, "%s(): DMA%d buffer virt/phys 0x%p/0x%llx size %d\n",
+	dev_dbg(dev, "%s(): DMA%d buffer virt/phys 0x%p/0x%llx size %d\n",
 		__func__, num, dma->addr_virt,
 		(unsigned long long)dma->addr_phys,
 		dma->ring_buffer_size);
@@ -817,7 +817,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
 	else
 		ndev->rev = NETUP_HW_REV_1_4;
 
-	dev_info(&pci_dev->dev,
+	dev_dbg(&pci_dev->dev,
 		"%s(): board (0x%x) hardware revision 0x%x\n",
 		__func__, pci_dev->device, ndev->rev);
 
@@ -835,7 +835,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
 	ndev->board_num = ndev->pci_bus*10 + ndev->pci_slot;
 	pci_set_drvdata(pci_dev, ndev);
 	/* PCI init */
-	dev_info(&pci_dev->dev, "%s(): PCI device (%d). Bus:0x%x Slot:0x%x\n",
+	dev_dbg(&pci_dev->dev, "%s(): PCI device (%d). Bus:0x%x Slot:0x%x\n",
 		__func__, ndev->board_num, ndev->pci_bus, ndev->pci_slot);
 
 	if (pci_enable_device(pci_dev)) {
@@ -851,7 +851,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
 			__func__, board_vendor);
 		goto pci_detect_err;
 	}
-	dev_info(&pci_dev->dev,
+	dev_dbg(&pci_dev->dev,
 		"%s(): board vendor 0x%x, revision 0x%x\n",
 		__func__, board_vendor, board_revision);
 	pci_set_master(pci_dev);
@@ -860,7 +860,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
 			"%s(): 32bit PCI DMA is not supported\n", __func__);
 		goto pci_detect_err;
 	}
-	dev_info(&pci_dev->dev, "%s(): using 32bit PCI DMA\n", __func__);
+	dev_dbg(&pci_dev->dev, "%s(): using 32bit PCI DMA\n", __func__);
 	/* Clear "no snoop" and "relaxed ordering" bits, use default MRRS. */
 	pcie_capability_clear_and_set_word(pci_dev, PCI_EXP_DEVCTL,
 		PCI_EXP_DEVCTL_READRQ | PCI_EXP_DEVCTL_RELAX_EN |
@@ -890,7 +890,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
 	}
 	ndev->bmmio0 = (u8 __iomem *)ndev->lmmio0;
 	ndev->bmmio1 = (u8 __iomem *)ndev->lmmio1;
-	dev_info(&pci_dev->dev,
+	dev_dbg(&pci_dev->dev,
 		"%s(): PCI MMIO at 0x%p (%d); 0x%p (%d); IRQ %d",
 		__func__,
 		ndev->lmmio0, (u32)pci_resource_len(pci_dev, 0),
@@ -945,7 +945,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
 		goto dma_setup_err;
 	}
 
-	dev_info(&pci_dev->dev,
+	dev_dbg(&pci_dev->dev,
 		"netup_unidvb: device has been initialized\n");
 	return 0;
 dma_setup_err:
@@ -988,7 +988,7 @@ static void netup_unidvb_finidev(struct pci_dev *pci_dev)
 {
 	struct netup_unidvb_dev *ndev = pci_get_drvdata(pci_dev);
 
-	dev_info(&pci_dev->dev, "%s(): trying to stop device\n", __func__);
+	dev_dbg(&pci_dev->dev, "%s(): trying to stop device\n", __func__);
 	if (!ndev->old_fw) {
 		netup_unidvb_dma_fini(ndev, 0);
 		netup_unidvb_dma_fini(ndev, 1);
@@ -1014,7 +1014,7 @@ static void netup_unidvb_finidev(struct pci_dev *pci_dev)
 	pci_set_drvdata(pci_dev, NULL);
 	destroy_workqueue(ndev->wq);
 	kfree(ndev);
-	dev_info(&pci_dev->dev,
+	dev_dbg(&pci_dev->dev,
 		"%s(): device has been successfully stopped\n", __func__);
 }
 

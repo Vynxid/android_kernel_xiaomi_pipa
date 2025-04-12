@@ -1340,7 +1340,7 @@ static int max2175_probe(struct i2c_client *client,
 	ctx->mode_resolved = false;
 	ctx->regmap = regmap;
 	ctx->xtal_freq = clk_get_rate(clk);
-	dev_info(&client->dev, "xtal freq %luHz\n", ctx->xtal_freq);
+	dev_dbg(&client->dev, "xtal freq %luHz\n", ctx->xtal_freq);
 
 	v4l2_i2c_subdev_init(sd, client, &max2175_ops);
 	ctx->client = client;

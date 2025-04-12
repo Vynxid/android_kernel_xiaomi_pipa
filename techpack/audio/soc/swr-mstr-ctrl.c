@@ -2874,7 +2874,7 @@ static int swrm_probe(struct platform_device *pdev)
 	swrm_clk_request(swrm, true);
 	swrm_hw_ver = swr_master_read(swrm, SWRM_COMP_HW_VERSION);
 	if (swrm->version != swrm_hw_ver)
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "%s: version specified in dtsi: 0x%x not match with HW read version 0x%x\n",
 			 __func__, swrm->version, swrm_hw_ver);
 	swrm->rd_fifo_depth = ((swr_master_read(swrm, SWRM_COMP_PARAMS)

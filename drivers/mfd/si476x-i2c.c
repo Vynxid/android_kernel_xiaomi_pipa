@@ -411,7 +411,7 @@ unlock:
  */
 static void si476x_core_pronounce_dead(struct si476x_core *core)
 {
-	dev_info(&core->client->dev, "Core device is dead.\n");
+	dev_dbg(&core->client->dev, "Core device is dead.\n");
 
 	atomic_set(&core->is_alive, 0);
 
@@ -790,7 +790,7 @@ static int si476x_core_probe(struct i2c_client *client,
 	} else {
 		INIT_DELAYED_WORK(&core->status_monitor,
 				  si476x_core_poll_loop);
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			 "No IRQ number specified, will use polling\n");
 
 		core->rds_fifo_depth = 5;

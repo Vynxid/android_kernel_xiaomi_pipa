@@ -115,7 +115,7 @@ static int init_energy_callback(struct notifier_block *nb, unsigned long val,
 
 	for (i = 0; i < cap_nstats; i++) {
 		eas[i].capacity = eas[i].frequency * capacity / max_freq;
-		pr_info("C %8lu F %8lu P %8lu\n", eas[i].capacity,
+		pr_debug("C %8lu F %8lu P %8lu\n", eas[i].capacity,
 			eas[i].frequency, eas[i].power);
 	}
 
@@ -124,7 +124,7 @@ static int init_energy_callback(struct notifier_block *nb, unsigned long val,
 		per_cpu(cpu_eas, i) = eas;
 	}
 
-	pr_info("Registering EAS of %*pbl\n", cpumask_pr_args(policy->cpus));
+	pr_debug("Registering EAS of %*pbl\n", cpumask_pr_args(policy->cpus));
 
 	cpumask_andnot(cpus_visit, cpus_visit, policy->cpus);
 	if (cpumask_empty(cpus_visit))

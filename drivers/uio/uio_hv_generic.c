@@ -305,7 +305,7 @@ hv_uio_probe(struct hv_device *dev,
 
 	ret = sysfs_create_bin_file(&dev->channel->kobj, &ring_buffer_bin_attr);
 	if (ret)
-		dev_notice(&dev->device,
+		dev_dbg(&dev->device,
 			   "sysfs create ring bin file failed; %d\n", ret);
 
 	hv_set_drvdata(dev, pdata);

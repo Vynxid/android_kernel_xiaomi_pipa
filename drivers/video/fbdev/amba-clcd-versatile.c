@@ -278,7 +278,7 @@ static void integrator_clcd_enable(struct clcd_fb *fb)
 	struct fb_var_screeninfo *var = &fb->fb.var;
 	u32 val;
 
-	dev_info(&fb->dev->dev, "enable Integrator CLCD connectors\n");
+	dev_dbg(&fb->dev->dev, "enable Integrator CLCD connectors\n");
 
 	/* FIXME: really needed? */
 	val = INTEGRATOR_CLCD_LCD_STATIC1 | INTEGRATOR_CLCD_LCD_STATIC2 |
@@ -336,7 +336,7 @@ static void integrator_clcd_enable(struct clcd_fb *fb)
 
 static void versatile_clcd_disable(struct clcd_fb *fb)
 {
-	dev_info(&fb->dev->dev, "disable Versatile CLCD connectors\n");
+	dev_dbg(&fb->dev->dev, "disable Versatile CLCD connectors\n");
 	regmap_update_bits(versatile_syscon_map,
 			   SYS_CLCD,
 			   SYS_CLCD_CONNECTOR_MASK,
@@ -344,7 +344,7 @@ static void versatile_clcd_disable(struct clcd_fb *fb)
 
 	/* If we're on an IB2 daughterboard, turn off display */
 	if (versatile_ib2_map) {
-		dev_info(&fb->dev->dev, "disable IB2 display\n");
+		dev_dbg(&fb->dev->dev, "disable IB2 display\n");
 		regmap_update_bits(versatile_ib2_map,
 				   IB2_CTRL,
 				   IB2_CTRL_LCD_MASK,
@@ -357,7 +357,7 @@ static void versatile_clcd_enable(struct clcd_fb *fb)
 	struct fb_var_screeninfo *var = &fb->fb.var;
 	u32 val = 0;
 
-	dev_info(&fb->dev->dev, "enable Versatile CLCD connectors\n");
+	dev_dbg(&fb->dev->dev, "enable Versatile CLCD connectors\n");
 	switch (var->green.length) {
 	case 5:
 		val |= SYS_CLCD_MODE_5551;
@@ -387,7 +387,7 @@ static void versatile_clcd_enable(struct clcd_fb *fb)
 
 	/* If we're on an IB2 daughterboard, turn on display */
 	if (versatile_ib2_map) {
-		dev_info(&fb->dev->dev, "enable IB2 display\n");
+		dev_dbg(&fb->dev->dev, "enable IB2 display\n");
 		regmap_update_bits(versatile_ib2_map,
 				   IB2_CTRL,
 				   IB2_CTRL_LCD_MASK,
@@ -406,7 +406,7 @@ static void versatile_clcd_decode(struct clcd_fb *fb, struct clcd_regs *regs)
 
 static void realview_clcd_disable(struct clcd_fb *fb)
 {
-	dev_info(&fb->dev->dev, "disable RealView CLCD connectors\n");
+	dev_dbg(&fb->dev->dev, "disable RealView CLCD connectors\n");
 	regmap_update_bits(versatile_syscon_map,
 			   SYS_CLCD,
 			   SYS_CLCD_CONNECTOR_MASK,
@@ -415,7 +415,7 @@ static void realview_clcd_disable(struct clcd_fb *fb)
 
 static void realview_clcd_enable(struct clcd_fb *fb)
 {
-	dev_info(&fb->dev->dev, "enable RealView CLCD connectors\n");
+	dev_dbg(&fb->dev->dev, "enable RealView CLCD connectors\n");
 	regmap_update_bits(versatile_syscon_map,
 			   SYS_CLCD,
 			   SYS_CLCD_CONNECTOR_MASK,
@@ -536,7 +536,7 @@ int versatile_clcd_init_panel(struct clcd_fb *fb, struct device_node *panel)
 		/* Override the caps, we have only these */
 		fb->board->caps = CLCD_CAP_5551 | CLCD_CAP_RGB565 |
 			CLCD_CAP_888;
-		dev_info(dev, "set up callbacks for Integrator PL110\n");
+		dev_dbg(dev, "set up callbacks for Integrator PL110\n");
 		break;
 	case VERSATILE_CLCD:
 		versatile_syscon_map = map;
@@ -544,7 +544,7 @@ int versatile_clcd_init_panel(struct clcd_fb *fb, struct device_node *panel)
 		fb->board->disable = versatile_clcd_disable;
 		fb->board->decode = versatile_clcd_decode;
 		versatile_panel_probe(dev, panel);
-		dev_info(dev, "set up callbacks for Versatile\n");
+		dev_dbg(dev, "set up callbacks for Versatile\n");
 		break;
 	case REALVIEW_CLCD_EB:
 	case REALVIEW_CLCD_PB1176:
@@ -554,10 +554,10 @@ int versatile_clcd_init_panel(struct clcd_fb *fb, struct device_node *panel)
 		versatile_syscon_map = map;
 		fb->board->enable = realview_clcd_enable;
 		fb->board->disable = realview_clcd_disable;
-		dev_info(dev, "set up callbacks for RealView PL111\n");
+		dev_dbg(dev, "set up callbacks for RealView PL111\n");
 		break;
 	default:
-		dev_info(dev, "unknown Versatile system controller\n");
+		dev_dbg(dev, "unknown Versatile system controller\n");
 		break;
 	}
 

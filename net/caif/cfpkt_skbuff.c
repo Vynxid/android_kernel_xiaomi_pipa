@@ -38,7 +38,7 @@ struct cfpkt {
 
 /* Private data inside SKB */
 struct cfpkt_priv_data {
-	struct dev_info dev_info;
+	struct dev_dbg dev_dbg;
 	bool erronous;
 };
 

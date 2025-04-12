@@ -1233,7 +1233,7 @@ static int ucc_uart_probe(struct platform_device *ofdev)
 			sprintf(filename, "fsl_qe_ucode_uart_%u_%u%u.bin",
 				soc, rev_h, rev_l);
 
-			dev_info(&ofdev->dev, "waiting for firmware %s\n",
+			dev_dbg(&ofdev->dev, "waiting for firmware %s\n",
 				filename);
 
 			/*
@@ -1444,7 +1444,7 @@ static int ucc_uart_probe(struct platform_device *ofdev)
 
 	platform_set_drvdata(ofdev, qe_port);
 
-	dev_info(&ofdev->dev, "UCC%u assigned to /dev/ttyQE%u\n",
+	dev_dbg(&ofdev->dev, "UCC%u assigned to /dev/ttyQE%u\n",
 		qe_port->ucc_num + 1, qe_port->port.line);
 
 	/* Display the mknod command for this device */
@@ -1464,7 +1464,7 @@ static int ucc_uart_remove(struct platform_device *ofdev)
 {
 	struct uart_qe_port *qe_port = platform_get_drvdata(ofdev);
 
-	dev_info(&ofdev->dev, "removing /dev/ttyQE%u\n", qe_port->port.line);
+	dev_dbg(&ofdev->dev, "removing /dev/ttyQE%u\n", qe_port->port.line);
 
 	uart_remove_one_port(&ucc_uart_driver, &qe_port->port);
 

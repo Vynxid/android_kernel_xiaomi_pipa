@@ -75,17 +75,17 @@
 #define pkt_err(pd, fmt, ...)						\
 	pr_err("%s: " fmt, pd->name, ##__VA_ARGS__)
 #define pkt_notice(pd, fmt, ...)					\
-	pr_notice("%s: " fmt, pd->name, ##__VA_ARGS__)
+	pr_debug("%s: " fmt, pd->name, ##__VA_ARGS__)
 #define pkt_info(pd, fmt, ...)						\
-	pr_info("%s: " fmt, pd->name, ##__VA_ARGS__)
+	pr_debug("%s: " fmt, pd->name, ##__VA_ARGS__)
 
 #define pkt_dbg(level, pd, fmt, ...)					\
 do {									\
 	if (level == 2 && PACKET_DEBUG >= 2)				\
-		pr_notice("%s: %s():" fmt,				\
+		pr_debug("%s: %s():" fmt,				\
 			  pd->name, __func__, ##__VA_ARGS__);		\
 	else if (level == 1 && PACKET_DEBUG >= 1)			\
-		pr_notice("%s: " fmt, pd->name, ##__VA_ARGS__);		\
+		pr_debug("%s: " fmt, pd->name, ##__VA_ARGS__);		\
 } while (0)
 
 #define MAX_SPEED 0xffff

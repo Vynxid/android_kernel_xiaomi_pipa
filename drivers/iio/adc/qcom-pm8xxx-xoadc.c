@@ -613,7 +613,7 @@ static int pm8xxx_calibrate_device(struct pm8xxx_xoadc *adc)
 	adc->graph[VADC_CALIB_ABSOLUTE].dy = read_1250v - read_0625v;
 	adc->graph[VADC_CALIB_ABSOLUTE].gnd = read_0625v;
 
-	dev_info(adc->dev, "absolute calibration dx = %d uV, dy = %d units\n",
+	dev_dbg(adc->dev, "absolute calibration dx = %d uV, dy = %d units\n",
 		 VADC_ABSOLUTE_RANGE_UV, adc->graph[VADC_CALIB_ABSOLUTE].dy);
 
 	/* Ratiometric calibration */
@@ -636,7 +636,7 @@ static int pm8xxx_calibrate_device(struct pm8xxx_xoadc *adc)
 		read_nomux_rsv5 - read_nomux_rsv4;
 	adc->graph[VADC_CALIB_RATIOMETRIC].gnd = read_nomux_rsv4;
 
-	dev_info(adc->dev, "ratiometric calibration dx = %d, dy = %d units\n",
+	dev_dbg(adc->dev, "ratiometric calibration dx = %d, dy = %d units\n",
 		 VADC_RATIOMETRIC_RANGE,
 		 adc->graph[VADC_CALIB_RATIOMETRIC].dy);
 
@@ -948,7 +948,7 @@ static int pm8xxx_xoadc_probe(struct platform_device *pdev)
 	if (ret)
 		goto out_unreg_device;
 
-	dev_info(dev, "%s XOADC driver enabled\n", variant->name);
+	dev_dbg(dev, "%s XOADC driver enabled\n", variant->name);
 
 	return 0;
 

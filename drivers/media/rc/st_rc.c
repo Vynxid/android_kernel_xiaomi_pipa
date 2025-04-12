@@ -117,7 +117,7 @@ static irqreturn_t st_rc_rx_interrupt(int irq, void *data)
 		if (unlikely(int_status & IRB_RX_OVERRUN_INT)) {
 			/* discard the entire collection in case of errors!  */
 			ir_raw_event_reset(dev->rdev);
-			dev_info(dev->dev, "IR RX overrun\n");
+			dev_dbg(dev->dev, "IR RX overrun\n");
 			writel(IRB_RX_OVERRUN_INT,
 					dev->rx_base + IRB_RX_INT_CLEAR);
 			continue;
@@ -327,7 +327,7 @@ static int st_rc_probe(struct platform_device *pdev)
 	 */
 	st_rc_send_lirc_timeout(rdev);
 
-	dev_info(dev, "setup in %s mode\n", rc_dev->rxuhfmode ? "UHF" : "IR");
+	dev_dbg(dev, "setup in %s mode\n", rc_dev->rxuhfmode ? "UHF" : "IR");
 
 	return ret;
 rcerr:

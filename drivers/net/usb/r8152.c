@@ -5098,7 +5098,7 @@ static u8 rtl_get_version(struct usb_interface *intf)
 		break;
 	default:
 		version = RTL_VER_UNKNOWN;
-		dev_info(&intf->dev, "Unknown version 0x%04x\n", ocp_data);
+		dev_dbg(&intf->dev, "Unknown version 0x%04x\n", ocp_data);
 		break;
 	}
 
@@ -5184,7 +5184,7 @@ static int rtl8152_probe(struct usb_interface *intf,
 
 	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 && udev->serial &&
 	    (!strcmp(udev->serial, "000001000000") || !strcmp(udev->serial, "000002000000"))) {
-		dev_info(&udev->dev, "Dell TB16 Dock, disable RX aggregation");
+		dev_dbg(&udev->dev, "Dell TB16 Dock, disable RX aggregation");
 		set_bit(DELL_TB_RX_AGG_BUG, &tp->flags);
 	}
 

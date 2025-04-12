@@ -33,7 +33,7 @@ static int smartconnect_acpi_init(struct acpi_device *acpi)
 		return -EINVAL;
 
 	if (value & 0x1) {
-		dev_info(&acpi->dev, "Disabling Intel Smart Connect\n");
+		dev_dbg(&acpi->dev, "Disabling Intel Smart Connect\n");
 		status = acpi_execute_simple_method(acpi->handle, "SAOS", 0);
 	}
 

@@ -1397,7 +1397,7 @@ struct ksz_counter_info {
 };
 
 /**
- * struct dev_info - Network device information data structure
+ * struct dev_dbg - Network device information data structure
  * @dev:		Pointer to network device.
  * @pdev:		Pointer to PCI device.
  * @hw:			Hardware structure.
@@ -1420,7 +1420,7 @@ struct ksz_counter_info {
  * @wol_support:	Wake-on-LAN support used by ethtool.
  * @pme_wait:		Used for KSZ8841 power management.
  */
-struct dev_info {
+struct dev_dbg {
 	struct net_device *dev;
 	struct pci_dev *pdev;
 
@@ -1430,7 +1430,7 @@ struct dev_info {
 	spinlock_t hwlock;
 	struct mutex lock;
 
-	int (*dev_rcv)(struct dev_info *);
+	int (*dev_rcv)(struct dev_dbg *);
 
 	struct sk_buff *last_skb;
 	int skb_index;
@@ -1466,7 +1466,7 @@ struct dev_info {
  * @promiscuous:	The promiscuous state of the device.
  */
 struct dev_priv {
-	struct dev_info *adapter;
+	struct dev_dbg *adapter;
 	struct ksz_port port;
 	struct ksz_timer_info monitor_timer_info;
 
@@ -3472,7 +3472,7 @@ static void port_set_power_saving(struct ksz_port *port, int enable)
  */
 static int hw_chk_wol_pme_status(struct ksz_hw *hw)
 {
-	struct dev_info *hw_priv = container_of(hw, struct dev_info, hw);
+	struct dev_dbg *hw_priv = container_of(hw, struct dev_dbg, hw);
 	struct pci_dev *pdev = hw_priv->pdev;
 	u16 data;
 
@@ -3490,7 +3490,7 @@ static int hw_chk_wol_pme_status(struct ksz_hw *hw)
  */
 static void hw_clr_wol_pme_status(struct ksz_hw *hw)
 {
-	struct dev_info *hw_priv = container_of(hw, struct dev_info, hw);
+	struct dev_dbg *hw_priv = container_of(hw, struct dev_dbg, hw);
 	struct pci_dev *pdev = hw_priv->pdev;
 	u16 data;
 
@@ -3512,7 +3512,7 @@ static void hw_clr_wol_pme_status(struct ksz_hw *hw)
  */
 static void hw_cfg_wol_pme(struct ksz_hw *hw, int set)
 {
-	struct dev_info *hw_priv = container_of(hw, struct dev_info, hw);
+	struct dev_dbg *hw_priv = container_of(hw, struct dev_dbg, hw);
 	struct pci_dev *pdev = hw_priv->pdev;
 	u16 data;
 
@@ -4385,7 +4385,7 @@ static int ksz_alloc_soft_desc(struct ksz_desc_info *desc_info, int transmit)
  *
  * Return 0 if successful.
  */
-static int ksz_alloc_desc(struct dev_info *adapter)
+static int ksz_alloc_desc(struct dev_dbg *adapter)
 {
 	struct ksz_hw *hw = &adapter->hw;
 	int offset;
@@ -4435,7 +4435,7 @@ static int ksz_alloc_desc(struct dev_info *adapter)
  *
  * This routine is just a helper function to release the DMA buffer resources.
  */
-static void free_dma_buf(struct dev_info *adapter, struct ksz_dma_buf *dma_buf,
+static void free_dma_buf(struct dev_dbg *adapter, struct ksz_dma_buf *dma_buf,
 	int direction)
 {
 	pci_unmap_single(adapter->pdev, dma_buf->dma, dma_buf->len, direction);
@@ -4450,7 +4450,7 @@ static void free_dma_buf(struct dev_info *adapter, struct ksz_dma_buf *dma_buf,
  *
  * This routine initializes DMA buffers for receiving.
  */
-static void ksz_init_rx_buffers(struct dev_info *adapter)
+static void ksz_init_rx_buffers(struct dev_dbg *adapter)
 {
 	int i;
 	struct ksz_desc *desc;
@@ -4490,7 +4490,7 @@ static void ksz_init_rx_buffers(struct dev_info *adapter)
  *
  * Return 0 if successful.
  */
-static int ksz_alloc_mem(struct dev_info *adapter)
+static int ksz_alloc_mem(struct dev_dbg *adapter)
 {
 	struct ksz_hw *hw = &adapter->hw;
 
@@ -4538,7 +4538,7 @@ static int ksz_alloc_mem(struct dev_info *adapter)
  * This local routine frees the software and hardware descriptors allocated by
  * ksz_alloc_desc().
  */
-static void ksz_free_desc(struct dev_info *adapter)
+static void ksz_free_desc(struct dev_dbg *adapter)
 {
 	struct ksz_hw *hw = &adapter->hw;
 
@@ -4573,7 +4573,7 @@ static void ksz_free_desc(struct dev_info *adapter)
  *
  * This local routine frees buffers used in the DMA buffers.
  */
-static void ksz_free_buffers(struct dev_info *adapter,
+static void ksz_free_buffers(struct dev_dbg *adapter,
 	struct ksz_desc_info *desc_info, int direction)
 {
 	int i;
@@ -4594,7 +4594,7 @@ static void ksz_free_buffers(struct dev_info *adapter,
  *
  * This local routine frees all the resources allocated by ksz_alloc_mem().
  */
-static void ksz_free_mem(struct dev_info *adapter)
+static void ksz_free_mem(struct dev_dbg *adapter)
 {
 	/* Free transmit buffers. */
 	ksz_free_buffers(adapter, &adapter->hw.tx_desc_info,
@@ -4636,7 +4636,7 @@ static void send_packet(struct sk_buff *skb, struct net_device *dev)
 	struct ksz_desc *desc;
 	struct ksz_desc *first;
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	struct ksz_desc_info *info = &hw->tx_desc_info;
 	struct ksz_dma_buf *dma_buf;
@@ -4738,7 +4738,7 @@ static void send_packet(struct sk_buff *skb, struct net_device *dev)
  *
  * This routine is called to clean up the transmitted buffers.
  */
-static void transmit_cleanup(struct dev_info *hw_priv, int normal)
+static void transmit_cleanup(struct dev_dbg *hw_priv, int normal)
 {
 	int last;
 	union desc_stat status;
@@ -4796,7 +4796,7 @@ static void transmit_cleanup(struct dev_info *hw_priv, int normal)
  * This routine is called when the transmit interrupt is triggered, indicating
  * either a packet is sent successfully or there are transmit errors.
  */
-static void tx_done(struct dev_info *hw_priv)
+static void tx_done(struct dev_dbg *hw_priv)
 {
 	struct ksz_hw *hw = &hw_priv->hw;
 	int port;
@@ -4834,7 +4834,7 @@ static inline void copy_old_skb(struct sk_buff *old, struct sk_buff *skb)
 static netdev_tx_t netdev_tx(struct sk_buff *skb, struct net_device *dev)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	int left;
 	int num = 1;
@@ -4908,7 +4908,7 @@ static void netdev_tx_timeout(struct net_device *dev)
 	static unsigned long last_reset;
 
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	int port;
 
@@ -4989,7 +4989,7 @@ static inline int rx_proc(struct net_device *dev, struct ksz_hw* hw,
 {
 	int packet_len;
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_dma_buf *dma_buf;
 	struct sk_buff *skb;
 	int rx_status;
@@ -5034,7 +5034,7 @@ static inline int rx_proc(struct net_device *dev, struct ksz_hw* hw,
 	return 0;
 }
 
-static int dev_rcv_packets(struct dev_info *hw_priv)
+static int dev_rcv_packets(struct dev_dbg *hw_priv)
 {
 	int next;
 	union desc_stat status;
@@ -5070,7 +5070,7 @@ release_packet:
 	return received;
 }
 
-static int port_rcv_packets(struct dev_info *hw_priv)
+static int port_rcv_packets(struct dev_dbg *hw_priv)
 {
 	int next;
 	union desc_stat status;
@@ -5115,7 +5115,7 @@ release_packet:
 	return received;
 }
 
-static int dev_rcv_special(struct dev_info *hw_priv)
+static int dev_rcv_special(struct dev_dbg *hw_priv)
 {
 	int next;
 	union desc_stat status;
@@ -5176,7 +5176,7 @@ release_packet:
 
 static void rx_proc_task(unsigned long data)
 {
-	struct dev_info *hw_priv = (struct dev_info *) data;
+	struct dev_dbg *hw_priv = (struct dev_dbg *) data;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	if (!hw->enabled)
@@ -5198,7 +5198,7 @@ static void rx_proc_task(unsigned long data)
 
 static void tx_proc_task(unsigned long data)
 {
-	struct dev_info *hw_priv = (struct dev_info *) data;
+	struct dev_dbg *hw_priv = (struct dev_dbg *) data;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	hw_ack_intr(hw, KS884X_INT_TX_MASK);
@@ -5242,7 +5242,7 @@ static irqreturn_t netdev_intr(int irq, void *dev_id)
 	uint int_enable = 0;
 	struct net_device *dev = (struct net_device *) dev_id;
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	spin_lock(&hw_priv->hwlock);
@@ -5290,10 +5290,10 @@ static irqreturn_t netdev_intr(int irq, void *dev_id)
 			u32 data;
 
 			hw->intr_mask &= ~KS884X_INT_TX_STOPPED;
-			pr_info("Tx stopped\n");
+			pr_debug("Tx stopped\n");
 			data = readl(hw->io + KS_DMA_TX_CTRL);
 			if (!(data & DMA_TX_ENABLE))
-				pr_info("Tx disabled\n");
+				pr_debug("Tx disabled\n");
 			break;
 		}
 	} while (0);
@@ -5315,7 +5315,7 @@ static unsigned long next_jiffies;
 static void netdev_netpoll(struct net_device *dev)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 
 	hw_dis_intr(&hw_priv->hw);
 	netdev_intr(dev->irq, dev);
@@ -5355,7 +5355,7 @@ static void bridge_change(struct ksz_hw *hw)
 static int netdev_close(struct net_device *dev)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_port *port = &priv->port;
 	struct ksz_hw *hw = &hw_priv->hw;
 	int pi;
@@ -5415,7 +5415,7 @@ static int netdev_close(struct net_device *dev)
 	return 0;
 }
 
-static void hw_cfg_huge_frame(struct dev_info *hw_priv, struct ksz_hw *hw)
+static void hw_cfg_huge_frame(struct dev_dbg *hw_priv, struct ksz_hw *hw)
 {
 	if (hw->ksz_switch) {
 		u32 data;
@@ -5442,7 +5442,7 @@ static void hw_cfg_huge_frame(struct dev_info *hw_priv, struct ksz_hw *hw)
 static int prepare_hardware(struct net_device *dev)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	int rc = 0;
 
@@ -5494,7 +5494,7 @@ static void set_media_state(struct net_device *dev, int media_state)
 static int netdev_open(struct net_device *dev)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	struct ksz_port *port = &priv->port;
 	int i;
@@ -5655,7 +5655,7 @@ static struct net_device_stats *netdev_query_statistics(struct net_device *dev)
 static int netdev_set_mac_address(struct net_device *dev, void *addr)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	struct sockaddr *mac = addr;
 	uint interrupt;
@@ -5743,7 +5743,7 @@ static void dev_set_multicast(struct dev_priv *priv, struct ksz_hw *hw,
 static void netdev_set_rx_mode(struct net_device *dev)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	struct netdev_hw_addr *ha;
 	int multicast = (dev->flags & IFF_ALLMULTI);
@@ -5791,7 +5791,7 @@ static void netdev_set_rx_mode(struct net_device *dev)
 static int netdev_change_mtu(struct net_device *dev, int new_mtu)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	int hw_mtu;
 
@@ -5831,7 +5831,7 @@ static int netdev_change_mtu(struct net_device *dev, int new_mtu)
 static int netdev_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	struct ksz_port *port = &priv->port;
 	int result = 0;
@@ -5951,7 +5951,7 @@ static int netdev_get_link_ksettings(struct net_device *dev,
 				     struct ethtool_link_ksettings *cmd)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 
 	mutex_lock(&hw_priv->lock);
 	mii_ethtool_get_link_ksettings(&priv->mii_if, cmd);
@@ -5978,7 +5978,7 @@ static int netdev_set_link_ksettings(struct net_device *dev,
 				     const struct ethtool_link_ksettings *cmd)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_port *port = &priv->port;
 	struct ethtool_link_ksettings copy_cmd;
 	u32 speed = cmd->base.speed;
@@ -6048,7 +6048,7 @@ static int netdev_set_link_ksettings(struct net_device *dev,
 static int netdev_nway_reset(struct net_device *dev)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	int rc;
 
 	mutex_lock(&hw_priv->lock);
@@ -6085,7 +6085,7 @@ static void netdev_get_drvinfo(struct net_device *dev,
 	struct ethtool_drvinfo *info)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 
 	strlcpy(info->driver, DRV_NAME, sizeof(info->driver));
 	strlcpy(info->version, DRV_VERSION, sizeof(info->version));
@@ -6138,7 +6138,7 @@ static void netdev_get_regs(struct net_device *dev, struct ethtool_regs *regs,
 	void *ptr)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	int *buf = (int *) ptr;
 	struct hw_regs *range = hw_regs_range;
@@ -6176,7 +6176,7 @@ static void netdev_get_wol(struct net_device *dev,
 	struct ethtool_wolinfo *wol)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 
 	wol->supported = hw_priv->wol_support;
 	wol->wolopts = hw_priv->wol_enable;
@@ -6196,7 +6196,7 @@ static int netdev_set_wol(struct net_device *dev,
 	struct ethtool_wolinfo *wol)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 
 	/* Need to find a way to retrieve the device IP address. */
 	static const u8 net_addr[] = { 192, 168, 1, 1 };
@@ -6271,7 +6271,7 @@ static int netdev_get_eeprom(struct net_device *dev,
 	struct ethtool_eeprom *eeprom, u8 *data)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	u8 *eeprom_byte = (u8 *) eeprom_data;
 	int i;
 	int len;
@@ -6299,7 +6299,7 @@ static int netdev_set_eeprom(struct net_device *dev,
 	struct ethtool_eeprom *eeprom, u8 *data)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	u16 eeprom_word[EEPROM_SIZE];
 	u8 *eeprom_byte = (u8 *) eeprom_word;
 	int i;
@@ -6333,7 +6333,7 @@ static void netdev_get_pauseparam(struct net_device *dev,
 	struct ethtool_pauseparam *pause)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	pause->autoneg = (hw->overrides & PAUSE_FLOW_CTRL) ? 0 : 1;
@@ -6366,7 +6366,7 @@ static int netdev_set_pauseparam(struct net_device *dev,
 	struct ethtool_pauseparam *pause)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	struct ksz_port *port = &priv->port;
 
@@ -6411,7 +6411,7 @@ static void netdev_get_ringparam(struct net_device *dev,
 	struct ethtool_ringparam *ring)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	ring->tx_max_pending = (1 << 9);
@@ -6474,7 +6474,7 @@ static struct {
 static void netdev_get_strings(struct net_device *dev, u32 stringset, u8 *buf)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	if (ETH_SS_STATS == stringset)
@@ -6494,7 +6494,7 @@ static void netdev_get_strings(struct net_device *dev, u32 stringset, u8 *buf)
 static int netdev_get_sset_count(struct net_device *dev, int sset)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	switch (sset) {
@@ -6517,7 +6517,7 @@ static void netdev_get_ethtool_stats(struct net_device *dev,
 	struct ethtool_stats *stats, u64 *data)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	struct ksz_port *port = &priv->port;
 	int n_stats = stats->n_stats;
@@ -6586,7 +6586,7 @@ static int netdev_set_features(struct net_device *dev,
 	netdev_features_t features)
 {
 	struct dev_priv *priv = netdev_priv(dev);
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	mutex_lock(&hw_priv->lock);
@@ -6644,8 +6644,8 @@ static void update_link(struct net_device *dev, struct dev_priv *priv,
 
 static void mib_read_work(struct work_struct *work)
 {
-	struct dev_info *hw_priv =
-		container_of(work, struct dev_info, mib_read);
+	struct dev_dbg *hw_priv =
+		container_of(work, struct dev_dbg, mib_read);
 	struct ksz_hw *hw = &hw_priv->hw;
 	struct ksz_port_mib *mib;
 	int i;
@@ -6687,7 +6687,7 @@ static void mib_read_work(struct work_struct *work)
 
 static void mib_monitor(struct timer_list *t)
 {
-	struct dev_info *hw_priv = from_timer(hw_priv, t, mib_timer_info.timer);
+	struct dev_dbg *hw_priv = from_timer(hw_priv, t, mib_timer_info.timer);
 
 	mib_read_work(&hw_priv->mib_read);
 
@@ -6716,7 +6716,7 @@ static void dev_monitor(struct timer_list *t)
 {
 	struct dev_priv *priv = from_timer(priv, t, monitor_timer_info.timer);
 	struct net_device *dev = priv->mii_if.dev;
-	struct dev_info *hw_priv = priv->adapter;
+	struct dev_dbg *hw_priv = priv->adapter;
 	struct ksz_hw *hw = &hw_priv->hw;
 	struct ksz_port *port = &priv->port;
 
@@ -6842,13 +6842,13 @@ static void netdev_free(struct net_device *dev)
 }
 
 struct platform_info {
-	struct dev_info dev_info;
+	struct dev_dbg dev_dbg;
 	struct net_device *netdev[SWITCH_PORT_NUM];
 };
 
 static int net_device_present;
 
-static void get_mac_addr(struct dev_info *hw_priv, u8 *macaddr, int port)
+static void get_mac_addr(struct dev_dbg *hw_priv, u8 *macaddr, int port)
 {
 	int i;
 	int j;
@@ -6921,7 +6921,7 @@ static int pcidev_init(struct pci_dev *pdev, const struct pci_device_id *id)
 {
 	struct net_device *dev;
 	struct dev_priv *priv;
-	struct dev_info *hw_priv;
+	struct dev_dbg *hw_priv;
 	struct ksz_hw *hw;
 	struct platform_info *info;
 	struct ksz_port *port;
@@ -6961,7 +6961,7 @@ static int pcidev_init(struct pci_dev *pdev, const struct pci_device_id *id)
 	if (!info)
 		goto pcidev_init_dev_err;
 
-	hw_priv = &info->dev_info;
+	hw_priv = &info->dev_dbg;
 	hw_priv->pdev = pdev;
 
 	hw = &hw_priv->hw;
@@ -6980,7 +6980,7 @@ static int pcidev_init(struct pci_dev *pdev, const struct pci_device_id *id)
 
 	snprintf(banner, sizeof(banner), "%s", version);
 	banner[13] = cnt + '0';		/* Replace x in "Micrel KSZ884x" */
-	dev_info(&hw_priv->pdev->dev, "%s\n", banner);
+	dev_dbg(&hw_priv->pdev->dev, "%s\n", banner);
 	dev_dbg(&hw_priv->pdev->dev, "Mem = %p; IRQ = %d\n", hw->io, pdev->irq);
 
 	/* Assume device is KSZ8841. */
@@ -7146,7 +7146,7 @@ static void pcidev_exit(struct pci_dev *pdev)
 {
 	int i;
 	struct platform_info *info = pci_get_drvdata(pdev);
-	struct dev_info *hw_priv = &info->dev_info;
+	struct dev_dbg *hw_priv = &info->dev_dbg;
 
 	release_mem_region(pci_resource_start(pdev, 0),
 		pci_resource_len(pdev, 0));
@@ -7167,7 +7167,7 @@ static int pcidev_resume(struct pci_dev *pdev)
 {
 	int i;
 	struct platform_info *info = pci_get_drvdata(pdev);
-	struct dev_info *hw_priv = &info->dev_info;
+	struct dev_dbg *hw_priv = &info->dev_dbg;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	pci_set_power_state(pdev, PCI_D0);
@@ -7193,7 +7193,7 @@ static int pcidev_suspend(struct pci_dev *pdev, pm_message_t state)
 {
 	int i;
 	struct platform_info *info = pci_get_drvdata(pdev);
-	struct dev_info *hw_priv = &info->dev_info;
+	struct dev_dbg *hw_priv = &info->dev_dbg;
 	struct ksz_hw *hw = &hw_priv->hw;
 
 	/* Need to find a way to retrieve the device IP address. */

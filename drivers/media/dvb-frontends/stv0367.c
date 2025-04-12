@@ -3322,7 +3322,7 @@ struct dvb_frontend *stv0367ddb_attach(const struct stv0367_config *config,
 	if ((state->chip_id != 0x50) && (state->chip_id != 0x60))
 		goto error;
 
-	dev_info(&i2c->dev, "Found %s with ChipID %02X at adr %02X\n",
+	dev_dbg(&i2c->dev, "Found %s with ChipID %02X at adr %02X\n",
 		state->fe.ops.info.name, state->chip_id,
 		config->demod_address);
 

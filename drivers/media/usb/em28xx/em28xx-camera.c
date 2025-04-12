@@ -152,17 +152,17 @@ static int em28xx_probe_sensor_micron(struct em28xx *dev)
 			dev->em28xx_sensor = EM28XX_MT9M001;
 			break;
 		default:
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "unknown Micron sensor detected: 0x%04x\n",
 				 id);
 			return 0;
 		}
 
 		if (dev->em28xx_sensor == EM28XX_NOSENSOR)
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "unsupported sensor detected: %s\n", name);
 		else
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "sensor %s detected\n", name);
 
 		return 0;
@@ -265,17 +265,17 @@ static int em28xx_probe_sensor_omnivision(struct em28xx *dev)
 			name = "OV9655";
 			break;
 		default:
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "unknown OmniVision sensor detected: 0x%04x\n",
 				id);
 			return 0;
 		}
 
 		if (dev->em28xx_sensor == EM28XX_NOSENSOR)
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "unsupported sensor detected: %s\n", name);
 		else
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				 "sensor %s detected\n", name);
 
 		return 0;
@@ -299,7 +299,7 @@ int em28xx_detect_sensor(struct em28xx *dev)
 	 */
 
 	if (dev->em28xx_sensor == EM28XX_NOSENSOR && ret < 0) {
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "No sensor detected\n");
 		return -ENODEV;
 	}

@@ -101,7 +101,7 @@ static void ssp_sync_available_sensors(struct ssp_data *data)
 
 static void ssp_enable_mcu(struct ssp_data *data, bool enable)
 {
-	dev_info(&data->spi->dev, "current shutdown = %d, old = %d\n", enable,
+	dev_dbg(&data->spi->dev, "current shutdown = %d, old = %d\n", enable,
 		 data->shut_down);
 
 	if (enable && data->shut_down) {
@@ -143,7 +143,7 @@ static int ssp_check_fwbl(struct ssp_data *data)
 		return SSP_FW_DL_STATE_NEED_TO_SCHEDULE;
 	}
 
-	dev_info(&data->spi->dev,
+	dev_dbg(&data->spi->dev,
 		 "MCU Firm Rev : Old = %8u, New = %8u\n",
 		 data->cur_firm_rev,
 		 data->sensorhub_info->fw_rev);
@@ -374,7 +374,7 @@ static int ssp_initialize_mcu(struct ssp_data *data)
 		return ret < 0 ? ret : -ENODEV;
 	}
 
-	dev_info(&data->spi->dev, "MCU device ID = %d\n", ret);
+	dev_dbg(&data->spi->dev, "MCU device ID = %d\n", ret);
 
 	/*
 	 * needs clarification, for now do not want to export all transfer
@@ -395,7 +395,7 @@ static int ssp_initialize_mcu(struct ssp_data *data)
 	}
 
 	data->cur_firm_rev = ssp_get_firmware_rev(data);
-	dev_info(&data->spi->dev, "MCU Firm Rev : New = %8u\n",
+	dev_dbg(&data->spi->dev, "MCU Firm Rev : New = %8u\n",
 		 data->cur_firm_rev);
 
 	return ssp_command(data, SSP_MSG2SSP_AP_MCU_DUMP_CHECK, 0);
@@ -410,7 +410,7 @@ static void ssp_refresh_task(struct work_struct *work)
 	struct ssp_data *data = container_of((struct delayed_work *)work,
 					     struct ssp_data, work_refresh);
 
-	dev_info(&data->spi->dev, "refreshing\n");
+	dev_dbg(&data->spi->dev, "refreshing\n");
 
 	data->reset_cnt++;
 

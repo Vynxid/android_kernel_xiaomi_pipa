@@ -586,7 +586,7 @@ void jffs2_mark_node_obsolete(struct jffs2_sb_info *c, struct jffs2_raw_node_ref
 	uint32_t freed_len;
 
 	if(unlikely(!ref)) {
-		pr_notice("EEEEEK. jffs2_mark_node_obsolete called with NULL node\n");
+		pr_debug("EEEEEK. jffs2_mark_node_obsolete called with NULL node\n");
 		return;
 	}
 	if (ref_obsolete(ref)) {
@@ -596,7 +596,7 @@ void jffs2_mark_node_obsolete(struct jffs2_sb_info *c, struct jffs2_raw_node_ref
 	}
 	blocknr = ref->flash_offset / c->sector_size;
 	if (blocknr >= c->nr_blocks) {
-		pr_notice("raw node at 0x%08x is off the end of device!\n",
+		pr_debug("raw node at 0x%08x is off the end of device!\n",
 			  ref->flash_offset);
 		BUG();
 	}
@@ -619,7 +619,7 @@ void jffs2_mark_node_obsolete(struct jffs2_sb_info *c, struct jffs2_raw_node_ref
 
 	if (ref_flags(ref) == REF_UNCHECKED) {
 		D1(if (unlikely(jeb->unchecked_size < freed_len)) {
-				pr_notice("raw unchecked node of size 0x%08x freed from erase block %d at 0x%08x, but unchecked_size was already 0x%08x\n",
+				pr_debug("raw unchecked node of size 0x%08x freed from erase block %d at 0x%08x, but unchecked_size was already 0x%08x\n",
 					  freed_len, blocknr,
 					  ref->flash_offset, jeb->used_size);
 			BUG();
@@ -630,7 +630,7 @@ void jffs2_mark_node_obsolete(struct jffs2_sb_info *c, struct jffs2_raw_node_ref
 		c->unchecked_size -= freed_len;
 	} else {
 		D1(if (unlikely(jeb->used_size < freed_len)) {
-				pr_notice("raw node of size 0x%08x freed from erase block %d at 0x%08x, but used_size was already 0x%08x\n",
+				pr_debug("raw node of size 0x%08x freed from erase block %d at 0x%08x, but used_size was already 0x%08x\n",
 					  freed_len, blocknr,
 					  ref->flash_offset, jeb->used_size);
 			BUG();

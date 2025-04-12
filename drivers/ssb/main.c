@@ -708,7 +708,7 @@ int ssb_bus_pcibus_register(struct ssb_bus *bus, struct pci_dev *host_pci)
 
 	err = ssb_bus_register(bus, ssb_pci_get_invariants, 0);
 	if (!err) {
-		dev_info(&host_pci->dev,
+		dev_dbg(&host_pci->dev,
 			 "Sonics Silicon Backplane found on PCI device %s\n",
 			 dev_name(&host_pci->dev));
 	} else {
@@ -734,7 +734,7 @@ int ssb_bus_pcmciabus_register(struct ssb_bus *bus,
 
 	err = ssb_bus_register(bus, ssb_pcmcia_get_invariants, baseaddr);
 	if (!err) {
-		dev_info(&pcmcia_dev->dev,
+		dev_dbg(&pcmcia_dev->dev,
 			 "Sonics Silicon Backplane found on PCMCIA device %s\n",
 			 pcmcia_dev->devname);
 	}
@@ -756,7 +756,7 @@ int ssb_bus_sdiobus_register(struct ssb_bus *bus, struct sdio_func *func,
 
 	err = ssb_bus_register(bus, ssb_sdio_get_invariants, ~0);
 	if (!err) {
-		dev_info(&func->dev,
+		dev_dbg(&func->dev,
 			 "Sonics Silicon Backplane found on SDIO device %s\n",
 			 sdio_func_id(func));
 	}
@@ -776,7 +776,7 @@ int ssb_bus_host_soc_register(struct ssb_bus *bus, unsigned long baseaddr)
 
 	err = ssb_bus_register(bus, ssb_host_soc_get_invariants, baseaddr);
 	if (!err) {
-		pr_info("Sonics Silicon Backplane found at address 0x%08lX\n",
+		pr_debug("Sonics Silicon Backplane found at address 0x%08lX\n",
 			baseaddr);
 	}
 

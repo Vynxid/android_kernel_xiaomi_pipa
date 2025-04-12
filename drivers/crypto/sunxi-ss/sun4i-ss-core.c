@@ -266,7 +266,7 @@ static int sun4i_ss_probe(struct platform_device *pdev)
 	if (IS_ERR(ss->reset)) {
 		if (PTR_ERR(ss->reset) == -EPROBE_DEFER)
 			return PTR_ERR(ss->reset);
-		dev_info(&pdev->dev, "no reset control found\n");
+		dev_dbg(&pdev->dev, "no reset control found\n");
 		ss->reset = NULL;
 	}
 
@@ -336,7 +336,7 @@ static int sun4i_ss_probe(struct platform_device *pdev)
 	v = readl(ss->base + SS_CTL);
 	v >>= 16;
 	v &= 0x07;
-	dev_info(&pdev->dev, "Die ID %d\n", v);
+	dev_dbg(&pdev->dev, "Die ID %d\n", v);
 	writel(0, ss->base + SS_CTL);
 
 	ss->dev = &pdev->dev;

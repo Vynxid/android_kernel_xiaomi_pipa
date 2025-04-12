@@ -185,9 +185,9 @@ static void kmod_test_done_check(struct kmod_test_device *test_dev,
 	dev_dbg(test_dev->dev, "Done thread count: %u\n", test_dev->done);
 
 	if (test_dev->done == config->num_threads) {
-		dev_info(test_dev->dev, "Done: %u threads have all run now\n",
+		dev_dbg(test_dev->dev, "Done: %u threads have all run now\n",
 			 test_dev->done);
-		dev_info(test_dev->dev, "Last thread to run: %u\n", idx);
+		dev_dbg(test_dev->dev, "Last thread to run: %u\n", idx);
 		complete(&test_dev->kthreads_done);
 	}
 }
@@ -260,7 +260,7 @@ static int tally_work_test(struct kmod_test_device_info *info)
 		 */
 		if (info->ret_sync != 0)
 			err_ret = info->ret_sync;
-		dev_info(test_dev->dev,
+		dev_dbg(test_dev->dev,
 			 "Sync thread %d return status: %d\n",
 			 info->thread_idx, info->ret_sync);
 		break;
@@ -268,7 +268,7 @@ static int tally_work_test(struct kmod_test_device_info *info)
 		/* For now we make this simple */
 		if (!info->fs_sync)
 			err_ret = -EINVAL;
-		dev_info(test_dev->dev, "Sync thread %u fs: %s\n",
+		dev_dbg(test_dev->dev, "Sync thread %u fs: %s\n",
 			 info->thread_idx, info->fs_sync ? config->test_fs :
 			 "NULL");
 		break;
@@ -298,7 +298,7 @@ static void tally_up_work(struct kmod_test_device *test_dev)
 
 	mutex_lock(&test_dev->thread_mutex);
 
-	dev_info(test_dev->dev, "Results:\n");
+	dev_dbg(test_dev->dev, "Results:\n");
 
 	for (idx=0; idx < config->num_threads; idx++) {
 		info = &test_dev->info[idx];
@@ -353,14 +353,14 @@ static void test_dev_kmod_stop_tests(struct kmod_test_device *test_dev)
 	struct kmod_test_device_info *info;
 	unsigned int i;
 
-	dev_info(test_dev->dev, "Ending request_module() tests\n");
+	dev_dbg(test_dev->dev, "Ending request_module() tests\n");
 
 	mutex_lock(&test_dev->thread_mutex);
 
 	for (i=0; i < config->num_threads; i++) {
 		info = &test_dev->info[i];
 		if (info->task_sync && !IS_ERR(info->task_sync)) {
-			dev_info(test_dev->dev,
+			dev_dbg(test_dev->dev,
 				 "Stopping still-running thread %i\n", i);
 			kthread_stop(info->task_sync);
 		}
@@ -407,13 +407,13 @@ static int try_requests(struct kmod_test_device *test_dev)
 
 	if (!any_error) {
 		test_dev->test_is_oom = false;
-		dev_info(test_dev->dev,
+		dev_dbg(test_dev->dev,
 			 "No errors were found while initializing threads\n");
 		wait_for_completion(&test_dev->kthreads_done);
 		tally_up_work(test_dev);
 	} else {
 		test_dev->test_is_oom = true;
-		dev_info(test_dev->dev,
+		dev_dbg(test_dev->dev,
 			 "At least one thread failed to start, stop all work\n");
 		test_dev_kmod_stop_tests(test_dev);
 		return -ENOMEM;
@@ -426,14 +426,14 @@ static int run_test_driver(struct kmod_test_device *test_dev)
 {
 	struct test_config *config = &test_dev->config;
 
-	dev_info(test_dev->dev, "Test case: %s (%u)\n",
+	dev_dbg(test_dev->dev, "Test case: %s (%u)\n",
 		 test_case_str(config->test_case),
 		 config->test_case);
-	dev_info(test_dev->dev, "Test driver to load: %s\n",
+	dev_dbg(test_dev->dev, "Test driver to load: %s\n",
 		 config->test_driver);
-	dev_info(test_dev->dev, "Number of threads to run: %u\n",
+	dev_dbg(test_dev->dev, "Number of threads to run: %u\n",
 		 config->num_threads);
-	dev_info(test_dev->dev, "Thread IDs will range from 0 - %u\n",
+	dev_dbg(test_dev->dev, "Thread IDs will range from 0 - %u\n",
 		 config->num_threads - 1);
 
 	return try_requests(test_dev);
@@ -443,14 +443,14 @@ static int run_test_fs_type(struct kmod_test_device *test_dev)
 {
 	struct test_config *config = &test_dev->config;
 
-	dev_info(test_dev->dev, "Test case: %s (%u)\n",
+	dev_dbg(test_dev->dev, "Test case: %s (%u)\n",
 		 test_case_str(config->test_case),
 		 config->test_case);
-	dev_info(test_dev->dev, "Test filesystem to load: %s\n",
+	dev_dbg(test_dev->dev, "Test filesystem to load: %s\n",
 		 config->test_fs);
-	dev_info(test_dev->dev, "Number of threads to run: %u\n",
+	dev_dbg(test_dev->dev, "Number of threads to run: %u\n",
 		 config->num_threads);
-	dev_info(test_dev->dev, "Thread IDs will range from 0 - %u\n",
+	dev_dbg(test_dev->dev, "Thread IDs will range from 0 - %u\n",
 		 config->num_threads - 1);
 
 	return try_requests(test_dev);
@@ -535,7 +535,7 @@ static int trigger_config_run(struct kmod_test_device *test_dev)
 	ret = __trigger_config_run(test_dev);
 	if (ret < 0)
 		goto out;
-	dev_info(test_dev->dev, "General test result: %d\n",
+	dev_dbg(test_dev->dev, "General test result: %d\n",
 		 config->test_result);
 
 	/*
@@ -860,7 +860,7 @@ static ssize_t reset_store(struct device *dev,
 		goto out;
 	}
 
-	dev_info(dev, "reset\n");
+	dev_dbg(dev, "reset\n");
 	ret = count;
 
 out:
@@ -1161,7 +1161,7 @@ static struct kmod_test_device *register_test_dev_kmod(void)
 
 	test_dev->dev = test_dev->misc_dev.this_device;
 	list_add_tail(&test_dev->list, &reg_test_devs);
-	dev_info(test_dev->dev, "interface ready\n");
+	dev_dbg(test_dev->dev, "interface ready\n");
 
 	num_test_devs++;
 
@@ -1213,7 +1213,7 @@ void unregister_test_dev_kmod(struct kmod_test_device *test_dev)
 
 	test_dev_kmod_stop_tests(test_dev);
 
-	dev_info(test_dev->dev, "removing interface\n");
+	dev_dbg(test_dev->dev, "removing interface\n");
 	misc_deregister(&test_dev->misc_dev);
 
 	mutex_unlock(&test_dev->config_mutex);

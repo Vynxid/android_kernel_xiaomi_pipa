@@ -114,7 +114,7 @@ static int fdtv_ca_get_msg(struct firedtv *fdtv, void *arg)
 		if (stat.ca_mmi == 1)
 			err = fdtv_ca_get_mmi(fdtv, arg);
 		else {
-			dev_info(fdtv->device, "unhandled CA message 0x%08x\n",
+			dev_dbg(fdtv->device, "unhandled CA message 0x%08x\n",
 				 fdtv->ca_last_command);
 			err = -EACCES;
 		}
@@ -199,7 +199,7 @@ static int fdtv_ca_ioctl(struct file *file, unsigned int cmd, void *arg)
 		err = fdtv_ca_send_msg(fdtv, arg);
 		break;
 	default:
-		dev_info(fdtv->device, "unhandled CA ioctl %u\n", cmd);
+		dev_dbg(fdtv->device, "unhandled CA ioctl %u\n", cmd);
 		err = -EOPNOTSUPP;
 	}
 

@@ -1592,7 +1592,7 @@ static void scan_of_host(struct soc_camera_host *ici)
 
 		ren = of_graph_get_remote_port(epn);
 		if (!ren) {
-			dev_notice(dev, "no remote for %pOF\n", epn);
+			dev_dbg(dev, "no remote for %pOF\n", epn);
 			continue;
 		}
 
@@ -1624,7 +1624,7 @@ static int soc_camera_probe(struct soc_camera_host *ici,
 	struct device *control = NULL;
 	int ret;
 
-	dev_info(icd->pdev, "Probing %s\n", dev_name(icd->pdev));
+	dev_dbg(icd->pdev, "Probing %s\n", dev_name(icd->pdev));
 
 	/*
 	 * Currently the subdev with the largest number of controls (13) is

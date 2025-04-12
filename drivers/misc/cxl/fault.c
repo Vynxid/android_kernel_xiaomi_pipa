@@ -245,7 +245,7 @@ void cxl_handle_fault(struct work_struct *fault_work)
 			 * process has detached and these were cleared by the
 			 * PSL purge, but warn about it just in case
 			 */
-			dev_notice(&ctx->afu->dev, "cxl_handle_fault: Translation fault regs changed\n");
+			dev_dbg(&ctx->afu->dev, "cxl_handle_fault: Translation fault regs changed\n");
 			return;
 		}
 	}

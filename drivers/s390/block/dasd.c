@@ -3243,7 +3243,7 @@ static int dasd_open(struct block_device *bdev, fmode_t mode)
 	}
 
 	if (dasd_probeonly) {
-		dev_info(&base->cdev->dev,
+		dev_dbg(&base->cdev->dev,
 			 "Accessing the DASD failed because it is in "
 			 "probeonly mode\n");
 		rc = -EPERM;
@@ -3706,7 +3706,7 @@ EXPORT_SYMBOL_GPL(dasd_generic_last_path_gone);
 
 int dasd_generic_path_operational(struct dasd_device *device)
 {
-	dev_info(&device->cdev->dev, "A channel path to the device has become "
+	dev_dbg(&device->cdev->dev, "A channel path to the device has become "
 		 "operational\n");
 	DBF_DEV_EVENT(DBF_WARNING, device, "%s", "path operational");
 	dasd_device_remove_stop_bits(device, DASD_STOPPED_DC_WAIT);
@@ -4113,7 +4113,7 @@ static int __init dasd_init(void)
 
 	return 0;
 failed:
-	pr_info("The DASD device driver could not be initialized\n");
+	pr_debug("The DASD device driver could not be initialized\n");
 	dasd_exit();
 	return rc;
 }

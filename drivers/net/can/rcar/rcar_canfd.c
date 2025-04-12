@@ -1581,7 +1581,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
 	priv->base = gpriv->base;
 	priv->channel = ch;
 	priv->can.clock.freq = fcan_freq;
-	dev_info(&pdev->dev, "can_clk rate is %u\n", priv->can.clock.freq);
+	dev_dbg(&pdev->dev, "can_clk rate is %u\n", priv->can.clock.freq);
 
 	if (gpriv->fdmode) {
 		priv->can.bittiming_const = &rcar_canfd_nom_bittiming_const;
@@ -1613,7 +1613,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
 			"register_candev() failed, error %d\n", err);
 		goto fail_candev;
 	}
-	dev_info(&pdev->dev, "device registered (channel %u)\n", priv->channel);
+	dev_dbg(&pdev->dev, "device registered (channel %u)\n", priv->channel);
 	return 0;
 
 fail_candev:
@@ -1789,7 +1789,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
 	}
 
 	platform_set_drvdata(pdev, gpriv);
-	dev_info(&pdev->dev, "global operational state (clk %d, fdmode %d)\n",
+	dev_dbg(&pdev->dev, "global operational state (clk %d, fdmode %d)\n",
 		 gpriv->fcan, gpriv->fdmode);
 	return 0;
 

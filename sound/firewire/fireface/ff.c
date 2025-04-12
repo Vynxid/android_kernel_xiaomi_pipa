@@ -93,7 +93,7 @@ error:
 	snd_ff_transaction_unregister(ff);
 	snd_ff_stream_destroy_duplex(ff);
 	snd_card_free(ff->card);
-	dev_info(&ff->unit->device,
+	dev_dbg(&ff->unit->device,
 		 "Sound card registration failed: %d\n", err);
 }
 

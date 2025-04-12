@@ -184,7 +184,7 @@ static int bcm2835_mbox_probe(struct platform_device *pdev)
 		return ret;
 
 	platform_set_drvdata(pdev, mbox);
-	dev_info(dev, "mailbox enabled\n");
+	dev_dbg(dev, "mailbox enabled\n");
 
 	return ret;
 }

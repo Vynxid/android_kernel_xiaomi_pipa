@@ -321,7 +321,7 @@ struct dvb_frontend *tda18218_attach(struct dvb_frontend *fe,
 		return NULL;
 	}
 
-	dev_info(&priv->i2c->dev,
+	dev_dbg(&priv->i2c->dev,
 			"%s: NXP TDA18218HN successfully identified\n",
 			KBUILD_MODNAME);
 

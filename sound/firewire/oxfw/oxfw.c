@@ -278,7 +278,7 @@ error:
 	snd_card_free(oxfw->card);
 	kfree(oxfw->spec);
 	oxfw->spec = NULL;
-	dev_info(&oxfw->unit->device,
+	dev_dbg(&oxfw->unit->device,
 		 "Sound card registration failed: %d\n", err);
 }
 

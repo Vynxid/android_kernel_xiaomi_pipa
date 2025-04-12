@@ -231,7 +231,7 @@ static int em_sti_register_clocksource(struct em_sti_priv *p)
 	cs->mask = CLOCKSOURCE_MASK(48);
 	cs->flags = CLOCK_SOURCE_IS_CONTINUOUS;
 
-	dev_info(&p->pdev->dev, "used as clock source\n");
+	dev_dbg(&p->pdev->dev, "used as clock source\n");
 
 	clocksource_register_hz(cs, p->rate);
 	return 0;
@@ -253,7 +253,7 @@ static int em_sti_clock_event_set_oneshot(struct clock_event_device *ced)
 {
 	struct em_sti_priv *p = ced_to_em_sti(ced);
 
-	dev_info(&p->pdev->dev, "used for oneshot clock events\n");
+	dev_dbg(&p->pdev->dev, "used for oneshot clock events\n");
 	em_sti_start(p, USER_CLOCKEVENT);
 	return 0;
 }
@@ -283,7 +283,7 @@ static void em_sti_register_clockevent(struct em_sti_priv *p)
 	ced->set_state_shutdown = em_sti_clock_event_shutdown;
 	ced->set_state_oneshot = em_sti_clock_event_set_oneshot;
 
-	dev_info(&p->pdev->dev, "used for clock events\n");
+	dev_dbg(&p->pdev->dev, "used for clock events\n");
 
 	clockevents_config_and_register(ced, p->rate, 2, 0xffffffff);
 }

@@ -1376,7 +1376,7 @@ int dw_dma_probe(struct dw_dma_chip *chip)
 	if (err)
 		goto err_dma_register;
 
-	dev_info(chip->dev, "DesignWare DMA Controller, %d channels\n",
+	dev_dbg(chip->dev, "DesignWare DMA Controller, %d channels\n",
 		 pdata->nr_channels);
 
 	pm_runtime_put_sync_suspend(chip->dev);

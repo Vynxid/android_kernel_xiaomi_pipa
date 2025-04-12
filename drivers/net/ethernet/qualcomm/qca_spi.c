@@ -917,7 +917,7 @@ qca_spi_probe(struct spi_device *spi)
 		return -EINVAL;
 	}
 
-	dev_info(&spi->dev, "ver=%s, clkspeed=%u, burst_len=%d, pluggable=%d\n",
+	dev_dbg(&spi->dev, "ver=%s, clkspeed=%u, burst_len=%d, pluggable=%d\n",
 		 QCASPI_DRV_VERSION,
 		 spi->max_speed_hz,
 		 qcaspi_burst_len,
@@ -955,7 +955,7 @@ qca_spi_probe(struct spi_device *spi)
 
 	if (!is_valid_ether_addr(qca->net_dev->dev_addr)) {
 		eth_hw_addr_random(qca->net_dev);
-		dev_info(&spi->dev, "Using random MAC address: %pM\n",
+		dev_dbg(&spi->dev, "Using random MAC address: %pM\n",
 			 qca->net_dev->dev_addr);
 	}
 

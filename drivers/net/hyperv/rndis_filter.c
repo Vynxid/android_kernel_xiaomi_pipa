@@ -1078,7 +1078,7 @@ static void netvsc_sc_open(struct vmbus_channel *new_sc)
  */
 int rndis_set_subchannel(struct net_device *ndev,
 			 struct netvsc_device *nvdev,
-			 struct netvsc_device_info *dev_info)
+			 struct netvsc_device_info *dev_dbg)
 {
 	struct nvsp_message *init_packet = &nvdev->channel_init_pkt;
 	struct net_device_context *ndev_ctx = netdev_priv(ndev);
@@ -1119,8 +1119,8 @@ int rndis_set_subchannel(struct net_device *ndev,
 		   atomic_read(&nvdev->open_chn) == nvdev->num_chn);
 
 	/* ignore failues from setting rss parameters, still have channels */
-	if (dev_info)
-		rndis_filter_set_rss_param(rdev, dev_info->rss_key);
+	if (dev_dbg)
+		rndis_filter_set_rss_param(rdev, dev_dbg->rss_key);
 	else
 		rndis_filter_set_rss_param(rdev, netvsc_hash_key);
 

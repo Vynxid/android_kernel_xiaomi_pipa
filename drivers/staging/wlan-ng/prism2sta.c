@@ -81,7 +81,7 @@
 #include "hfa384x.h"
 #include "prism2mgmt.h"
 
-static char *dev_info = "prism2_usb";
+static char *dev_dbg = "prism2_usb";
 static struct wlandevice *create_wlan(void);
 
 int prism2_reset_holdtime = 30;	/* Reset hold time in ms */
@@ -1894,7 +1894,7 @@ static struct wlandevice *create_wlan(void)
 	}
 
 	/* Initialize the network device object. */
-	wlandev->nsdname = dev_info;
+	wlandev->nsdname = dev_dbg;
 	wlandev->msdstate = WLAN_MSD_HWPRESENT_PENDING;
 	wlandev->priv = hw;
 	wlandev->open = prism2sta_open;

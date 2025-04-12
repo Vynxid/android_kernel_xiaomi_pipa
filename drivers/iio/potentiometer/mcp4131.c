@@ -266,7 +266,7 @@ static int mcp4131_probe(struct spi_device *spi)
 
 	err = devm_iio_device_register(dev, indio_dev);
 	if (err) {
-		dev_info(&spi->dev, "Unable to register %s\n", indio_dev->name);
+		dev_dbg(&spi->dev, "Unable to register %s\n", indio_dev->name);
 		return err;
 	}
 

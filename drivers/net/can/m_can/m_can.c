@@ -1690,7 +1690,7 @@ static int m_can_plat_probe(struct platform_device *pdev)
 
 	of_can_transceiver(dev);
 
-	dev_info(&pdev->dev, "%s device registered (irq=%d, version=%d)\n",
+	dev_dbg(&pdev->dev, "%s device registered (irq=%d, version=%d)\n",
 		 KBUILD_MODNAME, dev->irq, priv->version);
 
 	/* Probe finished

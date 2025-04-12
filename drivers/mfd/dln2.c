@@ -571,7 +571,7 @@ static int dln2_print_serialno(struct dln2_dev *dln2)
 	if (len < sizeof(serial_no))
 		return -EREMOTEIO;
 
-	dev_info(dev, "Diolan DLN2 serial %u\n", le32_to_cpu(serial_no));
+	dev_dbg(dev, "Diolan DLN2 serial %u\n", le32_to_cpu(serial_no));
 
 	return 0;
 }

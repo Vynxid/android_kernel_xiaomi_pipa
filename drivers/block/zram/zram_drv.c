@@ -378,7 +378,7 @@ static ssize_t idle_store(struct device *dev,
 	up_read(&zram->init_lock);
 
 #ifdef CONFIG_MIUI_ZRAM_MEMORY_TRACKING
-	pr_info("Mark IDLE finished. Mark %d pages\n", mark_nr);
+	pr_debug("Mark IDLE finished. Mark %d pages\n", mark_nr);
 #endif
 
 	return len;
@@ -559,7 +559,7 @@ static ssize_t backing_dev_store(struct device *dev,
 
 	down_write(&zram->init_lock);
 	if (init_done(zram)) {
-		pr_info("Can't setup backing device for initialized device\n");
+		pr_debug("Can't setup backing device for initialized device\n");
 		err = -EBUSY;
 		goto out;
 	}
@@ -633,7 +633,7 @@ static ssize_t backing_dev_store(struct device *dev,
 			~BDI_CAP_SYNCHRONOUS_IO;
 	up_write(&zram->init_lock);
 
-	pr_info("setup backing device %s\n", file_name);
+	pr_debug("setup backing device %s\n", file_name);
 	kfree(file_name);
 
 	return len;
@@ -781,7 +781,7 @@ static bool writeback_parse_input(const char *buf,
 	}
 
 	ret = true;
-	pr_info("Parse succeed. wb_max: %lu, wb_idle_min: %u\n", *wb_max, *wb_idle_min);
+	pr_debug("Parse succeed. wb_max: %lu, wb_idle_min: %u\n", *wb_max, *wb_idle_min);
 err:
 	kfree(argbuf);
 	return ret;
@@ -981,7 +981,7 @@ release_init_lock:
 	up_read(&zram->init_lock);
 
 #ifdef CONFIG_MIUI_ZRAM_MEMORY_TRACKING
-	pr_info("Flush finished. Mode %d, flush %lu pages\n", mode, wb_pages_nr);
+	pr_debug("Flush finished. Mode %d, flush %lu pages\n", mode, wb_pages_nr);
 	return ret ? ret : len;
 #else
 	return ret;
@@ -1345,7 +1345,7 @@ static ssize_t comp_algorithm_store(struct device *dev,
 	down_write(&zram->init_lock);
 	if (init_done(zram)) {
 		up_write(&zram->init_lock);
-		pr_info("Can't change algorithm for initialized device\n");
+		pr_debug("Can't change algorithm for initialized device\n");
 		return -EBUSY;
 	}
 
@@ -1380,7 +1380,7 @@ static ssize_t use_dedup_store(struct device *dev,
 	down_write(&zram->init_lock);
 	if (init_done(zram)) {
 		up_write(&zram->init_lock);
-		pr_info("Can't change dedup usage for initialized device\n");
+		pr_debug("Can't change dedup usage for initialized device\n");
 		return -EBUSY;
 	}
 	zram->use_dedup = val;
@@ -2456,7 +2456,7 @@ static ssize_t disksize_store(struct device *dev,
 
 	down_write(&zram->init_lock);
 	if (init_done(zram)) {
-		pr_info("Cannot change disksize for initialized device\n");
+		pr_debug("Cannot change disksize for initialized device\n");
 		err = -EBUSY;
 		goto out_unlock;
 	}
@@ -2720,7 +2720,7 @@ static int zram_add(void)
 	strscpy(zram->compressor, default_compressor, sizeof(zram->compressor));
 
 	zram_debugfs_register(zram);
-	pr_info("Added device: %s\n", zram->disk->disk_name);
+	pr_debug("Added device: %s\n", zram->disk->disk_name);
 	return device_id;
 
 out_free_queue:
@@ -2756,7 +2756,7 @@ static int zram_remove(struct zram *zram)
 	zram_reset_device(zram);
 	bdput(bdev);
 
-	pr_info("Removed device: %s\n", zram->disk->disk_name);
+	pr_debug("Removed device: %s\n", zram->disk->disk_name);
 
 	del_gendisk(zram->disk);
 	blk_cleanup_queue(zram->disk->queue);

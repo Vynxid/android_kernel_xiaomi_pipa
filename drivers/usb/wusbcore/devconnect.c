@@ -184,7 +184,7 @@ static struct wusb_dev *wusbhc_cack_add(struct wusbhc *wusbhc,
 	if (new_connection) {
 		dev_addr = (port_idx + 2) | WUSB_DEV_ADDR_UNAUTH;
 
-		dev_info(dev, "Connecting new WUSB device to address %u, "
+		dev_dbg(dev, "Connecting new WUSB device to address %u, "
 			"port %u\n", dev_addr, port_idx);
 
 		result = wusb_set_dev_addr(wusbhc, wusb_dev, dev_addr);
@@ -533,7 +533,7 @@ static void wusbhc_handle_dn_connect(struct wusbhc *wusbhc,
 
 	dnc = container_of(dn_hdr, struct wusb_dn_connect, hdr);
 	ckhdid_printf(pr_cdid, sizeof(pr_cdid), &dnc->CDID);
-	dev_info(dev, "DN CONNECT: device %s @ %x (%s) wants to %s\n",
+	dev_dbg(dev, "DN CONNECT: device %s @ %x (%s) wants to %s\n",
 		 pr_cdid,
 		 wusb_dn_connect_prev_dev_addr(dnc),
 		 beacon_behaviour[wusb_dn_connect_beacon_behavior(dnc)],
@@ -560,7 +560,7 @@ static void wusbhc_handle_dn_disconnect(struct wusbhc *wusbhc, u8 srcaddr)
 		dev_dbg(dev, "ignoring DN DISCONNECT from unconnected device %02x\n",
 			srcaddr);
 	} else {
-		dev_info(dev, "DN DISCONNECT: device 0x%02x going down\n",
+		dev_dbg(dev, "DN DISCONNECT: device 0x%02x going down\n",
 			wusb_dev->addr);
 		__wusbhc_dev_disconnect(wusbhc, wusb_port_by_idx(wusbhc,
 			wusb_dev->port_idx));
@@ -1076,7 +1076,7 @@ int wusb_set_dev_addr(struct wusbhc *wusbhc, struct wusb_dev *wusb_dev, u8 addr)
 		dev_err(wusbhc->dev, "device %d: failed to set device "
 			"address\n", wusb_dev->port_idx);
 	else
-		dev_info(wusbhc->dev, "device %d: %s addr %u\n",
+		dev_dbg(wusbhc->dev, "device %d: %s addr %u\n",
 			 wusb_dev->port_idx,
 			 (addr & WUSB_DEV_ADDR_UNAUTH) ? "unauth" : "auth",
 			 wusb_dev->addr);

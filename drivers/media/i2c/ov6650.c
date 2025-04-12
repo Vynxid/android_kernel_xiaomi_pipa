@@ -874,7 +874,7 @@ static int ov6650_video_probe(struct i2c_client *client)
 		goto done;
 	}
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		"ov6650 Product ID 0x%02x:0x%02x Manufacturer ID 0x%02x:0x%02x\n",
 		pidh, pidl, midh, midl);
 

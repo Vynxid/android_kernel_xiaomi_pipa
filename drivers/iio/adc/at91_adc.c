@@ -782,7 +782,7 @@ static int at91_adc_of_get_resolution(struct at91_adc_state *st,
 		else
 			st->low_res = false;
 
-		dev_info(&idev->dev, "Resolution used: %u bits\n", st->res);
+		dev_dbg(&idev->dev, "Resolution used: %u bits\n", st->res);
 		goto ret;
 	}
 
@@ -842,7 +842,7 @@ static int at91_adc_probe_dt_ts(struct device_node *node,
 
 	ret = of_property_read_u32(node, "atmel,adc-ts-wires", &prop);
 	if (ret) {
-		dev_info(dev, "ADC Touch screen is disabled.\n");
+		dev_dbg(dev, "ADC Touch screen is disabled.\n");
 		return 0;
 	}
 
@@ -955,7 +955,7 @@ static int at91_adc_probe_dt(struct at91_adc_state *st,
 	if (st->caps->has_ts)
 		return at91_adc_probe_dt_ts(node, st, &idev->dev);
 	else
-		dev_info(&idev->dev, "not support touchscreen in the adc compatible string.\n");
+		dev_dbg(&idev->dev, "not support touchscreen in the adc compatible string.\n");
 
 	return 0;
 

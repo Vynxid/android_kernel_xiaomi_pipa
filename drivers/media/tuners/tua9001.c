@@ -227,7 +227,7 @@ static int tua9001_probe(struct i2c_client *client,
 			sizeof(struct dvb_tuner_ops));
 	i2c_set_clientdata(client, dev);
 
-	dev_info(&client->dev, "Infineon TUA9001 successfully attached\n");
+	dev_dbg(&client->dev, "Infineon TUA9001 successfully attached\n");
 	return 0;
 err_kfree:
 	kfree(dev);

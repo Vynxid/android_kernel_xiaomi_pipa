@@ -119,7 +119,7 @@ static int altera_ps2_probe(struct platform_device *pdev)
 	serio->dev.parent	= &pdev->dev;
 	ps2if->io		= serio;
 
-	dev_info(&pdev->dev, "base %p, irq %d\n", ps2if->base, irq);
+	dev_dbg(&pdev->dev, "base %p, irq %d\n", ps2if->base, irq);
 
 	serio_register_port(ps2if->io);
 	platform_set_drvdata(pdev, ps2if);

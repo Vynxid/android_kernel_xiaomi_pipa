@@ -460,7 +460,7 @@ static int catu_disable_hw(struct catu_drvdata *drvdata)
 
 	catu_write_control(drvdata, 0);
 	if (catu_wait_for_ready(drvdata)) {
-		dev_info(drvdata->dev, "Timeout while waiting for READY\n");
+		dev_dbg(drvdata->dev, "Timeout while waiting for READY\n");
 		rc = -EAGAIN;
 	}
 

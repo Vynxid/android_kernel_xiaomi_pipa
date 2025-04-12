@@ -185,7 +185,7 @@ static void ldisc_receive(struct tty_struct *tty, const u8 *data,
 	 * only enable if STX handling is not enabled.
 	 */
 	if (!ser->common.use_stx && !ser->tx_started) {
-		dev_info(&ser->dev->dev,
+		dev_dbg(&ser->dev->dev,
 			"Bytes received before initial transmission -"
 			"bytes discarded.\n");
 		return;

@@ -188,7 +188,7 @@ unsigned long cmci_intel_adjust_timer(unsigned long interval)
 		 */
 		__this_cpu_write(cmci_storm_state, CMCI_STORM_SUBSIDED);
 		if (!atomic_sub_return(1, &cmci_storm_on_cpus))
-			pr_notice("CMCI storm subsided: switching to interrupt mode\n");
+			pr_debug("CMCI storm subsided: switching to interrupt mode\n");
 
 		/* FALLTHROUGH */
 
@@ -238,7 +238,7 @@ static bool cmci_storm_detect(void)
 	this_cpu_write(cmci_backoff_cnt, INITIAL_CHECK_INTERVAL);
 
 	if (r == 1)
-		pr_notice("CMCI storm detected: switching to poll mode\n");
+		pr_debug("CMCI storm detected: switching to poll mode\n");
 	return true;
 }
 

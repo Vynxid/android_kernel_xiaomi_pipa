@@ -442,7 +442,7 @@ int ubiblock_create(struct ubi_volume_info *vi)
 
 	/* Must be the last step: anyone can call file ops from now on */
 	add_disk(dev->gd);
-	dev_info(disk_to_dev(dev->gd), "created from ubi%d:%d(%s)",
+	dev_dbg(disk_to_dev(dev->gd), "created from ubi%d:%d(%s)",
 		 dev->ubi_num, dev->vol_id, vi->name);
 	mutex_unlock(&devices_mutex);
 	return 0;
@@ -472,7 +472,7 @@ static void ubiblock_cleanup(struct ubiblock *dev)
 	/* Finally destroy the blk queue */
 	blk_cleanup_queue(dev->rq);
 	blk_mq_free_tag_set(&dev->tag_set);
-	dev_info(disk_to_dev(dev->gd), "released");
+	dev_dbg(disk_to_dev(dev->gd), "released");
 	idr_remove(&ubiblock_minor_idr, dev->gd->first_minor);
 	put_disk(dev->gd);
 }
@@ -539,7 +539,7 @@ static int ubiblock_resize(struct ubi_volume_info *vi)
 
 	if (get_capacity(dev->gd) != disk_capacity) {
 		set_capacity(dev->gd, disk_capacity);
-		dev_info(disk_to_dev(dev->gd), "resized to %lld bytes",
+		dev_dbg(disk_to_dev(dev->gd), "resized to %lld bytes",
 			 vi->used_bytes);
 	}
 	mutex_unlock(&dev->dev_mutex);

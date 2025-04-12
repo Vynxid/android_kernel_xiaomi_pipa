@@ -872,7 +872,7 @@ static int mv_xor_v2_probe(struct platform_device *pdev)
 	if (ret)
 		goto free_hw_desq;
 
-	dev_notice(&pdev->dev, "Marvell Version 2 XOR driver\n");
+	dev_dbg(&pdev->dev, "Marvell Version 2 XOR driver\n");
 
 	return 0;
 

@@ -263,7 +263,7 @@ static int imx_rngc_probe(struct platform_device *pdev)
 		goto err;
 	}
 
-	dev_info(&pdev->dev, "Freescale RNGC registered.\n");
+	dev_dbg(&pdev->dev, "Freescale RNGC registered.\n");
 	return 0;
 
 err:

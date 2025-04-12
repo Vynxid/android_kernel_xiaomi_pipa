@@ -1643,7 +1643,7 @@ static void ftdi_determine_type(struct usb_serial_port *port)
 		priv->chip_type = FTX;
 	}
 
-	dev_info(&udev->dev, "Detected %s\n", ftdi_chip_name[priv->chip_type]);
+	dev_dbg(&udev->dev, "Detected %s\n", ftdi_chip_name[priv->chip_type]);
 }
 
 
@@ -1892,7 +1892,7 @@ static int ftdi_NDI_device_setup(struct usb_serial *serial)
 		latency = 99;
 
 	dev_dbg(&udev->dev, "%s setting NDI device latency to %d\n", __func__, latency);
-	dev_info(&udev->dev, "NDI device with a latency value of %d\n", latency);
+	dev_dbg(&udev->dev, "NDI device with a latency value of %d\n", latency);
 
 	/* FIXME: errors are not returned */
 	usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
@@ -1913,7 +1913,7 @@ static int ftdi_jtag_probe(struct usb_serial *serial)
 	struct usb_interface *interface = serial->interface;
 
 	if (interface == udev->actconfig->interface[0]) {
-		dev_info(&udev->dev,
+		dev_dbg(&udev->dev,
 			 "Ignoring serial port reserved for JTAG\n");
 		return -ENODEV;
 	}
@@ -1951,7 +1951,7 @@ static int ftdi_stmclite_probe(struct usb_serial *serial)
 
 	if (interface == udev->actconfig->interface[0] ||
 	    interface == udev->actconfig->interface[1]) {
-		dev_info(&udev->dev, "Ignoring serial port reserved for JTAG\n");
+		dev_dbg(&udev->dev, "Ignoring serial port reserved for JTAG\n");
 		return -ENODEV;
 	}
 

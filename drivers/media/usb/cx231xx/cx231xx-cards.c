@@ -1156,7 +1156,7 @@ static inline void cx231xx_set_model(struct cx231xx *dev)
  */
 void cx231xx_pre_card_setup(struct cx231xx *dev)
 {
-	dev_info(dev->dev, "Identified as %s (card=%d)\n",
+	dev_dbg(dev->dev, "Identified as %s (card=%d)\n",
 		dev->board.name, dev->model);
 
 	if (CX231XX_BOARD_ASTROMETA_T2HYBRID == dev->model) {
@@ -1503,7 +1503,7 @@ static int cx231xx_init_dev(struct cx231xx *dev, struct usb_device *udev,
 	cx231xx_add_into_devlist(dev);
 
 	if (dev->board.has_417) {
-		dev_info(dev->dev, "attach 417 %d\n", dev->model);
+		dev_dbg(dev->dev, "attach 417 %d\n", dev->model);
 		if (cx231xx_417_register(dev) < 0) {
 			dev_err(dev->dev,
 				"%s() Failed to register 417 on VID_B\n",
@@ -1584,7 +1584,7 @@ static int cx231xx_init_v4l2(struct cx231xx *dev,
 	dev->video_mode.end_point_addr = uif->altsetting[0].endpoint[isoc_pipe].desc.bEndpointAddress;
 	dev->video_mode.num_alt = uif->num_altsetting;
 
-	dev_info(dev->dev,
+	dev_dbg(dev->dev,
 		 "video EndPoint Addr 0x%x, Alternate settings: %i\n",
 		 dev->video_mode.end_point_addr,
 		 dev->video_mode.num_alt);
@@ -1624,7 +1624,7 @@ static int cx231xx_init_v4l2(struct cx231xx *dev,
 			bEndpointAddress;
 
 	dev->vbi_mode.num_alt = uif->num_altsetting;
-	dev_info(dev->dev,
+	dev_dbg(dev->dev,
 		 "VBI EndPoint Addr 0x%x, Alternate settings: %i\n",
 		 dev->vbi_mode.end_point_addr,
 		 dev->vbi_mode.num_alt);
@@ -1668,7 +1668,7 @@ static int cx231xx_init_v4l2(struct cx231xx *dev,
 			bEndpointAddress;
 
 	dev->sliced_cc_mode.num_alt = uif->num_altsetting;
-	dev_info(dev->dev,
+	dev_dbg(dev->dev,
 		 "sliced CC EndPoint Addr 0x%x, Alternate settings: %i\n",
 		 dev->sliced_cc_mode.end_point_addr,
 		 dev->sliced_cc_mode.num_alt);
@@ -1787,7 +1787,7 @@ static int cx231xx_usb_probe(struct usb_interface *interface,
 		speed = "unknown";
 	}
 
-	dev_info(d,
+	dev_dbg(d,
 		 "New device %s %s @ %s Mbps (%04x:%04x) with %d interfaces\n",
 		 udev->manufacturer ? udev->manufacturer : "",
 		 udev->product ? udev->product : "",
@@ -1861,7 +1861,7 @@ static int cx231xx_usb_probe(struct usb_interface *interface,
 				desc.bEndpointAddress;
 
 		dev->ts1_mode.num_alt = uif->num_altsetting;
-		dev_info(d,
+		dev_dbg(d,
 			 "TS EndPoint Addr 0x%x, Alternate settings: %i\n",
 			 dev->ts1_mode.end_point_addr,
 			 dev->ts1_mode.num_alt);

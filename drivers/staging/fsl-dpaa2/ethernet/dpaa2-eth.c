@@ -1449,7 +1449,7 @@ static struct fsl_mc_device *setup_dpcon(struct dpaa2_eth_priv *priv)
 	err = fsl_mc_object_allocate(to_fsl_mc_device(dev),
 				     FSL_MC_POOL_DPCON, &dpcon);
 	if (err) {
-		dev_info(dev, "Not enough DPCONs, will go on as-is\n");
+		dev_dbg(dev, "Not enough DPCONs, will go on as-is\n");
 		return NULL;
 	}
 
@@ -1563,7 +1563,7 @@ static int setup_dpio(struct dpaa2_eth_priv *priv)
 		/* Try to allocate a channel */
 		channel = alloc_channel(priv);
 		if (!channel) {
-			dev_info(dev,
+			dev_dbg(dev,
 				 "No affine channel for cpu %d and above\n", i);
 			err = -ENODEV;
 			goto err_alloc_ch;
@@ -1628,7 +1628,7 @@ err_alloc_ch:
 		return err;
 	}
 
-	dev_info(dev, "Cores %*pbl available for processing ingress traffic\n",
+	dev_dbg(dev, "Cores %*pbl available for processing ingress traffic\n",
 		 cpumask_pr_args(&priv->dpio_cpumask));
 
 	return 0;
@@ -2575,7 +2575,7 @@ static int dpaa2_eth_probe(struct fsl_mc_device *dpni_dev)
 		priv->do_link_poll = true;
 	}
 
-	dev_info(dev, "Probed interface %s\n", net_dev->name);
+	dev_dbg(dev, "Probed interface %s\n", net_dev->name);
 	return 0;
 
 err_poll_thread:

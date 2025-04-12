@@ -1196,7 +1196,7 @@ static int stmpe_chip_init(struct stmpe *stmpe)
 		return -EINVAL;
 	}
 
-	dev_info(stmpe->dev, "%s detected, chip id: %#x\n", variant->name, id);
+	dev_dbg(stmpe->dev, "%s detected, chip id: %#x\n", variant->name, id);
 
 	/* Disable all modules -- subdrivers should enable what they need. */
 	ret = stmpe_disable(stmpe, ~0);
@@ -1383,7 +1383,7 @@ int stmpe_probe(struct stmpe_client_info *ci, enum stmpe_partnum partnum)
 
 	if (stmpe->irq < 0) {
 		/* use alternate variant info for no-irq mode, if supported */
-		dev_info(stmpe->dev,
+		dev_dbg(stmpe->dev,
 			"%s configured in no-irq mode by platform data\n",
 			stmpe->variant->name);
 		if (!stmpe_noirq_variant_info[stmpe->partnum]) {

@@ -1015,10 +1015,10 @@ static int kaweth_probe(
 	 */
 
 	if (le16_to_cpu(udev->descriptor.bcdDevice) >> 8) {
-		dev_info(dev, "Firmware present in device.\n");
+		dev_dbg(dev, "Firmware present in device.\n");
 	} else {
 		/* Download the firmware */
-		dev_info(dev, "Downloading firmware...\n");
+		dev_dbg(dev, "Downloading firmware...\n");
 		kaweth->firmware_buf = (__u8 *)__get_free_page(GFP_KERNEL);
 		if (!kaweth->firmware_buf) {
 			rv = -ENOMEM;
@@ -1067,7 +1067,7 @@ static int kaweth_probe(
 		}
 
 		/* Device will now disappear for a moment...  */
-		dev_info(dev, "Firmware loaded.  I'll be back...\n");
+		dev_dbg(dev, "Firmware loaded.  I'll be back...\n");
 err_fw:
 		free_page((unsigned long)kaweth->firmware_buf);
 		free_netdev(netdev);
@@ -1081,10 +1081,10 @@ err_fw:
 		goto err_free_netdev;
 	}
 
-	dev_info(dev, "Statistics collection: %x\n", kaweth->configuration.statistics_mask);
-	dev_info(dev, "Multicast filter limit: %x\n", kaweth->configuration.max_multicast_filters & ((1 << 15) - 1));
-	dev_info(dev, "MTU: %d\n", le16_to_cpu(kaweth->configuration.segment_size));
-	dev_info(dev, "Read MAC address %pM\n", kaweth->configuration.hw_addr);
+	dev_dbg(dev, "Statistics collection: %x\n", kaweth->configuration.statistics_mask);
+	dev_dbg(dev, "Multicast filter limit: %x\n", kaweth->configuration.max_multicast_filters & ((1 << 15) - 1));
+	dev_dbg(dev, "MTU: %d\n", le16_to_cpu(kaweth->configuration.segment_size));
+	dev_dbg(dev, "Read MAC address %pM\n", kaweth->configuration.hw_addr);
 
 	if(!memcmp(&kaweth->configuration.hw_addr,
                    &bcast_addr,
@@ -1156,7 +1156,7 @@ err_fw:
 		goto err_intfdata;
 	}
 
-	dev_info(dev, "kaweth interface created at %s\n",
+	dev_dbg(dev, "kaweth interface created at %s\n",
 		 kaweth->net->name);
 
 	return 0;

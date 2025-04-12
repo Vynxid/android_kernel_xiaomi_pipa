@@ -563,10 +563,10 @@ static void gameport_add_port(struct gameport *gameport)
 	list_add_tail(&gameport->node, &gameport_list);
 
 	if (gameport->io)
-		dev_info(&gameport->dev, "%s is %s, io %#x, speed %dkHz\n",
+		dev_dbg(&gameport->dev, "%s is %s, io %#x, speed %dkHz\n",
 			 gameport->name, gameport->phys, gameport->io, gameport->speed);
 	else
-		dev_info(&gameport->dev, "%s is %s, speed %dkHz\n",
+		dev_dbg(&gameport->dev, "%s is %s, speed %dkHz\n",
 			gameport->name, gameport->phys, gameport->speed);
 
 	error = device_add(&gameport->dev);

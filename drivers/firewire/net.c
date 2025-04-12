@@ -1508,7 +1508,7 @@ static int fwnet_probe(struct fw_unit *unit,
 		goto out;
 
 	list_add_tail(&dev->dev_link, &fwnet_device_list);
-	dev_notice(&net->dev, "IP over IEEE 1394 on card %s\n",
+	dev_dbg(&net->dev, "IP over IEEE 1394 on card %s\n",
 		   dev_name(card->device));
  have_dev:
 	ret = fwnet_add_peer(dev, unit, device);

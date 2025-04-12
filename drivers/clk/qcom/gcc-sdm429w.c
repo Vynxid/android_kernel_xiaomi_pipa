@@ -4157,7 +4157,7 @@ static void get_speed_bin(struct platform_device *pdev, int *bin)
 
 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "gpu-bin");
 	if (!res) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"No GPU speed binning available. Defaulting to 0.\n");
 		return;
 	}
@@ -4173,7 +4173,7 @@ static void get_speed_bin(struct platform_device *pdev, int *bin)
 	iounmap(base);
 	*bin = (config_efuse >> 31) & 0x1;
 
-	dev_info(&pdev->dev, "GPU speed bin: %d\n", *bin);
+	dev_dbg(&pdev->dev, "GPU speed bin: %d\n", *bin);
 }
 
 static struct clk_init_data vcodec0_clk_src_init = {
@@ -4373,7 +4373,7 @@ static int gcc_sdm429w_probe(struct platform_device *pdev)
 	clk_prepare_enable(apss_ahb_clk_src.clkr.hw.clk);
 	clk_prepare_enable(gpll0_ao_out_main.clkr.hw.clk);
 
-	dev_info(&pdev->dev, "Registered GCC clocks\n");
+	dev_dbg(&pdev->dev, "Registered GCC clocks\n");
 
 	return 0;
 }
@@ -4494,7 +4494,7 @@ static int mdss_sdm429w_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered GCC MDSS Clocks\n");
+	dev_dbg(&pdev->dev, "Registered GCC MDSS Clocks\n");
 
 	return ret;
 }

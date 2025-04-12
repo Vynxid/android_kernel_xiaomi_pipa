@@ -220,7 +220,7 @@ static void wait_and_send(struct tpm_chip *chip, u8 sendbyte)
 static void tpm_wtx(struct tpm_chip *chip)
 {
 	number_of_wtx++;
-	dev_info(&chip->dev, "Granting WTX (%02d / %02d)\n",
+	dev_dbg(&chip->dev, "Granting WTX (%02d / %02d)\n",
 		 number_of_wtx, TPM_MAX_WTX_PACKAGES);
 	wait_and_send(chip, TPM_VL_VER);
 	wait_and_send(chip, TPM_CTRL_WTX);
@@ -231,7 +231,7 @@ static void tpm_wtx(struct tpm_chip *chip)
 
 static void tpm_wtx_abort(struct tpm_chip *chip)
 {
-	dev_info(&chip->dev, "Aborting WTX\n");
+	dev_dbg(&chip->dev, "Aborting WTX\n");
 	wait_and_send(chip, TPM_VL_VER);
 	wait_and_send(chip, TPM_CTRL_WTX_ABORT);
 	wait_and_send(chip, 0x00);
@@ -284,7 +284,7 @@ recv_begin:
 	}
 
 	if (buf[1] == TPM_CTRL_WTX) {
-		dev_info(&chip->dev, "WTX-package received\n");
+		dev_dbg(&chip->dev, "WTX-package received\n");
 		if (number_of_wtx < TPM_MAX_WTX_PACKAGES) {
 			tpm_wtx(chip);
 			goto recv_begin;
@@ -295,7 +295,7 @@ recv_begin:
 	}
 
 	if (buf[1] == TPM_CTRL_WTX_ABORT_ACK) {
-		dev_info(&chip->dev, "WTX-abort acknowledged\n");
+		dev_dbg(&chip->dev, "WTX-abort acknowledged\n");
 		return size;
 	}
 
@@ -414,7 +414,7 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
 			rc = -EINVAL;
 			goto err_last;
 		}
-		dev_info(&dev->dev, "Found %s with ID %s\n",
+		dev_dbg(&dev->dev, "Found %s with ID %s\n",
 			 dev->name, dev_id->id);
 		if (!((tpm_dev.data_regs >> 8) & 0xff)) {
 			rc = -EINVAL;
@@ -440,7 +440,7 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
 		tpm_dev.map_base = pnp_mem_start(dev, 0);
 		tpm_dev.map_size = pnp_mem_len(dev, 0);
 
-		dev_info(&dev->dev, "Found %s with ID %s\n",
+		dev_dbg(&dev->dev, "Found %s with ID %s\n",
 			 dev->name, dev_id->id);
 
 		/* publish my base address and request region */
@@ -529,7 +529,7 @@ static int tpm_inf_pnp_probe(struct pnp_dev *dev,
 		tpm_data_out(RESET_LP_IRQC_DISABLE, CMD);
 
 		/* Finally, we're done, print some infos */
-		dev_info(&dev->dev, "TPM found: "
+		dev_dbg(&dev->dev, "TPM found: "
 			 "config base 0x%lx, "
 			 "data base 0x%lx, "
 			 "chip version 0x%02x%02x, "

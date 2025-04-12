@@ -407,7 +407,7 @@ static int bcm_iproc_i2c_cfg_speed(struct bcm_iproc_i2c_dev *iproc_i2c)
 	int ret = of_property_read_u32(iproc_i2c->device->of_node,
 				       "clock-frequency", &bus_speed);
 	if (ret < 0) {
-		dev_info(iproc_i2c->device,
+		dev_dbg(iproc_i2c->device,
 			"unable to interpret clock-frequency DT property\n");
 		bus_speed = 100000;
 	}
@@ -430,7 +430,7 @@ static int bcm_iproc_i2c_cfg_speed(struct bcm_iproc_i2c_dev *iproc_i2c)
 	val |= (bus_speed == 400000) << TIM_CFG_MODE_400_SHIFT;
 	writel(val, iproc_i2c->base + TIM_CFG_OFFSET);
 
-	dev_info(iproc_i2c->device, "bus set to %u Hz\n", bus_speed);
+	dev_dbg(iproc_i2c->device, "bus set to %u Hz\n", bus_speed);
 
 	return 0;
 }

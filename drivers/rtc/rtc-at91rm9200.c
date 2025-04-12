@@ -451,7 +451,7 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
 	 */
 	at91_rtc_write_ier(AT91_RTC_SECEV);
 
-	dev_info(&pdev->dev, "AT91 Real Time Clock driver.\n");
+	dev_dbg(&pdev->dev, "AT91 Real Time Clock driver.\n");
 	return 0;
 
 err_clk:

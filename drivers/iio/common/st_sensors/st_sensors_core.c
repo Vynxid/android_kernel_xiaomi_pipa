@@ -292,7 +292,7 @@ static int st_sensors_set_drdy_int_pin(struct iio_dev *indio_dev,
 	if (!sdata->sensor_settings->drdy_irq.int1.addr &&
 	    !sdata->sensor_settings->drdy_irq.int2.addr) {
 		if (pdata->drdy_int_pin)
-			dev_info(&indio_dev->dev,
+			dev_dbg(&indio_dev->dev,
 				 "DRDY on pin INT%d specified, but sensor "
 				 "does not support interrupts\n",
 				 pdata->drdy_int_pin);
@@ -424,7 +424,7 @@ int st_sensors_init_sensor(struct iio_dev *indio_dev,
 		if (err < 0)
 			return err;
 	} else
-		dev_info(&indio_dev->dev, "Full-scale not possible\n");
+		dev_dbg(&indio_dev->dev, "Full-scale not possible\n");
 
 	err = st_sensors_set_odr(indio_dev, sdata->odr);
 	if (err < 0)
@@ -459,7 +459,7 @@ int st_sensors_init_sensor(struct iio_dev *indio_dev,
 			mask = sdata->sensor_settings->drdy_irq.int2.mask_od;
 		}
 
-		dev_info(&indio_dev->dev,
+		dev_dbg(&indio_dev->dev,
 			 "set interrupt line to open drain mode on pin %d\n",
 			 sdata->drdy_int_pin);
 		err = st_sensors_write_data_with_mask(indio_dev, addr,

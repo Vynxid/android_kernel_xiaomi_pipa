@@ -303,7 +303,7 @@ static int bonding_attach(struct comedi_device *dev,
 	s->insn_bits = bonding_dio_insn_bits;
 	s->insn_config = bonding_dio_insn_config;
 
-	dev_info(dev->class_dev,
+	dev_dbg(dev->class_dev,
 		 "%s: %s attached, %u channels from %u devices\n",
 		 dev->driver->driver_name, dev->board_name,
 		 devpriv->nchans, devpriv->ndevs);

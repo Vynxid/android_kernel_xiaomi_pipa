@@ -1475,7 +1475,7 @@ static void at91_adc_dma_init(struct platform_device *pdev)
 	st->dma_st.dma_chan = dma_request_slave_channel(&pdev->dev, "rx");
 
 	if (!st->dma_st.dma_chan)  {
-		dev_info(&pdev->dev, "can't get DMA channel\n");
+		dev_dbg(&pdev->dev, "can't get DMA channel\n");
 		goto dma_exit;
 	}
 
@@ -1484,7 +1484,7 @@ static void at91_adc_dma_init(struct platform_device *pdev)
 					       &st->dma_st.rx_dma_buf,
 					       GFP_KERNEL);
 	if (!st->dma_st.rx_buf) {
-		dev_info(&pdev->dev, "can't allocate coherent DMA area\n");
+		dev_dbg(&pdev->dev, "can't allocate coherent DMA area\n");
 		goto dma_chan_disable;
 	}
 
@@ -1497,11 +1497,11 @@ static void at91_adc_dma_init(struct platform_device *pdev)
 	config.dst_maxburst = 1;
 
 	if (dmaengine_slave_config(st->dma_st.dma_chan, &config)) {
-		dev_info(&pdev->dev, "can't configure DMA slave\n");
+		dev_dbg(&pdev->dev, "can't configure DMA slave\n");
 		goto dma_free_area;
 	}
 
-	dev_info(&pdev->dev, "using %s for rx DMA transfers\n",
+	dev_dbg(&pdev->dev, "using %s for rx DMA transfers\n",
 		 dma_chan_name(st->dma_st.dma_chan));
 
 	return;
@@ -1513,7 +1513,7 @@ dma_chan_disable:
 	dma_release_channel(st->dma_st.dma_chan);
 	st->dma_st.dma_chan = 0;
 dma_exit:
-	dev_info(&pdev->dev, "continuing without DMA support\n");
+	dev_dbg(&pdev->dev, "continuing without DMA support\n");
 }
 
 static void at91_adc_dma_disable(struct platform_device *pdev)
@@ -1536,7 +1536,7 @@ static void at91_adc_dma_disable(struct platform_device *pdev)
 	dma_release_channel(st->dma_st.dma_chan);
 	st->dma_st.dma_chan = 0;
 
-	dev_info(&pdev->dev, "continuing without DMA support\n");
+	dev_dbg(&pdev->dev, "continuing without DMA support\n");
 }
 
 static int at91_adc_set_watermark(struct iio_dev *indio_dev, unsigned int val)
@@ -1824,17 +1824,17 @@ static int at91_adc_probe(struct platform_device *pdev)
 	}
 
 	if (dma_coerce_mask_and_coherent(&indio_dev->dev, DMA_BIT_MASK(32)))
-		dev_info(&pdev->dev, "cannot set DMA mask to 32-bit\n");
+		dev_dbg(&pdev->dev, "cannot set DMA mask to 32-bit\n");
 
 	ret = iio_device_register(indio_dev);
 	if (ret < 0)
 		goto dma_disable;
 
 	if (st->selected_trig->hw_trig)
-		dev_info(&pdev->dev, "setting up trigger as %s\n",
+		dev_dbg(&pdev->dev, "setting up trigger as %s\n",
 			 st->selected_trig->name);
 
-	dev_info(&pdev->dev, "version: %x\n",
+	dev_dbg(&pdev->dev, "version: %x\n",
 		 readl_relaxed(st->base + AT91_SAMA5D2_VERSION));
 
 	return 0;

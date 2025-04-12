@@ -147,10 +147,10 @@ static int ds1347_probe(struct spi_device *spi)
 
 	/* display the settings */
 	regmap_read(map, DS1347_CONTROL_REG, &data);
-	dev_info(&spi->dev, "DS1347 RTC CTRL Reg = 0x%02x\n", data);
+	dev_dbg(&spi->dev, "DS1347 RTC CTRL Reg = 0x%02x\n", data);
 
 	regmap_read(map, DS1347_STATUS_REG, &data);
-	dev_info(&spi->dev, "DS1347 RTC Status Reg = 0x%02x\n", data);
+	dev_dbg(&spi->dev, "DS1347 RTC Status Reg = 0x%02x\n", data);
 
 	rtc = devm_rtc_device_register(&spi->dev, "ds1347",
 				&ds1347_rtc_ops, THIS_MODULE);

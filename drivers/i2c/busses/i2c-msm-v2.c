@@ -476,7 +476,7 @@ static void i2c_msm_qup_xfer_init_run_state(struct i2c_msm_ctrl *ctrl)
 	wmb();
 
 	if (ctrl->dbgfs.dbg_lvl == MSM_DBG) {
-		dev_info(ctrl->dev,
+		dev_dbg(ctrl->dev,
 			"QUP state after programming for next transfers\n");
 		i2c_msm_dbg_qup_reg_dump(ctrl);
 	}
@@ -555,7 +555,7 @@ static size_t i2c_msm_fifo_xfer_wr_tag(struct i2c_msm_ctrl *ctrl)
 	if (ctrl->dbgfs.dbg_lvl >= MSM_DBG) {
 		char str[I2C_MSM_REG_2_STR_BUF_SZ];
 
-		dev_info(ctrl->dev, "tag.val:0x%llx tag.len:%d %s\n",
+		dev_dbg(ctrl->dev, "tag.val:0x%llx tag.len:%d %s\n",
 			buf->out_tag.val, buf->out_tag.len,
 			i2c_msm_dbg_tag_to_str(&buf->out_tag, str,
 								sizeof(str)));
@@ -613,7 +613,7 @@ static void i2c_msm_fifo_read_xfer_buf(struct i2c_msm_ctrl *ctrl)
 							!buf->in_tag.len) {
 				char str[64];
 
-				dev_info(ctrl->dev, "%s\n",
+				dev_dbg(ctrl->dev, "%s\n",
 					i2c_msm_dbg_tag_to_str(&buf->in_tag,
 							str, sizeof(str)));
 			}
@@ -655,7 +655,7 @@ static void i2c_msm_fifo_write_xfer_buf(struct i2c_msm_ctrl *ctrl)
 				offset += scnprintf(str + offset,
 						   sizeof(str) - offset,
 						   "0x%x ", *p);
-			dev_info(ctrl->dev, "data: %s\n", str);
+			dev_dbg(ctrl->dev, "data: %s\n", str);
 		}
 
 		len = i2c_msm_fifo_wr_buf(ctrl, i2c_msm_buf_to_ptr(buf),
@@ -1514,7 +1514,7 @@ static bool i2c_msm_qup_slv_holds_bus(struct i2c_msm_ctrl *ctrl)
 				(status & QUP_BUS_ACTIVE) &&
 				!(status & QUP_BUS_MASTER);
 	if (slv_holds_bus)
-		dev_info(ctrl->dev,
+		dev_dbg(ctrl->dev,
 			"bus lines held low by a slave detected\n");
 
 	return slv_holds_bus;
@@ -1676,7 +1676,7 @@ static int i2c_msm_clk_path_postponed_register(struct i2c_msm_ctrl *ctrl)
 		if (!ctrl->rsrcs.clk_path_vote.reg_err) {
 			ctrl->rsrcs.clk_path_vote.reg_err = true;
 
-			dev_info(ctrl->dev,
+			dev_dbg(ctrl->dev,
 				"msm_bus_scale_register_client(mstr-id:%d):0 (not a problem)\n",
 				ctrl->rsrcs.clk_path_vote.mstr_id);
 		}
@@ -1725,7 +1725,7 @@ static irqreturn_t i2c_msm_qup_isr(int irq, void *devid)
 	i2c_msm_prof_evnt_add(ctrl, MSM_PROF, I2C_MSM_IRQ_BGN, irq, 0, 0);
 
 	if (!atomic_read(&ctrl->xfer.is_active)) {
-		dev_info(ctrl->dev, "irq:%d when no active transfer\n", irq);
+		dev_dbg(ctrl->dev, "irq:%d when no active transfer\n", irq);
 		return IRQ_HANDLED;
 	}
 
@@ -1925,7 +1925,7 @@ static void qup_i2c_recover_bit_bang(struct i2c_msm_ctrl *ctrl)
 	u32 status = readl_relaxed(ctrl->rsrcs.base + QUP_I2C_STATUS);
 	struct pinctrl_state *bitbang;
 
-	dev_info(ctrl->dev, "Executing bus recovery procedure (9 clk pulse)\n");
+	dev_dbg(ctrl->dev, "Executing bus recovery procedure (9 clk pulse)\n");
 	disable_irq(ctrl->rsrcs.irq);
 	if (!(status & (I2C_STATUS_BUS_ACTIVE)) ||
 		(status & (I2C_STATUS_BUS_MASTER))) {
@@ -1974,7 +1974,7 @@ static void qup_i2c_recover_bit_bang(struct i2c_msm_ctrl *ctrl)
 
 	status = readl_relaxed(ctrl->rsrcs.base + QUP_I2C_STATUS);
 	if (!(status & I2C_STATUS_BUS_ACTIVE)) {
-		dev_info(ctrl->dev,
+		dev_dbg(ctrl->dev,
 			"Bus busy cleared after %d clock cycles, status %x\n",
 			 i, status);
 		goto recovery_exit;
@@ -2253,7 +2253,7 @@ static int i2c_msm_pm_xfer_start(struct i2c_msm_ctrl *ctrl)
 	 * and systme-pm are in transition concurrently)
 	 */
 	if (ctrl->pwr_state != I2C_MSM_PM_RT_ACTIVE) {
-		dev_info(ctrl->dev, "Runtime PM-callback was not invoked\n");
+		dev_dbg(ctrl->dev, "Runtime PM-callback was not invoked\n");
 		i2c_msm_pm_resume(ctrl->dev);
 	}
 
@@ -2604,7 +2604,7 @@ i2c_msm_rsrcs_gpio_get_state(struct i2c_msm_ctrl *ctrl, const char *name)
 			= pinctrl_lookup_state(ctrl->rsrcs.pinctrl, name);
 
 	if (IS_ERR_OR_NULL(pin_state))
-		dev_info(ctrl->dev, "note pinctrl_lookup_state(%s) err:%ld\n",
+		dev_dbg(ctrl->dev, "note pinctrl_lookup_state(%s) err:%ld\n",
 						name, PTR_ERR(pin_state));
 	return pin_state;
 }

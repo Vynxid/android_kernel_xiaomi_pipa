@@ -1908,10 +1908,10 @@ static int aureon_add_controls(struct snd_ice1712 *ice)
 		id = aureon_cs8415_get(ice, CS8415_ID);
 		snd_ice1712_restore_gpio_status(ice);
 		if (id != 0x41)
-			dev_info(ice->card->dev,
+			dev_dbg(ice->card->dev,
 				 "No CS8415 chip. Skipping CS8415 controls.\n");
 		else if ((id & 0x0F) != 0x01)
-			dev_info(ice->card->dev,
+			dev_dbg(ice->card->dev,
 				 "Detected unsupported CS8415 rev. (%c)\n",
 				 (char)((id & 0x0F) + 'A' - 1));
 		else {

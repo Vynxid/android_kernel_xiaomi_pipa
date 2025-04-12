@@ -462,7 +462,7 @@ static void (*torture_shutdown_hook)(void);
 void torture_shutdown_absorb(const char *title)
 {
 	while (READ_ONCE(fullstop) == FULLSTOP_SHUTDOWN) {
-		pr_notice("torture thread %s parking due to system shutdown\n",
+		pr_debug("torture thread %s parking due to system shutdown\n",
 			  title);
 		schedule_timeout_uninterruptible(MAX_SCHEDULE_TIMEOUT);
 	}

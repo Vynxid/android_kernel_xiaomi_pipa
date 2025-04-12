@@ -30,7 +30,7 @@ static __init int ima_mok_init(void)
 {
 	struct key_restriction *restriction;
 
-	pr_notice("Allocating IMA blacklist keyring.\n");
+	pr_debug("Allocating IMA blacklist keyring.\n");
 
 	restriction = kzalloc(sizeof(struct key_restriction), GFP_KERNEL);
 	if (!restriction)

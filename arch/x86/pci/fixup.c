@@ -44,7 +44,7 @@ static void pci_fixup_i450gx(struct pci_dev *d)
 	 */
 	u8 busno;
 	pci_read_config_byte(d, 0x4a, &busno);
-	dev_info(&d->dev, "i440KX/GX host bridge; secondary bus %02x\n", busno);
+	dev_dbg(&d->dev, "i440KX/GX host bridge; secondary bus %02x\n", busno);
 	pcibios_scan_root(busno);
 	pcibios_last_bus = -1;
 }
@@ -281,7 +281,7 @@ static void pcie_rootport_aspm_quirk(struct pci_dev *pdev)
 				dev->pcie_cap + PCI_EXP_LNKCTL;
 
 		pci_bus_set_ops(pbus, &quirk_pcie_aspm_ops);
-		dev_info(&pbus->dev, "writes to ASPM control bits will be ignored\n");
+		dev_dbg(&pbus->dev, "writes to ASPM control bits will be ignored\n");
 	}
 
 }
@@ -349,7 +349,7 @@ static void pci_fixup_video(struct pci_dev *pdev)
 			res->end = res->start + 0x20000 - 1;
 			res->flags = IORESOURCE_MEM | IORESOURCE_ROM_SHADOW |
 				     IORESOURCE_PCI_FIXED;
-			dev_info(&pdev->dev, "Video device with shadowed ROM at %pR\n",
+			dev_dbg(&pdev->dev, "Video device with shadowed ROM at %pR\n",
 				 res);
 		}
 	}
@@ -392,10 +392,10 @@ static void pci_fixup_msi_k8t_onboard_sound(struct pci_dev *dev)
 		/* verify the change for status output */
 		pci_read_config_byte(dev, 0x50, &val);
 		if (val & 0x40)
-			dev_info(&dev->dev, "Detected MSI K8T Neo2-FIR; "
+			dev_dbg(&dev->dev, "Detected MSI K8T Neo2-FIR; "
 					"can't enable onboard soundcard!\n");
 		else
-			dev_info(&dev->dev, "Detected MSI K8T Neo2-FIR; "
+			dev_dbg(&dev->dev, "Detected MSI K8T Neo2-FIR; "
 					"enabled onboard soundcard\n");
 	}
 }
@@ -531,7 +531,7 @@ static void sb600_hpet_quirk(struct pci_dev *dev)
 
 	if (r->flags & IORESOURCE_MEM && r->start == hpet_address) {
 		r->flags |= IORESOURCE_PCI_FIXED;
-		dev_info(&dev->dev, "reg 0x14 contains HPET; making it immovable\n");
+		dev_dbg(&dev->dev, "reg 0x14 contains HPET; making it immovable\n");
 	}
 }
 DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_ATI, 0x4385, sb600_hpet_quirk);
@@ -548,7 +548,7 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_ATI, 0x4385, sb600_hpet_quirk);
 static void twinhead_reserve_killing_zone(struct pci_dev *dev)
 {
         if (dev->subsystem_vendor == 0x14FF && dev->subsystem_device == 0xA003) {
-                pr_info("Reserving memory on Twinhead H12Y\n");
+                pr_debug("Reserving memory on Twinhead H12Y\n");
                 request_mem_region(0xFFB00000, 0x100000, "twinhead");
         }
 }
@@ -587,7 +587,7 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_INTEL, 0xa26d, pci_invalid_bar);
  */
 static void pci_fixup_amd_ehci_pme(struct pci_dev *dev)
 {
-	dev_info(&dev->dev, "PME# does not work under D3, disabling it\n");
+	dev_dbg(&dev->dev, "PME# does not work under D3, disabling it\n");
 	dev->pme_support &= ~((PCI_PM_CAP_PME_D3 | PCI_PM_CAP_PME_D3cold)
 		>> PCI_PM_CAP_PME_SHIFT);
 }
@@ -599,7 +599,7 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x7808, pci_fixup_amd_ehci_pme);
  */
 static void pci_fixup_amd_fch_xhci_pme(struct pci_dev *dev)
 {
-	dev_info(&dev->dev, "PME# does not work under D0, disabling it\n");
+	dev_dbg(&dev->dev, "PME# does not work under D0, disabling it\n");
 	dev->pme_support &= ~(PCI_PM_CAP_PME_D0 >> PCI_PM_CAP_PME_SHIFT);
 }
 DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x7914, pci_fixup_amd_fch_xhci_pme);
@@ -630,9 +630,9 @@ static void quirk_apple_mbp_poweroff(struct pci_dev *pdev)
 	res = request_mem_region(0x7fa00000, 0x200000,
 				 "MacBook Pro poweroff workaround");
 	if (res)
-		dev_info(dev, "claimed %s %pR\n", res->name, res);
+		dev_dbg(dev, "claimed %s %pR\n", res->name, res);
 	else
-		dev_info(dev, "can't work around MacBook Pro poweroff issue\n");
+		dev_dbg(dev, "can't work around MacBook Pro poweroff issue\n");
 }
 DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x8c10, quirk_apple_mbp_poweroff);
 
@@ -752,7 +752,7 @@ static void pci_amd_enable_64bit_bar(struct pci_dev *dev)
 		/* We are resuming from suspend; just reenable the window */
 		res = conflict;
 	} else {
-		dev_info(&dev->dev, "adding root bus resource %pR (tainting kernel)\n",
+		dev_dbg(&dev->dev, "adding root bus resource %pR (tainting kernel)\n",
 			 res);
 		add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
 		pci_bus_add_resource(dev->bus, res, 0);

@@ -106,7 +106,7 @@ static int runtime_show_all(struct seq_file *m, void *v)
 		if (bit == last_uid && !print_user_zero) {
 			user = user_zero;
 			print_user_zero = 1;
-			pr_info("-----------non user info -----------------\n");
+			pr_debug("-----------non user info -----------------\n");
 		}
 
 		if (!user)
@@ -456,7 +456,7 @@ static int fb_show_all(struct seq_file *m, void *v)
 		if (bit == last_uid && !print_user_zero) {
 			user = user_zero;
 			print_user_zero = 1;
-			pr_info("-----------non user info -----------------\n");
+			pr_debug("-----------non user info -----------------\n");
 		}
 
 		if (!user)
@@ -735,13 +735,13 @@ static ssize_t fb_status_set(struct file *filp, const char __user *buf,
 	if (sscanf(buffer, "%d:%d", &fb_uid, &fb_condition) != 2)
 		return count;
 
-	pr_info("uid is %d, condition is %d\n", fb_uid, fb_condition);
+	pr_debug("uid is %d, condition is %d\n", fb_uid, fb_condition);
 
 	uid.val = fb_uid;
 
 	user = find_user(uid);
 	if (user == NULL) {
-		pr_info("uid is invalid\n");
+		pr_debug("uid is invalid\n");
 		return 0;
 	}
 	user->pkg.edt = fb_condition;

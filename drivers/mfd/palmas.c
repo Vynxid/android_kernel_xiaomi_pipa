@@ -387,7 +387,7 @@ static int palmas_set_pdata_irq_flag(struct i2c_client *i2c,
 	}
 
 	pdata->irq_flags = irqd_get_trigger_type(irq_data);
-	dev_info(&i2c->dev, "Irq flag is 0x%08x\n", pdata->irq_flags);
+	dev_dbg(&i2c->dev, "Irq flag is 0x%08x\n", pdata->irq_flags);
 	return 0;
 }
 
@@ -666,7 +666,7 @@ no_irq:
 	if (!(reg & PALMAS_PRIMARY_SECONDARY_PAD2_GPIO_7_MASK))
 		palmas->gpio_muxed |= PALMAS_GPIO_7_MUXED;
 
-	dev_info(palmas->dev, "Muxing GPIO %x, PWM %x, LED %x\n",
+	dev_dbg(palmas->dev, "Muxing GPIO %x, PWM %x, LED %x\n",
 			palmas->gpio_muxed, palmas->pwm_muxed,
 			palmas->led_muxed);
 

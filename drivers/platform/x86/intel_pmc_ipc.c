@@ -807,7 +807,7 @@ static int ipc_plat_get_res(struct platform_device *pdev)
 	size = resource_size(res);
 	ipcdev.acpi_io_base = res->start;
 	ipcdev.acpi_io_size = size;
-	dev_info(&pdev->dev, "io res: %pR\n", res);
+	dev_dbg(&pdev->dev, "io res: %pR\n", res);
 
 	punit_res = punit_res_array;
 	/* This is index 0 to cover BIOS data register */
@@ -818,7 +818,7 @@ static int ipc_plat_get_res(struct platform_device *pdev)
 		return -ENXIO;
 	}
 	*punit_res = *res;
-	dev_info(&pdev->dev, "punit BIOS data res: %pR\n", res);
+	dev_dbg(&pdev->dev, "punit BIOS data res: %pR\n", res);
 
 	/* This is index 1 to cover BIOS interface register */
 	res = platform_get_resource(pdev, IORESOURCE_MEM,
@@ -828,7 +828,7 @@ static int ipc_plat_get_res(struct platform_device *pdev)
 		return -ENXIO;
 	}
 	*++punit_res = *res;
-	dev_info(&pdev->dev, "punit BIOS interface res: %pR\n", res);
+	dev_dbg(&pdev->dev, "punit BIOS interface res: %pR\n", res);
 
 	/* This is index 2 to cover ISP data register, optional */
 	res = platform_get_resource(pdev, IORESOURCE_MEM,
@@ -836,7 +836,7 @@ static int ipc_plat_get_res(struct platform_device *pdev)
 	++punit_res;
 	if (res) {
 		*punit_res = *res;
-		dev_info(&pdev->dev, "punit ISP data res: %pR\n", res);
+		dev_dbg(&pdev->dev, "punit ISP data res: %pR\n", res);
 	}
 
 	/* This is index 3 to cover ISP interface register, optional */
@@ -845,7 +845,7 @@ static int ipc_plat_get_res(struct platform_device *pdev)
 	++punit_res;
 	if (res) {
 		*punit_res = *res;
-		dev_info(&pdev->dev, "punit ISP interface res: %pR\n", res);
+		dev_dbg(&pdev->dev, "punit ISP interface res: %pR\n", res);
 	}
 
 	/* This is index 4 to cover GTD data register, optional */
@@ -854,7 +854,7 @@ static int ipc_plat_get_res(struct platform_device *pdev)
 	++punit_res;
 	if (res) {
 		*punit_res = *res;
-		dev_info(&pdev->dev, "punit GTD data res: %pR\n", res);
+		dev_dbg(&pdev->dev, "punit GTD data res: %pR\n", res);
 	}
 
 	/* This is index 5 to cover GTD interface register, optional */
@@ -863,7 +863,7 @@ static int ipc_plat_get_res(struct platform_device *pdev)
 	++punit_res;
 	if (res) {
 		*punit_res = *res;
-		dev_info(&pdev->dev, "punit GTD interface res: %pR\n", res);
+		dev_dbg(&pdev->dev, "punit GTD interface res: %pR\n", res);
 	}
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM,
@@ -882,7 +882,7 @@ static int ipc_plat_get_res(struct platform_device *pdev)
 	ipcdev.ipc_base = addr;
 
 	ipcdev.gcr_mem_base = addr + PLAT_RESOURCE_GCR_OFFSET;
-	dev_info(&pdev->dev, "ipc res: %pR\n", res);
+	dev_dbg(&pdev->dev, "ipc res: %pR\n", res);
 
 	ipcdev.telem_res_inval = 0;
 	res = platform_get_resource(pdev, IORESOURCE_MEM,
@@ -897,7 +897,7 @@ static int ipc_plat_get_res(struct platform_device *pdev)
 		ipcdev.telem_pmc_ssram_base = res->start +
 						TELEM_PMC_SSRAM_OFFSET;
 		ipcdev.telem_pmc_ssram_size = TELEM_SSRAM_SIZE;
-		dev_info(&pdev->dev, "telemetry ssram res: %pR\n", res);
+		dev_dbg(&pdev->dev, "telemetry ssram res: %pR\n", res);
 	}
 
 	return 0;

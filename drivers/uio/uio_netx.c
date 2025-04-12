@@ -29,11 +29,11 @@
 #define DPM_HOST_INT_MASK	0xe600ffff
 #define DPM_HOST_INT_GLOBAL_EN	0x80000000
 
-static irqreturn_t netx_handler(int irq, struct uio_info *dev_info)
+static irqreturn_t netx_handler(int irq, struct uio_info *dev_dbg)
 {
-	void __iomem *int_enable_reg = dev_info->mem[0].internal_addr
+	void __iomem *int_enable_reg = dev_dbg->mem[0].internal_addr
 					+ DPM_HOST_INT_EN0;
-	void __iomem *int_status_reg = dev_info->mem[0].internal_addr
+	void __iomem *int_status_reg = dev_dbg->mem[0].internal_addr
 					+ DPM_HOST_INT_STAT0;
 
 	/* Is one of our interrupts enabled and active ? */
@@ -101,7 +101,7 @@ static int netx_pci_probe(struct pci_dev *dev,
 		goto out_unmap;
 
 	pci_set_drvdata(dev, info);
-	dev_info(&dev->dev, "Found %s card, registered UIO device.\n",
+	dev_dbg(&dev->dev, "Found %s card, registered UIO device.\n",
 				info->name);
 
 	return 0;

@@ -409,7 +409,7 @@ static irqreturn_t mpc52xx_fec_rx_interrupt(int irq, void *dev_id)
 		skb = netdev_alloc_skb(dev, FEC_RX_BUFFER_SIZE);
 		if (!skb) {
 			/* Can't get a new one : reuse the same & drop pkt */
-			dev_notice(&dev->dev, "Low memory - dropped packet.\n");
+			dev_dbg(&dev->dev, "Low memory - dropped packet.\n");
 			mpc52xx_fec_rx_submit(dev, rskb);
 			dev->stats.rx_dropped++;
 			continue;
@@ -948,7 +948,7 @@ static int mpc52xx_fec_probe(struct platform_device *op)
 	/* the 7-wire property means don't use MII mode */
 	if (of_find_property(np, "fsl,7-wire-mode", NULL)) {
 		priv->seven_wire_mode = 1;
-		dev_info(&ndev->dev, "using 7-wire PHY mode\n");
+		dev_dbg(&ndev->dev, "using 7-wire PHY mode\n");
 	}
 
 	/* Hardware init */

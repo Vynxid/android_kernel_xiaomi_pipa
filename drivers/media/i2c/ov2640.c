@@ -1075,7 +1075,7 @@ static int ov2640_video_probe(struct i2c_client *client)
 		goto done;
 	}
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "%s Product ID %0x:%0x Manufacturer ID %x:%x\n",
 		 devname, pid, ver, midh, midl);
 
@@ -1212,7 +1212,7 @@ static int ov2640_probe(struct i2c_client *client,
 	if (ret < 0)
 		goto err_videoprobe;
 
-	dev_info(&adapter->dev, "OV2640 Probed\n");
+	dev_dbg(&adapter->dev, "OV2640 Probed\n");
 
 	return 0;
 

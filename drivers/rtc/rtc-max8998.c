@@ -288,7 +288,7 @@ static int max8998_rtc_probe(struct platform_device *pdev)
 			info->irq, ret);
 
 no_irq:
-	dev_info(&pdev->dev, "RTC CHIP NAME: %s\n", pdev->id_entry->name);
+	dev_dbg(&pdev->dev, "RTC CHIP NAME: %s\n", pdev->id_entry->name);
 	if (pdata && pdata->rtc_delay) {
 		info->lp3974_bug_workaround = true;
 		dev_warn(&pdev->dev, "LP3974 with RTC REGERR option."

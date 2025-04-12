@@ -538,7 +538,7 @@ static int omap2_onenand_probe(struct platform_device *pdev)
 	c->mtd.dev.parent = dev;
 	mtd_set_of_node(&c->mtd, dev->of_node);
 
-	dev_info(dev, "initializing on CS%d (0x%08lx), va %p, %s mode\n",
+	dev_dbg(dev, "initializing on CS%d (0x%08lx), va %p, %s mode\n",
 		 c->gpmc_cs, c->phys_base, c->onenand.base,
 		 c->dma_chan ? "DMA" : "PIO");
 
@@ -576,7 +576,7 @@ static int omap2_onenand_probe(struct platform_device *pdev)
 			goto err_release_onenand;
 
 		if (info.sync_read || info.sync_write)
-			dev_info(dev, "optimized timings for %d MHz\n", freq);
+			dev_dbg(dev, "optimized timings for %d MHz\n", freq);
 	}
 
 	r = mtd_device_register(&c->mtd, NULL, 0);

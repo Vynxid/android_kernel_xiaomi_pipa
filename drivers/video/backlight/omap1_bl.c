@@ -166,7 +166,7 @@ static int omapbl_probe(struct platform_device *pdev)
 	dev->props.brightness = pdata->default_intensity;
 	omapbl_update_status(dev);
 
-	dev_info(&pdev->dev, "OMAP LCD backlight initialised\n");
+	dev_dbg(&pdev->dev, "OMAP LCD backlight initialised\n");
 
 	return 0;
 }

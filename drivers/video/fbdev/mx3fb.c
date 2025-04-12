@@ -1186,7 +1186,7 @@ static int mx3fb_pan_display(struct fb_var_screeninfo *var,
 	ret = wait_for_completion_timeout(&mx3_fbi->flip_cmpl, HZ / 10);
 	if (ret <= 0) {
 		mutex_unlock(&mx3_fbi->mutex);
-		dev_info(fbi->device, "Panning failed due to %s\n", ret < 0 ?
+		dev_dbg(fbi->device, "Panning failed due to %s\n", ret < 0 ?
 			 "user interrupt" : "timeout");
 		disable_irq(mx3_fbi->idmac_channel->eof_irq);
 		return ret ? : -ETIMEDOUT;
@@ -1506,7 +1506,7 @@ static int init_fb_chan(struct mx3fb_data *mx3fb, struct idmac_channel *ichan)
 
 	__blank(FB_BLANK_UNBLANK, fbi);
 
-	dev_info(dev, "registered, using mode %s\n", fb_mode);
+	dev_dbg(dev, "registered, using mode %s\n", fb_mode);
 
 	ret = register_framebuffer(fbi);
 	if (ret < 0)

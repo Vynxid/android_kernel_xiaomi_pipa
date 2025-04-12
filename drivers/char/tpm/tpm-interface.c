@@ -705,7 +705,7 @@ int tpm_startup(struct tpm_chip *chip)
 	struct tpm_buf buf;
 	int rc;
 
-	dev_info(&chip->dev, "starting up the TPM manually\n");
+	dev_dbg(&chip->dev, "starting up the TPM manually\n");
 
 	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
 		rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_STARTUP);
@@ -860,7 +860,7 @@ int tpm_get_timeouts(struct tpm_chip *chip)
 
 	/* Report adjusted timeouts */
 	if (chip->timeout_adjusted) {
-		dev_info(&chip->dev,
+		dev_dbg(&chip->dev,
 			 HW_ERR "Adjusting reported timeouts: A %lu->%luus B %lu->%luus C %lu->%luus D %lu->%luus\n",
 			 timeout_chip[0], timeout_eff[0],
 			 timeout_chip[1], timeout_eff[1],
@@ -897,7 +897,7 @@ int tpm_get_timeouts(struct tpm_chip *chip)
 		chip->duration[TPM_MEDIUM] *= 1000;
 		chip->duration[TPM_LONG] *= 1000;
 		chip->duration_adjusted = true;
-		dev_info(&chip->dev, "Adjusting TPM timeout parameters.");
+		dev_dbg(&chip->dev, "Adjusting TPM timeout parameters.");
 	}
 
 	chip->flags |= TPM_CHIP_FLAG_HAVE_TIMEOUTS;
@@ -1103,7 +1103,7 @@ int tpm_do_selftest(struct tpm_chip *chip)
 	rc = tpm_continue_selftest(chip);
 	if (rc == TPM_ERR_INVALID_POSTINIT) {
 		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
-		dev_info(&chip->dev, "TPM not ready (%d)\n", rc);
+		dev_dbg(&chip->dev, "TPM not ready (%d)\n", rc);
 	}
 	/* This may fail if there was no TPM driver during a suspend/resume
 	 * cycle; some may return 10 (BAD_ORDINAL), others 28 (FAILEDSELFTEST)
@@ -1119,7 +1119,7 @@ int tpm_do_selftest(struct tpm_chip *chip)
 		 * around 300ms while the self test is ongoing, keep trying
 		 * until the self test duration expires. */
 		if (rc == -ETIME) {
-			dev_info(
+			dev_dbg(
 			    &chip->dev, HW_ERR
 			    "TPM command timed out during continue self test");
 			tpm_msleep(delay_msec);
@@ -1127,7 +1127,7 @@ int tpm_do_selftest(struct tpm_chip *chip)
 		}
 
 		if (rc == TPM_ERR_DISABLED || rc == TPM_ERR_DEACTIVATED) {
-			dev_info(&chip->dev,
+			dev_dbg(&chip->dev,
 				 "TPM is disabled/deactivated (0x%X)\n", rc);
 			/* TPM is disabled and/or deactivated; driver can
 			 * proceed and TPM does handle commands for

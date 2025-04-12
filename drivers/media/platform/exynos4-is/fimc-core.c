@@ -1130,7 +1130,7 @@ static int fimc_remove(struct platform_device *pdev)
 	clk_disable(fimc->clock[CLK_BUS]);
 	fimc_clk_put(fimc);
 
-	dev_info(&pdev->dev, "driver unloaded\n");
+	dev_dbg(&pdev->dev, "driver unloaded\n");
 	return 0;
 }
 

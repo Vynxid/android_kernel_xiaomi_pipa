@@ -586,7 +586,7 @@ static struct dma_async_tx_descriptor *pd_prep_slave_sg(struct dma_chan *chan,
 	int i;
 
 	if (unlikely(!sg_len)) {
-		dev_info(chan2dev(chan), "prep_slave_sg: length is zero!\n");
+		dev_dbg(chan2dev(chan), "prep_slave_sg: length is zero!\n");
 		return NULL;
 	}
 

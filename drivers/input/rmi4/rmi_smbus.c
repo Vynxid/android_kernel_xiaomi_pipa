@@ -336,7 +336,7 @@ static int rmi_smb_probe(struct i2c_client *client,
 
 	i2c_set_clientdata(client, rmi_smb);
 
-	dev_info(&client->dev, "registering SMbus-connected sensor\n");
+	dev_dbg(&client->dev, "registering SMbus-connected sensor\n");
 
 	error = rmi_register_transport_device(&rmi_smb->xport);
 	if (error) {

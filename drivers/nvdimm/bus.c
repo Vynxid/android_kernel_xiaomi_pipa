@@ -610,7 +610,7 @@ int nvdimm_revalidate_disk(struct gendisk *disk)
 	if (disk_ro || nd_region->ro == disk_ro)
 		return 0;
 
-	dev_info(dev, "%s read-only, marking %s read-only\n",
+	dev_dbg(dev, "%s read-only, marking %s read-only\n",
 			dev_name(&nd_region->dev), disk->disk_name);
 	set_disk_ro(disk, 1);
 

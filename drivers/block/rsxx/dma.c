@@ -387,7 +387,7 @@ static void dma_engine_stalled(struct timer_list *t)
 		cnt += rsxx_dma_cancel(ctrl);
 
 		if (cnt)
-			dev_info(CARD_TO_DEV(ctrl->card),
+			dev_dbg(CARD_TO_DEV(ctrl->card),
 				"Freed %d queued DMAs on channel %d\n",
 				cnt, ctrl->id);
 	}
@@ -907,7 +907,7 @@ int rsxx_dma_setup(struct rsxx_cardinfo *card)
 	int st;
 	int i;
 
-	dev_info(CARD_TO_DEV(card),
+	dev_dbg(CARD_TO_DEV(card),
 		"Initializing %d DMA targets\n",
 		card->n_targets);
 

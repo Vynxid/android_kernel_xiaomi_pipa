@@ -645,7 +645,7 @@ static int vme_user_probe(struct vme_dev *vdev)
 						MKDEV(VME_MAJOR, i), NULL,
 						name, num);
 		if (IS_ERR(image[i].device)) {
-			dev_info(&vdev->dev, "Error creating sysfs device\n");
+			dev_dbg(&vdev->dev, "Error creating sysfs device\n");
 			err = PTR_ERR(image[i].device);
 			goto err_sysfs;
 		}
@@ -732,7 +732,7 @@ static int __init vme_user_init(void)
 {
 	int retval = 0;
 
-	pr_info("VME User Space Access Driver\n");
+	pr_debug("VME User Space Access Driver\n");
 
 	if (bus_num == 0) {
 		pr_err("No cards, skipping registration\n");

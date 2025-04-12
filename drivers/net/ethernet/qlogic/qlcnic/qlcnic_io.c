@@ -1048,11 +1048,11 @@ static void qlcnic_handle_linkevent(struct qlcnic_adapter *adapter,
 
 	module = (msg->body[2] >> 8) & 0xff;
 	if (module == LINKEVENT_MODULE_TWINAX_UNSUPPORTED_CABLE)
-		dev_info(&netdev->dev,
+		dev_dbg(&netdev->dev,
 			 "unsupported cable: OUI 0x%x, length %d\n",
 			 cable_OUI, cable_len);
 	else if (module == LINKEVENT_MODULE_TWINAX_UNSUPPORTED_CABLELEN)
-		dev_info(&netdev->dev, "unsupported cable length %d\n",
+		dev_dbg(&netdev->dev, "unsupported cable length %d\n",
 			 cable_len);
 
 	if (!link_status && (lb_status == QLCNIC_ILB_MODE ||
@@ -1110,15 +1110,15 @@ static void qlcnic_handle_fw_message(int desc_cnt, int index,
 			adapter->ahw->loopback_state |= QLCNIC_LB_RESPONSE;
 			break;
 		case 1:
-			dev_info(dev, "loopback already in progress\n");
+			dev_dbg(dev, "loopback already in progress\n");
 			adapter->ahw->diag_cnt = -EINPROGRESS;
 			break;
 		case 2:
-			dev_info(dev, "loopback cable is not connected\n");
+			dev_dbg(dev, "loopback cable is not connected\n");
 			adapter->ahw->diag_cnt = -ENODEV;
 			break;
 		default:
-			dev_info(dev,
+			dev_dbg(dev,
 				 "loopback configure request failed, err %x\n",
 				 ret);
 			adapter->ahw->diag_cnt = -EIO;
@@ -1907,7 +1907,7 @@ static int qlcnic_83xx_process_rcv_ring(struct qlcnic_host_sds_ring *sds_ring,
 							sts_data);
 			break;
 		default:
-			dev_info(&adapter->pdev->dev,
+			dev_dbg(&adapter->pdev->dev,
 				 "Unknown opcode: 0x%x\n", opcode);
 			goto skip;
 		}

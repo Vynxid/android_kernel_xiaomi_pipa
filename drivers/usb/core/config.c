@@ -300,7 +300,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
 	i = d->bEndpointAddress &
 			(USB_ENDPOINT_DIR_MASK | USB_ENDPOINT_NUMBER_MASK);
 	if (i != d->bEndpointAddress) {
-		dev_notice(ddev, "config %d interface %d altsetting %d has an endpoint descriptor with address 0x%X, changing to 0x%X\n",
+		dev_dbg(ddev, "config %d interface %d altsetting %d has an endpoint descriptor with address 0x%X, changing to 0x%X\n",
 		    cfgno, inum, asnum, d->bEndpointAddress, i);
 		endpoint->desc.bEndpointAddress = i;
 	}

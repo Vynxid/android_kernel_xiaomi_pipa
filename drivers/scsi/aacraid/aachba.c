@@ -2242,12 +2242,12 @@ int aac_get_adapter_info(struct aac_dev* dev)
 	if (dev->dac_support) {
 		if (!pci_set_dma_mask(dev->pdev, DMA_BIT_MASK(64))) {
 			if (!dev->in_reset)
-				dev_info(&dev->pdev->dev, "64 Bit DAC enabled\n");
+				dev_dbg(&dev->pdev->dev, "64 Bit DAC enabled\n");
 		} else if (!pci_set_dma_mask(dev->pdev, DMA_BIT_MASK(32))) {
-			dev_info(&dev->pdev->dev, "DMA mask set failed, 64 Bit DAC disabled\n");
+			dev_dbg(&dev->pdev->dev, "DMA mask set failed, 64 Bit DAC disabled\n");
 			dev->dac_support = 0;
 		} else {
-			dev_info(&dev->pdev->dev, "No suitable DMA available\n");
+			dev_dbg(&dev->pdev->dev, "No suitable DMA available\n");
 			rcode = -ENOMEM;
 		}
 	}
@@ -3630,7 +3630,7 @@ static void aac_srb_callback(void *context, struct fib * fibptr)
 	case SRB_STATUS_DOMAIN_VALIDATION_FAIL:
 	default:
 #ifdef AAC_DETAILED_STATUS_INFO
-		pr_info("aacraid: SRB ERROR(%u) %s scsi cmd 0x%x -scsi status 0x%x\n",
+		pr_debug("aacraid: SRB ERROR(%u) %s scsi cmd 0x%x -scsi status 0x%x\n",
 			le32_to_cpu(srbreply->srb_status) & 0x3F,
 			aac_get_status_string(
 				le32_to_cpu(srbreply->srb_status) & 0x3F),

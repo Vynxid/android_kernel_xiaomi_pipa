@@ -789,7 +789,7 @@ static int vsoc_probe_device(struct pci_dev *pdev,
 	vsoc_dev.shm_phys_start = pci_resource_start(pdev, SHARED_MEMORY_BAR);
 	vsoc_dev.shm_size = pci_resource_len(pdev, SHARED_MEMORY_BAR);
 
-	dev_info(&pdev->dev, "shared memory @ DMA %pa size=0x%zx\n",
+	dev_dbg(&pdev->dev, "shared memory @ DMA %pa size=0x%zx\n",
 		 &vsoc_dev.shm_phys_start, vsoc_dev.shm_size);
 	vsoc_dev.kernel_mapped_shm = pci_iomap_wc(pdev, SHARED_MEMORY_BAR, 0);
 	if (!vsoc_dev.kernel_mapped_shm) {
@@ -800,12 +800,12 @@ static int vsoc_probe_device(struct pci_dev *pdev,
 
 	vsoc_dev.layout = (struct vsoc_shm_layout_descriptor __force *)
 				vsoc_dev.kernel_mapped_shm;
-	dev_info(&pdev->dev, "major_version: %d\n",
+	dev_dbg(&pdev->dev, "major_version: %d\n",
 		 vsoc_dev.layout->major_version);
-	dev_info(&pdev->dev, "minor_version: %d\n",
+	dev_dbg(&pdev->dev, "minor_version: %d\n",
 		 vsoc_dev.layout->minor_version);
-	dev_info(&pdev->dev, "size: 0x%x\n", vsoc_dev.layout->size);
-	dev_info(&pdev->dev, "regions: %d\n", vsoc_dev.layout->region_count);
+	dev_dbg(&pdev->dev, "size: 0x%x\n", vsoc_dev.layout->size);
+	dev_dbg(&pdev->dev, "regions: %d\n", vsoc_dev.layout->region_count);
 	if (vsoc_dev.layout->major_version !=
 	    CURRENT_VSOC_LAYOUT_MAJOR_VERSION) {
 		dev_err(&vsoc_dev.dev->dev,
@@ -865,7 +865,7 @@ static int vsoc_probe_device(struct pci_dev *pdev,
 	result = pci_enable_msix_exact(vsoc_dev.dev, vsoc_dev.msix_entries,
 				       vsoc_dev.layout->region_count);
 	if (result) {
-		dev_info(&pdev->dev, "pci_enable_msix failed: %d\n", result);
+		dev_dbg(&pdev->dev, "pci_enable_msix failed: %d\n", result);
 		vsoc_remove_device(pdev);
 		return -ENOSPC;
 	}
@@ -911,7 +911,7 @@ static int vsoc_probe_device(struct pci_dev *pdev,
 		vsoc_dev.regions_data[i].name[name_sz] = '\0';
 		memcpy(vsoc_dev.regions_data[i].name, region->device_name,
 		       name_sz);
-		dev_info(&pdev->dev, "region %d name=%s\n",
+		dev_dbg(&pdev->dev, "region %d name=%s\n",
 			 i, vsoc_dev.regions_data[i].name);
 		init_waitqueue_head
 			(&vsoc_dev.regions_data[i].interrupt_wait_queue);
@@ -927,7 +927,7 @@ static int vsoc_probe_device(struct pci_dev *pdev,
 				     vsoc_dev.regions_data[i].name,
 				     vsoc_dev.regions_data + i);
 		if (result) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "request_irq failed irq=%d vector=%d\n",
 				i, vsoc_dev.msix_entries[i].vector);
 			vsoc_remove_device(pdev);
@@ -967,7 +967,7 @@ static void vsoc_remove_device(struct pci_dev *pdev)
 	 */
 	if (!pdev || !vsoc_dev.dev)
 		return;
-	dev_info(&pdev->dev, "remove_device\n");
+	dev_dbg(&pdev->dev, "remove_device\n");
 	if (vsoc_dev.regions_data) {
 		for (i = 0; i < vsoc_dev.layout->region_count; ++i) {
 			if (vsoc_dev.regions_data[i].device_created) {

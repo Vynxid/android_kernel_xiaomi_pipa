@@ -91,7 +91,7 @@ static int mux_gpio_probe(struct platform_device *pdev)
 	if (ret < 0)
 		return ret;
 
-	dev_info(dev, "%u-way mux-controller registered\n",
+	dev_dbg(dev, "%u-way mux-controller registered\n",
 		 mux_chip->mux->states);
 
 	return 0;

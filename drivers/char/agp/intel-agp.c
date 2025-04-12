@@ -761,7 +761,7 @@ static int agp_intel_probe(struct pci_dev *pdev,
 	bridge->dev = pdev;
 	bridge->dev_private_data = NULL;
 
-	dev_info(&pdev->dev, "Intel %s Chipset\n", intel_agp_chipsets[i].name);
+	dev_dbg(&pdev->dev, "Intel %s Chipset\n", intel_agp_chipsets[i].name);
 
 	/*
 	* The following fixes the case where the BIOS has "forgotten" to

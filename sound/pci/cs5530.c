@@ -160,7 +160,7 @@ static int snd_cs5530_create(struct snd_card *card,
 	sb_base = 0x220 + 0x20 * (map & 3);
 
 	if (map & (1<<2))
-		dev_info(card->dev, "XpressAudio at 0x%lx\n", sb_base);
+		dev_dbg(card->dev, "XpressAudio at 0x%lx\n", sb_base);
 	else {
 		dev_err(card->dev, "Could not find XpressAudio!\n");
 		snd_cs5530_free(chip);
@@ -168,9 +168,9 @@ static int snd_cs5530_create(struct snd_card *card,
 	}
 
 	if (map & (1<<5))
-		dev_info(card->dev, "MPU at 0x300\n");
+		dev_dbg(card->dev, "MPU at 0x300\n");
 	else if (map & (1<<6))
-		dev_info(card->dev, "MPU at 0x330\n");
+		dev_dbg(card->dev, "MPU at 0x330\n");
 
 	irq = snd_cs5530_mixer_read(sb_base, 0x80) & 0x0F;
 	dma8 = snd_cs5530_mixer_read(sb_base, 0x81);
@@ -213,7 +213,7 @@ static int snd_cs5530_create(struct snd_card *card,
 		return -ENODEV;
 	}
 
-	dev_info(card->dev, "IRQ: %d DMA8: %d DMA16: %d\n", irq, dma8, dma16);
+	dev_dbg(card->dev, "IRQ: %d DMA8: %d DMA16: %d\n", irq, dma8, dma16);
 
 	err = snd_sbdsp_create(card, sb_base, irq, snd_sb16dsp_interrupt, dma8,
 						dma16, SB_HW_CS5530, &chip->sb);

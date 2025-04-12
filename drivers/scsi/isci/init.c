@@ -370,7 +370,7 @@ static int isci_setup_interrupts(struct pci_dev *pdev)
 		if (!err)
 			continue;
 
-		dev_info(&pdev->dev, "msix setup failed falling back to intx\n");
+		dev_dbg(&pdev->dev, "msix setup failed falling back to intx\n");
 		while (i--) {
 			id = i / SCI_NUM_MSI_X_INT;
 			ihost = pci_info->hosts[id];
@@ -569,7 +569,7 @@ static struct isci_host *isci_host_alloc(struct pci_dev *pdev, int id)
 	if (!shost)
 		return NULL;
 
-	dev_info(&pdev->dev, "%sSCU controller %d: phy 3-0 cables: "
+	dev_dbg(&pdev->dev, "%sSCU controller %d: phy 3-0 cables: "
 		 "{%s, %s, %s, %s}\n",
 		 (is_cable_select_overridden() ? "* " : ""), ihost->id,
 		 lookup_cable_names(decode_cable_selection(ihost, 3)),
@@ -623,7 +623,7 @@ static int isci_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	struct isci_orom *orom = NULL;
 	char *source = "(platform)";
 
-	dev_info(&pdev->dev, "driver configured for rev: %d silicon\n",
+	dev_dbg(&pdev->dev, "driver configured for rev: %d silicon\n",
 		 pdev->revision);
 
 	pci_info = devm_kzalloc(&pdev->dev, sizeof(*pci_info), GFP_KERNEL);
@@ -664,7 +664,7 @@ static int isci_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	}
 
 	if (orom)
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "OEM SAS parameters (version: %u.%u) loaded %s\n",
 			 (orom->hdr.version & 0xf0) >> 4,
 			 (orom->hdr.version & 0xf), source);
@@ -777,7 +777,7 @@ static __init int isci_init(void)
 {
 	int err;
 
-	pr_info("%s: Intel(R) C600 SAS Controller Driver - version %s\n",
+	pr_debug("%s: Intel(R) C600 SAS Controller Driver - version %s\n",
 		DRV_NAME, DRV_VERSION);
 
 	isci_transport_template = sas_domain_attach_transport(&isci_transport_ops);

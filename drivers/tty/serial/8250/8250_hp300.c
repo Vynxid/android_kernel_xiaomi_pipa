@@ -111,7 +111,7 @@ int __init hp300_setup_serial_console(void)
 	/* Check for APCI console */
 	if (scode == 256) {
 #ifdef CONFIG_HPAPCI
-		pr_info("Serial console is HP APCI 1\n");
+		pr_debug("Serial console is HP APCI 1\n");
 
 		port.uartclk = HPAPCI_BAUD_BASE * 16;
 		port.mapbase = (FRODO_BASE + FRODO_APCI_OFFSET(1));
@@ -128,7 +128,7 @@ int __init hp300_setup_serial_console(void)
 		if (!pa)
 			return 0;
 
-		pr_info("Serial console is HP DCA at select code %d\n", scode);
+		pr_debug("Serial console is HP DCA at select code %d\n", scode);
 
 		port.uartclk = HPDCA_BAUD_BASE * 16;
 		port.mapbase = (pa + UART_OFFSET);
@@ -180,7 +180,7 @@ static int hpdca_init_one(struct dio_dev *d,
 	line = serial8250_register_8250_port(&uart);
 
 	if (line < 0) {
-		dev_notice(&d->dev,
+		dev_dbg(&d->dev,
 			  "8250_hp300: register_serial() DCA scode %d irq %d failed\n",
 			  d->scode, uart.port.irq);
 		return -ENOMEM;
@@ -262,7 +262,7 @@ static int __init hp300_8250_init(void)
 		line = serial8250_register_8250_port(&uart);
 
 		if (line < 0) {
-			dev_notice(uart.port.dev,
+			dev_dbg(uart.port.dev,
 				   "8250_hp300: register_serial() APCI %d irq %d failed\n",
 				   i, uart.port.irq);
 			kfree(port);

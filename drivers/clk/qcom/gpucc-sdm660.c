@@ -475,7 +475,7 @@ static int gpucc_660_probe(struct platform_device *pdev)
 
 	clk_prepare_enable(gpucc_cxo_clk.clkr.hw.clk);
 
-	dev_info(&pdev->dev, "Registered GPUCC clocks\n");
+	dev_dbg(&pdev->dev, "Registered GPUCC clocks\n");
 
 	return ret;
 }
@@ -534,7 +534,7 @@ static int gpu_660_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered GPU RBCPR clocks\n");
+	dev_dbg(&pdev->dev, "Registered GPU RBCPR clocks\n");
 
 	return ret;
 }

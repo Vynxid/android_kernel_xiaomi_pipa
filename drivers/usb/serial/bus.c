@@ -69,7 +69,7 @@ static int usb_serial_device_probe(struct device *dev)
 
 	usb_autopm_put_interface(port->serial->interface);
 
-	dev_info(&port->serial->dev->dev,
+	dev_dbg(&port->serial->dev->dev,
 		 "%s converter now attached to ttyUSB%d\n",
 		 driver->description, minor);
 
@@ -111,7 +111,7 @@ static int usb_serial_device_remove(struct device *dev)
 	if (driver->port_remove)
 		retval = driver->port_remove(port);
 
-	dev_info(dev, "%s converter now disconnected from ttyUSB%d\n",
+	dev_dbg(dev, "%s converter now disconnected from ttyUSB%d\n",
 		 driver->description, minor);
 
 	if (!autopm_err)

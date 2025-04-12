@@ -203,7 +203,7 @@ static int tmp421_init_client(struct i2c_client *client)
 	config &= ~TMP421_CONFIG_SHUTDOWN;
 
 	if (config != config_orig) {
-		dev_info(&client->dev, "Enable monitoring chip\n");
+		dev_dbg(&client->dev, "Enable monitoring chip\n");
 		i2c_smbus_write_byte_data(client, TMP421_CONFIG_REG_1, config);
 	}
 
@@ -263,7 +263,7 @@ static int tmp421_detect(struct i2c_client *client,
 	}
 
 	strlcpy(info->type, tmp421_id[kind].name, I2C_NAME_SIZE);
-	dev_info(&adapter->dev, "Detected TI %s chip at 0x%02x\n",
+	dev_dbg(&adapter->dev, "Detected TI %s chip at 0x%02x\n",
 		 names[kind], client->addr);
 
 	return 0;

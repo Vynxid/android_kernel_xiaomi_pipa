@@ -950,7 +950,7 @@ static int fsmc_nand_attach_chip(struct nand_chip *nand)
 
 	switch (nand->ecc.mode) {
 	case NAND_ECC_HW:
-		dev_info(host->dev, "Using 1-bit HW ECC scheme\n");
+		dev_dbg(host->dev, "Using 1-bit HW ECC scheme\n");
 		nand->ecc.calculate = fsmc_read_hwecc_ecc1;
 		nand->ecc.correct = nand_correct_data;
 		nand->ecc.bytes = 3;
@@ -959,7 +959,7 @@ static int fsmc_nand_attach_chip(struct nand_chip *nand)
 
 	case NAND_ECC_SOFT:
 		if (nand->ecc.algo == NAND_ECC_BCH) {
-			dev_info(host->dev,
+			dev_dbg(host->dev,
 				 "Using 4-bit SW BCH ECC scheme\n");
 			break;
 		}
@@ -1068,7 +1068,7 @@ static int __init fsmc_nand_probe(struct platform_device *pdev)
 	for (pid = 0, i = 0; i < 4; i++)
 		pid |= (readl(base + resource_size(res) - 0x20 + 4 * i) & 255) << (i * 8);
 	host->pid = pid;
-	dev_info(&pdev->dev, "FSMC device partno %03x, manufacturer %02x, "
+	dev_dbg(&pdev->dev, "FSMC device partno %03x, manufacturer %02x, "
 		 "revision %02x, config %02x\n",
 		 AMBA_PART_BITS(pid), AMBA_MANF_BITS(pid),
 		 AMBA_REV_BITS(pid), AMBA_CONFIG_BITS(pid));
@@ -1141,7 +1141,7 @@ static int __init fsmc_nand_probe(struct platform_device *pdev)
 		goto cleanup_nand;
 
 	platform_set_drvdata(pdev, host);
-	dev_info(&pdev->dev, "FSMC NAND driver registration successful\n");
+	dev_dbg(&pdev->dev, "FSMC NAND driver registration successful\n");
 
 	return 0;
 

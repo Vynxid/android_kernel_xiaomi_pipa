@@ -117,9 +117,9 @@ static int adg792a_probe(struct i2c_client *i2c)
 		return ret;
 
 	if (cells)
-		dev_info(dev, "3x single pole quadruple throw muxes registered\n");
+		dev_dbg(dev, "3x single pole quadruple throw muxes registered\n");
 	else
-		dev_info(dev, "triple pole quadruple throw mux registered\n");
+		dev_dbg(dev, "triple pole quadruple throw mux registered\n");
 
 	return 0;
 }

@@ -116,7 +116,7 @@ static int micro_leds_probe(struct platform_device *pdev)
 		dev_err(&pdev->dev, "registering led failed: %d\n", ret);
 		return ret;
 	}
-	dev_info(&pdev->dev, "iPAQ micro notification LED driver\n");
+	dev_dbg(&pdev->dev, "iPAQ micro notification LED driver\n");
 
 	return 0;
 }

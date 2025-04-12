@@ -111,7 +111,7 @@ static int __init early_parse_mem(char *p)
 
 	memory_limit = PAGE_ALIGN(memparse(p, &p));
 
-	pr_notice("Memory limited to %ldMB\n", memory_limit >> 20);
+	pr_debug("Memory limited to %ldMB\n", memory_limit >> 20);
 
 	return 0;
 }
@@ -170,7 +170,7 @@ void __init check_for_initrd(void)
 	return;
 
 disable:
-	pr_info("initrd disabled\n");
+	pr_debug("initrd disabled\n");
 	initrd_start = initrd_end = 0;
 #endif
 }
@@ -407,7 +407,7 @@ void __init arch_cpu_finalize_init(void)
 		break;
 	}
 
-	pr_info("CPU: %s\n", get_cpu_subtype(&current_cpu_data));
+	pr_debug("CPU: %s\n", get_cpu_subtype(&current_cpu_data));
 
 #ifndef __LITTLE_ENDIAN__
 	/* 'eb' means 'Endian Big' */

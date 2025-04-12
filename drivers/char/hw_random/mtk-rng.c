@@ -160,7 +160,7 @@ static int mtk_rng_probe(struct platform_device *pdev)
 	pm_runtime_use_autosuspend(&pdev->dev);
 	pm_runtime_enable(&pdev->dev);
 
-	dev_info(&pdev->dev, "registered RNG driver\n");
+	dev_dbg(&pdev->dev, "registered RNG driver\n");
 
 	return 0;
 }

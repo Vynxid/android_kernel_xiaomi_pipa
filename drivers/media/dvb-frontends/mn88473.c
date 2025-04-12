@@ -492,7 +492,7 @@ static int mn88473_init(struct dvb_frontend *fe)
 		goto err;
 	}
 
-	dev_info(&client->dev, "downloading firmware from file '%s'\n", name);
+	dev_dbg(&client->dev, "downloading firmware from file '%s'\n", name);
 
 	ret = regmap_write(dev->regmap[0], 0xf5, 0x03);
 	if (ret)
@@ -717,7 +717,7 @@ static int mn88473_probe(struct i2c_client *client,
 	*config->fe = &dev->frontend;
 	i2c_set_clientdata(client, dev);
 
-	dev_info(&client->dev, "Panasonic MN88473 successfully identified\n");
+	dev_dbg(&client->dev, "Panasonic MN88473 successfully identified\n");
 
 	return 0;
 err_regmap_2_regmap_exit:

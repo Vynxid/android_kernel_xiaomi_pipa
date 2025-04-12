@@ -1065,7 +1065,7 @@ int i2400m_firmware_check(struct i2400m *i2400m)
 			 major, minor, branch);
 	/* Yes, we ignore the branch -- we don't have to track it */
 	i2400m->fw_version = major << 16 | minor;
-	dev_info(dev, "firmware interface version %u.%u.%u\n",
+	dev_dbg(dev, "firmware interface version %u.%u.%u\n",
 		 major, minor, branch);
 error_bad_major:
 error_no_tlv:

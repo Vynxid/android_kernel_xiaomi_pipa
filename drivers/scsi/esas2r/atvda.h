@@ -1297,7 +1297,7 @@ struct __packed atto_vda_ae_data {
 struct __packed atto_vda_mgmt_data {
 	union {
 		u8 bytes[112];
-		struct atto_vda_devinfo dev_info;
+		struct atto_vda_devinfo dev_dbg;
 		struct atto_vda_grp_info grp_info;
 		struct atto_vdapart_info part_info;
 		struct atto_vda_dh_info dev_health_info;

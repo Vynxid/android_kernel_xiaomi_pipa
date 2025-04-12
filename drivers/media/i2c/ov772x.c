@@ -895,7 +895,7 @@ static int ov772x_power_on(struct ov772x_priv *priv)
 	priv->rstb_gpio = gpiod_get_optional(&client->dev, "reset",
 					     GPIOD_OUT_LOW);
 	if (IS_ERR(priv->rstb_gpio)) {
-		dev_info(&client->dev, "Unable to get GPIO \"reset\"");
+		dev_dbg(&client->dev, "Unable to get GPIO \"reset\"");
 		clk_disable_unprepare(priv->clk);
 		return PTR_ERR(priv->rstb_gpio);
 	}
@@ -1305,7 +1305,7 @@ static int ov772x_video_probe(struct ov772x_priv *priv)
 	if (midl < 0)
 		return midl;
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "%s Product ID %0x:%0x Manufacturer ID %x:%x\n",
 		 devname, pid, ver, midh, midl);
 
@@ -1437,7 +1437,7 @@ static int ov772x_probe(struct i2c_client *client,
 	priv->pwdn_gpio = gpiod_get_optional(&client->dev, "powerdown",
 					     GPIOD_OUT_LOW);
 	if (IS_ERR(priv->pwdn_gpio)) {
-		dev_info(&client->dev, "Unable to get GPIO \"powerdown\"");
+		dev_dbg(&client->dev, "Unable to get GPIO \"powerdown\"");
 		ret = PTR_ERR(priv->pwdn_gpio);
 		goto error_clk_put;
 	}

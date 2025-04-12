@@ -722,7 +722,7 @@ static int mtk_mdp_m2m_s_fmt_mplane(struct file *file, void *fh,
 
 	vq = v4l2_m2m_get_vq(ctx->m2m_ctx, f->type);
 	if (vb2_is_streaming(vq)) {
-		dev_info(&ctx->mdp_dev->pdev->dev, "queue %d busy", f->type);
+		dev_dbg(&ctx->mdp_dev->pdev->dev, "queue %d busy", f->type);
 		return -EBUSY;
 	}
 
@@ -927,7 +927,7 @@ static int mtk_mdp_m2m_s_selection(struct file *file, void *fh,
 		}
 
 		if (ret) {
-			dev_info(&ctx->mdp_dev->pdev->dev,
+			dev_dbg(&ctx->mdp_dev->pdev->dev,
 				"Out of scaler range");
 			return -EINVAL;
 		}

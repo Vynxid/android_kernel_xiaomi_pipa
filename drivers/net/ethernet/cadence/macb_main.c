@@ -318,7 +318,7 @@ static void macb_get_hwaddr(struct macb *bp)
 		}
 	}
 
-	dev_info(&bp->pdev->dev, "invalid hw address, using random\n");
+	dev_dbg(&bp->pdev->dev, "invalid hw address, using random\n");
 	eth_hw_addr_random(bp->dev);
 }
 

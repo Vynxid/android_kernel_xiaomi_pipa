@@ -588,10 +588,10 @@ static void rtl8192eu_log_next_device_info(struct rtl8xxxu_priv *priv,
 
 		memcpy(value, &record[2], l - 2);
 		value[l - 2] = '\0';
-		dev_info(&priv->udev->dev, "%s: %s\n", record_name, value);
+		dev_dbg(&priv->udev->dev, "%s: %s\n", record_name, value);
 		*record_offset = *record_offset + l;
 	} else {
-		dev_info(&priv->udev->dev, "%s not available.\n", record_name);
+		dev_dbg(&priv->udev->dev, "%s not available.\n", record_name);
 	}
 }
 
@@ -669,11 +669,11 @@ static int rtl8192eu_parse_efuse(struct rtl8xxxu_priv *priv)
 	if (rtl8xxxu_debug & RTL8XXXU_DEBUG_EFUSE) {
 		unsigned char *raw = priv->efuse_wifi.raw;
 
-		dev_info(&priv->udev->dev,
+		dev_dbg(&priv->udev->dev,
 			 "%s: dumping efuse (0x%02zx bytes):\n",
 			 __func__, sizeof(struct rtl8192eu_efuse));
 		for (i = 0; i < sizeof(struct rtl8192eu_efuse); i += 8)
-			dev_info(&priv->udev->dev, "%02x: %8ph\n", i, &raw[i]);
+			dev_dbg(&priv->udev->dev, "%02x: %8ph\n", i, &raw[i]);
 	}
 	return 0;
 }

@@ -897,7 +897,7 @@ static int pcan_usb_fd_init(struct peak_usb_device *dev)
 		 * information displayed are related to the device itself, not
 		 * to the canx (channel) device.
 		 */
-		dev_info(dev->netdev->dev.parent,
+		dev_dbg(dev->netdev->dev.parent,
 			 "PEAK-System %s v%u fw v%u.%u.%u (%u channels)\n",
 			 dev->adapter->name, pdev->usb_if->fw_info.hw_version,
 			 pdev->usb_if->fw_info.fw_version[0],

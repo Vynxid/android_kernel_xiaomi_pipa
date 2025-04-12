@@ -358,7 +358,7 @@ static int jz4780_nemc_probe(struct platform_device *pdev)
 	}
 
 	platform_set_drvdata(pdev, nemc);
-	dev_info(dev, "JZ4780 NEMC initialised\n");
+	dev_dbg(dev, "JZ4780 NEMC initialised\n");
 	return 0;
 }
 

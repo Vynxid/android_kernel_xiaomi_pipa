@@ -555,7 +555,7 @@ static int mtk_ecc_probe(struct platform_device *pdev)
 	ecc->dev = dev;
 	mutex_init(&ecc->lock);
 	platform_set_drvdata(pdev, ecc);
-	dev_info(dev, "probed\n");
+	dev_dbg(dev, "probed\n");
 
 	return 0;
 }

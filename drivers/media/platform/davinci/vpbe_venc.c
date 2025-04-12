@@ -670,7 +670,7 @@ static int venc_probe(struct platform_device *pdev)
 	}
 	spin_lock_init(&venc->lock);
 	platform_set_drvdata(pdev, venc);
-	dev_notice(venc->pdev, "VENC sub device probe success\n");
+	dev_dbg(venc->pdev, "VENC sub device probe success\n");
 
 	return 0;
 }

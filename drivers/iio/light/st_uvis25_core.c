@@ -186,7 +186,7 @@ static int st_uvis25_allocate_trigger(struct iio_dev *iio_dev)
 		irq_active_low = true;
 		break;
 	default:
-		dev_info(dev, "mode %lx unsupported\n", irq_type);
+		dev_dbg(dev, "mode %lx unsupported\n", irq_type);
 		return -EINVAL;
 	}
 

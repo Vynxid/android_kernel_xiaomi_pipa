@@ -904,14 +904,14 @@ static int ov7740_probe_dt(struct i2c_client *client,
 	ov7740->resetb_gpio = devm_gpiod_get_optional(&client->dev, "reset",
 			GPIOD_OUT_HIGH);
 	if (IS_ERR(ov7740->resetb_gpio)) {
-		dev_info(&client->dev, "can't get %s GPIO\n", "reset");
+		dev_dbg(&client->dev, "can't get %s GPIO\n", "reset");
 		return PTR_ERR(ov7740->resetb_gpio);
 	}
 
 	ov7740->pwdn_gpio = devm_gpiod_get_optional(&client->dev, "powerdown",
 			GPIOD_OUT_LOW);
 	if (IS_ERR(ov7740->pwdn_gpio)) {
-		dev_info(&client->dev, "can't get %s GPIO\n", "powerdown");
+		dev_dbg(&client->dev, "can't get %s GPIO\n", "powerdown");
 		return PTR_ERR(ov7740->pwdn_gpio);
 	}
 

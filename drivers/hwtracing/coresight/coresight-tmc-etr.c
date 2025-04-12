@@ -1428,7 +1428,7 @@ int tmc_etr_bam_init(struct amba_device *adev,
 		iommu_domain_get_attr(domain, DOMAIN_ATTR_S1_BYPASS,
 			&s1_bypass);
 		if (!s1_bypass) {
-			pr_info("%s: setting SPS_BAM_SMMU_EN flag with (%s)\n",
+			pr_debug("%s: setting SPS_BAM_SMMU_EN flag with (%s)\n",
 			__func__, dev_name(dev));
 			bamdata->props.options |= SPS_BAM_SMMU_EN;
 		}
@@ -1551,7 +1551,7 @@ out:
 	if (!ret) {
 		if (drvdata->out_mode == TMC_ETR_OUT_MODE_MEM)
 			tmc_etr_byte_cntr_start(drvdata->byte_cntr);
-		dev_info(drvdata->dev, "TMC-ETR enabled\n");
+		dev_dbg(drvdata->dev, "TMC-ETR enabled\n");
 	}
 
 	return ret;
@@ -2062,7 +2062,7 @@ static int _tmc_disable_etr_sink(struct coresight_device *csdev,
 		coresight_cti_unmap_trigout(drvdata->cti_flush, 3, 0);
 	}
 out:
-	dev_info(drvdata->dev, "TMC-ETR disabled\n");
+	dev_dbg(drvdata->dev, "TMC-ETR disabled\n");
 	return 0;
 }
 

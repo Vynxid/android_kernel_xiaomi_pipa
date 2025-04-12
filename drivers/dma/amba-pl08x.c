@@ -2421,7 +2421,7 @@ static int pl08x_dma_init_virtual_channels(struct pl08x_driver_data *pl08x,
 		chan->vc.desc_free = pl08x_desc_free;
 		vchan_init(&chan->vc, dmadev);
 	}
-	dev_info(&pl08x->adev->dev, "initialized %d virtual %s channels\n",
+	dev_dbg(&pl08x->adev->dev, "initialized %d virtual %s channels\n",
 		 i, slave ? "slave" : "memcpy");
 	return i;
 }
@@ -2602,7 +2602,7 @@ static int pl08x_of_probe(struct amba_device *adev,
 	if (of_property_read_bool(np, "lli-bus-interface-ahb2"))
 		pd->lli_buses |= PL08X_AHB2;
 	if (!pd->lli_buses) {
-		dev_info(&adev->dev, "no bus masters for LLIs stated, assume all\n");
+		dev_dbg(&adev->dev, "no bus masters for LLIs stated, assume all\n");
 		pd->lli_buses |= PL08X_AHB1 | PL08X_AHB2;
 	}
 
@@ -2612,14 +2612,14 @@ static int pl08x_of_probe(struct amba_device *adev,
 	if (of_property_read_bool(np, "mem-bus-interface-ahb2"))
 		pd->mem_buses |= PL08X_AHB2;
 	if (!pd->mem_buses) {
-		dev_info(&adev->dev, "no bus masters for memory stated, assume all\n");
+		dev_dbg(&adev->dev, "no bus masters for memory stated, assume all\n");
 		pd->mem_buses |= PL08X_AHB1 | PL08X_AHB2;
 	}
 
 	/* Parse the memcpy channel properties */
 	ret = of_property_read_u32(np, "memcpy-burst-size", &val);
 	if (ret) {
-		dev_info(&adev->dev, "no memcpy burst size specified, using 1 byte\n");
+		dev_dbg(&adev->dev, "no memcpy burst size specified, using 1 byte\n");
 		val = 1;
 	}
 	switch (val) {
@@ -2654,7 +2654,7 @@ static int pl08x_of_probe(struct amba_device *adev,
 
 	ret = of_property_read_u32(np, "memcpy-bus-width", &val);
 	if (ret) {
-		dev_info(&adev->dev, "no memcpy bus width specified, using 8 bits\n");
+		dev_dbg(&adev->dev, "no memcpy bus width specified, using 8 bits\n");
 		val = 8;
 	}
 	switch (val) {
@@ -2750,10 +2750,10 @@ static int pl08x_probe(struct amba_device *adev, const struct amba_id *id)
 		u32 val;
 
 		val = readl(pl08x->base + FTDMAC020_REVISION);
-		dev_info(&pl08x->adev->dev, "FTDMAC020 %d.%d rel %d\n",
+		dev_dbg(&pl08x->adev->dev, "FTDMAC020 %d.%d rel %d\n",
 			 (val >> 16) & 0xff, (val >> 8) & 0xff, val & 0xff);
 		val = readl(pl08x->base + FTDMAC020_FEATURE);
-		dev_info(&pl08x->adev->dev, "FTDMAC020 %d channels, "
+		dev_dbg(&pl08x->adev->dev, "FTDMAC020 %d channels, "
 			 "%s built-in bridge, %s, %s linked lists\n",
 			 (val >> 12) & 0x0f,
 			 (val & BIT(10)) ? "no" : "has",
@@ -2922,7 +2922,7 @@ static int pl08x_probe(struct amba_device *adev, const struct amba_id *id)
 
 			val = readl(ch->reg_config);
 			if (val & (PL080N_CONFIG_ITPROT | PL080N_CONFIG_SECPROT)) {
-				dev_info(&adev->dev, "physical channel %d reserved for secure access only\n", i);
+				dev_dbg(&adev->dev, "physical channel %d reserved for secure access only\n", i);
 				ch->locked = true;
 			}
 		}
@@ -2973,7 +2973,7 @@ static int pl08x_probe(struct amba_device *adev, const struct amba_id *id)
 
 	amba_set_drvdata(adev, pl08x);
 	init_pl08x_debugfs(pl08x);
-	dev_info(&pl08x->adev->dev, "DMA: PL%03x%s rev%u at 0x%08llx irq %d\n",
+	dev_dbg(&pl08x->adev->dev, "DMA: PL%03x%s rev%u at 0x%08llx irq %d\n",
 		 amba_part(adev), pl08x->vd->pl080s ? "s" : "", amba_rev(adev),
 		 (unsigned long long)adev->res.start, adev->irq[0]);
 

@@ -341,7 +341,7 @@ static int rtc_probe(struct platform_device *pdev)
 	disable_irq(aie_irq);
 	disable_irq(pie_irq);
 
-	dev_info(&pdev->dev, "Real Time Clock of NEC VR4100 series\n");
+	dev_dbg(&pdev->dev, "Real Time Clock of NEC VR4100 series\n");
 
 	retval = rtc_register_device(rtc);
 	if (retval)

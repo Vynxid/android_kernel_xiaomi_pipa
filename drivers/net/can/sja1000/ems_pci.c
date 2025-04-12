@@ -192,7 +192,7 @@ static void ems_pci_del_card(struct pci_dev *pdev)
 		if (!dev)
 			continue;
 
-		dev_info(&pdev->dev, "Removing %s.\n", dev->name);
+		dev_dbg(&pdev->dev, "Removing %s.\n", dev->name);
 		unregister_sja1000dev(dev);
 		free_sja1000dev(dev);
 	}
@@ -345,7 +345,7 @@ static int ems_pci_add_card(struct pci_dev *pdev,
 
 			card->channels++;
 
-			dev_info(&pdev->dev, "Channel #%d at 0x%p, irq %d\n",
+			dev_dbg(&pdev->dev, "Channel #%d at 0x%p, irq %d\n",
 					i + 1, priv->reg_base, dev->irq);
 		} else {
 			free_sja1000dev(dev);

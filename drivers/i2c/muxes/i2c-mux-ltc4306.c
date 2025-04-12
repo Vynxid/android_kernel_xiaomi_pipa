@@ -288,7 +288,7 @@ static int ltc4306_probe(struct i2c_client *client)
 		}
 	}
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "registered %d multiplexed busses for I2C switch %s\n",
 		 num, client->name);
 

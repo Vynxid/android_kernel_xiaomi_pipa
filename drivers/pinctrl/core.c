@@ -970,7 +970,7 @@ static int add_setting(struct pinctrl *p, struct pinctrl_dev *pctldev,
 		 * OK let us guess that the driver is not there yet, and
 		 * let's defer obtaining this pinctrl handle to later...
 		 */
-		dev_info(p->dev, "unknown pinctrl device %s in map entry, deferring probe",
+		dev_dbg(p->dev, "unknown pinctrl device %s in map entry, deferring probe",
 			map->ctrl_dev_name);
 		return -EPROBE_DEFER;
 	}
@@ -2263,7 +2263,7 @@ EXPORT_SYMBOL_GPL(devm_pinctrl_unregister);
 
 static int __init pinctrl_init(void)
 {
-	pr_info("initialized pinctrl subsystem\n");
+	pr_debug("initialized pinctrl subsystem\n");
 	pinctrl_init_debugfs();
 	return 0;
 }

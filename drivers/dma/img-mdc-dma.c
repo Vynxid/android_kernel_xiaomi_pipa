@@ -1009,7 +1009,7 @@ static int mdc_dma_probe(struct platform_device *pdev)
 	if (ret)
 		goto unregister;
 
-	dev_info(&pdev->dev, "MDC with %u channels and %u threads\n",
+	dev_dbg(&pdev->dev, "MDC with %u channels and %u threads\n",
 		 mdma->nr_channels, mdma->nr_threads);
 
 	return 0;

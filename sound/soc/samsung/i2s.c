@@ -1313,7 +1313,7 @@ static int samsung_i2s_probe(struct platform_device *pdev)
 		if (of_property_read_u32(np, "samsung,idma-addr",
 					 &idma_addr)) {
 			if (quirks & QUIRK_SUPPORTS_IDMA) {
-				dev_info(&pdev->dev, "idma address is not"\
+				dev_dbg(&pdev->dev, "idma address is not"\
 						"specified");
 			}
 		}

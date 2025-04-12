@@ -366,14 +366,14 @@ static void handle_dle(struct inbuf_t *inbuf)
 	switch (inbuf->data[inbuf->head]) {
 	case 'X':	/* begin of event message */
 		if (inbuf->inputstate & INS_command)
-			dev_notice(cs->dev,
+			dev_dbg(cs->dev,
 				   "received <DLE>X in command mode\n");
 		inbuf->inputstate |= INS_command | INS_DLE_command;
 		inbuf->head++;	/* byte consumed */
 		break;
 	case '.':	/* end of event message */
 		if (!(inbuf->inputstate & INS_DLE_command))
-			dev_notice(cs->dev,
+			dev_dbg(cs->dev,
 				   "received <DLE>. without <DLE>X\n");
 		inbuf->inputstate &= ~INS_DLE_command;
 		/* return to data mode if in DLE mode */
@@ -385,11 +385,11 @@ static void handle_dle(struct inbuf_t *inbuf)
 		/* mark as quoted */
 		inbuf->inputstate |= INS_DLE_char;
 		if (!(cs->dle || inbuf->inputstate & INS_DLE_command))
-			dev_notice(cs->dev,
+			dev_dbg(cs->dev,
 				   "received <DLE><DLE> not in DLE mode\n");
 		break;	/* quoted byte left in buffer */
 	default:
-		dev_notice(cs->dev, "received <DLE><%02x>\n",
+		dev_dbg(cs->dev, "received <DLE><%02x>\n",
 			   inbuf->data[inbuf->head]);
 		/* quoted byte left in buffer */
 	}

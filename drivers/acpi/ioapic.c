@@ -176,7 +176,7 @@ done:
 	mutex_unlock(&ioapic_list_lock);
 
 	if (dev)
-		dev_info(&dev->dev, "%s at %pR, GSI %u\n",
+		dev_dbg(&dev->dev, "%s at %pR, GSI %u\n",
 			 type, res, (u32)gsi_base);
 	else
 		acpi_handle_info(handle, "%s at %pR, GSI %u\n",

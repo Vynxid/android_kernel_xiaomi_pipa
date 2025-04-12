@@ -493,7 +493,7 @@ static void pcan_free_channels(struct pcan_pccard *card)
 
 		free_sja1000dev(netdev);
 
-		dev_info(&card->pdev->dev, "%s removed\n", name);
+		dev_dbg(&card->pdev->dev, "%s removed\n", name);
 	}
 
 	/* do it only if device not removed */
@@ -588,7 +588,7 @@ static int pcan_add_channels(struct pcan_pccard *card)
 		/* set corresponding led on in the new ccr */
 		ccr &= ~PCC_CCR_LED_OFF_CHAN(i);
 
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"%s on channel %d at 0x%p irq %d\n",
 			netdev->name, i, priv->reg_base, pdev->irq);
 	}
@@ -680,7 +680,7 @@ static int pcan_probe(struct pcmcia_device *pdev)
 	card->fw_minor = pcan_read_reg(card, PCC_FW_MINOR);
 
 	/* display board name and firware version */
-	dev_info(&pdev->dev, "PEAK-System pcmcia card %s fw %d.%d\n",
+	dev_dbg(&pdev->dev, "PEAK-System pcmcia card %s fw %d.%d\n",
 		pdev->prod_id[1] ? pdev->prod_id[1] : "PCAN-PC Card",
 		card->fw_major, card->fw_minor);
 

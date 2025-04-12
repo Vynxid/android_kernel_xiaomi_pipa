@@ -937,7 +937,7 @@ retry:
 		return 0;
 	if (retries++ >= 5)
 		return -EAGAIN;
-	dev_info(dev, "controller reset failed (gintsts=0x%x) - retrying\n",
+	dev_dbg(dev, "controller reset failed (gintsts=0x%x) - retrying\n",
 		 (int)usbc_gintsts.u32);
 	msleep(50);
 	cvmx_usb_shutdown(usb);
@@ -3672,7 +3672,7 @@ static int octeon_usb_probe(struct platform_device *pdev)
 	}
 	device_wakeup_enable(hcd->self.controller);
 
-	dev_info(dev, "Registered HCD for port %d on irq %d\n", usb_num, irq);
+	dev_dbg(dev, "Registered HCD for port %d on irq %d\n", usb_num, irq);
 
 	return 0;
 }

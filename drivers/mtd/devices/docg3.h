@@ -314,7 +314,7 @@ struct docg3 {
 };
 
 #define doc_err(fmt, arg...) dev_err(docg3->dev, (fmt), ## arg)
-#define doc_info(fmt, arg...) dev_info(docg3->dev, (fmt), ## arg)
+#define doc_info(fmt, arg...) dev_dbg(docg3->dev, (fmt), ## arg)
 #define doc_dbg(fmt, arg...) dev_dbg(docg3->dev, (fmt), ## arg)
 #define doc_vdbg(fmt, arg...) dev_vdbg(docg3->dev, (fmt), ## arg)
 

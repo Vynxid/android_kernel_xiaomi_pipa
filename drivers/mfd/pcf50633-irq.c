@@ -159,7 +159,7 @@ static irqreturn_t pcf50633_irq(int irq, void *data)
 	/* Some revisions of the chip don't have a 8s standby mode on
 	 * ONKEY1S press. We try to manually do it in such cases. */
 	if ((pcf_int[0] & PCF50633_INT1_SECOND) && pcf->onkey1s_held) {
-		dev_info(pcf->dev, "ONKEY1S held for %d secs\n",
+		dev_dbg(pcf->dev, "ONKEY1S held for %d secs\n",
 							pcf->onkey1s_held);
 		if (pcf->onkey1s_held++ == PCF50633_ONKEY1S_TIMEOUT)
 			if (pcf->pdata->force_shutdown)
@@ -167,7 +167,7 @@ static irqreturn_t pcf50633_irq(int irq, void *data)
 	}
 
 	if (pcf_int[2] & PCF50633_INT3_ONKEY1S) {
-		dev_info(pcf->dev, "ONKEY1S held\n");
+		dev_dbg(pcf->dev, "ONKEY1S held\n");
 		pcf->onkey1s_held = 1 ;
 
 		/* Unmask IRQ_SECOND */

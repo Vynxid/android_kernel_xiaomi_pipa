@@ -232,7 +232,7 @@ static u32 brcm_ahci_get_portmask(struct ahci_host_priv *hpriv,
 		dev_warn(priv->dev, "warning: more ports than PHYs (%#x)\n",
 			 impl);
 	else if (!impl)
-		dev_info(priv->dev, "no ports found\n");
+		dev_dbg(priv->dev, "no ports found\n");
 
 	return impl;
 }
@@ -507,7 +507,7 @@ static int brcm_ahci_probe(struct platform_device *pdev)
 	if (ret)
 		goto out_disable_platform_phys;
 
-	dev_info(dev, "Broadcom AHCI SATA3 registered\n");
+	dev_dbg(dev, "Broadcom AHCI SATA3 registered\n");
 
 	return 0;
 

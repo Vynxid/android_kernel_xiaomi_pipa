@@ -785,7 +785,7 @@ static int mv88e6097_watchdog_action(struct mv88e6xxx_chip *chip, int irq)
 
 	mv88e6xxx_g2_read(chip, MV88E6352_G2_WDOG_CTL, &reg);
 
-	dev_info(chip->dev, "Watchdog event: 0x%04x", reg);
+	dev_dbg(chip->dev, "Watchdog event: 0x%04x", reg);
 
 	return IRQ_HANDLED;
 }
@@ -835,14 +835,14 @@ static int mv88e6390_watchdog_action(struct mv88e6xxx_chip *chip, int irq)
 			   MV88E6390_G2_WDOG_CTL_PTR_EVENT);
 	err = mv88e6xxx_g2_read(chip, MV88E6390_G2_WDOG_CTL, &reg);
 
-	dev_info(chip->dev, "Watchdog event: 0x%04x",
+	dev_dbg(chip->dev, "Watchdog event: 0x%04x",
 		 reg & MV88E6390_G2_WDOG_CTL_DATA_MASK);
 
 	mv88e6xxx_g2_write(chip, MV88E6390_G2_WDOG_CTL,
 			   MV88E6390_G2_WDOG_CTL_PTR_HISTORY);
 	err = mv88e6xxx_g2_read(chip, MV88E6390_G2_WDOG_CTL, &reg);
 
-	dev_info(chip->dev, "Watchdog history: 0x%04x",
+	dev_dbg(chip->dev, "Watchdog history: 0x%04x",
 		 reg & MV88E6390_G2_WDOG_CTL_DATA_MASK);
 
 	/* Trigger a software reset to try to recover the switch */

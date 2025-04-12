@@ -382,7 +382,7 @@ static int neponset_probe(struct platform_device *dev)
 	enable_irq_wake(irq);
 #endif
 
-	dev_info(&dev->dev, "Neponset daughter board, providing IRQ%u-%u\n",
+	dev_dbg(&dev->dev, "Neponset daughter board, providing IRQ%u-%u\n",
 		 d->irq_base, d->irq_base + NEP_IRQ_NR - 1);
 	nep = d;
 

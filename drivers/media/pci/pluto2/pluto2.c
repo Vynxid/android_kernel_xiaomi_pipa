@@ -535,7 +535,7 @@ static int frontend_init(struct pluto *pluto)
 static void pluto_read_rev(struct pluto *pluto)
 {
 	u32 val = pluto_readreg(pluto, REG_MISC) & MISC_DVR;
-	dev_info(&pluto->pdev->dev, "board revision %d.%d\n",
+	dev_dbg(&pluto->pdev->dev, "board revision %d.%d\n",
 			(val >> 12) & 0x0f, (val >> 4) & 0xff);
 }
 
@@ -553,7 +553,7 @@ static void pluto_read_mac(struct pluto *pluto, u8 *mac)
 	mac[4] = (val >> 8) & 0xff;
 	mac[5] = (val >> 0) & 0xff;
 
-	dev_info(&pluto->pdev->dev, "MAC %pM\n", mac);
+	dev_dbg(&pluto->pdev->dev, "MAC %pM\n", mac);
 }
 
 static int pluto_read_serial(struct pluto *pluto)
@@ -566,7 +566,7 @@ static int pluto_read_serial(struct pluto *pluto)
 	if (!cis)
 		return -EIO;
 
-	dev_info(&pdev->dev, "S/N ");
+	dev_dbg(&pdev->dev, "S/N ");
 
 	for (i = 0xe0; i < 0x100; i += 4) {
 		u32 val = readl(&cis[i]);

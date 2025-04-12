@@ -2191,7 +2191,7 @@ static int hv_pci_protocol_negotiation(struct hv_device *hdev)
 
 		if (comp_pkt.completion_status >= 0) {
 			pci_protocol_version = pci_protocol_versions[i];
-			dev_info(&hdev->device,
+			dev_dbg(&hdev->device,
 				"PCI VMBus probing: Using version %#x\n",
 				pci_protocol_version);
 			goto exit;

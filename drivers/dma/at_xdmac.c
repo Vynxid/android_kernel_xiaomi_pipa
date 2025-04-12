@@ -2069,7 +2069,7 @@ static int at_xdmac_probe(struct platform_device *pdev)
 		goto err_dma_unregister;
 	}
 
-	dev_info(&pdev->dev, "%d channels, mapped at 0x%p\n",
+	dev_dbg(&pdev->dev, "%d channels, mapped at 0x%p\n",
 		 nr_channels, atxdmac->regs);
 
 	return 0;

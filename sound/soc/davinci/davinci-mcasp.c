@@ -1030,7 +1030,7 @@ static int davinci_mcasp_calc_clk_div(struct davinci_mcasp *mcasp,
 
 	if (set) {
 		if (error_ppm)
-			dev_info(mcasp->dev, "Sample-rate is off by %d PPM\n",
+			dev_dbg(mcasp->dev, "Sample-rate is off by %d PPM\n",
 				 error_ppm);
 
 		__davinci_mcasp_set_clkdiv(mcasp, MCASP_CLKDIV_BCLK, div, 0);

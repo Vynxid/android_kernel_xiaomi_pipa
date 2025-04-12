@@ -703,7 +703,7 @@ static int cxd2820r_probe(struct i2c_client *client,
 	/* Setup callbacks */
 	pdata->get_dvb_frontend = cxd2820r_get_dvb_frontend;
 
-	dev_info(&client->dev, "Sony CXD2820R successfully identified\n");
+	dev_dbg(&client->dev, "Sony CXD2820R successfully identified\n");
 
 	return 0;
 err_regmap_1_regmap_exit:

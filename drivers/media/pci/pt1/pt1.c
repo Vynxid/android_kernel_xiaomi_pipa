@@ -1312,7 +1312,7 @@ static int pt1_resume(struct device *dev)
 	return 0;
 
 resume_err:
-	dev_info(&pt1->pdev->dev, "failed to resume PT1/PT2.");
+	dev_dbg(&pt1->pdev->dev, "failed to resume PT1/PT2.");
 	return 0;	/* resume anyway */
 }
 

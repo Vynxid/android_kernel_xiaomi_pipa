@@ -1296,7 +1296,7 @@ static int at91_pinctrl_probe(struct platform_device *pdev)
 				gpio_chips[i]->range.pin_base, gpio_chips[i]->range.npins);
 		}
 
-	dev_info(&pdev->dev, "initialized AT91 pinctrl driver\n");
+	dev_dbg(&pdev->dev, "initialized AT91 pinctrl driver\n");
 
 	return 0;
 }
@@ -1808,7 +1808,7 @@ static int at91_gpio_probe(struct platform_device *pdev)
 	if (ret)
 		goto irq_setup_err;
 
-	dev_info(&pdev->dev, "at address %p\n", at91_chip->regbase);
+	dev_dbg(&pdev->dev, "at address %p\n", at91_chip->regbase);
 
 	return 0;
 

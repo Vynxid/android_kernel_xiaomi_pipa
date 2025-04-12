@@ -781,27 +781,27 @@ int initialize_cx231xx(struct cx231xx *dev)
 		   sizeof(struct pcb_config));
 
 	if (pcb_debug) {
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "SC(0x00) register = 0x%x\n", config_info);
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "scenario %d\n",
 			 (dev->current_pcb_config.index) + 1);
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			"type=%x\n",
 			 dev->current_pcb_config.type);
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "mode=%x\n",
 			 dev->current_pcb_config.mode);
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "speed=%x\n",
 			 dev->current_pcb_config.speed);
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "ts1_source=%x\n",
 			 dev->current_pcb_config.ts1_source);
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "ts2_source=%x\n",
 			 dev->current_pcb_config.ts2_source);
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "analog_source=%x\n",
 			 dev->current_pcb_config.analog_source);
 	}

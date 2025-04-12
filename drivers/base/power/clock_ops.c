@@ -555,7 +555,7 @@ static void enable_clock(struct device *dev, const char *con_id)
 	if (!IS_ERR(clk)) {
 		clk_prepare_enable(clk);
 		clk_put(clk);
-		dev_info(dev, "Runtime PM disabled, clock forced on.\n");
+		dev_dbg(dev, "Runtime PM disabled, clock forced on.\n");
 	}
 }
 
@@ -572,7 +572,7 @@ static void disable_clock(struct device *dev, const char *con_id)
 	if (!IS_ERR(clk)) {
 		clk_disable_unprepare(clk);
 		clk_put(clk);
-		dev_info(dev, "Runtime PM disabled, clock forced off.\n");
+		dev_dbg(dev, "Runtime PM disabled, clock forced off.\n");
 	}
 }
 

@@ -680,7 +680,7 @@ static int tpdm_enable(struct coresight_device *csdev,
 	drvdata->enable = true;
 	mutex_unlock(&drvdata->lock);
 
-	dev_info(drvdata->dev, "TPDM tracing enabled\n");
+	dev_dbg(drvdata->dev, "TPDM tracing enabled\n");
 	return 0;
 }
 
@@ -758,7 +758,7 @@ static void tpdm_disable(struct coresight_device *csdev,
 	drvdata->enable = false;
 	mutex_unlock(&drvdata->lock);
 
-	dev_info(drvdata->dev, "TPDM tracing disabled\n");
+	dev_dbg(drvdata->dev, "TPDM tracing disabled\n");
 }
 
 static int tpdm_trace_id(struct coresight_device *csdev)

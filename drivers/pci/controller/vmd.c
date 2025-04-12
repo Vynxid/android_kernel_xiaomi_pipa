@@ -805,7 +805,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
 	if (err)
 		return err;
 
-	dev_info(&vmd->dev->dev, "Bound to PCI domain %04x\n",
+	dev_dbg(&vmd->dev->dev, "Bound to PCI domain %04x\n",
 		 vmd->sysdata.domain);
 	return 0;
 }

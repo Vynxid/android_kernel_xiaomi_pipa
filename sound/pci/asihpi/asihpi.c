@@ -1428,7 +1428,7 @@ static inline int ctl_add(struct snd_card *card, struct snd_kcontrol_new *ctl,
 	if (err < 0)
 		return err;
 	else if (mixer_dump)
-		dev_info(&asihpi->pci->dev, "added %s(%d)\n", ctl->name, ctl->index);
+		dev_dbg(&asihpi->pci->dev, "added %s(%d)\n", ctl->name, ctl->index);
 
 	return 0;
 }
@@ -2642,7 +2642,7 @@ static int snd_card_asihpi_mixer_new(struct snd_card_asihpi *asihpi)
 		if (err) {
 			if (err == HPI_ERROR_CONTROL_DISABLED) {
 				if (mixer_dump)
-					dev_info(&asihpi->pci->dev,
+					dev_dbg(&asihpi->pci->dev,
 						   "Disabled HPI Control(%d)\n",
 						   idx);
 				continue;
@@ -2707,7 +2707,7 @@ static int snd_card_asihpi_mixer_new(struct snd_card_asihpi *asihpi)
 		case HPI_CONTROL_COMPANDER:
 		default:
 			if (mixer_dump)
-				dev_info(&asihpi->pci->dev,
+				dev_dbg(&asihpi->pci->dev,
 					"Untranslated HPI Control (%d) %d %d %d %d %d\n",
 					idx,
 					hpi_ctl.control_type,
@@ -2723,7 +2723,7 @@ static int snd_card_asihpi_mixer_new(struct snd_card_asihpi *asihpi)
 	if (HPI_ERROR_INVALID_OBJ_INDEX != err)
 		hpi_handle_error(err);
 
-	dev_info(&asihpi->pci->dev, "%d mixer controls found\n", idx);
+	dev_dbg(&asihpi->pci->dev, "%d mixer controls found\n", idx);
 
 	return 0;
 }
@@ -2948,7 +2948,7 @@ static int snd_asihpi_probe(struct pci_dev *pci_dev,
 		asihpi->in_min_chans = 1;
 	}
 
-	dev_info(&pci_dev->dev, "Has dma:%d, grouping:%d, mrx:%d, uif:%d\n",
+	dev_dbg(&pci_dev->dev, "Has dma:%d, grouping:%d, mrx:%d, uif:%d\n",
 			asihpi->can_dma,
 			asihpi->support_grouping,
 			asihpi->support_mrx,

@@ -244,7 +244,7 @@ static int aat1290_led_parse_dt(struct aat1290_led *led,
 	pinctrl = devm_pinctrl_get_select_default(&led->pdev->dev);
 	if (IS_ERR(pinctrl)) {
 		cfg->has_external_strobe = false;
-		dev_info(dev,
+		dev_dbg(dev,
 			 "No support for external strobe detected.\n");
 	} else {
 		cfg->has_external_strobe = true;

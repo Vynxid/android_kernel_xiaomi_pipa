@@ -526,7 +526,7 @@ static int vsc73xx_detect(struct vsc73xx *vsc)
 	}
 
 	if (val == 0xffffffff) {
-		dev_info(vsc->dev, "chip seems dead, assert reset\n");
+		dev_dbg(vsc->dev, "chip seems dead, assert reset\n");
 		gpiod_set_value_cansleep(vsc->reset, 1);
 		/* Reset pulse should be 20ns minimum, according to datasheet
 		 * table 245, so 10us should be fine
@@ -567,7 +567,7 @@ static int vsc73xx_detect(struct vsc73xx *vsc)
 	vsc->chipid = id;
 	rev = (val >> VSC73XX_CHIPID_REV_SHIFT) &
 		VSC73XX_CHIPID_REV_MASK;
-	dev_info(vsc->dev, "VSC%04X (rev: %d) switch found\n", id, rev);
+	dev_dbg(vsc->dev, "VSC%04X (rev: %d) switch found\n", id, rev);
 
 	ret = vsc73xx_read(vsc, VSC73XX_BLOCK_SYSTEM, 0,
 			   VSC73XX_ICPU_CTRL, &val);
@@ -603,7 +603,7 @@ static int vsc73xx_detect(struct vsc73xx *vsc)
 		return -ENODEV;
 	}
 	/* !icpu_si_boot_en && !cpu_pi_en */
-	dev_info(vsc->dev, "iCPU disabled, no external memory\n");
+	dev_dbg(vsc->dev, "iCPU disabled, no external memory\n");
 
 	return 0;
 }
@@ -651,7 +651,7 @@ static int vsc73xx_phy_write(struct dsa_switch *ds, int phy, int regnum,
 	 * (Resetting the whole chip is OK.)
 	 */
 	if (regnum == 0 && (val & BIT(15))) {
-		dev_info(vsc->dev, "reset PHY - disallowed\n");
+		dev_dbg(vsc->dev, "reset PHY - disallowed\n");
 		return 0;
 	}
 
@@ -685,7 +685,7 @@ static int vsc73xx_setup(struct dsa_switch *ds)
 	struct vsc73xx *vsc = ds->priv;
 	int i;
 
-	dev_info(vsc->dev, "set up the switch\n");
+	dev_dbg(vsc->dev, "set up the switch\n");
 
 	/* Issue RESET */
 	vsc73xx_write(vsc, VSC73XX_BLOCK_SYSTEM, 0, VSC73XX_GLORESET,
@@ -1013,7 +1013,7 @@ static int vsc73xx_port_enable(struct dsa_switch *ds, int port,
 {
 	struct vsc73xx *vsc = ds->priv;
 
-	dev_info(vsc->dev, "enable port %d\n", port);
+	dev_dbg(vsc->dev, "enable port %d\n", port);
 	vsc73xx_init_port(vsc, port);
 
 	return 0;
@@ -1294,7 +1294,7 @@ static int vsc73xx_probe(struct spi_device *spi)
 	}
 
 	eth_random_addr(vsc->addr);
-	dev_info(vsc->dev,
+	dev_dbg(vsc->dev,
 		 "MAC for control frames: %02X:%02X:%02X:%02X:%02X:%02X\n",
 		 vsc->addr[0], vsc->addr[1], vsc->addr[2],
 		 vsc->addr[3], vsc->addr[4], vsc->addr[5]);

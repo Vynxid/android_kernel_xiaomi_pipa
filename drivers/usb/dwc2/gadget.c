@@ -1847,7 +1847,7 @@ static void dwc2_hsotg_process_control(struct dwc2_hsotg *hsotg,
 				 DCFG_DEVADDR_SHIFT) & DCFG_DEVADDR_MASK;
 			dwc2_writel(hsotg, dcfg, DCFG);
 
-			dev_info(hsotg->dev, "new address %d\n", ctrl->wValue);
+			dev_dbg(hsotg->dev, "new address %d\n", ctrl->wValue);
 
 			ret = dwc2_hsotg_send_reply(hsotg, ep0, NULL, 0);
 			return;
@@ -3078,7 +3078,7 @@ static void dwc2_hsotg_irq_enumdone(struct dwc2_hsotg *hsotg)
 		 */
 		break;
 	}
-	dev_info(hsotg->dev, "new device is %s\n",
+	dev_dbg(hsotg->dev, "new device is %s\n",
 		 usb_speed_string(hsotg->gadget.speed));
 
 	/*
@@ -3697,7 +3697,7 @@ irq_retry:
 	}
 
 	if (gintsts & GINTSTS_GINNAKEFF) {
-		dev_info(hsotg->dev, "GINNakEff triggered\n");
+		dev_dbg(hsotg->dev, "GINNakEff triggered\n");
 
 		dwc2_set_bit(hsotg, DCTL, DCTL_CGNPINNAK);
 
@@ -4160,7 +4160,7 @@ static int dwc2_hsotg_ep_sethalt(struct usb_ep *ep, int value, bool now)
 	u32 epctl;
 	u32 xfertype;
 
-	dev_info(hs->dev, "%s(ep %p %s, %d)\n", __func__, ep, ep->name, value);
+	dev_dbg(hs->dev, "%s(ep %p %s, %d)\n", __func__, ep, ep->name, value);
 
 	if (index == 0) {
 		if (value)
@@ -4352,7 +4352,7 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
 	hsotg->enabled = 0;
 	spin_unlock_irqrestore(&hsotg->lock, flags);
 
-	dev_info(hsotg->dev, "bound driver %s\n", driver->driver.name);
+	dev_dbg(hsotg->dev, "bound driver %s\n", driver->driver.name);
 
 	return 0;
 
@@ -4637,7 +4637,7 @@ static int dwc2_hsotg_hw_cfg(struct dwc2_hsotg *hsotg)
 	hsotg->fifo_mem = hsotg->hw_params.total_fifo_size;
 	hsotg->dedicated_fifos = hsotg->hw_params.en_multiple_tx_fifo;
 
-	dev_info(hsotg->dev, "EPs: %d, %s fifos, %d entries in SPRAM\n",
+	dev_dbg(hsotg->dev, "EPs: %d, %s fifos, %d entries in SPRAM\n",
 		 hsotg->num_of_eps,
 		 hsotg->dedicated_fifos ? "dedicated" : "shared",
 		 hsotg->fifo_mem);
@@ -4656,41 +4656,41 @@ static void dwc2_hsotg_dump(struct dwc2_hsotg *hsotg)
 	u32 val;
 	int idx;
 
-	dev_info(dev, "DCFG=0x%08x, DCTL=0x%08x, DIEPMSK=%08x\n",
+	dev_dbg(dev, "DCFG=0x%08x, DCTL=0x%08x, DIEPMSK=%08x\n",
 		 dwc2_readl(hsotg, DCFG), dwc2_readl(hsotg, DCTL),
 		 dwc2_readl(hsotg, DIEPMSK));
 
-	dev_info(dev, "GAHBCFG=0x%08x, GHWCFG1=0x%08x\n",
+	dev_dbg(dev, "GAHBCFG=0x%08x, GHWCFG1=0x%08x\n",
 		 dwc2_readl(hsotg, GAHBCFG), dwc2_readl(hsotg, GHWCFG1));
 
-	dev_info(dev, "GRXFSIZ=0x%08x, GNPTXFSIZ=0x%08x\n",
+	dev_dbg(dev, "GRXFSIZ=0x%08x, GNPTXFSIZ=0x%08x\n",
 		 dwc2_readl(hsotg, GRXFSIZ), dwc2_readl(hsotg, GNPTXFSIZ));
 
 	/* show periodic fifo settings */
 
 	for (idx = 1; idx < hsotg->num_of_eps; idx++) {
 		val = dwc2_readl(hsotg, DPTXFSIZN(idx));
-		dev_info(dev, "DPTx[%d] FSize=%d, StAddr=0x%08x\n", idx,
+		dev_dbg(dev, "DPTx[%d] FSize=%d, StAddr=0x%08x\n", idx,
 			 val >> FIFOSIZE_DEPTH_SHIFT,
 			 val & FIFOSIZE_STARTADDR_MASK);
 	}
 
 	for (idx = 0; idx < hsotg->num_of_eps; idx++) {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "ep%d-in: EPCTL=0x%08x, SIZ=0x%08x, DMA=0x%08x\n", idx,
 			 dwc2_readl(hsotg, DIEPCTL(idx)),
 			 dwc2_readl(hsotg, DIEPTSIZ(idx)),
 			 dwc2_readl(hsotg, DIEPDMA(idx)));
 
 		val = dwc2_readl(hsotg, DOEPCTL(idx));
-		dev_info(dev,
+		dev_dbg(dev,
 			 "ep%d-out: EPCTL=0x%08x, SIZ=0x%08x, DMA=0x%08x\n",
 			 idx, dwc2_readl(hsotg, DOEPCTL(idx)),
 			 dwc2_readl(hsotg, DOEPTSIZ(idx)),
 			 dwc2_readl(hsotg, DOEPDMA(idx)));
 	}
 
-	dev_info(dev, "DVBUSDIS=0x%08x, DVBUSPULSE=%08x\n",
+	dev_dbg(dev, "DVBUSDIS=0x%08x, DVBUSPULSE=%08x\n",
 		 dwc2_readl(hsotg, DVBUSDIS), dwc2_readl(hsotg, DVBUSPULSE));
 #endif
 }
@@ -4812,7 +4812,7 @@ int dwc2_hsotg_suspend(struct dwc2_hsotg *hsotg)
 	if (hsotg->driver) {
 		int ep;
 
-		dev_info(hsotg->dev, "suspending usb gadget %s\n",
+		dev_dbg(hsotg->dev, "suspending usb gadget %s\n",
 			 hsotg->driver->driver.name);
 
 		spin_lock_irqsave(&hsotg->lock, flags);
@@ -4841,7 +4841,7 @@ int dwc2_hsotg_resume(struct dwc2_hsotg *hsotg)
 		return 0;
 
 	if (hsotg->driver) {
-		dev_info(hsotg->dev, "resuming usb gadget %s\n",
+		dev_dbg(hsotg->dev, "resuming usb gadget %s\n",
 			 hsotg->driver->driver.name);
 
 		spin_lock_irqsave(&hsotg->lock, flags);

@@ -693,7 +693,7 @@ static int ov2685_check_sensor_id(struct ov2685 *ov2685,
 		return ret;
 	}
 
-	dev_info(dev, "Detected OV%04x sensor\n", CHIP_ID);
+	dev_dbg(dev, "Detected OV%04x sensor\n", CHIP_ID);
 
 	return 0;
 }

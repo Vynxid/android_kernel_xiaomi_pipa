@@ -921,7 +921,7 @@ static int omap_sr_probe(struct platform_device *pdev)
 		}
 	}
 
-	dev_info(&pdev->dev, "%s: SmartReflex driver initialized\n", __func__);
+	dev_dbg(&pdev->dev, "%s: SmartReflex driver initialized\n", __func__);
 	if (!sr_dbg_dir) {
 		sr_dbg_dir = debugfs_create_dir("smartreflex", NULL);
 		if (IS_ERR_OR_NULL(sr_dbg_dir)) {

@@ -1324,7 +1324,7 @@ static int stm32_dma_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, dmadev);
 
-	dev_info(&pdev->dev, "STM32 DMA driver registered\n");
+	dev_dbg(&pdev->dev, "STM32 DMA driver registered\n");
 
 	return 0;
 

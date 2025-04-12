@@ -690,7 +690,7 @@ static int pciefd_can_probe(struct pciefd_board *pciefd)
 	/* save the object address in the board structure */
 	pciefd->can[pciefd->can_count] = priv;
 
-	dev_info(&pciefd->pci_dev->dev, "%s at reg_base=0x%p irq=%d\n",
+	dev_dbg(&pciefd->pci_dev->dev, "%s at reg_base=0x%p irq=%d\n",
 		 ndev->name, priv->reg_base, ndev->irq);
 
 	return 0;
@@ -782,7 +782,7 @@ static int peak_pciefd_probe(struct pci_dev *pdev,
 	hw_ver_minor = (v2 & 0x00000f00) >> 8;
 	hw_ver_sub = (v2 & 0x000000f0) >> 4;
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "%ux CAN-FD PCAN-PCIe FPGA v%u.%u.%u:\n", can_count,
 		 hw_ver_major, hw_ver_minor, hw_ver_sub);
 

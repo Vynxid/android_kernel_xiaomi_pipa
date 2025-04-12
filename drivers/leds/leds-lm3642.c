@@ -114,7 +114,7 @@ static int lm3642_control(struct lm3642_chip_data *chip,
 	}
 
 	if (chip->last_flag)
-		dev_info(chip->dev, "Last FLAG is 0x%x\n", chip->last_flag);
+		dev_dbg(chip->dev, "Last FLAG is 0x%x\n", chip->last_flag);
 
 	/* brightness 0 means off-state */
 	if (!brightness)
@@ -385,7 +385,7 @@ static int lm3642_probe(struct i2c_client *client,
 		goto err_create_indicator_file;
 	}
 
-	dev_info(&client->dev, "LM3642 is initialized\n");
+	dev_dbg(&client->dev, "LM3642 is initialized\n");
 	return 0;
 
 err_create_indicator_file:

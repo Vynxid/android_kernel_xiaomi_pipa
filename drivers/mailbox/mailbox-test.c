@@ -327,7 +327,7 @@ static void mbox_test_message_sent(struct mbox_client *client,
 		dev_warn(client->dev,
 			 "Client: Message could not be sent: %d\n", r);
 	else
-		dev_info(client->dev,
+		dev_dbg(client->dev,
 			 "Client: Message sent\n");
 }
 
@@ -418,7 +418,7 @@ static int mbox_test_probe(struct platform_device *pdev)
 		return ret;
 
 	init_waitqueue_head(&tdev->waitq);
-	dev_info(&pdev->dev, "Successfully registered\n");
+	dev_dbg(&pdev->dev, "Successfully registered\n");
 
 	return 0;
 }

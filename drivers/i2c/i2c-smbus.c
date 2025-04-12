@@ -204,7 +204,7 @@ static int smbalert_probe(struct i2c_client *ara,
 	}
 
 	i2c_set_clientdata(ara, alert);
-	dev_info(&adapter->dev, "supports SMBALERT#\n");
+	dev_dbg(&adapter->dev, "supports SMBALERT#\n");
 
 	return 0;
 }

@@ -983,7 +983,7 @@ static int si1133_validate_ids(struct iio_dev *iio_dev)
 	if (err)
 		return err;
 
-	dev_info(&iio_dev->dev,
+	dev_dbg(&iio_dev->dev,
 		 "Device ID part %#02hhx rev %#02hhx mfr %#02hhx\n",
 		 part_id, rev_id, mfr_id);
 	if (part_id != SI1133_PART_ID) {

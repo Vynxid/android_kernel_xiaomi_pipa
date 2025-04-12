@@ -19,14 +19,14 @@
 static int cfvidl_receive(struct cflayer *layr, struct cfpkt *pkt);
 static int cfvidl_transmit(struct cflayer *layr, struct cfpkt *pkt);
 
-struct cflayer *cfvidl_create(u8 channel_id, struct dev_info *dev_info)
+struct cflayer *cfvidl_create(u8 channel_id, struct dev_dbg *dev_dbg)
 {
 	struct cfsrvl *vid = kzalloc(sizeof(struct cfsrvl), GFP_ATOMIC);
 	if (!vid)
 		return NULL;
 	caif_assert(offsetof(struct cfsrvl, layer) == 0);
 
-	cfsrvl_init(vid, channel_id, dev_info, false);
+	cfsrvl_init(vid, channel_id, dev_dbg, false);
 	vid->layer.receive = cfvidl_receive;
 	vid->layer.transmit = cfvidl_transmit;
 	snprintf(vid->layer.name, CAIF_LAYER_NAME_SZ - 1, "vid1");
@@ -60,6 +60,6 @@ static int cfvidl_transmit(struct cflayer *layr, struct cfpkt *pkt)
 	/* Add info for MUX-layer to route the packet out */
 	info = cfpkt_info(pkt);
 	info->channel_id = service->layer.id;
-	info->dev_info = &service->dev_info;
+	info->dev_dbg = &service->dev_dbg;
 	return layr->dn->transmit(layr->dn, pkt);
 }

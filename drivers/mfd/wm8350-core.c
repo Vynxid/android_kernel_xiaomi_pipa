@@ -311,7 +311,7 @@ int wm8350_device_init(struct wm8350 *wm8350, int irq,
 	mode = (id2 & WM8350_CONF_STS_MASK) >> 10;
 	cust_id = id2 & WM8350_CUST_ID_MASK;
 	chip_rev = (id2 & WM8350_CHIP_REV_MASK) >> 12;
-	dev_info(wm8350->dev,
+	dev_dbg(wm8350->dev,
 		 "CONF_STS %d, CUST_ID %d, MASK_REV %d, CHIP_REV %d\n",
 		 mode, cust_id, mask_rev, chip_rev);
 
@@ -328,17 +328,17 @@ int wm8350_device_init(struct wm8350 *wm8350, int irq,
 
 		switch (chip_rev) {
 		case WM8350_REV_E:
-			dev_info(wm8350->dev, "WM8350 Rev E\n");
+			dev_dbg(wm8350->dev, "WM8350 Rev E\n");
 			break;
 		case WM8350_REV_F:
-			dev_info(wm8350->dev, "WM8350 Rev F\n");
+			dev_dbg(wm8350->dev, "WM8350 Rev F\n");
 			break;
 		case WM8350_REV_G:
-			dev_info(wm8350->dev, "WM8350 Rev G\n");
+			dev_dbg(wm8350->dev, "WM8350 Rev G\n");
 			wm8350->power.rev_g_coeff = 1;
 			break;
 		case WM8350_REV_H:
-			dev_info(wm8350->dev, "WM8350 Rev H\n");
+			dev_dbg(wm8350->dev, "WM8350 Rev H\n");
 			wm8350->power.rev_g_coeff = 1;
 			break;
 		default:
@@ -355,12 +355,12 @@ int wm8350_device_init(struct wm8350 *wm8350, int irq,
 
 		switch (chip_rev) {
 		case 0:
-			dev_info(wm8350->dev, "WM8351 Rev A\n");
+			dev_dbg(wm8350->dev, "WM8351 Rev A\n");
 			wm8350->power.rev_g_coeff = 1;
 			break;
 
 		case 1:
-			dev_info(wm8350->dev, "WM8351 Rev B\n");
+			dev_dbg(wm8350->dev, "WM8351 Rev B\n");
 			wm8350->power.rev_g_coeff = 1;
 			break;
 
@@ -377,7 +377,7 @@ int wm8350_device_init(struct wm8350 *wm8350, int irq,
 
 		switch (chip_rev) {
 		case 0:
-			dev_info(wm8350->dev, "WM8352 Rev A\n");
+			dev_dbg(wm8350->dev, "WM8352 Rev A\n");
 			wm8350->power.rev_g_coeff = 1;
 			break;
 

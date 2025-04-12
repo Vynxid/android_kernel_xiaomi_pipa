@@ -57,12 +57,12 @@ static struct tpci200_board *check_slot(struct ipack_device *dev)
 	tpci200 = dev_get_drvdata(dev->bus->parent);
 
 	if (tpci200 == NULL) {
-		dev_info(&dev->dev, "carrier board not found\n");
+		dev_dbg(&dev->dev, "carrier board not found\n");
 		return NULL;
 	}
 
 	if (dev->slot >= TPCI200_NB_SLOT) {
-		dev_info(&dev->dev,
+		dev_dbg(&dev->dev,
 			 "Slot [%d:%d] doesn't exist! Last tpci200 slot is %d.\n",
 			 dev->bus->bus_nr, dev->slot, TPCI200_NB_SLOT-1);
 		return NULL;
@@ -153,7 +153,7 @@ static irqreturn_t tpci200_interrupt(int irq, void *dev_id)
 		slot_irq = rcu_dereference(tpci200->slots[i].irq);
 		ret = tpci200_slot_irq(slot_irq);
 		if (ret == -ENODEV) {
-			dev_info(&tpci200->info->pdev->dev,
+			dev_dbg(&tpci200->info->pdev->dev,
 				 "No registered ISR for slot [%d:%d]!. IRQ will be disabled.\n",
 				 tpci200->number, i);
 			tpci200_disable_irq(tpci200, i);

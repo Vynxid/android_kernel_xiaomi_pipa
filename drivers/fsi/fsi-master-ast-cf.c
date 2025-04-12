@@ -887,7 +887,7 @@ static int check_firmware_image(struct fsi_master_acf *master)
 	master->trace_enabled = !!(fw_options & FW_OPTION_TRACE_EN);
 
 	/* Check version and signature */
-	dev_info(master->dev, "ColdFire initialized, firmware v%d API v%d.%d (trace %s)\n",
+	dev_dbg(master->dev, "ColdFire initialized, firmware v%d API v%d.%d (trace %s)\n",
 		 fw_vers, fw_api >> 8, fw_api & 0xff,
 		 master->trace_enabled ? "enabled" : "disabled");
 

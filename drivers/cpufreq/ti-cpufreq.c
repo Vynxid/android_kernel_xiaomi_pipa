@@ -240,7 +240,7 @@ static int ti_cpufreq_probe(struct platform_device *pdev)
 
 	opp_data->opp_node = dev_pm_opp_of_get_opp_desc_node(opp_data->cpu_dev);
 	if (!opp_data->opp_node) {
-		dev_info(opp_data->cpu_dev,
+		dev_dbg(opp_data->cpu_dev,
 			 "OPP-v2 not supported, cpufreq-dt will attempt to use legacy tables.\n");
 		goto register_cpufreq_dt;
 	}

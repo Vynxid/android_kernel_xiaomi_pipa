@@ -671,7 +671,7 @@ static int adm9240_detect(struct i2c_client *new_client,
 
 	/* successful detect, print chip info */
 	die_rev = i2c_smbus_read_byte_data(new_client, ADM9240_REG_DIE_REV);
-	dev_info(&adapter->dev, "found %s revision %u\n",
+	dev_dbg(&adapter->dev, "found %s revision %u\n",
 		 man_id == 0x23 ? "ADM9240" :
 		 man_id == 0xda ? "DS1780" : "LM81", die_rev);
 
@@ -688,12 +688,12 @@ static void adm9240_init_client(struct i2c_client *client)
 
 	data->vrm = vid_which_vrm(); /* need this to report vid as mV */
 
-	dev_info(&client->dev, "Using VRM: %d.%d\n", data->vrm / 10,
+	dev_dbg(&client->dev, "Using VRM: %d.%d\n", data->vrm / 10,
 			data->vrm % 10);
 
 	if (conf & 1) { /* measurement cycle running: report state */
 
-		dev_info(&client->dev, "status: config 0x%02x mode %u\n",
+		dev_dbg(&client->dev, "status: config 0x%02x mode %u\n",
 				conf, mode);
 
 	} else { /* cold start: open limits before starting chip */
@@ -717,7 +717,7 @@ static void adm9240_init_client(struct i2c_client *client)
 		/* start measurement cycle */
 		i2c_smbus_write_byte_data(client, ADM9240_REG_CONFIG, 1);
 
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			 "cold start: config was 0x%02x mode %u\n", conf, mode);
 	}
 }

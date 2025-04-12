@@ -840,16 +840,16 @@ static int atusb_get_and_show_revision(struct atusb *atusb)
 			break;
 		}
 
-		dev_info(&usb_dev->dev,
+		dev_dbg(&usb_dev->dev,
 			 "Firmware: major: %u, minor: %u, hardware type: %s (%d)\n",
 			 atusb->fw_ver_maj, atusb->fw_ver_min, hw_name,
 			 atusb->fw_hw_type);
 	}
 	if (atusb->fw_ver_maj == 0 && atusb->fw_ver_min < 2) {
-		dev_info(&usb_dev->dev,
+		dev_dbg(&usb_dev->dev,
 			 "Firmware version (%u.%u) predates our first public release.",
 			 atusb->fw_ver_maj, atusb->fw_ver_min);
-		dev_info(&usb_dev->dev, "Please update to version 0.2 or newer");
+		dev_dbg(&usb_dev->dev, "Please update to version 0.2 or newer");
 	}
 
 	kfree(buffer);
@@ -871,7 +871,7 @@ static int atusb_get_and_show_build(struct atusb *atusb)
 			      ATUSB_REQ_FROM_DEV, 0, 0, build, ATUSB_BUILD_SIZE, 1000);
 	if (ret >= 0) {
 		build[ret] = 0;
-		dev_info(&usb_dev->dev, "Firmware: build %s\n", build);
+		dev_dbg(&usb_dev->dev, "Firmware: build %s\n", build);
 	}
 
 	kfree(build);
@@ -960,7 +960,7 @@ static int atusb_get_and_conf_chip(struct atusb *atusb)
 	hw->phy->transmit_power = hw->phy->supported.tx_powers[0];
 	hw->phy->cca_ed_level = hw->phy->supported.cca_ed_levels[7];
 
-	dev_info(&usb_dev->dev, "ATUSB: %s version %d\n", chip, version_num);
+	dev_dbg(&usb_dev->dev, "ATUSB: %s version %d\n", chip, version_num);
 
 	return 0;
 
@@ -1003,12 +1003,12 @@ static int atusb_set_extended_addr(struct atusb *atusb)
 	memcpy(&extended_addr, buffer, IEEE802154_EXTENDED_ADDR_LEN);
 	/* Check if read address is not empty and the unicast bit is set correctly */
 	if (!ieee802154_is_valid_extended_unicast_addr(extended_addr)) {
-		dev_info(&usb_dev->dev, "no permanent extended address found, random address set\n");
+		dev_dbg(&usb_dev->dev, "no permanent extended address found, random address set\n");
 		ieee802154_random_extended_addr(&atusb->hw->phy->perm_extended_addr);
 	} else {
 		atusb->hw->phy->perm_extended_addr = extended_addr;
 		addr = swab64((__force u64)atusb->hw->phy->perm_extended_addr);
-		dev_info(&usb_dev->dev, "Read permanent extended address %8phC from device\n",
+		dev_dbg(&usb_dev->dev, "Read permanent extended address %8phC from device\n",
 			 &addr);
 	}
 

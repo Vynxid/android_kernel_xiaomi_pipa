@@ -171,7 +171,7 @@ static int bh1780_probe(struct i2c_client *client,
 	ret = bh1780_read(bh1780, BH1780_REG_PARTID);
 	if (ret < 0)
 		goto out_disable_pm;
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "Ambient Light Sensor, Rev : %lu\n",
 		 (ret & BH1780_REVMASK));
 

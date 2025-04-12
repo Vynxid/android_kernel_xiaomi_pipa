@@ -303,7 +303,7 @@ static int mxl301rf_probe(struct i2c_client *client,
 	memcpy(&fe->ops.tuner_ops, &mxl301rf_ops, sizeof(mxl301rf_ops));
 
 	i2c_set_clientdata(client, &state->cfg);
-	dev_info(&client->dev, "MaxLinear MxL301RF attached.\n");
+	dev_dbg(&client->dev, "MaxLinear MxL301RF attached.\n");
 	return 0;
 }
 

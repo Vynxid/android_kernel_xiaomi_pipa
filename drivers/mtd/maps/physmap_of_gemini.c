@@ -96,7 +96,7 @@ int of_flash_probe_gemini(struct platform_device *pdev,
 				 map->bankwidth * 8);
 	}
 
-	dev_info(&pdev->dev, "initialized Gemini-specific physmap control\n");
+	dev_dbg(&pdev->dev, "initialized Gemini-specific physmap control\n");
 
 	return 0;
 }

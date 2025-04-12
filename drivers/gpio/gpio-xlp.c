@@ -422,7 +422,7 @@ static int xlp_gpio_probe(struct platform_device *pdev)
 	gpiochip_set_chained_irqchip(gc, &xlp_gpio_irq_chip, irq,
 			xlp_gpio_generic_handler);
 
-	dev_info(&pdev->dev, "registered %d GPIOs\n", gc->ngpio);
+	dev_dbg(&pdev->dev, "registered %d GPIOs\n", gc->ngpio);
 
 	return 0;
 

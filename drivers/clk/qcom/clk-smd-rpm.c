@@ -1337,7 +1337,7 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
 		clk_prepare_enable(pnoc_keepalive_a_clk.hw.clk);
 	}
 
-	dev_info(&pdev->dev, "Registered RPM clocks\n");
+	dev_dbg(&pdev->dev, "Registered RPM clocks\n");
 
 	return 0;
 err:

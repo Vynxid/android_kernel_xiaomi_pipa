@@ -165,7 +165,7 @@ void ubi_msg(const struct ubi_device *ubi, const char *fmt, ...)
 	vaf.fmt = fmt;
 	vaf.va = &args;
 
-	pr_notice(UBI_NAME_STR "%d: %pV\n", ubi->ubi_num, &vaf);
+	pr_debug(UBI_NAME_STR "%d: %pV\n", ubi->ubi_num, &vaf);
 
 	va_end(args);
 }

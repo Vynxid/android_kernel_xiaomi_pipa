@@ -230,7 +230,7 @@ static int l4f00242t03_probe(struct spi_device *spi)
 	priv->lcd_state = FB_BLANK_VSYNC_SUSPEND;
 	l4f00242t03_lcd_power_set(priv->ld, FB_BLANK_UNBLANK);
 
-	dev_info(&spi->dev, "Epson l4f00242t03 lcd probed.\n");
+	dev_dbg(&spi->dev, "Epson l4f00242t03 lcd probed.\n");
 
 	return 0;
 }

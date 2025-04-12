@@ -600,7 +600,7 @@ static int msm_bus_apply_rules(struct list_head *list, bool after_clk_commit)
 {
 	struct rule_apply_rcm_info *rule;
 	struct device *dev = NULL;
-	struct msm_bus_node_device_type *dev_info = NULL;
+	struct msm_bus_node_device_type *dev_dbg = NULL;
 	int ret = 0;
 
 	list_for_each_entry(rule, list, link) {
@@ -615,9 +615,9 @@ static int msm_bus_apply_rules(struct list_head *list, bool after_clk_commit)
 			MSM_BUS_ERR("Can't find dev node for %d", rule->id);
 			continue;
 		}
-		dev_info = to_msm_bus_node(dev);
+		dev_dbg = to_msm_bus_node(dev);
 
-		ret = msm_bus_enable_limiter(dev_info, rule->throttle,
+		ret = msm_bus_enable_limiter(dev_dbg, rule->throttle,
 							rule->lim_bw);
 		if (ret)
 			MSM_BUS_ERR("Failed to set limiter for %d", rule->id);
@@ -670,7 +670,7 @@ static int update_path(struct device *src_dev, int dest, uint64_t act_req_ib,
 {
 	struct device *next_dev = NULL;
 	struct link_node *lnode = NULL;
-	struct msm_bus_node_device_type *dev_info = NULL;
+	struct msm_bus_node_device_type *dev_dbg = NULL;
 	int curr_idx;
 	int ret = 0;
 	struct rule_update_path_info *rule_node;
@@ -694,16 +694,16 @@ static int update_path(struct device *src_dev, int dest, uint64_t act_req_ib,
 	while (next_dev) {
 		int i;
 
-		dev_info = to_msm_bus_node(next_dev);
+		dev_dbg = to_msm_bus_node(next_dev);
 
-		if (curr_idx >= dev_info->num_lnodes) {
+		if (curr_idx >= dev_dbg->num_lnodes) {
 			MSM_BUS_ERR("%s: Invalid lnode Idx %d num lnodes %d",
-			 __func__, curr_idx, dev_info->num_lnodes);
+			 __func__, curr_idx, dev_dbg->num_lnodes);
 			ret = -ENXIO;
 			goto exit_update_path;
 		}
 
-		lnode = &dev_info->lnode_list[curr_idx];
+		lnode = &dev_dbg->lnode_list[curr_idx];
 		if (!lnode) {
 			MSM_BUS_ERR("%s: Invalid lnode ptr lnode %d",
 				 __func__, curr_idx);
@@ -716,18 +716,18 @@ static int update_path(struct device *src_dev, int dest, uint64_t act_req_ib,
 		lnode->lnode_ab[DUAL_CTX] = slp_req_bw;
 
 		for (i = 0; i < NUM_CTX; i++)
-			dev_info->node_bw[i].cur_clk_hz =
-					aggregate_bus_req(dev_info, i);
+			dev_dbg->node_bw[i].cur_clk_hz =
+					aggregate_bus_req(dev_dbg, i);
 
-		add_node_to_clist(dev_info);
+		add_node_to_clist(dev_dbg);
 
 		if (rules_registered) {
-			rule_node = &dev_info->node_info->rule;
-			rule_node->id = dev_info->node_info->id;
-			rule_node->ib = dev_info->node_bw[ACTIVE_CTX].max_ib;
-			rule_node->ab = dev_info->node_bw[ACTIVE_CTX].sum_ab;
+			rule_node = &dev_dbg->node_info->rule;
+			rule_node->id = dev_dbg->node_info->id;
+			rule_node->ib = dev_dbg->node_bw[ACTIVE_CTX].max_ib;
+			rule_node->ab = dev_dbg->node_bw[ACTIVE_CTX].sum_ab;
 			rule_node->clk =
-				dev_info->node_bw[ACTIVE_CTX].cur_clk_hz;
+				dev_dbg->node_bw[ACTIVE_CTX].cur_clk_hz;
 			if (!rule_node->added) {
 				list_add_tail(&rule_node->link, &input_list);
 				rule_node->added = true;
@@ -747,7 +747,7 @@ static int remove_path(struct device *src_dev, int dst, uint64_t cur_ib,
 {
 	struct device *next_dev = NULL;
 	struct link_node *lnode = NULL;
-	struct msm_bus_node_device_type *dev_info = NULL;
+	struct msm_bus_node_device_type *dev_dbg = NULL;
 	int ret = 0;
 	int cur_idx = src_idx;
 	int next_idx;
@@ -772,11 +772,11 @@ static int remove_path(struct device *src_dev, int dst, uint64_t cur_ib,
 	next_dev = src_dev;
 
 	while (next_dev) {
-		dev_info = to_msm_bus_node(next_dev);
-		lnode = &dev_info->lnode_list[cur_idx];
+		dev_dbg = to_msm_bus_node(next_dev);
+		lnode = &dev_dbg->lnode_list[cur_idx];
 		next_idx = lnode->next;
 		next_dev = lnode->next_dev;
-		remove_lnode(dev_info, cur_idx);
+		remove_lnode(dev_dbg, cur_idx);
 		cur_idx = next_idx;
 	}
 

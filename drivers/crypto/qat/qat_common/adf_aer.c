@@ -60,7 +60,7 @@ static pci_ers_result_t adf_error_detected(struct pci_dev *pdev,
 {
 	struct adf_accel_dev *accel_dev = adf_devmgr_pci_to_accel_dev(pdev);
 
-	dev_info(&pdev->dev, "Acceleration driver hardware error detected.\n");
+	dev_dbg(&pdev->dev, "Acceleration driver hardware error detected.\n");
 	if (!accel_dev) {
 		dev_err(&pdev->dev, "Can't find acceleration device\n");
 		return PCI_ERS_RESULT_DISCONNECT;
@@ -92,10 +92,10 @@ void adf_reset_sbr(struct adf_accel_dev *accel_dev)
 		parent = pdev;
 
 	if (!pci_wait_for_pending_transaction(pdev))
-		dev_info(&GET_DEV(accel_dev),
+		dev_dbg(&GET_DEV(accel_dev),
 			 "Transaction still in progress. Proceeding\n");
 
-	dev_info(&GET_DEV(accel_dev), "Secondary bus reset\n");
+	dev_dbg(&GET_DEV(accel_dev), "Secondary bus reset\n");
 
 	pci_read_config_word(parent, PCI_BRIDGE_CONTROL, &bridge_ctl);
 	bridge_ctl |= PCI_BRIDGE_CTL_BUS_RESET;
@@ -119,7 +119,7 @@ void adf_dev_restore(struct adf_accel_dev *accel_dev)
 	struct pci_dev *pdev = accel_to_pci_dev(accel_dev);
 
 	if (hw_device->reset_device) {
-		dev_info(&GET_DEV(accel_dev), "Resetting device qat_dev%d\n",
+		dev_dbg(&GET_DEV(accel_dev), "Resetting device qat_dev%d\n",
 			 accel_dev->accel_id);
 		hw_device->reset_device(accel_dev);
 		pci_restore_state(pdev);
@@ -209,8 +209,8 @@ static pci_ers_result_t adf_slot_reset(struct pci_dev *pdev)
 
 static void adf_resume(struct pci_dev *pdev)
 {
-	dev_info(&pdev->dev, "Acceleration driver reset completed\n");
-	dev_info(&pdev->dev, "Device is up and running\n");
+	dev_dbg(&pdev->dev, "Acceleration driver reset completed\n");
+	dev_dbg(&pdev->dev, "Device is up and running\n");
 }
 
 static const struct pci_error_handlers adf_err_handler = {

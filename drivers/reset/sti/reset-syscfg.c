@@ -188,7 +188,7 @@ static int syscfg_reset_controller_register(struct device *dev,
 
 	err = reset_controller_register(&rc->rst);
 	if (!err)
-		dev_info(dev, "registered\n");
+		dev_dbg(dev, "registered\n");
 
 	return err;
 }

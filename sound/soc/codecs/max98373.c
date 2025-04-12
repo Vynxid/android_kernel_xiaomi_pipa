@@ -918,7 +918,7 @@ static int max98373_i2c_probe(struct i2c_client *i2c,
 			"Failed to read: 0x%02X\n", MAX98373_R21FF_REV_ID);
 		return ret;
 	}
-	dev_info(&i2c->dev, "MAX98373 revisionID: 0x%02X\n", reg);
+	dev_dbg(&i2c->dev, "MAX98373 revisionID: 0x%02X\n", reg);
 
 	/* voltage/current slot configuration */
 	max98373_slot_config(i2c, max98373);

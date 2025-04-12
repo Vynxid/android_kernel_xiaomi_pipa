@@ -1610,7 +1610,7 @@ static int sba_async_register(struct sba_device *sba)
 		return ret;
 	}
 
-	dev_info(sba->dev, "%s capabilities: %s%s%s%s\n",
+	dev_dbg(sba->dev, "%s capabilities: %s%s%s%s\n",
 	dma_chan_name(&sba->dma_chan),
 	dma_has_cap(DMA_INTERRUPT, dma_dev->cap_mask) ? "interrupt " : "",
 	dma_has_cap(DMA_MEMCPY, dma_dev->cap_mask) ? "memcpy " : "",
@@ -1736,7 +1736,7 @@ skip_debugfs:
 		goto fail_free_resources;
 
 	/* Print device info */
-	dev_info(sba->dev, "%s using SBAv%d mailbox channel from %s",
+	dev_dbg(sba->dev, "%s using SBAv%d mailbox channel from %s",
 		 dma_chan_name(&sba->dma_chan), sba->ver+1,
 		 dev_name(sba->mbox_dev));
 

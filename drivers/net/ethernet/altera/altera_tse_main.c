@@ -1601,7 +1601,7 @@ static int altera_tse_probe(struct platform_device *pdev)
 	priv->revision = ioread32(&priv->mac_dev->megacore_revision);
 
 	if (netif_msg_probe(priv))
-		dev_info(&pdev->dev, "Altera TSE MAC version %d.%d at 0x%08lx irq %d/%d\n",
+		dev_dbg(&pdev->dev, "Altera TSE MAC version %d.%d at 0x%08lx irq %d/%d\n",
 			 (priv->revision >> 8) & 0xff,
 			 priv->revision & 0xff,
 			 (unsigned long) control_port->start, priv->rx_irq,

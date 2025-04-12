@@ -176,7 +176,7 @@ static int write_reg(struct i2c_client *client, u8 reg, u8 value)
 
 	usb = go->hpi_context;
 	if (mutex_lock_interruptible(&usb->i2c_lock) != 0) {
-		dev_info(&client->dev, "i2c lock failed\n");
+		dev_dbg(&client->dev, "i2c lock failed\n");
 		kfree(buf);
 		return -EINTR;
 	}
@@ -215,7 +215,7 @@ static int write_reg_fp(struct i2c_client *client, u16 addr, u16 val)
 
 	usb = go->hpi_context;
 	if (mutex_lock_interruptible(&usb->i2c_lock) != 0) {
-		dev_info(&client->dev, "i2c lock failed\n");
+		dev_dbg(&client->dev, "i2c lock failed\n");
 		kfree(buf);
 		return -EINTR;
 	}
@@ -233,12 +233,12 @@ static int write_reg_fp(struct i2c_client *client, u16 addr, u16 val)
 		val_read = (buf[2] << 8) + buf[3];
 		kfree(buf);
 		if (val_read != val) {
-			dev_info(&client->dev, "invalid fp write %x %x\n",
+			dev_dbg(&client->dev, "invalid fp write %x %x\n",
 				 val_read, val);
 			return -EFAULT;
 		}
 		if (subaddr != addr) {
-			dev_info(&client->dev, "invalid fp write addr %x %x\n",
+			dev_dbg(&client->dev, "invalid fp write addr %x %x\n",
 				 subaddr, addr);
 			return -EFAULT;
 		}
@@ -277,7 +277,7 @@ static int read_reg_fp(struct i2c_client *client, u16 addr, u16 *val)
 	memset(buf, 0xcd, 6);
 	usb = go->hpi_context;
 	if (mutex_lock_interruptible(&usb->i2c_lock) != 0) {
-		dev_info(&client->dev, "i2c lock failed\n");
+		dev_dbg(&client->dev, "i2c lock failed\n");
 		kfree(buf);
 		return -EINTR;
 	}
@@ -301,7 +301,7 @@ static int write_regs(struct i2c_client *client, u8 *regs)
 
 	for (i = 0; !((regs[i] == 0x00) && (regs[i+1] == 0x00)); i += 2) {
 		if (write_reg(client, regs[i], regs[i+1]) < 0) {
-			dev_info(&client->dev, "failed\n");
+			dev_dbg(&client->dev, "failed\n");
 			return -1;
 		}
 	}
@@ -314,7 +314,7 @@ static int write_regs_fp(struct i2c_client *client, u16 *regs)
 
 	for (i = 0; !((regs[i] == 0x00) && (regs[i+1] == 0x00)); i += 2) {
 		if (write_reg_fp(client, regs[i], regs[i+1]) < 0) {
-			dev_info(&client->dev, "failed fp\n");
+			dev_dbg(&client->dev, "failed fp\n");
 			return -1;
 		}
 	}

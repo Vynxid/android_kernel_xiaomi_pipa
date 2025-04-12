@@ -885,7 +885,7 @@ static int tower_probe (struct usb_interface *interface, const struct usb_device
 		retval = result;
 		goto error;
 	}
-	dev_info(&interface->dev,
+	dev_dbg(&interface->dev,
 		 "LEGO USB Tower firmware version is %d.%d build %d\n",
 		 get_version_reply->major,
 		 get_version_reply->minor,
@@ -904,7 +904,7 @@ static int tower_probe (struct usb_interface *interface, const struct usb_device
 	dev->minor = interface->minor;
 
 	/* let the user know what node this device is now attached to */
-	dev_info(&interface->dev, "LEGO USB Tower #%d now attached to major "
+	dev_dbg(&interface->dev, "LEGO USB Tower #%d now attached to major "
 		 "%d minor %d\n", (dev->minor - LEGO_USB_TOWER_MINOR_BASE),
 		 USB_MAJOR, dev->minor);
 
@@ -954,7 +954,7 @@ static void tower_disconnect (struct usb_interface *interface)
 		mutex_unlock(&dev->lock);
 	}
 
-	dev_info(&interface->dev, "LEGO USB Tower #%d now disconnected\n",
+	dev_dbg(&interface->dev, "LEGO USB Tower #%d now disconnected\n",
 		 (minor - LEGO_USB_TOWER_MINOR_BASE));
 }
 

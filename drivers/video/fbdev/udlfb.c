@@ -1258,7 +1258,7 @@ static int dlfb_realloc_framebuffer(struct dlfb_data *dlfb, struct fb_info *info
 		if (shadow)
 			new_back = vzalloc(new_len);
 		if (!new_back)
-			dev_info(info->dev,
+			dev_dbg(info->dev,
 				 "No shadow/backing buffer allocated\n");
 		else {
 			dlfb_deferred_vfree(dlfb, dlfb->backing_buffer);
@@ -1591,7 +1591,7 @@ static int dlfb_parse_vendor_descriptor(struct dlfb_data *dlfb,
 	}
 
 	if (total_len > 5) {
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			 "vendor descriptor length: %d data: %11ph\n",
 			 total_len, desc);
 
@@ -1631,7 +1631,7 @@ static int dlfb_parse_vendor_descriptor(struct dlfb_data *dlfb,
 			desc += length;
 		}
 	} else {
-		dev_info(&intf->dev, "vendor descriptor not available (%d)\n",
+		dev_dbg(&intf->dev, "vendor descriptor not available (%d)\n",
 			 total_len);
 	}
 
@@ -1760,7 +1760,7 @@ static int dlfb_usb_probe(struct usb_interface *intf,
 		dev_warn(info->device, "failed to create '%s' attribute: %d\n",
 			 edid_attr.attr.name, retval);
 
-	dev_info(info->device,
+	dev_dbg(info->device,
 		 "%s is DisplayLink USB device (%dx%d, %dK framebuffer memory)\n",
 		 dev_name(info->dev), info->var.xres, info->var.yres,
 		 ((dlfb->backing_buffer) ?

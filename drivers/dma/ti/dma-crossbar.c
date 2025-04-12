@@ -163,7 +163,7 @@ static int ti_am335x_xbar_probe(struct platform_device *pdev)
 
 	if (of_property_read_u32(dma_node, "dma-requests",
 				 &xbar->dma_requests)) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Missing XBAR output information, using %u.\n",
 			 TI_AM335X_XBAR_LINES);
 		xbar->dma_requests = TI_AM335X_XBAR_LINES;
@@ -171,7 +171,7 @@ static int ti_am335x_xbar_probe(struct platform_device *pdev)
 	of_node_put(dma_node);
 
 	if (of_property_read_u32(node, "dma-requests", &xbar->xbar_events)) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Missing XBAR input information, using %u.\n",
 			 TI_AM335X_XBAR_LINES);
 		xbar->xbar_events = TI_AM335X_XBAR_LINES;
@@ -360,7 +360,7 @@ static int ti_dra7_xbar_probe(struct platform_device *pdev)
 
 	if (of_property_read_u32(dma_node, "dma-requests",
 				 &xbar->dma_requests)) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Missing XBAR output information, using %u.\n",
 			 TI_DRA7_XBAR_OUTPUTS);
 		xbar->dma_requests = TI_DRA7_XBAR_OUTPUTS;
@@ -374,7 +374,7 @@ static int ti_dra7_xbar_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	if (of_property_read_u32(node, "dma-requests", &xbar->xbar_requests)) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Missing XBAR input information, using %u.\n",
 			 TI_DRA7_XBAR_INPUTS);
 		xbar->xbar_requests = TI_DRA7_XBAR_INPUTS;

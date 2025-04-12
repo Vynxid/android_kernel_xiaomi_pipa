@@ -38,7 +38,7 @@ static int mi_disp_fod_thread_create(struct disp_lhbm *dl_ptr, int disp_id)
 		pr_err("%s failed to create disp_feature kthread\n", LHBM_TAG);
 		dt_ptr->thread = NULL;
 	}
-	pr_info("%s create disp_fod:%d kthread success\n", LHBM_TAG, disp_id);
+	pr_debug("%s create disp_fod:%d kthread success\n", LHBM_TAG, disp_id);
 
 	return ret;
 }
@@ -81,7 +81,7 @@ static int mi_dsi_panel_set_fod_lhbm(struct dsi_panel *panel, int lhbm_target)
 		if (panel->mi_cfg.local_hbm_cur_status == false) {
 			rc = dsi_panel_set_disp_param(panel, DISPPARAM_HBM_FOD_ON|lhbm_target);
 			if(panel->mi_cfg.in_aod == true) {
-				pr_info("%s in aod status delay 30 ms lhbm on\n", LHBM_TAG);
+				pr_debug("%s in aod status delay 30 ms lhbm on\n", LHBM_TAG);
 				mdelay(70);
 			}
 		}
@@ -124,11 +124,11 @@ static int mi_sde_connector_fod_lhbm(struct drm_connector *connector, bool from_
 	mi_cfg = &display->panel->mi_cfg;
 	btn_down = (fod_btn == 1);
 
-	pr_info("%s dsi_mi_sde_connector_fod_lhbm=%d\n", LHBM_TAG, btn_down);
+	pr_debug("%s dsi_mi_sde_connector_fod_lhbm=%d\n", LHBM_TAG, btn_down);
 	if (btn_down) {
 		if (!mi_cfg->pending_lhbm_state && !from_touch) {
 			rc = -EINVAL;
-			pr_info("%s LHBM on from display skip\n", LHBM_TAG);
+			pr_debug("%s LHBM on from display skip\n", LHBM_TAG);
 		} else {
 			lhbm_target = mi_get_fod_lhbm_target_brightness(display);
 			rc = mi_dsi_panel_set_fod_lhbm(display->panel, lhbm_target);
@@ -136,7 +136,7 @@ static int mi_sde_connector_fod_lhbm(struct drm_connector *connector, bool from_
 			if (!rc) {
 				mi_cfg->pending_lhbm_state = 0;
 			} else if (rc == -ENODEV) {
-				pr_info("%s LHBM on !panel_initialized rc=%d\n", LHBM_TAG, rc);
+				pr_debug("%s LHBM on !panel_initialized rc=%d\n", LHBM_TAG, rc);
 				mi_cfg->pending_lhbm_state = 1;
 			} else {
 				pr_err("%s LHBM on failed rc=%d\n", LHBM_TAG, rc);
@@ -254,7 +254,7 @@ int mi_disp_set_fod_queue_work(u32 fod_btn, bool from_touch)
 					return 0;
 				} else {
 					ignore_fod_btn = false;
-					pr_info("%s clear ignore state\n", LHBM_TAG);
+					pr_debug("%s clear ignore state\n", LHBM_TAG);
 					return 0;
 				}
 			}
@@ -266,7 +266,7 @@ int mi_disp_set_fod_queue_work(u32 fod_btn, bool from_touch)
 				mutex_lock(&display->display_lock);
 				if (display->panel->power_mode == SDE_MODE_DPMS_ON && atomic_read(&touch_current_status) == 0
 							&& fod_btn == 1 && !mi_cfg->fod_anim_layer_enabled) {
-					pr_info("%s ignore fod_btn due to fod anim is disable!\n", LHBM_TAG);
+					pr_debug("%s ignore fod_btn due to fod anim is disable!\n", LHBM_TAG);
 					ignore_fod_btn = true;
 					mutex_unlock(&display->display_lock);
 					return 0;
@@ -282,7 +282,7 @@ int mi_disp_set_fod_queue_work(u32 fod_btn, bool from_touch)
 	fp_status = display->panel->mi_cfg.fp_status;
 	if (fp_status == ENROLL_STOP || fp_status == AUTH_STOP || fp_status == HEART_RATE_STOP) {
 		if (fod_btn == 1) {
-			pr_info("%s fp_state=%d, skip\n", LHBM_TAG, fp_status);
+			pr_debug("%s fp_state=%d, skip\n", LHBM_TAG, fp_status);
 			return 0;
 		}
 	}
@@ -301,7 +301,7 @@ int mi_disp_set_fod_queue_work(u32 fod_btn, bool from_touch)
 	//cur_work->wq = &dl_ptr->fod_pending_wq;
 	cur_work->data = fod_data;
 
-	pr_info("%s fod_queue_work: fod_btn(%d)\n", LHBM_TAG, fod_btn);
+	pr_debug("%s fod_queue_work: fod_btn(%d)\n", LHBM_TAG, fod_btn);
 	kthread_queue_work(&dl_ptr->fod_thread.worker, &cur_work->work);
 
 	return 0;
@@ -334,7 +334,7 @@ int mi_disp_lhbm_attach_primary_dsi_display(struct dsi_display *display)
 
 		g_disp_lhbm = dl_ptr;
 
-		pr_info("%s lhbm attach primary_dsi_display success\n", LHBM_TAG);
+		pr_debug("%s lhbm attach primary_dsi_display success\n", LHBM_TAG);
 	} else {
 		pr_debug("%s is not primary_dsi_display\n", LHBM_TAG);
 	}

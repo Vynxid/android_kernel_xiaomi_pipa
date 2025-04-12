@@ -490,7 +490,7 @@ static int rt3883_pci_probe(struct platform_device *pdev)
 		goto err_put_hb_node;
 	}
 
-	dev_info(dev, "mode:%s%s\n",
+	dev_dbg(dev, "mode:%s%s\n",
 		 (mode & RT3883_PCI_MODE_PCI) ? " PCI" : "",
 		 (mode & RT3883_PCI_MODE_PCIE) ? " PCIe" : "");
 

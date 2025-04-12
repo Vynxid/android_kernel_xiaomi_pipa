@@ -187,7 +187,7 @@ static int gb_interface_legacy_mode_switch(struct gb_interface *intf)
 {
 	int ret;
 
-	dev_info(&intf->dev, "legacy mode switch detected\n");
+	dev_dbg(&intf->dev, "legacy mode switch detected\n");
 
 	/* Mark as disconnected to prevent I/O during disable. */
 	intf->disconnected = true;
@@ -233,7 +233,7 @@ void gb_interface_mailbox_event(struct gb_interface *intf, u16 result,
 		goto err_disable;
 	}
 
-	dev_info(&intf->dev, "mode switch detected\n");
+	dev_dbg(&intf->dev, "mode switch detected\n");
 
 	complete(&intf->mode_switch_completion);
 
@@ -1226,16 +1226,16 @@ int gb_interface_add(struct gb_interface *intf)
 
 	trace_gb_interface_add(intf);
 
-	dev_info(&intf->dev, "Interface added (%s)\n",
+	dev_dbg(&intf->dev, "Interface added (%s)\n",
 		 gb_interface_type_string(intf));
 
 	switch (intf->type) {
 	case GB_INTERFACE_TYPE_GREYBUS:
-		dev_info(&intf->dev, "GMP VID=0x%08x, PID=0x%08x\n",
+		dev_dbg(&intf->dev, "GMP VID=0x%08x, PID=0x%08x\n",
 			 intf->vendor_id, intf->product_id);
 		/* fall-through */
 	case GB_INTERFACE_TYPE_UNIPRO:
-		dev_info(&intf->dev, "DDBL1 Manufacturer=0x%08x, Product=0x%08x\n",
+		dev_dbg(&intf->dev, "DDBL1 Manufacturer=0x%08x, Product=0x%08x\n",
 			 intf->ddbl1_manufacturer_id,
 			 intf->ddbl1_product_id);
 		break;
@@ -1253,7 +1253,7 @@ void gb_interface_del(struct gb_interface *intf)
 		trace_gb_interface_del(intf);
 
 		device_del(&intf->dev);
-		dev_info(&intf->dev, "Interface removed\n");
+		dev_dbg(&intf->dev, "Interface removed\n");
 	}
 }
 

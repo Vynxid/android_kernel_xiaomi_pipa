@@ -609,7 +609,7 @@ static int tw9910_power_on(struct tw9910_priv *priv)
 	priv->rstb_gpio = gpiod_get_optional(&client->dev, "rstb",
 					     GPIOD_OUT_LOW);
 	if (IS_ERR(priv->rstb_gpio)) {
-		dev_info(&client->dev, "Unable to get GPIO \"rstb\"");
+		dev_dbg(&client->dev, "Unable to get GPIO \"rstb\"");
 		return PTR_ERR(priv->rstb_gpio);
 	}
 
@@ -864,7 +864,7 @@ static int tw9910_video_probe(struct i2c_client *client)
 		goto done;
 	}
 
-	dev_info(&client->dev, "tw9910 Product ID %0x:%0x\n",
+	dev_dbg(&client->dev, "tw9910 Product ID %0x:%0x\n",
 		 id, priv->revision);
 
 	priv->norm = V4L2_STD_NTSC;
@@ -969,7 +969,7 @@ static int tw9910_probe(struct i2c_client *client,
 	priv->pdn_gpio = gpiod_get_optional(&client->dev, "pdn",
 					    GPIOD_OUT_HIGH);
 	if (IS_ERR(priv->pdn_gpio)) {
-		dev_info(&client->dev, "Unable to get GPIO \"pdn\"");
+		dev_dbg(&client->dev, "Unable to get GPIO \"pdn\"");
 		ret = PTR_ERR(priv->pdn_gpio);
 		goto error_clk_put;
 	}

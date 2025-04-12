@@ -2576,7 +2576,7 @@ static int mxser_probe(struct pci_dev *pdev,
 
 	brd = &mxser_boards[i];
 	brd->idx = i * MXSER_PORTS_PER_BOARD;
-	dev_info(&pdev->dev, "found MOXA %s board (BusNo=%d, DevNo=%d)\n",
+	dev_dbg(&pdev->dev, "found MOXA %s board (BusNo=%d, DevNo=%d)\n",
 		mxser_cards[ent->driver_data].name,
 		pdev->bus->number, PCI_SLOT(pdev->devfn));
 

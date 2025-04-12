@@ -682,7 +682,7 @@ static int mt9v022_video_probe(struct i2c_client *client)
 	/* must be 0x1311, 0x1313 or 0x1324 */
 	if (data != 0x1311 && data != 0x1313 && data != 0x1324) {
 		ret = -ENODEV;
-		dev_info(&client->dev, "No MT9V022 found, ID register 0x%x\n",
+		dev_dbg(&client->dev, "No MT9V022 found, ID register 0x%x\n",
 			 data);
 		goto ei2c;
 	}
@@ -742,7 +742,7 @@ static int mt9v022_video_probe(struct i2c_client *client)
 
 	mt9v022->fmt = &mt9v022->fmts[0];
 
-	dev_info(&client->dev, "Detected a MT9V022 chip ID %x, %s sensor\n",
+	dev_dbg(&client->dev, "Detected a MT9V022 chip ID %x, %s sensor\n",
 		 data, mt9v022->model == MT9V022IX7ATM ?
 		 "monochrome" : "colour");
 

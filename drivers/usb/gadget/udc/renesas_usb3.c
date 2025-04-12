@@ -2747,7 +2747,7 @@ static int renesas_usb3_probe(struct platform_device *pdev)
 
 	renesas_usb3_debugfs_init(usb3, &pdev->dev);
 
-	dev_info(&pdev->dev, "probed%s\n", usb3->phy ? " with phy" : "");
+	dev_dbg(&pdev->dev, "probed%s\n", usb3->phy ? " with phy" : "");
 
 	return 0;
 

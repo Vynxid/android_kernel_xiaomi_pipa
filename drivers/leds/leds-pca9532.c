@@ -452,7 +452,7 @@ static int pca9532_configure(struct i2c_client *client,
 			data->gpio.parent = NULL;
 			dev_warn(&client->dev, "could not add gpiochip\n");
 		} else {
-			dev_info(&client->dev, "gpios %i...%i\n",
+			dev_dbg(&client->dev, "gpios %i...%i\n",
 				data->gpio.base, data->gpio.base +
 				data->gpio.ngpio - 1);
 		}
@@ -548,7 +548,7 @@ static int pca9532_probe(struct i2c_client *client,
 
 	data->chip_info = &pca9532_chip_info_tbl[devid];
 
-	dev_info(&client->dev, "setting platform data\n");
+	dev_dbg(&client->dev, "setting platform data\n");
 	i2c_set_clientdata(client, data);
 	data->client = client;
 	mutex_init(&data->update_lock);

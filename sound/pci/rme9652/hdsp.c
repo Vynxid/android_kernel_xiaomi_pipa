@@ -707,7 +707,7 @@ static int hdsp_wait_for_iobox(struct hdsp *hdsp, unsigned int loops,
 		}
 	}
 
-	dev_info(hdsp->card->dev, "no IO box connected!\n");
+	dev_dbg(hdsp->card->dev, "no IO box connected!\n");
 	hdsp->state &= ~HDSP_FirmwareLoaded;
 	return -EIO;
 }
@@ -730,13 +730,13 @@ static int snd_hdsp_load_firmware_from_cache(struct hdsp *hdsp) {
 
 	if ((hdsp_read (hdsp, HDSP_statusRegister) & HDSP_DllError) != 0) {
 
-		dev_info(hdsp->card->dev, "loading firmware\n");
+		dev_dbg(hdsp->card->dev, "loading firmware\n");
 
 		hdsp_write (hdsp, HDSP_control2Reg, HDSP_S_PROGRAM);
 		hdsp_write (hdsp, HDSP_fifoData, 0);
 
 		if (hdsp_fifo_wait (hdsp, 0, HDSP_LONG_WAIT)) {
-			dev_info(hdsp->card->dev,
+			dev_dbg(hdsp->card->dev,
 				 "timeout waiting for download preparation\n");
 			hdsp_write(hdsp, HDSP_control2Reg, HDSP_S200);
 			return -EIO;
@@ -747,7 +747,7 @@ static int snd_hdsp_load_firmware_from_cache(struct hdsp *hdsp) {
 		for (i = 0; i < HDSP_FIRMWARE_SIZE / 4; ++i) {
 			hdsp_write(hdsp, HDSP_fifoData, cache[i]);
 			if (hdsp_fifo_wait (hdsp, 127, HDSP_LONG_WAIT)) {
-				dev_info(hdsp->card->dev,
+				dev_dbg(hdsp->card->dev,
 					 "timeout during firmware loading\n");
 				hdsp_write(hdsp, HDSP_control2Reg, HDSP_S200);
 				return -EIO;
@@ -764,11 +764,11 @@ static int snd_hdsp_load_firmware_from_cache(struct hdsp *hdsp) {
 		hdsp->control2_register = 0;
 #endif
 		hdsp_write (hdsp, HDSP_control2Reg, hdsp->control2_register);
-		dev_info(hdsp->card->dev, "finished firmware loading\n");
+		dev_dbg(hdsp->card->dev, "finished firmware loading\n");
 
 	}
 	if (hdsp->state & HDSP_InitializationComplete) {
-		dev_info(hdsp->card->dev,
+		dev_dbg(hdsp->card->dev,
 			 "firmware loaded from cache, restoring defaults\n");
 		spin_lock_irqsave(&hdsp->lock, flags);
 		snd_hdsp_set_defaults(hdsp);
@@ -801,7 +801,7 @@ static int hdsp_get_iobox_version (struct hdsp *hdsp)
 		hdsp_write(hdsp, HDSP_fifoData, 0);
 		if (hdsp_fifo_wait(hdsp, 0, HDSP_SHORT_WAIT) == 0) {
 			hdsp->io_type = Digiface;
-			dev_info(hdsp->card->dev, "Digiface found\n");
+			dev_dbg(hdsp->card->dev, "Digiface found\n");
 			return 0;
 		}
 
@@ -818,7 +818,7 @@ static int hdsp_get_iobox_version (struct hdsp *hdsp)
 			goto set_multi;
 
 		hdsp->io_type = RPM;
-		dev_info(hdsp->card->dev, "RPM found\n");
+		dev_dbg(hdsp->card->dev, "RPM found\n");
 		return 0;
 	} else {
 		/* firmware was already loaded, get iobox type */
@@ -833,7 +833,7 @@ static int hdsp_get_iobox_version (struct hdsp *hdsp)
 
 set_multi:
 	hdsp->io_type = Multiface;
-	dev_info(hdsp->card->dev, "Multiface found\n");
+	dev_dbg(hdsp->card->dev, "Multiface found\n");
 	return 0;
 }
 
@@ -1150,13 +1150,13 @@ static int hdsp_set_rate(struct hdsp *hdsp, int rate, int called_internally)
 			int spdif_freq = hdsp_spdif_sample_rate(hdsp);
 
 			if ((spdif_freq == external_freq*2) && (hdsp_autosync_ref(hdsp) >= HDSP_AUTOSYNC_FROM_ADAT1))
-				dev_info(hdsp->card->dev,
+				dev_dbg(hdsp->card->dev,
 					 "Detected ADAT in double speed mode\n");
 			else if (hdsp->io_type == H9632 && (spdif_freq == external_freq*4) && (hdsp_autosync_ref(hdsp) >= HDSP_AUTOSYNC_FROM_ADAT1))
-				dev_info(hdsp->card->dev,
+				dev_dbg(hdsp->card->dev,
 					 "Detected ADAT in quad speed mode\n");
 			else if (rate != external_freq) {
-				dev_info(hdsp->card->dev,
+				dev_dbg(hdsp->card->dev,
 					 "No AutoSync source for requested rate\n");
 				return -1;
 			}
@@ -4837,7 +4837,7 @@ static int snd_hdsp_hwdep_ioctl(struct snd_hwdep *hw, struct file *file, unsigne
 		if (hdsp->state & (HDSP_FirmwareCached | HDSP_FirmwareLoaded))
 			return -EBUSY;
 
-		dev_info(hdsp->card->dev,
+		dev_dbg(hdsp->card->dev,
 			 "initializing firmware upload\n");
 		firmware = (struct hdsp_firmware __user *)argp;
 
@@ -5284,13 +5284,13 @@ static int snd_hdsp_create(struct snd_card *card,
 				/* init is complete, we return */
 				return 0;
 			/* we defer initialization */
-			dev_info(hdsp->card->dev,
+			dev_dbg(hdsp->card->dev,
 				 "card initialization pending : waiting for firmware\n");
 			if ((err = snd_hdsp_create_hwdep(card, hdsp)) < 0)
 				return err;
 			return 0;
 		} else {
-			dev_info(hdsp->card->dev,
+			dev_dbg(hdsp->card->dev,
 				 "Firmware already present, initializing card.\n");
 			if (hdsp_read(hdsp, HDSP_status2Register) & HDSP_version2)
 				hdsp->io_type = RPM;

@@ -27,7 +27,7 @@ static void acer_wireless_notify(struct acpi_device *adev, u32 event)
 
 	dev_dbg(&adev->dev, "event=%#x\n", event);
 	if (event != 0x80) {
-		dev_notice(&adev->dev, "Unknown SMKB event: %#x\n", event);
+		dev_dbg(&adev->dev, "Unknown SMKB event: %#x\n", event);
 		return;
 	}
 	input_report_key(idev, KEY_RFKILL, 1);

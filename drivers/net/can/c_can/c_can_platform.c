@@ -394,7 +394,7 @@ static int c_can_plat_probe(struct platform_device *pdev)
 		goto exit_pm_runtime;
 	}
 
-	dev_info(&pdev->dev, "%s device registered (regs=%p, irq=%d)\n",
+	dev_dbg(&pdev->dev, "%s device registered (regs=%p, irq=%d)\n",
 		 KBUILD_MODNAME, priv->base, dev->irq);
 	return 0;
 

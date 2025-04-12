@@ -641,7 +641,7 @@ static int ntc_thermistor_probe(struct platform_device *pdev)
 		return PTR_ERR(hwmon_dev);
 	}
 
-	dev_info(dev, "Thermistor type: %s successfully probed.\n",
+	dev_dbg(dev, "Thermistor type: %s successfully probed.\n",
 		 pdev_id->name);
 
 	tz = devm_thermal_zone_of_sensor_register(dev, 0, data,

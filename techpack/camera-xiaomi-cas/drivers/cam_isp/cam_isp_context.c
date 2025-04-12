@@ -3751,15 +3751,15 @@ static int __cam_isp_ctx_unlink_in_acquired(struct cam_context *ctx,
 }
 
 static int __cam_isp_ctx_get_dev_info_in_acquired(struct cam_context *ctx,
-	struct cam_req_mgr_device_info *dev_info)
+	struct cam_req_mgr_device_info *dev_dbg)
 {
 	int rc = 0;
 
-	dev_info->dev_hdl = ctx->dev_hdl;
-	strlcpy(dev_info->name, CAM_ISP_DEV_NAME, sizeof(dev_info->name));
-	dev_info->dev_id = CAM_REQ_MGR_DEVICE_IFE;
-	dev_info->p_delay = 1;
-	dev_info->trigger = CAM_TRIGGER_POINT_SOF;
+	dev_dbg->dev_hdl = ctx->dev_hdl;
+	strlcpy(dev_dbg->name, CAM_ISP_DEV_NAME, sizeof(dev_dbg->name));
+	dev_dbg->dev_id = CAM_REQ_MGR_DEVICE_IFE;
+	dev_dbg->p_delay = 1;
+	dev_dbg->trigger = CAM_TRIGGER_POINT_SOF;
 
 	return rc;
 }

@@ -1029,7 +1029,7 @@ static int cpcap_adc_probe(struct platform_device *pdev)
 	if (error)
 		return error;
 
-	dev_info(&pdev->dev, "CPCAP ADC device probed\n");
+	dev_dbg(&pdev->dev, "CPCAP ADC device probed\n");
 
 	return devm_iio_device_register(&pdev->dev, indio_dev);
 }

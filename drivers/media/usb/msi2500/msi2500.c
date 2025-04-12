@@ -1290,9 +1290,9 @@ static int msi2500_probe(struct usb_interface *intf,
 			"Failed to register as video device (%d)\n", ret);
 		goto err_unregister_v4l2_dev;
 	}
-	dev_info(dev->dev, "Registered as %s\n",
+	dev_dbg(dev->dev, "Registered as %s\n",
 		 video_device_node_name(&dev->vdev));
-	dev_notice(dev->dev,
+	dev_dbg(dev->dev,
 		   "SDR API is still slightly experimental and functionality changes may follow\n");
 	return 0;
 err_free_controls:

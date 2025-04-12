@@ -352,7 +352,7 @@ static int erase_xfer(partition_t *part,
 	xfer->EraseCount++;
     } else {
 	xfer->state = XFER_FAILED;
-	pr_notice("ftl_cs: erase failed: err = %d\n", ret);
+	pr_debug("ftl_cs: erase failed: err = %d\n", ret);
     }
 
     kfree(erase);

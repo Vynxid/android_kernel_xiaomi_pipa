@@ -36,9 +36,9 @@
 #include "tfa.h"
 #include "tfa_dsp_fw.h"
 
-#undef pr_info
+#undef pr_debug
 #undef pr_err
-#define pr_info(fmt, args...) printk(KERN_INFO "[TFA9874] " pr_fmt(fmt), ##args)
+#define pr_debug(fmt, args...) printk(KERN_INFO "[TFA9874] " pr_fmt(fmt), ##args)
 #define pr_err(fmt, args...) printk(KERN_ERR "[tfa9874] " pr_fmt(fmt), ##args)
 
 /* required for enum tfa9912_irq */
@@ -382,11 +382,11 @@ static void __tfa98xx_inputdev_check_register(struct tfa98xx *tfa98xx, bool unre
 			tap_profile = true;
 			tfa98xx->tapdet_profiles |= 1 << i;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,18,0)
-			dev_info(tfa98xx->component->dev,
+			dev_dbg(tfa98xx->component->dev,
 				"found a tap-detection profile (%d - %s)\n",
 				i, tfa_cont_profile_name(tfa98xx, i));
 #else
-			dev_info(tfa98xx->codec->dev,
+			dev_dbg(tfa98xx->codec->dev,
 				"found a tap-detection profile (%d - %s)\n",
 				i, tfa_cont_profile_name(tfa98xx, i));
 #endif
@@ -411,9 +411,9 @@ static void __tfa98xx_inputdev_check_register(struct tfa98xx *tfa98xx, bool unre
 	/* input device required */
 	if (tfa98xx->input)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,18,0)
-		dev_info(tfa98xx->component->dev, "Input device already registered, skipping\n");
+		dev_dbg(tfa98xx->component->dev, "Input device already registered, skipping\n");
 #else
-		dev_info(tfa98xx->codec->dev, "Input device already registered, skipping\n");
+		dev_dbg(tfa98xx->codec->dev, "Input device already registered, skipping\n");
 #endif
 	else
 		tfa98xx_register_inputdev(tfa98xx);
@@ -2435,14 +2435,14 @@ static void tfa98xx_container_loaded(const struct firmware *cont, void *context)
 			if (strcmp(tfa_cont_profile_name(tfa98xx, i),
 							dflt_prof_name) == 0) {
 				tfa98xx->profile = i;
-				dev_info(tfa98xx->dev,
+				dev_dbg(tfa98xx->dev,
 					"changing default profile to %s (%d)\n",
 					dflt_prof_name, tfa98xx->profile);
 				break;
 			}
 		}
 		if (i >= nprof)
-			dev_info(tfa98xx->dev,
+			dev_dbg(tfa98xx->dev,
 				"Default profile override failed (%s profile not found)\n",
 				dflt_prof_name);
 	}
@@ -2755,7 +2755,7 @@ static int tfa98xx_startup(struct snd_pcm_substream *substream,
 		return 0;
 
 	if (tfa98xx->dsp_fw_state != TFA98XX_DSP_FW_OK) {
-		dev_info(codec->dev, "Container file not loaded\n");
+		dev_dbg(codec->dev, "Container file not loaded\n");
 		return -EINVAL;
 	}
 
@@ -2780,7 +2780,7 @@ static int tfa98xx_startup(struct snd_pcm_substream *substream,
 			 */
 			sr = tfa98xx_get_profile_sr(tfa98xx->tfa, prof);
 			if (!sr)
-				dev_info(codec->dev, "Unable to identify supported sample rate\n");
+				dev_dbg(codec->dev, "Unable to identify supported sample rate\n");
 
 			if (tfa98xx->rate_constraint.count >= TFA98XX_NUM_RATES) {
 				dev_err(codec->dev, "too many sample rates\n");
@@ -3133,7 +3133,7 @@ static int tfa98xx_probe(struct snd_soc_codec *codec)
 	snd_soc_dapm_ignore_suspend(dapm, "DMIC4");
 	snd_soc_dapm_ignore_suspend(dapm, "AIF Playback-1-34");
 	snd_soc_dapm_ignore_suspend(dapm, "AIF Capture-1-34");
-	dev_info(codec->dev, "tfa98xx codec registered (%s)",
+	dev_dbg(codec->dev, "tfa98xx codec registered (%s)",
 							tfa98xx->fw.name);
 
 	return ret;
@@ -4322,7 +4322,7 @@ static int tfa98xx_i2c_probe(struct i2c_client *i2c,
 			return ret;
 		}
 	} else {
-		dev_info(&i2c->dev, "Skipping IRQ registration\n");
+		dev_dbg(&i2c->dev, "Skipping IRQ registration\n");
 		/* disable feature support if gpio was invalid */
 		tfa98xx->flags |= TFA98XX_FLAG_SKIP_INTERRUPTS;
 	}
@@ -4334,10 +4334,10 @@ static int tfa98xx_i2c_probe(struct i2c_client *i2c,
 	/* Register the sysfs files for climax backdoor access */
 	ret = device_create_bin_file(&i2c->dev, &dev_attr_rw);
 	if (ret)
-		dev_info(&i2c->dev, "error creating sysfs files\n");
+		dev_dbg(&i2c->dev, "error creating sysfs files\n");
 	ret = device_create_bin_file(&i2c->dev, &dev_attr_reg);
 	if (ret)
-		dev_info(&i2c->dev, "error creating sysfs files\n");
+		dev_dbg(&i2c->dev, "error creating sysfs files\n");
 	if (0 == tfa98xx_device_count)
 		tfa98xx_init_misc_device(tfa98xx);
 	pr_debug("[TFA9874] %s Probe completed successfully!\n", __func__);

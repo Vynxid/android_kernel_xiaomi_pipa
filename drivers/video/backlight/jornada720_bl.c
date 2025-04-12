@@ -61,7 +61,7 @@ static int jornada_bl_update_status(struct backlight_device *bd)
 	if ((bd->props.power != FB_BLANK_UNBLANK) || (bd->props.fb_blank != FB_BLANK_UNBLANK)) {
 		ret = jornada_ssp_byte(BRIGHTNESSOFF);
 		if (ret != TXDUMMY) {
-			dev_info(&bd->dev, "brightness off timeout\n");
+			dev_dbg(&bd->dev, "brightness off timeout\n");
 			/* turn off backlight */
 			PPSR &= ~PPC_LDD1;
 			PPDR |= PPC_LDD1;
@@ -72,7 +72,7 @@ static int jornada_bl_update_status(struct backlight_device *bd)
 
 		/* send command to our mcu */
 		if (jornada_ssp_byte(SETBRIGHTNESS) != TXDUMMY) {
-			dev_info(&bd->dev, "failed to set brightness\n");
+			dev_dbg(&bd->dev, "failed to set brightness\n");
 			ret = -ETIMEDOUT;
 			goto out;
 		}
@@ -135,7 +135,7 @@ static int jornada_bl_probe(struct platform_device *pdev)
 	jornada_bl_update_status(bd);
 
 	platform_set_drvdata(pdev, bd);
-	dev_info(&pdev->dev, "HP Jornada 700 series backlight driver\n");
+	dev_dbg(&pdev->dev, "HP Jornada 700 series backlight driver\n");
 
 	return 0;
 }

@@ -524,12 +524,12 @@ static int rtl8366rb_setup_cascaded_irq(struct realtek_smi *smi)
 	switch (irq_trig) {
 	case IRQF_TRIGGER_RISING:
 	case IRQF_TRIGGER_HIGH:
-		dev_info(smi->dev, "active high/rising IRQ\n");
+		dev_dbg(smi->dev, "active high/rising IRQ\n");
 		val = 0;
 		break;
 	case IRQF_TRIGGER_FALLING:
 	case IRQF_TRIGGER_LOW:
-		dev_info(smi->dev, "active low/falling IRQ\n");
+		dev_dbg(smi->dev, "active low/falling IRQ\n");
 		val = RTL8366RB_INTERRUPT_POLARITY;
 		break;
 	}
@@ -573,7 +573,7 @@ static int rtl8366rb_set_addr(struct realtek_smi *smi)
 
 	eth_random_addr(addr);
 
-	dev_info(smi->dev, "set MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
+	dev_dbg(smi->dev, "set MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
 		 addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]);
 	val = addr[0] << 8 | addr[1];
 	ret = regmap_write(smi->map, RTL8366RB_SMAR0, val);
@@ -740,7 +740,7 @@ static int rtl8366rb_setup(struct dsa_switch *ds)
 		return ret;
 	}
 
-	dev_info(smi->dev, "RTL%04x ver %u chip found\n",
+	dev_dbg(smi->dev, "RTL%04x ver %u chip found\n",
 		 chip_id, chip_ver & RTL8366RB_CHIP_VERSION_MASK);
 
 	/* Do the init dance using the right jam table */
@@ -952,11 +952,11 @@ static int rtl8366rb_setup(struct dsa_switch *ds)
 
 	ret = rtl8366rb_setup_cascaded_irq(smi);
 	if (ret)
-		dev_info(smi->dev, "no interrupt support\n");
+		dev_dbg(smi->dev, "no interrupt support\n");
 
 	ret = realtek_smi_setup_mdio(smi);
 	if (ret) {
-		dev_info(smi->dev, "could not set up MDIO bus\n");
+		dev_dbg(smi->dev, "could not set up MDIO bus\n");
 		return -ENODEV;
 	}
 
@@ -992,7 +992,7 @@ static void rtl8366rb_adjust_link(struct dsa_switch *ds, int port,
 	if (port != smi->cpu_port)
 		return;
 
-	dev_info(smi->dev, "adjust link on CPU port (%d)\n", port);
+	dev_dbg(smi->dev, "adjust link on CPU port (%d)\n", port);
 
 	/* Force the fixed CPU port into 1Gbit mode, no autonegotiation */
 	ret = regmap_update_bits(smi->map, RTL8366RB_MAC_FORCE_CTRL_REG,
@@ -1393,11 +1393,11 @@ static int rtl8366rb_detect(struct realtek_smi *smi)
 
 	switch (val) {
 	case 0x6027:
-		dev_info(dev, "found an RTL8366S switch\n");
+		dev_dbg(dev, "found an RTL8366S switch\n");
 		dev_err(dev, "this switch is not yet supported, submit patches!\n");
 		return -ENODEV;
 	case 0x5937:
-		dev_info(dev, "found an RTL8366RB switch\n");
+		dev_dbg(dev, "found an RTL8366RB switch\n");
 		smi->cpu_port = RTL8366RB_PORT_NUM_CPU;
 		smi->num_ports = RTL8366RB_NUM_PORTS;
 		smi->num_vlan_mc = RTL8366RB_NUM_VLANS;
@@ -1405,7 +1405,7 @@ static int rtl8366rb_detect(struct realtek_smi *smi)
 		smi->num_mib_counters = ARRAY_SIZE(rtl8366rb_mib_counters);
 		break;
 	default:
-		dev_info(dev, "found an Unknown Realtek switch (id=0x%04x)\n",
+		dev_dbg(dev, "found an Unknown Realtek switch (id=0x%04x)\n",
 			 val);
 		break;
 	}

@@ -438,7 +438,7 @@ static int sca3000_print_rev(struct iio_dev *indio_dev)
 	ret = sca3000_read_data_short(st, SCA3000_REG_REVID_ADDR, 1);
 	if (ret < 0)
 		goto error_ret;
-	dev_info(&indio_dev->dev,
+	dev_dbg(&indio_dev->dev,
 		 "sca3000 revision major=%lu, minor=%lu\n",
 		 st->rx[0] & SCA3000_REG_REVID_MAJOR_MASK,
 		 st->rx[0] & SCA3000_REG_REVID_MINOR_MASK);
@@ -1299,7 +1299,7 @@ int __sca3000_hw_ring_state_set(struct iio_dev *indio_dev, bool state)
 	if (ret)
 		goto error_ret;
 	if (state) {
-		dev_info(&indio_dev->dev, "supposedly enabling ring buffer\n");
+		dev_dbg(&indio_dev->dev, "supposedly enabling ring buffer\n");
 		ret = sca3000_write_reg(st,
 			SCA3000_REG_MODE_ADDR,
 			(st->rx[0] | SCA3000_REG_MODE_RING_BUF_ENABLE));

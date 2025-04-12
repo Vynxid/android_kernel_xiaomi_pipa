@@ -59,7 +59,7 @@ static int __init early_seeprom_probe(struct spi_device *spi)
 	char *buf = read_param->buf;
 	int address = read_param->address;
 
-	dev_info(&spi->dev, "spiclk %u KHz.\n",
+	dev_dbg(&spi->dev, "spiclk %u KHz.\n",
 		 (spi->max_speed_hz + 500) / 1000);
 	if (read_param->busid != spi->master->bus_num ||
 	    read_param->chipid != spi->chip_select)

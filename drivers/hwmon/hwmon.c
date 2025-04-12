@@ -882,7 +882,7 @@ static void __init hwmon_pci_quirks(void)
 			pci_read_config_word(sb, 0x64, &base);
 
 			if (base == 0 && !(enable & BIT(2))) {
-				dev_info(&sb->dev,
+				dev_dbg(&sb->dev,
 					 "Opening wide generic port at 0x295\n");
 				pci_write_config_word(sb, 0x64, 0x295);
 				pci_write_config_byte(sb, 0x48,

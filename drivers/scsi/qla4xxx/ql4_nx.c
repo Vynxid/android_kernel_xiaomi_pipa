@@ -1812,7 +1812,7 @@ void qla4_82xx_rom_lock_recovery(struct scsi_qla_host *ha)
 {
 	if (qla4_82xx_rom_lock(ha)) {
 		/* Someone else is holding the lock. */
-		dev_info(&ha->pdev->dev, "Resetting rom_lock\n");
+		dev_dbg(&ha->pdev->dev, "Resetting rom_lock\n");
 	}
 
 	/*

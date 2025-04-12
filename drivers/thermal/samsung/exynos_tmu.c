@@ -291,9 +291,9 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
 	}
 
 	if (of_thermal_get_ntrips(tzd) > data->ntrip) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "More trip points than supported by this TMU.\n");
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "%d trip points should be configured in polling mode.\n",
 			 (of_thermal_get_ntrips(tzd) - data->ntrip));
 	}
@@ -509,7 +509,7 @@ static void exynos5433_tmu_initialize(struct platform_device *pdev)
 	/* Read the temperature sensor id */
 	sensor_id = (trim_info & EXYNOS5433_TRIMINFO_SENSOR_ID_MASK)
 				>> EXYNOS5433_TRIMINFO_SENSOR_ID_SHIFT;
-	dev_info(&pdev->dev, "Temperature sensor ID: 0x%x\n", sensor_id);
+	dev_dbg(&pdev->dev, "Temperature sensor ID: 0x%x\n", sensor_id);
 
 	/* Read the calibration mode */
 	writel(trim_info, data->base + EXYNOS_TMU_REG_TRIMINFO);
@@ -526,7 +526,7 @@ static void exynos5433_tmu_initialize(struct platform_device *pdev)
 		break;
 	}
 
-	dev_info(&pdev->dev, "Calibration type is %d-point calibration\n",
+	dev_dbg(&pdev->dev, "Calibration type is %d-point calibration\n",
 			cal_type ?  2 : 1);
 }
 
@@ -1041,7 +1041,7 @@ static int exynos_tmu_probe(struct platform_device *pdev)
 	} else {
 		if (PTR_ERR(data->regulator) == -EPROBE_DEFER)
 			return -EPROBE_DEFER;
-		dev_info(&pdev->dev, "Regulator node (vtmu) not found\n");
+		dev_dbg(&pdev->dev, "Regulator node (vtmu) not found\n");
 	}
 
 	ret = exynos_map_dt_data(pdev);

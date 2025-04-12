@@ -178,7 +178,7 @@ struct dvb_frontend *lnbh25_attach(struct dvb_frontend *fe,
 	fe->ops.release_sec = lnbh25_release;
 	fe->ops.set_voltage = lnbh25_set_voltage;
 
-	dev_info(&i2c->dev, "%s(): attached at I2C addr 0x%02x\n",
+	dev_dbg(&i2c->dev, "%s(): attached at I2C addr 0x%02x\n",
 		__func__, priv->i2c_address);
 	return fe;
 }

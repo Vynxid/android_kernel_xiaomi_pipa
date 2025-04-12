@@ -277,7 +277,7 @@ static int start_streams(struct snd_dice *dice, enum amdtp_stream_direction dir,
 
 		/* These are important for developer of this driver. */
 		if (pcm_chs != pcm_cache || midi_ports != midi_cache) {
-			dev_info(&dice->unit->device,
+			dev_dbg(&dice->unit->device,
 				 "cache mismatch: pcm: %u:%u, midi: %u:%u\n",
 				 pcm_chs, pcm_cache, midi_ports, midi_cache);
 			return -EPROTO;

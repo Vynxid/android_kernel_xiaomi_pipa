@@ -576,7 +576,7 @@ static void pch_remove(struct pci_dev *pdev)
 	}
 	pci_disable_device(pdev);
 	kfree(chip);
-	dev_info(&pdev->dev, "complete\n");
+	dev_dbg(&pdev->dev, "complete\n");
 }
 
 static s32

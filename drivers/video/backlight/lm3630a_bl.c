@@ -118,7 +118,7 @@ static void lm3630a_delayed_func(struct work_struct *work)
 		return;
 	}
 
-	dev_info(pchip->dev, "REG_INT_STATUS Register is 0x%x\n", rval);
+	dev_dbg(pchip->dev, "REG_INT_STATUS Register is 0x%x\n", rval);
 }
 
 static irqreturn_t lm3630a_isr_func(int irq, void *chip)
@@ -435,7 +435,7 @@ static int lm3630a_probe(struct i2c_client *client,
 		if (rval < 0)
 			return rval;
 	}
-	dev_info(&client->dev, "LM3630A backlight register OK.\n");
+	dev_dbg(&client->dev, "LM3630A backlight register OK.\n");
 	return 0;
 }
 

@@ -171,7 +171,7 @@ static int ams_delta_serio_init(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, priv);
 
-	dev_info(&serio->dev, "%s\n", serio->name);
+	dev_dbg(&serio->dev, "%s\n", serio->name);
 
 	return 0;
 }

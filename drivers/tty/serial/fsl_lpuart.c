@@ -2258,12 +2258,12 @@ static int lpuart_probe(struct platform_device *pdev)
 
 	sport->dma_tx_chan = dma_request_slave_channel(sport->port.dev, "tx");
 	if (!sport->dma_tx_chan)
-		dev_info(sport->port.dev, "DMA tx channel request failed, "
+		dev_dbg(sport->port.dev, "DMA tx channel request failed, "
 				"operating without tx DMA\n");
 
 	sport->dma_rx_chan = dma_request_slave_channel(sport->port.dev, "rx");
 	if (!sport->dma_rx_chan)
-		dev_info(sport->port.dev, "DMA rx channel request failed, "
+		dev_dbg(sport->port.dev, "DMA rx channel request failed, "
 				"operating without rx DMA\n");
 
 	return 0;

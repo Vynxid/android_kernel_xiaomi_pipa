@@ -819,8 +819,8 @@ static int rave_sp_probe(struct serdev_device *serdev)
 	 * Those strings already have a \n embedded, so there's no
 	 * need to have one in format string.
 	 */
-	dev_info(dev, "Firmware version: %s",   sp->part_number_firmware);
-	dev_info(dev, "Bootloader version: %s", sp->part_number_bootloader);
+	dev_dbg(dev, "Firmware version: %s",   sp->part_number_firmware);
+	dev_dbg(dev, "Bootloader version: %s", sp->part_number_bootloader);
 
 	return devm_of_platform_populate(dev);
 }

@@ -67,7 +67,7 @@ int ssb_pci_switch_core(struct ssb_bus *bus,
 	unsigned long flags;
 
 #if SSB_VERBOSE_PCICORESWITCH_DEBUG
-	pr_info("Switching to %s core, index %d\n",
+	pr_debug("Switching to %s core, index %d\n",
 		ssb_core_name(dev->id.coreid), dev->core_index);
 #endif
 
@@ -285,7 +285,7 @@ static int sprom_do_write(struct ssb_bus *bus, const u16 *sprom)
 	u32 spromctl;
 	u16 size = bus->sprom_size;
 
-	pr_notice("Writing SPROM. Do NOT turn off the power! Please stand by...\n");
+	pr_debug("Writing SPROM. Do NOT turn off the power! Please stand by...\n");
 	err = pci_read_config_dword(pdev, SSB_SPROMCTL, &spromctl);
 	if (err)
 		goto err_ctlreg;
@@ -293,7 +293,7 @@ static int sprom_do_write(struct ssb_bus *bus, const u16 *sprom)
 	err = pci_write_config_dword(pdev, SSB_SPROMCTL, spromctl);
 	if (err)
 		goto err_ctlreg;
-	pr_notice("[ 0%%");
+	pr_debug("[ 0%%");
 	msleep(500);
 	for (i = 0; i < size; i++) {
 		if (i == size / 4)
@@ -317,7 +317,7 @@ static int sprom_do_write(struct ssb_bus *bus, const u16 *sprom)
 		goto err_ctlreg;
 	msleep(500);
 	pr_cont("100%% ]\n");
-	pr_notice("SPROM written\n");
+	pr_debug("SPROM written\n");
 
 	return 0;
 err_ctlreg:

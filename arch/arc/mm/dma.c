@@ -179,9 +179,9 @@ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
 	 */
 	if (is_isa_arcv2() && ioc_enable && coherent) {
 		set_dma_ops(dev, &dma_direct_ops);
-		dev_info(dev, "use dma_direct_ops cache ops\n");
+		dev_dbg(dev, "use dma_direct_ops cache ops\n");
 	} else {
 		set_dma_ops(dev, &dma_noncoherent_ops);
-		dev_info(dev, "use dma_noncoherent_ops cache ops\n");
+		dev_dbg(dev, "use dma_noncoherent_ops cache ops\n");
 	}
 }

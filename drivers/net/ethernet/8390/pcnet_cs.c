@@ -524,13 +524,13 @@ static struct hw_info *pcnet_try_config(struct pcmcia_device *link,
 		if ((if_port == 1) || (if_port == 2))
 			dev->if_port = if_port;
 		else
-			dev_notice(&link->dev, "invalid if_port requested\n");
+			dev_dbg(&link->dev, "invalid if_port requested\n");
 	} else
 		dev->if_port = 0;
 
 	if ((link->config_base == 0x03c0) &&
 	    (link->manf_id == 0x149) && (link->card_id == 0xc1ab)) {
-		dev_info(&link->dev,
+		dev_dbg(&link->dev,
 			"this is an AX88190 card - use axnet_cs instead.\n");
 		return NULL;
 	}
@@ -564,7 +564,7 @@ static int pcnet_config(struct pcmcia_device *link)
 	    pcmcia_disable_device(link);
 	    local_hw_info = pcnet_try_config(link, &has_shmem, 1);
 	    if (local_hw_info == NULL) {
-		    dev_notice(&link->dev, "unable to read hardware net"
+		    dev_dbg(&link->dev, "unable to read hardware net"
 			    " address for io base %#3lx\n", dev->base_addr);
 		    goto failed;
 	    }
@@ -606,7 +606,7 @@ static int pcnet_config(struct pcmcia_device *link)
     SET_NETDEV_DEV(dev, &link->dev);
 
     if (register_netdev(dev) != 0) {
-	pr_notice("register_netdev() failed\n");
+	pr_debug("register_netdev() failed\n");
 	goto failed;
     }
 

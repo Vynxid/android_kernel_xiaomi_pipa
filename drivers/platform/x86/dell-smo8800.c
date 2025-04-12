@@ -48,7 +48,7 @@ static irqreturn_t smo8800_interrupt_thread(int irq, void *data)
 {
 	struct smo8800_device *smo8800 = data;
 
-	dev_info(smo8800->dev, "detected free fall\n");
+	dev_dbg(smo8800->dev, "detected free fall\n");
 	return IRQ_HANDLED;
 }
 

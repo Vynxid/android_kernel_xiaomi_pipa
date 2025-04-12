@@ -931,7 +931,7 @@ static int s3c24xx_i2c_cpufreq_transition(struct notifier_block *nb,
 		if (ret < 0)
 			dev_err(i2c->dev, "cannot find frequency (%d)\n", ret);
 		else
-			dev_info(i2c->dev, "setting freq %d\n", got);
+			dev_dbg(i2c->dev, "setting freq %d\n", got);
 	}
 
 	return 0;
@@ -1030,7 +1030,7 @@ static int s3c24xx_i2c_init(struct s3c24xx_i2c *i2c)
 
 	writeb(pdata->slave_addr, i2c->regs + S3C2410_IICADD);
 
-	dev_info(i2c->dev, "slave address 0x%02x\n", pdata->slave_addr);
+	dev_dbg(i2c->dev, "slave address 0x%02x\n", pdata->slave_addr);
 
 	writel(0, i2c->regs + S3C2410_IICCON);
 	writel(0, i2c->regs + S3C2410_IICSTAT);
@@ -1044,7 +1044,7 @@ static int s3c24xx_i2c_init(struct s3c24xx_i2c *i2c)
 
 	/* todo - check that the i2c lines aren't being dragged anywhere */
 
-	dev_info(i2c->dev, "bus frequency set to %d KHz\n", freq);
+	dev_dbg(i2c->dev, "bus frequency set to %d KHz\n", freq);
 	dev_dbg(i2c->dev, "S3C2410_IICCON=0x%02x\n",
 		readl(i2c->regs + S3C2410_IICCON));
 
@@ -1224,7 +1224,7 @@ static int s3c24xx_i2c_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "%s: S3C I2C adapter\n", dev_name(&i2c->adap.dev));
+	dev_dbg(&pdev->dev, "%s: S3C I2C adapter\n", dev_name(&i2c->adap.dev));
 	return 0;
 }
 

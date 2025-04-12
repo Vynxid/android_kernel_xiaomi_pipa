@@ -1551,7 +1551,7 @@ static int ca91cx42_crcsr_init(struct vme_bridge *ca91cx42_bridge,
 	if (geoid)
 		iowrite32(geoid << 27, bridge->base + VCSR_BS);
 
-	dev_info(&pdev->dev, "CR/CSR Offset: %d\n", slot);
+	dev_dbg(&pdev->dev, "CR/CSR Offset: %d\n", slot);
 	if (slot == 0) {
 		dev_err(&pdev->dev, "Slot number is unset, not configuring "
 			"CR/CSR space\n");
@@ -1774,9 +1774,9 @@ static int ca91cx42_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	ca91cx42_bridge->free_consistent = ca91cx42_free_consistent;
 
 	data = ioread32(ca91cx42_device->base + MISC_CTL);
-	dev_info(&pdev->dev, "Board is%s the VME system controller\n",
+	dev_dbg(&pdev->dev, "Board is%s the VME system controller\n",
 		(data & CA91CX42_MISC_CTL_SYSCON) ? "" : " not");
-	dev_info(&pdev->dev, "Slot ID is %d\n",
+	dev_dbg(&pdev->dev, "Slot ID is %d\n",
 		ca91cx42_slot_get(ca91cx42_bridge));
 
 	if (ca91cx42_crcsr_init(ca91cx42_bridge, pdev))

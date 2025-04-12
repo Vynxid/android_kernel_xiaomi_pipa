@@ -159,7 +159,7 @@ static int exynos_trng_probe(struct platform_device *pdev)
 		goto err_register;
 	}
 
-	dev_info(&pdev->dev, "Exynos True Random Number Generator.\n");
+	dev_dbg(&pdev->dev, "Exynos True Random Number Generator.\n");
 
 	return 0;
 

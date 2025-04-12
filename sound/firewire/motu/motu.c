@@ -133,7 +133,7 @@ error:
 	snd_motu_transaction_unregister(motu);
 	snd_motu_stream_destroy_duplex(motu);
 	snd_card_free(motu->card);
-	dev_info(&motu->unit->device,
+	dev_dbg(&motu->unit->device,
 		 "Sound card registration failed: %d\n", err);
 }
 

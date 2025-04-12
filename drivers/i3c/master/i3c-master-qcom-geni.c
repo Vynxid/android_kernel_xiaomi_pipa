@@ -2042,7 +2042,7 @@ static int geni_i3c_probe(struct platform_device *pdev)
 	gi3c->se.dev = &pdev->dev;
 	gi3c->ipcl = ipc_log_context_create(4, dev_name(gi3c->se.dev), 0);
 	if (!gi3c->ipcl)
-		dev_info(&pdev->dev, "Error creating IPC Log\n");
+		dev_dbg(&pdev->dev, "Error creating IPC Log\n");
 
 	if (i3c_nos < MAX_I3C_SE)
 		i3c_geni_dev[i3c_nos++] = gi3c;

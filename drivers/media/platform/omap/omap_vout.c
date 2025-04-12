@@ -1894,7 +1894,7 @@ static int __init omap_vout_setup_video_bufs(struct platform_device *pdev,
 
 	numbuffers = (vid_num == 0) ? video1_numbuffers : video2_numbuffers;
 	vout->buffer_size = (vid_num == 0) ? video1_bufsize : video2_bufsize;
-	dev_info(&pdev->dev, "Buffer Size = %d\n", vout->buffer_size);
+	dev_dbg(&pdev->dev, "Buffer Size = %d\n", vout->buffer_size);
 
 	for (i = 0; i < numbuffers; i++) {
 		vout->buf_virt_addr[i] =
@@ -1990,7 +1990,7 @@ static int __init omap_vout_create_video_devices(struct platform_device *pdev)
 		}
 		video_set_drvdata(vfd, vout);
 
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 ": registered and initialized video device %d\n",
 			 vfd->minor);
 		if (k == (pdev->num_resources - 1))

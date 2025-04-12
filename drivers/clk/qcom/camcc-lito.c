@@ -2380,7 +2380,7 @@ static int cam_cc_lito_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered CAM CC clocks\n");
+	dev_dbg(&pdev->dev, "Registered CAM CC clocks\n");
 	return 0;
 }
 

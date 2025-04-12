@@ -2492,7 +2492,7 @@ static void vpe_fw_cb(struct platform_device *pdev)
 	}
 
 	video_set_drvdata(vfd, dev);
-	dev_info(dev->v4l2_dev.dev, "Device registered as /dev/video%d\n",
+	dev_dbg(dev->v4l2_dev.dev, "Device registered as /dev/video%d\n",
 		vfd->num);
 }
 

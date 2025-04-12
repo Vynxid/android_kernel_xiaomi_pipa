@@ -81,7 +81,7 @@
 
 #undef DEBUG_GEOMETRY
 #ifdef DEBUG_GEOMETRY
-#define dev_geo	dev_info
+#define dev_geo	dev_dbg
 #else
 #define dev_geo	dev_dbg
 #endif
@@ -514,7 +514,7 @@ out:
 
 static int sh_mobile_ceu_add_device(struct soc_camera_device *icd)
 {
-	dev_info(icd->parent,
+	dev_dbg(icd->parent,
 		 "SuperH Mobile CEU driver attached to camera %d\n",
 		 icd->devnum);
 
@@ -523,7 +523,7 @@ static int sh_mobile_ceu_add_device(struct soc_camera_device *icd)
 
 static void sh_mobile_ceu_remove_device(struct soc_camera_device *icd)
 {
-	dev_info(icd->parent,
+	dev_dbg(icd->parent,
 		 "SuperH Mobile CEU driver detached from camera %d\n",
 		 icd->devnum);
 }

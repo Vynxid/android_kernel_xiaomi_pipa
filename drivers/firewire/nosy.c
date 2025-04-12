@@ -671,7 +671,7 @@ add_card(struct pci_dev *dev, const struct pci_device_id *unused)
 	list_add_tail(&lynx->link, &card_list);
 	mutex_unlock(&card_mutex);
 
-	dev_info(&dev->dev,
+	dev_dbg(&dev->dev,
 		 "Initialized PCILynx IEEE1394 card, irq=%d\n", dev->irq);
 
 	return 0;

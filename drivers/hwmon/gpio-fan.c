@@ -551,7 +551,7 @@ static int gpio_fan_probe(struct platform_device *pdev)
 							    fan_data,
 							    &gpio_fan_cool_ops);
 
-	dev_info(dev, "GPIO fan initialized\n");
+	dev_dbg(dev, "GPIO fan initialized\n");
 
 	return 0;
 }

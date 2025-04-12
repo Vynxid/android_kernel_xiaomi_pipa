@@ -440,7 +440,7 @@ static int bus_info_debugfs_show(struct seq_file *seq, void *v)
 {
 	int i = 0;
 	unsigned long off;
-	struct visor_vbus_deviceinfo dev_info;
+	struct visor_vbus_deviceinfo dev_dbg;
 	struct visor_device *vdev = seq->private;
 	struct visorchannel *channel = vdev->visorchannel;
 
@@ -453,19 +453,19 @@ static int bus_info_debugfs_show(struct seq_file *seq, void *v)
 		   vdev->chipset_bus_no);
 	if (visorchannel_read(channel,
 			      offsetof(struct visor_vbus_channel, chp_info),
-			      &dev_info, sizeof(dev_info)) >= 0)
-		vbuschannel_print_devinfo(&dev_info, seq, -1);
+			      &dev_dbg, sizeof(dev_dbg)) >= 0)
+		vbuschannel_print_devinfo(&dev_dbg, seq, -1);
 	if (visorchannel_read(channel,
 			      offsetof(struct visor_vbus_channel, bus_info),
-			      &dev_info, sizeof(dev_info)) >= 0)
-		vbuschannel_print_devinfo(&dev_info, seq, -1);
+			      &dev_dbg, sizeof(dev_dbg)) >= 0)
+		vbuschannel_print_devinfo(&dev_dbg, seq, -1);
 
-	off = offsetof(struct visor_vbus_channel, dev_info);
-	while (off + sizeof(dev_info) <= visorchannel_get_nbytes(channel)) {
-		if (visorchannel_read(channel, off, &dev_info,
-				      sizeof(dev_info)) >= 0)
-			vbuschannel_print_devinfo(&dev_info, seq, i);
-		off += sizeof(dev_info);
+	off = offsetof(struct visor_vbus_channel, dev_dbg);
+	while (off + sizeof(dev_dbg) <= visorchannel_get_nbytes(channel)) {
+		if (visorchannel_read(channel, off, &dev_dbg,
+				      sizeof(dev_dbg)) >= 0)
+			vbuschannel_print_devinfo(&dev_dbg, seq, i);
+		off += sizeof(dev_dbg);
 		i++;
 	}
 	return 0;
@@ -790,7 +790,7 @@ static void write_vbus_bus_info(struct visorchannel *chan,
 
 /*
  * write_vbus_dev_info() - write the contents of <info> to the struct
- *                         visor_vbus_channel.dev_info[<devix>]
+ *                         visor_vbus_channel.dev_dbg[<devix>]
  * @chan:     indentifies the s-Par channel that will be updated
  * @hdr_info: used to find appropriate channel offset to write data
  * @info:     contains the information to write
@@ -846,7 +846,7 @@ static void publish_vbus_dev_info(struct visor_device *visordev)
 	struct visor_driver *visordrv;
 	u32 bus_no = visordev->chipset_bus_no;
 	u32 dev_no = visordev->chipset_dev_no;
-	struct visor_vbus_deviceinfo dev_info;
+	struct visor_vbus_deviceinfo dev_dbg;
 	const char *chan_type_name = NULL;
 	struct visor_vbus_headerinfo *hdr_info;
 
@@ -873,8 +873,8 @@ static void publish_vbus_dev_info(struct visor_device *visordev)
 			break;
 		}
 	}
-	bus_device_info_init(&dev_info, chan_type_name, visordrv->name);
-	write_vbus_dev_info(bdev->visorchannel, hdr_info, &dev_info, dev_no);
+	bus_device_info_init(&dev_dbg, chan_type_name, visordrv->name);
+	write_vbus_dev_info(bdev->visorchannel, hdr_info, &dev_dbg, dev_no);
 	write_vbus_chp_info(bdev->visorchannel, hdr_info, &chipset_driverinfo);
 	write_vbus_bus_info(bdev->visorchannel, hdr_info,
 			    &clientbus_driverinfo);
@@ -1165,19 +1165,19 @@ static int visorchipset_initiate_device_pause_resume(struct visor_device *dev,
 
 /*
  * visorchipset_device_pause() - start a pause operation for a visor device
- * @dev_info: struct visor_device identifying the device being paused
+ * @dev_dbg: struct visor_device identifying the device being paused
  *
  * Tell the subordinate function driver for a specific device to pause
  * that device.  Success/failure result is returned asynchronously
  * via a callback function; see pause_state_change_complete().
  */
-int visorchipset_device_pause(struct visor_device *dev_info)
+int visorchipset_device_pause(struct visor_device *dev_dbg)
 {
 	int err;
 
-	err = visorchipset_initiate_device_pause_resume(dev_info, true);
+	err = visorchipset_initiate_device_pause_resume(dev_dbg, true);
 	if (err < 0) {
-		dev_info->pausing = false;
+		dev_dbg->pausing = false;
 		return err;
 	}
 	return 0;
@@ -1185,19 +1185,19 @@ int visorchipset_device_pause(struct visor_device *dev_info)
 
 /*
  * visorchipset_device_resume() - start a resume operation for a visor device
- * @dev_info: struct visor_device identifying the device being resumed
+ * @dev_dbg: struct visor_device identifying the device being resumed
  *
  * Tell the subordinate function driver for a specific device to resume
  * that device.  Success/failure result is returned asynchronously
  * via a callback function; see resume_state_change_complete().
  */
-int visorchipset_device_resume(struct visor_device *dev_info)
+int visorchipset_device_resume(struct visor_device *dev_dbg)
 {
 	int err;
 
-	err = visorchipset_initiate_device_pause_resume(dev_info, false);
+	err = visorchipset_initiate_device_pause_resume(dev_dbg, false);
 	if (err < 0) {
-		dev_info->resuming = false;
+		dev_dbg->resuming = false;
 		return err;
 	}
 	return 0;

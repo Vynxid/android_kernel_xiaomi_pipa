@@ -97,7 +97,7 @@ struct isci_orom *isci_request_oprom(struct pci_dev *pdev)
 				   ISCI_ROM_SIG_SIZE) != 0)
 				continue;
 
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "OEM parameter table found in OROM\n");
 			break;
 		}

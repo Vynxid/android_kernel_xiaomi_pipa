@@ -71,7 +71,7 @@ MODULE_PARM_DESC(force, "Force device probe rather than using ACPI entry");
 static int tpm_tis_disable_irq(const struct dmi_system_id *d)
 {
 	if (interrupts == -1) {
-		pr_notice("tpm_tis: %s detected: disabling interrupts.\n", d->ident);
+		pr_debug("tpm_tis: %s detected: disabling interrupts.\n", d->ident);
 		interrupts = 0;
 	}
 

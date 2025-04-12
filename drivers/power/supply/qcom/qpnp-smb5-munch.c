@@ -2545,7 +2545,7 @@ static int smb5_set_prop_div2_mode(struct smb_charger *chg,
 {
 	int rc;
 
-	dev_info(chg->dev, "%s: set mode is = %d\n",
+	dev_dbg(chg->dev, "%s: set mode is = %d\n",
 				__func__, val->intval);
 
 	chg->ln_psy = power_supply_get_by_name("lionsemi");
@@ -2567,7 +2567,7 @@ static int smb5_set_prop_div2_mode(struct smb_charger *chg,
 static int smb5_get_prop_div2_mode(struct smb_charger *chg,
 				union power_supply_propval *val)
 {
-	dev_info(chg->dev, "%s: get div2 mode\n", __func__);
+	dev_dbg(chg->dev, "%s: get div2 mode\n", __func__);
 
 	chg->ln_psy = power_supply_get_by_name("lionsemi");
 	//chg->halo_psy = power_supply_get_by_name("halo");
@@ -2582,7 +2582,7 @@ static int smb5_get_prop_div2_mode(struct smb_charger *chg,
 	if (chg->cp_chip_psy) {
 		power_supply_get_property(chg->cp_chip_psy,
 			POWER_SUPPLY_PROP_DIV_2_MODE, val);
-		dev_info(chg->dev, "%s: get mode is = %d\n",
+		dev_dbg(chg->dev, "%s: get mode is = %d\n",
 				__func__, val->intval);
 	}
 
@@ -2593,7 +2593,7 @@ static int smb5_set_prop_reverse_chg_mode(struct smb_charger *chg,
 {
 	int rc;
 
-	dev_info(chg->dev, "%s: set mode is = %d\n",
+	dev_dbg(chg->dev, "%s: set mode is = %d\n",
 				__func__, val->intval);
 
 	chg->idtp_psy = power_supply_get_by_name("idt");
@@ -2619,7 +2619,7 @@ static int smb5_set_prop_otg_mode(struct smb_charger *chg,
 {
 	int rc;
 
-	dev_info(chg->dev, "%s: set mode is = %d\n",
+	dev_dbg(chg->dev, "%s: set mode is = %d\n",
 				__func__, val->intval);
 
 	chg->idtp_psy = power_supply_get_by_name("idt");
@@ -2659,7 +2659,7 @@ static int smb5_get_prop_reverse_chg_mode(struct smb_charger *chg,
 	if (chg->wls_chip_psy) {
 		rc = power_supply_get_property(chg->wls_chip_psy,
 				POWER_SUPPLY_PROP_REVERSE_CHG_MODE, val);
-		dev_info(chg->dev, "%s: get mode is = %d\n",
+		dev_dbg(chg->dev, "%s: get mode is = %d\n",
 				__func__, val->intval);
 	}
 
@@ -2685,7 +2685,7 @@ static int smb5_get_prop_wirless_chip_ok(struct smb_charger *chg,
 	if (chg->wls_chip_psy) {
 		rc = power_supply_get_property(chg->wls_chip_psy,
 				POWER_SUPPLY_PROP_CHIP_OK, val);
-		dev_info(chg->dev, "%s: get chip status is = %d\n",
+		dev_dbg(chg->dev, "%s: get chip status is = %d\n",
 				__func__, val->intval);
 	}
 
@@ -2754,7 +2754,7 @@ static int smb5_wireless_set_prop(struct power_supply *psy,
 
 	switch (psp) {
 	case POWER_SUPPLY_PROP_WIRELESS_VERSION:
-		dev_info(chg->dev, "set version=%d\n", val->intval);
+		dev_dbg(chg->dev, "set version=%d\n", val->intval);
 		break;
 	case POWER_SUPPLY_PROP_WIRELESS_WAKELOCK:
 		rc = smblib_set_prop_wireless_wakelock(chg, val);
@@ -4958,7 +4958,7 @@ static int smb5_show_charger_status(struct smb5 *chip)
 	}
 	batt_charge_type = val.intval;
 
-	pr_info("SMB5 status - usb:present=%d type=%d batt:present = %d health = %d charge = %d\n",
+	pr_debug("SMB5 status - usb:present=%d type=%d batt:present = %d health = %d charge = %d\n",
 		usb_present, chg->real_charger_type,
 		batt_present, batt_health, batt_charge_type);
 	return rc;
@@ -5216,7 +5216,7 @@ static int smb5_probe(struct platform_device *pdev)
 	}
 
 	schedule_delayed_work(&chg->reg_work, 30 * HZ);
-	pr_info("QPNP SMB5 probed successfully\n");
+	pr_debug("QPNP SMB5 probed successfully\n");
 
 	return rc;
 

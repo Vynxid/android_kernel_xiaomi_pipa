@@ -202,18 +202,18 @@ static void print_regs(struct udc *dev)
 	if (use_dma && use_dma_ppb && !use_dma_ppb_du) {
 		DBG(dev, "DMA mode       = PPBNDU (packet per buffer "
 			"WITHOUT desc. update)\n");
-		dev_info(dev->dev, "DMA mode (%s)\n", "PPBNDU");
+		dev_dbg(dev->dev, "DMA mode (%s)\n", "PPBNDU");
 	} else if (use_dma && use_dma_ppb && use_dma_ppb_du) {
 		DBG(dev, "DMA mode       = PPBDU (packet per buffer "
 			"WITH desc. update)\n");
-		dev_info(dev->dev, "DMA mode (%s)\n", "PPBDU");
+		dev_dbg(dev->dev, "DMA mode (%s)\n", "PPBDU");
 	}
 	if (use_dma && use_dma_bufferfill_mode) {
 		DBG(dev, "DMA mode       = BF (buffer fill mode)\n");
-		dev_info(dev->dev, "DMA mode (%s)\n", "BF");
+		dev_dbg(dev->dev, "DMA mode (%s)\n", "BF");
 	}
 	if (!use_dma)
-		dev_info(dev->dev, "FIFO mode\n");
+		dev_dbg(dev->dev, "FIFO mode\n");
 	DBG(dev, "-------------------------------------------------------\n");
 }
 
@@ -1621,7 +1621,7 @@ static void usb_connect(struct udc *dev)
 	if (dev->connected)
 		return;
 
-	dev_info(dev->dev, "USB Connect\n");
+	dev_dbg(dev->dev, "USB Connect\n");
 
 	dev->connected = 1;
 
@@ -1642,7 +1642,7 @@ static void usb_disconnect(struct udc *dev)
 	if (!dev->connected)
 		return;
 
-	dev_info(dev->dev, "USB Disconnect\n");
+	dev_dbg(dev->dev, "USB Disconnect\n");
 
 	dev->connected = 0;
 
@@ -2960,7 +2960,7 @@ __acquires(dev->lock)
 
 		/* link up all endpoints */
 		udc_setup_endpoints(dev);
-		dev_info(dev->dev, "Connect: %s\n",
+		dev_dbg(dev->dev, "Connect: %s\n",
 			 usb_speed_string(dev->gadget.speed));
 
 		/* init ep 0 */
@@ -3166,14 +3166,14 @@ int udc_probe(struct udc *dev)
 	/* init registers, interrupts, ... */
 	startup_registers(dev);
 
-	dev_info(dev->dev, "%s\n", mod_desc);
+	dev_dbg(dev->dev, "%s\n", mod_desc);
 
 	snprintf(tmp, sizeof(tmp), "%d", dev->irq);
 
 	/* Print this device info for AMD chips only*/
 	if (dev->chiprev == UDC_HSA0_REV ||
 	    dev->chiprev == UDC_HSB1_REV) {
-		dev_info(dev->dev, "irq %s, pci mem %08lx, chip rev %02x(Geode5536 %s)\n",
+		dev_dbg(dev->dev, "irq %s, pci mem %08lx, chip rev %02x(Geode5536 %s)\n",
 			 tmp, dev->phys_addr, dev->chiprev,
 			 (dev->chiprev == UDC_HSA0_REV) ?
 			 "A0" : "B1");
@@ -3183,7 +3183,7 @@ int udc_probe(struct udc *dev)
 			retval = -ENODEV;
 			goto finished;
 		}
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "driver version: %s(for Geode5536 B1)\n", tmp);
 	}
 

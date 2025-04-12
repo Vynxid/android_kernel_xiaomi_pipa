@@ -108,7 +108,7 @@ static void __init jailhouse_get_smp_config(unsigned int early)
 
 static void jailhouse_no_restart(void)
 {
-	pr_notice("Jailhouse: Restart not supported, halting\n");
+	pr_debug("Jailhouse: Restart not supported, halting\n");
 	machine_halt();
 }
 

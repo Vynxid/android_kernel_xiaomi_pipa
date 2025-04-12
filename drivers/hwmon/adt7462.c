@@ -1914,7 +1914,7 @@ static int adt7462_probe(struct i2c_client *client,
 	data->client = client;
 	mutex_init(&data->lock);
 
-	dev_info(&client->dev, "%s chip found\n", client->name);
+	dev_dbg(&client->dev, "%s chip found\n", client->name);
 
 	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
 							   data,

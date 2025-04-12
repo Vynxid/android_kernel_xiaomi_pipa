@@ -822,7 +822,7 @@ static int iproc_pcie_check_link(struct iproc_pcie *pcie)
 		}
 	}
 
-	dev_info(dev, "link: %s\n", link_is_active ? "UP" : "DOWN");
+	dev_dbg(dev, "link: %s\n", link_is_active ? "UP" : "DOWN");
 
 	return link_is_active ? 0 : -ENODEV;
 }
@@ -1459,7 +1459,7 @@ int iproc_pcie_setup(struct iproc_pcie *pcie, struct list_head *res)
 
 	if (IS_ENABLED(CONFIG_PCI_MSI))
 		if (iproc_pcie_msi_enable(pcie))
-			dev_info(dev, "not using iProc MSI\n");
+			dev_dbg(dev, "not using iProc MSI\n");
 
 	list_splice_init(res, &host->windows);
 	host->busnr = 0;

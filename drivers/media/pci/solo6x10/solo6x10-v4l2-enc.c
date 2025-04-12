@@ -1391,7 +1391,7 @@ int solo_enc_v4l2_init(struct solo_dev *solo_dev, unsigned nr)
 	else
 		solo_dev->enc_bw_remain = solo_dev->fps * 4 * 5;
 
-	dev_info(&solo_dev->pdev->dev, "Encoders as /dev/video%d-%d\n",
+	dev_dbg(&solo_dev->pdev->dev, "Encoders as /dev/video%d-%d\n",
 		 solo_dev->v4l2_enc[0]->vfd->num,
 		 solo_dev->v4l2_enc[solo_dev->nr_chans - 1]->vfd->num);
 

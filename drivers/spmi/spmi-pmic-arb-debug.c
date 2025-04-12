@@ -322,7 +322,7 @@ static int spmi_pmic_arb_debug_probe(struct platform_device *pdev)
 	if (rc)
 		goto err_put_ctrl;
 
-	dev_info(&ctrl->dev, "SPMI PMIC arbiter debug bus controller added\n");
+	dev_dbg(&ctrl->dev, "SPMI PMIC arbiter debug bus controller added\n");
 
 	return 0;
 

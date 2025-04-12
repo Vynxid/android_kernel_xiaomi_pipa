@@ -1611,7 +1611,7 @@ static int u132_run(struct u132 *u132)
 	retval = u132_read_pcimem(u132, control, &u132->hc_control);
 	if (retval)
 		return retval;
-	dev_info(&u132->platform_dev->dev, "resetting from state '%s', control "
+	dev_dbg(&u132->platform_dev->dev, "resetting from state '%s', control "
 		"= %08X\n", hcfs2string(u132->hc_control & OHCI_CTRL_HCFS),
 		u132->hc_control);
 	switch (u132->hc_control & OHCI_CTRL_HCFS) {
@@ -2619,7 +2619,7 @@ static int u132_roothub_portstatus(struct u132 *u132, __le32 *desc, u16 wIndex)
 			roothub.portstatus[port], &rh_portstatus);
 		*desc = cpu_to_le32(rh_portstatus);
 		if (*(u16 *) (desc + 2)) {
-			dev_info(&u132->platform_dev->dev, "Port %d Status Chan"
+			dev_dbg(&u132->platform_dev->dev, "Port %d Status Chan"
 				"ge = %08X\n", port, *desc);
 		}
 		return ret_portstatus;

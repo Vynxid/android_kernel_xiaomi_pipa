@@ -872,7 +872,7 @@ static int wm2000_i2c_probe(struct i2c_client *i2c,
 	}
 
 	reg = wm2000_read(i2c, WM2000_REG_REVISON);
-	dev_info(&i2c->dev, "revision %c\n", reg + 'A');
+	dev_dbg(&i2c->dev, "revision %c\n", reg + 'A');
 
 	wm2000->mclk = devm_clk_get(&i2c->dev, "MCLK");
 	if (IS_ERR(wm2000->mclk)) {

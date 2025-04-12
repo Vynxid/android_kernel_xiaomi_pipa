@@ -332,7 +332,7 @@ static int enforce_temp_range(struct device *dev, int trip_temp)
 
 	temp = clamp_val(trip_temp, min_low_temp, max_high_temp);
 	if (temp != trip_temp)
-		dev_info(dev, "soctherm: trip temperature %d forced to %d\n",
+		dev_dbg(dev, "soctherm: trip temperature %d forced to %d\n",
 			 trip_temp, temp);
 	return temp;
 }
@@ -562,7 +562,7 @@ static int tegra_soctherm_set_hwtrips(struct device *dev,
 		return ret;
 	}
 
-	dev_info(dev,
+	dev_dbg(dev,
 		 "thermtrip: will shut down when %s reaches %d mC\n",
 		 sg->name, temperature);
 
@@ -593,7 +593,7 @@ set_throttle:
 			return ret;
 		}
 
-		dev_info(dev,
+		dev_dbg(dev,
 			 "throttrip: will throttle when %s reaches %d mC\n",
 			 sg->name, temperature);
 		break;
@@ -928,7 +928,7 @@ static void soctherm_init_hw_throt_cdev(struct platform_device *pdev)
 
 	np_stc = of_get_child_by_name(dev->of_node, "throttle-cfgs");
 	if (!np_stc) {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "throttle-cfg: no throttle-cfgs - not enabling\n");
 		return;
 	}
@@ -947,7 +947,7 @@ static void soctherm_init_hw_throt_cdev(struct platform_device *pdev)
 
 		r = of_property_read_u32(np_stcc, "nvidia,priority", &val);
 		if (r) {
-			dev_info(dev,
+			dev_dbg(dev,
 				 "throttle-cfg: %s: missing priority\n", name);
 			continue;
 		}
@@ -958,7 +958,7 @@ static void soctherm_init_hw_throt_cdev(struct platform_device *pdev)
 						 "nvidia,cpu-throt-level",
 						 &val);
 			if (r) {
-				dev_info(dev,
+				dev_dbg(dev,
 					 "throttle-cfg: %s: missing cpu-throt-level\n",
 					 name);
 				continue;
@@ -969,7 +969,7 @@ static void soctherm_init_hw_throt_cdev(struct platform_device *pdev)
 						 "nvidia,cpu-throt-percent",
 						 &val);
 			if (r) {
-				dev_info(dev,
+				dev_dbg(dev,
 					 "throttle-cfg: %s: missing cpu-throt-percent\n",
 					 name);
 				continue;

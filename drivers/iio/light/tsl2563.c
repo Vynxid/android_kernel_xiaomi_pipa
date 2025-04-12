@@ -622,15 +622,15 @@ error_ret:
 
 static irqreturn_t tsl2563_event_handler(int irq, void *private)
 {
-	struct iio_dev *dev_info = private;
-	struct tsl2563_chip *chip = iio_priv(dev_info);
+	struct iio_dev *dev_dbg = private;
+	struct tsl2563_chip *chip = iio_priv(dev_dbg);
 
-	iio_push_event(dev_info,
+	iio_push_event(dev_dbg,
 		       IIO_UNMOD_EVENT_CODE(IIO_INTENSITY,
 					    0,
 					    IIO_EV_TYPE_THRESH,
 					    IIO_EV_DIR_EITHER),
-		       iio_get_time_ns(dev_info));
+		       iio_get_time_ns(dev_dbg));
 
 	/* clear the interrupt and push the event */
 	i2c_smbus_write_byte(chip->client, TSL2563_CMD | TSL2563_CLEARINT);
@@ -759,7 +759,7 @@ static int tsl2563_probe(struct i2c_client *client,
 	else
 		chip->cover_comp_gain = 1;
 
-	dev_info(&client->dev, "model %d, rev. %d\n", id >> 4, id & 0x0f);
+	dev_dbg(&client->dev, "model %d, rev. %d\n", id >> 4, id & 0x0f);
 	indio_dev->name = client->name;
 	indio_dev->channels = tsl2563_channels;
 	indio_dev->num_channels = ARRAY_SIZE(tsl2563_channels);

@@ -1111,7 +1111,7 @@ static int rtl2832_probe(struct i2c_client *client,
 	pdata->pid_filter_ctrl = rtl2832_pid_filter_ctrl;
 	pdata->regmap = dev->regmap;
 
-	dev_info(&client->dev, "Realtek RTL2832 successfully attached\n");
+	dev_dbg(&client->dev, "Realtek RTL2832 successfully attached\n");
 	return 0;
 err_regmap_exit:
 	regmap_exit(dev->regmap);

@@ -173,16 +173,16 @@ int usb_device_supports_lpm(struct usb_device *udev)
 	 * latencies to zero.
 	 */
 	if (!udev->bos->ss_cap) {
-		dev_info(&udev->dev, "No LPM exit latency info found, disabling LPM.\n");
+		dev_dbg(&udev->dev, "No LPM exit latency info found, disabling LPM.\n");
 		return 0;
 	}
 
 	if (udev->bos->ss_cap->bU1devExitLat == 0 &&
 			udev->bos->ss_cap->bU2DevExitLat == 0) {
 		if (udev->parent)
-			dev_info(&udev->dev, "LPM exit latency is zeroed, disabling LPM.\n");
+			dev_dbg(&udev->dev, "LPM exit latency is zeroed, disabling LPM.\n");
 		else
-			dev_info(&udev->dev, "We don't know the algorithms for LPM for this host, disabling LPM.\n");
+			dev_dbg(&udev->dev, "We don't know the algorithms for LPM for this host, disabling LPM.\n");
 		return 0;
 	}
 
@@ -1433,7 +1433,7 @@ static int hub_configure(struct usb_hub *hub,
 	}
 
 	maxchild = hub->descriptor->bNbrPorts;
-	dev_info(hub_dev, "%d port%s detected\n", maxchild,
+	dev_dbg(hub_dev, "%d port%s detected\n", maxchild,
 			(maxchild == 1) ? "" : "s");
 
 	hub->ports = kcalloc(maxchild, sizeof(struct usb_port *), GFP_KERNEL);
@@ -1858,7 +1858,7 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
 	}
 
 	/* We found a hub */
-	dev_info(&intf->dev, "USB hub found\n");
+	dev_dbg(&intf->dev, "USB hub found\n");
 
 	hub = kzalloc(sizeof(*hub), GFP_KERNEL);
 	if (!hub)
@@ -2203,7 +2203,7 @@ void usb_disconnect(struct usb_device **pdev)
 	 * this quiesces everything except pending urbs.
 	 */
 	usb_set_device_state(udev, USB_STATE_NOTATTACHED);
-	dev_info(&udev->dev, "USB disconnect, device number %d\n",
+	dev_dbg(&udev->dev, "USB disconnect, device number %d\n",
 			udev->devnum);
 
 	if(udev->parent){
@@ -2211,7 +2211,7 @@ void usb_disconnect(struct usb_device **pdev)
 		if(hub->asuspend && hub->addr_number == udev->devnum){
 			hub->asuspend = 0;
 			hub->addr_number = 0;
-			dev_info(&udev->dev,"usb_disconnect reset asuspend and addr_number\n");
+			dev_dbg(&udev->dev,"usb_disconnect reset asuspend and addr_number\n");
 		}
 	}
 
@@ -2281,19 +2281,19 @@ static void show_string(struct usb_device *udev, char *id, char *string)
 {
 	if (!string)
 		return;
-	dev_info(&udev->dev, "%s: %s\n", id, string);
+	dev_dbg(&udev->dev, "%s: %s\n", id, string);
 }
 
 static void announce_device(struct usb_device *udev)
 {
 	u16 bcdDevice = le16_to_cpu(udev->descriptor.bcdDevice);
 
-	dev_info(&udev->dev,
+	dev_dbg(&udev->dev,
 		"New USB device found, idVendor=%04x, idProduct=%04x, bcdDevice=%2x.%02x\n",
 		le16_to_cpu(udev->descriptor.idVendor),
 		le16_to_cpu(udev->descriptor.idProduct),
 		bcdDevice >> 8, bcdDevice & 0xff);
-	dev_info(&udev->dev,
+	dev_dbg(&udev->dev,
 		"New USB device strings: Mfr=%d, Product=%d, SerialNumber=%d\n",
 		udev->descriptor.iManufacturer,
 		udev->descriptor.iProduct,
@@ -2339,7 +2339,7 @@ static int usb_enumerate_device_otg(struct usb_device *udev)
 		if (err || !(desc->bmAttributes & USB_OTG_HNP))
 			return 0;
 
-		dev_info(&udev->dev, "Dual-Role OTG device on %sHNP port\n",
+		dev_dbg(&udev->dev, "Dual-Role OTG device on %sHNP port\n",
 					(port1 == bus->otg_port) ? "" : "non-");
 
 		/* enable HNP before suspend, it's simpler */
@@ -2691,7 +2691,7 @@ int usb_authorize_device(struct usb_device *usb_dev)
 			 * set other configurations. */
 		}
 	}
-	dev_info(&usb_dev->dev, "authorized to connect\n");
+	dev_dbg(&usb_dev->dev, "authorized to connect\n");
 
 error_device_descriptor:
 	usb_autosuspend_device(usb_dev);
@@ -3863,7 +3863,7 @@ static int hub_reset_resume(struct usb_interface *intf)
  */
 void usb_root_hub_lost_power(struct usb_device *rhdev)
 {
-	dev_notice(&rhdev->dev, "root hub lost power or was reset\n");
+	dev_dbg(&rhdev->dev, "root hub lost power or was reset\n");
 	rhdev->reset_resume = 1;
 }
 EXPORT_SYMBOL_GPL(usb_root_hub_lost_power);
@@ -4716,7 +4716,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
 		driver_name = udev->bus->sysdev->driver->name;
 
 	if (udev->speed < USB_SPEED_SUPER)
-		dev_info(&udev->dev,
+		dev_dbg(&udev->dev,
 				"%s %s USB device number %d using %s\n",
 				(udev->config) ? "reset" : "new", speed,
 				devnum, driver_name);
@@ -4849,7 +4849,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
 			}
 			if (udev->speed >= USB_SPEED_SUPER) {
 				devnum = udev->devnum;
-				dev_info(&udev->dev,
+				dev_dbg(&udev->dev,
 						"%s SuperSpeed%s%s USB device number %d using %s\n",
 						(udev->config) ? "reset" : "new",
 					 (udev->speed == USB_SPEED_SUPER_PLUS) ?
@@ -4988,7 +4988,7 @@ check_highspeed(struct usb_hub *hub, struct usb_device *udev, int port1)
 	status = usb_get_descriptor(udev, USB_DT_DEVICE_QUALIFIER, 0,
 			qual, sizeof *qual);
 	if (status == sizeof *qual) {
-		dev_info(&udev->dev, "not running at top speed; "
+		dev_dbg(&udev->dev, "not running at top speed; "
 			"connect to a high speed hub\n");
 		/* hub LEDs are probably harder to miss than syslog */
 		if (hub->has_indicators) {
@@ -5260,7 +5260,7 @@ loop:
 
 		/* When halfway through our retry count, power-cycle the port */
 		if (i == (SET_CONFIG_TRIES / 2) - 1) {
-			dev_info(&port_dev->dev, "attempt power cycle\n");
+			dev_dbg(&port_dev->dev, "attempt power cycle\n");
 			usb_hub_set_port_power(hdev, hub, port1, false);
 			msleep(2 * hub_power_on_good_delay(hub));
 			usb_hub_set_port_power(hdev, hub, port1, true);
@@ -5844,7 +5844,7 @@ static int usb_reset_and_verify_device(struct usb_device *udev)
 
 	/* Device might have changed firmware (DFU or similar) */
 	if (descriptors_changed(udev, &descriptor, bos)) {
-		dev_info(&udev->dev, "device firmware changed\n");
+		dev_dbg(&udev->dev, "device firmware changed\n");
 		udev->descriptor = descriptor;	/* for disconnect() calls */
 		goto re_enumerate;
 	}

@@ -670,7 +670,7 @@ int twl4030_sih_setup(struct device *dev, int module, int irq_base)
 				      IRQF_EARLY_RESUME | IRQF_ONESHOT,
 				      agent->irq_name ?: sih->name, NULL);
 
-	dev_info(dev, "%s (irq %d) chaining IRQs %d..%d\n", sih->name,
+	dev_dbg(dev, "%s (irq %d) chaining IRQs %d..%d\n", sih->name,
 			irq, irq_base, irq_base + i - 1);
 
 	return status < 0 ? status : irq_base;
@@ -734,7 +734,7 @@ int twl4030_init_irq(struct device *dev, int irq_num)
 		activate_irq(i);
 	}
 
-	dev_info(dev, "%s (irq %d) chaining IRQs %d..%d\n", "PIH",
+	dev_dbg(dev, "%s (irq %d) chaining IRQs %d..%d\n", "PIH",
 			irq_num, irq_base, irq_end);
 
 	/* ... and the PWR_INT module ... */

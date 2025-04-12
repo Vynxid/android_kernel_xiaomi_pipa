@@ -61,7 +61,7 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
 	if (sockfd != -1) {
 		int err;
 
-		dev_info(dev, "stub up\n");
+		dev_dbg(dev, "stub up\n");
 
 		mutex_lock(&sdev->ud.sysfs_lock);
 		spin_lock_irq(&sdev->ud.lock);
@@ -116,7 +116,7 @@ static ssize_t usbip_sockfd_store(struct device *dev, struct device_attribute *a
 		mutex_unlock(&sdev->ud.sysfs_lock);
 
 	} else {
-		dev_info(dev, "stub down\n");
+		dev_dbg(dev, "stub down\n");
 
 		spin_lock_irq(&sdev->ud.lock);
 		if (sdev->ud.status != SDEV_ST_USED)
@@ -258,7 +258,7 @@ static void stub_device_reset(struct usbip_device *ud)
 		dev_err(&udev->dev, "device reset\n");
 		ud->status = SDEV_ST_ERROR;
 	} else {
-		dev_info(&udev->dev, "device reset\n");
+		dev_dbg(&udev->dev, "device reset\n");
 		ud->status = SDEV_ST_AVAILABLE;
 	}
 	spin_unlock_irq(&ud->lock);
@@ -351,7 +351,7 @@ static int stub_probe(struct usb_device *udev)
 	busid_priv = get_busid_priv(udev_busid);
 	if (!busid_priv || (busid_priv->status == STUB_BUSID_REMOV) ||
 	    (busid_priv->status == STUB_BUSID_OTHER)) {
-		dev_info(&udev->dev,
+		dev_dbg(&udev->dev,
 			"%s is not in match_busid table... skip!\n",
 			udev_busid);
 
@@ -384,7 +384,7 @@ static int stub_probe(struct usb_device *udev)
 	}
 
 
-	dev_info(&udev->dev,
+	dev_dbg(&udev->dev,
 		"usbip-host: register new device (bus %u dev %u)\n",
 		udev->bus->busnum, udev->devnum);
 

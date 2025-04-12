@@ -446,7 +446,7 @@ static int arche_apb_ctrl_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Device registered successfully\n");
+	dev_dbg(&pdev->dev, "Device registered successfully\n");
 	return 0;
 }
 

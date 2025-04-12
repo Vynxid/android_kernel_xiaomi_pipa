@@ -846,9 +846,9 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
 	pci_create_legacy_files(bus);
 
 	if (parent)
-		dev_info(parent, "PCI host bridge to bus %s\n", name);
+		dev_dbg(parent, "PCI host bridge to bus %s\n", name);
 	else
-		pr_info("PCI host bridge to bus %s\n", name);
+		pr_debug("PCI host bridge to bus %s\n", name);
 
 	/* Add initial resources to the bus */
 	resource_list_for_each_entry_safe(window, n, &resources) {
@@ -873,7 +873,7 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
 		} else
 			addr[0] = '\0';
 
-		dev_info(&bus->dev, "root bus resource %pR%s\n", res, addr);
+		dev_dbg(&bus->dev, "root bus resource %pR%s\n", res, addr);
 	}
 
 	down_write(&pci_bus_sem);
@@ -1254,7 +1254,7 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
 		    (child->number > bus->busn_res.end) ||
 		    (child->number < bus->number) ||
 		    (child->busn_res.end < bus->number)) {
-			dev_info(&dev->dev, "devices behind bridge are unusable because %pR cannot be assigned for them\n",
+			dev_dbg(&dev->dev, "devices behind bridge are unusable because %pR cannot be assigned for them\n",
 				 &child->busn_res);
 			break;
 		}
@@ -2229,7 +2229,7 @@ static bool pci_bus_wait_crs(struct pci_bus *bus, int devfn, u32 *l,
 			return false;
 		}
 		if (delay >= 1000)
-			pr_info("pci %04x:%02x:%02x.%d: not ready after %dms; waiting\n",
+			pr_debug("pci %04x:%02x:%02x.%d: not ready after %dms; waiting\n",
 				pci_domain_nr(bus), bus->number,
 				PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
 
@@ -2241,7 +2241,7 @@ static bool pci_bus_wait_crs(struct pci_bus *bus, int devfn, u32 *l,
 	}
 
 	if (delay >= 1000)
-		pr_info("pci %04x:%02x:%02x.%d: ready after %dms\n",
+		pr_debug("pci %04x:%02x:%02x.%d: ready after %dms\n",
 			pci_domain_nr(bus), bus->number,
 			PCI_SLOT(devfn), PCI_FUNC(devfn), delay - 1);
 
@@ -3082,7 +3082,7 @@ int pci_scan_root_bus_bridge(struct pci_host_bridge *bridge)
 	bus = bridge->busnr;
 
 	if (!found) {
-		dev_info(&b->dev,
+		dev_dbg(&b->dev,
 		 "No busn resource found for root bus, will use [bus %02x-ff]\n",
 			bus);
 		pci_bus_insert_busn_res(b, bus, 255);
@@ -3116,7 +3116,7 @@ struct pci_bus *pci_scan_root_bus(struct device *parent, int bus,
 		return NULL;
 
 	if (!found) {
-		dev_info(&b->dev,
+		dev_dbg(&b->dev,
 		 "No busn resource found for root bus, will use [bus %02x-ff]\n",
 			bus);
 		pci_bus_insert_busn_res(b, bus, 255);

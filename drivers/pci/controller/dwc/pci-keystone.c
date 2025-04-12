@@ -74,7 +74,7 @@ static void quirk_limit_mrrs(struct pci_dev *dev)
 		 */
 		if (pci_match_id(rc_pci_devids, bridge)) {
 			if (pcie_get_readrq(dev) > 256) {
-				dev_info(&dev->dev, "limiting MRRS to 256\n");
+				dev_dbg(&dev->dev, "limiting MRRS to 256\n");
 				pcie_set_readrq(dev, 256);
 			}
 		}
@@ -92,7 +92,7 @@ static int ks_pcie_establish_link(struct keystone_pcie *ks_pcie)
 	dw_pcie_setup_rc(pp);
 
 	if (dw_pcie_link_up(pci)) {
-		dev_info(dev, "Link already up\n");
+		dev_dbg(dev, "Link already up\n");
 		return 0;
 	}
 
@@ -343,7 +343,7 @@ static int __init ks_add_pcie_port(struct keystone_pcie *ks_pcie,
 	 */
 	ks_pcie->error_irq = irq_of_parse_and_map(ks_pcie->np, 0);
 	if (ks_pcie->error_irq <= 0)
-		dev_info(dev, "no error IRQ defined\n");
+		dev_dbg(dev, "no error IRQ defined\n");
 	else {
 		ret = request_irq(ks_pcie->error_irq, pcie_err_irq_handler,
 				  IRQF_SHARED, "pcie-error-irq", ks_pcie);

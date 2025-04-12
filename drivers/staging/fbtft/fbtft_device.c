@@ -1304,7 +1304,7 @@ static int spi_device_found(struct device *dev, void *data)
 {
 	struct spi_device *spi = to_spi_device(dev);
 
-	dev_info(dev, "%s %s %dkHz %d bits mode=0x%02X\n", spi->modalias,
+	dev_dbg(dev, "%s %s %dkHz %d bits mode=0x%02X\n", spi->modalias,
 		 dev_name(dev), spi->max_speed_hz / 1000, spi->bits_per_word,
 		 spi->mode);
 
@@ -1323,7 +1323,7 @@ static int p_device_found(struct device *dev, void *data)
 	*pdev = to_platform_device(dev);
 
 	if (strstr(pdev->name, "fb"))
-		dev_info(dev, "%s id=%d pdata? %s\n", pdev->name, pdev->id,
+		dev_dbg(dev, "%s id=%d pdata? %s\n", pdev->name, pdev->id,
 			 pdev->dev.platform_data ? "yes" : "no");
 
 	return 0;
@@ -1346,7 +1346,7 @@ static void fbtft_device_spi_delete(struct spi_master *master, unsigned int cs)
 	dev = bus_find_device_by_name(&spi_bus_type, NULL, str);
 	if (dev) {
 		if (verbose)
-			dev_info(dev, "Deleting %s\n", str);
+			dev_dbg(dev, "Deleting %s\n", str);
 		device_del(dev);
 	}
 }
@@ -1456,10 +1456,10 @@ static int __init fbtft_device_init(void)
 
 	/* name=list lists all supported displays */
 	if (strncmp(name, "list", FBTFT_GPIO_NAME_SIZE) == 0) {
-		pr_info("Supported displays:\n");
+		pr_debug("Supported displays:\n");
 
 		for (i = 0; i < ARRAY_SIZE(displays); i++)
-			pr_info("%s\n", displays[i].name);
+			pr_debug("%s\n", displays[i].name);
 		return -ECANCELED;
 	}
 
@@ -1551,15 +1551,15 @@ static int __init fbtft_device_init(void)
 
 	if (verbose && pdata && pdata->gpios) {
 		gpio = pdata->gpios;
-		pr_info("GPIOS used by '%s':\n", name);
+		pr_debug("GPIOS used by '%s':\n", name);
 		found = false;
 		while (verbose && gpio->name[0]) {
-			pr_info("'%s' = GPIO%d\n", gpio->name, gpio->gpio);
+			pr_debug("'%s' = GPIO%d\n", gpio->name, gpio->gpio);
 			gpio++;
 			found = true;
 		}
 		if (!found)
-			pr_info("(none)\n");
+			pr_debug("(none)\n");
 	}
 
 	if (spi_device && (verbose > 1))

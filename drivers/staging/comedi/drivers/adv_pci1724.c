@@ -129,7 +129,7 @@ static int adv_pci1724_auto_attach(struct comedi_device *dev,
 
 	dev->iobase = pci_resource_start(pcidev, 2);
 	board_id = inl(dev->iobase + PCI1724_BOARD_ID_REG);
-	dev_info(dev->class_dev, "board id: %d\n",
+	dev_dbg(dev->class_dev, "board id: %d\n",
 		 board_id & PCI1724_BOARD_ID_MASK);
 
 	ret = comedi_alloc_subdevices(dev, 3);

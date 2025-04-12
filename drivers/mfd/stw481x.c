@@ -93,14 +93,14 @@ static int stw481x_startup(struct stw481x *stw481x)
 	vaux_en = !!(val & STW_CONF1_PDN_VAUX);
 	it_warn = !!(val & STW_CONF1_IT_WARN);
 
-	dev_info(&stw481x->client->dev, "voltages %s\n",
+	dev_dbg(&stw481x->client->dev, "voltages %s\n",
 		(val & STW_CONF1_V_MONITORING) ? "OK" : "LOW");
-	dev_info(&stw481x->client->dev, "MMC level shifter %s\n",
+	dev_dbg(&stw481x->client->dev, "MMC level shifter %s\n",
 		(val & STW_CONF1_MMC_LS_STATUS) ? "high impedance" : "ON");
-	dev_info(&stw481x->client->dev, "VMMC: %s\n",
+	dev_dbg(&stw481x->client->dev, "VMMC: %s\n",
 		(val & STW_CONF1_PDN_VMMC) ? "ON" : "disabled");
 
-	dev_info(&stw481x->client->dev, "STw481x power control registers:\n");
+	dev_dbg(&stw481x->client->dev, "STw481x power control registers:\n");
 
 	ret = stw481x_get_pctl_reg(stw481x, STW_PC_VCORE_SEL);
 	if (ret < 0)
@@ -118,15 +118,15 @@ static int stw481x_startup(struct stw481x *stw481x)
 		return ret;
 	vpll |= (ret >> 1) & 2;
 
-	dev_info(&stw481x->client->dev, "VCORE: %u.%uV %s\n",
+	dev_dbg(&stw481x->client->dev, "VCORE: %u.%uV %s\n",
 		vcore_val[vcore] / 100, vcore_val[vcore] % 100,
 		(ret & 4) ? "ON" : "OFF");
 
-	dev_info(&stw481x->client->dev, "VPLL:  %u.%uV %s\n",
+	dev_dbg(&stw481x->client->dev, "VPLL:  %u.%uV %s\n",
 		vpll_val[vpll] / 100, vpll_val[vpll] % 100,
 		(ret & 0x10) ? "ON" : "OFF");
 
-	dev_info(&stw481x->client->dev, "VAUX:  %u.%uV %s\n",
+	dev_dbg(&stw481x->client->dev, "VAUX:  %u.%uV %s\n",
 		vaux_val[vaux] / 10, vaux_val[vaux] % 10,
 		vaux_en ? "ON" : "OFF");
 
@@ -134,24 +134,24 @@ static int stw481x_startup(struct stw481x *stw481x)
 	if (ret)
 		return ret;
 
-	dev_info(&stw481x->client->dev, "TWARN: %s threshold, %s\n",
+	dev_dbg(&stw481x->client->dev, "TWARN: %s threshold, %s\n",
 		it_warn ? "below" : "above",
 		(val & STW_CONF2_MASK_TWARN) ?
 		 "enabled" : "mask through VDDOK");
-	dev_info(&stw481x->client->dev, "VMMC: %s\n",
+	dev_dbg(&stw481x->client->dev, "VMMC: %s\n",
 		(val & STW_CONF2_VMMC_EXT) ? "internal" : "external");
-	dev_info(&stw481x->client->dev, "IT WAKE UP: %s\n",
+	dev_dbg(&stw481x->client->dev, "IT WAKE UP: %s\n",
 		(val & STW_CONF2_MASK_IT_WAKE_UP) ? "enabled" : "masked");
-	dev_info(&stw481x->client->dev, "GPO1: %s\n",
+	dev_dbg(&stw481x->client->dev, "GPO1: %s\n",
 		(val & STW_CONF2_GPO1) ? "low" : "high impedance");
-	dev_info(&stw481x->client->dev, "GPO2: %s\n",
+	dev_dbg(&stw481x->client->dev, "GPO2: %s\n",
 		(val & STW_CONF2_GPO2) ? "low" : "high impedance");
 
 	ret = regmap_read(stw481x->map, STW_VCORE_SLEEP, &val);
 	if (ret)
 		return ret;
 	vcore_slp = val & 0x0f;
-	dev_info(&stw481x->client->dev, "VCORE SLEEP: %u.%uV\n",
+	dev_dbg(&stw481x->client->dev, "VCORE SLEEP: %u.%uV\n",
 		vcore_val[vcore_slp] / 100, vcore_val[vcore_slp] % 100);
 
 	return 0;
@@ -213,7 +213,7 @@ static int stw481x_probe(struct i2c_client *client,
 	if (ret)
 		return ret;
 
-	dev_info(&client->dev, "initialized STw481x device\n");
+	dev_dbg(&client->dev, "initialized STw481x device\n");
 
 	return ret;
 }

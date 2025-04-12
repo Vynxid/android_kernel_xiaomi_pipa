@@ -207,7 +207,7 @@ static int mv_ehci_probe(struct platform_device *pdev)
 			retval = PTR_ERR(ehci_mv->otg);
 
 			if (retval == -ENXIO)
-				dev_info(&pdev->dev, "MV_USB_MODE_OTG "
+				dev_dbg(&pdev->dev, "MV_USB_MODE_OTG "
 						"must have CONFIG_USB_PHY enabled\n");
 			else
 				dev_err(&pdev->dev,
@@ -240,7 +240,7 @@ static int mv_ehci_probe(struct platform_device *pdev)
 	if (pdata->private_init)
 		pdata->private_init(ehci_mv->op_regs, ehci_mv->phy_regs);
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "successful find EHCI device with regs 0x%p irq %d"
 		 " working in %s mode\n", hcd->regs, hcd->irq,
 		 ehci_mv->mode == MV_USB_MODE_OTG ? "OTG" : "Host");

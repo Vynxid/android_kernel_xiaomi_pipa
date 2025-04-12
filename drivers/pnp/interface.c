@@ -342,7 +342,7 @@ static ssize_t resources_store(struct device *dmdev,
 
 	if (dev->status & PNP_ATTACHED) {
 		retval = -EBUSY;
-		dev_info(&dev->dev, "in use; can't configure\n");
+		dev_dbg(&dev->dev, "in use; can't configure\n");
 		goto done;
 	}
 

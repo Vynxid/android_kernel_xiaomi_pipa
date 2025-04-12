@@ -584,7 +584,7 @@ initiate_logging(struct device *dev, struct device_attribute *attr,
 			sch->schid.ssid, sch->schid.sch_no, rc);
 		return rc;
 	}
-	pr_notice("Logging for subchannel 0.%x.%04x was triggered\n",
+	pr_debug("Logging for subchannel 0.%x.%04x was triggered\n",
 		  sch->schid.ssid, sch->schid.sch_no);
 	return count;
 }

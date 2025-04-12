@@ -560,7 +560,7 @@ static int siu_pcm_new(struct snd_soc_pcm_runtime *rtd)
 			     (unsigned long)&(*port_info)->capture);
 	}
 
-	dev_info(card->dev, "SuperH SIU driver initialized.\n");
+	dev_dbg(card->dev, "SuperH SIU driver initialized.\n");
 	return 0;
 
 fail:

@@ -2287,7 +2287,7 @@ static int f71882fg_create_fan_sysfs_files(
 			return err;
 	}
 
-	dev_info(&pdev->dev, "Fan: %d is in %s mode\n", idx + 1,
+	dev_dbg(&pdev->dev, "Fan: %d is in %s mode\n", idx + 1,
 		 (data->pwm_enable & (1 << (2 * idx))) ? "duty-cycle" : "RPM");
 
 	/* Check for unsupported auto pwm settings */
@@ -2689,7 +2689,7 @@ static int __init f71882fg_find(int sioaddr, struct f71882fg_sio_data *sio_data)
 		sio_data->type = f81866a;
 		break;
 	default:
-		pr_info("Unsupported Fintek device: %04x\n",
+		pr_debug("Unsupported Fintek device: %04x\n",
 			(unsigned int)devid);
 		err = -ENODEV;
 		goto exit;
@@ -2715,7 +2715,7 @@ static int __init f71882fg_find(int sioaddr, struct f71882fg_sio_data *sio_data)
 	address &= ~(REGION_LENGTH - 1);	/* Ignore 3 LSB */
 
 	err = address;
-	pr_info("Found %s chip at %#x, revision %d\n",
+	pr_debug("Found %s chip at %#x, revision %d\n",
 		f71882fg_names[sio_data->type],	(unsigned int)address,
 		(int)superio_inb(sioaddr, SIO_REG_DEVREV));
 exit:

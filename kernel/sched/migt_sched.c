@@ -190,11 +190,11 @@ static void set_viptask_flag(struct task_struct *p, int pri, int super_id)
 	} else if (pri == super_id) {
 		p->pkg.migt.flag |= 1 << GAME_SUPER_TASK;
 		if (migt_debug)
-			pr_info("set %s pri %d as super\n", p->comm, pri);
+			pr_debug("set %s pri %d as super\n", p->comm, pri);
 		return;
 	} else if (pri < stask_candidate_num + vip_task_max_num) {
 		if (migt_debug)
-			pr_info("set %s pri %d as vip\n", p->comm, pri);
+			pr_debug("set %s pri %d as vip\n", p->comm, pri);
 		p->pkg.migt.flag |= 1 << GAME_VIP_TASK;
 		return;
 	} else if (pri <
@@ -378,7 +378,7 @@ static inline void clean_mi_vip_task(struct task_struct *p)
 
 	if (mi_time_after(jiffies, boost_end)) {
 		if (migt_debug)
-			pr_info("clean vip flag %d, %s, time %lu %lu to %lu\n",
+			pr_debug("clean vip flag %d, %s, time %lu %lu to %lu\n",
 				p->pid, p->comm, jiffies, boost_end,
 				p->pkg.migt.boost_end);
 		atomic_dec(&mi_dynamic_vip_num);
@@ -401,7 +401,7 @@ static int proc_boost_mi_task(struct ctl_table *table, int write,
 	}
 
 	get_task_struct(target);
-	pr_info("%d, %s set as mi vip task from %u", boost_task_pid,
+	pr_debug("%d, %s set as mi vip task from %u", boost_task_pid,
 		target->comm, jiffies);
 	rcu_read_unlock();
 	set_mi_vip_task(target, HZ);
@@ -440,7 +440,7 @@ void mi_vip_task_req(int *pid, unsigned int nr, unsigned int jiff)
 		}
 
 		get_task_struct(target);
-		pr_info("%d, %s set as mi vip task from %u to %u", task_pid,
+		pr_debug("%d, %s set as mi vip task from %u to %u", task_pid,
 			target->comm, jiffies, jiffies + jiff);
 		rcu_read_unlock();
 		set_mi_vip_task(target, jiff);
@@ -464,7 +464,7 @@ int proc_viptask_cpus_set(struct ctl_table *table, int write,
 			break;
 
 		cpumask_set_cpu(cpu, &viptask_use_cpumask);
-		pr_info("vip task use max cpu nr %d\n", cpu);
+		pr_debug("vip task use max cpu nr %d\n", cpu);
 	}
 
 	return ret;
@@ -556,7 +556,7 @@ static int __init migt_sched_init(void)
 		return ret;
 	}
 
-	pr_info("migt_sched %s: inited!\n", __func__);
+	pr_debug("migt_sched %s: inited!\n", __func__);
 	atomic_set(&migt_init_sucess, 1);
 	WARN_ON(migt_sched_header);
 	migt_sched_header = register_sysctl_table(migt_ctl_root);
@@ -629,7 +629,7 @@ int game_vip_task(struct task_struct *p)
 	if (!migt_enable()) {
 		if (mi_time_before(jiffies, boost_end)) {
 			if (migt_debug)
-				pr_info("%d %s is mi vip task %d\n", p->pid,
+				pr_debug("%d %s is mi vip task %d\n", p->pid,
 					p->comm,
 					p->pkg.migt.flag & MASK_MI_VTASK);
 
@@ -688,7 +688,7 @@ static int cluster_core_init(void)
 	const struct cpumask *cluster_cpus;
 	int i, cpu, cluster = 0;
 
-	pr_info("come into %s\n", __func__);
+	pr_debug("come into %s\n", __func__);
 	memset(&tcpus, 0, sizeof(struct cpumask));
 
 	for_each_cpu (i, &cpus) {
@@ -701,14 +701,14 @@ static int cluster_core_init(void)
 		cpumask_or(&tcpus, &tcpus, cluster_cpus);
 		cpumask_andnot(&cpus, &cpus, cluster_cpus);
 		if (clus_affinity < CLUSTER_AFFINITY_TYPES) {
-			pr_info("clus_affnity %d ", clus_affinity);
+			pr_debug("clus_affnity %d ", clus_affinity);
 			cpumask_copy(&cluster_affinity_cpumask[clus_affinity],
 				     &tcpus);
 			for_each_cpu (cpu,
 				      &cluster_affinity_cpumask[clus_affinity])
-				pr_info("-%d \t", cpu);
+				pr_debug("-%d \t", cpu);
 
-			pr_info("\n");
+			pr_debug("\n");
 		}
 		clus_affinity++;
 		cluster++;

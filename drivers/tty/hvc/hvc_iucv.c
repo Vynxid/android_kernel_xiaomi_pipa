@@ -829,7 +829,7 @@ static	int hvc_iucv_path_pending(struct iucv_path *path, u8 *ipvmid,
 		iucv_path_free(path);
 		memcpy(vm_user_id, ipvmid, 8);
 		vm_user_id[8] = 0;
-		pr_info("A connection request from z/VM user ID %s "
+		pr_debug("A connection request from z/VM user ID %s "
 			"was refused\n", vm_user_id);
 		return 0;
 	}
@@ -1363,7 +1363,7 @@ static int __init hvc_iucv_init(void)
 		return -ENODEV;
 
 	if (!MACHINE_IS_VM) {
-		pr_notice("The z/VM IUCV HVC device driver cannot "
+		pr_debug("The z/VM IUCV HVC device driver cannot "
 			   "be used without z/VM\n");
 		rc = -ENODEV;
 		goto out_error;

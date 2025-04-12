@@ -520,7 +520,7 @@ static int au1000_mii_probe(struct net_device *dev)
 		/* try harder to find a PHY */
 		if (!phydev && (aup->mac_id == 1)) {
 			/* no PHY found, maybe we have a dual PHY? */
-			dev_info(&dev->dev, ": no PHY found on MAC1, "
+			dev_dbg(&dev->dev, ": no PHY found on MAC1, "
 				"let's see if it's attached to MAC0...\n");
 
 			/* find the first (lowest address) non-attached
@@ -1223,7 +1223,7 @@ static int au1000_probe(struct platform_device *pdev)
 
 	pd = dev_get_platdata(&pdev->dev);
 	if (!pd) {
-		dev_info(&pdev->dev, "no platform_data passed,"
+		dev_dbg(&pdev->dev, "no platform_data passed,"
 					" PHY search on MAC0\n");
 		aup->phy1_search_mac0 = 1;
 	} else {

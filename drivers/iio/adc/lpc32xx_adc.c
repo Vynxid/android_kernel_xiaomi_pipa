@@ -194,7 +194,7 @@ static int lpc32xx_adc_probe(struct platform_device *pdev)
 	if (retval)
 		return retval;
 
-	dev_info(&pdev->dev, "LPC32XX ADC driver loaded, IRQ %d\n", irq);
+	dev_dbg(&pdev->dev, "LPC32XX ADC driver loaded, IRQ %d\n", irq);
 
 	return 0;
 }

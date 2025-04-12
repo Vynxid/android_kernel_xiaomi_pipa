@@ -54,7 +54,7 @@ struct voice_mhi_dev_info {
 };
 
 struct voice_mhi {
-	struct voice_mhi_dev_info dev_info;
+	struct voice_mhi_dev_info dev_dbg;
 	struct mhi_device *mhi_dev;
 	uint32_t vote_count;
 	struct mutex mutex;
@@ -310,10 +310,10 @@ static int voice_mhi_set_mailbox_memory_config(void)
 	mb_memory_config.hdr.token = 0;
 	mb_memory_config.hdr.opcode = VSS_IPKTEXG_CMD_SET_MAILBOX_MEMORY_CONFIG;
 	mb_memory_config.mailbox_mem_address_pcie =
-			voice_mhi_lcl.dev_info.iova_pcie.base;
+			voice_mhi_lcl.dev_dbg.iova_pcie.base;
 	mb_memory_config.mailbox_mem_address_adsp =
-			voice_mhi_lcl.dev_info.iova_adsp.base;
-	mb_memory_config.mem_size = voice_mhi_lcl.dev_info.iova_adsp.size;
+			voice_mhi_lcl.dev_dbg.iova_adsp.base;
+	mb_memory_config.mem_size = voice_mhi_lcl.dev_dbg.iova_adsp.size;
 	voice_mhi_lcl.mvm_state = CMD_STATUS_FAIL;
 	voice_mhi_lcl.async_err = 0;
 
@@ -359,8 +359,8 @@ static void voice_mhi_map_pcie_and_send(struct work_struct *work)
 		goto err;
 	}
 
-	phys_addr = voice_mhi_lcl.dev_info.phys_addr.base;
-	mem_size = voice_mhi_lcl.dev_info.iova_pcie.size;
+	phys_addr = voice_mhi_lcl.dev_dbg.phys_addr.base;
+	mem_size = voice_mhi_lcl.dev_dbg.iova_pcie.size;
 	if (md) {
 		iova = dma_map_resource(md->parent, phys_addr, mem_size,
 					DMA_BIDIRECTIONAL, 0);
@@ -370,7 +370,7 @@ static void voice_mhi_map_pcie_and_send(struct work_struct *work)
 		}
 		pr_debug("%s: dma_mapping_success iova:0x%lx\n",
 				 __func__, (unsigned long)iova);
-		voice_mhi_lcl.dev_info.iova_pcie.base = iova;
+		voice_mhi_lcl.dev_dbg.iova_pcie.base = iova;
 
 		if (q6core_is_adsp_ready()) {
 			if (VOICE_MHI_STATE_CHECK(voice_mhi_lcl.voice_mhi_state,
@@ -435,7 +435,7 @@ static void voice_mhi_pcie_down_callback(struct mhi_device *voice_mhi_dev)
 		md = &voice_mhi_lcl.mhi_dev->dev;
 
 	VOICE_MHI_STATE_RESET(voice_mhi_lcl.voice_mhi_state, VOICE_MHI_SDX_UP);
-	iova = voice_mhi_lcl.dev_info.iova_pcie.base;
+	iova = voice_mhi_lcl.dev_dbg.iova_pcie.base;
 
 	if (md)
 		dma_unmap_resource(md->parent, iova, PAGE_SIZE,
@@ -527,10 +527,10 @@ static int voice_mhi_probe(struct platform_device *pdev)
 		pr_debug("%s: dma_mapping_success iova:0x%lx\n",
 				 __func__, (unsigned long)iova);
 
-		voice_mhi_lcl.dev_info.phys_addr.base = phys_addr;
-		voice_mhi_lcl.dev_info.iova_adsp.base = iova;
-		voice_mhi_lcl.dev_info.iova_adsp.size = mem_size;
-		voice_mhi_lcl.dev_info.iova_pcie.size = mem_size;
+		voice_mhi_lcl.dev_dbg.phys_addr.base = phys_addr;
+		voice_mhi_lcl.dev_dbg.iova_adsp.base = iova;
+		voice_mhi_lcl.dev_dbg.iova_adsp.size = mem_size;
+		voice_mhi_lcl.dev_dbg.iova_pcie.size = mem_size;
 		VOICE_MHI_STATE_SET(voice_mhi_lcl.voice_mhi_state,
 				VOICE_MHI_ADSP_UP);
 
@@ -552,7 +552,7 @@ static int voice_mhi_probe(struct platform_device *pdev)
 				__func__, ret);
 
 		mutex_lock(&voice_mhi_lcl.mutex);
-		voice_mhi_lcl.dev_info.pdev = pdev;
+		voice_mhi_lcl.dev_dbg.pdev = pdev;
 		voice_mhi_lcl.pcie_enabled = true;
 		VOICE_MHI_STATE_SET(voice_mhi_lcl.voice_mhi_state,
 				VOICE_MHI_PROBED);

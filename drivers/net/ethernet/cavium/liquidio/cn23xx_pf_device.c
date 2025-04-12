@@ -1296,7 +1296,7 @@ int cn23xx_sriov_config(struct octeon_device *oct)
 	oct->sriov_info.rings_per_vf = rings_per_vf;
 	oct->sriov_info.pf_srn = pf_srn;
 	oct->sriov_info.num_pf_rings = num_pf_rings;
-	dev_notice(&oct->pci_dev->dev, "trs:%d max_vfs:%d rings_per_vf:%d pf_srn:%d num_pf_rings:%d\n",
+	dev_dbg(&oct->pci_dev->dev, "trs:%d max_vfs:%d rings_per_vf:%d pf_srn:%d num_pf_rings:%d\n",
 		   oct->sriov_info.trs, oct->sriov_info.max_vfs,
 		   oct->sriov_info.rings_per_vf, oct->sriov_info.pf_srn,
 		   oct->sriov_info.num_pf_rings);

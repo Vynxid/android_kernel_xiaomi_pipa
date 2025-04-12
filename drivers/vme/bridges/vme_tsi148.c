@@ -2225,16 +2225,16 @@ static int tsi148_crcsr_init(struct vme_bridge *tsi148_bridge,
 
 	if (cbar != vstat) {
 		cbar = vstat;
-		dev_info(tsi148_bridge->parent, "Setting CR/CSR offset\n");
+		dev_dbg(tsi148_bridge->parent, "Setting CR/CSR offset\n");
 		iowrite32be(cbar<<3, bridge->base + TSI148_CBAR);
 	}
-	dev_info(tsi148_bridge->parent, "CR/CSR Offset: %d\n", cbar);
+	dev_dbg(tsi148_bridge->parent, "CR/CSR Offset: %d\n", cbar);
 
 	crat = ioread32be(bridge->base + TSI148_LCSR_CRAT);
 	if (crat & TSI148_LCSR_CRAT_EN)
-		dev_info(tsi148_bridge->parent, "CR/CSR already enabled\n");
+		dev_dbg(tsi148_bridge->parent, "CR/CSR already enabled\n");
 	else {
-		dev_info(tsi148_bridge->parent, "Enabling CR/CSR space\n");
+		dev_dbg(tsi148_bridge->parent, "Enabling CR/CSR space\n");
 		iowrite32be(crat | TSI148_LCSR_CRAT_EN,
 			bridge->base + TSI148_LCSR_CRAT);
 	}
@@ -2482,16 +2482,16 @@ static int tsi148_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	tsi148_bridge->free_consistent = tsi148_free_consistent;
 
 	data = ioread32be(tsi148_device->base + TSI148_LCSR_VSTAT);
-	dev_info(&pdev->dev, "Board is%s the VME system controller\n",
+	dev_dbg(&pdev->dev, "Board is%s the VME system controller\n",
 		(data & TSI148_LCSR_VSTAT_SCONS) ? "" : " not");
 	if (!geoid)
-		dev_info(&pdev->dev, "VME geographical address is %d\n",
+		dev_dbg(&pdev->dev, "VME geographical address is %d\n",
 			data & TSI148_LCSR_VSTAT_GA_M);
 	else
-		dev_info(&pdev->dev, "VME geographical address is set to %d\n",
+		dev_dbg(&pdev->dev, "VME geographical address is set to %d\n",
 			geoid);
 
-	dev_info(&pdev->dev, "VME Write and flush and error check is %s\n",
+	dev_dbg(&pdev->dev, "VME Write and flush and error check is %s\n",
 		err_chk ? "enabled" : "disabled");
 
 	retval = tsi148_crcsr_init(tsi148_bridge, pdev);

@@ -379,7 +379,7 @@ static int rmi_f30_probe(struct rmi_function *fn)
 		return 0;
 
 	if (!drv_data->input) {
-		dev_info(&fn->dev, "F30: no input device found, ignoring\n");
+		dev_dbg(&fn->dev, "F30: no input device found, ignoring\n");
 		return -ENXIO;
 	}
 

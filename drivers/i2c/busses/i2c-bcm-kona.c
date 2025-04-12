@@ -861,7 +861,7 @@ static int bcm_kona_i2c_probe(struct platform_device *pdev)
 	if (rc)
 		return rc;
 
-	dev_info(dev->device, "device registered successfully\n");
+	dev_dbg(dev->device, "device registered successfully\n");
 
 	return 0;
 

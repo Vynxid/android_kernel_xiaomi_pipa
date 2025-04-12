@@ -1258,7 +1258,7 @@ static int ov13858_set_ctrl(struct v4l2_ctrl *ctrl)
 		ret = ov13858_enable_test_pattern(ov13858, ctrl->val);
 		break;
 	default:
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			 "ctrl(id:0x%x,val:0x%x) is not handled\n",
 			 ctrl->id, ctrl->val);
 		break;

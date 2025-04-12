@@ -555,7 +555,7 @@ int bnxt_qplib_free_mrw(struct bnxt_qplib_res *res, struct bnxt_qplib_mrw *mrw)
 	int rc;
 
 	if (mrw->lkey == 0xFFFFFFFF) {
-		dev_info(&res->pdev->dev,
+		dev_dbg(&res->pdev->dev,
 			 "QPLIB: SP: Free a reserved lkey MRW");
 		return 0;
 	}

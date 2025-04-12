@@ -356,7 +356,7 @@ static int hi6220_mbox_probe(struct platform_device *pdev)
 	}
 
 	platform_set_drvdata(pdev, mbox);
-	dev_info(dev, "Mailbox enabled\n");
+	dev_dbg(dev, "Mailbox enabled\n");
 	return 0;
 }
 

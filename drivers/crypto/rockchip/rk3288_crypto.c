@@ -412,7 +412,7 @@ static int rk_crypto_probe(struct platform_device *pdev)
 		goto err_register_alg;
 	}
 
-	dev_info(dev, "Crypto Accelerator successfully registered\n");
+	dev_dbg(dev, "Crypto Accelerator successfully registered\n");
 	return 0;
 
 err_register_alg:

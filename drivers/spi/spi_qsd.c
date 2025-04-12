@@ -1742,7 +1742,7 @@ static int msm_spi_pm_get_sync(struct device *dev)
 	 * active mode only if client requests anything on the bus
 	 */
 	if (!pm_runtime_enabled(dev)) {
-		dev_info(dev, "%s: pm_runtime not enabled\n", __func__);
+		dev_dbg(dev, "%s: pm_runtime not enabled\n", __func__);
 		ret = msm_spi_pm_resume_runtime(dev);
 	} else {
 		ret = pm_runtime_get_sync(dev);
@@ -1756,7 +1756,7 @@ static int msm_spi_pm_put_sync(struct device *dev)
 	int ret = 0;
 
 	if (!pm_runtime_enabled(dev)) {
-		dev_info(dev, "%s: pm_runtime not enabled\n", __func__);
+		dev_dbg(dev, "%s: pm_runtime not enabled\n", __func__);
 		ret = msm_spi_pm_suspend_runtime(dev);
 	} else {
 		pm_runtime_mark_last_busy(dev);
@@ -2674,7 +2674,7 @@ skip_dma_resources:
 	spi_debugfs_init(dd);
 	dd->ipc_logs = ipc_log_context_create(4, dev_name(dd->dev), 0);
 	if (!dd->ipc_logs)
-		dev_info(&pdev->dev, "%s: failed to create ipc log cntxt\n",
+		dev_dbg(&pdev->dev, "%s: failed to create ipc log cntxt\n",
 							__func__);
 
 	spi_ipc(dd->ipc_logs, false, dd->dev, "%s: success\n", __func__);

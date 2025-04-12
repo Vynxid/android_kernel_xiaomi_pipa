@@ -405,7 +405,7 @@ static int si470x_i2c_probe(struct i2c_client *client,
 		retval = -EIO;
 		goto err_ctrl;
 	}
-	dev_info(&client->dev, "DeviceID=0x%4.4hx ChipID=0x%4.4hx\n",
+	dev_dbg(&client->dev, "DeviceID=0x%4.4hx ChipID=0x%4.4hx\n",
 			radio->registers[DEVICEID], radio->registers[SI_CHIPID]);
 	if ((radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE) < RADIO_FW_VERSION) {
 		dev_warn(&client->dev,

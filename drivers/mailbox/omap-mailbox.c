@@ -857,7 +857,7 @@ static int omap_mbox_probe(struct platform_device *pdev)
 	 * uniform across all SoCs
 	 */
 	l = mbox_read_reg(mdev, MAILBOX_REVISION);
-	dev_info(mdev->dev, "omap mailbox rev 0x%x\n", l);
+	dev_dbg(mdev->dev, "omap mailbox rev 0x%x\n", l);
 
 	ret = pm_runtime_put_sync(mdev->dev);
 	if (ret < 0)

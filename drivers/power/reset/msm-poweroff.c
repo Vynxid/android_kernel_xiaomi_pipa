@@ -517,7 +517,7 @@ static void msm_restart_prepare(const char *cmd)
 	}
 
 	if (force_warm_reboot)
-		pr_info("Forcing a warm reset of the system\n");
+		pr_debug("Forcing a warm reset of the system\n");
 
 	/* Hard reset the PMIC unless memory contents must be maintained. */
 	if (force_warm_reboot || need_warm_reset)
@@ -611,7 +611,7 @@ static void deassert_ps_hold(void)
 
 static void do_msm_restart(enum reboot_mode reboot_mode, const char *cmd)
 {
-	pr_notice("Going down for restart now\n");
+	pr_debug("Going down for restart now\n");
 
 	msm_restart_prepare(cmd);
 
@@ -631,7 +631,7 @@ static void do_msm_restart(enum reboot_mode reboot_mode, const char *cmd)
 
 static void do_msm_poweroff(void)
 {
-	pr_notice("Powering off the SoC\n");
+	pr_debug("Powering off the SoC\n");
 
 	set_dload_mode(0);
 	scm_disable_sdi();

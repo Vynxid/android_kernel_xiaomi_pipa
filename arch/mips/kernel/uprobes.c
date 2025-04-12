@@ -39,7 +39,7 @@ int arch_uprobe_analyze_insn(struct arch_uprobe *aup,
 	inst.word = aup->insn[0];
 
 	if (__insn_is_compact_branch(inst)) {
-		pr_notice("Uprobes for compact branches are not supported\n");
+		pr_debug("Uprobes for compact branches are not supported\n");
 		return -EINVAL;
 	}
 

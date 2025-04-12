@@ -388,7 +388,7 @@ static int si2165_upload_firmware(struct si2165_state *state)
 		fw_file = SI2165_FIRMWARE_REV_D;
 		break;
 	default:
-		dev_info(&state->client->dev, "no firmware file for revision=%d\n",
+		dev_dbg(&state->client->dev, "no firmware file for revision=%d\n",
 			 state->chip_revcode);
 		return 0;
 	}
@@ -404,7 +404,7 @@ static int si2165_upload_firmware(struct si2165_state *state)
 	data = fw->data;
 	len = fw->size;
 
-	dev_info(&state->client->dev, "downloading firmware from file '%s' size=%d\n",
+	dev_dbg(&state->client->dev, "downloading firmware from file '%s' size=%d\n",
 		 fw_file, len);
 
 	if (len % 4 != 0) {
@@ -458,7 +458,7 @@ static int si2165_upload_firmware(struct si2165_state *state)
 	/* start right after the header */
 	offset = 8;
 
-	dev_info(&state->client->dev, "%s: extracted patch_version=0x%02x, block_count=0x%02x, crc_expected=0x%04x\n",
+	dev_dbg(&state->client->dev, "%s: extracted patch_version=0x%02x, block_count=0x%02x, crc_expected=0x%04x\n",
 		 __func__, patch_version, block_count, crc_expected);
 
 	ret = si2165_upload_firmware_block(state, data, len, &offset, 1);
@@ -517,7 +517,7 @@ static int si2165_upload_firmware(struct si2165_state *state)
 	if (ret < 0)
 		goto error;
 
-	dev_info(&state->client->dev, "fw load finished\n");
+	dev_dbg(&state->client->dev, "fw load finished\n");
 
 	ret = 0;
 	state->firmware_loaded = true;
@@ -1250,7 +1250,7 @@ static int si2165_probe(struct i2c_client *client,
 		goto nodev_error;
 	}
 
-	dev_info(&state->client->dev,
+	dev_dbg(&state->client->dev,
 		 "Detected Silicon Labs %s-%c (type %d, rev %d)\n",
 		chip_name, rev_char, state->chip_type,
 		state->chip_revcode);

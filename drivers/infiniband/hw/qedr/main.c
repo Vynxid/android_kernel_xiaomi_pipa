@@ -860,7 +860,7 @@ static void qedr_stop_hw(struct qedr_dev *dev)
 static struct qedr_dev *qedr_add(struct qed_dev *cdev, struct pci_dev *pdev,
 				 struct net_device *ndev)
 {
-	struct qed_dev_rdma_info dev_info;
+	struct qed_dev_rdma_info dev_dbg;
 	struct qedr_dev *dev;
 	int rc = 0, i;
 
@@ -883,13 +883,13 @@ static struct qedr_dev *qedr_add(struct qed_dev *cdev, struct pci_dev *pdev,
 	}
 
 	dev->ops = qed_ops;
-	rc = qed_ops->fill_dev_info(cdev, &dev_info);
+	rc = qed_ops->fill_dev_info(cdev, &dev_dbg);
 	if (rc)
 		goto init_err;
 
-	dev->user_dpm_enabled = dev_info.user_dpm_enabled;
-	dev->rdma_type = dev_info.rdma_type;
-	dev->num_hwfns = dev_info.common.num_hwfns;
+	dev->user_dpm_enabled = dev_dbg.user_dpm_enabled;
+	dev->rdma_type = dev_dbg.rdma_type;
+	dev->num_hwfns = dev_dbg.common.num_hwfns;
 	dev->rdma_ctx = dev->ops->rdma_get_rdma_ctx(cdev);
 
 	dev->num_cnq = dev->ops->rdma_get_min_cnq_msix(cdev);

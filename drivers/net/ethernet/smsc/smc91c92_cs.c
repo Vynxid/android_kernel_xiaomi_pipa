@@ -845,7 +845,7 @@ static int smc91c92_config(struct pcmcia_device *link)
     if ((if_port >= 0) && (if_port <= 2))
 	dev->if_port = if_port;
     else
-	dev_notice(&link->dev, "invalid if_port requested\n");
+	dev_dbg(&link->dev, "invalid if_port requested\n");
 
     switch (smc->manfid) {
     case MANFID_OSITECH:
@@ -863,7 +863,7 @@ static int smc91c92_config(struct pcmcia_device *link)
     }
 
     if (i != 0) {
-	dev_notice(&link->dev, "Unable to find hardware address.\n");
+	dev_dbg(&link->dev, "Unable to find hardware address.\n");
 	goto config_failed;
     }
 

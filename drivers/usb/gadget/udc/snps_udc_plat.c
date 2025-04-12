@@ -23,7 +23,7 @@
 static void start_udc(struct udc *udc)
 {
 	if (udc->driver) {
-		dev_info(udc->dev, "Connecting...\n");
+		dev_dbg(udc->dev, "Connecting...\n");
 		udc_enable_dev_setup_interrupts(udc);
 		udc_basic_init(udc);
 		udc->connected = 1;
@@ -65,7 +65,7 @@ static void stop_udc(struct udc *udc)
 	udc->connected = 0;
 
 	spin_unlock(&udc->lock);
-	dev_info(udc->dev, "Device disconnected\n");
+	dev_dbg(udc->dev, "Device disconnected\n");
 }
 
 static void udc_drd_work(struct work_struct *work)
@@ -207,7 +207,7 @@ static int udc_plat_probe(struct platform_device *pdev)
 		ret = -ENODEV;
 		goto exit_dma;
 	}
-	dev_info(dev, "Synopsys UDC platform driver probe successful\n");
+	dev_dbg(dev, "Synopsys UDC platform driver probe successful\n");
 
 	return 0;
 
@@ -252,7 +252,7 @@ static int udc_plat_remove(struct platform_device *pdev)
 	phy_exit(dev->udc_phy);
 	extcon_unregister_notifier(dev->edev, EXTCON_USB, &dev->nb);
 
-	dev_info(&pdev->dev, "Synopsys UDC platform driver removed\n");
+	dev_dbg(&pdev->dev, "Synopsys UDC platform driver removed\n");
 
 	return 0;
 }

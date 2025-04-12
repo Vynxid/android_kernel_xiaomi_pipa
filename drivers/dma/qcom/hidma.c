@@ -833,7 +833,7 @@ static int hidma_probe(struct platform_device *pdev)
 				 &dmadev->nr_descriptors);
 
 	if (nr_desc_prm) {
-		dev_info(&pdev->dev, "overriding number of descriptors as %d\n",
+		dev_dbg(&pdev->dev, "overriding number of descriptors as %d\n",
 			 nr_desc_prm);
 		dmadev->nr_descriptors = nr_desc_prm;
 	}
@@ -888,7 +888,7 @@ static int hidma_probe(struct platform_device *pdev)
 	tasklet_init(&dmadev->task, hidma_issue_task, (unsigned long)dmadev);
 	hidma_debug_init(dmadev);
 	hidma_sysfs_init(dmadev);
-	dev_info(&pdev->dev, "HI-DMA engine driver registration complete\n");
+	dev_dbg(&pdev->dev, "HI-DMA engine driver registration complete\n");
 	pm_runtime_mark_last_busy(dmadev->ddev.dev);
 	pm_runtime_put_autosuspend(dmadev->ddev.dev);
 	return 0;
@@ -912,7 +912,7 @@ static void hidma_shutdown(struct platform_device *pdev)
 {
 	struct hidma_dev *dmadev = platform_get_drvdata(pdev);
 
-	dev_info(dmadev->ddev.dev, "HI-DMA engine shutdown\n");
+	dev_dbg(dmadev->ddev.dev, "HI-DMA engine shutdown\n");
 
 	pm_runtime_get_sync(dmadev->ddev.dev);
 	if (hidma_ll_disable(dmadev->lldev))
@@ -939,7 +939,7 @@ static int hidma_remove(struct platform_device *pdev)
 	hidma_ll_uninit(dmadev->lldev);
 	hidma_free(dmadev);
 
-	dev_info(&pdev->dev, "HI-DMA engine removed\n");
+	dev_dbg(&pdev->dev, "HI-DMA engine removed\n");
 	pm_runtime_put_sync_suspend(&pdev->dev);
 	pm_runtime_disable(&pdev->dev);
 

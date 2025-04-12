@@ -1163,7 +1163,7 @@ int go7007_v4l2_init(struct go7007 *go)
 	rv = video_register_device(vdev, VFL_TYPE_GRABBER, -1);
 	if (rv < 0)
 		return rv;
-	dev_info(go->dev, "registered device %s [v4l2]\n",
+	dev_dbg(go->dev, "registered device %s [v4l2]\n",
 		 video_device_node_name(vdev));
 
 	return 0;

@@ -1403,8 +1403,8 @@ static int hackrf_probe(struct usb_interface *intf,
 	}
 
 	buf[BUF_SIZE - 1] = '\0';
-	dev_info(dev->dev, "Board ID: %02x\n", u8tmp);
-	dev_info(dev->dev, "Firmware version: %s\n", buf);
+	dev_dbg(dev->dev, "Board ID: %02x\n", u8tmp);
+	dev_dbg(dev->dev, "Firmware version: %s\n", buf);
 
 	/* Init vb2 queue structure for receiver */
 	dev->rx_vb2_queue.type = V4L2_BUF_TYPE_SDR_CAPTURE;
@@ -1503,7 +1503,7 @@ static int hackrf_probe(struct usb_interface *intf,
 			"Failed to register as video device (%d)\n", ret);
 		goto err_v4l2_device_unregister;
 	}
-	dev_info(dev->dev, "Registered as %s\n",
+	dev_dbg(dev->dev, "Registered as %s\n",
 		 video_device_node_name(&dev->rx_vdev));
 
 	/* Init video_device structure for transmitter */
@@ -1521,10 +1521,10 @@ static int hackrf_probe(struct usb_interface *intf,
 			"Failed to register as video device (%d)\n", ret);
 		goto err_video_unregister_device_rx;
 	}
-	dev_info(dev->dev, "Registered as %s\n",
+	dev_dbg(dev->dev, "Registered as %s\n",
 		 video_device_node_name(&dev->tx_vdev));
 
-	dev_notice(dev->dev, "SDR API is still slightly experimental and functionality changes may follow\n");
+	dev_dbg(dev->dev, "SDR API is still slightly experimental and functionality changes may follow\n");
 	return 0;
 err_video_unregister_device_rx:
 	video_unregister_device(&dev->rx_vdev);

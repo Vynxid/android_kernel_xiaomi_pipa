@@ -809,12 +809,12 @@ static int sis_init_one (struct pci_dev *pdev, const struct pci_device_id *ent)
 
 		switch(trueid) {
 		case 0x5518:	/* SIS 962/963 */
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "SiS 962/963 MuTIOL IDE UDMA133 controller\n");
 			chipset = &sis133;
 			if ((idemisc & 0x40000000) == 0) {
 				pci_write_config_dword(pdev, 0x54, idemisc | 0x40000000);
-				dev_info(&pdev->dev,
+				dev_dbg(&pdev->dev,
 					 "Switching to 5513 register mapping\n");
 			}
 			break;

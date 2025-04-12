@@ -936,7 +936,7 @@ static int ov2680_probe(struct i2c_client *client)
 	if (ret < 0)
 		goto lock_destroy;
 
-	dev_info(dev, "ov2680 init correctly\n");
+	dev_dbg(dev, "ov2680 init correctly\n");
 
 	return 0;
 

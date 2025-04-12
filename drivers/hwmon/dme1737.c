@@ -2187,7 +2187,7 @@ static int dme1737_create_files(struct device *dev)
 	 * selected attributes from read-only to read-writeable.
 	 */
 	if (data->config & 0x02) {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "Device is locked. Some attributes will be read-only.\n");
 	} else {
 		/* Change permissions of zone sysfs attributes */
@@ -2325,7 +2325,7 @@ static int dme1737_init_device(struct device *dev)
 		break;
 	}
 
-	dev_info(dev,
+	dev_dbg(dev,
 		 "Optional features: pwm3=%s, pwm5=%s, pwm6=%s, fan3=%s, fan4=%s, fan5=%s, fan6=%s.\n",
 		 (data->has_features & HAS_PWM(2)) ? "yes" : "no",
 		 (data->has_features & HAS_PWM(4)) ? "yes" : "no",
@@ -2361,7 +2361,7 @@ static int dme1737_init_device(struct device *dev)
 						DME1737_REG_PWM_CONFIG(ix));
 			if ((data->has_features & HAS_PWM(ix)) &&
 			    (PWM_EN_FROM_REG(data->pwm_config[ix]) == -1)) {
-				dev_info(dev,
+				dev_dbg(dev,
 					 "Switching pwm%d to manual mode.\n",
 					 ix + 1);
 				data->pwm_config[ix] = PWM_EN_TO_REG(1,
@@ -2466,7 +2466,7 @@ static int dme1737_i2c_detect(struct i2c_client *client,
 		return -ENODEV;
 	}
 
-	dev_info(dev, "Found a %s chip at 0x%02x (rev 0x%02x).\n",
+	dev_dbg(dev, "Found a %s chip at 0x%02x (rev 0x%02x).\n",
 		 verstep == SCH5027_VERSTEP ? "SCH5027" : "DME1737",
 		 client->addr, verstep);
 	strlcpy(info->type, name, I2C_NAME_SIZE);
@@ -2692,7 +2692,7 @@ static int dme1737_isa_probe(struct platform_device *pdev)
 	/* Initialize the mutex */
 	mutex_init(&data->update_lock);
 
-	dev_info(dev, "Found a %s chip at 0x%04x\n",
+	dev_dbg(dev, "Found a %s chip at 0x%04x\n",
 		 data->type == sch5127 ? "SCH5127" : "SCH311x", data->addr);
 
 	/* Initialize the chip */

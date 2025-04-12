@@ -536,7 +536,7 @@ int st_lsm6dsx_fifo_setup(struct st_lsm6dsx_hw *hw)
 		irq_active_low = true;
 		break;
 	default:
-		dev_info(hw->dev, "mode %lx unsupported\n", irq_type);
+		dev_dbg(hw->dev, "mode %lx unsupported\n", irq_type);
 		return -EINVAL;
 	}
 

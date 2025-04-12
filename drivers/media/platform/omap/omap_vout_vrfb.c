@@ -106,7 +106,7 @@ int omap_vout_setup_vrfb_bufs(struct platform_device *pdev, int vid_num,
 
 	for (i = 0; i < VRFB_NUM_BUFS; i++) {
 		if (omap_vrfb_request_ctx(&vout->vrfb_context[i])) {
-			dev_info(&pdev->dev, ": VRFB allocation failed\n");
+			dev_dbg(&pdev->dev, ": VRFB allocation failed\n");
 			for (j = 0; j < i; j++)
 				omap_vrfb_release_ctx(&vout->vrfb_context[j]);
 			ret = -ENOMEM;
@@ -149,7 +149,7 @@ int omap_vout_setup_vrfb_bufs(struct platform_device *pdev, int vid_num,
 	}
 
 	if (vout->vrfb_dma_tx.req_status == DMA_CHAN_NOT_ALLOTED)
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 ": failed to allocate DMA Channel for video%d\n",
 			 vfd->minor);
 

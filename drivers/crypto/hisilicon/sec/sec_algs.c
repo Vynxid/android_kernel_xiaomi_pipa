@@ -229,7 +229,7 @@ static int sec_alg_skcipher_setkey(struct crypto_skcipher *tfm,
 				   enum sec_cipher_alg alg)
 {
 	struct sec_alg_tfm_ctx *ctx = crypto_skcipher_ctx(tfm);
-	struct device *dev = ctx->queue->dev_info->dev;
+	struct device *dev = ctx->queue->dev_dbg->dev;
 
 	mutex_lock(&ctx->lock);
 	if (ctx->key) {
@@ -437,7 +437,7 @@ static void sec_skcipher_alg_callback(struct sec_bd_info *sec_resp,
 	struct sec_request_el *sec_req_el, *nextrequest;
 	struct sec_alg_tfm_ctx *ctx = sec_req->tfm_ctx;
 	struct crypto_skcipher *atfm = crypto_skcipher_reqtfm(skreq);
-	struct device *dev = ctx->queue->dev_info->dev;
+	struct device *dev = ctx->queue->dev_dbg->dev;
 	int icv_or_skey_en, ret;
 	bool done;
 
@@ -522,7 +522,7 @@ static void sec_skcipher_alg_callback(struct sec_bd_info *sec_resp,
 	mutex_lock(&sec_req->lock);
 	list_del(&sec_req_el->head);
 	mutex_unlock(&sec_req->lock);
-	sec_alg_free_el(sec_req_el, ctx->queue->dev_info);
+	sec_alg_free_el(sec_req_el, ctx->queue->dev_dbg);
 
 	/*
 	 * Request is done.
@@ -720,7 +720,7 @@ static int sec_alg_skcipher_crypto(struct skcipher_request *skreq,
 	struct sec_alg_tfm_ctx *ctx = crypto_tfm_ctx(tfm);
 	struct sec_queue *queue = ctx->queue;
 	struct sec_request *sec_req = skcipher_request_ctx(skreq);
-	struct sec_dev_info *info = queue->dev_info;
+	struct sec_dev_info *info = queue->dev_dbg;
 	int i, ret, steps;
 	size_t *split_sizes;
 	struct scatterlist **splits_in;
@@ -898,7 +898,7 @@ static int sec_alg_skcipher_init(struct crypto_skcipher *tfm)
 static void sec_alg_skcipher_exit(struct crypto_skcipher *tfm)
 {
 	struct sec_alg_tfm_ctx *ctx = crypto_skcipher_ctx(tfm);
-	struct device *dev = ctx->queue->dev_info->dev;
+	struct device *dev = ctx->queue->dev_dbg->dev;
 
 	if (ctx->key) {
 		memzero_explicit(ctx->key, SEC_MAX_CIPHER_KEY);

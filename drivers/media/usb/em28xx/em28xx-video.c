@@ -2239,7 +2239,7 @@ static int em28xx_v4l2_fini(struct em28xx *dev)
 	if (!v4l2)
 		return 0;
 
-	dev_info(&dev->intf->dev, "Closing video extension\n");
+	dev_dbg(&dev->intf->dev, "Closing video extension\n");
 
 	mutex_lock(&dev->lock);
 
@@ -2250,17 +2250,17 @@ static int em28xx_v4l2_fini(struct em28xx *dev)
 	em28xx_v4l2_media_release(dev);
 
 	if (video_is_registered(&v4l2->radio_dev)) {
-		dev_info(&dev->intf->dev, "V4L2 device %s deregistered\n",
+		dev_dbg(&dev->intf->dev, "V4L2 device %s deregistered\n",
 			 video_device_node_name(&v4l2->radio_dev));
 		video_unregister_device(&v4l2->radio_dev);
 	}
 	if (video_is_registered(&v4l2->vbi_dev)) {
-		dev_info(&dev->intf->dev, "V4L2 device %s deregistered\n",
+		dev_dbg(&dev->intf->dev, "V4L2 device %s deregistered\n",
 			 video_device_node_name(&v4l2->vbi_dev));
 		video_unregister_device(&v4l2->vbi_dev);
 	}
 	if (video_is_registered(&v4l2->vdev)) {
-		dev_info(&dev->intf->dev, "V4L2 device %s deregistered\n",
+		dev_dbg(&dev->intf->dev, "V4L2 device %s deregistered\n",
 			 video_device_node_name(&v4l2->vdev));
 		video_unregister_device(&v4l2->vdev);
 	}
@@ -2285,7 +2285,7 @@ static int em28xx_v4l2_suspend(struct em28xx *dev)
 	if (!dev->has_video)
 		return 0;
 
-	dev_info(&dev->intf->dev, "Suspending video extension\n");
+	dev_dbg(&dev->intf->dev, "Suspending video extension\n");
 	em28xx_stop_urbs(dev);
 	return 0;
 }
@@ -2298,7 +2298,7 @@ static int em28xx_v4l2_resume(struct em28xx *dev)
 	if (!dev->has_video)
 		return 0;
 
-	dev_info(&dev->intf->dev, "Resuming video extension\n");
+	dev_dbg(&dev->intf->dev, "Resuming video extension\n");
 	/* what do we do here */
 	return 0;
 }
@@ -2556,7 +2556,7 @@ static int em28xx_v4l2_init(struct em28xx *dev)
 		return 0;
 	}
 
-	dev_info(&dev->intf->dev, "Registering V4L2 extension\n");
+	dev_dbg(&dev->intf->dev, "Registering V4L2 extension\n");
 
 	mutex_lock(&dev->lock);
 
@@ -2852,7 +2852,7 @@ static int em28xx_v4l2_init(struct em28xx *dev)
 				"can't register radio device\n");
 			goto unregister_dev;
 		}
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "Registered radio device as %s\n",
 			 video_device_node_name(&v4l2->radio_dev));
 	}
@@ -2870,12 +2870,12 @@ static int em28xx_v4l2_init(struct em28xx *dev)
 	}
 #endif
 
-	dev_info(&dev->intf->dev,
+	dev_dbg(&dev->intf->dev,
 		 "V4L2 video device registered as %s\n",
 		 video_device_node_name(&v4l2->vdev));
 
 	if (video_is_registered(&v4l2->vbi_dev))
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "V4L2 VBI device registered as %s\n",
 			 video_device_node_name(&v4l2->vbi_dev));
 
@@ -2885,7 +2885,7 @@ static int em28xx_v4l2_init(struct em28xx *dev)
 	/* initialize videobuf2 stuff */
 	em28xx_vb2_setup(dev);
 
-	dev_info(&dev->intf->dev,
+	dev_dbg(&dev->intf->dev,
 		 "V4L2 extension successfully initialized\n");
 
 	kref_get(&dev->ref);
@@ -2895,19 +2895,19 @@ static int em28xx_v4l2_init(struct em28xx *dev)
 
 unregister_dev:
 	if (video_is_registered(&v4l2->radio_dev)) {
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "V4L2 device %s deregistered\n",
 			 video_device_node_name(&v4l2->radio_dev));
 		video_unregister_device(&v4l2->radio_dev);
 	}
 	if (video_is_registered(&v4l2->vbi_dev)) {
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "V4L2 device %s deregistered\n",
 			 video_device_node_name(&v4l2->vbi_dev));
 		video_unregister_device(&v4l2->vbi_dev);
 	}
 	if (video_is_registered(&v4l2->vdev)) {
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "V4L2 device %s deregistered\n",
 			 video_device_node_name(&v4l2->vdev));
 		video_unregister_device(&v4l2->vdev);

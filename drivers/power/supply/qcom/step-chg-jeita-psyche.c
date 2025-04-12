@@ -479,7 +479,7 @@ static void get_config_work(struct work_struct *work)
 	chip->config_is_read = true;
 
 	for (i = 0; i < MAX_STEP_CHG_ENTRIES; i++)
-		pr_info("step-chg-cfg: %duV(SoC) ~ %duV(SoC), %duA\n",
+		pr_debug("step-chg-cfg: %duV(SoC) ~ %duV(SoC), %duA\n",
 			chip->step_chg_config->fcc_cfg[i].low_threshold,
 			chip->step_chg_config->fcc_cfg[i].high_threshold,
 			chip->step_chg_config->fcc_cfg[i].value);
@@ -617,7 +617,7 @@ static void taper_fcc_step_chg(struct step_chg_info *chip, int index,
 		 */
 		vote(chip->fcc_votable, STEP_CHG_VOTER, true, max(target_fcc,
 			current_fcc - TAPERED_STEP_CHG_FCC_REDUCTION_STEP_MA));
-		pr_info("target_fcc:%d, current_fcc-:%d, max:%d.\n", target_fcc,
+		pr_debug("target_fcc:%d, current_fcc-:%d, max:%d.\n", target_fcc,
 				(current_fcc - TAPERED_STEP_CHG_FCC_REDUCTION_STEP_MA),
 				max(target_fcc, current_fcc - TAPERED_STEP_CHG_FCC_REDUCTION_STEP_MA));
 	} else if ((current_fcc >
@@ -633,7 +633,7 @@ static void taper_fcc_step_chg(struct step_chg_info *chip, int index,
 		vote(chip->fcc_votable, STEP_CHG_VOTER, true,
 			max(chip->step_chg_config->fcc_cfg[index - 1].value,
 			current_fcc - TAPERED_STEP_CHG_FCC_REDUCTION_STEP_MA));
-		pr_info("target_fcc-:%d, current_fcc-:%d, max:%d.\n",
+		pr_debug("target_fcc-:%d, current_fcc-:%d, max:%d.\n",
 				chip->step_chg_config->fcc_cfg[index - 1].value,
 				(current_fcc - TAPERED_STEP_CHG_FCC_REDUCTION_STEP_MA),
 				max(chip->step_chg_config->fcc_cfg[index - 1].value,
@@ -661,11 +661,11 @@ static int handle_step_chg_config(struct step_chg_info *chip)
 		update_now = true;
 		if (pval.intval) {
 			chip->step_index = 0;
-			pr_info("%s: present:true, step_index = 0.\n", __func__);
+			pr_debug("%s: present:true, step_index = 0.\n", __func__);
 		}
 		if (!pval.intval && chip->fcc_votable) {
 			vote(chip->fcc_votable, STEP_CHG_VOTER, false, 0);
-			pr_info("%s: present:false, clear STEP_CHG_VOTER.\n", __func__);
+			pr_debug("%s: present:false, clear STEP_CHG_VOTER.\n", __func__);
 		}
 	}
 	usb_present = pval.intval;
@@ -733,11 +733,11 @@ static int handle_step_chg_config(struct step_chg_info *chip)
 	} else {
 		fcc_ua = chip->step_chg_config->fcc_cfg[chip->step_index].value;
 		vote(chip->fcc_votable, STEP_CHG_VOTER, true, fcc_ua);
-		pr_info("%s: STEP_CHG_VOTER: index:%d fcc_ua:%d.\n",
+		pr_debug("%s: STEP_CHG_VOTER: index:%d fcc_ua:%d.\n",
 				__func__, chip->step_index, fcc_ua);
 	}
 
-	pr_info("%s = %d Step-FCC = %duA taper-fcc: %d\n",
+	pr_debug("%s = %d Step-FCC = %duA taper-fcc: %d\n",
 		chip->step_chg_config->param.prop_name, pval.intval,
 		get_client_vote(chip->fcc_votable, STEP_CHG_VOTER),
 		chip->taper_fcc);
@@ -749,7 +749,7 @@ static int handle_step_chg_config(struct step_chg_info *chip)
 			vote(chip->fcc_votable, STEP_BMS_CHG_VOTER, false, pval.intval);
 		fcc_ua = pval.intval;
 
-		pr_info("bms step charge fcc:%d fv:%d\n", fcc_ua, fv_uv);
+		pr_debug("bms step charge fcc:%d fv:%d\n", fcc_ua, fv_uv);
 	}
 
 update_time:
@@ -782,12 +782,12 @@ static void handle_chg_iterm(struct step_chg_info *chip, int temp)
 		ffc_temp_high = false;
 		rc = power_supply_set_property(chip->usb_psy,
 				POWER_SUPPLY_PROP_FFC_ITERM, &pval);
-		pr_info("ffc iterm current [%d], battery temp [%d]\n", pval.intval, temp);
+		pr_debug("ffc iterm current [%d], battery temp [%d]\n", pval.intval, temp);
 	} else if ((temp > (FFC_ITERM_TEMP + FFC_ITERM_TEMP_HYST)) && !ffc_temp_high) {
 		ffc_temp_high = true;
 		rc = power_supply_set_property(chip->usb_psy,
 				POWER_SUPPLY_PROP_FFC_ITERM, &pval);
-		pr_info("ffc iterm current [%d], battery temp [%d]\n", pval.intval, temp);
+		pr_debug("ffc iterm current [%d], battery temp [%d]\n", pval.intval, temp);
 	}
 
 	return;
@@ -953,7 +953,7 @@ static int handle_jeita(struct step_chg_info *chip)
 	if(chip->jeita_hot_th >= 0 && chip->jeita_cold_th >= (-100)) {
 		if (temp >= chip->jeita_hot_th ||
 				temp <= chip->jeita_cold_th) {
-			pr_info("sw-jeita: temp is :%d, stop charing\n", temp);
+			pr_debug("sw-jeita: temp is :%d, stop charing\n", temp);
 			vote(chip->chg_disable_votable, JEITA_VOTER, true, 0);
 		} else {
 			vote(chip->chg_disable_votable, JEITA_VOTER, false, 0);
@@ -1029,7 +1029,7 @@ static int handle_jeita(struct step_chg_info *chip)
 	if (!chip->usb_icl_votable)
 		goto set_jeita_fv;
 
-	pr_info("%s = %d FCC = %duA FV = %duV\n",
+	pr_debug("%s = %d FCC = %duA FV = %duV\n",
 		chip->jeita_fcc_config->param.prop_name, temp, fcc_ua, fv_uv);
 	handle_fast_charge(chip, temp);
 	handle_chg_iterm(chip, temp);
@@ -1060,7 +1060,7 @@ static int handle_jeita(struct step_chg_info *chip)
 
 	rc = power_supply_get_property(chip->batt_psy,
 				POWER_SUPPLY_PROP_VOLTAGE_MAX, &pval);
-	pr_info("%s = %d max voltage= %duv FV = %duV\n",
+	pr_debug("%s = %d max voltage= %duv FV = %duV\n",
 		chip->jeita_fcc_config->param.prop_name, temp, pval.intval, fv_uv);
 	if (rc || (pval.intval == fv_uv)) {
 		vote(chip->usb_icl_votable, JEITA_VOTER, false, 0);

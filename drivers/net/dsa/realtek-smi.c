@@ -426,7 +426,7 @@ static int realtek_smi_probe(struct platform_device *pdev)
 	msleep(REALTEK_SMI_HW_STOP_DELAY);
 	gpiod_set_value(smi->reset, 0);
 	msleep(REALTEK_SMI_HW_START_DELAY);
-	dev_info(dev, "deasserted RESET\n");
+	dev_dbg(dev, "deasserted RESET\n");
 
 	/* Fetch MDIO pins */
 	smi->mdc = devm_gpiod_get_optional(dev, "mdc", GPIOD_OUT_LOW);

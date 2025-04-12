@@ -2041,7 +2041,7 @@ store_fan_min(struct device *dev, struct device_attribute *attr,
 		/* No min limit, alarm disabled */
 		data->fan_min[nr] = 255;
 		new_div = data->fan_div[nr]; /* No change */
-		dev_info(dev, "fan%u low limit and alarm disabled\n", nr + 1);
+		dev_dbg(dev, "fan%u low limit and alarm disabled\n", nr + 1);
 		goto write_div;
 	}
 	reg = 1350000U / val;
@@ -4098,7 +4098,7 @@ static int nct6775_probe(struct platform_device *pdev)
 			continue;
 
 		if (!(data->temp_mask & BIT(src))) {
-			dev_info(dev,
+			dev_dbg(dev,
 				 "Invalid temperature source %d at index %d, source register 0x%x, temp register 0x%x\n",
 				 src, i, data->REG_TEMP_SOURCE[i], reg_temp[i]);
 			continue;
@@ -4158,7 +4158,7 @@ static int nct6775_probe(struct platform_device *pdev)
 			continue;
 
 		if (!(data->temp_mask & BIT(src))) {
-			dev_info(dev,
+			dev_dbg(dev,
 				 "Invalid temperature source %d at index %d, source register 0x%x, temp register 0x%x\n",
 				 src, i, data->REG_TEMP_SEL[i],
 				 reg_temp_mon[i]);
@@ -4297,7 +4297,7 @@ static int nct6775_probe(struct platform_device *pdev)
 		}
 		superio_outb(sio_data->sioreg, NCT6775_REG_CR_FAN_DEBOUNCE,
 			     tmp);
-		dev_info(&pdev->dev, "Enabled fan debounce for chip %s\n",
+		dev_dbg(&pdev->dev, "Enabled fan debounce for chip %s\n",
 			 data->name);
 	}
 
@@ -4349,7 +4349,7 @@ static void nct6791_enable_io_mapping(int sioaddr)
 
 	val = superio_inb(sioaddr, NCT6791_REG_HM_IO_SPACE_LOCK_ENABLE);
 	if (val & 0x10) {
-		pr_info("Enabling hardware monitor logical device mappings.\n");
+		pr_debug("Enabling hardware monitor logical device mappings.\n");
 		superio_outb(sioaddr, NCT6791_REG_HM_IO_SPACE_LOCK_ENABLE,
 			     val & ~0x10);
 	}
@@ -4525,7 +4525,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
 		nct6791_enable_io_mapping(sioaddr);
 
 	superio_exit(sioaddr);
-	pr_info("Found %s or compatible chip at %#x:%#x\n",
+	pr_debug("Found %s or compatible chip at %#x:%#x\n",
 		nct6775_sio_names[sio_data->kind], sioaddr, addr);
 	sio_data->sioreg = sioaddr;
 

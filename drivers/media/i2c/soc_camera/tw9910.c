@@ -826,7 +826,7 @@ static int tw9910_video_probe(struct i2c_client *client)
 		goto done;
 	}
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "tw9910 Product ID %0x:%0x\n", id, priv->revision);
 
 	priv->norm = V4L2_STD_NTSC;

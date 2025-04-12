@@ -538,7 +538,7 @@ static int __init dwc3_octeon_device_init(void)
 			dwc3_octeon_clocks_start(&pdev->dev, (u64)base);
 			dwc3_octeon_set_endian_mode((u64)base);
 			dwc3_octeon_phy_reset((u64)base);
-			dev_info(&pdev->dev, "clocks initialized.\n");
+			dev_dbg(&pdev->dev, "clocks initialized.\n");
 			mutex_unlock(&dwc3_octeon_clocks_mutex);
 			devm_iounmap(&pdev->dev, base);
 			devm_release_mem_region(&pdev->dev, res->start,

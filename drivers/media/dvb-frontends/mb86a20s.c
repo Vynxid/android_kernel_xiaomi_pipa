@@ -1864,7 +1864,7 @@ err:
 
 	if (rc < 0) {
 		state->need_init = true;
-		dev_info(&state->i2c->dev,
+		dev_dbg(&state->i2c->dev,
 			 "mb86a20s: Init failed. Will try again later\n");
 	} else {
 		state->need_init = false;
@@ -2094,7 +2094,7 @@ struct dvb_frontend *mb86a20s_attach(const struct mb86a20s_config *config,
 		return NULL;
 	}
 
-	dev_info(&i2c->dev, "Detected a Fujitsu mb86a20s frontend\n");
+	dev_dbg(&i2c->dev, "Detected a Fujitsu mb86a20s frontend\n");
 	return &state->frontend;
 }
 EXPORT_SYMBOL_GPL(mb86a20s_attach);

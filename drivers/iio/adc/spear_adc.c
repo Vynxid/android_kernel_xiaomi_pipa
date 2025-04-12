@@ -350,7 +350,7 @@ static int spear_adc_probe(struct platform_device *pdev)
 	if (ret)
 		goto errout2;
 
-	dev_info(dev, "SPEAR ADC driver loaded, IRQ %d\n", irq);
+	dev_dbg(dev, "SPEAR ADC driver loaded, IRQ %d\n", irq);
 
 	return 0;
 

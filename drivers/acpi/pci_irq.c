@@ -294,7 +294,7 @@ static int acpi_reroute_boot_interrupt(struct pci_dev *dev,
 			 * 2.15.2. Other chipsets (80332, ...) have the same
 			 * mapping and are handled here as well.
 			 */
-			dev_info(&dev->dev, "PCI IRQ %d -> rerouted to legacy "
+			dev_dbg(&dev->dev, "PCI IRQ %d -> rerouted to legacy "
 				 "IRQ %d\n", entry->index,
 				 (entry->index % 4) + 16);
 			entry->index = (entry->index % 4) + 16;

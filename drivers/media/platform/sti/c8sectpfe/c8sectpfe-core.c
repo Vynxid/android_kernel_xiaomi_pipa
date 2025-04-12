@@ -386,15 +386,15 @@ static void c8sectpfe_getconfig(struct c8sectpfei *fei)
 	hw->num_ram = readl(fei->io + SYS_CFG_NUM_RAM);
 	hw->num_tp = readl(fei->io + SYS_CFG_NUM_TP);
 
-	dev_info(fei->dev, "C8SECTPFE hw supports the following:\n");
-	dev_info(fei->dev, "Input Blocks: %d\n", hw->num_ib);
-	dev_info(fei->dev, "Merged Input Blocks: %d\n", hw->num_mib);
-	dev_info(fei->dev, "Software Transport Stream Inputs: %d\n"
+	dev_dbg(fei->dev, "C8SECTPFE hw supports the following:\n");
+	dev_dbg(fei->dev, "Input Blocks: %d\n", hw->num_ib);
+	dev_dbg(fei->dev, "Merged Input Blocks: %d\n", hw->num_mib);
+	dev_dbg(fei->dev, "Software Transport Stream Inputs: %d\n"
 				, hw->num_swts);
-	dev_info(fei->dev, "Transport Stream Output: %d\n", hw->num_tsout);
-	dev_info(fei->dev, "Cable Card Converter: %d\n", hw->num_ccsc);
-	dev_info(fei->dev, "RAMs supported by C8SECTPFE: %d\n", hw->num_ram);
-	dev_info(fei->dev, "Tango TPs supported by C8SECTPFE: %d\n"
+	dev_dbg(fei->dev, "Transport Stream Output: %d\n", hw->num_tsout);
+	dev_dbg(fei->dev, "Cable Card Converter: %d\n", hw->num_ccsc);
+	dev_dbg(fei->dev, "RAMs supported by C8SECTPFE: %d\n", hw->num_ram);
+	dev_dbg(fei->dev, "Tango TPs supported by C8SECTPFE: %d\n"
 			, hw->num_tp);
 }
 
@@ -908,7 +908,7 @@ static int c8sectpfe_remove(struct platform_device *pdev)
 
 	c8sectpfe_debugfs_exit(fei);
 
-	dev_info(fei->dev, "Stopping memdma SLIM core\n");
+	dev_dbg(fei->dev, "Stopping memdma SLIM core\n");
 	if (readl(fei->io + DMA_CPU_RUN))
 		writel(0x0,  fei->io + DMA_CPU_RUN);
 
@@ -1143,7 +1143,7 @@ static int load_c8sectpfe_fw(struct c8sectpfei *fei)
 	const struct firmware *fw;
 	int err;
 
-	dev_info(fei->dev, "Loading firmware: %s\n", FIRMWARE_MEMDMA);
+	dev_dbg(fei->dev, "Loading firmware: %s\n", FIRMWARE_MEMDMA);
 
 	err = request_firmware(&fw, FIRMWARE_MEMDMA, fei->dev);
 	if (err)
@@ -1176,7 +1176,7 @@ static int load_c8sectpfe_fw(struct c8sectpfei *fei)
 	 */
 	writel(0x1, fei->io + DMA_PER_STBUS_SYNC);
 
-	dev_info(fei->dev, "Boot the memdma SLIM core\n");
+	dev_dbg(fei->dev, "Boot the memdma SLIM core\n");
 	writel(0x1,  fei->io + DMA_CPU_RUN);
 
 	atomic_set(&fei->fw_loaded, 1);

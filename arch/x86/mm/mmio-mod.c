@@ -106,7 +106,7 @@ static void print_pte(unsigned long address)
 			 address);
 		BUG();
 	}
-	pr_info("pte for 0x%lx: 0x%llx 0x%llx\n",
+	pr_debug("pte for 0x%lx: 0x%llx 0x%llx\n",
 		address,
 		(unsigned long long)pte_val(*pte),
 		(unsigned long long)pte_val(*pte) & _PAGE_PRESENT);
@@ -363,7 +363,7 @@ static void clear_trace_list(void)
 	 * Caller also ensures is_enabled() cannot change.
 	 */
 	list_for_each_entry(trace, &trace_list, list) {
-		pr_notice("purging non-iounmapped trace @0x%08lx, size 0x%lx.\n",
+		pr_debug("purging non-iounmapped trace @0x%08lx, size 0x%lx.\n",
 			  trace->probe.addr, trace->probe.len);
 		if (!nommiotrace)
 			unregister_kmmio_probe(&trace->probe);
@@ -386,7 +386,7 @@ static void enter_uniprocessor(void)
 
 	if (!cpumask_available(downed_cpus) &&
 	    !alloc_cpumask_var(&downed_cpus, GFP_KERNEL)) {
-		pr_notice("Failed to allocate mask\n");
+		pr_debug("Failed to allocate mask\n");
 		goto out;
 	}
 
@@ -394,13 +394,13 @@ static void enter_uniprocessor(void)
 	cpumask_copy(downed_cpus, cpu_online_mask);
 	cpumask_clear_cpu(cpumask_first(cpu_online_mask), downed_cpus);
 	if (num_online_cpus() > 1)
-		pr_notice("Disabling non-boot CPUs...\n");
+		pr_debug("Disabling non-boot CPUs...\n");
 	put_online_cpus();
 
 	for_each_cpu(cpu, downed_cpus) {
 		err = cpu_down(cpu);
 		if (!err)
-			pr_info("CPU%d is down.\n", cpu);
+			pr_debug("CPU%d is down.\n", cpu);
 		else
 			pr_err("Error taking CPU%d down: %d\n", cpu, err);
 	}
@@ -416,11 +416,11 @@ static void leave_uniprocessor(void)
 
 	if (!cpumask_available(downed_cpus) || cpumask_weight(downed_cpus) == 0)
 		return;
-	pr_notice("Re-enabling CPUs...\n");
+	pr_debug("Re-enabling CPUs...\n");
 	for_each_cpu(cpu, downed_cpus) {
 		err = cpu_up(cpu);
 		if (!err)
-			pr_info("enabled CPU%d.\n", cpu);
+			pr_debug("enabled CPU%d.\n", cpu);
 		else
 			pr_err("cannot re-enable CPU%d: %d\n", cpu, err);
 	}
@@ -446,13 +446,13 @@ void enable_mmiotrace(void)
 		goto out;
 
 	if (nommiotrace)
-		pr_info("MMIO tracing disabled.\n");
+		pr_debug("MMIO tracing disabled.\n");
 	kmmio_init();
 	enter_uniprocessor();
 	spin_lock_irq(&trace_lock);
 	atomic_inc(&mmiotrace_enabled);
 	spin_unlock_irq(&trace_lock);
-	pr_info("enabled.\n");
+	pr_debug("enabled.\n");
 out:
 	mutex_unlock(&mmiotrace_mutex);
 }
@@ -471,7 +471,7 @@ void disable_mmiotrace(void)
 	clear_trace_list(); /* guarantees: no more kmmio callbacks */
 	leave_uniprocessor();
 	kmmio_cleanup();
-	pr_info("disabled.\n");
+	pr_debug("disabled.\n");
 out:
 	mutex_unlock(&mmiotrace_mutex);
 }

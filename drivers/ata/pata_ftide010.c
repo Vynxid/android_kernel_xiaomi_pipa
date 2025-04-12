@@ -279,33 +279,33 @@ static int pata_ftide010_gemini_port_start(struct ata_port *ap)
 		return ret;
 
 	if (ftide->master_to_sata0) {
-		dev_info(dev, "SATA0 (master) start\n");
+		dev_dbg(dev, "SATA0 (master) start\n");
 		ret = gemini_sata_start_bridge(sg, 0);
 		if (!ret)
 			bridges++;
 	}
 	if (ftide->master_to_sata1) {
-		dev_info(dev, "SATA1 (master) start\n");
+		dev_dbg(dev, "SATA1 (master) start\n");
 		ret = gemini_sata_start_bridge(sg, 1);
 		if (!ret)
 			bridges++;
 	}
 	/* Avoid double-starting */
 	if (ftide->slave_to_sata0 && !ftide->master_to_sata0) {
-		dev_info(dev, "SATA0 (slave) start\n");
+		dev_dbg(dev, "SATA0 (slave) start\n");
 		ret = gemini_sata_start_bridge(sg, 0);
 		if (!ret)
 			bridges++;
 	}
 	/* Avoid double-starting */
 	if (ftide->slave_to_sata1 && !ftide->master_to_sata1) {
-		dev_info(dev, "SATA1 (slave) start\n");
+		dev_dbg(dev, "SATA1 (slave) start\n");
 		ret = gemini_sata_start_bridge(sg, 1);
 		if (!ret)
 			bridges++;
 	}
 
-	dev_info(dev, "brought %d bridges online\n", bridges);
+	dev_dbg(dev, "brought %d bridges online\n", bridges);
 	return (bridges > 0) ? 0 : -EINVAL; // -ENODEV;
 }
 
@@ -316,21 +316,21 @@ static void pata_ftide010_gemini_port_stop(struct ata_port *ap)
 	struct sata_gemini *sg = ftide->sg;
 
 	if (ftide->master_to_sata0) {
-		dev_info(dev, "SATA0 (master) stop\n");
+		dev_dbg(dev, "SATA0 (master) stop\n");
 		gemini_sata_stop_bridge(sg, 0);
 	}
 	if (ftide->master_to_sata1) {
-		dev_info(dev, "SATA1 (master) stop\n");
+		dev_dbg(dev, "SATA1 (master) stop\n");
 		gemini_sata_stop_bridge(sg, 1);
 	}
 	/* Avoid double-stopping */
 	if (ftide->slave_to_sata0 && !ftide->master_to_sata0) {
-		dev_info(dev, "SATA0 (slave) stop\n");
+		dev_dbg(dev, "SATA0 (slave) stop\n");
 		gemini_sata_stop_bridge(sg, 0);
 	}
 	/* Avoid double-stopping */
 	if (ftide->slave_to_sata1 && !ftide->master_to_sata1) {
-		dev_info(dev, "SATA1 (slave) stop\n");
+		dev_dbg(dev, "SATA1 (slave) stop\n");
 		gemini_sata_stop_bridge(sg, 1);
 	}
 }
@@ -434,7 +434,7 @@ static int pata_ftide010_gemini_init(struct ftide010 *ftide,
 			break;
 		}
 	}
-	dev_info(dev, "set up Gemini PATA%d\n", is_ata1);
+	dev_dbg(dev, "set up Gemini PATA%d\n", is_ata1);
 
 	return 0;
 }
@@ -524,7 +524,7 @@ static int pata_ftide010_probe(struct platform_device *pdev)
 		ata_sff_std_ports(ioaddr);
 	}
 
-	dev_info(dev, "device ID %08x, irq %d, reg %pR\n",
+	dev_dbg(dev, "device ID %08x, irq %d, reg %pR\n",
 		 readl(ftide->base + FTIDE010_IDE_DEVICE_ID), irq, res);
 
 	ret = ata_host_activate(ftide->host, irq, ata_bmdma_interrupt,

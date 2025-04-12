@@ -330,7 +330,7 @@ static int __init ehv_bc_console_init(void)
 	add_preferred_console(ehv_bc_console.name, ehv_bc_console.index, NULL);
 	register_console(&ehv_bc_console);
 
-	pr_info("ehv-bc: registered console driver for byte channel %u\n",
+	pr_debug("ehv-bc: registered console driver for byte channel %u\n",
 		stdout_bc);
 
 	return 0;
@@ -716,7 +716,7 @@ static int ehv_bc_tty_probe(struct platform_device *pdev)
 
 	dev_set_drvdata(&pdev->dev, bc);
 
-	dev_info(&pdev->dev, "registered /dev/%s%u for byte channel %u\n",
+	dev_dbg(&pdev->dev, "registered /dev/%s%u for byte channel %u\n",
 		ehv_bc_driver->name, i, bc->handle);
 
 	return 0;
@@ -755,7 +755,7 @@ static int __init ehv_bc_init(void)
 	unsigned int count = 0; /* Number of elements in bcs[] */
 	int ret;
 
-	pr_info("ePAPR hypervisor byte channel driver\n");
+	pr_debug("ePAPR hypervisor byte channel driver\n");
 
 	/* Count the number of byte channels */
 	for_each_compatible_node(np, NULL, "epapr,hv-byte-channel")

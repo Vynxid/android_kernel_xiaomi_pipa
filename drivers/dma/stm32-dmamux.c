@@ -224,7 +224,7 @@ static int stm32_dmamux_probe(struct platform_device *pdev)
 
 		if (of_property_read_u32(dma_node, "dma-requests",
 					 &stm32_dmamux->dma_reqs[i])) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Missing MUX output information, using %u.\n",
 				 STM32_DMAMUX_MAX_DMA_REQUESTS);
 			stm32_dmamux->dma_reqs[i] =
@@ -266,7 +266,7 @@ static int stm32_dmamux_probe(struct platform_device *pdev)
 	if (IS_ERR(stm32_dmamux->clk)) {
 		ret = PTR_ERR(stm32_dmamux->clk);
 		if (ret == -EPROBE_DEFER)
-			dev_info(&pdev->dev, "Missing controller clock\n");
+			dev_dbg(&pdev->dev, "Missing controller clock\n");
 		return ret;
 	}
 

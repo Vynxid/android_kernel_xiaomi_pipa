@@ -77,7 +77,7 @@ static int __hwahc_set_cluster_id(struct hwahc *hwahc, u8 cluster_id)
 			cluster_id, result);
 	else
 		wusbhc->cluster_id = cluster_id;
-	dev_info(dev, "Wireless USB Cluster ID set to 0x%02x\n", cluster_id);
+	dev_dbg(dev, "Wireless USB Cluster ID set to 0x%02x\n", cluster_id);
 	return result;
 }
 
@@ -408,16 +408,16 @@ static int __hwahc_op_dev_info_set(struct wusbhc *wusbhc,
 	struct hwahc *hwahc = container_of(wusbhc, struct hwahc, wusbhc);
 	struct wahc *wa = &hwahc->wa;
 	u8 iface_no = wa->usb_iface->cur_altsetting->desc.bInterfaceNumber;
-	struct hwa_dev_info *dev_info;
+	struct hwa_dev_info *dev_dbg;
 	int ret;
 
 	/* fill out the Device Info buffer and send it */
-	dev_info = kzalloc(sizeof(struct hwa_dev_info), GFP_KERNEL);
-	if (!dev_info)
+	dev_dbg = kzalloc(sizeof(struct hwa_dev_info), GFP_KERNEL);
+	if (!dev_dbg)
 		return -ENOMEM;
-	uwb_mas_bm_copy_le(dev_info->bmDeviceAvailability,
+	uwb_mas_bm_copy_le(dev_dbg->bmDeviceAvailability,
 			   &wusb_dev->availability);
-	dev_info->bDeviceAddress = wusb_dev->addr;
+	dev_dbg->bDeviceAddress = wusb_dev->addr;
 
 	/*
 	 * If the descriptors haven't been read yet, use a default PHY
@@ -427,17 +427,17 @@ static int __hwahc_op_dev_info_set(struct wusbhc *wusbhc,
 	 * have been read).
 	 */
 	if (wusb_dev->wusb_cap_descr)
-		dev_info->wPHYRates = wusb_dev->wusb_cap_descr->wPHYRates;
+		dev_dbg->wPHYRates = wusb_dev->wusb_cap_descr->wPHYRates;
 	else
-		dev_info->wPHYRates = cpu_to_le16(USB_WIRELESS_PHY_53);
+		dev_dbg->wPHYRates = cpu_to_le16(USB_WIRELESS_PHY_53);
 
 	ret = usb_control_msg(wa->usb_dev, usb_sndctrlpipe(wa->usb_dev, 0),
 			WUSB_REQ_SET_DEV_INFO,
 			USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
 			0, wusb_dev->port_idx << 8 | iface_no,
-			dev_info, sizeof(struct hwa_dev_info),
+			dev_dbg, sizeof(struct hwa_dev_info),
 			USB_CTRL_SET_TIMEOUT);
-	kfree(dev_info);
+	kfree(dev_dbg);
 	return ret;
 }
 
@@ -686,7 +686,7 @@ static int hwahc_security_create(struct hwahc *hwahc)
 				  etd->bEncryptionValue);
 		wusbhc->ccm1_etd = etd;
 	}
-	dev_info(dev, "supported encryption types: %s\n", buf);
+	dev_dbg(dev, "supported encryption types: %s\n", buf);
 	if (wusbhc->ccm1_etd == NULL) {
 		dev_err(dev, "E: host doesn't support CCM-1 crypto\n");
 		return 0;

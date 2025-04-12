@@ -226,7 +226,7 @@ static inline void xvip_print_version(struct xvip_device *xvip)
 
 	version = xvip_read(xvip, XVIP_CTRL_VERSION);
 
-	dev_info(xvip->dev, "device found, version %u.%02x%x\n",
+	dev_dbg(xvip->dev, "device found, version %u.%02x%x\n",
 		 ((version & XVIP_CTRL_VERSION_MAJOR_MASK) >>
 		  XVIP_CTRL_VERSION_MAJOR_SHIFT),
 		 ((version & XVIP_CTRL_VERSION_MINOR_MASK) >>

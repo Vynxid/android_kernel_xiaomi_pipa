@@ -176,7 +176,7 @@ static int do_mult_aead_op(struct test_mb_aead_data *data, int enc,
 		rc[i] = crypto_wait_req(rc[i], &data[i].wait);
 
 		if (rc[i]) {
-			pr_info("concurrent request %d error %d\n", i, rc[i]);
+			pr_debug("concurrent request %d error %d\n", i, rc[i]);
 			err = rc[i];
 		}
 	}
@@ -334,7 +334,7 @@ static void test_mb_aead_speed(const char *algo, int enc, int secs,
 					  crypto_req_done, &data[i].wait);
 	}
 
-	pr_info("\ntesting speed of multibuffer %s (%s) %s\n", algo,
+	pr_debug("\ntesting speed of multibuffer %s (%s) %s\n", algo,
 		get_driver_name(crypto_aead, tfm), e);
 
 	i = 0;
@@ -348,7 +348,7 @@ static void test_mb_aead_speed(const char *algo, int enc, int secs,
 				goto out;
 			}
 
-			pr_info("test %u (%d bit key, %d byte blocks): ", i,
+			pr_debug("test %u (%d bit key, %d byte blocks): ", i,
 				*keysize * 8, *b_size);
 
 			/* Set up tfm global state, i.e. the key */
@@ -737,7 +737,7 @@ static inline int do_mult_ahash_op(struct test_mb_ahash_data *data, u32 num_mb,
 		rc[i] = crypto_wait_req(rc[i], &data[i].wait);
 
 		if (rc[i]) {
-			pr_info("concurrent request %d error %d\n", i, rc[i]);
+			pr_debug("concurrent request %d error %d\n", i, rc[i]);
 			err = rc[i];
 		}
 	}
@@ -855,7 +855,7 @@ static void test_mb_ahash_speed(const char *algo, unsigned int secs,
 		}
 	}
 
-	pr_info("\ntesting speed of multibuffer %s (%s)\n", algo,
+	pr_debug("\ntesting speed of multibuffer %s (%s)\n", algo,
 		get_driver_name(crypto_ahash, tfm));
 
 	for (i = 0; speed[i].blen != 0; i++) {
@@ -876,7 +876,7 @@ static void test_mb_ahash_speed(const char *algo, unsigned int secs,
 			ahash_request_set_crypt(data[k].req, data[k].sg,
 						data[k].result, speed[i].blen);
 
-		pr_info("test%3u "
+		pr_debug("test%3u "
 			"(%5u byte blocks,%5u bytes per update,%4u updates): ",
 			i, speed[i].blen, speed[i].plen,
 			speed[i].blen / speed[i].plen);
@@ -1107,7 +1107,7 @@ static void test_ahash_speed_common(const char *algo, unsigned int secs,
 		if (speed[i].klen)
 			crypto_ahash_setkey(tfm, tvmem[0], speed[i].klen);
 
-		pr_info("test%3u "
+		pr_debug("test%3u "
 			"(%5u byte blocks,%5u bytes per update,%4u updates): ",
 			i, speed[i].blen, speed[i].plen, speed[i].blen / speed[i].plen);
 
@@ -1174,7 +1174,7 @@ static int do_mult_acipher_op(struct test_mb_skcipher_data *data, int enc,
 		rc[i] = crypto_wait_req(rc[i], &data[i].wait);
 
 		if (rc[i]) {
-			pr_info("concurrent request %d error %d\n", i, rc[i]);
+			pr_debug("concurrent request %d error %d\n", i, rc[i]);
 			err = rc[i];
 		}
 	}
@@ -1304,7 +1304,7 @@ static void test_mb_skcipher_speed(const char *algo, int enc, int secs,
 		crypto_init_wait(&data[i].wait);
 	}
 
-	pr_info("\ntesting speed of multibuffer %s (%s) %s\n", algo,
+	pr_debug("\ntesting speed of multibuffer %s (%s) %s\n", algo,
 		get_driver_name(crypto_skcipher, tfm), e);
 
 	i = 0;
@@ -1317,7 +1317,7 @@ static void test_mb_skcipher_speed(const char *algo, int enc, int secs,
 				goto out;
 			}
 
-			pr_info("test %u (%d bit key, %d byte blocks): ", i,
+			pr_debug("test %u (%d bit key, %d byte blocks): ", i,
 				*keysize * 8, *b_size);
 
 			/* Set up tfm global state, i.e. the key */
@@ -1510,7 +1510,7 @@ static void test_skcipher_speed(const char *algo, int enc, unsigned int secs,
 		return;
 	}
 
-	pr_info("\ntesting speed of async %s (%s) %s\n", algo,
+	pr_debug("\ntesting speed of async %s (%s) %s\n", algo,
 			get_driver_name(crypto_skcipher, tfm), e);
 
 	req = skcipher_request_alloc(tfm, GFP_KERNEL);
@@ -1537,7 +1537,7 @@ static void test_skcipher_speed(const char *algo, int enc, unsigned int secs,
 				goto out_free_req;
 			}
 
-			pr_info("test %u (%d bit key, %d byte blocks): ", i,
+			pr_debug("test %u (%d bit key, %d byte blocks): ", i,
 				*keysize * 8, *b_size);
 
 			memset(tvmem[0], 0xff, PAGE_SIZE);

@@ -6295,7 +6295,7 @@ static int msm_init_aux_dev(struct platform_device *pdev,
 	ret = of_property_read_u32(pdev->dev.of_node,
 				   "qcom,wsa-max-devs", &wsa_max_devs);
 	if (ret) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "%s: wsa-max-devs property missing in DT %s, ret = %d\n",
 			 __func__, pdev->dev.of_node->full_name, ret);
 		wsa_max_devs = 0;
@@ -6391,7 +6391,7 @@ static int msm_init_aux_dev(struct platform_device *pdev,
 			__func__, wsa_max_devs, found);
 		return -EPROBE_DEFER;
 	}
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"%s: found %d wsa881x devices registered with ALSA core\n",
 		__func__, found);
 
@@ -6487,7 +6487,7 @@ codec_aux_dev:
 			__func__, codec_aux_dev_cnt, codecs_found);
 		return -EPROBE_DEFER;
 	}
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"%s: found %d AUX codecs registered with ALSA core\n",
 		__func__, codecs_found);
 
@@ -6754,7 +6754,7 @@ static int msm_asoc_machine_probe(struct platform_device *pdev)
 			__func__, ret);
 		goto err;
 	}
-	dev_info(&pdev->dev, "%s: Sound card %s registered\n",
+	dev_dbg(&pdev->dev, "%s: Sound card %s registered\n",
 		 __func__, card->name);
 
 	pdata->hph_en1_gpio_p = of_parse_phandle(pdev->dev.of_node,

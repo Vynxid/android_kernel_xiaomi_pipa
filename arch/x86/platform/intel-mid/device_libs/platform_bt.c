@@ -102,7 +102,7 @@ static int __init bt_sfi_init(void)
 	if (IS_ERR(pdev))
 		return PTR_ERR(pdev);
 
-	dev_info(ddata->dev, "Registered Bluetooth device: %s\n", ddata->name);
+	dev_dbg(ddata->dev, "Registered Bluetooth device: %s\n", ddata->name);
 	return 0;
 }
 device_initcall(bt_sfi_init);

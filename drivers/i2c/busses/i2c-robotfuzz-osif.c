@@ -167,7 +167,7 @@ static int osif_probe(struct usb_interface *interface,
 	i2c_add_adapter(&(priv->adapter));
 
 	version = le16_to_cpu(priv->usb_dev->descriptor.bcdDevice);
-	dev_info(&interface->dev,
+	dev_dbg(&interface->dev,
 		 "version %x.%02x found at bus %03d address %03d",
 		 version >> 8, version & 0xff,
 		 priv->usb_dev->bus->busnum, priv->usb_dev->devnum);

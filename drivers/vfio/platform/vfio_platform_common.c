@@ -212,10 +212,10 @@ static int vfio_platform_call_reset(struct vfio_platform_device *vdev,
 				    const char **extra_dbg)
 {
 	if (VFIO_PLATFORM_IS_ACPI(vdev)) {
-		dev_info(vdev->device, "reset\n");
+		dev_dbg(vdev->device, "reset\n");
 		return vfio_platform_acpi_call_reset(vdev, extra_dbg);
 	} else if (vdev->of_reset) {
-		dev_info(vdev->device, "reset\n");
+		dev_dbg(vdev->device, "reset\n");
 		return vdev->of_reset(vdev);
 	}
 

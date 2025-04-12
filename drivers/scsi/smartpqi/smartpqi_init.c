@@ -1379,7 +1379,7 @@ static void pqi_show_volume_status(struct pqi_ctrl_info *ctrl_info,
 		break;
 	}
 
-	dev_info(&ctrl_info->pci_dev->dev,
+	dev_dbg(&ctrl_info->pci_dev->dev,
 		"scsi %d:%d:%d:%d %s\n",
 		ctrl_info->scsi_host->host_no,
 		device->bus, device->target, device->lun, status);
@@ -1534,7 +1534,7 @@ static void pqi_dev_info(struct pqi_ctrl_info *ctrl_info,
 				" qd=%-6d", device->queue_depth);
 	}
 
-	dev_info(&ctrl_info->pci_dev->dev, "%s %s\n", action, buffer);
+	dev_dbg(&ctrl_info->pci_dev->dev, "%s %s\n", action, buffer);
 }
 
 /* Assumes the SCSI device list lock is held. */
@@ -6619,7 +6619,7 @@ static void pqi_print_ctrl_info(struct pci_dev *pci_dev,
 	else
 		ctrl_description = "Microsemi Smart Family Controller";
 
-	dev_info(&pci_dev->dev, "%s found\n", ctrl_description);
+	dev_dbg(&pci_dev->dev, "%s found\n", ctrl_description);
 }
 
 static int pqi_pci_probe(struct pci_dev *pci_dev,
@@ -7087,7 +7087,7 @@ static int __init pqi_init(void)
 {
 	int rc;
 
-	pr_info(DRIVER_NAME "\n");
+	pr_debug(DRIVER_NAME "\n");
 
 	pqi_sas_transport_template =
 		sas_attach_transport(&pqi_sas_transport_functions);

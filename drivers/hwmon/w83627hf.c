@@ -1341,7 +1341,7 @@ static int __init w83627hf_find(int sioaddr, unsigned short *addr,
 	}
 
 	err = 0;
-	pr_info(DRVNAME ": Found %s chip at %#x\n",
+	pr_debug(DRVNAME ": Found %s chip at %#x\n",
 		names[sio_data->type], *addr);
 
  exit:
@@ -1686,7 +1686,7 @@ static int w83627thf_read_gpio5(struct platform_device *pdev)
 		goto exit;
 	}
 
-	dev_info(&pdev->dev, "Reading VID from GPIO5\n");
+	dev_dbg(&pdev->dev, "Reading VID from GPIO5\n");
 	res = superio_inb(sio_data, W83627THF_GPIO5_DR) & sel;
 
 exit:

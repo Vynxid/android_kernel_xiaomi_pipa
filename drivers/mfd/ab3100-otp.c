@@ -200,7 +200,7 @@ static int __init ab3100_otp_probe(struct platform_device *pdev)
 	if (err)
 		return err;
 
-	dev_info(&pdev->dev, "AB3100 OTP readout registered\n");
+	dev_dbg(&pdev->dev, "AB3100 OTP readout registered\n");
 
 	/* sysfs entries */
 	for (i = 0; i < ARRAY_SIZE(ab3100_otp_attrs); i++) {

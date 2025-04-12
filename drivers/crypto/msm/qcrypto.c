@@ -1752,7 +1752,7 @@ static void _qce_ahash_complete(void *cookie, unsigned char *digest,
 	}
 
 #ifdef QCRYPTO_DEBUG
-	dev_info(&pengine->pdev->dev, "%s: %pK ret %d\n",
+	dev_dbg(&pengine->pdev->dev, "%s: %pK ret %d\n",
 				__func__, areq, ret);
 #endif
 	if (digest) {
@@ -1811,7 +1811,7 @@ static void _qce_ablk_cipher_complete(void *cookie, unsigned char *icb,
 	}
 
 #ifdef QCRYPTO_DEBUG
-	dev_info(&pengine->pdev->dev, "%s: %pK ret %d\n",
+	dev_dbg(&pengine->pdev->dev, "%s: %pK ret %d\n",
 			__func__, areq, ret);
 #endif
 	if (iv)
@@ -2515,7 +2515,7 @@ static int _qcrypto_enc_aes_ecb(struct ablkcipher_request *req)
 	WARN_ON(crypto_tfm_alg_type(req->base.tfm) !=
 					CRYPTO_ALG_TYPE_ABLKCIPHER);
 #ifdef QCRYPTO_DEBUG
-	dev_info(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
+	dev_dbg(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
 #endif
 
 	if ((ctx->enc_key_len == AES_KEYSIZE_192) &&
@@ -2545,7 +2545,7 @@ static int _qcrypto_enc_aes_cbc(struct ablkcipher_request *req)
 	WARN_ON(crypto_tfm_alg_type(req->base.tfm) !=
 					CRYPTO_ALG_TYPE_ABLKCIPHER);
 #ifdef QCRYPTO_DEBUG
-	dev_info(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
+	dev_dbg(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
 #endif
 
 	if ((ctx->enc_key_len == AES_KEYSIZE_192) &&
@@ -2575,7 +2575,7 @@ static int _qcrypto_enc_aes_ctr(struct ablkcipher_request *req)
 	WARN_ON(crypto_tfm_alg_type(req->base.tfm) !=
 				CRYPTO_ALG_TYPE_ABLKCIPHER);
 #ifdef QCRYPTO_DEBUG
-	dev_info(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
+	dev_dbg(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
 #endif
 
 	if ((ctx->enc_key_len == AES_KEYSIZE_192) &&
@@ -2763,7 +2763,7 @@ static int _qcrypto_dec_aes_ecb(struct ablkcipher_request *req)
 	WARN_ON(crypto_tfm_alg_type(req->base.tfm) !=
 				CRYPTO_ALG_TYPE_ABLKCIPHER);
 #ifdef QCRYPTO_DEBUG
-	dev_info(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
+	dev_dbg(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
 #endif
 
 	if ((ctx->enc_key_len == AES_KEYSIZE_192) &&
@@ -2793,7 +2793,7 @@ static int _qcrypto_dec_aes_cbc(struct ablkcipher_request *req)
 	WARN_ON(crypto_tfm_alg_type(req->base.tfm) !=
 				CRYPTO_ALG_TYPE_ABLKCIPHER);
 #ifdef QCRYPTO_DEBUG
-	dev_info(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
+	dev_dbg(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
 #endif
 
 	if ((ctx->enc_key_len == AES_KEYSIZE_192) &&
@@ -2823,7 +2823,7 @@ static int _qcrypto_dec_aes_ctr(struct ablkcipher_request *req)
 	WARN_ON(crypto_tfm_alg_type(req->base.tfm) !=
 					CRYPTO_ALG_TYPE_ABLKCIPHER);
 #ifdef QCRYPTO_DEBUG
-	dev_info(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
+	dev_dbg(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
 #endif
 
 	if ((ctx->enc_key_len == AES_KEYSIZE_192) &&
@@ -3402,7 +3402,7 @@ static int _qcrypto_aead_encrypt_aes_cbc(struct aead_request *req)
 	pstat = &_qcrypto_stat;
 
 #ifdef QCRYPTO_DEBUG
-	dev_info(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
+	dev_dbg(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
 #endif
 
 	rctx = aead_request_ctx(req);
@@ -3432,7 +3432,7 @@ static int _qcrypto_aead_decrypt_aes_cbc(struct aead_request *req)
 	pstat = &_qcrypto_stat;
 
 #ifdef QCRYPTO_DEBUG
-	dev_info(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
+	dev_dbg(&ctx->pengine->pdev->dev, "%s: %pK\n", __func__, req);
 #endif
 	rctx = aead_request_ctx(req);
 	rctx->aead = 1;
@@ -5052,7 +5052,7 @@ static int  _qcrypto_probe(struct platform_device *pdev)
 			kzfree(q_alg);
 		} else {
 			list_add_tail(&q_alg->entry, &cp->alg_list);
-			dev_info(&pdev->dev, "%s\n",
+			dev_dbg(&pdev->dev, "%s\n",
 					q_alg->cipher_alg.cra_driver_name);
 		}
 	}
@@ -5086,7 +5086,7 @@ static int  _qcrypto_probe(struct platform_device *pdev)
 			kzfree(q_alg);
 		} else {
 			list_add_tail(&q_alg->entry, &cp->alg_list);
-			dev_info(&pdev->dev, "%s\n",
+			dev_dbg(&pdev->dev, "%s\n",
 					q_alg->cipher_alg.cra_driver_name);
 		}
 	}
@@ -5123,7 +5123,7 @@ static int  _qcrypto_probe(struct platform_device *pdev)
 			kzfree(q_alg);
 		} else {
 			list_add_tail(&q_alg->entry, &cp->alg_list);
-			dev_info(&pdev->dev, "%s\n",
+			dev_dbg(&pdev->dev, "%s\n",
 				q_alg->sha_alg.halg.base.cra_driver_name);
 		}
 	}
@@ -5161,7 +5161,7 @@ static int  _qcrypto_probe(struct platform_device *pdev)
 				kfree(q_alg);
 			} else {
 				list_add_tail(&q_alg->entry, &cp->alg_list);
-				dev_info(&pdev->dev, "%s\n",
+				dev_dbg(&pdev->dev, "%s\n",
 					q_alg->aead_alg.base.cra_driver_name);
 			}
 		}
@@ -5199,7 +5199,7 @@ static int  _qcrypto_probe(struct platform_device *pdev)
 				kfree(q_alg);
 			} else {
 				list_add_tail(&q_alg->entry, &cp->alg_list);
-				dev_info(&pdev->dev, "%s\n",
+				dev_dbg(&pdev->dev, "%s\n",
 					q_alg->aead_alg.base.cra_driver_name);
 			}
 		}
@@ -5238,7 +5238,7 @@ static int  _qcrypto_probe(struct platform_device *pdev)
 				kzfree(q_alg);
 			} else {
 				list_add_tail(&q_alg->entry, &cp->alg_list);
-				dev_info(&pdev->dev, "%s\n",
+				dev_dbg(&pdev->dev, "%s\n",
 				q_alg->sha_alg.halg.base.cra_driver_name);
 			}
 		}
@@ -5274,7 +5274,7 @@ static int  _qcrypto_probe(struct platform_device *pdev)
 			kzfree(q_alg);
 		} else {
 			list_add_tail(&q_alg->entry, &cp->alg_list);
-			dev_info(&pdev->dev, "%s\n",
+			dev_dbg(&pdev->dev, "%s\n",
 					q_alg->aead_alg.base.cra_driver_name);
 		}
 
@@ -5304,7 +5304,7 @@ static int  _qcrypto_probe(struct platform_device *pdev)
 			kfree(q_alg);
 		} else {
 			list_add_tail(&q_alg->entry, &cp->alg_list);
-			dev_info(&pdev->dev, "%s\n",
+			dev_dbg(&pdev->dev, "%s\n",
 					q_alg->aead_alg.base.cra_driver_name);
 		}
 	}

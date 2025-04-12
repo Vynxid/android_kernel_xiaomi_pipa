@@ -1458,7 +1458,7 @@ static int ethsw_probe(struct fsl_mc_device *sw_dev)
 	if (err)
 		goto err_stop;
 
-	dev_info(dev, "probed %d port switch\n", ethsw->sw_attr.num_ifs);
+	dev_dbg(dev, "probed %d port switch\n", ethsw->sw_attr.num_ifs);
 	return 0;
 
 err_stop:

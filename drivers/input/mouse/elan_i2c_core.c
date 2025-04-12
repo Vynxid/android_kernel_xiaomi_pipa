@@ -539,7 +539,7 @@ static ssize_t elan_sysfs_update_fw(struct device *dev,
 		return -ENOMEM;
 	}
 
-	dev_info(dev, "requesting fw '%s'\n", fw_name);
+	dev_dbg(dev, "requesting fw '%s'\n", fw_name);
 	error = request_firmware(&fw, fw_name, dev);
 	kfree(fw_name);
 	if (error) {
@@ -1148,7 +1148,7 @@ static int elan_probe(struct i2c_client *client,
 	if (error)
 		return error;
 
-	dev_info(dev,
+	dev_dbg(dev,
 		 "Elan Touchpad: Module ID: 0x%04x, Firmware: 0x%04x, Sample: 0x%04x, IAP: 0x%04x\n",
 		 data->product_id,
 		 data->fw_version,

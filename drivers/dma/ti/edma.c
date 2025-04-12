@@ -1901,7 +1901,7 @@ static void edma_dma_init(struct edma_cc *ecc, bool legacy_mode)
 		m_ddev->dev = ecc->dev;
 		INIT_LIST_HEAD(&m_ddev->channels);
 	} else if (!ecc->legacy_mode) {
-		dev_info(ecc->dev, "memcpy is disabled\n");
+		dev_dbg(ecc->dev, "memcpy is disabled\n");
 	}
 
 ch_setup:
@@ -2411,7 +2411,7 @@ static int edma_probe(struct platform_device *pdev)
 	if (node)
 		of_dma_controller_register(node, of_edma_xlate, ecc);
 
-	dev_info(dev, "TI EDMA DMA engine driver\n");
+	dev_dbg(dev, "TI EDMA DMA engine driver\n");
 
 	return 0;
 

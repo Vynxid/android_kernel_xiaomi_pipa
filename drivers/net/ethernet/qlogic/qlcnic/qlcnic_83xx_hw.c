@@ -276,7 +276,7 @@ int qlcnic_83xx_get_fw_version(struct qlcnic_adapter *adapter)
 	fw_build = QLC_SHARED_REG_RD32(adapter, QLCNIC_FW_VERSION_SUB);
 	adapter->fw_version = QLCNIC_VERSION_CODE(fw_major, fw_minor, fw_build);
 
-	dev_info(&pdev->dev, "Driver v%s, firmware version %d.%d.%d\n",
+	dev_dbg(&pdev->dev, "Driver v%s, firmware version %d.%d.%d\n",
 		 QLCNIC_LINUX_VERSIONID, fw_major, fw_minor, fw_build);
 
 	return adapter->fw_version;
@@ -339,7 +339,7 @@ static void qlcnic_83xx_enable_legacy(struct qlcnic_adapter *adapter)
 	adapter->tgt_mask_reg = ahw->pci_base0 + QLC_83XX_INTX_MASK;
 	adapter->isr_int_vec = ahw->pci_base0 + QLC_83XX_INTX_TRGR;
 	adapter->msix_entries[0].vector = adapter->pdev->irq;
-	dev_info(&adapter->pdev->dev, "using legacy interrupt\n");
+	dev_dbg(&adapter->pdev->dev, "using legacy interrupt\n");
 }
 
 static int qlcnic_83xx_calculate_msix_vector(struct qlcnic_adapter *adapter)
@@ -780,7 +780,7 @@ void qlcnic_83xx_check_vf(struct qlcnic_adapter *adapter,
 
 	if (priv_level == QLCNIC_NON_PRIV_FUNC) {
 		ahw->op_mode = QLCNIC_NON_PRIV_FUNC;
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "HAL Version: %d Non Privileged function\n",
 			 ahw->fw_hal_version);
 		adapter->nic_ops = &qlcnic_vf_ops;
@@ -805,22 +805,22 @@ void qlcnic_dump_mbx(struct qlcnic_adapter *adapter,
 	if (cmd->op_type == QLC_83XX_MBX_POST_BC_OP)
 		return;
 
-	dev_info(&adapter->pdev->dev,
+	dev_dbg(&adapter->pdev->dev,
 		 "Host MBX regs(%d)\n", cmd->req.num);
 	for (i = 0; i < cmd->req.num; i++) {
 		if (i && !(i % 8))
-			pr_info("\n");
-		pr_info("%08x ", cmd->req.arg[i]);
+			pr_debug("\n");
+		pr_debug("%08x ", cmd->req.arg[i]);
 	}
-	pr_info("\n");
-	dev_info(&adapter->pdev->dev,
+	pr_debug("\n");
+	dev_dbg(&adapter->pdev->dev,
 		 "FW MBX regs(%d)\n", cmd->rsp.num);
 	for (i = 0; i < cmd->rsp.num; i++) {
 		if (i && !(i % 8))
-			pr_info("\n");
-		pr_info("%08x ", cmd->rsp.arg[i]);
+			pr_debug("\n");
+		pr_debug("%08x ", cmd->rsp.arg[i]);
 	}
-	pr_info("\n");
+	pr_debug("\n");
 }
 
 static void qlcnic_83xx_poll_for_mbx_completion(struct qlcnic_adapter *adapter,
@@ -949,7 +949,7 @@ void qlcnic_83xx_idc_aen_work(struct work_struct *work)
 
 	err = qlcnic_issue_cmd(adapter, &cmd);
 	if (err)
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "%s: Mailbox IDC ACK failed.\n", __func__);
 	qlcnic_free_mbx_args(&cmd);
 }
@@ -993,11 +993,11 @@ static void __qlcnic_83xx_process_aen(struct qlcnic_adapter *adapter)
 		qlcnic_sriov_handle_bc_event(adapter, event[1]);
 		break;
 	case QLCNIC_MBX_SFP_INSERT_EVENT:
-		dev_info(&adapter->pdev->dev, "SFP+ Insert AEN:0x%x.\n",
+		dev_dbg(&adapter->pdev->dev, "SFP+ Insert AEN:0x%x.\n",
 			 QLCNIC_MBX_RSP(event[0]));
 		break;
 	case QLCNIC_MBX_SFP_REMOVE_EVENT:
-		dev_info(&adapter->pdev->dev, "SFP Removed AEN:0x%x.\n",
+		dev_dbg(&adapter->pdev->dev, "SFP Removed AEN:0x%x.\n",
 			 QLCNIC_MBX_RSP(event[0]));
 		break;
 	case QLCNIC_MBX_DCBX_CONFIG_CHANGE_EVENT:
@@ -1265,7 +1265,7 @@ int qlcnic_83xx_create_rx_ctx(struct qlcnic_adapter *adapter)
 	recv_ctx->context_id = mbx_out->ctx_id;
 	recv_ctx->state = mbx_out->state;
 	recv_ctx->virt_port = mbx_out->vport_id;
-	dev_info(&adapter->pdev->dev, "Rx Context[%d] Created, state:0x%x\n",
+	dev_dbg(&adapter->pdev->dev, "Rx Context[%d] Created, state:0x%x\n",
 		 recv_ctx->context_id, recv_ctx->state);
 	/* Receive descriptor ring */
 	/* Standard ring */
@@ -1670,7 +1670,7 @@ static int qlcnic_83xx_set_port_config(struct qlcnic_adapter *adapter)
 	cmd.req.arg[1] = adapter->ahw->port_config;
 	err = qlcnic_issue_cmd(adapter, &cmd);
 	if (err)
-		dev_info(&adapter->pdev->dev, "Set Port Config failed.\n");
+		dev_dbg(&adapter->pdev->dev, "Set Port Config failed.\n");
 	qlcnic_free_mbx_args(&cmd);
 	return err;
 }
@@ -1686,7 +1686,7 @@ static int qlcnic_83xx_get_port_config(struct qlcnic_adapter *adapter)
 
 	err = qlcnic_issue_cmd(adapter, &cmd);
 	if (err)
-		dev_info(&adapter->pdev->dev, "Get Port config failed\n");
+		dev_dbg(&adapter->pdev->dev, "Get Port config failed\n");
 	else
 		adapter->ahw->port_config = cmd.rsp.arg[1];
 	qlcnic_free_mbx_args(&cmd);
@@ -1707,7 +1707,7 @@ int qlcnic_83xx_setup_link_event(struct qlcnic_adapter *adapter, int enable)
 	cmd.req.arg[1] = (enable ? 1 : 0) | BIT_8 | temp;
 	err = qlcnic_issue_cmd(adapter, &cmd);
 	if (err)
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "Setup linkevent mailbox failed\n");
 	qlcnic_free_mbx_args(&cmd);
 	return err;
@@ -2037,7 +2037,7 @@ int qlcnic_83xx_config_hw_lro(struct qlcnic_adapter *adapter, int mode)
 
 	err = qlcnic_issue_cmd(adapter, &cmd);
 	if (err)
-		dev_info(&adapter->pdev->dev, "LRO config failed\n");
+		dev_dbg(&adapter->pdev->dev, "LRO config failed\n");
 	qlcnic_free_mbx_args(&cmd);
 
 	return err;
@@ -2075,7 +2075,7 @@ int qlcnic_83xx_config_rss(struct qlcnic_adapter *adapter, int enable)
 	err = qlcnic_issue_cmd(adapter, &cmd);
 
 	if (err)
-		dev_info(&adapter->pdev->dev, "RSS config failed\n");
+		dev_dbg(&adapter->pdev->dev, "RSS config failed\n");
 	qlcnic_free_mbx_args(&cmd);
 
 	return err;
@@ -2436,7 +2436,7 @@ int qlcnic_83xx_get_nic_info(struct qlcnic_adapter *adapter,
 	}
 	err = qlcnic_issue_cmd(adapter, &cmd);
 	if (err) {
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "Failed to get nic info %d\n", err);
 		goto out;
 	}
@@ -2587,7 +2587,7 @@ int qlcnic_83xx_config_intrpt(struct qlcnic_adapter *adapter, bool op_type)
 	for (i = 0, index = 2; i < max_ints; i++, index += 2) {
 		val = cmd.rsp.arg[index];
 		if (LSB(val)) {
-			dev_info(&adapter->pdev->dev,
+			dev_dbg(&adapter->pdev->dev,
 				 "Can't configure interrupt %d\n",
 				 adapter->ahw->intr_tbl[i].id);
 			continue;
@@ -2991,7 +2991,7 @@ static void qlcnic_83xx_recover_driver_lock(struct qlcnic_adapter *adapter)
 		val = val | ((adapter->portnum << 2) |
 			     QLC_83XX_NEED_DRV_LOCK_RECOVERY);
 		QLCWRX(adapter->ahw, QLC_83XX_RECOVER_DRV_LOCK, val);
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "%s: lock recovery initiated\n", __func__);
 		mdelay(QLC_83XX_DRV_LOCK_RECOVERY_DELAY);
 		val = QLCRDX(adapter->ahw, QLC_83XX_RECOVER_DRV_LOCK);
@@ -3005,15 +3005,15 @@ static void qlcnic_83xx_recover_driver_lock(struct qlcnic_adapter *adapter)
 			/* Clear recovery bits */
 			val = val & ~0x3F;
 			QLCWRX(adapter->ahw, QLC_83XX_RECOVER_DRV_LOCK, val);
-			dev_info(&adapter->pdev->dev,
+			dev_dbg(&adapter->pdev->dev,
 				 "%s: lock recovery completed\n", __func__);
 		} else {
-			dev_info(&adapter->pdev->dev,
+			dev_dbg(&adapter->pdev->dev,
 				 "%s: func %d to resume lock recovery process\n",
 				 __func__, id);
 		}
 	} else {
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "%s: lock recovery initiated by other functions\n",
 			 __func__);
 	}
@@ -3039,7 +3039,7 @@ int qlcnic_83xx_lock_driver(struct qlcnic_adapter *adapter)
 			val = QLCRDX(adapter->ahw, QLC_83XX_DRV_LOCK_ID);
 			if (val == temp) {
 				id = val & 0xFF;
-				dev_info(&adapter->pdev->dev,
+				dev_dbg(&adapter->pdev->dev,
 					 "%s: lock to be recovered from %d\n",
 					 __func__, id);
 				qlcnic_83xx_recover_driver_lock(adapter);
@@ -3193,7 +3193,7 @@ void qlcnic_83xx_get_port_type(struct qlcnic_adapter *adapter)
 
 	err = qlcnic_issue_cmd(adapter, &cmd);
 	if (err) {
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "Get Link Status Command failed: 0x%x\n", err);
 		goto out;
 	} else {
@@ -3229,7 +3229,7 @@ int qlcnic_83xx_test_link(struct qlcnic_adapter *adapter)
 
 	state = readl(ahw->pci_base0 + QLC_83XX_LINK_STATE(pci_func));
 	if (!QLC_83xx_FUNC_VAL(state, pci_func)) {
-		dev_info(&adapter->pdev->dev, "link state down\n");
+		dev_dbg(&adapter->pdev->dev, "link state down\n");
 		return config;
 	}
 
@@ -3239,7 +3239,7 @@ int qlcnic_83xx_test_link(struct qlcnic_adapter *adapter)
 
 	err = qlcnic_issue_cmd(adapter, &cmd);
 	if (err) {
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "Get Link Status Command failed: 0x%x\n", err);
 		goto out;
 	} else {
@@ -3481,7 +3481,7 @@ static u64 *qlcnic_83xx_fill_stats(struct qlcnic_adapter *adapter,
 	*ret = 0;
 	err = qlcnic_issue_cmd(adapter, cmd);
 	if (err != QLCNIC_RCODE_SUCCESS) {
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "Error in get statistics mailbox command\n");
 		*ret = -EIO;
 		return data;
@@ -3602,7 +3602,7 @@ int qlcnic_83xx_reg_test(struct qlcnic_adapter *adapter)
 	sub = QLC_SHARED_REG_RD32(adapter, QLCNIC_FW_VERSION_SUB);
 
 	if (adapter->fw_version != QLCNIC_VERSION_CODE(major, minor, sub)) {
-		dev_info(&adapter->pdev->dev, "%s: Reg test failed\n",
+		dev_dbg(&adapter->pdev->dev, "%s: Reg test failed\n",
 			 __func__);
 		return 1;
 	}
@@ -3675,7 +3675,7 @@ int qlcnic_83xx_interrupt_test(struct net_device *netdev)
 	id = LSW(data);
 	val = LSB(MSW(data));
 	if (id != intrpt_id)
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "Interrupt generated: 0x%x, requested:0x%x\n",
 			 id, intrpt_id);
 	if (val)
@@ -3810,7 +3810,7 @@ int qlcnic_83xx_flash_test(struct qlcnic_adapter *adapter)
 
 	status = qlcnic_83xx_read_flash_status_reg(adapter);
 	if (status == -EIO) {
-		dev_info(&adapter->pdev->dev, "%s: EEPROM test failed.\n",
+		dev_dbg(&adapter->pdev->dev, "%s: EEPROM test failed.\n",
 			 __func__);
 		return 1;
 	}
@@ -3907,7 +3907,7 @@ static void qlcnic_83xx_flush_mbx_queue(struct qlcnic_adapter *adapter)
 
 	while (!list_empty(head)) {
 		cmd = list_entry(head->next, struct qlcnic_cmd_args, list);
-		dev_info(&adapter->pdev->dev, "%s: Mailbox command 0x%x\n",
+		dev_dbg(&adapter->pdev->dev, "%s: Mailbox command 0x%x\n",
 			 __func__, cmd->cmd_op);
 		list_del(&cmd->list);
 		mbx->num_cmds--;
@@ -4093,7 +4093,7 @@ static inline void qlcnic_dump_mailbox_registers(struct qlcnic_adapter *adapter)
 	u32 offset;
 
 	offset = QLCRDX(ahw, QLCNIC_DEF_INT_MASK);
-	dev_info(&adapter->pdev->dev, "Mbx interrupt mask=0x%x, Mbx interrupt enable=0x%x, Host mbx control=0x%x, Fw mbx control=0x%x",
+	dev_dbg(&adapter->pdev->dev, "Mbx interrupt mask=0x%x, Mbx interrupt enable=0x%x, Host mbx control=0x%x, Fw mbx control=0x%x",
 		 readl(ahw->pci_base0 + offset),
 		 QLCRDX(ahw, QLCNIC_MBX_INTR_ENBL),
 		 QLCRDX(ahw, QLCNIC_HOST_MBX_CTRL),

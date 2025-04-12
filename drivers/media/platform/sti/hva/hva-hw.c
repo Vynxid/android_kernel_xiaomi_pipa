@@ -322,7 +322,7 @@ int hva_hw_probe(struct platform_device *pdev, struct hva_dev *hva)
 	hva->esram_addr = esram->start;
 	hva->esram_size = resource_size(esram);
 
-	dev_info(dev, "%s     esram reserved for address: 0x%x size:%d\n",
+	dev_dbg(dev, "%s     esram reserved for address: 0x%x size:%d\n",
 		 HVA_PREFIX, hva->esram_addr, hva->esram_size);
 
 	/* get clock resource */
@@ -403,7 +403,7 @@ int hva_hw_probe(struct platform_device *pdev, struct hva_dev *hva)
 		goto err_pm;
 	}
 
-	dev_info(dev, "%s     found hva device (version 0x%lx)\n", HVA_PREFIX,
+	dev_dbg(dev, "%s     found hva device (version 0x%lx)\n", HVA_PREFIX,
 		 hva->ip_version);
 
 	return 0;

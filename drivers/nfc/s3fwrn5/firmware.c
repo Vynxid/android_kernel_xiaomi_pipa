@@ -467,7 +467,7 @@ int s3fwrn5_fw_download(struct s3fwrn5_fw_info *fw_info)
 
 	/* Firmware update process */
 
-	dev_info(&fw_info->ndev->nfc_dev->dev,
+	dev_dbg(&fw_info->ndev->nfc_dev->dev,
 		"Firmware update: %s\n", fw_info->fw_name);
 
 	ret = s3fwrn5_fw_enter_update_mode(fw_info, hash_data,
@@ -495,7 +495,7 @@ int s3fwrn5_fw_download(struct s3fwrn5_fw_info *fw_info)
 		goto out;
 	}
 
-	dev_info(&fw_info->ndev->nfc_dev->dev,
+	dev_dbg(&fw_info->ndev->nfc_dev->dev,
 		"Firmware update: success\n");
 
 out:

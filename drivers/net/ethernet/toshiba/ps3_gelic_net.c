@@ -66,7 +66,7 @@ int gelic_card_set_irq_mask(struct gelic_card *card, u64 mask)
 	status = lv1_net_set_interrupt_mask(bus_id(card), dev_id(card),
 					    mask, 0);
 	if (status)
-		dev_info(ctodev(card),
+		dev_dbg(ctodev(card),
 			 "%s failed %d\n", __func__, status);
 	return status;
 }
@@ -123,7 +123,7 @@ static int gelic_card_set_link_mode(struct gelic_card *card, int mode)
 				 GELIC_LV1_SET_NEGOTIATION_MODE,
 				 GELIC_LV1_PHY_ETHERNET_0, mode, 0, &v1, &v2);
 	if (status) {
-		pr_info("%s: failed setting negotiation mode %d\n", __func__,
+		pr_debug("%s: failed setting negotiation mode %d\n", __func__,
 			status);
 		return -EBUSY;
 	}
@@ -175,7 +175,7 @@ static void gelic_card_enable_rxdmac(struct gelic_card *card)
 	status = lv1_net_start_rx_dma(bus_id(card), dev_id(card),
 				card->rx_chain.head->bus_addr, 0);
 	if (status)
-		dev_info(ctodev(card),
+		dev_dbg(ctodev(card),
 			 "lv1_net_start_rx_dma failed, status=%d\n", status);
 }
 
@@ -394,12 +394,12 @@ static int gelic_descr_prepare_rx(struct gelic_card *card,
 	int offset;
 
 	if (gelic_descr_get_status(descr) !=  GELIC_DESCR_DMA_NOT_IN_USE)
-		dev_info(ctodev(card), "%s: ERROR status\n", __func__);
+		dev_dbg(ctodev(card), "%s: ERROR status\n", __func__);
 
 	descr->skb = netdev_alloc_skb(*card->netdev, rx_skb_size);
 	if (!descr->skb) {
 		descr->buf_addr = 0; /* tell DMAC don't touch memory */
-		dev_info(ctodev(card),
+		dev_dbg(ctodev(card),
 			 "%s:allocate skb failed !!\n", __func__);
 		return -ENOMEM;
 	}
@@ -420,7 +420,7 @@ static int gelic_descr_prepare_rx(struct gelic_card *card,
 	if (dma_mapping_error(ctodev(card), cpu_addr)) {
 		dev_kfree_skb_any(descr->skb);
 		descr->skb = NULL;
-		dev_info(ctodev(card),
+		dev_dbg(ctodev(card),
 			 "%s:Could not iommu-map rx buffer\n", __func__);
 		gelic_descr_set_status(descr, GELIC_DESCR_DMA_NOT_IN_USE);
 		return -ENOMEM;
@@ -568,7 +568,7 @@ static void gelic_card_release_tx_chain(struct gelic_card *card, int stop)
 		case GELIC_DESCR_DMA_PROTECTION_ERROR:
 		case GELIC_DESCR_DMA_FORCE_END:
 			if (printk_ratelimit())
-				dev_info(ctodev(card),
+				dev_dbg(ctodev(card),
 					 "%s: forcing end of tx descriptor " \
 					 "with status %x\n",
 					 __func__, status);
@@ -836,7 +836,7 @@ static int gelic_card_kick_txdma(struct gelic_card *card,
 					      descr->bus_addr, 0);
 		if (status) {
 			card->tx_dma_progress = 0;
-			dev_info(ctodev(card), "lv1_net_start_txdma failed," \
+			dev_dbg(ctodev(card), "lv1_net_start_txdma failed," \
 				 "status=%d\n", status);
 		}
 	}
@@ -905,7 +905,7 @@ netdev_tx_t gelic_net_xmit(struct sk_buff *skb, struct net_device *netdev)
 		card->tx_chain.head = descr;
 		/* reset hw termination */
 		descr->prev->next_descr_addr = 0;
-		dev_info(ctodev(card), "%s: kick failure\n", __func__);
+		dev_dbg(ctodev(card), "%s: kick failure\n", __func__);
 	}
 
 	spin_unlock_irqrestore(&card->tx_lock, flags);
@@ -940,7 +940,7 @@ static void gelic_net_pass_skb_up(struct gelic_descr *descr,
 		be32_to_cpu(descr->valid_size) :
 		be32_to_cpu(descr->result_size));
 	if (!descr->valid_size)
-		dev_info(ctodev(card), "buffer full %x %x %x\n",
+		dev_dbg(ctodev(card), "buffer full %x %x %x\n",
 			 be32_to_cpu(descr->result_size),
 			 be32_to_cpu(descr->buf_size),
 			 be32_to_cpu(descr->dmac_cmd_status));
@@ -1010,7 +1010,7 @@ static int gelic_card_decode_one_descr(struct gelic_card *card)
 			}
 		}
 		if (GELIC_PORT_MAX <= i) {
-			pr_info("%s: unknown packet vid=%x\n", __func__, vid);
+			pr_debug("%s: unknown packet vid=%x\n", __func__, vid);
 			goto refill;
 		}
 	} else
@@ -1019,7 +1019,7 @@ static int gelic_card_decode_one_descr(struct gelic_card *card)
 	if ((status == GELIC_DESCR_DMA_RESPONSE_ERROR) ||
 	    (status == GELIC_DESCR_DMA_PROTECTION_ERROR) ||
 	    (status == GELIC_DESCR_DMA_FORCE_END)) {
-		dev_info(ctodev(card), "dropping RX descriptor with state %x\n",
+		dev_dbg(ctodev(card), "dropping RX descriptor with state %x\n",
 			 status);
 		netdev->stats.rx_dropped++;
 		goto refill;
@@ -1035,7 +1035,7 @@ static int gelic_card_decode_one_descr(struct gelic_card *card)
 		 * Anyway this frame was longer than the MTU,
 		 * just drop it.
 		 */
-		dev_info(ctodev(card), "overlength frame\n");
+		dev_dbg(ctodev(card), "overlength frame\n");
 		goto refill;
 	}
 	/*
@@ -1233,7 +1233,7 @@ static int gelic_ether_get_link_ksettings(struct net_device *netdev,
 		cmd->base.speed = SPEED_1000;
 		break;
 	default:
-		pr_info("%s: speed unknown\n", __func__);
+		pr_debug("%s: speed unknown\n", __func__);
 		cmd->base.speed = SPEED_10;
 		break;
 	}
@@ -1286,7 +1286,7 @@ gelic_ether_set_link_ksettings(struct net_device *netdev,
 		if (cmd->base.duplex == DUPLEX_FULL) {
 			mode |= GELIC_LV1_ETHER_FULL_DUPLEX;
 		} else if (cmd->base.speed == SPEED_1000) {
-			pr_info("1000 half duplex is not supported.\n");
+			pr_debug("1000 half duplex is not supported.\n");
 			return -EINVAL;
 		}
 	}
@@ -1332,7 +1332,7 @@ static int gelic_net_set_wol(struct net_device *netdev,
 					 0, GELIC_LV1_WOL_MP_ENABLE,
 					 &v1, &v2);
 		if (status) {
-			pr_info("%s: enabling WOL failed %d\n", __func__,
+			pr_debug("%s: enabling WOL failed %d\n", __func__,
 				status);
 			status = -EIO;
 			goto done;
@@ -1345,7 +1345,7 @@ static int gelic_net_set_wol(struct net_device *netdev,
 		if (!status)
 			ps3_sys_manager_set_wol(1);
 		else {
-			pr_info("%s: enabling WOL filter failed %d\n",
+			pr_debug("%s: enabling WOL filter failed %d\n",
 				__func__, status);
 			status = -EIO;
 		}
@@ -1356,7 +1356,7 @@ static int gelic_net_set_wol(struct net_device *netdev,
 					 0, GELIC_LV1_WOL_MP_DISABLE,
 					 &v1, &v2);
 		if (status) {
-			pr_info("%s: disabling WOL failed %d\n", __func__,
+			pr_debug("%s: disabling WOL failed %d\n", __func__,
 				status);
 			status = -EIO;
 			goto done;
@@ -1369,7 +1369,7 @@ static int gelic_net_set_wol(struct net_device *netdev,
 		if (!status)
 			ps3_sys_manager_set_wol(0);
 		else {
-			pr_info("%s: removing WOL filter failed %d\n",
+			pr_debug("%s: removing WOL filter failed %d\n",
 				__func__, status);
 			status = -EIO;
 		}
@@ -1400,7 +1400,7 @@ static void gelic_net_tx_timeout_task(struct work_struct *work)
 		container_of(work, struct gelic_card, tx_timeout_task);
 	struct net_device *netdev = card->netdev[GELIC_PORT_ETHERNET_0];
 
-	dev_info(ctodev(card), "%s:Timed out. Restarting...\n", __func__);
+	dev_dbg(ctodev(card), "%s:Timed out. Restarting...\n", __func__);
 
 	if (!(netdev->flags & IFF_UP))
 		goto out;
@@ -1488,7 +1488,7 @@ int gelic_net_setup_netdev(struct net_device *netdev, struct gelic_card *card)
 				 0, 0, 0, &v1, &v2);
 	v1 <<= 16;
 	if (status || !is_valid_ether_addr((u8 *)&v1)) {
-		dev_info(ctodev(card),
+		dev_dbg(ctodev(card),
 			 "%s:lv1_net_control GET_MAC_ADDR failed %d\n",
 			 __func__, status);
 		return -EINVAL;
@@ -1514,7 +1514,7 @@ int gelic_net_setup_netdev(struct net_device *netdev, struct gelic_card *card)
 			__func__, netdev->name, status);
 		return status;
 	}
-	dev_info(ctodev(card), "%s: MAC addr %pM\n",
+	dev_dbg(ctodev(card), "%s: MAC addr %pM\n",
 		 netdev->name, netdev->dev_addr);
 
 	return 0;
@@ -1622,7 +1622,7 @@ static void gelic_card_get_vlan_info(struct gelic_card *card)
 					 0, 0, &v1, &v2);
 		if (status || !v1) {
 			if (status != LV1_NO_ENTRY)
-				dev_info(ctodev(card),
+				dev_dbg(ctodev(card),
 					 "get vlan id for rx(%d) failed(%d)\n",
 					 vlan_id_ix[i].rx, status);
 			card->vlan[i].tx = 0;
@@ -1647,7 +1647,7 @@ static void gelic_card_get_vlan_info(struct gelic_card *card)
 		card->vlan[GELIC_PORT_WIRELESS].rx = 0;
 	}
 
-	dev_info(ctodev(card), "internal vlan %s\n",
+	dev_dbg(ctodev(card), "internal vlan %s\n",
 		 card->vlan_required? "enabled" : "disabled");
 }
 /**
@@ -1683,7 +1683,7 @@ static int ps3_gelic_driver_probe(struct ps3_system_bus_device *dev)
 	/* alloc card/netdevice */
 	card = gelic_alloc_card_net(&netdev);
 	if (!card) {
-		dev_info(&dev->core, "%s:gelic_net_alloc_card failed\n",
+		dev_dbg(&dev->core, "%s:gelic_net_alloc_card failed\n",
 			 __func__);
 		result = -ENOMEM;
 		goto fail_alloc_card;
@@ -1714,7 +1714,7 @@ static int ps3_gelic_driver_probe(struct ps3_system_bus_device *dev)
 		&card->irq);
 
 	if (result) {
-		dev_info(ctodev(card),
+		dev_dbg(ctodev(card),
 			 "%s:gelic_net_open_device failed (%d)\n",
 			 __func__, result);
 		result = -EPERM;
@@ -1724,7 +1724,7 @@ static int ps3_gelic_driver_probe(struct ps3_system_bus_device *dev)
 			     0, netdev->name, card);
 
 	if (result) {
-		dev_info(ctodev(card), "%s:request_irq failed (%d)\n",
+		dev_dbg(ctodev(card), "%s:request_irq failed (%d)\n",
 			__func__, result);
 		goto fail_request_irq;
 	}

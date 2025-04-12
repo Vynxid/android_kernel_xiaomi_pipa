@@ -48,7 +48,7 @@ static void __iomem * __init xdbc_map_pci_mmio(u32 bus, u32 dev, u32 func)
 	write_pci_config(bus, dev, func, PCI_BASE_ADDRESS_0, val);
 
 	if (val == 0xffffffff || sz == 0xffffffff) {
-		pr_notice("invalid mmio bar\n");
+		pr_debug("invalid mmio bar\n");
 		return NULL;
 	}
 
@@ -70,7 +70,7 @@ static void __iomem * __init xdbc_map_pci_mmio(u32 bus, u32 dev, u32 func)
 	sz64 &= mask64;
 
 	if (!sz64) {
-		pr_notice("invalid mmio address\n");
+		pr_debug("invalid mmio address\n");
 		return NULL;
 	}
 
@@ -160,7 +160,7 @@ static void __init xdbc_bios_handoff(void)
 		timeout = handshake(xdbc.xhci_base + offset, XHCI_HC_BIOS_OWNED, 0, 5000, 10);
 
 		if (timeout) {
-			pr_notice("failed to hand over xHCI control from BIOS\n");
+			pr_debug("failed to hand over xHCI control from BIOS\n");
 			writel(val & ~XHCI_HC_BIOS_OWNED, xdbc.xhci_base + offset);
 		}
 	}
@@ -232,7 +232,7 @@ static void xdbc_mem_init(void)
 	unsigned int max_burst;
 	u32 string_length;
 	int index = 0;
-	u32 dev_info;
+	u32 dev_dbg;
 
 	xdbc_reset_ring(&xdbc.evt_ring);
 	xdbc_reset_ring(&xdbc.in_ring);
@@ -334,11 +334,11 @@ static void xdbc_mem_init(void)
 	/* Set DbC context and info registers: */
 	xdbc_write64(xdbc.dbcc_dma, &xdbc.xdbc_reg->dccp);
 
-	dev_info = cpu_to_le32((XDBC_VENDOR_ID << 16) | XDBC_PROTOCOL);
-	writel(dev_info, &xdbc.xdbc_reg->devinfo1);
+	dev_dbg = cpu_to_le32((XDBC_VENDOR_ID << 16) | XDBC_PROTOCOL);
+	writel(dev_dbg, &xdbc.xdbc_reg->devinfo1);
 
-	dev_info = cpu_to_le32((XDBC_DEVICE_REV << 16) | XDBC_PRODUCT_ID);
-	writel(dev_info, &xdbc.xdbc_reg->devinfo2);
+	dev_dbg = cpu_to_le32((XDBC_DEVICE_REV << 16) | XDBC_PRODUCT_ID);
+	writel(dev_dbg, &xdbc.xdbc_reg->devinfo2);
 
 	xdbc.in_buf = xdbc.out_buf + XDBC_MAX_PACKET;
 	xdbc.in_dma = xdbc.out_dma + XDBC_MAX_PACKET;
@@ -620,12 +620,12 @@ int __init early_xdbc_parse_parameter(char *s)
 	if (*s && kstrtoul(s, 0, &dbgp_num))
 		dbgp_num = 0;
 
-	pr_notice("dbgp_num: %lu\n", dbgp_num);
+	pr_debug("dbgp_num: %lu\n", dbgp_num);
 
 	/* Locate the host controller: */
 	ret = xdbc_find_dbgp(dbgp_num, &bus, &dev, &func);
 	if (ret) {
-		pr_notice("failed to locate xhci host\n");
+		pr_debug("failed to locate xhci host\n");
 		return -ENODEV;
 	}
 
@@ -643,7 +643,7 @@ int __init early_xdbc_parse_parameter(char *s)
 	/* Locate DbC registers: */
 	offset = xhci_find_next_ext_cap(xdbc.xhci_base, 0, XHCI_EXT_CAPS_DEBUG);
 	if (!offset) {
-		pr_notice("xhci host doesn't support debug capability\n");
+		pr_debug("xhci host doesn't support debug capability\n");
 		early_iounmap(xdbc.xhci_base, xdbc.xhci_length);
 		xdbc.xhci_base = NULL;
 		xdbc.xhci_length = 0;
@@ -668,7 +668,7 @@ int __init early_xdbc_setup_hardware(void)
 
 	ret = xdbc_early_setup();
 	if (ret) {
-		pr_notice("failed to setup the connection to host\n");
+		pr_debug("failed to setup the connection to host\n");
 
 		xdbc_free_ring(&xdbc.evt_ring);
 		xdbc_free_ring(&xdbc.out_ring);

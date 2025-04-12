@@ -666,7 +666,7 @@ out_no_bt_cap:
 		bt->BT_CAP_retries = BT_CAP[7];
 	}
 
-	dev_info(bt->io->dev, "req2rsp=%ld secs retries=%d\n",
+	dev_dbg(bt->io->dev, "req2rsp=%ld secs retries=%d\n",
 		 bt->BT_CAP_req2rsp / USEC_PER_SEC, bt->BT_CAP_retries);
 
 	return 0;

@@ -1675,7 +1675,7 @@ int wm831x_device_init(struct wm831x *wm831x, int irq)
 	 * the device being registered correctly.
 	 */
 	if (ret == 0) {
-		dev_info(wm831x->dev, "Device is an engineering sample\n");
+		dev_dbg(wm831x->dev, "Device is an engineering sample\n");
 		ret = wm831x->type;
 	}
 
@@ -1689,7 +1689,7 @@ int wm831x_device_init(struct wm831x *wm831x, int irq)
 			wm831x->has_cs_sts = 1;
 		}
 
-		dev_info(wm831x->dev, "WM8310 revision %c\n", 'A' + rev);
+		dev_dbg(wm831x->dev, "WM8310 revision %c\n", 'A' + rev);
 		break;
 
 	case WM8311:
@@ -1701,7 +1701,7 @@ int wm831x_device_init(struct wm831x *wm831x, int irq)
 			wm831x->has_cs_sts = 1;
 		}
 
-		dev_info(wm831x->dev, "WM8311 revision %c\n", 'A' + rev);
+		dev_dbg(wm831x->dev, "WM8311 revision %c\n", 'A' + rev);
 		break;
 
 	case WM8312:
@@ -1713,31 +1713,31 @@ int wm831x_device_init(struct wm831x *wm831x, int irq)
 			wm831x->has_cs_sts = 1;
 		}
 
-		dev_info(wm831x->dev, "WM8312 revision %c\n", 'A' + rev);
+		dev_dbg(wm831x->dev, "WM8312 revision %c\n", 'A' + rev);
 		break;
 
 	case WM8320:
 		parent = WM8320;
 		wm831x->num_gpio = 12;
-		dev_info(wm831x->dev, "WM8320 revision %c\n", 'A' + rev);
+		dev_dbg(wm831x->dev, "WM8320 revision %c\n", 'A' + rev);
 		break;
 
 	case WM8321:
 		parent = WM8321;
 		wm831x->num_gpio = 12;
-		dev_info(wm831x->dev, "WM8321 revision %c\n", 'A' + rev);
+		dev_dbg(wm831x->dev, "WM8321 revision %c\n", 'A' + rev);
 		break;
 
 	case WM8325:
 		parent = WM8325;
 		wm831x->num_gpio = 12;
-		dev_info(wm831x->dev, "WM8325 revision %c\n", 'A' + rev);
+		dev_dbg(wm831x->dev, "WM8325 revision %c\n", 'A' + rev);
 		break;
 
 	case WM8326:
 		parent = WM8326;
 		wm831x->num_gpio = 12;
-		dev_info(wm831x->dev, "WM8326 revision %c\n", 'A' + rev);
+		dev_dbg(wm831x->dev, "WM8326 revision %c\n", 'A' + rev);
 		break;
 
 	default:
@@ -1860,7 +1860,7 @@ int wm831x_device_init(struct wm831x *wm831x, int irq)
 			goto err_irq;
 		}
 	} else {
-		dev_info(wm831x->dev, "32.768kHz clock disabled, no RTC\n");
+		dev_dbg(wm831x->dev, "32.768kHz clock disabled, no RTC\n");
 	}
 
 	if (pdata->backlight) {
@@ -1925,7 +1925,7 @@ int wm831x_device_suspend(struct wm831x *wm831x)
 					      WM831X_INTERRUPT_STATUS_2);
 
 		if (reg & mask) {
-			dev_info(wm831x->dev,
+			dev_dbg(wm831x->dev,
 				 "Acknowledging masked charger IRQs: %x\n",
 				 reg & mask);
 			wm831x_reg_write(wm831x, WM831X_INTERRUPT_STATUS_2,
@@ -1939,7 +1939,7 @@ int wm831x_device_suspend(struct wm831x *wm831x)
 void wm831x_device_shutdown(struct wm831x *wm831x)
 {
 	if (wm831x->soft_shutdown) {
-		dev_info(wm831x->dev, "Initiating shutdown...\n");
+		dev_dbg(wm831x->dev, "Initiating shutdown...\n");
 		wm831x_set_bits(wm831x, WM831X_POWER_STATE, WM831X_CHIP_ON, 0);
 	}
 }

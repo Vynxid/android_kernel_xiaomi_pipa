@@ -280,11 +280,11 @@ static uint r8712_usb_dvobj_init(struct _adapter *padapter)
 	pdvobjpriv->nr_endpoint = piface_desc->bNumEndpoints;
 	if (pusbd->speed == USB_SPEED_HIGH) {
 		pdvobjpriv->ishighspeed = true;
-		dev_info(&pusbd->dev, "r8712u: USB_SPEED_HIGH with %d endpoints\n",
+		dev_dbg(&pusbd->dev, "r8712u: USB_SPEED_HIGH with %d endpoints\n",
 			 pdvobjpriv->nr_endpoint);
 	} else {
 		pdvobjpriv->ishighspeed = false;
-		dev_info(&pusbd->dev, "r8712u: USB_SPEED_LOW with %d endpoints\n",
+		dev_dbg(&pusbd->dev, "r8712u: USB_SPEED_LOW with %d endpoints\n",
 			 pdvobjpriv->nr_endpoint);
 	}
 	if ((r8712_alloc_io_queue(padapter)) == _FAIL)
@@ -429,7 +429,7 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
 		tmpU1b = r8712_read8(padapter, EE_9346CR);/*CR9346*/
 
 		/* To check system boot selection.*/
-		dev_info(&udev->dev, "r8712u: Boot from %s: Autoload %s\n",
+		dev_dbg(&udev->dev, "r8712u: Boot from %s: Autoload %s\n",
 			 (tmpU1b & _9356SEL) ? "EEPROM" : "EFUSE",
 			 (tmpU1b & _EEPROM_EN) ? "OK" : "Failed");
 
@@ -530,7 +530,7 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
 						 RT_CID_DEFAULT;
 				break;
 			}
-			dev_info(&udev->dev, "r8712u: CustomerID = 0x%.4x\n",
+			dev_dbg(&udev->dev, "r8712u: CustomerID = 0x%.4x\n",
 				 padapter->eeprompriv.CustomerID);
 			/* Led mode */
 			switch (padapter->eeprompriv.CustomerID) {
@@ -588,10 +588,10 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
 			 * address by setting bit 1 of first octet.
 			 */
 			mac[0] &= 0xFE;
-			dev_info(&udev->dev,
+			dev_dbg(&udev->dev,
 				"r8712u: MAC Address from user = %pM\n", mac);
 		} else {
-			dev_info(&udev->dev,
+			dev_dbg(&udev->dev,
 				"r8712u: MAC Address from efuse = %pM\n", mac);
 		}
 		ether_addr_copy(pnetdev->dev_addr, mac);

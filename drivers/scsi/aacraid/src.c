@@ -801,7 +801,7 @@ static int aac_src_restart_adapter(struct aac_dev *dev, int bled, u8 reset_type)
 	dev_err(&dev->pdev->dev, "Controller reset type is %d\n", reset_type);
 
 	if (reset_type & HW_IOP_RESET) {
-		dev_info(&dev->pdev->dev, "Issuing IOP reset\n");
+		dev_dbg(&dev->pdev->dev, "Issuing IOP reset\n");
 		aac_send_iop_reset(dev);
 
 		/*
@@ -811,7 +811,7 @@ static int aac_src_restart_adapter(struct aac_dev *dev, int bled, u8 reset_type)
 		if (!is_ctrl_up)
 			dev_err(&dev->pdev->dev, "IOP reset failed\n");
 		else {
-			dev_info(&dev->pdev->dev, "IOP reset succeeded\n");
+			dev_dbg(&dev->pdev->dev, "IOP reset succeeded\n");
 			goto set_startup;
 		}
 	}
@@ -823,7 +823,7 @@ static int aac_src_restart_adapter(struct aac_dev *dev, int bled, u8 reset_type)
 	}
 
 	if (reset_type & HW_SOFT_RESET) {
-		dev_info(&dev->pdev->dev, "Issuing SOFT reset\n");
+		dev_dbg(&dev->pdev->dev, "Issuing SOFT reset\n");
 		aac_send_hardware_soft_reset(dev);
 		dev->msi_enabled = 0;
 
@@ -833,7 +833,7 @@ static int aac_src_restart_adapter(struct aac_dev *dev, int bled, u8 reset_type)
 			ret = -ENODEV;
 			goto out;
 		} else
-			dev_info(&dev->pdev->dev, "SOFT reset succeeded\n");
+			dev_dbg(&dev->pdev->dev, "SOFT reset succeeded\n");
 	}
 
 set_startup:

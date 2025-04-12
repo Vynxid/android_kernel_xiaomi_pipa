@@ -1297,7 +1297,7 @@ static int switchtec_pci_probe(struct pci_dev *pdev,
 	if (rc)
 		goto err_devadd;
 
-	dev_info(&stdev->dev, "Management device registered.\n");
+	dev_dbg(&stdev->dev, "Management device registered.\n");
 
 	return 0;
 
@@ -1317,7 +1317,7 @@ static void switchtec_pci_remove(struct pci_dev *pdev)
 
 	cdev_device_del(&stdev->cdev, &stdev->dev);
 	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
-	dev_info(&stdev->dev, "unregistered.\n");
+	dev_dbg(&stdev->dev, "unregistered.\n");
 
 	stdev_kill(stdev);
 	put_device(&stdev->dev);
@@ -1402,7 +1402,7 @@ static int __init switchtec_init(void)
 	if (rc)
 		goto err_pci_register;
 
-	pr_info(KBUILD_MODNAME ": loaded.\n");
+	pr_debug(KBUILD_MODNAME ": loaded.\n");
 
 	return 0;
 
@@ -1423,6 +1423,6 @@ static void __exit switchtec_exit(void)
 	unregister_chrdev_region(switchtec_devt, max_devices);
 	ida_destroy(&switchtec_minor_ida);
 
-	pr_info(KBUILD_MODNAME ": unloaded.\n");
+	pr_debug(KBUILD_MODNAME ": unloaded.\n");
 }
 module_exit(switchtec_exit);

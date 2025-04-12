@@ -1727,7 +1727,7 @@ static int ufx_usb_probe(struct usb_interface *interface,
 	retval = register_framebuffer(info);
 	check_warn_goto_error(retval, "error %d register_framebuffer", retval);
 
-	dev_info(dev->gdev, "SMSC UDX USB device /dev/fb%d attached. %dx%d resolution."
+	dev_dbg(dev->gdev, "SMSC UDX USB device /dev/fb%d attached. %dx%d resolution."
 		" Using %dK framebuffer memory\n", info->node,
 		info->var.xres, info->var.yres, info->fix.smem_len >> 10);
 

@@ -129,7 +129,7 @@ struct e7xxx_pvt {
 	u32 tolm;
 	u32 remapbase;
 	u32 remaplimit;
-	const struct e7xxx_dev_info *dev_info;
+	const struct e7xxx_dev_info *dev_dbg;
 };
 
 struct e7xxx_dev_info {
@@ -460,9 +460,9 @@ static int e7xxx_probe1(struct pci_dev *pdev, int dev_idx)
 	mci->pdev = &pdev->dev;
 	edac_dbg(3, "init pvt\n");
 	pvt = (struct e7xxx_pvt *)mci->pvt_info;
-	pvt->dev_info = &e7xxx_devs[dev_idx];
+	pvt->dev_dbg = &e7xxx_devs[dev_idx];
 	pvt->bridge_ck = pci_get_device(PCI_VENDOR_ID_INTEL,
-					pvt->dev_info->err_dev, pvt->bridge_ck);
+					pvt->dev_dbg->err_dev, pvt->bridge_ck);
 
 	if (!pvt->bridge_ck) {
 		e7xxx_printk(KERN_ERR, "error reporting device not found:"
@@ -472,7 +472,7 @@ static int e7xxx_probe1(struct pci_dev *pdev, int dev_idx)
 	}
 
 	edac_dbg(3, "more mci init\n");
-	mci->ctl_name = pvt->dev_info->ctl_name;
+	mci->ctl_name = pvt->dev_dbg->ctl_name;
 	mci->dev_name = pci_name(pdev);
 	mci->edac_check = e7xxx_check;
 	mci->ctl_page_to_phys = ctl_page_to_phys;

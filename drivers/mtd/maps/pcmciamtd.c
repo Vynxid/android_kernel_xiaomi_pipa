@@ -628,7 +628,7 @@ static int pcmciamtd_config(struct pcmcia_device *link)
 		pcmciamtd_release(link);
 		return -ENODEV;
 	}
-	dev_info(&dev->p_dev->dev, "mtd%d: %s\n", mtd->index, mtd->name);
+	dev_dbg(&dev->p_dev->dev, "mtd%d: %s\n", mtd->index, mtd->name);
 	return 0;
 }
 
@@ -660,7 +660,7 @@ static void pcmciamtd_detach(struct pcmcia_device *link)
 
 	if(dev->mtd_info) {
 		mtd_device_unregister(dev->mtd_info);
-		dev_info(&dev->p_dev->dev, "mtd%d: Removing\n",
+		dev_dbg(&dev->p_dev->dev, "mtd%d: Removing\n",
 			 dev->mtd_info->index);
 		map_destroy(dev->mtd_info);
 	}

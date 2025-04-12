@@ -222,7 +222,7 @@ qm1d1b0004_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	if (ret != 0)
 		goto err_priv;
 
-	dev_info(&client->dev, "Sharp QM1D1B0004 attached.\n");
+	dev_dbg(&client->dev, "Sharp QM1D1B0004 attached.\n");
 	return 0;
 
 err_priv:

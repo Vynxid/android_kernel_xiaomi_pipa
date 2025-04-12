@@ -1278,7 +1278,7 @@ static int rj54n1_video_probe(struct i2c_client *client,
 
 	if (data1 != 0x51 || data2 != 0x10) {
 		ret = -ENODEV;
-		dev_info(&client->dev, "No RJ54N1CB0C found, read 0x%x:0x%x\n",
+		dev_dbg(&client->dev, "No RJ54N1CB0C found, read 0x%x:0x%x\n",
 			 data1, data2);
 		goto done;
 	}
@@ -1288,7 +1288,7 @@ static int rj54n1_video_probe(struct i2c_client *client,
 	if (ret < 0)
 		goto done;
 
-	dev_info(&client->dev, "Detected a RJ54N1CB0C chip ID 0x%x:0x%x\n",
+	dev_dbg(&client->dev, "Detected a RJ54N1CB0C chip ID 0x%x:0x%x\n",
 		 data1, data2);
 
 	ret = v4l2_ctrl_handler_setup(&rj54n1->hdl);
@@ -1358,7 +1358,7 @@ static int rj54n1_probe(struct i2c_client *client,
 	rj54n1->pwup_gpio = gpiod_get_optional(&client->dev, "powerup",
 					       GPIOD_OUT_LOW);
 	if (IS_ERR(rj54n1->pwup_gpio)) {
-		dev_info(&client->dev, "Unable to get GPIO \"powerup\": %ld\n",
+		dev_dbg(&client->dev, "Unable to get GPIO \"powerup\": %ld\n",
 			 PTR_ERR(rj54n1->pwup_gpio));
 		ret = PTR_ERR(rj54n1->pwup_gpio);
 		goto err_clk_put;
@@ -1367,7 +1367,7 @@ static int rj54n1_probe(struct i2c_client *client,
 	rj54n1->enable_gpio = gpiod_get_optional(&client->dev, "enable",
 						 GPIOD_OUT_LOW);
 	if (IS_ERR(rj54n1->enable_gpio)) {
-		dev_info(&client->dev, "Unable to get GPIO \"enable\": %ld\n",
+		dev_dbg(&client->dev, "Unable to get GPIO \"enable\": %ld\n",
 			 PTR_ERR(rj54n1->enable_gpio));
 		ret = PTR_ERR(rj54n1->enable_gpio);
 		goto err_gpio_put;

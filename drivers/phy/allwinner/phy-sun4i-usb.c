@@ -502,7 +502,7 @@ static int sun4i_usb_phy_set_mode(struct phy *_phy, enum phy_mode mode)
 	}
 
 	if (new_mode != data->dr_mode) {
-		dev_info(&_phy->dev, "Changing dr_mode to %d\n", new_mode);
+		dev_dbg(&_phy->dev, "Changing dr_mode to %d\n", new_mode);
 		data->dr_mode = new_mode;
 	}
 

@@ -496,7 +496,7 @@ static int mcp4725_probe(struct i2c_client *client,
 		ref = (inbuf[3] >> 3) & 0x3;
 
 	if (data->id == MCP4726 && ref != data->ref_mode) {
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			"voltage reference mode differs (conf: %u, eeprom: %u), setting %u",
 			data->ref_mode, ref, data->ref_mode);
 		err = mcp4726_set_cfg(indio_dev);

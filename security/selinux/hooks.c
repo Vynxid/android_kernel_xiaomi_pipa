@@ -1669,7 +1669,7 @@ static int inode_doinit_with_dentry(struct inode *inode, struct dentry *opt_dent
 
 				if (rc == -EINVAL) {
 					if (printk_ratelimit())
-						pr_notice("SELinux: inode=%lu on dev=%s was found to have an invalid "
+						pr_debug("SELinux: inode=%lu on dev=%s was found to have an invalid "
 							"context=%s.  This indicates you may need to relabel the inode or the "
 							"filesystem in question.\n", ino, dev, context);
 				} else {
@@ -7343,11 +7343,11 @@ static __init int selinux_init(void)
 	}
 
 	if (!selinux_enabled) {
-		pr_info("SELinux:  Disabled at boot.\n");
+		pr_debug("SELinux:  Disabled at boot.\n");
 		return 0;
 	}
 
-	pr_info("SELinux:  Initializing.\n");
+	pr_debug("SELinux:  Initializing.\n");
 
 	memset(&selinux_state, 0, sizeof(selinux_state));
 	enforcing_set(&selinux_state, selinux_enforcing_boot);
@@ -7517,7 +7517,7 @@ int selinux_disable(struct selinux_state *state)
 
 	state->disabled = 1;
 
-	pr_info("SELinux:  Disabled at runtime.\n");
+	pr_debug("SELinux:  Disabled at runtime.\n");
 
 	selinux_enabled = 0;
 

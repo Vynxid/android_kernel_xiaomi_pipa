@@ -393,7 +393,7 @@ static void gbcodec_shutdown(struct snd_pcm_substream *substream,
 	mutex_lock(&codec->lock);
 
 	if (list_empty(&codec->module_list))
-		dev_info(codec->dev, "No codec module available during shutdown\n");
+		dev_dbg(codec->dev, "No codec module available during shutdown\n");
 
 	params = find_dai_stream_params(codec, dai->id, substream->stream);
 	if (!params) {

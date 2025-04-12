@@ -255,7 +255,7 @@ static int m48t86_rtc_probe(struct platform_device *pdev)
 	dev_set_drvdata(&pdev->dev, info);
 
 	if (!m48t86_verify_chip(pdev)) {
-		dev_info(&pdev->dev, "RTC not present\n");
+		dev_dbg(&pdev->dev, "RTC not present\n");
 		return -ENODEV;
 	}
 
@@ -274,7 +274,7 @@ static int m48t86_rtc_probe(struct platform_device *pdev)
 
 	/* read battery status */
 	reg = m48t86_readb(&pdev->dev, M48T86_D);
-	dev_info(&pdev->dev, "battery %s\n",
+	dev_dbg(&pdev->dev, "battery %s\n",
 		 (reg & M48T86_D_VRT) ? "ok" : "exhausted");
 
 	return 0;

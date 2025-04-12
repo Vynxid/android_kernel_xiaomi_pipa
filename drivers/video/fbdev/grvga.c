@@ -478,7 +478,7 @@ static int grvga_probe(struct platform_device *dev)
 
 	dev_set_drvdata(&dev->dev, info);
 
-	dev_info(&dev->dev,
+	dev_dbg(&dev->dev,
 		 "Aeroflex Gaisler framebuffer device (fb%d), %dx%d-%d, using %luK of video memory @ %p\n",
 		 info->node, info->var.xres, info->var.yres, info->var.bits_per_pixel,
 		 grvga_mem_size >> 10, info->screen_base);

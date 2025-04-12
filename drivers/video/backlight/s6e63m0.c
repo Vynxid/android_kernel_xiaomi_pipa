@@ -647,7 +647,7 @@ static ssize_t s6e63m0_sysfs_show_gamma_mode(struct device *dev,
 		strcat(buf, temp);
 		break;
 	default:
-		dev_info(dev, "gamma mode could be 0:2.2, 1:1.9 or 2:1.7)n");
+		dev_dbg(dev, "gamma mode could be 0:2.2, 1:1.9 or 2:1.7)n");
 		break;
 	}
 
@@ -681,7 +681,7 @@ static ssize_t s6e63m0_sysfs_store_gamma_mode(struct device *dev,
 		_s6e63m0_gamma_ctl(lcd, gamma_table.gamma_17_table[brightness]);
 		break;
 	default:
-		dev_info(dev, "gamma mode could be 0:2.2, 1:1.9 or 2:1.7\n");
+		dev_dbg(dev, "gamma mode could be 0:2.2, 1:1.9 or 2:1.7\n");
 		_s6e63m0_gamma_ctl(lcd, gamma_table.gamma_22_table[brightness]);
 		break;
 	}
@@ -789,7 +789,7 @@ static int s6e63m0_probe(struct spi_device *spi)
 
 	spi_set_drvdata(spi, lcd);
 
-	dev_info(&spi->dev, "s6e63m0 panel driver has been probed.\n");
+	dev_dbg(&spi->dev, "s6e63m0 panel driver has been probed.\n");
 
 	return 0;
 }

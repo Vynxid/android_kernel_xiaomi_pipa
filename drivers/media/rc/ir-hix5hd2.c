@@ -170,7 +170,7 @@ static irqreturn_t hix5hd2_ir_rx_interrupt(int irq, void *data)
 			readl_relaxed(priv->base + IR_DATAL);
 
 		writel_relaxed(INT_CLR_OVERFLOW, priv->base + IR_INTC);
-		dev_info(priv->dev, "overflow, level=%d\n",
+		dev_dbg(priv->dev, "overflow, level=%d\n",
 			 IR_CFG_INT_THRESHOLD);
 	}
 
@@ -225,7 +225,7 @@ static int hix5hd2_ir_probe(struct platform_device *pdev)
 	priv->regmap = syscon_regmap_lookup_by_phandle(node,
 						       "hisilicon,power-syscon");
 	if (IS_ERR(priv->regmap)) {
-		dev_info(dev, "no power-reg\n");
+		dev_dbg(dev, "no power-reg\n");
 		priv->regmap = NULL;
 	}
 

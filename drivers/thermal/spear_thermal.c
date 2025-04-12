@@ -66,7 +66,7 @@ static int __maybe_unused spear_thermal_suspend(struct device *dev)
 	writel_relaxed(actual_mask & ~stdev->flags, stdev->thermal_base);
 
 	clk_disable(stdev->clk);
-	dev_info(dev, "Suspended.\n");
+	dev_dbg(dev, "Suspended.\n");
 
 	return 0;
 }
@@ -89,7 +89,7 @@ static int __maybe_unused spear_thermal_resume(struct device *dev)
 	actual_mask = readl_relaxed(stdev->thermal_base);
 	writel_relaxed(actual_mask | stdev->flags, stdev->thermal_base);
 
-	dev_info(dev, "Resumed.\n");
+	dev_dbg(dev, "Resumed.\n");
 
 	return 0;
 }
@@ -145,7 +145,7 @@ static int spear_thermal_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, spear_thermal);
 
-	dev_info(&spear_thermal->device, "Thermal Sensor Loaded at: 0x%p.\n",
+	dev_dbg(&spear_thermal->device, "Thermal Sensor Loaded at: 0x%p.\n",
 			stdev->thermal_base);
 
 	return 0;

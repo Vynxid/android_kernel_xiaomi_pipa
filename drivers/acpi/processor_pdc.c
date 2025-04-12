@@ -168,7 +168,7 @@ early_init_pdc(acpi_handle handle, u32 lvl, void *context, void **rv)
 
 static int __init set_no_mwait(const struct dmi_system_id *id)
 {
-	pr_notice("%s detected - disabling mwait for CPU C-states\n",
+	pr_debug("%s detected - disabling mwait for CPU C-states\n",
 		  id->ident);
 	boot_option_idle_override = IDLE_NOMWAIT;
 	return 0;

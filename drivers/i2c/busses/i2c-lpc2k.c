@@ -435,7 +435,7 @@ static int i2c_lpc2k_probe(struct platform_device *pdev)
 	if (ret < 0)
 		goto fail_clk;
 
-	dev_info(&pdev->dev, "LPC2K I2C adapter\n");
+	dev_dbg(&pdev->dev, "LPC2K I2C adapter\n");
 
 	return 0;
 

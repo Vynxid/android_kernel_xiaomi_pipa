@@ -777,7 +777,7 @@ void agp_device_command(u32 bridge_agpstat, bool agp_v3)
 		if (!agp)
 			continue;
 
-		dev_info(&device->dev, "putting AGP V%d device into %dx mode\n",
+		dev_dbg(&device->dev, "putting AGP V%d device into %dx mode\n",
 			 agp_v3 ? 3 : 2, mode);
 		pci_write_config_dword(device, agp + PCI_AGP_COMMAND, bridge_agpstat);
 	}
@@ -806,7 +806,7 @@ void agp_generic_enable(struct agp_bridge_data *bridge, u32 requested_mode)
 
 	get_agp_version(agp_bridge);
 
-	dev_info(&agp_bridge->dev->dev, "AGP %d.%d bridge\n",
+	dev_dbg(&agp_bridge->dev->dev, "AGP %d.%d bridge\n",
 		 agp_bridge->major_version, agp_bridge->minor_version);
 
 	pci_read_config_dword(agp_bridge->dev,
@@ -836,7 +836,7 @@ void agp_generic_enable(struct agp_bridge_data *bridge, u32 requested_mode)
 		    pci_write_config_dword(bridge->dev,
 					bridge->capndx+AGPCTRL, temp);
 
-		    dev_info(&bridge->dev->dev, "bridge is in legacy mode, falling back to 2.x\n");
+		    dev_dbg(&bridge->dev->dev, "bridge is in legacy mode, falling back to 2.x\n");
 		}
 	}
 

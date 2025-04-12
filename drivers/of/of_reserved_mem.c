@@ -174,7 +174,7 @@ static int __init __reserved_mem_alloc_size(unsigned long node,
 	}
 
 	if (base == 0) {
-		pr_info("failed to allocate memory for node '%s'\n", uname);
+		pr_debug("failed to allocate memory for node '%s'\n", uname);
 		return -ENOMEM;
 	}
 
@@ -203,7 +203,7 @@ static int __init __reserved_mem_init_node(struct reserved_mem *rmem)
 			continue;
 
 		if (initfn(rmem) == 0) {
-			pr_info("initialized node %s, compatible id %s\n",
+			pr_debug("initialized node %s, compatible id %s\n",
 				rmem->name, compat);
 			return 0;
 		}
@@ -367,7 +367,7 @@ int of_reserved_mem_device_init_by_idx(struct device *dev,
 		 */
 		of_dma_configure(dev, np, true);
 
-		dev_info(dev, "assigned reserved memory node %s\n", rmem->name);
+		dev_dbg(dev, "assigned reserved memory node %s\n", rmem->name);
 	} else {
 		kfree(rd);
 	}

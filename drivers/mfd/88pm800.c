@@ -304,11 +304,11 @@ static int device_gpadc_init(struct pm80x_chip *chip,
 	if (ret < 0)
 		goto out;
 
-	dev_info(chip->dev, "pm800 device_gpadc_init: Done\n");
+	dev_dbg(chip->dev, "pm800 device_gpadc_init: Done\n");
 	return 0;
 
 out:
-	dev_info(chip->dev, "pm800 device_gpadc_init: Failed!\n");
+	dev_dbg(chip->dev, "pm800 device_gpadc_init: Failed!\n");
 	return ret;
 }
 

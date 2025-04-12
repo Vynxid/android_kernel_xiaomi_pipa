@@ -3383,12 +3383,12 @@ static void dwc2_conn_id_status_change(struct work_struct *work)
 		/* Wait for switch to device mode */
 		dev_dbg(hsotg->dev, "connId B\n");
 		if (hsotg->bus_suspended) {
-			dev_info(hsotg->dev,
+			dev_dbg(hsotg->dev,
 				 "Do port resume before switching to device mode\n");
 			dwc2_port_resume(hsotg);
 		}
 		while (!dwc2_is_device_mode(hsotg)) {
-			dev_info(hsotg->dev,
+			dev_dbg(hsotg->dev,
 				 "Waiting for Peripheral Mode, Mode=%s\n",
 				 dwc2_is_host_mode(hsotg) ? "Host" :
 				 "Peripheral");
@@ -3421,7 +3421,7 @@ host:
 		/* A-Device connector (Host Mode) */
 		dev_dbg(hsotg->dev, "connId A\n");
 		while (!dwc2_is_host_mode(hsotg)) {
-			dev_info(hsotg->dev, "Waiting for Host Mode, Mode=%s\n",
+			dev_dbg(hsotg->dev, "Waiting for Host Mode, Mode=%s\n",
 				 dwc2_is_host_mode(hsotg) ?
 				 "Host" : "Peripheral");
 			msleep(20);
@@ -3786,7 +3786,7 @@ static int dwc2_hcd_hub_control(struct dwc2_hsotg *hsotg, u16 typereq,
 			       USB_PORT_STAT_CONNECTION)) {
 				u32 hcfg;
 
-				dev_info(hsotg->dev, "Enabling descriptor DMA mode\n");
+				dev_dbg(hsotg->dev, "Enabling descriptor DMA mode\n");
 				hsotg->params.dma_desc_enable = true;
 				hcfg = dwc2_readl(hsotg, HCFG);
 				hcfg |= HCFG_DESCDMA;
@@ -5036,7 +5036,7 @@ static void dwc2_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
 	 */
 	if (udev->parent && udev->parent->speed > USB_SPEED_UNKNOWN &&
 	    udev->parent->speed < USB_SPEED_HIGH) {
-		dev_info(hsotg->dev, "Set speed to default high-speed\n");
+		dev_dbg(hsotg->dev, "Set speed to default high-speed\n");
 		dwc2_change_bus_speed(hcd, HPRT0_SPD_HIGH_SPEED);
 	}
 }
@@ -5049,7 +5049,7 @@ static int dwc2_reset_device(struct usb_hcd *hcd, struct usb_device *udev)
 		return 0;
 
 	if (udev->speed == USB_SPEED_HIGH) {
-		dev_info(hsotg->dev, "Set speed to high-speed\n");
+		dev_dbg(hsotg->dev, "Set speed to high-speed\n");
 		dwc2_change_bus_speed(hcd, HPRT0_SPD_HIGH_SPEED);
 	} else if ((udev->speed == USB_SPEED_FULL ||
 				udev->speed == USB_SPEED_LOW)) {
@@ -5057,7 +5057,7 @@ static int dwc2_reset_device(struct usb_hcd *hcd, struct usb_device *udev)
 		 * Change speed setting to full-speed if there's
 		 * a full-speed or low-speed device plugged in.
 		 */
-		dev_info(hsotg->dev, "Set speed to full-speed\n");
+		dev_dbg(hsotg->dev, "Set speed to full-speed\n");
 		dwc2_change_bus_speed(hcd, HPRT0_SPD_FULL_SPEED);
 	}
 

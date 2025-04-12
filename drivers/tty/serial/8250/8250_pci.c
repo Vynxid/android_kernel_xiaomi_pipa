@@ -587,7 +587,7 @@ static int pci_timedia_probe(struct pci_dev *dev)
 	 * (0,2,3,5,6: serial only -- 7,8,9: serial + parallel)
 	 */
 	if ((dev->subsystem_device & 0x00f0) >= 0x70) {
-		dev_info(&dev->dev,
+		dev_dbg(&dev->dev,
 			"ignoring Timedia subdevice %04x for parport_serial\n",
 			dev->subsystem_device);
 		return -ENODEV;

@@ -62,7 +62,7 @@ static int z188_iio_read_raw(struct iio_dev *iio_dev,
 		tmp = readw(adc->base + chan->channel * 4);
 
 		if (ADC_OVR(tmp)) {
-			dev_info(&iio_dev->dev,
+			dev_dbg(&iio_dev->dev,
 				"Oversampling error on ADC channel %d\n",
 				chan->channel);
 			return -EIO;

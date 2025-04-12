@@ -250,7 +250,7 @@ static int fsl_elbc_run_command(struct mtd_info *mtd)
 	elbc_fcm_ctrl->use_mdr = 0;
 
 	if (elbc_fcm_ctrl->status != LTESR_CC) {
-		dev_info(priv->dev,
+		dev_dbg(priv->dev,
 		         "command failed: fir %x fcr %x status %x mdr %x\n",
 		         in_be32(&lbc->fir), in_be32(&lbc->fcr),
 			 elbc_fcm_ctrl->status, elbc_fcm_ctrl->mdr);
@@ -925,7 +925,7 @@ static int fsl_elbc_nand_probe(struct platform_device *pdev)
 	if (ret)
 		goto cleanup_nand;
 
-	pr_info("eLBC NAND device at 0x%llx, bank %d\n",
+	pr_debug("eLBC NAND device at 0x%llx, bank %d\n",
 		(unsigned long long)res.start, priv->bank);
 
 	return 0;

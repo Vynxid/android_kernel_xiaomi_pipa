@@ -1771,7 +1771,7 @@ void wa_process_errored_transfers_run(struct work_struct *ws)
 	struct wa_xfer *xfer, *next;
 	LIST_HEAD(tmp_list);
 
-	pr_info("%s: Run delayed STALL processing.\n", __func__);
+	pr_debug("%s: Run delayed STALL processing.\n", __func__);
 
 	/* Create a copy of the wa->xfer_errored_list while holding the lock */
 	spin_lock_irq(&wa->xfer_list_lock);
@@ -2388,7 +2388,7 @@ error_complete:
 		usb_endpoint_xfer_control(&xfer->ep->desc) &&
 		done) {
 
-		dev_info(dev, "Control EP stall.  Queue delayed work.\n");
+		dev_dbg(dev, "Control EP stall.  Queue delayed work.\n");
 		spin_lock(&wa->xfer_list_lock);
 		/* move xfer from xfer_list to xfer_errored_list. */
 		list_move_tail(&xfer->list_node, &wa->xfer_errored_list);

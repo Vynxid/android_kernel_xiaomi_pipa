@@ -590,7 +590,7 @@ int st33zp24_probe(void *phy_id, const struct st33zp24_phy_ops *ops,
 
 	return tpm_chip_register(chip);
 _tpm_clean_answer:
-	dev_info(&chip->dev, "TPM initialization fail\n");
+	dev_dbg(&chip->dev, "TPM initialization fail\n");
 	return ret;
 }
 EXPORT_SYMBOL(st33zp24_probe);

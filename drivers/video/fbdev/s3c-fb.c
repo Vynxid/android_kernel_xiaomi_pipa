@@ -1279,7 +1279,7 @@ static int s3c_fb_probe_win(struct s3c_fb *sfb, unsigned int win_no,
 		return ret;
 	}
 
-	dev_info(sfb->dev, "window %d: fb %s\n", win_no, fbinfo->fix.id);
+	dev_dbg(sfb->dev, "window %d: fb %s\n", win_no, fbinfo->fix.id);
 
 	return 0;
 }

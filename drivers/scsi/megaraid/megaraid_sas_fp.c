@@ -956,7 +956,7 @@ MR_BuildRaidContext(struct megasas_instance *instance,
 		else if (instance->UnevenSpanSupport) {
 			io_info->IoforUnevenSpan = 1;
 		} else {
-			dev_info(&instance->pdev->dev,
+			dev_dbg(&instance->pdev->dev,
 				"raid->rowDataSize is 0, but has SPAN[0]"
 				"rowDataSize = 0x%0x,"
 				"but there is _NO_ UnevenSpanSupport\n",
@@ -983,7 +983,7 @@ MR_BuildRaidContext(struct megasas_instance *instance,
 		start_row = get_row_from_strip(instance, ld, start_strip, map);
 		endRow	  = get_row_from_strip(instance, ld, endStrip, map);
 		if (start_row == -1ULL || endRow == -1ULL) {
-			dev_info(&instance->pdev->dev, "return from %s %d."
+			dev_dbg(&instance->pdev->dev, "return from %s %d."
 				"Send IO w/o region lock.\n",
 				__func__, __LINE__);
 			return false;
@@ -996,7 +996,7 @@ MR_BuildRaidContext(struct megasas_instance *instance,
 			startlba_span = (u8)mr_spanset_get_span_block(instance,
 						ld, start_row, pdBlock, map);
 		if (startlba_span == SPAN_INVALID) {
-			dev_info(&instance->pdev->dev, "return from %s %d"
+			dev_dbg(&instance->pdev->dev, "return from %s %d"
 				"for row 0x%llx,start strip %llx"
 				"endSrip %llx\n", __func__, __LINE__,
 				(unsigned long long)start_row,

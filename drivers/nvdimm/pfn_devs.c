@@ -579,7 +579,7 @@ static int __nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap)
 		nd_pfn->npfns = PFN_SECTION_ALIGN_UP((resource_size(res)
 					- offset) / PAGE_SIZE);
 		if (le64_to_cpu(nd_pfn->pfn_sb->npfns) > nd_pfn->npfns)
-			dev_info(&nd_pfn->dev,
+			dev_dbg(&nd_pfn->dev,
 					"number of pfns truncated from %lld to %ld\n",
 					le64_to_cpu(nd_pfn->pfn_sb->npfns),
 					nd_pfn->npfns);
@@ -666,7 +666,7 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
 
 	nd_region = to_nd_region(nd_pfn->dev.parent);
 	if (nd_region->ro) {
-		dev_info(&nd_pfn->dev,
+		dev_dbg(&nd_pfn->dev,
 				"%s is read-only, unable to init metadata\n",
 				dev_name(&nd_region->dev));
 		return -ENXIO;
@@ -676,7 +676,7 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
 
 	trim_pfn_device(nd_pfn, &start_pad, &end_trunc);
 	if (start_pad + end_trunc)
-		dev_info(&nd_pfn->dev, "%s alignment collision, truncate %d bytes\n",
+		dev_dbg(&nd_pfn->dev, "%s alignment collision, truncate %d bytes\n",
 				dev_name(&ndns->dev), start_pad + end_trunc);
 
 	/*

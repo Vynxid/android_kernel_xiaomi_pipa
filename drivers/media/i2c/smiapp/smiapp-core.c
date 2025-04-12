@@ -871,7 +871,7 @@ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
 		}
 
 		if (!*valid_link_freqs) {
-			dev_info(&client->dev,
+			dev_dbg(&client->dev,
 				 "no valid link frequencies for %u bpp\n",
 				 f->compressed);
 			sensor->default_mbus_frame_fmts &= ~BIT(i);
@@ -2823,7 +2823,7 @@ static struct smiapp_hwconfig *smiapp_get_hwconfig(struct device *dev)
 	rval = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
 					&hwcfg->ext_clk);
 	if (rval)
-		dev_info(dev, "can't get clock-frequency\n");
+		dev_dbg(dev, "can't get clock-frequency\n");
 
 	dev_dbg(dev, "nvm %d, clk %d, mode %d\n",
 		hwcfg->nvm_size, hwcfg->ext_clk, hwcfg->csi_signalling_mode);
@@ -2884,7 +2884,7 @@ static int smiapp_probe(struct i2c_client *client,
 
 	sensor->ext_clk = devm_clk_get(&client->dev, NULL);
 	if (PTR_ERR(sensor->ext_clk) == -ENOENT) {
-		dev_info(&client->dev, "no clock defined, continuing...\n");
+		dev_dbg(&client->dev, "no clock defined, continuing...\n");
 		sensor->ext_clk = NULL;
 	} else if (IS_ERR(sensor->ext_clk)) {
 		dev_err(&client->dev, "could not get clock (%ld)\n",

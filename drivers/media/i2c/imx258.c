@@ -788,7 +788,7 @@ static int imx258_set_ctrl(struct v4l2_ctrl *ctrl)
 				REG_CONFIG_FLIP_TEST_PATTERN);
 		break;
 	default:
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			 "ctrl(id:0x%x,val:0x%x) is not handled\n",
 			 ctrl->id, ctrl->val);
 		ret = -EINVAL;

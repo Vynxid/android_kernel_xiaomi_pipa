@@ -1210,7 +1210,7 @@ static int usblp_probe(struct usb_interface *intf,
 		goto abort_intfdata;
 	}
 	usblp->minor = intf->minor;
-	dev_info(&intf->dev,
+	dev_dbg(&intf->dev,
 		"usblp%d: USB %sdirectional printer dev %d if %d alt %d proto %d vid 0x%4.4X pid 0x%4.4X\n",
 		usblp->minor, usblp->bidir ? "Bi" : "Uni", dev->devnum,
 		usblp->ifnum,

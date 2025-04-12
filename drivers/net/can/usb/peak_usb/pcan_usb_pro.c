@@ -903,7 +903,7 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
 		if (err)
 			goto err_out;
 
-		dev_info(dev->netdev->dev.parent,
+		dev_dbg(dev->netdev->dev.parent,
 		     "PEAK-System %s hwrev %u serial %08X.%08X (%u channels)\n",
 		     pcan_usb_pro.name,
 		     bi->hw_rev, bi->serial_num_hi, bi->serial_num_lo,

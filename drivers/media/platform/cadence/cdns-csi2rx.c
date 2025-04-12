@@ -456,7 +456,7 @@ static int csi2rx_probe(struct platform_device *pdev)
 	if (ret < 0)
 		goto err_free_priv;
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "Probed CSI2RX with %u/%u lanes, %u streams, %s D-PHY\n",
 		 csi2rx->num_lanes, csi2rx->max_lanes, csi2rx->max_streams,
 		 csi2rx->has_internal_dphy ? "internal" : "no");

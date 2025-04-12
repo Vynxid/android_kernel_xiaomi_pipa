@@ -754,12 +754,12 @@ static int wdt_ioctl(struct file *file, unsigned int cmd,
 			return -EFAULT;
 
 		if (rv & WDIOS_DISABLECARD) {
-			pr_info("disable watchdog\n");
+			pr_debug("disable watchdog\n");
 			wdt_disable();
 		}
 
 		if (rv & WDIOS_ENABLECARD) {
-			pr_info("enable watchdog\n");
+			pr_debug("enable watchdog\n");
 			wdt_ping();
 		}
 
@@ -938,8 +938,8 @@ static int m41t80_probe(struct i2c_client *client,
 	if (rc >= 0 && rc & M41T80_ALHOUR_HT) {
 		if (m41t80_data->features & M41T80_FEATURE_HT) {
 			m41t80_rtc_read_time(&client->dev, &tm);
-			dev_info(&client->dev, "HT bit was set!\n");
-			dev_info(&client->dev,
+			dev_dbg(&client->dev, "HT bit was set!\n");
+			dev_dbg(&client->dev,
 				 "Power Down at %04i-%02i-%02i %02i:%02i:%02i\n",
 				 tm.tm_year + 1900,
 				 tm.tm_mon + 1, tm.tm_mday, tm.tm_hour,

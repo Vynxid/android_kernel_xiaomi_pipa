@@ -186,7 +186,7 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
 
 	ret = pci_enable_pcie_error_reporting(pcidev);
 	if (ret && ret != -EINVAL)
-		dev_info(&pcidev->dev, "PCIE AER unavailable %d.\n", ret);
+		dev_dbg(&pcidev->dev, "PCIE AER unavailable %d.\n", ret);
 
 	pci_set_master(pcidev);
 

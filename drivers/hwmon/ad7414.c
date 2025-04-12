@@ -194,7 +194,7 @@ static int ad7414_probe(struct i2c_client *client,
 	data->client = client;
 	mutex_init(&data->lock);
 
-	dev_info(&client->dev, "chip found\n");
+	dev_dbg(&client->dev, "chip found\n");
 
 	/* Make sure the chip is powered up. */
 	conf = i2c_smbus_read_byte_data(client, AD7414_REG_CONF);

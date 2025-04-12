@@ -284,7 +284,7 @@ static void sbp_management_request_login(
 	unpacked_lun = sbp_get_lun_from_tpg(tpg,
 			LOGIN_ORB_LUN(be32_to_cpu(req->orb.misc)), &ret);
 	if (ret) {
-		pr_notice("login to unknown LUN: %d\n",
+		pr_debug("login to unknown LUN: %d\n",
 			LOGIN_ORB_LUN(be32_to_cpu(req->orb.misc)));
 
 		req->status.status = cpu_to_be32(
@@ -303,14 +303,14 @@ static void sbp_management_request_login(
 		return;
 	}
 
-	pr_notice("mgt_agent LOGIN to LUN %d from %016llx\n",
+	pr_debug("mgt_agent LOGIN to LUN %d from %016llx\n",
 		unpacked_lun, guid);
 
 	sess = sbp_session_find_by_guid(tpg, guid);
 	if (sess) {
 		login = sbp_login_find_by_lun(sess, unpacked_lun);
 		if (login) {
-			pr_notice("initiator already logged-in\n");
+			pr_debug("initiator already logged-in\n");
 
 			/*
 			 * SBP-2 R4 says we should return access denied, but
@@ -491,7 +491,7 @@ static void sbp_management_request_query_logins(
 	struct sbp_management_agent *agent, struct sbp_management_request *req,
 	int *status_data_size)
 {
-	pr_notice("QUERY LOGINS not implemented\n");
+	pr_debug("QUERY LOGINS not implemented\n");
 	/* FIXME: implement */
 
 	req->status.status = cpu_to_be32(
@@ -519,7 +519,7 @@ static void sbp_management_request_reconnect(
 		return;
 	}
 
-	pr_notice("mgt_agent RECONNECT from %016llx\n", guid);
+	pr_debug("mgt_agent RECONNECT from %016llx\n", guid);
 
 	login = sbp_login_find_by_id(tpg,
 		RECONNECT_ORB_LOGIN_ID(be32_to_cpu(req->orb.misc)));
@@ -579,7 +579,7 @@ static void sbp_management_request_logout(
 		return;
 	}
 
-	pr_info("mgt_agent LOGOUT from LUN %d session %d\n",
+	pr_debug("mgt_agent LOGOUT from LUN %d session %d\n",
 		login->login_lun, login->login_id);
 
 	if (req->node_addr != login->sess->node_id) {
@@ -616,7 +616,7 @@ static void session_check_for_reset(struct sbp_session *sess)
 	}
 
 	if (!card_valid || (sess->generation != sess->card->generation)) {
-		pr_info("Waiting for reconnect from node: %016llx\n",
+		pr_debug("Waiting for reconnect from node: %016llx\n",
 				sess->guid);
 
 		sess->node_id = -1;
@@ -632,7 +632,7 @@ static void session_reconnect_expired(struct sbp_session *sess)
 	struct sbp_login_descriptor *login, *temp;
 	LIST_HEAD(login_list);
 
-	pr_info("Reconnect timer expired for node: %016llx\n", sess->guid);
+	pr_debug("Reconnect timer expired for node: %016llx\n", sess->guid);
 
 	spin_lock_bh(&sess->lock);
 	list_for_each_entry_safe(login, temp, &sess->login_list, link) {
@@ -731,7 +731,7 @@ static int tgt_agent_rw_orb_pointer(struct fw_card *card, int tcode, void *data,
 		if (agent->state != AGENT_STATE_SUSPENDED &&
 				agent->state != AGENT_STATE_RESET) {
 			spin_unlock_bh(&agent->lock);
-			pr_notice("Ignoring ORB_POINTER write while active.\n");
+			pr_debug("Ignoring ORB_POINTER write while active.\n");
 			return RCODE_CONFLICT_ERROR;
 		}
 		agent->state = AGENT_STATE_ACTIVE;
@@ -821,13 +821,13 @@ static void tgt_agent_rw(struct fw_card *card, struct fw_request *request,
 	spin_unlock_bh(&sess->lock);
 
 	if (generation != sess_gen) {
-		pr_notice("ignoring request with wrong generation\n");
+		pr_debug("ignoring request with wrong generation\n");
 		rcode = RCODE_TYPE_ERROR;
 		goto out;
 	}
 
 	if (source != sess_node) {
-		pr_notice("ignoring request from foreign node (%x != %x)\n",
+		pr_debug("ignoring request from foreign node (%x != %x)\n",
 				source, sess_node);
 		rcode = RCODE_TYPE_ERROR;
 		goto out;
@@ -1507,7 +1507,7 @@ static void sbp_mgt_agent_process(struct work_struct *work)
 		break;
 
 	case MANAGEMENT_ORB_FUNCTION_SET_PASSWORD:
-		pr_notice("SET PASSWORD not implemented\n");
+		pr_debug("SET PASSWORD not implemented\n");
 
 		req->status.status = cpu_to_be32(
 			STATUS_BLOCK_RESP(STATUS_RESP_REQUEST_COMPLETE) |
@@ -1520,7 +1520,7 @@ static void sbp_mgt_agent_process(struct work_struct *work)
 		break;
 
 	case MANAGEMENT_ORB_FUNCTION_ABORT_TASK:
-		pr_notice("ABORT TASK not implemented\n");
+		pr_debug("ABORT TASK not implemented\n");
 
 		req->status.status = cpu_to_be32(
 			STATUS_BLOCK_RESP(STATUS_RESP_REQUEST_COMPLETE) |
@@ -1529,7 +1529,7 @@ static void sbp_mgt_agent_process(struct work_struct *work)
 		break;
 
 	case MANAGEMENT_ORB_FUNCTION_ABORT_TASK_SET:
-		pr_notice("ABORT TASK SET not implemented\n");
+		pr_debug("ABORT TASK SET not implemented\n");
 
 		req->status.status = cpu_to_be32(
 			STATUS_BLOCK_RESP(STATUS_RESP_REQUEST_COMPLETE) |
@@ -1538,7 +1538,7 @@ static void sbp_mgt_agent_process(struct work_struct *work)
 		break;
 
 	case MANAGEMENT_ORB_FUNCTION_LOGICAL_UNIT_RESET:
-		pr_notice("LOGICAL UNIT RESET not implemented\n");
+		pr_debug("LOGICAL UNIT RESET not implemented\n");
 
 		req->status.status = cpu_to_be32(
 			STATUS_BLOCK_RESP(STATUS_RESP_REQUEST_COMPLETE) |
@@ -1547,7 +1547,7 @@ static void sbp_mgt_agent_process(struct work_struct *work)
 		break;
 
 	case MANAGEMENT_ORB_FUNCTION_TARGET_RESET:
-		pr_notice("TARGET RESET not implemented\n");
+		pr_debug("TARGET RESET not implemented\n");
 
 		req->status.status = cpu_to_be32(
 			STATUS_BLOCK_RESP(STATUS_RESP_REQUEST_COMPLETE) |
@@ -1556,7 +1556,7 @@ static void sbp_mgt_agent_process(struct work_struct *work)
 		break;
 
 	default:
-		pr_notice("unknown management function 0x%x\n",
+		pr_debug("unknown management function 0x%x\n",
 			MANAGEMENT_ORB_FUNCTION(be32_to_cpu(req->orb.misc)));
 
 		req->status.status = cpu_to_be32(
@@ -1616,7 +1616,7 @@ static void sbp_mgt_agent_rw(struct fw_card *card,
 		spin_unlock_bh(&agent->lock);
 
 		if (prev_state == MANAGEMENT_AGENT_STATE_BUSY) {
-			pr_notice("ignoring management request while busy\n");
+			pr_debug("ignoring management request while busy\n");
 			rcode = RCODE_CONFLICT_ERROR;
 			goto out;
 		}

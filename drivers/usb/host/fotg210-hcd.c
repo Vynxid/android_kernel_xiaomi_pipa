@@ -81,7 +81,7 @@ MODULE_PARM_DESC(hird, "host initiated resume duration, +1 for each 75us");
 #define fotg210_err(fotg210, fmt, args...) \
 	dev_err(fotg210_to_hcd(fotg210)->self.controller, fmt, ## args)
 #define fotg210_info(fotg210, fmt, args...) \
-	dev_info(fotg210_to_hcd(fotg210)->self.controller, fmt, ## args)
+	dev_dbg(fotg210_to_hcd(fotg210)->self.controller, fmt, ## args)
 #define fotg210_warn(fotg210, fmt, args...) \
 	dev_warn(fotg210_to_hcd(fotg210)->self.controller, fmt, ## args)
 
@@ -5660,7 +5660,7 @@ static int __init fotg210_hcd_init(void)
 	if (usb_disabled())
 		return -ENODEV;
 
-	pr_info("%s: " DRIVER_DESC "\n", hcd_name);
+	pr_debug("%s: " DRIVER_DESC "\n", hcd_name);
 	set_bit(USB_EHCI_LOADED, &usb_hcds_loaded);
 	if (test_bit(USB_UHCI_LOADED, &usb_hcds_loaded) ||
 			test_bit(USB_OHCI_LOADED, &usb_hcds_loaded))

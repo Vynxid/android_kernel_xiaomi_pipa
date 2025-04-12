@@ -285,7 +285,7 @@ static int qrc_uart_probe(struct serdev_device *serdev)
 		cancel_work_sync(&qrc->tx_work);
 		goto free;
 	}
-	dev_info(&serdev->dev, "qrcuart drv probed\n");
+	dev_dbg(&serdev->dev, "qrcuart drv probed\n");
 
 	return 0;
 
@@ -305,7 +305,7 @@ static void qrc_uart_remove(struct serdev_device *serdev)
 	qrc_unregister(qrc->qrc_dev);
 	kfree(qrc->qrc_dev);
 	kfree(qrc);
-	dev_info(&serdev->dev, "qrcuart drv removed\n");
+	dev_dbg(&serdev->dev, "qrcuart drv removed\n");
 }
 
 static const struct of_device_id qrc_uart_of_match[] = {

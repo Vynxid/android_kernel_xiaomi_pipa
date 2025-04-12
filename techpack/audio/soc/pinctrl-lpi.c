@@ -150,7 +150,7 @@ do {							\
 	else if (c)					\
 		pr_cont(fmt, ##__VA_ARGS__);		\
 	else						\
-		pr_info(fmt, ##__VA_ARGS__);		\
+		pr_debug(fmt, ##__VA_ARGS__);		\
 } while (0)
 
 

@@ -1727,7 +1727,7 @@ static int dcmi_probe(struct platform_device *pdev)
 
 	chan = dma_request_slave_channel(&pdev->dev, "tx");
 	if (!chan) {
-		dev_info(&pdev->dev, "Unable to request DMA channel, defer probing\n");
+		dev_dbg(&pdev->dev, "Unable to request DMA channel, defer probing\n");
 		return -EPROBE_DEFER;
 	}
 
@@ -1804,7 +1804,7 @@ static int dcmi_probe(struct platform_device *pdev)
 		goto err_device_release;
 	}
 
-	dev_info(&pdev->dev, "Probe done\n");
+	dev_dbg(&pdev->dev, "Probe done\n");
 
 	platform_set_drvdata(pdev, dcmi);
 

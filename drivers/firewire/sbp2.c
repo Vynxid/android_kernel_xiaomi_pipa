@@ -438,7 +438,7 @@ static void sbp2_status_write(struct fw_card *card, struct fw_request *request,
 		memcpy(status.data, payload + 8, length - 8);
 
 	if (STATUS_GET_SOURCE(status) == 2 || STATUS_GET_SOURCE(status) == 3) {
-		dev_notice(lu_dev(lu),
+		dev_dbg(lu_dev(lu),
 			   "non-ORB related status write, not handled\n");
 		fw_send_response(card, request, RCODE_COMPLETE);
 		return;
@@ -853,7 +853,7 @@ static void sbp2_login(struct work_struct *work)
 		      << 32) | be32_to_cpu(response.command_block_agent.low);
 	lu->login_id = be32_to_cpu(response.misc) & 0xffff;
 
-	dev_notice(tgt_dev(tgt), "logged in to LUN %04x (%d retries)\n",
+	dev_dbg(tgt_dev(tgt), "logged in to LUN %04x (%d retries)\n",
 		   lu->lun, lu->retries);
 
 	/* set appropriate retry limit(s) in BUSY_TIMEOUT register */
@@ -959,7 +959,7 @@ static void sbp2_reconnect(struct work_struct *work)
 	smp_wmb();	  /* node IDs must not be older than generation */
 	lu->generation	  = generation;
 
-	dev_notice(tgt_dev(tgt), "reconnected to LUN %04x (%d retries)\n",
+	dev_dbg(tgt_dev(tgt), "reconnected to LUN %04x (%d retries)\n",
 		   lu->lun, lu->retries);
 
 	sbp2_agent_reset(lu);
@@ -1089,7 +1089,7 @@ static void sbp2_clamp_management_orb_timeout(struct sbp2_target *tgt)
 	unsigned int timeout = tgt->mgt_orb_timeout;
 
 	if (timeout > 40000)
-		dev_notice(tgt_dev(tgt), "%ds mgt_ORB_timeout limited to 40s\n",
+		dev_dbg(tgt_dev(tgt), "%ds mgt_ORB_timeout limited to 40s\n",
 			   timeout / 1000);
 
 	tgt->mgt_orb_timeout = clamp_val(timeout, 5000, 40000);
@@ -1102,7 +1102,7 @@ static void sbp2_init_workarounds(struct sbp2_target *tgt, u32 model,
 	unsigned int w = sbp2_param_workarounds;
 
 	if (w)
-		dev_notice(tgt_dev(tgt),
+		dev_dbg(tgt_dev(tgt),
 			   "Please notify linux1394-devel@lists.sf.net "
 			   "if you need the workarounds parameter\n");
 
@@ -1124,7 +1124,7 @@ static void sbp2_init_workarounds(struct sbp2_target *tgt, u32 model,
 	}
  out:
 	if (w)
-		dev_notice(tgt_dev(tgt), "workarounds 0x%x "
+		dev_dbg(tgt_dev(tgt), "workarounds 0x%x "
 			   "(firmware_revision 0x%06x, model_id 0x%06x)\n",
 			   w, firmware_revision, model);
 	tgt->workarounds = w;
@@ -1263,7 +1263,7 @@ static void sbp2_remove(struct fw_unit *unit)
 		kfree(lu);
 	}
 	scsi_remove_host(shost);
-	dev_notice(&unit->device, "released target %d:0:0\n", shost->host_no);
+	dev_dbg(&unit->device, "released target %d:0:0\n", shost->host_no);
 
 	scsi_host_put(shost);
 }
@@ -1564,7 +1564,7 @@ static int sbp2_scsi_abort(struct scsi_cmnd *cmd)
 {
 	struct sbp2_logical_unit *lu = cmd->device->hostdata;
 
-	dev_notice(lu_dev(lu), "sbp2_scsi_abort\n");
+	dev_dbg(lu_dev(lu), "sbp2_scsi_abort\n");
 	sbp2_agent_reset(lu);
 	sbp2_cancel_orbs(lu);
 

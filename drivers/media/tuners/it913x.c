@@ -419,7 +419,7 @@ static int it913x_probe(struct platform_device *pdev)
 	else
 		chip_ver_str = "??";
 
-	dev_info(&pdev->dev, "ITE IT913X %s successfully attached\n",
+	dev_dbg(&pdev->dev, "ITE IT913X %s successfully attached\n",
 		 chip_ver_str);
 	dev_dbg(&pdev->dev, "chip_ver %u, role %u\n", dev->chip_ver, dev->role);
 	return 0;

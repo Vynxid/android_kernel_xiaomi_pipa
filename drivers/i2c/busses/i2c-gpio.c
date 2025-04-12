@@ -362,7 +362,7 @@ static int i2c_gpio_probe(struct platform_device *pdev)
 	 * get accessors to get the actual name of the GPIO line,
 	 * from the descriptor, then provide that instead.
 	 */
-	dev_info(dev, "using lines %u (SDA) and %u (SCL%s)\n",
+	dev_dbg(dev, "using lines %u (SDA) and %u (SCL%s)\n",
 		 desc_to_gpio(priv->sda), desc_to_gpio(priv->scl),
 		 pdata->scl_is_output_only
 		 ? ", no clock stretching" : "");

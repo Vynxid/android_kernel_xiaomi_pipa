@@ -714,7 +714,7 @@ static int mmp_tdma_probe(struct platform_device *pdev)
 		}
 	}
 
-	dev_info(tdev->device.dev, "initialized\n");
+	dev_dbg(tdev->device.dev, "initialized\n");
 	return 0;
 }
 

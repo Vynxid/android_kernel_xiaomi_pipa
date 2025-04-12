@@ -191,7 +191,7 @@ static int ddb_unredirect(struct ddb_port *port)
 	struct ddb_input *oredi, *iredi = NULL;
 	struct ddb_output *iredo = NULL;
 
-	/* dev_info(port->dev->dev,
+	/* dev_dbg(port->dev->dev,
 	 * "unredirect %d.%d\n", port->dev->nr, port->nr);
 	 */
 	mutex_lock(&redirect_lock);
@@ -1160,7 +1160,7 @@ static int tuner_attach_stv6110(struct ddb_input *input, int type)
 		dev_err(dev, "No STV6110X found!\n");
 		return -ENODEV;
 	}
-	dev_info(dev, "attach tuner input %d adr %02x\n",
+	dev_dbg(dev, "attach tuner input %d adr %02x\n",
 		 input->nr, tunerconf->addr);
 
 	feconf->tuner_init          = ctl->tuner_init;
@@ -1213,7 +1213,7 @@ static int demod_attach_stv0910(struct ddb_input *input, int type, int tsfast)
 		cfg.parallel = 2;
 
 	if (tsfast) {
-		dev_info(dev, "Enabling stv0910 higher speed TS\n");
+		dev_dbg(dev, "Enabling stv0910 higher speed TS\n");
 		cfg.tsspeed = 0x10;
 	}
 
@@ -1644,7 +1644,7 @@ static int port_has_encti(struct ddb_port *port)
 	int ret = i2c_read_reg(&port->i2c->adap, 0x20, 0, &val);
 
 	if (!ret)
-		dev_info(dev, "[0x20]=0x%02x\n", val);
+		dev_dbg(dev, "[0x20]=0x%02x\n", val);
 	return ret ? 0 : 1;
 }
 
@@ -1740,7 +1740,7 @@ static int init_xo2(struct ddb_port *port)
 		return res;
 
 	if (data[0] != 0x01)  {
-		dev_info(dev->dev, "Port %d: invalid XO2\n", port->nr);
+		dev_dbg(dev->dev, "Port %d: invalid XO2\n", port->nr);
 		return -1;
 	}
 
@@ -1759,7 +1759,7 @@ static int init_xo2(struct ddb_port *port)
 	i2c_write_reg(i2c, 0x10, 0x09, xo2_speed);
 
 	if (dev->link[port->lnr].info->con_clock) {
-		dev_info(dev->dev, "Setting continuous clock for XO2\n");
+		dev_dbg(dev->dev, "Setting continuous clock for XO2\n");
 		i2c_write_reg(i2c, 0x10, 0x0a, 0x03);
 		i2c_write_reg(i2c, 0x10, 0x0b, 0x03);
 	} else {
@@ -1786,11 +1786,11 @@ static int init_xo2_ci(struct ddb_port *port)
 		return res;
 
 	if (data[0] > 1)  {
-		dev_info(dev->dev, "Port %d: invalid XO2 CI %02x\n",
+		dev_dbg(dev->dev, "Port %d: invalid XO2 CI %02x\n",
 			 port->nr, data[0]);
 		return -1;
 	}
-	dev_info(dev->dev, "Port %d: DuoFlex CI %u.%u\n",
+	dev_dbg(dev->dev, "Port %d: DuoFlex CI %u.%u\n",
 		 port->nr, data[0], data[1]);
 
 	i2c_read_reg(i2c, 0x10, 0x08, &val);
@@ -1809,7 +1809,7 @@ static int init_xo2_ci(struct ddb_port *port)
 	usleep_range(2000, 3000);
 
 	if (dev->link[port->lnr].info->con_clock) {
-		dev_info(dev->dev, "Setting continuous clock for DuoFlex CI\n");
+		dev_dbg(dev->dev, "Setting continuous clock for DuoFlex CI\n");
 		i2c_write_reg(i2c, 0x10, 0x0a, 0x03);
 		i2c_write_reg(i2c, 0x10, 0x0b, 0x03);
 	} else {
@@ -1923,13 +1923,13 @@ static void ddb_port_probe(struct ddb_port *port)
 			ddbwritel(dev, I2C_SPEED_400,
 				  port->i2c->regs + I2C_TIMING);
 		} else {
-			dev_info(dev->dev, "Port %d: Uninitialized DuoFlex\n",
+			dev_dbg(dev->dev, "Port %d: Uninitialized DuoFlex\n",
 				 port->nr);
 			return;
 		}
 	} else if (port_has_xo2(port, &type, &id)) {
 		ddbwritel(dev, I2C_SPEED_400, port->i2c->regs + I2C_TIMING);
-		/*dev_info(dev->dev, "XO2 ID %02x\n", id);*/
+		/*dev_dbg(dev->dev, "XO2 ID %02x\n", id);*/
 		if (type == 2) {
 			port->name = "DuoFlex CI";
 			port->class = DDB_PORT_CI;
@@ -2408,7 +2408,7 @@ void ddb_ports_init(struct ddb *dev)
 				port->i2c = dev->port[p - 1].i2c;
 			}
 
-			dev_info(dev->dev, "Port %u: Link %u, Link Port %u (TAB %u): %s\n",
+			dev_dbg(dev->dev, "Port %u: Link %u, Link Port %u (TAB %u): %s\n",
 				 port->pnr, port->lnr, port->nr, port->nr + 1,
 				 port->name);
 
@@ -2978,7 +2978,7 @@ static ssize_t redirect_store(struct device *device,
 	res = ddb_redirect(i, p);
 	if (res < 0)
 		return res;
-	dev_info(device, "redirect: %02x, %02x\n", i, p);
+	dev_dbg(device, "redirect: %02x, %02x\n", i, p);
 	return count;
 }
 
@@ -3218,7 +3218,7 @@ int ddb_device_create(struct ddb *dev)
 				     dev, "ddbridge%d", dev->nr);
 	if (IS_ERR(dev->ddb_dev)) {
 		res = PTR_ERR(dev->ddb_dev);
-		dev_info(dev->dev, "Could not create ddbridge%d\n", dev->nr);
+		dev_dbg(dev->dev, "Could not create ddbridge%d\n", dev->nr);
 		goto fail;
 	}
 	res = ddb_device_attrs_add(dev);
@@ -3253,7 +3253,7 @@ static void tempmon_setfan(struct ddb_link *link)
 
 	if ((ddblreadl(link, TEMPMON_CONTROL) &
 	    TEMPMON_CONTROL_OVERTEMP) != 0) {
-		dev_info(link->dev->dev, "Over temperature condition\n");
+		dev_dbg(link->dev->dev, "Over temperature condition\n");
 		link->overtemperature_error = 1;
 	}
 	temp  = (ddblreadl(link, TEMPMON_SENSOR0) >> 8) & 0xFF;
@@ -3312,7 +3312,7 @@ static int tempmon_init(struct ddb_link *link, int first_time)
 		((ddblreadl(link, TEMPMON_CONTROL) &
 			TEMPMON_CONTROL_OVERTEMP) != 0);
 	if (link->overtemperature_error) {
-		dev_info(link->dev->dev, "Over temperature condition\n");
+		dev_dbg(link->dev->dev, "Over temperature condition\n");
 		status = -1;
 	}
 	tempmon_setfan(link);
@@ -3381,7 +3381,7 @@ int ddb_init(struct ddb *dev)
 		goto fail1;
 	ddb_ports_init(dev);
 	if (ddb_buffers_alloc(dev) < 0) {
-		dev_info(dev->dev, "Could not allocate buffer memory\n");
+		dev_dbg(dev->dev, "Could not allocate buffer memory\n");
 		goto fail2;
 	}
 	if (ddb_ports_attach(dev) < 0)

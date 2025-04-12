@@ -510,7 +510,7 @@ static u32 chip_set_segment(struct aspeed_smc_chip *chip, u32 cs, u32 start,
 		size = end - start;
 	}
 
-	dev_info(chip->nor.dev, "CE%d window [ 0x%.8x - 0x%.8x ] %dMB",
+	dev_dbg(chip->nor.dev, "CE%d window [ 0x%.8x - 0x%.8x ] %dMB",
 		 cs, start, end, size >> 20);
 
 	return size;
@@ -554,7 +554,7 @@ static u32 aspeed_smc_chip_set_segment(struct aspeed_smc_chip *chip)
 	if (chip->cs == 0 && controller->info == &spi_2500_info &&
 	    size == SZ_128M) {
 		size = 120 << 20;
-		dev_info(chip->nor.dev,
+		dev_dbg(chip->nor.dev,
 			 "CE%d window resized to %dMB (AST2500 HW quirk)",
 			 chip->cs, size >> 20);
 	}

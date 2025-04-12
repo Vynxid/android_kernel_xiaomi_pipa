@@ -1313,21 +1313,21 @@ static int tvp5150_detect_version(struct tvp5150 *core)
 	core->dev_id = (regs[0] << 8) | regs[1];
 	core->rom_ver = (regs[2] << 8) | regs[3];
 
-	dev_info(sd->dev, "tvp%04x (%u.%u) chip found @ 0x%02x (%s)\n",
+	dev_dbg(sd->dev, "tvp%04x (%u.%u) chip found @ 0x%02x (%s)\n",
 		  core->dev_id, regs[2], regs[3], c->addr << 1,
 		  c->adapter->name);
 
 	if (core->dev_id == 0x5150 && core->rom_ver == 0x0321) {
-		dev_info(sd->dev, "tvp5150a detected.\n");
+		dev_dbg(sd->dev, "tvp5150a detected.\n");
 	} else if (core->dev_id == 0x5150 && core->rom_ver == 0x0400) {
-		dev_info(sd->dev, "tvp5150am1 detected.\n");
+		dev_dbg(sd->dev, "tvp5150am1 detected.\n");
 
 		/* ITU-T BT.656.4 timing */
 		tvp5150_write(sd, TVP5150_REV_SELECT, 0);
 	} else if (core->dev_id == 0x5151 && core->rom_ver == 0x0100) {
-		dev_info(sd->dev, "tvp5151 detected.\n");
+		dev_dbg(sd->dev, "tvp5151 detected.\n");
 	} else {
-		dev_info(sd->dev, "*** unknown tvp%04x chip detected.\n",
+		dev_dbg(sd->dev, "*** unknown tvp%04x chip detected.\n",
 			  core->dev_id);
 	}
 

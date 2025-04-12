@@ -191,7 +191,7 @@ static void ad7418_init_client(struct i2c_client *client)
 	if (reg < 0) {
 		dev_err(&client->dev, "cannot read configuration register\n");
 	} else {
-		dev_info(&client->dev, "configuring for mode 1\n");
+		dev_dbg(&client->dev, "configuring for mode 1\n");
 		i2c_smbus_write_byte_data(client, AD7418_REG_CONF, reg & 0xfe);
 
 		if (data->type == ad7417 || data->type == ad7418)
@@ -240,7 +240,7 @@ static int ad7418_probe(struct i2c_client *client,
 		break;
 	}
 
-	dev_info(dev, "%s chip found\n", client->name);
+	dev_dbg(dev, "%s chip found\n", client->name);
 
 	/* Initialize the AD7418 chip */
 	ad7418_init_client(client);

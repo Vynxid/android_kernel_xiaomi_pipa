@@ -93,7 +93,7 @@ static struct snd_soc_card snd_soc_machine_simtec_aic33 = {
 
 static int simtec_audio_hermes_probe(struct platform_device *pd)
 {
-	dev_info(&pd->dev, "probing....\n");
+	dev_dbg(&pd->dev, "probing....\n");
 	return simtec_audio_core_probe(pd, &snd_soc_machine_simtec_aic33);
 }
 

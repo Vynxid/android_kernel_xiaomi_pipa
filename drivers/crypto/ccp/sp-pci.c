@@ -84,13 +84,13 @@ static int sp_get_irqs(struct sp_device *sp)
 		return 0;
 
 	/* Couldn't get MSI-X vectors, try MSI */
-	dev_notice(dev, "could not enable MSI-X (%d), trying MSI\n", ret);
+	dev_dbg(dev, "could not enable MSI-X (%d), trying MSI\n", ret);
 	ret = sp_get_msi_irq(sp);
 	if (!ret)
 		return 0;
 
 	/* Couldn't get MSI interrupt */
-	dev_notice(dev, "could not enable MSI (%d)\n", ret);
+	dev_dbg(dev, "could not enable MSI (%d)\n", ret);
 
 	return ret;
 }
@@ -226,14 +226,14 @@ static int sp_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	if (ret)
 		goto free_irqs;
 
-	dev_notice(dev, "enabled\n");
+	dev_dbg(dev, "enabled\n");
 
 	return 0;
 
 free_irqs:
 	sp_free_irqs(sp);
 e_err:
-	dev_notice(dev, "initialization failed\n");
+	dev_dbg(dev, "initialization failed\n");
 	return ret;
 }
 
@@ -249,7 +249,7 @@ static void sp_pci_remove(struct pci_dev *pdev)
 
 	sp_free_irqs(sp);
 
-	dev_notice(dev, "disabled\n");
+	dev_dbg(dev, "disabled\n");
 }
 
 #ifdef CONFIG_PM

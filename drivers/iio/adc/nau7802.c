@@ -513,7 +513,7 @@ static int nau7802_probe(struct i2c_client *client,
 			 * So, we continue no matter what but we switch to
 			 * polling mode.
 			 */
-			dev_info(&client->dev,
+			dev_dbg(&client->dev,
 				"Failed to allocate IRQ, using polling mode\n");
 			client->irq = 0;
 		} else

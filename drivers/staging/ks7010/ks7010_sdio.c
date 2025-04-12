@@ -490,7 +490,7 @@ static void ks7010_rw_function(struct work_struct *work)
 	/* wait after WAKEUP */
 	while (time_after(priv->last_wakeup + msecs_to_jiffies(30), jiffies)) {
 		netdev_dbg(priv->net_dev, "wait after WAKEUP\n");
-		dev_info(&func->dev, "wake: %lu %lu\n",
+		dev_dbg(&func->dev, "wake: %lu %lu\n",
 			 priv->last_wakeup + msecs_to_jiffies(30), jiffies);
 		msleep(30);
 	}

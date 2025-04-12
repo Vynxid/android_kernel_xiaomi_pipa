@@ -3674,7 +3674,7 @@ struct host_data {
      struct ncb *ncb;
 };
 
-#define PRINT_ADDR(cmd, arg...) dev_info(&cmd->device->sdev_gendev , ## arg)
+#define PRINT_ADDR(cmd, arg...) dev_dbg(&cmd->device->sdev_gendev , ## arg)
 
 static void ncr_print_msg(struct ccb *cp, char *label, u_char *msg)
 {
@@ -4078,7 +4078,7 @@ static int ncr_prepare_nego(struct ncb *np, struct ccb *cp, u_char *msgptr)
 			nego = NS_SYNC;
 		} else {
 			tp->period  =0xffff;
-			dev_info(&starget->dev, "target did not report SYNC.\n");
+			dev_dbg(&starget->dev, "target did not report SYNC.\n");
 		}
 	}
 
@@ -5611,7 +5611,7 @@ static void ncr_setwide (struct ncb *np, struct ccb *cp, u_char wide, u_char ack
 	**	Bells and whistles   ;-)
 	*/
 	if (bootverbose >= 2) {
-		dev_info(&cmd->device->sdev_target->dev, "WIDE SCSI %sabled.\n",
+		dev_dbg(&cmd->device->sdev_target->dev, "WIDE SCSI %sabled.\n",
 				(scntl3 & EWS) ? "en" : "dis");
 	}
 
@@ -5708,11 +5708,11 @@ static void ncr_setup_tags (struct ncb *np, struct scsi_device *sdev)
 	*/
 	if (bootverbose) {
 		if (lp->usetags) {
-			dev_info(&sdev->sdev_gendev,
+			dev_dbg(&sdev->sdev_gendev,
 				"tagged command queue depth set to %d\n",
 				reqtags);
 		} else {
-			dev_info(&sdev->sdev_gendev,
+			dev_dbg(&sdev->sdev_gendev,
 					"tagged command queueing disabled\n");
 		}
 	}

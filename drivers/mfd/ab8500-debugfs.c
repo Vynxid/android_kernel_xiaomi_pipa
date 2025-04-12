@@ -1308,7 +1308,7 @@ static int ab8500_registers_print(struct device *dev, u32 bank,
 				if (seq_has_overflowed(s))
 					return 0;
 			} else {
-				dev_info(dev, " [0x%02X/0x%02X]: 0x%02X\n",
+				dev_dbg(dev, " [0x%02X/0x%02X]: 0x%02X\n",
 					 bank, reg, value);
 			}
 		}
@@ -1354,10 +1354,10 @@ void ab8500_dump_all_banks(struct device *dev)
 {
 	unsigned int i;
 
-	dev_info(dev, "ab8500 register values:\n");
+	dev_dbg(dev, "ab8500 register values:\n");
 
 	for (i = 1; i < AB8500_NUM_BANKS; i++) {
-		dev_info(dev, " bank 0x%02X:\n", i);
+		dev_dbg(dev, " bank 0x%02X:\n", i);
 		ab8500_registers_print(dev, i, NULL);
 	}
 }
@@ -2529,7 +2529,7 @@ static ssize_t ab8500_subscribe_write(struct file *file,
 	dev_attr[irq_index]->attr.mode = S_IRUGO;
 	err = sysfs_create_file(&dev->kobj, &dev_attr[irq_index]->attr);
 	if (err < 0) {
-		pr_info("sysfs_create_file failed %d\n", err);
+		pr_debug("sysfs_create_file failed %d\n", err);
 		return err;
 	}
 
@@ -2537,7 +2537,7 @@ static ssize_t ab8500_subscribe_write(struct file *file,
 				   IRQF_SHARED | IRQF_NO_SUSPEND | IRQF_ONESHOT,
 				   "ab8500-debug", &dev->kobj);
 	if (err < 0) {
-		pr_info("request_threaded_irq failed %d, %lu\n",
+		pr_debug("request_threaded_irq failed %d, %lu\n",
 			err, user_val);
 		sysfs_remove_file(&dev->kobj, &dev_attr[irq_index]->attr);
 		return err;

@@ -180,12 +180,12 @@ static int jz4780_nand_attach_chip(struct nand_chip *chip)
 		chip->ecc.correct = jz4780_nand_ecc_correct;
 		/* fall through */
 	case NAND_ECC_SOFT:
-		dev_info(nfc->dev, "using %s (strength %d, size %d, bytes %d)\n",
+		dev_dbg(nfc->dev, "using %s (strength %d, size %d, bytes %d)\n",
 			 (nfc->bch) ? "hardware BCH" : "software ECC",
 			 chip->ecc.strength, chip->ecc.size, chip->ecc.bytes);
 		break;
 	case NAND_ECC_NONE:
-		dev_info(nfc->dev, "not using ECC\n");
+		dev_dbg(nfc->dev, "not using ECC\n");
 		break;
 	default:
 		dev_err(nfc->dev, "ECC mode %d not supported\n",

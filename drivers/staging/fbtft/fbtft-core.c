@@ -65,9 +65,9 @@ void fbtft_dbg_hex(const struct device *dev, int groupsize,
 			   512 - text_len, false);
 
 	if (len > 32)
-		dev_info(dev, "%s ...\n", text);
+		dev_dbg(dev, "%s ...\n", text);
 	else
-		dev_info(dev, "%s\n", text);
+		dev_dbg(dev, "%s\n", text);
 }
 EXPORT_SYMBOL(fbtft_dbg_hex);
 
@@ -407,7 +407,7 @@ static void fbtft_update_display(struct fbtft_par *par, unsigned int start_line,
 		throughput = throughput ? (len * 1000) / throughput : 0;
 		throughput = throughput * 1000 / 1024;
 
-		dev_info(par->info->device,
+		dev_dbg(par->info->device,
 			 "Display update: %ld kB/s, fps=%ld\n",
 			 throughput, fps);
 		par->first_update_done = true;
@@ -970,7 +970,7 @@ int fbtft_register_framebuffer(struct fb_info *fb_info)
 	if (spi)
 		sprintf(text2, ", spi%d.%d at %d MHz", spi->master->bus_num,
 			spi->chip_select, spi->max_speed_hz / 1000000);
-	dev_info(fb_info->dev,
+	dev_dbg(fb_info->dev,
 		 "%s frame buffer, %dx%d, %d KiB video memory%s, fps=%lu%s\n",
 		 fb_info->fix.id, fb_info->var.xres, fb_info->var.yres,
 		 fb_info->fix.smem_len >> 10, text1,
@@ -1263,7 +1263,7 @@ static u32 fbtft_of_value(struct device_node *node, const char *propname)
 
 	ret = of_property_read_u32(node, propname, &val);
 	if (ret == 0)
-		pr_info("%s: %s = %u\n", __func__, propname, val);
+		pr_debug("%s: %s = %u\n", __func__, propname, val);
 
 	return val;
 }
@@ -1340,7 +1340,7 @@ int fbtft_probe_common(struct fbtft_display *display,
 		dev = &pdev->dev;
 
 	if (unlikely(display->debug & DEBUG_DRIVER_INIT_FUNCTIONS))
-		dev_info(dev, "%s()\n", __func__);
+		dev_dbg(dev, "%s()\n", __func__);
 
 	pdata = dev->platform_data;
 	if (!pdata) {

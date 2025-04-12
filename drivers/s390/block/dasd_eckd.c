@@ -1651,7 +1651,7 @@ dasd_eckd_check_characteristics(struct dasd_device *device)
 		return -EIO;
 	}
 	if (!ccw_device_is_multipath(device->cdev)) {
-		dev_info(&device->cdev->dev,
+		dev_dbg(&device->cdev->dev,
 			 "The DASD is not operating in multipath mode\n");
 	}
 	if (!private) {
@@ -1752,7 +1752,7 @@ dasd_eckd_check_characteristics(struct dasd_device *device)
 	if (readonly)
 		set_bit(DASD_FLAG_DEVICE_RO, &device->flags);
 
-	dev_info(&device->cdev->dev, "New DASD %04X/%02X (CU %04X/%02X) "
+	dev_dbg(&device->cdev->dev, "New DASD %04X/%02X (CU %04X/%02X) "
 		 "with %d cylinders, %d heads, %d sectors%s\n",
 		 private->rdc_data.dev_type,
 		 private->rdc_data.dev_model,
@@ -1994,7 +1994,7 @@ raw:
 			  private->rdc_data.trk_per_cyl *
 			  blk_per_trk);
 
-	dev_info(&device->cdev->dev,
+	dev_dbg(&device->cdev->dev,
 		 "DASD with %u KB/block, %lu KB total size, %u KB/track, "
 		 "%s\n", (block->bp_block >> 10),
 		 (((unsigned long) private->real_cyl *
@@ -4416,7 +4416,7 @@ dasd_eckd_set_attrib(struct dasd_device *device, void __user *argp)
 		return -EFAULT;
 	private->attrib = attrib;
 
-	dev_info(&device->cdev->dev,
+	dev_dbg(&device->cdev->dev,
 		 "The DASD cache mode was set to %x (%i cylinder prestage)\n",
 		 private->attrib.operation, private->attrib.nr_cyl);
 	return 0;
@@ -5016,7 +5016,7 @@ static int dasd_eckd_reload_device(struct dasd_device *device)
 				 "%s.%s.%04x.%02x", uid.vendor, uid.serial,
 				 uid.ssid, uid.base_unit_addr);
 
-		dev_info(&device->cdev->dev,
+		dev_dbg(&device->cdev->dev,
 			 "An Alias device was reassigned to a new base device "
 			 "with UID: %s\n", print_uid);
 	}
@@ -5427,7 +5427,7 @@ static void dasd_eckd_cuir_notify_user(struct dasd_device *device,
 				device->path[pos].cssid,
 				device->path[pos].chpid);
 		else if (action == CUIR_RESUME)
-			pr_info("Path %x.%02x is back online after service on the storage server",
+			pr_debug("Path %x.%02x is back online after service on the storage server",
 				device->path[pos].cssid,
 				device->path[pos].chpid);
 		clear_bit(7 - pos, &paths);

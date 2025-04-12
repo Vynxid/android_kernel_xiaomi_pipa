@@ -288,7 +288,7 @@ static int usb_dsbr100_suspend(struct usb_interface *intf, pm_message_t message)
 		dev_warn(&intf->dev, "dsbr100_stop failed\n");
 	mutex_unlock(&radio->v4l2_lock);
 
-	dev_info(&intf->dev, "going into suspend..\n");
+	dev_dbg(&intf->dev, "going into suspend..\n");
 	return 0;
 }
 
@@ -302,7 +302,7 @@ static int usb_dsbr100_resume(struct usb_interface *intf)
 		dev_warn(&intf->dev, "dsbr100_start failed\n");
 	mutex_unlock(&radio->v4l2_lock);
 
-	dev_info(&intf->dev, "coming out of suspend..\n");
+	dev_dbg(&intf->dev, "coming out of suspend..\n");
 	return 0;
 }
 

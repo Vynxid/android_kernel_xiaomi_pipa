@@ -252,7 +252,7 @@ static int __init test_ ## t ## _overflow(void) {			\
 	int err = 0;							\
 	unsigned i;							\
 									\
-	pr_info("%-3s: %zu arithmetic tests\n", #t,			\
+	pr_debug("%-3s: %zu arithmetic tests\n", #t,			\
 		ARRAY_SIZE(t ## _tests));				\
 	for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)			\
 		err |= do_test_ ## t(&t ## _tests[i]);			\
@@ -314,7 +314,7 @@ static int __init test_overflow_shift(void)
 		__failed = 1;						\
 	}								\
 	if (!__failed)							\
-		pr_info("ok: (%s)(%s << %s) == %s\n", #t, #a, #s,	\
+		pr_debug("ok: (%s)(%s << %s) == %s\n", #t, #a, #s,	\
 			of ? "overflow" : #expect);			\
 	__failed;							\
 })
@@ -530,7 +530,7 @@ static int __init test_ ## func (void *arg)				\
 		free ## want_arg (free_func, arg, ptr);			\
 		return 1;						\
 	}								\
-	pr_info(#func " detected saturation\n");			\
+	pr_debug(#func " detected saturation\n");			\
 	return 0;							\
 }
 
@@ -680,7 +680,7 @@ static int __init test_overflow_size_helpers(void)
 	err |= check_one_size_helper(SIZE_MAX,
 				     struct_size, obj, data, SIZE_MAX - 3);
 
-	pr_info("%d overflow size helper tests finished\n", count);
+	pr_debug("%d overflow size helper tests finished\n", count);
 
 	return err;
 }
@@ -698,7 +698,7 @@ static int __init test_module_init(void)
 		pr_warn("FAIL!\n");
 		err = -EINVAL;
 	} else {
-		pr_info("all tests passed\n");
+		pr_debug("all tests passed\n");
 	}
 
 	return err;

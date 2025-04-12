@@ -1228,7 +1228,7 @@ static int ipu_add_client_devices(struct ipu_soc *ipu, unsigned long ipu_base)
 		/* Associate subdevice with the corresponding port node */
 		of_node = of_graph_get_port_by_id(dev->of_node, i);
 		if (!of_node) {
-			dev_info(dev,
+			dev_dbg(dev,
 				 "no port@%d node in %pOF, not using %s%d\n",
 				 i, dev->of_node,
 				 (i / 2) ? "DI" : "CSI", i % 2);
@@ -1509,7 +1509,7 @@ static int ipu_probe(struct platform_device *pdev)
 		goto failed_add_clients;
 	}
 
-	dev_info(&pdev->dev, "%s probed\n", devtype->name);
+	dev_dbg(&pdev->dev, "%s probed\n", devtype->name);
 
 	return 0;
 

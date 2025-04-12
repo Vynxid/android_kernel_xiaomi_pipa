@@ -105,9 +105,9 @@ static int uio_dmem_genirq_release(struct uio_info *info, struct inode *inode)
 	return 0;
 }
 
-static irqreturn_t uio_dmem_genirq_handler(int irq, struct uio_info *dev_info)
+static irqreturn_t uio_dmem_genirq_handler(int irq, struct uio_info *dev_dbg)
 {
-	struct uio_dmem_genirq_platdata *priv = dev_info->priv;
+	struct uio_dmem_genirq_platdata *priv = dev_dbg->priv;
 
 	/* Just disable the interrupt in the interrupt controller, and
 	 * remember the state so we can allow user space to enable it later.
@@ -121,9 +121,9 @@ static irqreturn_t uio_dmem_genirq_handler(int irq, struct uio_info *dev_info)
 	return IRQ_HANDLED;
 }
 
-static int uio_dmem_genirq_irqcontrol(struct uio_info *dev_info, s32 irq_on)
+static int uio_dmem_genirq_irqcontrol(struct uio_info *dev_dbg, s32 irq_on)
 {
-	struct uio_dmem_genirq_platdata *priv = dev_info->priv;
+	struct uio_dmem_genirq_platdata *priv = dev_dbg->priv;
 	unsigned long flags;
 
 	/* Allow user space to enable and disable the interrupt
@@ -137,10 +137,10 @@ static int uio_dmem_genirq_irqcontrol(struct uio_info *dev_info, s32 irq_on)
 	spin_lock_irqsave(&priv->lock, flags);
 	if (irq_on) {
 		if (test_and_clear_bit(0, &priv->flags))
-			enable_irq(dev_info->irq);
+			enable_irq(dev_dbg->irq);
 	} else {
 		if (!test_and_set_bit(0, &priv->flags))
-			disable_irq_nosync(dev_info->irq);
+			disable_irq_nosync(dev_dbg->irq);
 	}
 	spin_unlock_irqrestore(&priv->lock, flags);
 

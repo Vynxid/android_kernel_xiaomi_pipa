@@ -1010,7 +1010,7 @@ static int aha1542_pnp_probe(struct pnp_dev *pdev, const struct pnp_device_id *i
 		/* The card can be queried for its DMA, we have
 		   the DMA set up that is enough */
 
-		dev_info(&pdev->dev, "ISAPnP found an AHA1535 at I/O 0x%03X", io[indx]);
+		dev_dbg(&pdev->dev, "ISAPnP found an AHA1535 at I/O 0x%03X", io[indx]);
 	}
 
 	sh = aha1542_hw_init(&driver_template, &pdev->dev, indx);

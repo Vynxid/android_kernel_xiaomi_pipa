@@ -1993,7 +1993,7 @@ static int imx274_probe(struct i2c_client *client,
 		goto err_ctrls;
 	}
 
-	dev_info(&client->dev, "imx274 : imx274 probe success !\n");
+	dev_dbg(&client->dev, "imx274 : imx274 probe success !\n");
 	return 0;
 
 err_ctrls:

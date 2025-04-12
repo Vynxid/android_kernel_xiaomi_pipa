@@ -174,7 +174,7 @@ int lcd_spi_register(struct mmphw_ctrl *ctrl)
 		return err;
 	}
 
-	dev_info(&master->dev, "registered\n");
+	dev_dbg(&master->dev, "registered\n");
 
 	return 0;
 }

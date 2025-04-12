@@ -126,7 +126,7 @@ static int i5500_temp_probe(struct pci_dev *pdev,
 	pci_read_config_byte(pdev, REG_TSFSC, &tsfsc);
 	pci_read_config_dword(pdev, REG_TSTIMER, &tstimer);
 	if (tsfsc == 0x7F && tstimer == 0x07D30D40) {
-		dev_notice(&pdev->dev, "Sensor seems to be disabled\n");
+		dev_dbg(&pdev->dev, "Sensor seems to be disabled\n");
 		return -ENODEV;
 	}
 

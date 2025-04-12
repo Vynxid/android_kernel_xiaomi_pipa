@@ -92,7 +92,7 @@ struct mdev_state {
 	u32 bar_mask;
 	struct mutex ops_lock;
 	struct mdev_device *mdev;
-	struct vfio_device_info dev_info;
+	struct vfio_device_info dev_dbg;
 
 	const struct mdpy_type *type;
 	u32 memsize;
@@ -162,7 +162,7 @@ static void handle_pci_cfg_write(struct mdev_state *mdev_state, u16 offset,
 		} else {
 			cfg_addr &= PCI_BASE_ADDRESS_MEM_MASK;
 			if (cfg_addr)
-				dev_info(dev, "BAR0 @ 0x%x\n", cfg_addr);
+				dev_dbg(dev, "BAR0 @ 0x%x\n", cfg_addr);
 		}
 
 		cfg_addr |= (mdev_state->vconfig[offset] &
@@ -197,7 +197,7 @@ static ssize_t mdev_access(struct mdev_device *mdev, char *buf, size_t count,
 			memcpy(buf, mdev_state->memblk, count);
 
 	} else {
-		dev_info(dev, "%s: %s @0x%llx (unhandled)\n",
+		dev_dbg(dev, "%s: %s @0x%llx (unhandled)\n",
 			 __func__, is_write ? "WR" : "RD", pos);
 		ret = -1;
 		goto accessfailed;
@@ -256,7 +256,7 @@ static int mdpy_create(struct kobject *kobj, struct mdev_device *mdev)
 		kfree(mdev_state);
 		return -ENOMEM;
 	}
-	dev_info(dev, "%s: %s (%dx%d)\n",
+	dev_dbg(dev, "%s: %s (%dx%d)\n",
 		 __func__, kobj->name, type->width, type->height);
 
 	mutex_init(&mdev_state->ops_lock);
@@ -277,7 +277,7 @@ static int mdpy_remove(struct mdev_device *mdev)
 	struct mdev_state *mdev_state = mdev_get_drvdata(mdev);
 	struct device *dev = mdev_dev(mdev);
 
-	dev_info(dev, "%s\n", __func__);
+	dev_dbg(dev, "%s\n", __func__);
 
 	mdev_set_drvdata(mdev, NULL);
 	vfree(mdev_state->memblk);
@@ -468,11 +468,11 @@ static int mdpy_get_irq_info(struct mdev_device *mdev,
 }
 
 static int mdpy_get_device_info(struct mdev_device *mdev,
-				struct vfio_device_info *dev_info)
+				struct vfio_device_info *dev_dbg)
 {
-	dev_info->flags = VFIO_DEVICE_FLAGS_PCI;
-	dev_info->num_regions = VFIO_PCI_NUM_REGIONS;
-	dev_info->num_irqs = VFIO_PCI_NUM_IRQS;
+	dev_dbg->flags = VFIO_DEVICE_FLAGS_PCI;
+	dev_dbg->num_regions = VFIO_PCI_NUM_REGIONS;
+	dev_dbg->num_irqs = VFIO_PCI_NUM_IRQS;
 	return 0;
 }
 
@@ -535,7 +535,7 @@ static long mdpy_ioctl(struct mdev_device *mdev, unsigned int cmd,
 		if (ret)
 			return ret;
 
-		memcpy(&mdev_state->dev_info, &info, sizeof(info));
+		memcpy(&mdev_state->dev_dbg, &info, sizeof(info));
 
 		if (copy_to_user((void __user *)arg, &info, minsz))
 			return -EFAULT;
@@ -577,7 +577,7 @@ static long mdpy_ioctl(struct mdev_device *mdev, unsigned int cmd,
 			return -EFAULT;
 
 		if ((info.argsz < minsz) ||
-		    (info.index >= mdev_state->dev_info.num_irqs))
+		    (info.index >= mdev_state->dev_dbg.num_irqs))
 			return -EINVAL;
 
 		ret = mdpy_get_irq_info(mdev, &info);
@@ -759,7 +759,7 @@ static int __init mdpy_dev_init(void)
 	}
 	cdev_init(&mdpy_cdev, &vd_fops);
 	cdev_add(&mdpy_cdev, mdpy_devt, MINORMASK);
-	pr_info("%s: major %d\n", __func__, MAJOR(mdpy_devt));
+	pr_debug("%s: major %d\n", __func__, MAJOR(mdpy_devt));
 
 	mdpy_class = class_create(THIS_MODULE, MDPY_CLASS_NAME);
 	if (IS_ERR(mdpy_class)) {

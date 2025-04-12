@@ -3221,7 +3221,7 @@ static int transport_axon_probe(struct platform_device *dev)
 	priv->msg_size = roundup_pow_of_two(priv->msg_size +
 			sizeof(vs_service_id_t)) - sizeof(vs_service_id_t);
 	if (priv->msg_size != msg_size)
-		dev_info(&dev->dev, "message size rounded up from %zd to %zd\n",
+		dev_dbg(&dev->dev, "message size rounded up from %zd to %zd\n",
 				(size_t)msg_size, priv->msg_size);
 
 	INIT_LIST_HEAD(&priv->tx_queue);

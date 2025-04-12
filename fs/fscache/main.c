@@ -184,7 +184,7 @@ static int __init fscache_init(void)
 					       sizeof(struct fscache_cookie),
 					       0, 0, NULL);
 	if (!fscache_cookie_jar) {
-		pr_notice("Failed to allocate a cookie jar\n");
+		pr_debug("Failed to allocate a cookie jar\n");
 		ret = -ENOMEM;
 		goto error_cookie_jar;
 	}
@@ -193,7 +193,7 @@ static int __init fscache_init(void)
 	if (!fscache_root)
 		goto error_kobj;
 
-	pr_notice("Loaded\n");
+	pr_debug("Loaded\n");
 	return 0;
 
 error_kobj:
@@ -229,7 +229,7 @@ static void __exit fscache_exit(void)
 	fscache_proc_cleanup();
 	destroy_workqueue(fscache_op_wq);
 	destroy_workqueue(fscache_object_wq);
-	pr_notice("Unloaded\n");
+	pr_debug("Unloaded\n");
 }
 
 module_exit(fscache_exit);

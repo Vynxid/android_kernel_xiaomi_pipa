@@ -187,7 +187,7 @@ static int via_no_dac_cb(struct pci_dev *pdev, void *data)
 static void via_no_dac(struct pci_dev *dev)
 {
 	if (!disable_dac_quirk) {
-		dev_info(&dev->dev, "disabling DAC on VIA PCI bridge\n");
+		dev_dbg(&dev->dev, "disabling DAC on VIA PCI bridge\n");
 		pci_walk_bus(dev->subordinate, via_no_dac_cb, NULL);
 	}
 }

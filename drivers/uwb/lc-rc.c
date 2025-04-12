@@ -381,7 +381,7 @@ int uwb_rc_add(struct uwb_rc *rc, struct device *parent_dev, void *priv)
 
 	uwb_mac_addr_print(macbuf, sizeof(macbuf), &rc->uwb_dev.mac_addr);
 	uwb_dev_addr_print(devbuf, sizeof(devbuf), &rc->uwb_dev.dev_addr);
-	dev_info(dev,
+	dev_dbg(dev,
 		 "new uwb radio controller (mac %s dev %s) on %s %s\n",
 		 macbuf, devbuf, parent_dev->bus->name, dev_name(parent_dev));
 	rc->ready = 1;

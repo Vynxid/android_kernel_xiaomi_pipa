@@ -309,7 +309,7 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 
 	case SUBSYS_BEFORE_SHUTDOWN:
 		bootup_request++;
-		dev_info(memsh_drv->dev,
+		dev_dbg(memsh_drv->dev,
 		"memshare: SUBSYS_BEFORE_SHUTDOWN: bootup_request:%d\n",
 		bootup_request);
 		for (i = 0; i < MAX_CLIENTS; i++)
@@ -318,7 +318,7 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 
 	case SUBSYS_RAMDUMP_NOTIFICATION:
 		ramdump_event = true;
-		dev_info(memsh_drv->dev,
+		dev_dbg(memsh_drv->dev,
 		"memshare: SUBSYS_RAMDUMP_NOTIFICATION: ramdump_event:%d\n",
 		ramdump_event);
 		break;
@@ -326,12 +326,12 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 	case SUBSYS_BEFORE_POWERUP:
 		if (_cmd) {
 			notifdata = (struct notif_data *) _cmd;
-			dev_info(memsh_drv->dev,
+			dev_dbg(memsh_drv->dev,
 			"memshare: SUBSYS_BEFORE_POWERUP: enable_ramdump: %d, ramdump_event: %d\n",
 			notifdata->enable_ramdump, ramdump_event);
 		} else {
 			ramdump_event = false;
-			dev_info(memsh_drv->dev,
+			dev_dbg(memsh_drv->dev,
 			"memshare: SUBSYS_BEFORE_POWERUP: ramdump_event: %d\n",
 			ramdump_event);
 			break;
@@ -346,7 +346,7 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 		break;
 
 	case SUBSYS_AFTER_POWERUP:
-		dev_info(memsh_drv->dev, "memshare: SUBSYS_AFTER_POWERUP: Modem has booted up\n");
+		dev_dbg(memsh_drv->dev, "memshare: SUBSYS_AFTER_POWERUP: Modem has booted up\n");
 		for (i = 0; i < MAX_CLIENTS; i++) {
 			size = memblock[i].size;
 			if (memblock[i].free_memory > 0 &&
@@ -364,7 +364,7 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 				!memblock[i].client_request &&
 				memblock[i].allotted &&
 				!memblock[i].alloc_request) {
-				dev_info(memsh_child->dev,
+				dev_dbg(memsh_child->dev,
 					"memshare: hypervisor unmapping for allocated memory with client id: %d\n",
 					memblock[i].client_id);
 				if (memblock[i].hyp_mapping) {
@@ -411,7 +411,7 @@ static int modem_notifier_cb(struct notifier_block *this, unsigned long code,
 		break;
 	}
 	mutex_unlock(&memsh_drv->mem_share);
-	dev_info(memsh_drv->dev,
+	dev_dbg(memsh_drv->dev,
 	"memshare: notifier_cb processed for code: %d\n", code);
 	return NOTIFY_DONE;
 }
@@ -457,7 +457,7 @@ static void handle_alloc_generic_req(struct qmi_handle *handle,
 
 	mutex_lock(&memsh_drv->mem_share);
 	alloc_req = (struct mem_alloc_generic_req_msg_v01 *)decoded_msg;
-	dev_info(memsh_child->dev,
+	dev_dbg(memsh_child->dev,
 		"memshare_alloc: memory alloc request received for client id: %d, proc_id: %d, request size: %d\n",
 		alloc_req->client_id, alloc_req->proc_id, alloc_req->num_bytes);
 	alloc_resp = kzalloc(sizeof(*alloc_resp),
@@ -520,7 +520,7 @@ static void handle_alloc_generic_req(struct qmi_handle *handle,
 		memblock[client_id].allotted)
 		shared_hyp_mapping(client_id);
 	mutex_unlock(&memsh_drv->mem_share);
-	dev_info(memsh_child->dev,
+	dev_dbg(memsh_child->dev,
 		"memshare_alloc: client_id: %d, alloc_resp.num_bytes: %d, alloc_resp.resp.result: %lx\n",
 		alloc_req->client_id,
 		alloc_resp->dhms_mem_alloc_addr_info[0].num_bytes,
@@ -555,7 +555,7 @@ static void handle_free_generic_req(struct qmi_handle *handle,
 	memset(&free_resp, 0, sizeof(free_resp));
 	free_resp.resp.error = QMI_ERR_INTERNAL_V01;
 	free_resp.resp.result = QMI_RESULT_FAILURE_V01;
-	dev_info(memsh_child->dev,
+	dev_dbg(memsh_child->dev,
 		"memshare_free: handling memory free request with client id: %d, proc_id: %d\n",
 		free_req->client_id, free_req->proc_id);
 	client_id = check_client(free_req->client_id, free_req->proc_id, FREE);
@@ -661,7 +661,7 @@ static void handle_query_size_req(struct qmi_handle *handle,
 	query_resp->resp.error = QMI_ERR_NONE_V01;
 	mutex_unlock(&memsh_drv->mem_share);
 
-	dev_info(memsh_child->dev,
+	dev_dbg(memsh_child->dev,
 		"memshare_query: client_id : %d, query_resp.size :%d, query_resp.resp.result :%lx\n",
 		query_req->client_id, query_resp->size,
 		(unsigned long)query_resp->resp.result);

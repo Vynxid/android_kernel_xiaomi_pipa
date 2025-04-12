@@ -371,7 +371,7 @@ static int __klp_enable_patch(struct klp_patch *patch)
 	if (!try_module_get(patch->mod))
 		return -ENODEV;
 
-	pr_notice("enabling patch '%s'\n", patch->mod->name);
+	pr_debug("enabling patch '%s'\n", patch->mod->name);
 
 	klp_init_transition(patch, KLP_PATCHED);
 
@@ -938,7 +938,7 @@ static void klp_cleanup_module_patches_limited(struct module *mod,
 				if (patch != klp_transition_patch)
 					klp_pre_unpatch_callback(obj);
 
-				pr_notice("reverting patch '%s' on unloading module '%s'\n",
+				pr_debug("reverting patch '%s' on unloading module '%s'\n",
 					  patch->mod->name, obj->mod->name);
 				klp_unpatch_object(obj);
 
@@ -989,7 +989,7 @@ int klp_module_coming(struct module *mod)
 			if (!patch->enabled && patch != klp_transition_patch)
 				break;
 
-			pr_notice("applying patch '%s' to loading module '%s'\n",
+			pr_debug("applying patch '%s' to loading module '%s'\n",
 				  patch->mod->name, obj->mod->name);
 
 			ret = klp_pre_patch_callback(obj);
@@ -1059,7 +1059,7 @@ static int __init klp_init(void)
 
 	ret = klp_check_compiler_support();
 	if (ret) {
-		pr_info("Your compiler is too old; turning off.\n");
+		pr_debug("Your compiler is too old; turning off.\n");
 		return -EINVAL;
 	}
 

@@ -252,7 +252,7 @@ static int com20020_config(struct pcmcia_device *link)
 	i = com20020_found(dev, 0);	/* calls register_netdev */
 
 	if (i != 0) {
-		dev_notice(&link->dev,
+		dev_dbg(&link->dev,
 			   "com20020_found() failed\n");
 		goto failed;
 	}

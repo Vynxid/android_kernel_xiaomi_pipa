@@ -293,7 +293,7 @@ static int atmel_classd_component_probe(struct snd_soc_component *component)
 
 	snd_soc_component_update_bits(component, CLASSD_MR, mask, val);
 
-	dev_info(component->dev,
+	dev_dbg(component->dev,
 		"PWM modulation type is %s, non-overlapping is %s\n",
 		pwm_type[pdata->pwm_type],
 		pdata->non_overlap_enable?"enabled":"disabled");

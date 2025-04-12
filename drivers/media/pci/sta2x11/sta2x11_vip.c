@@ -802,7 +802,7 @@ static irqreturn_t vip_irq(int irq, void *data)
 
 	if (status & DVP_IT_FIFO)
 		if (vip->overflow++ > 5)
-			pr_info("VIP: fifo overflow\n");
+			pr_debug("VIP: fifo overflow\n");
 
 	if ((status & DVP_IT_VST) && (status & DVP_IT_VSB)) {
 		/* this is bad, we are too slow, hope the condition is gone
@@ -998,7 +998,7 @@ static int sta2x11_vip_init_one(struct pci_dev *pdev,
 	/* Get VIP platform data */
 	config = dev_get_platdata(&pdev->dev);
 	if (!config) {
-		dev_info(&pdev->dev, "VIP slot disabled\n");
+		dev_dbg(&pdev->dev, "VIP slot disabled\n");
 		ret = -EINVAL;
 		goto disable;
 	}
@@ -1114,7 +1114,7 @@ static int sta2x11_vip_init_one(struct pci_dev *pdev,
 
 	sta2x11_vip_init_register(vip);
 
-	dev_info(&pdev->dev, "STA2X11 Video Input Port (VIP) loaded\n");
+	dev_dbg(&pdev->dev, "STA2X11 Video Input Port (VIP) loaded\n");
 	return 0;
 
 vunreg:
@@ -1227,7 +1227,7 @@ static int sta2x11_vip_suspend(struct pci_dev *pdev, pm_message_t state)
 		vip->disabled = 1;
 	}
 
-	pr_info("VIP: suspend\n");
+	pr_debug("VIP: suspend\n");
 	return 0;
 }
 
@@ -1250,7 +1250,7 @@ static int sta2x11_vip_resume(struct pci_dev *pdev)
 	unsigned long flags;
 	int ret, i;
 
-	pr_info("VIP: resume\n");
+	pr_debug("VIP: resume\n");
 	/* restore pci state */
 	if (vip->disabled) {
 		ret = pci_enable_device(pdev);

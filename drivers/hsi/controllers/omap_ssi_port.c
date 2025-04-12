@@ -1251,7 +1251,7 @@ static int ssi_port_probe(struct platform_device *pd)
 
 	hsi_add_clients_from_dt(port, np);
 
-	dev_info(&pd->dev, "ssi port %u successfully initialized\n", port_id);
+	dev_dbg(&pd->dev, "ssi port %u successfully initialized\n", port_id);
 
 	return 0;
 

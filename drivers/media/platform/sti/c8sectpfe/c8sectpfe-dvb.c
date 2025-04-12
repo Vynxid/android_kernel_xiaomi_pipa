@@ -228,7 +228,7 @@ int c8sectpfe_frontend_attach(struct dvb_frontend **fe,
 
 	(*fe)->id = chan_num;
 
-	dev_info(c8sectpfe->device,
+	dev_dbg(c8sectpfe->device,
 			"DVB frontend card %s successfully attached",
 			dvb_card_str(tsin->dvb_card));
 	return 0;

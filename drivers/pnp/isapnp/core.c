@@ -1060,12 +1060,12 @@ static int __init isapnp_init(void)
 	protocol_for_each_card(&isapnp_protocol, card) {
 		cards++;
 		if (isapnp_verbose) {
-			dev_info(&card->dev, "card '%s'\n",
+			dev_dbg(&card->dev, "card '%s'\n",
 			       card->name[0] ? card->name : "unknown");
 			if (isapnp_verbose < 2)
 				continue;
 			card_for_each_dev(card, dev) {
-				dev_info(&card->dev, "device '%s'\n",
+				dev_dbg(&card->dev, "device '%s'\n",
 				       dev->name[0] ? dev->name : "unknown");
 			}
 		}

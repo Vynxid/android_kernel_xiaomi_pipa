@@ -93,7 +93,7 @@ int hts221_allocate_trigger(struct hts221_hw *hw)
 		irq_active_low = true;
 		break;
 	default:
-		dev_info(hw->dev,
+		dev_dbg(hw->dev,
 			 "mode %lx unsupported, using IRQF_TRIGGER_RISING\n",
 			 irq_type);
 		irq_type = IRQF_TRIGGER_RISING;

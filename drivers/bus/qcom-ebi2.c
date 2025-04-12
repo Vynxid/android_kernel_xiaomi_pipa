@@ -284,7 +284,7 @@ static void qcom_ebi2_setup_chipselect(struct device_node *np,
 		dev_dbg(dev, "set %s to %u\n", xp->prop, val);
 	}
 
-	dev_info(dev, "CS%u: SLOW CFG 0x%08x, FAST CFG 0x%08x\n",
+	dev_dbg(dev, "CS%u: SLOW CFG 0x%08x, FAST CFG 0x%08x\n",
 		 csindex, slowcfg, fastcfg);
 
 	if (slowcfg)

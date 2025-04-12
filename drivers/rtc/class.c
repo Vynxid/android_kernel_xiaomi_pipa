@@ -338,7 +338,7 @@ struct rtc_device *rtc_device_register(const char *name, struct device *dev,
 
 	rtc_proc_add_device(rtc);
 
-	dev_info(dev, "rtc core: registered %s as %s\n",
+	dev_dbg(dev, "rtc core: registered %s as %s\n",
 			name, dev_name(&rtc->dev));
 
 #ifdef CONFIG_RTC_HCTOSYS_DEVICE
@@ -529,7 +529,7 @@ int __rtc_register_device(struct module *owner, struct rtc_device *rtc)
 	rtc_proc_add_device(rtc);
 
 	rtc->registered = true;
-	dev_info(rtc->dev.parent, "registered as %s\n",
+	dev_dbg(rtc->dev.parent, "registered as %s\n",
 		 dev_name(&rtc->dev));
 
 #ifdef CONFIG_RTC_HCTOSYS_DEVICE

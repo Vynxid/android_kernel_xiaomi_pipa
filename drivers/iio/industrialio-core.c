@@ -501,7 +501,7 @@ static int iio_setup_mount_idmatrix(const struct device *dev,
 				    struct iio_mount_matrix *matrix)
 {
 	*matrix = iio_mount_idmatrix;
-	dev_info(dev, "mounting matrix not found: using identity...\n");
+	dev_dbg(dev, "mounting matrix not found: using identity...\n");
 	return 0;
 }
 

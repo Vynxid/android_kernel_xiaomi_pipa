@@ -354,7 +354,7 @@ static int snd_usb_create_streams(struct snd_usb_audio *chip, int ctrlif)
 		}
 
 		if (!h1->bInCollection) {
-			dev_info(&dev->dev, "skipping empty audio interface (v1)\n");
+			dev_dbg(&dev->dev, "skipping empty audio interface (v1)\n");
 			return -EINVAL;
 		}
 
@@ -613,7 +613,7 @@ static bool get_alias_id(struct usb_device *dev, unsigned int *id)
 		    sscanf(quirk_alias[i], "%x:%x", &src, &dst) != 2 ||
 		    src != *id)
 			continue;
-		dev_info(&dev->dev,
+		dev_dbg(&dev->dev,
 			 "device (%04x:%04x): applying quirk alias %04x:%04x\n",
 			 USB_ID_VENDOR(*id), USB_ID_PRODUCT(*id),
 			 USB_ID_VENDOR(dst), USB_ID_PRODUCT(dst));
@@ -714,7 +714,7 @@ static int usb_audio_probe(struct usb_interface *intf,
 					chip->pm_intf = intf;
 					break;
 				} else if (vid[i] != -1 || pid[i] != -1) {
-					dev_info(&dev->dev,
+					dev_dbg(&dev->dev,
 						 "device (%04x:%04x) is disabled\n",
 						 USB_ID_VENDOR(id),
 						 USB_ID_PRODUCT(id));

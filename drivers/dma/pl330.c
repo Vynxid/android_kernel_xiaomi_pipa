@@ -1029,7 +1029,7 @@ static bool _trigger(struct pl330_thread *thrd)
 
 	/* See 'Abort Sources' point-4 at Page 2-25 */
 	if (_manager_ns(thrd) && !ns)
-		dev_info(thrd->dmac->ddma.dev, "%s:%d Recipe for ABORT!\n",
+		dev_dbg(thrd->dmac->ddma.dev, "%s:%d Recipe for ABORT!\n",
 			__func__, __LINE__);
 
 	go.chan = thrd->id;
@@ -1483,7 +1483,7 @@ static int pl330_submit_req(struct pl330_thread *thrd,
 
 	if (pl330->state == DYING
 		|| pl330->dmac_tbd.reset_chan & (1 << thrd->id)) {
-		dev_info(thrd->dmac->ddma.dev, "%s:%d\n",
+		dev_dbg(thrd->dmac->ddma.dev, "%s:%d\n",
 			__func__, __LINE__);
 		return -EAGAIN;
 	}
@@ -1491,7 +1491,7 @@ static int pl330_submit_req(struct pl330_thread *thrd,
 	/* If request for non-existing peripheral */
 	if (desc->rqtype != DMA_MEM_TO_MEM &&
 	    desc->peri >= pl330->pcfg.num_peri) {
-		dev_info(thrd->dmac->ddma.dev,
+		dev_dbg(thrd->dmac->ddma.dev,
 				"%s:%d Invalid peripheral(%u)!\n",
 				__func__, __LINE__, desc->peri);
 		return -EINVAL;
@@ -1523,7 +1523,7 @@ static int pl330_submit_req(struct pl330_thread *thrd,
 		goto xfer_exit;
 
 	if (ret > pl330->mcbufsz / 2) {
-		dev_info(pl330->ddma.dev, "%s:%d Try increasing mcbufsz (%i/%i)\n",
+		dev_dbg(pl330->ddma.dev, "%s:%d Try increasing mcbufsz (%i/%i)\n",
 				__func__, __LINE__, ret, pl330->mcbufsz / 2);
 		ret = -ENOMEM;
 		goto xfer_exit;
@@ -1648,7 +1648,7 @@ static int pl330_update(struct pl330_dmac *pl330)
 		int i = 0;
 		while (i < pl330->pcfg.num_chan) {
 			if (val & (1 << i)) {
-				dev_info(pl330->ddma.dev,
+				dev_dbg(pl330->ddma.dev,
 					"Reset Channel-%d\t CS-%x FTC-%x\n",
 						i, readl(regs + CS(i)),
 						readl(regs + FTC(i)));
@@ -3083,9 +3083,9 @@ pl330_probe(struct amba_device *adev, const struct amba_id *id)
 		dev_err(&adev->dev, "unable to set the seg size\n");
 
 
-	dev_info(&adev->dev,
+	dev_dbg(&adev->dev,
 		"Loaded driver for PL330 DMAC-%x\n", adev->periphid);
-	dev_info(&adev->dev,
+	dev_dbg(&adev->dev,
 		"\tDBUFF-%ux%ubytes Num_Chans-%u Num_Peri-%u Num_Events-%u\n",
 		pcfg->data_buf_dep, pcfg->data_bus_width / 8, pcfg->num_chan,
 		pcfg->num_peri, pcfg->num_events);

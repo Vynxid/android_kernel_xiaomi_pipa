@@ -660,7 +660,7 @@ static int m88ds3103_init(struct dvb_frontend *fe)
 		goto err;
 
 	/* cold state - try to download firmware */
-	dev_info(&client->dev, "found a '%s' in cold state\n",
+	dev_dbg(&client->dev, "found a '%s' in cold state\n",
 		 m88ds3103_ops.info.name);
 
 	if (dev->chip_id == M88RS6000_CHIP_ID)
@@ -674,7 +674,7 @@ static int m88ds3103_init(struct dvb_frontend *fe)
 		goto err;
 	}
 
-	dev_info(&client->dev, "downloading firmware from file '%s'\n", name);
+	dev_dbg(&client->dev, "downloading firmware from file '%s'\n", name);
 
 	ret = regmap_write(dev->regmap, 0xb2, 0x01);
 	if (ret)
@@ -704,13 +704,13 @@ static int m88ds3103_init(struct dvb_frontend *fe)
 
 	if (!utmp) {
 		ret = -EINVAL;
-		dev_info(&client->dev, "firmware did not run\n");
+		dev_dbg(&client->dev, "firmware did not run\n");
 		goto err;
 	}
 
-	dev_info(&client->dev, "found a '%s' in warm state\n",
+	dev_dbg(&client->dev, "found a '%s' in warm state\n",
 		 m88ds3103_ops.info.name);
-	dev_info(&client->dev, "firmware version: %X.%X\n",
+	dev_dbg(&client->dev, "firmware version: %X.%X\n",
 		 (utmp >> 4) & 0xf, (utmp >> 0 & 0xf));
 
 warm:

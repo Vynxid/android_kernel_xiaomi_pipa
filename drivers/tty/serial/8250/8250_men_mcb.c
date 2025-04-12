@@ -30,7 +30,7 @@ static u32 men_lookup_uartclk(struct mcb_device *mdev)
 	/* use default value if board is not available below */
 	u32 clkval = 1041666;
 
-	dev_info(&mdev->dev, "%s on board %s\n",
+	dev_dbg(&mdev->dev, "%s on board %s\n",
 		dev_name(&mdev->dev),
 		mdev->bus->name);
 	if  (strncmp(mdev->bus->name, "F075", 4) == 0)
@@ -42,7 +42,7 @@ static u32 men_lookup_uartclk(struct mcb_device *mdev)
 	else if (strncmp(mdev->bus->name, "F210", 4) == 0)
 		clkval = 115200;
 	else
-		dev_info(&mdev->dev,
+		dev_dbg(&mdev->dev,
 			 "board not detected, using default uartclk\n");
 
 	clkval = clkval  << 4;
@@ -124,7 +124,7 @@ static int serial_8250_men_mcb_probe(struct mcb_device *mdev,
 			dev_err(&mdev->dev, "unable to register UART port\n");
 			return data[i].line;
 		}
-		dev_info(&mdev->dev, "found MCB UART: ttyS%d\n", data[i].line);
+		dev_dbg(&mdev->dev, "found MCB UART: ttyS%d\n", data[i].line);
 	}
 
 	return 0;

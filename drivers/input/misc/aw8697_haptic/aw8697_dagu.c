@@ -3565,7 +3565,7 @@ static long aw8697_file_unlocked_ioctl(struct file *file, unsigned int cmd,
 
 	int ret = 0;
 	aw_pr_info("%s enter\n", __func__);
-	dev_info(aw8697->dev, "%s: cmd=0x%x, arg=0x%lx\n", __func__, cmd, arg);
+	dev_dbg(aw8697->dev, "%s: cmd=0x%x, arg=0x%lx\n", __func__, cmd, arg);
 
 	mutex_lock(&aw8697->lock);
 
@@ -3596,7 +3596,7 @@ static ssize_t aw8697_file_read(struct file *filp, char *buff, size_t len,
 	aw_pr_info("%s enter\n", __func__);
 	mutex_lock(&aw8697->lock);
 
-	dev_info(aw8697->dev, "%s: len=%zu\n", __func__, len);
+	dev_dbg(aw8697->dev, "%s: len=%zu\n", __func__, len);
 
 	switch (aw8697->fileops.cmd) {
 	case AW8697_HAPTIC_CMD_READ_REG:
@@ -3608,7 +3608,7 @@ static ssize_t aw8697_file_read(struct file *filp, char *buff, size_t len,
 				pbuff[i] = reg_val;
 			}
 			for (i = 0; i < len; i++) {
-				dev_info(aw8697->dev, "%s: pbuff[%d]=0x%02x\n",
+				dev_dbg(aw8697->dev, "%s: pbuff[%d]=0x%02x\n",
 					 __func__, i, pbuff[i]);
 			}
 			ret = copy_to_user(buff, pbuff, len);
@@ -3654,7 +3654,7 @@ static ssize_t aw8697_file_write(struct file *filp, const char *buff,
 	}
 
 	for (i = 0; i < len; i++) {
-		dev_info(aw8697->dev, "%s: pbuff[%d]=0x%02x\n", __func__, i,
+		dev_dbg(aw8697->dev, "%s: pbuff[%d]=0x%02x\n", __func__, i,
 			 pbuff[i]);
 	}
 
@@ -3674,7 +3674,7 @@ static ssize_t aw8697_file_write(struct file *filp, const char *buff,
 	case AW8697_HAPTIC_CMD_WRITE_REG:
 		if (len > 2) {
 			for (i = 0; i < len - 2; i++) {
-				dev_info(aw8697->dev,
+				dev_dbg(aw8697->dev,
 					 "%s: write reg0x%02x=0x%02x\n",
 					 __func__, pbuff[1] + i, pbuff[i + 2]);
 				aw8697_i2c_write(aw8697, pbuff[1] + i,
@@ -4305,13 +4305,13 @@ static int aw8697_parse_dt_common(struct device *dev, struct aw8697 *aw8697,
 			__func__);
 		return -EINVAL;
 	} else {
-		dev_info(dev, "%s: reset gpio provided ok\n", __func__);
+		dev_dbg(dev, "%s: reset gpio provided ok\n", __func__);
 	}
 	aw8697->irq_gpio = of_get_named_gpio(np, "irq-gpio", 0);
 	if (aw8697->irq_gpio < 0) {
 		dev_err(dev, "%s: no irq gpio provided.\n", __func__);
 	} else {
-		dev_info(dev, "%s: irq gpio provided ok.\n", __func__);
+		dev_dbg(dev, "%s: irq gpio provided ok.\n", __func__);
 	}
 
 	val = of_property_read_u32(np, "vib_mode", &aw8697->info.mode);
@@ -6860,7 +6860,7 @@ static int aw8697_i2c_probe(struct i2c_client *i2c,
 			}
 		}
 	} else {
-		dev_info(&i2c->dev, "%s skipping IRQ registration\n", __func__);
+		dev_dbg(&i2c->dev, "%s skipping IRQ registration\n", __func__);
 		/* disable feature support if gpio was invalid */
 		aw8697->flags |= AW8697_FLAG_SKIP_INTERRUPTS;
 	}
@@ -6925,7 +6925,7 @@ static int aw8697_i2c_probe(struct i2c_client *i2c,
 					 &aw869xx_vibrator_attribute_group);
 	}
 	if (ret < 0) {
-		dev_info(&i2c->dev, "%s error creating sysfs attr files\n",
+		dev_dbg(&i2c->dev, "%s error creating sysfs attr files\n",
 			 __func__);
 		goto err_sysfs;
 	}
@@ -6934,7 +6934,7 @@ static int aw8697_i2c_probe(struct i2c_client *i2c,
 
 	ret = create_rb();
 	if (ret < 0) {
-		dev_info(&i2c->dev, "%s error creating ringbuffer\n", __func__);
+		dev_dbg(&i2c->dev, "%s error creating ringbuffer\n", __func__);
 		goto err_rb;
 	}
 

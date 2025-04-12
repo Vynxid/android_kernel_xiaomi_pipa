@@ -72,7 +72,7 @@ static void sta2x11_new_instance(struct pci_dev *pdev)
 	if (list_empty(&sta2x11_instance_list)) {
 		int size = STA2X11_SWIOTLB_SIZE;
 		/* First instance: register your own swiotlb area */
-		dev_info(&pdev->dev, "Using SWIOTLB (size %i)\n", size);
+		dev_dbg(&pdev->dev, "Using SWIOTLB (size %i)\n", size);
 		if (swiotlb_late_init_with_default_size(size))
 			dev_emerg(&pdev->dev, "init swiotlb failed\n");
 	}
@@ -267,7 +267,7 @@ static void sta2x11_map_ep(struct pci_dev *pdev)
 	for (i = 1; i < STA2X11_NR_FUNCS; i++)
 		pci_write_config_dword(pdev, AHB_CRW(i), 0);
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "sta2x11: Map EP %i: AMBA address %#8x-%#8x\n",
 		 sta2x11_pdev_to_ep(pdev),  map->amba_base,
 		 map->amba_base + STA2X11_AMBA_SIZE - 1);

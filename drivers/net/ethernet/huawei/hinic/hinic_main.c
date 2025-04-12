@@ -1029,7 +1029,7 @@ static int hinic_probe(struct pci_dev *pdev,
 		goto err_nic_dev_init;
 	}
 
-	dev_info(&pdev->dev, "HiNIC driver - probed\n");
+	dev_dbg(&pdev->dev, "HiNIC driver - probed\n");
 	return 0;
 
 err_nic_dev_init:
@@ -1067,7 +1067,7 @@ static void hinic_remove(struct pci_dev *pdev)
 	pci_release_regions(pdev);
 	pci_disable_device(pdev);
 
-	dev_info(&pdev->dev, "HiNIC driver - removed\n");
+	dev_dbg(&pdev->dev, "HiNIC driver - removed\n");
 }
 
 static const struct pci_device_id hinic_pci_table[] = {

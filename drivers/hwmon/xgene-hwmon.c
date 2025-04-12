@@ -761,7 +761,7 @@ static int xgene_hwmon_probe(struct platform_device *pdev)
 	 */
 	schedule_work(&ctx->workq);
 
-	dev_info(&pdev->dev, "APM X-Gene SoC HW monitor driver registered\n");
+	dev_dbg(&pdev->dev, "APM X-Gene SoC HW monitor driver registered\n");
 
 	return 0;
 

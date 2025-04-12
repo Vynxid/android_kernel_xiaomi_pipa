@@ -134,13 +134,13 @@ static int alt_fpga_bridge_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(dev, "driver initialized with handoff %08x\n", priv->mask);
+	dev_dbg(dev, "driver initialized with handoff %08x\n", priv->mask);
 
 	if (!of_property_read_u32(dev->of_node, "bridge-enable", &enable)) {
 		if (enable > 1) {
 			dev_warn(dev, "invalid bridge-enable %u > 1\n", enable);
 		} else {
-			dev_info(dev, "%s bridge\n",
+			dev_dbg(dev, "%s bridge\n",
 				 (enable ? "enabling" : "disabling"));
 			ret = _alt_fpga2sdram_enable_set(priv, enable);
 			if (ret) {

@@ -548,7 +548,7 @@ static int n2rng_check_selftest_buffer(struct n2rng *np, unsigned long unit)
 		dev_err(&np->op->dev, "Selftest failed on unit %lu\n", unit);
 		n2rng_dump_test_buffer(np);
 	} else
-		dev_info(&np->op->dev, "Selftest passed on unit %lu\n", unit);
+		dev_dbg(&np->op->dev, "Selftest passed on unit %lu\n", unit);
 
 	return err;
 }
@@ -674,7 +674,7 @@ static void n2rng_work(struct work_struct *work)
 
 	if (!err) {
 		np->flags |= N2RNG_FLAG_READY;
-		dev_info(&np->op->dev, "RNG ready\n");
+		dev_dbg(&np->op->dev, "RNG ready\n");
 	}
 
 	if (--retries == 0)
@@ -688,7 +688,7 @@ static void n2rng_driver_version(void)
 	static int n2rng_version_printed;
 
 	if (n2rng_version_printed++ == 0)
-		pr_info("%s", version);
+		pr_debug("%s", version);
 }
 
 static const struct of_device_id n2rng_match[];
@@ -746,7 +746,7 @@ static int n2rng_probe(struct platform_device *op)
 		np->num_units = 1;
 	}
 
-	dev_info(&op->dev, "Registered RNG HVAPI major %lu minor %lu\n",
+	dev_dbg(&op->dev, "Registered RNG HVAPI major %lu minor %lu\n",
 		 np->hvapi_major, np->hvapi_minor);
 	np->units = devm_kcalloc(&op->dev, np->num_units, sizeof(*np->units),
 				 GFP_KERNEL);
@@ -758,7 +758,7 @@ static int n2rng_probe(struct platform_device *op)
 	if (err)
 		goto out_hvapi_unregister;
 
-	dev_info(&op->dev, "Found %s RNG, units: %d\n",
+	dev_dbg(&op->dev, "Found %s RNG, units: %d\n",
 		 ((np->flags & N2RNG_FLAG_MULTI) ?
 		  "multi-unit-capable" : "single-unit"),
 		 np->num_units);

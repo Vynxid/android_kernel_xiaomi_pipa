@@ -182,7 +182,7 @@ static void kvaser_pci_del_chan(struct net_device *dev)
 	if (!board)
 		return;
 
-	dev_info(&board->pci_dev->dev, "Removing device %s\n",
+	dev_dbg(&board->pci_dev->dev, "Removing device %s\n",
 		 dev->name);
 
 	/* Disable PCI interrupts */
@@ -190,7 +190,7 @@ static void kvaser_pci_del_chan(struct net_device *dev)
 
 	for (i = 0; i < board->no_channels - 1; i++) {
 		if (board->slave_dev[i]) {
-			dev_info(&board->pci_dev->dev, "Removing device %s\n",
+			dev_dbg(&board->pci_dev->dev, "Removing device %s\n",
 				 board->slave_dev[i]->name);
 			unregister_sja1000dev(board->slave_dev[i]);
 			free_sja1000dev(board->slave_dev[i]);
@@ -263,7 +263,7 @@ static int kvaser_pci_add_chan(struct pci_dev *pdev, int channel,
 	priv->irq_flags = IRQF_SHARED;
 	dev->irq = pdev->irq;
 
-	dev_info(&pdev->dev, "reg_base=%p conf_addr=%p irq=%d\n",
+	dev_dbg(&pdev->dev, "reg_base=%p conf_addr=%p irq=%d\n",
 		 priv->reg_base, board->conf_addr, dev->irq);
 
 	SET_NETDEV_DEV(dev, &pdev->dev);
@@ -300,7 +300,7 @@ static int kvaser_pci_init_one(struct pci_dev *pdev,
 	void __iomem *res_addr = NULL;
 	int i;
 
-	dev_info(&pdev->dev, "initializing device %04x:%04x\n",
+	dev_dbg(&pdev->dev, "initializing device %04x:%04x\n",
 		 pdev->vendor, pdev->device);
 
 	err = pci_enable_device(pdev);
@@ -348,7 +348,7 @@ static int kvaser_pci_init_one(struct pci_dev *pdev,
 	priv = netdev_priv(master_dev);
 	board = priv->priv;
 
-	dev_info(&pdev->dev, "xilinx version=%d number of channels=%d\n",
+	dev_dbg(&pdev->dev, "xilinx version=%d number of channels=%d\n",
 		 board->xilinx_ver, board->no_channels);
 
 	pci_set_drvdata(pdev, master_dev);

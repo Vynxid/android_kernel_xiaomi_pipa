@@ -765,7 +765,7 @@ static ssize_t broadsheet_loadstore_waveform(struct device *dev,
 		goto err_fw;
 	}
 
-	dev_info(dev, "Stored broadsheet waveform, size %zd\n", fw_entry->size);
+	dev_dbg(dev, "Stored broadsheet waveform, size %zd\n", fw_entry->size);
 
 	err = len;
 
@@ -845,7 +845,7 @@ static void broadsheet_identify(struct broadsheetfb_par *par)
 
 	rev = broadsheet_read_reg(par, BS_REG_REV);
 	prc = broadsheet_read_reg(par, BS_REG_PRC);
-	dev_info(dev, "Broadsheet Rev 0x%x, Product Code 0x%x\n", rev, prc);
+	dev_dbg(dev, "Broadsheet Rev 0x%x, Product Code 0x%x\n", rev, prc);
 
 	if (prc != 0x0047)
 		dev_warn(dev, "Unrecognized Broadsheet Product Code\n");

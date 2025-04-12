@@ -627,7 +627,7 @@ static int juli_init(struct snd_ice1712 *ice)
 #endif
 
 	if (spec->analog) {
-		dev_info(ice->card->dev, "juli@: analog I/O detected\n");
+		dev_dbg(ice->card->dev, "juli@: analog I/O detected\n");
 		ice->num_total_dacs = 2;
 		ice->num_total_adcs = 2;
 

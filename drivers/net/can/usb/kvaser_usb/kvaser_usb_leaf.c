@@ -832,7 +832,7 @@ static int kvaser_usb_leaf_get_capabilities_leaf(struct kvaser_usb *dev)
 	u16 status;
 
 	if (!(dev->card_data.capabilities & KVASER_USB_CAP_EXT_CAP)) {
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "No extended capability support. Upgrade device firmware.\n");
 		return 0;
 	}
@@ -843,7 +843,7 @@ static int kvaser_usb_leaf_get_capabilities_leaf(struct kvaser_usb *dev)
 	if (err)
 		return err;
 	if (status)
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "KVASER_USB_LEAF_CAP_CMD_LISTEN_MODE failed %u\n",
 			 status);
 
@@ -853,7 +853,7 @@ static int kvaser_usb_leaf_get_capabilities_leaf(struct kvaser_usb *dev)
 	if (err)
 		return err;
 	if (status)
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "KVASER_USB_LEAF_CAP_CMD_ERR_REPORT failed %u\n",
 			 status);
 

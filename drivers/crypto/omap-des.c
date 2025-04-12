@@ -1020,7 +1020,7 @@ static int omap_des_probe(struct platform_device *pdev)
 
 	pm_runtime_put_sync(dev);
 
-	dev_info(dev, "OMAP DES hw accel rev: %u.%u\n",
+	dev_dbg(dev, "OMAP DES hw accel rev: %u.%u\n",
 		 (reg & dd->pdata->major_mask) >> dd->pdata->major_shift,
 		 (reg & dd->pdata->minor_mask) >> dd->pdata->minor_shift);
 

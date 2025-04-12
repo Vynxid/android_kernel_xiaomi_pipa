@@ -1505,7 +1505,7 @@ static int aer_probe(struct pcie_device *dev)
 	rpc->isr = 1;
 
 	aer_enable_rootport(rpc);
-	dev_info(device, "AER enabled with IRQ %d\n", dev->irq);
+	dev_dbg(device, "AER enabled with IRQ %d\n", dev->irq);
 	return 0;
 }
 

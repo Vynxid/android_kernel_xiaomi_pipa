@@ -242,11 +242,11 @@ static int sis_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 			break;
 		}
 		if ((pmr & SIS_PMR_COMBINED) == 0) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Detected SiS 180/181/964 chipset in SATA mode\n");
 			port2_start = 64;
 		} else {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Detected SiS 180/181 chipset in combined mode\n");
 			port2_start = 0;
 			pi.flags |= ATA_FLAG_SLAVE_POSS;
@@ -257,21 +257,21 @@ static int sis_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	case 0x0183:
 		pci_read_config_dword(pdev, 0x6C, &val);
 		if (val & (1L << 31)) {
-			dev_info(&pdev->dev, "Detected SiS 182/965 chipset\n");
+			dev_dbg(&pdev->dev, "Detected SiS 182/965 chipset\n");
 			pi.flags |= ATA_FLAG_SLAVE_POSS;
 		} else {
-			dev_info(&pdev->dev, "Detected SiS 182/965L chipset\n");
+			dev_dbg(&pdev->dev, "Detected SiS 182/965L chipset\n");
 		}
 		break;
 
 	case 0x1182:
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Detected SiS 1182/966/680 SATA controller\n");
 		pi.flags |= ATA_FLAG_SLAVE_POSS;
 		break;
 
 	case 0x1183:
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Detected SiS 1183/966/966L/968/680 controller in PATA mode\n");
 		ppi[0] = &sis_info133_for_sata;
 		ppi[1] = &sis_info133_for_sata;

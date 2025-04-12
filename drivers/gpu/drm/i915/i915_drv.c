@@ -119,7 +119,7 @@ __i915_printk(struct drm_i915_private *dev_priv, const char *level,
 		 * module parameters.
 		 */
 		if (!test_taint(TAINT_USER))
-			dev_notice(kdev, "%s", FDO_BUG_MSG);
+			dev_dbg(kdev, "%s", FDO_BUG_MSG);
 		shown_bug_once = true;
 	}
 }
@@ -601,14 +601,14 @@ static void i915_switcheroo_set_state(struct pci_dev *pdev, enum vga_switcheroo_
 	pm_message_t pmm = { .event = PM_EVENT_SUSPEND };
 
 	if (state == VGA_SWITCHEROO_ON) {
-		pr_info("switched on\n");
+		pr_debug("switched on\n");
 		dev->switch_power_state = DRM_SWITCH_POWER_CHANGING;
 		/* i915 resume handler doesn't set to D0 */
 		pci_set_power_state(pdev, PCI_D0);
 		i915_resume_switcheroo(dev);
 		dev->switch_power_state = DRM_SWITCH_POWER_ON;
 	} else {
-		pr_info("switched off\n");
+		pr_debug("switched off\n");
 		dev->switch_power_state = DRM_SWITCH_POWER_CHANGING;
 		i915_suspend_switcheroo(dev, pmm);
 		dev->switch_power_state = DRM_SWITCH_POWER_OFF;
@@ -1921,7 +1921,7 @@ void i915_reset(struct drm_i915_private *i915,
 		goto wakeup;
 
 	if (reason)
-		dev_notice(i915->drm.dev, "Resetting chip for %s\n", reason);
+		dev_dbg(i915->drm.dev, "Resetting chip for %s\n", reason);
 	error->reset_count++;
 
 	disable_irq(i915->drm.irq);
@@ -2022,7 +2022,7 @@ static inline int intel_gt_reset_engine(struct drm_i915_private *dev_priv,
 /**
  * i915_reset_engine - reset GPU engine to recover from a hang
  * @engine: engine to reset
- * @msg: reason for GPU reset; or NULL for no dev_notice()
+ * @msg: reason for GPU reset; or NULL for no dev_dbg()
  *
  * Reset a specific GPU engine. Useful if a hang is detected.
  * Returns zero on successful reset or otherwise an error code.
@@ -2049,7 +2049,7 @@ int i915_reset_engine(struct intel_engine_cs *engine, const char *msg)
 	}
 
 	if (msg)
-		dev_notice(engine->i915->drm.dev,
+		dev_dbg(engine->i915->drm.dev,
 			   "Resetting %s for %s\n", engine->name, msg);
 	error->reset_engine_count[engine->id]++;
 

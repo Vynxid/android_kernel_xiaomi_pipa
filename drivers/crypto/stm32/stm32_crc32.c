@@ -322,7 +322,7 @@ static int stm32_crc_probe(struct platform_device *pdev)
 	refcnt++;
 	mutex_unlock(&refcnt_lock);
 
-	dev_info(dev, "Initialized\n");
+	dev_dbg(dev, "Initialized\n");
 
 	pm_runtime_put_sync(dev);
 

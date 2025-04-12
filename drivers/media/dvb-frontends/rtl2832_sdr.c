@@ -735,7 +735,7 @@ static int rtl2832_sdr_set_adc(struct rtl2832_sdr_dev *dev)
 		ret = regmap_bulk_write(dev->regmap, 0x011, "\xe9\xf4", 2);
 		break;
 	default:
-		dev_notice(&pdev->dev, "Unsupported tuner\n");
+		dev_dbg(&pdev->dev, "Unsupported tuner\n");
 	}
 
 	/* software reset */
@@ -1461,10 +1461,10 @@ static int rtl2832_sdr_probe(struct platform_device *pdev)
 			ret);
 		goto err_v4l2_device_unregister;
 	}
-	dev_info(&pdev->dev, "Registered as %s\n",
+	dev_dbg(&pdev->dev, "Registered as %s\n",
 		 video_device_node_name(&dev->vdev));
-	dev_info(&pdev->dev, "Realtek RTL2832 SDR attached\n");
-	dev_notice(&pdev->dev,
+	dev_dbg(&pdev->dev, "Realtek RTL2832 SDR attached\n");
+	dev_dbg(&pdev->dev,
 		   "SDR API is still slightly experimental and functionality changes may follow\n");
 	platform_set_drvdata(pdev, dev);
 	return 0;

@@ -480,7 +480,7 @@ static int altr_i2c_probe(struct platform_device *pdev)
 		clk_disable_unprepare(idev->i2c_clk);
 		return ret;
 	}
-	dev_info(&pdev->dev, "Altera SoftIP I2C Probe Complete\n");
+	dev_dbg(&pdev->dev, "Altera SoftIP I2C Probe Complete\n");
 
 	return 0;
 }

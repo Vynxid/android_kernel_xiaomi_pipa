@@ -309,10 +309,10 @@ static irqreturn_t nwl_pcie_misc_handler(int irq, void *data)
 		dev_err(dev, "Fatal Error Detected\n");
 
 	if (misc_stat & MSGF_MISC_SR_LINK_AUTO_BWIDTH)
-		dev_info(dev, "Link Autonomous Bandwidth Management Status bit set\n");
+		dev_dbg(dev, "Link Autonomous Bandwidth Management Status bit set\n");
 
 	if (misc_stat & MSGF_MISC_SR_LINK_BWIDTH)
-		dev_info(dev, "Link Bandwidth Management Status bit set\n");
+		dev_dbg(dev, "Link Bandwidth Management Status bit set\n");
 
 	/* Clear misc interrupt status */
 	nwl_bridge_writel(pcie, misc_stat, MSGF_MISC_STATUS);
@@ -721,9 +721,9 @@ static int nwl_pcie_bridge_init(struct nwl_pcie *pcie)
 	writel(ecam_val, (pcie->ecam_base + PCI_PRIMARY_BUS));
 
 	if (nwl_pcie_link_up(pcie))
-		dev_info(dev, "Link is UP\n");
+		dev_dbg(dev, "Link is UP\n");
 	else
-		dev_info(dev, "Link is DOWN\n");
+		dev_dbg(dev, "Link is DOWN\n");
 
 	/* Get misc IRQ number */
 	pcie->irq_misc = platform_get_irq_byname(pdev, "misc");

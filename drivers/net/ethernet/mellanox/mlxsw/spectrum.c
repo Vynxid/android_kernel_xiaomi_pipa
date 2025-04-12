@@ -342,9 +342,9 @@ static int mlxsw_sp_fw_rev_validate(struct mlxsw_sp *mlxsw_sp)
 	      rev->subminor >= req_rev->subminor)))
 		return 0;
 
-	dev_info(mlxsw_sp->bus_info->dev, "The firmware version %d.%d.%d is incompatible with the driver\n",
+	dev_dbg(mlxsw_sp->bus_info->dev, "The firmware version %d.%d.%d is incompatible with the driver\n",
 		 rev->major, rev->minor, rev->subminor);
-	dev_info(mlxsw_sp->bus_info->dev, "Flashing firmware using file %s\n",
+	dev_dbg(mlxsw_sp->bus_info->dev, "Flashing firmware using file %s\n",
 		 fw_filename);
 
 	err = request_firmware_direct(&firmware, fw_filename,

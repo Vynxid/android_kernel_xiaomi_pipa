@@ -509,7 +509,7 @@ no_more:
 		break;
 
 	default:
-		pr_notice("kAFS: Unexpected error from FS.StoreData %d\n", ret);
+		pr_debug("kAFS: Unexpected error from FS.StoreData %d\n", ret);
 		/* Fall through */
 	case -EACCES:
 	case -EPERM:

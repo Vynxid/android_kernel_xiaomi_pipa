@@ -697,7 +697,7 @@ static int atmel_i2s_probe(struct platform_device *pdev)
 
 	/* Get IP version. */
 	regmap_read(dev->regmap, ATMEL_I2SC_VERSION, &version);
-	dev_info(&pdev->dev, "hw version: %#x\n", version);
+	dev_dbg(&pdev->dev, "hw version: %#x\n", version);
 
 	/* Enable error interrupts. */
 	regmap_write(dev->regmap, ATMEL_I2SC_IER,

@@ -476,7 +476,7 @@ static int pca955x_probe(struct i2c_client *client,
 		return -ENODEV;
 	}
 
-	dev_info(&client->dev, "leds-pca955x: Using %s %d-bit LED driver at "
+	dev_dbg(&client->dev, "leds-pca955x: Using %s %d-bit LED driver at "
 			"slave address 0x%02x\n",
 			client->name, chip->bits, client->addr);
 
@@ -590,7 +590,7 @@ static int pca955x_probe(struct i2c_client *client,
 			dev_warn(&client->dev, "could not add gpiochip\n");
 			return err;
 		}
-		dev_info(&client->dev, "gpios %i...%i\n",
+		dev_dbg(&client->dev, "gpios %i...%i\n",
 			 pca955x->gpio.base, pca955x->gpio.base +
 			 pca955x->gpio.ngpio - 1);
 	}

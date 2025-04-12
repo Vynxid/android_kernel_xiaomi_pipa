@@ -44,7 +44,7 @@ static void cfservl_ctrlcmd(struct cflayer *layr, enum caif_ctrlcmd ctrl,
 		layr->up->ctrlcmd(layr->up, ctrl, phyid);
 		break;
 	case _CAIF_CTRLCMD_PHYIF_FLOW_OFF_IND:
-		if (phyid != service->dev_info.id)
+		if (phyid != service->dev_dbg.id)
 			break;
 		if (service->modem_flow_on)
 			layr->up->ctrlcmd(layr->up,
@@ -52,7 +52,7 @@ static void cfservl_ctrlcmd(struct cflayer *layr, enum caif_ctrlcmd ctrl,
 		service->phy_flow_on = false;
 		break;
 	case _CAIF_CTRLCMD_PHYIF_FLOW_ON_IND:
-		if (phyid != service->dev_info.id)
+		if (phyid != service->dev_dbg.id)
 			return;
 		if (service->modem_flow_on) {
 			layr->up->ctrlcmd(layr->up,
@@ -121,7 +121,7 @@ static int cfservl_modemcmd(struct cflayer *layr, enum caif_modemcmd ctrl)
 			info = cfpkt_info(pkt);
 			info->channel_id = service->layer.id;
 			info->hdr_len = 1;
-			info->dev_info = &service->dev_info;
+			info->dev_dbg = &service->dev_dbg;
 			cfpkt_set_prio(pkt, TC_PRIO_CONTROL);
 			return layr->dn->transmit(layr->dn, pkt);
 		}
@@ -142,7 +142,7 @@ static int cfservl_modemcmd(struct cflayer *layr, enum caif_modemcmd ctrl)
 			info = cfpkt_info(pkt);
 			info->channel_id = service->layer.id;
 			info->hdr_len = 1;
-			info->dev_info = &service->dev_info;
+			info->dev_dbg = &service->dev_dbg;
 			cfpkt_set_prio(pkt, TC_PRIO_CONTROL);
 			return layr->dn->transmit(layr->dn, pkt);
 		}
@@ -160,7 +160,7 @@ static void cfsrvl_release(struct cflayer *layer)
 
 void cfsrvl_init(struct cfsrvl *service,
 		 u8 channel_id,
-		 struct dev_info *dev_info,
+		 struct dev_dbg *dev_dbg,
 		 bool supports_flowctrl)
 {
 	caif_assert(offsetof(struct cfsrvl, layer) == 0);
@@ -170,7 +170,7 @@ void cfsrvl_init(struct cfsrvl *service,
 	service->layer.id = channel_id;
 	service->layer.ctrlcmd = cfservl_ctrlcmd;
 	service->layer.modemcmd = cfservl_modemcmd;
-	service->dev_info = *dev_info;
+	service->dev_dbg = *dev_dbg;
 	service->supports_flowctrl = supports_flowctrl;
 	service->release = cfsrvl_release;
 }
@@ -187,13 +187,13 @@ bool cfsrvl_ready(struct cfsrvl *service, int *err)
 u8 cfsrvl_getphyid(struct cflayer *layer)
 {
 	struct cfsrvl *servl = container_obj(layer);
-	return servl->dev_info.id;
+	return servl->dev_dbg.id;
 }
 
 bool cfsrvl_phyid_match(struct cflayer *layer, int phyid)
 {
 	struct cfsrvl *servl = container_obj(layer);
-	return servl->dev_info.id == phyid;
+	return servl->dev_dbg.id == phyid;
 }
 
 void caif_free_client(struct cflayer *adap_layer)

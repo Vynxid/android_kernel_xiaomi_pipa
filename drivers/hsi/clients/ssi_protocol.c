@@ -746,7 +746,7 @@ static void ssip_rx_waketest(struct hsi_client *cl, u32 cmd)
 	del_timer(&ssi->tx_wd); /* Stop boot handshake timer */
 	spin_unlock_bh(&ssi->lock);
 
-	dev_notice(&cl->device, "WAKELINES TEST %s\n",
+	dev_dbg(&cl->device, "WAKELINES TEST %s\n",
 				wkres & SSIP_WAKETEST_FAILED ? "FAILED" : "OK");
 	if (wkres & SSIP_WAKETEST_FAILED) {
 		ssip_error(cl);
@@ -1018,7 +1018,7 @@ static int ssip_pn_xmit(struct sk_buff *skb, struct net_device *dev)
 	list_add_tail(&msg->link, &ssi->txqueue);
 	ssi->txqueue_len++;
 	if (dev->tx_queue_len < ssi->txqueue_len) {
-		dev_info(&cl->device, "TX queue full %d\n", ssi->txqueue_len);
+		dev_dbg(&cl->device, "TX queue full %d\n", ssi->txqueue_len);
 		netif_stop_queue(dev);
 	}
 	if (ssi->send_state == SEND_IDLE) {
@@ -1182,7 +1182,7 @@ static struct hsi_client_driver ssip_driver = {
 
 static int __init ssip_init(void)
 {
-	pr_info("SSI protocol aka McSAAB added\n");
+	pr_debug("SSI protocol aka McSAAB added\n");
 
 	return hsi_register_client_driver(&ssip_driver);
 }
@@ -1191,7 +1191,7 @@ module_init(ssip_init);
 static void __exit ssip_exit(void)
 {
 	hsi_unregister_client_driver(&ssip_driver);
-	pr_info("SSI protocol driver removed\n");
+	pr_debug("SSI protocol driver removed\n");
 }
 module_exit(ssip_exit);
 

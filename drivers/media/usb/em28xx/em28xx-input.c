@@ -601,7 +601,7 @@ static int em28xx_register_snapshot_button(struct em28xx *dev)
 	struct input_dev *input_dev;
 	int err;
 
-	dev_info(&dev->intf->dev, "Registering snapshot button...\n");
+	dev_dbg(&dev->intf->dev, "Registering snapshot button...\n");
 	input_dev = input_allocate_device();
 	if (!input_dev)
 		return -ENOMEM;
@@ -704,7 +704,7 @@ static void em28xx_shutdown_buttons(struct em28xx *dev)
 	dev->num_button_polling_addresses = 0;
 	/* Deregister input devices */
 	if (dev->sbutton_input_dev) {
-		dev_info(&dev->intf->dev, "Deregistering snapshot button\n");
+		dev_dbg(&dev->intf->dev, "Deregistering snapshot button\n");
 		input_unregister_device(dev->sbutton_input_dev);
 		dev->sbutton_input_dev = NULL;
 	}
@@ -748,7 +748,7 @@ static int em28xx_ir_init(struct em28xx *dev)
 		return 0;
 	}
 
-	dev_info(&dev->intf->dev, "Registering input extension\n");
+	dev_dbg(&dev->intf->dev, "Registering input extension\n");
 
 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
 	if (!ir)
@@ -854,7 +854,7 @@ static int em28xx_ir_init(struct em28xx *dev)
 	if (err)
 		goto error;
 
-	dev_info(&dev->intf->dev, "Input extension successfully initialized\n");
+	dev_dbg(&dev->intf->dev, "Input extension successfully initialized\n");
 
 	return 0;
 
@@ -877,7 +877,7 @@ static int em28xx_ir_fini(struct em28xx *dev)
 		return 0;
 	}
 
-	dev_info(&dev->intf->dev, "Closing input extension\n");
+	dev_dbg(&dev->intf->dev, "Closing input extension\n");
 
 	em28xx_shutdown_buttons(dev);
 
@@ -906,7 +906,7 @@ static int em28xx_ir_suspend(struct em28xx *dev)
 	if (dev->is_audio_only)
 		return 0;
 
-	dev_info(&dev->intf->dev, "Suspending input extension\n");
+	dev_dbg(&dev->intf->dev, "Suspending input extension\n");
 	if (ir)
 		cancel_delayed_work_sync(&ir->work);
 	cancel_delayed_work_sync(&dev->buttons_query_work);
@@ -925,7 +925,7 @@ static int em28xx_ir_resume(struct em28xx *dev)
 	if (dev->is_audio_only)
 		return 0;
 
-	dev_info(&dev->intf->dev, "Resuming input extension\n");
+	dev_dbg(&dev->intf->dev, "Resuming input extension\n");
 	/*
 	 * if suspend calls ir_raw_event_unregister(), the should call
 	 * ir_raw_event_register()

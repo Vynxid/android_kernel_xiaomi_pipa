@@ -1966,7 +1966,7 @@ static int brcmnand_write(struct mtd_info *mtd, struct nand_chip *chip,
 		status = brcmnand_waitfunc(mtd, chip);
 
 		if (status & NAND_STATUS_FAIL) {
-			dev_info(ctrl->dev, "program failed at %llx\n",
+			dev_dbg(ctrl->dev, "program failed at %llx\n",
 				(unsigned long long)addr);
 			ret = -EIO;
 			goto out;
@@ -2260,7 +2260,7 @@ static int brcmnand_setup_dev(struct brcmnand_host *host)
 	brcmnand_set_ecc_enabled(host, 1);
 
 	brcmnand_print_cfg(host, msg, cfg);
-	dev_info(ctrl->dev, "detected %s\n", msg);
+	dev_dbg(ctrl->dev, "detected %s\n", msg);
 
 	/* Configure ACC_CONTROL */
 	offs = brcmnand_cs_offset(ctrl, host->cs, BRCMNAND_CS_ACC_CONTROL);
@@ -2601,7 +2601,7 @@ int brcmnand_probe(struct platform_device *pdev, struct brcmnand_soc *soc)
 			goto err;
 		}
 
-		dev_info(dev, "enabling FLASH_DMA\n");
+		dev_dbg(dev, "enabling FLASH_DMA\n");
 	}
 
 	/* Disable automatic device ID config, direct addressing */

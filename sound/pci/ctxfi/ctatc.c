@@ -1297,7 +1297,7 @@ static int atc_identify_card(struct ct_atc *atc, unsigned int ssid)
 			atc->model = CT20K2_UNKNOWN;
 	}
 	atc->model_name = ct_subsys_name[atc->model];
-	dev_info(atc->card->dev, "chip %s model %s (%04x:%04x) is found\n",
+	dev_dbg(atc->card->dev, "chip %s model %s (%04x:%04x) is found\n",
 		   atc->chip_name, atc->model_name,
 		   vendor_id, device_id);
 	return 0;

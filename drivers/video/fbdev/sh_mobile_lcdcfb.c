@@ -1611,7 +1611,7 @@ sh_mobile_lcdc_overlay_fb_register(struct sh_mobile_lcdc_overlay *ovl)
 	if (ret < 0)
 		return ret;
 
-	dev_info(lcdc->dev, "registered %s/overlay %u as %dx%d %dbpp.\n",
+	dev_dbg(lcdc->dev, "registered %s/overlay %u as %dx%d %dbpp.\n",
 		 dev_name(lcdc->dev), ovl->index, info->var.xres,
 		 info->var.yres, info->var.bits_per_pixel);
 
@@ -2098,7 +2098,7 @@ sh_mobile_lcdc_channel_fb_register(struct sh_mobile_lcdc_chan *ch)
 	if (ret < 0)
 		return ret;
 
-	dev_info(ch->lcdc->dev, "registered %s/%s as %dx%d %dbpp.\n",
+	dev_dbg(ch->lcdc->dev, "registered %s/%s as %dx%d %dbpp.\n",
 		 dev_name(ch->lcdc->dev), (ch->cfg->chan == LCDC_CHAN_MAINLCD) ?
 		 "mainlcd" : "sublcd", info->var.xres, info->var.yres,
 		 info->var.bits_per_pixel);

@@ -6146,7 +6146,7 @@ static int sisfb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 		reg = SiS_GetReg(SISCR, 0x48);
 		if (reg & 0x02) {			/* GPIOG */
 			ivideo->chip_real_id = XGI_21;
-			dev_info(&pdev->dev, "Z9 detected\n");
+			dev_dbg(&pdev->dev, "Z9 detected\n");
 		}
 	}
 #endif

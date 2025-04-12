@@ -520,7 +520,7 @@ static int csr_probe(struct platform_device *pdev)
 	list_add_tail(&drvdata->csr.link, &csr_list);
 	mutex_unlock(&csr_lock);
 
-	dev_info(dev, "CSR initialized: %s\n", drvdata->csr.name);
+	dev_dbg(dev, "CSR initialized: %s\n", drvdata->csr.name);
 	return 0;
 }
 

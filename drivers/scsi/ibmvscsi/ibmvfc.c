@@ -1696,7 +1696,7 @@ static void ibmvfc_bsg_timeout_done(struct ibmvfc_event *evt)
 
 	ibmvfc_free_event(evt);
 	vhost->aborting_passthru = 0;
-	dev_info(vhost->dev, "Passthru command cancelled\n");
+	dev_dbg(vhost->dev, "Passthru command cancelled\n");
 }
 
 /**
@@ -1742,7 +1742,7 @@ static int ibmvfc_bsg_timeout(struct bsg_job *job)
 		dev_err(vhost->dev, "Failed to send cancel event. rc=%d\n", rc);
 		rc = -EIO;
 	} else
-		dev_info(vhost->dev, "Cancelling passthru command to port id 0x%lx\n",
+		dev_dbg(vhost->dev, "Cancelling passthru command to port id 0x%lx\n",
 			 port_id);
 
 	spin_unlock_irqrestore(vhost->host->host_lock, flags);
@@ -2733,7 +2733,7 @@ static void ibmvfc_handle_crq(struct ibmvfc_crq *crq, struct ibmvfc_host *vhost)
 	case IBMVFC_CRQ_INIT_RSP:
 		switch (crq->format) {
 		case IBMVFC_CRQ_INIT:
-			dev_info(vhost->dev, "Partner initialized\n");
+			dev_dbg(vhost->dev, "Partner initialized\n");
 			/* Send back a response */
 			rc = ibmvfc_send_crq_init_complete(vhost);
 			if (rc == 0)
@@ -2742,7 +2742,7 @@ static void ibmvfc_handle_crq(struct ibmvfc_crq *crq, struct ibmvfc_host *vhost)
 				dev_err(vhost->dev, "Unable to send init rsp. rc=%ld\n", rc);
 			break;
 		case IBMVFC_CRQ_INIT_COMPLETE:
-			dev_info(vhost->dev, "Partner initialization complete\n");
+			dev_dbg(vhost->dev, "Partner initialization complete\n");
 			ibmvfc_init_host(vhost);
 			break;
 		default:
@@ -2755,7 +2755,7 @@ static void ibmvfc_handle_crq(struct ibmvfc_crq *crq, struct ibmvfc_host *vhost)
 		ibmvfc_set_host_action(vhost, IBMVFC_HOST_ACTION_NONE);
 		if (crq->format == IBMVFC_PARTITION_MIGRATED) {
 			/* We need to re-setup the interpartition connection */
-			dev_info(vhost->dev, "Re-enabling adapter\n");
+			dev_dbg(vhost->dev, "Re-enabling adapter\n");
 			vhost->client_migrated = 1;
 			ibmvfc_purge_requests(vhost, DID_REQUEUE);
 			ibmvfc_link_down(vhost, IBMVFC_LINK_DOWN);
@@ -2815,7 +2815,7 @@ static int ibmvfc_scan_finished(struct Scsi_Host *shost, unsigned long time)
 
 	spin_lock_irqsave(shost->host_lock, flags);
 	if (time >= (init_timeout * HZ)) {
-		dev_info(vhost->dev, "Scan taking longer than %d seconds, "
+		dev_dbg(vhost->dev, "Scan taking longer than %d seconds, "
 			 "continuing initialization\n", init_timeout);
 		done = 1;
 	}
@@ -4062,7 +4062,7 @@ static void ibmvfc_npiv_login_done(struct ibmvfc_event *evt)
 
 	vhost->logged_in = 1;
 	npiv_max_sectors = min((uint)(be64_to_cpu(rsp->max_dma_len) >> 9), IBMVFC_MAX_SECTORS);
-	dev_info(vhost->dev, "Host partition: %s, device: %s %s %s max sectors %u\n",
+	dev_dbg(vhost->dev, "Host partition: %s, device: %s %s %s max sectors %u\n",
 		 rsp->partition_name, rsp->device_name, rsp->port_loc_code,
 		 rsp->drc_name, npiv_max_sectors);
 

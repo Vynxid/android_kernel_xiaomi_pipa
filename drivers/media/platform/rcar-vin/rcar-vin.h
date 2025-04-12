@@ -221,7 +221,7 @@ struct rvin_dev {
 
 /* Debug */
 #define vin_dbg(d, fmt, arg...)		dev_dbg(d->dev, fmt, ##arg)
-#define vin_info(d, fmt, arg...)	dev_info(d->dev, fmt, ##arg)
+#define vin_info(d, fmt, arg...)	dev_dbg(d->dev, fmt, ##arg)
 #define vin_warn(d, fmt, arg...)	dev_warn(d->dev, fmt, ##arg)
 #define vin_err(d, fmt, arg...)		dev_err(d->dev, fmt, ##arg)
 

@@ -1358,7 +1358,7 @@ static void tegra_pmc_init_tsense_reset(struct tegra_pmc *pmc)
 	value |= PMC_SENSOR_CTRL_ENABLE_RST;
 	tegra_pmc_writel(value, PMC_SENSOR_CTRL);
 
-	dev_info(pmc->dev, "emergency thermal reset enabled\n");
+	dev_dbg(pmc->dev, "emergency thermal reset enabled\n");
 
 out:
 	of_node_put(np);

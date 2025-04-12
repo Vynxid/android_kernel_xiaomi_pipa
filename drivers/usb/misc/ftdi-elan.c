@@ -317,9 +317,9 @@ static int ftdi_elan_hcd_init(struct usb_ftdi *ftdi)
 	ftdi->platform_dev.dev.dma_mask = NULL;
 	snprintf(ftdi->device_name, sizeof(ftdi->device_name), "u132_hcd");
 	ftdi->platform_dev.name = ftdi->device_name;
-	dev_info(&ftdi->udev->dev, "requesting module '%s'\n", "u132_hcd");
+	dev_dbg(&ftdi->udev->dev, "requesting module '%s'\n", "u132_hcd");
 	request_module("u132_hcd");
-	dev_info(&ftdi->udev->dev, "registering '%s'\n",
+	dev_dbg(&ftdi->udev->dev, "registering '%s'\n",
 		 ftdi->platform_dev.name);
 
 	return platform_device_register(&ftdi->platform_dev);
@@ -2709,7 +2709,7 @@ static int ftdi_elan_probe(struct usb_interface *interface,
 
 	ftdi->bulk_out_endpointAddr = bulk_out->bEndpointAddress;
 
-	dev_info(&ftdi->udev->dev, "interface %d has I=%02X O=%02X\n",
+	dev_dbg(&ftdi->udev->dev, "interface %d has I=%02X O=%02X\n",
 		 iface_desc->desc.bInterfaceNumber, ftdi->bulk_in_endpointAddr,
 		 ftdi->bulk_out_endpointAddr);
 	usb_set_intfdata(interface, ftdi);
@@ -2724,7 +2724,7 @@ static int ftdi_elan_probe(struct usb_interface *interface,
 			goto error;
 		} else {
 			ftdi->class = &ftdi_elan_jtag_class;
-			dev_info(&ftdi->udev->dev, "USB FDTI=%p JTAG interface %d now attached to ftdi%d\n",
+			dev_dbg(&ftdi->udev->dev, "USB FDTI=%p JTAG interface %d now attached to ftdi%d\n",
 				 ftdi, iface_desc->desc.bInterfaceNumber,
 				 interface->minor);
 			return 0;
@@ -2733,7 +2733,7 @@ static int ftdi_elan_probe(struct usb_interface *interface,
 		   ftdi->bulk_in_endpointAddr == 0x83 &&
 		   ftdi->bulk_out_endpointAddr == 0x04) {
 		ftdi->class = NULL;
-		dev_info(&ftdi->udev->dev, "USB FDTI=%p ELAN interface %d now activated\n",
+		dev_dbg(&ftdi->udev->dev, "USB FDTI=%p ELAN interface %d now activated\n",
 			 ftdi, iface_desc->desc.bInterfaceNumber);
 		INIT_DELAYED_WORK(&ftdi->status_work, ftdi_elan_status_work);
 		INIT_DELAYED_WORK(&ftdi->command_work, ftdi_elan_command_work);
@@ -2761,7 +2761,7 @@ static void ftdi_elan_disconnect(struct usb_interface *interface)
 		struct usb_class_driver *class = ftdi->class;
 		usb_set_intfdata(interface, NULL);
 		usb_deregister_dev(interface, class);
-		dev_info(&ftdi->udev->dev, "USB FTDI U132 jtag interface on minor %d now disconnected\n",
+		dev_dbg(&ftdi->udev->dev, "USB FTDI U132 jtag interface on minor %d now disconnected\n",
 			 minor);
 	} else {
 		ftdi_status_cancel_work(ftdi);
@@ -2778,7 +2778,7 @@ static void ftdi_elan_disconnect(struct usb_interface *interface)
 		}
 		ftdi->disconnected += 1;
 		usb_set_intfdata(interface, NULL);
-		dev_info(&ftdi->udev->dev, "USB FTDI U132 host controller interface now disconnected\n");
+		dev_dbg(&ftdi->udev->dev, "USB FTDI U132 host controller interface now disconnected\n");
 	}
 	ftdi_elan_put_kref(ftdi);
 }
@@ -2792,7 +2792,7 @@ static struct usb_driver ftdi_elan_driver = {
 static int __init ftdi_elan_init(void)
 {
 	int result;
-	pr_info("driver %s\n", ftdi_elan_driver.name);
+	pr_debug("driver %s\n", ftdi_elan_driver.name);
 	mutex_init(&ftdi_module_lock);
 	INIT_LIST_HEAD(&ftdi_static_list);
 	result = usb_register(&ftdi_elan_driver);
@@ -2808,7 +2808,7 @@ static void __exit ftdi_elan_exit(void)
 	struct usb_ftdi *ftdi;
 	struct usb_ftdi *temp;
 	usb_deregister(&ftdi_elan_driver);
-	pr_info("ftdi_u132 driver deregistered\n");
+	pr_debug("ftdi_u132 driver deregistered\n");
 	list_for_each_entry_safe(ftdi, temp, &ftdi_static_list, ftdi_list) {
 		ftdi_status_cancel_work(ftdi);
 		ftdi_command_cancel_work(ftdi);

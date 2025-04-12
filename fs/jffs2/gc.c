@@ -700,12 +700,12 @@ static int jffs2_garbage_collect_pristine(struct jffs2_sb_info *c,
 	ret = jffs2_flash_write(c, phys_ofs, rawlen, &retlen, (char *)node);
 
 	if (ret || (retlen != rawlen)) {
-		pr_notice("Write of %d bytes at 0x%08x failed. returned %d, retlen %zd\n",
+		pr_debug("Write of %d bytes at 0x%08x failed. returned %d, retlen %zd\n",
 			  rawlen, phys_ofs, ret, retlen);
 		if (retlen) {
 			jffs2_add_physical_node_ref(c, phys_ofs | REF_OBSOLETE, rawlen, NULL);
 		} else {
-			pr_notice("Not marking the space at 0x%08x as dirty because the flash driver returned retlen zero\n",
+			pr_debug("Not marking the space at 0x%08x as dirty because the flash driver returned retlen zero\n",
 				  phys_ofs);
 		}
 		if (!retried) {

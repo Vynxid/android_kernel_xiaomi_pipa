@@ -110,8 +110,8 @@ struct amd8131_dev_info {
 struct amd8131_info {
 	u16 err_dev;	/* PCI Device ID for AMD8131 APIC*/
 	struct amd8131_dev_info *devices;
-	void (*init)(struct amd8131_dev_info *dev_info);
-	void (*exit)(struct amd8131_dev_info *dev_info);
+	void (*init)(struct amd8131_dev_info *dev_dbg);
+	void (*exit)(struct amd8131_dev_info *dev_dbg);
 	void (*check)(struct edac_pci_ctl_info *edac_dev);
 };
 

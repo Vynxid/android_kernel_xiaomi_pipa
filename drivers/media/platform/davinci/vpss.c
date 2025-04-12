@@ -421,7 +421,7 @@ static int vpss_probe(struct platform_device *pdev)
 		return -ENODEV;
 	}
 
-	dev_info(&pdev->dev, "%s vpss probed\n", platform_name);
+	dev_dbg(&pdev->dev, "%s vpss probed\n", platform_name);
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 
 	oper_cfg.vpss_regs_base0 = devm_ioremap_resource(&pdev->dev, res);
@@ -468,7 +468,7 @@ static int vpss_probe(struct platform_device *pdev)
 	pm_runtime_get(&pdev->dev);
 
 	spin_lock_init(&oper_cfg.vpss_lock);
-	dev_info(&pdev->dev, "%s vpss probe success\n", platform_name);
+	dev_dbg(&pdev->dev, "%s vpss probe success\n", platform_name);
 
 	return 0;
 }

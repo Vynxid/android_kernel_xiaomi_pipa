@@ -652,7 +652,7 @@ static int snd_usb_fasttrackpro_boot_quirk(struct usb_device *dev)
 	int err;
 
 	if (dev->actconfig->desc.bConfigurationValue == 1) {
-		dev_info(&dev->dev,
+		dev_dbg(&dev->dev,
 			   "Fast Track Pro switching to config #2\n");
 		/* This function has to be available by the usb core module.
 		 * if it is not avialable the boot quirk has to be left out
@@ -669,7 +669,7 @@ static int snd_usb_fasttrackpro_boot_quirk(struct usb_device *dev)
 		   configuration */
 		return -ENODEV;
 	} else
-		dev_info(&dev->dev, "Fast Track Pro config OK\n");
+		dev_dbg(&dev->dev, "Fast Track Pro config OK\n");
 
 	return 0;
 }
@@ -895,7 +895,7 @@ static int snd_usb_mbox2_boot_quirk(struct usb_device *dev)
 
 	mbox2_setup_48_24_magic(dev);
 
-	dev_info(&dev->dev, "Digidesign Mbox 2: 24bit 48kHz");
+	dev_dbg(&dev->dev, "Digidesign Mbox 2: 24bit 48kHz");
 
 	return 0; /* Successful boot */
 }

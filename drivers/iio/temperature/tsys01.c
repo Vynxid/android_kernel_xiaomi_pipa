@@ -147,7 +147,7 @@ static int tsys01_read_prom(struct iio_dev *indio_dev)
 		return -ENODEV;
 	}
 	*ptr = 0;
-	dev_info(&indio_dev->dev, "PROM coefficients : %s\n", buf);
+	dev_dbg(&indio_dev->dev, "PROM coefficients : %s\n", buf);
 
 	return 0;
 }

@@ -542,7 +542,7 @@ static void chsc_process_sei_chp_config(struct chsc_sei_nt0_area *sei_area)
 		if (!chp_test_bit(data->map, num))
 			continue;
 		chpid.id = num;
-		pr_notice("Processing %s for channel path %x.%02x\n",
+		pr_debug("Processing %s for channel path %x.%02x\n",
 			  events[data->op], chpid.cssid, chpid.id);
 		switch (data->op) {
 		case 0:

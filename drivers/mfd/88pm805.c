@@ -212,7 +212,7 @@ static int device_805_init(struct pm80x_chip *chip)
 		dev_err(chip->dev, "Failed to add codec subdev\n");
 		goto out_codec;
 	} else
-		dev_info(chip->dev, "[%s]:Added mfd codec_devs\n", __func__);
+		dev_dbg(chip->dev, "[%s]:Added mfd codec_devs\n", __func__);
 
 	return 0;
 

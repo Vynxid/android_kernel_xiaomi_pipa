@@ -1433,13 +1433,13 @@ static irqreturn_t tegra_pcie_msi_irq(int irq, void *data)
 				if (test_bit(index, msi->used))
 					generic_handle_irq(irq);
 				else
-					dev_info(dev, "unhandled MSI\n");
+					dev_dbg(dev, "unhandled MSI\n");
 			} else {
 				/*
 				 * that's weird who triggered this?
 				 * just clear it
 				 */
-				dev_info(dev, "unexpected MSI\n");
+				dev_dbg(dev, "unexpected MSI\n");
 			}
 
 			/* see if there's any more pending in this vector */
@@ -1640,22 +1640,22 @@ static int tegra_pcie_get_xbar_config(struct tegra_pcie *pcie, u32 lanes,
 	if (of_device_is_compatible(np, "nvidia,tegra186-pcie")) {
 		switch (lanes) {
 		case 0x010004:
-			dev_info(dev, "4x1, 1x1 configuration\n");
+			dev_dbg(dev, "4x1, 1x1 configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_401;
 			return 0;
 
 		case 0x010102:
-			dev_info(dev, "2x1, 1X1, 1x1 configuration\n");
+			dev_dbg(dev, "2x1, 1X1, 1x1 configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_211;
 			return 0;
 
 		case 0x010101:
-			dev_info(dev, "1x1, 1x1, 1x1 configuration\n");
+			dev_dbg(dev, "1x1, 1x1, 1x1 configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_111;
 			return 0;
 
 		default:
-			dev_info(dev, "wrong configuration updated in DT, "
+			dev_dbg(dev, "wrong configuration updated in DT, "
 				 "switching to default 2x1, 1x1, 1x1 "
 				 "configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_211;
@@ -1665,41 +1665,41 @@ static int tegra_pcie_get_xbar_config(struct tegra_pcie *pcie, u32 lanes,
 		   of_device_is_compatible(np, "nvidia,tegra210-pcie")) {
 		switch (lanes) {
 		case 0x0000104:
-			dev_info(dev, "4x1, 1x1 configuration\n");
+			dev_dbg(dev, "4x1, 1x1 configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_X4_X1;
 			return 0;
 
 		case 0x0000102:
-			dev_info(dev, "2x1, 1x1 configuration\n");
+			dev_dbg(dev, "2x1, 1x1 configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_X2_X1;
 			return 0;
 		}
 	} else if (of_device_is_compatible(np, "nvidia,tegra30-pcie")) {
 		switch (lanes) {
 		case 0x00000204:
-			dev_info(dev, "4x1, 2x1 configuration\n");
+			dev_dbg(dev, "4x1, 2x1 configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_420;
 			return 0;
 
 		case 0x00020202:
-			dev_info(dev, "2x3 configuration\n");
+			dev_dbg(dev, "2x3 configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_222;
 			return 0;
 
 		case 0x00010104:
-			dev_info(dev, "4x1, 1x2 configuration\n");
+			dev_dbg(dev, "4x1, 1x2 configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_411;
 			return 0;
 		}
 	} else if (of_device_is_compatible(np, "nvidia,tegra20-pcie")) {
 		switch (lanes) {
 		case 0x00000004:
-			dev_info(dev, "single-mode configuration\n");
+			dev_dbg(dev, "single-mode configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_SINGLE;
 			return 0;
 
 		case 0x00000202:
-			dev_info(dev, "dual-mode configuration\n");
+			dev_dbg(dev, "dual-mode configuration\n");
 			*xbar = AFI_PCIE_CONFIG_SM2TMS0_XBAR_CONFIG_DUAL;
 			return 0;
 		}
@@ -1886,7 +1886,7 @@ static int tegra_pcie_get_regulators(struct tegra_pcie *pcie, u32 lane_mask)
 	 * that the device tree complies with an older version of the device
 	 * tree binding.
 	 */
-	dev_info(dev, "using legacy DT binding for power supplies\n");
+	dev_dbg(dev, "using legacy DT binding for power supplies\n");
 
 	devm_kfree(dev, pcie->supplies);
 	pcie->num_supplies = 0;
@@ -2115,7 +2115,7 @@ static void tegra_pcie_enable_ports(struct tegra_pcie *pcie)
 	struct tegra_pcie_port *port, *tmp;
 
 	list_for_each_entry_safe(port, tmp, &pcie->ports, list) {
-		dev_info(dev, "probing port %u, using %u lanes\n",
+		dev_dbg(dev, "probing port %u, using %u lanes\n",
 			 port->index, port->lanes);
 
 		tegra_pcie_port_enable(port);
@@ -2123,7 +2123,7 @@ static void tegra_pcie_enable_ports(struct tegra_pcie *pcie)
 		if (tegra_pcie_port_check_link(port))
 			continue;
 
-		dev_info(dev, "link %u down, ignoring\n", port->index);
+		dev_dbg(dev, "link %u down, ignoring\n", port->index);
 
 		tegra_pcie_port_disable(port);
 		tegra_pcie_port_free(port);

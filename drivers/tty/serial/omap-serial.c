@@ -1702,7 +1702,7 @@ static int serial_omap_probe(struct platform_device *pdev)
 
 	up->wakeirq = wakeirq;
 	if (!up->wakeirq)
-		dev_info(up->port.dev, "no wakeirq for uart%d\n",
+		dev_dbg(up->port.dev, "no wakeirq for uart%d\n",
 			 up->port.line);
 
 	ret = serial_omap_probe_rs485(up, pdev->dev.of_node);

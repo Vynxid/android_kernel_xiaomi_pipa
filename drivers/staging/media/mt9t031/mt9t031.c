@@ -654,7 +654,7 @@ static int mt9t031_video_probe(struct i2c_client *client)
 		goto done;
 	}
 
-	dev_info(&client->dev, "Detected a MT9T031 chip ID %x\n", data);
+	dev_dbg(&client->dev, "Detected a MT9T031 chip ID %x\n", data);
 
 	ret = v4l2_ctrl_handler_setup(&mt9t031->hdl);
 

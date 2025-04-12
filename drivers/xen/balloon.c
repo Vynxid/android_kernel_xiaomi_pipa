@@ -737,7 +737,7 @@ static int __init balloon_init(void)
 	if (!xen_domain())
 		return -ENODEV;
 
-	pr_info("Initialising balloon driver\n");
+	pr_debug("Initialising balloon driver\n");
 
 #ifdef CONFIG_XEN_PV
 	balloon_stats.current_pages = xen_pv_domain()
@@ -802,7 +802,7 @@ static int __init balloon_wait_finish(void)
 	if (xen_pv_domain() || !current_credit())
 		return 0;
 
-	pr_notice("Waiting for initial ballooning down having finished.\n");
+	pr_debug("Waiting for initial ballooning down having finished.\n");
 
 	while ((credit = current_credit()) < 0) {
 		if (credit != last_credit) {
@@ -819,7 +819,7 @@ static int __init balloon_wait_finish(void)
 		schedule_timeout_interruptible(HZ / 10);
 	}
 
-	pr_notice("Initial ballooning down finished.\n");
+	pr_debug("Initial ballooning down finished.\n");
 
 	return 0;
 }

@@ -174,7 +174,7 @@ static int men_z127_probe(struct mcb_device *mdev,
 		goto err_unmap;
 	}
 
-	dev_info(dev, "MEN 16Z127 GPIO driver registered");
+	dev_dbg(dev, "MEN 16Z127 GPIO driver registered");
 
 	return 0;
 

@@ -1789,7 +1789,7 @@ static void es1968_measure_clock(struct es1968 *chip)
 			if (offset >= 40000 && offset <= 50000)
 				chip->clock = (chip->clock * offset) / 48000;
 		}
-		dev_info(chip->card->dev, "clocking to %d\n", chip->clock);
+		dev_dbg(chip->card->dev, "clocking to %d\n", chip->clock);
 	}
 	snd_es1968_free_memory(chip, memory);
 	snd_es1968_free_apu_pair(chip, apu);
@@ -2109,7 +2109,7 @@ static void snd_es1968_ac97_reset(struct es1968 *chip)
 	outw(inw(ioaddr + 0x3c) & 0xfffc, ioaddr + 0x3c);
 
 #if 0				/* the loop here needs to be much better if we want it.. */
-	dev_info(chip->card->dev, "trying software reset\n");
+	dev_dbg(chip->card->dev, "trying software reset\n");
 	/* try and do a software reset */
 	outb(0x80 | 0x7c, ioaddr + 0x30);
 	for (w = 0;; w++) {
@@ -2756,7 +2756,7 @@ static int snd_es1968_create(struct snd_card *card,
 		}
 		if (do_pm > 1) {
 			/* not matched; disabling pm */
-			dev_info(card->dev, "not attempting power management.\n");
+			dev_dbg(card->dev, "not attempting power management.\n");
 			do_pm = 0;
 		}
 	}
@@ -2786,7 +2786,7 @@ static int snd_es1968_create(struct snd_card *card,
 	for (i = 0; i < ARRAY_SIZE(snd_es1968_tea575x_gpios); i++) {
 		chip->tea575x_tuner = i;
 		if (!snd_tea575x_init(&chip->tea, THIS_MODULE)) {
-			dev_info(card->dev, "detected TEA575x radio type %s\n",
+			dev_dbg(card->dev, "detected TEA575x radio type %s\n",
 				   get_tea575x_gpio(chip)->name);
 			strlcpy(chip->tea.card, get_tea575x_gpio(chip)->name,
 				sizeof(chip->tea.card));

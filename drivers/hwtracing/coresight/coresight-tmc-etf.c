@@ -223,7 +223,7 @@ out:
 	if (!ret) {
 		coresight_cti_map_trigin(drvdata->cti_reset, 0, 0);
 		coresight_cti_map_trigout(drvdata->cti_flush, 1, 0);
-		dev_info(drvdata->dev, "TMC-ETB/ETF enabled\n");
+		dev_dbg(drvdata->dev, "TMC-ETB/ETF enabled\n");
 	}
 
 	return ret;

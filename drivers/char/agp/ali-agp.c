@@ -110,7 +110,7 @@ static int ali_configure(void)
 
 		nlvm_addr+= agp_bridge->gart_bus_addr;
 		nlvm_addr|=(agp_bridge->gart_bus_addr>>12);
-		dev_info(&agp_bridge->dev->dev, "nlvm top &base = %8x\n",
+		dev_dbg(&agp_bridge->dev->dev, "nlvm top &base = %8x\n",
 			 nlvm_addr);
 	}
 #endif
@@ -362,7 +362,7 @@ found:
 		bridge->driver = &ali_generic_bridge;
 	}
 
-	dev_info(&pdev->dev, "ALi %s chipset\n", devs[j].chipset_name);
+	dev_dbg(&pdev->dev, "ALi %s chipset\n", devs[j].chipset_name);
 
 	/* Fill in the mode register */
 	pci_read_config_dword(pdev,

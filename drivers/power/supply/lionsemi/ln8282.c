@@ -126,7 +126,7 @@
 #define LN8282_REG_PRINT(regmap, reg_addr, val)                                \
 	do {                                                                   \
 		regmap_read(regmap, reg_addr, &val);                           \
-		pr_info("ln8282_reg:  --> [%-30s]   0x%02X   :   0x%02X\n",    \
+		pr_debug("ln8282_reg:  --> [%-30s]   0x%02X   :   0x%02X\n",    \
 			#reg_addr, reg_addr, val & 0xFF);                      \
 	} while (0)
 
@@ -325,7 +325,7 @@ static bool ln8282_vin_switch_ok(struct ln8282_info *info)
 static void ln8282_enter_switching(struct ln8282_info *info)
 {
 	if (info->reverse_power) {
-		pr_info("%s:set switch in reverse mode\n");
+		pr_debug("%s:set switch in reverse mode\n");
 		ln8282_set_switch_seq(info, 0);
 		ln8282_set_base_opt_Bx(info, 0, 1, 0);
 		ln8282_set_vbus_uv_track(info, 1); //disable during startup
@@ -337,7 +337,7 @@ static void ln8282_enter_switching(struct ln8282_info *info)
 				__func__);
 			return;
 		}
-		pr_info("%s:set switch in forward mode\n");
+		pr_debug("%s:set switch in forward mode\n");
 		ln8282_set_switch_seq(info, 1);
 		ln8282_set_base_opt_Bx(info, 0, 1, 0);
 		regmap_write(info->regmap, LN8282_REG_FAULT_CTRL, 0x04);
@@ -375,7 +375,7 @@ bool ln8282_change_opmode(struct ln8282_info *info, unsigned int target_mode)
 	 *      based on power connections before attempting to change operation mode
 	*/
 	//info->reverse_power = false;
-	dev_info(info->dev, "opmode from %d change to %d\n", info->op_mode,
+	dev_dbg(info->dev, "opmode from %d change to %d\n", info->op_mode,
 		 target_mode);
 	ret = true;
 	switch (target_mode) {
@@ -437,7 +437,7 @@ int ln8282_hw_init(struct ln8282_info *info)
 	 * -- unmasking interrupts
 	 * -- overriding OTP settings, etc
 	 */
-	pr_info("%s: HW initialization\n", __func__);
+	pr_debug("%s: HW initialization\n", __func__);
 
 	// TEMPORARY FIX TO ENABLE 12V BYPASS
 #ifdef LN8282_HW_REV_A1
@@ -577,7 +577,7 @@ static ssize_t ln8282_sysfs_show_regcmd(struct device *dev,
 	//struct ln8282_info *info = dev_get_drvdata(dev);
 
 	if (ln8282_regcmd_valid) {
-		pr_info("%s: /sysfs/ return stored data value (0x%02X)\n",
+		pr_debug("%s: /sysfs/ return stored data value (0x%02X)\n",
 			__func__, ln8282_regcmd_data & 0xFF);
 		return scnprintf(buf, PAGE_SIZE, "0x%02x\n",
 				 ln8282_regcmd_data & 0xFF);
@@ -621,7 +621,7 @@ static ssize_t ln8282_sysfs_store_regcmd(struct device *dev,
 			goto parse_error;
 		}
 
-		pr_info("%s: /sysfs/ writing to addr 0x%02X (data=0x%02X)\n",
+		pr_debug("%s: /sysfs/ writing to addr 0x%02X (data=0x%02X)\n",
 			__func__, ln8282_regcmd_addr, ln8282_regcmd_data);
 		ret = regmap_write(info->regmap, ln8282_regcmd_addr,
 				   ln8282_regcmd_data);
@@ -634,7 +634,7 @@ static ssize_t ln8282_sysfs_store_regcmd(struct device *dev,
 			goto parse_error;
 		}
 
-		pr_info("%s: /sysfs/ reading from addr 0x%02X\n", __func__,
+		pr_debug("%s: /sysfs/ reading from addr 0x%02X\n", __func__,
 			ln8282_regcmd_addr);
 		ret = regmap_read(info->regmap, ln8282_regcmd_addr,
 				  &ln8282_regcmd_data);
@@ -657,7 +657,7 @@ static ssize_t ln8282_sysfs_show_opmode(struct device *dev,
 	struct ln8282_info *info = dev_get_drvdata(dev);
 	int ret;
 
-	pr_info("%s: /sysfs/ retrieve op_mode\n", __func__);
+	pr_debug("%s: /sysfs/ retrieve op_mode\n", __func__);
 
 	info->op_mode = ln8282_get_opmode(info);
 	switch (info->op_mode) {
@@ -684,8 +684,8 @@ static ssize_t ln8282_sysfs_show_dump(struct device *dev,
 	struct ln8282_info *info = dev_get_drvdata(dev);
 	int val;
 
-	pr_info("----------------------/dump/---------------------\n");
-	pr_info("ln8282_reg:      [           %-19s]  /addr/  :  /value/\n",
+	pr_debug("----------------------/dump/---------------------\n");
+	pr_debug("ln8282_reg:      [           %-19s]  /addr/  :  /value/\n",
 		"Register Name");
 	LN8282_REG_PRINT(info->regmap, LN8282_REG_DEVICE_CTRL_0, val);
 	LN8282_REG_PRINT(info->regmap, LN8282_REG_HV_SC_CTRL_0, val);
@@ -700,7 +700,7 @@ static ssize_t ln8282_sysfs_show_dump(struct device *dev,
 	LN8282_REG_PRINT(info->regmap, LN8282_REG_STS_D, val);
 #endif
 
-	pr_info("----------------------/dump/---------------------\n");
+	pr_debug("----------------------/dump/---------------------\n");
 	return scnprintf(buf, PAGE_SIZE, "done\n");
 }
 
@@ -719,7 +719,7 @@ static ssize_t ln8282_sysfs_store_opmode(struct device *dev,
 		opmode = LN8282_OPMODE_SWITCHING;
 	else
 		opmode = LN8282_OPMODE_UNKNOWN;
-	pr_info("%s: /sysfs/ set op_mode to 0x%02X==%s", __func__, opmode, buf);
+	pr_debug("%s: /sysfs/ set op_mode to 0x%02X==%s", __func__, opmode, buf);
 
 	if (!ln8282_change_opmode(info, opmode))
 		pr_warn("%s: /sysfs/ unable to enter %s\n", __func__, buf);
@@ -789,20 +789,20 @@ static ssize_t ln8282_sysfs_otp_overwrite(struct device *dev,
 	// -- overwrite OTP cell 0xF:
 	//    -- is 0xF0, now overwrite to 0xF8 (DISABLE_VIN_OV_TRACK=1)
 #ifdef LN8282_HW_REV_Bx
-	pr_info("%s: ********************** WARNING **********************\n",
+	pr_debug("%s: ********************** WARNING **********************\n",
 		__func__);
-	pr_info("%s: --> this is an experimental feature (temporary fix)\n",
+	pr_debug("%s: --> this is an experimental feature (temporary fix)\n",
 		__func__);
-	pr_info("%s:     NEVER use this in production release\n", __func__);
-	pr_info("%s: --> begin to overwrite OTP cell [0xF] to 0xF8\n",
+	pr_debug("%s:     NEVER use this in production release\n", __func__);
+	pr_debug("%s: --> begin to overwrite OTP cell [0xF] to 0xF8\n",
 		__func__);
 
 	ln8282_otp_write(info, 0x0F /*OTP cell addr*/, 0xF8 /*new OTP value*/);
 
-	pr_info("%s: --> finished overwriting OTP cell\n", __func__);
-	pr_info("%s: --> now, unplug/re-plugin VIN to power-up chip\n",
+	pr_debug("%s: --> finished overwriting OTP cell\n", __func__);
+	pr_debug("%s: --> now, unplug/re-plugin VIN to power-up chip\n",
 		__func__);
-	pr_info("%s: *****************************************************\n",
+	pr_debug("%s: *****************************************************\n",
 		__func__);
 #endif
 
@@ -1016,7 +1016,7 @@ static int ln8282_probe(struct i2c_client *client,
 	struct ln8282_info *info;
 	struct power_supply_config ln_cfg = {};
 	int ret = 0;
-	pr_info("%s: =/START-PROBE/=\n", __func__);
+	pr_debug("%s: =/START-PROBE/=\n", __func__);
 
 	/* allocate memory for our device state and initialize it */
 	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
@@ -1067,7 +1067,7 @@ static int ln8282_probe(struct i2c_client *client,
 	ln_cfg.drv_data = info;
 	info->ln_psy = power_supply_register(info->dev, &ln_psy_desc, &ln_cfg);
 
-	pr_info("[ln8282]%s: success probe!\n", __func__);
+	pr_debug("[ln8282]%s: success probe!\n", __func__);
 	return 0;
 
 cleanup:
@@ -1093,7 +1093,7 @@ static int ln8282_suspend(struct device *dev)
 	/* don't set bypass when suspend for reverse charge
 	ln8282_change_opmode(info, LN8282_OPMODE_BYPASS);
 	*/
-	dev_info(info->dev, "%s: suspend\n", __func__);
+	dev_dbg(info->dev, "%s: suspend\n", __func__);
 
 	return 0;
 }
@@ -1103,7 +1103,7 @@ static int ln8282_resume(struct device *dev)
 	struct i2c_client *client = to_i2c_client(dev);
 	struct ln8282_info *info = i2c_get_clientdata(client);
 
-	pr_info("%s: update/resume\n", __func__);
+	pr_debug("%s: update/resume\n", __func__);
 	dev_err(info->dev, "%s: resume\n", __func__);
 	return 0;
 }

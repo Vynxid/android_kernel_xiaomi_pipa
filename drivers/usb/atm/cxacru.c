@@ -1367,7 +1367,7 @@ static int cxacru_usb_probe(struct usb_interface *intf,
 			&& usb_string(usb_dev, usb_dev->descriptor.iProduct,
 				buf, sizeof(buf)) > 0) {
 		if (!strcmp(buf, "USB NET CARD")) {
-			dev_info(&intf->dev, "ignoring cx82310_eth device\n");
+			dev_dbg(&intf->dev, "ignoring cx82310_eth device\n");
 			return -ENODEV;
 		}
 	}

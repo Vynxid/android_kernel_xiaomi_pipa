@@ -393,7 +393,7 @@ static int s3c_adc_probe(struct platform_device *pdev)
 
 	writel(tmp, adc->regs + S3C2410_ADCCON);
 
-	dev_info(dev, "attached adc driver\n");
+	dev_dbg(dev, "attached adc driver\n");
 
 	platform_set_drvdata(pdev, adc);
 	adc_dev = adc;

@@ -44,7 +44,7 @@
 #define oxu_err(oxu, fmt, args...) \
 		dev_err(oxu_to_hcd(oxu)->self.controller , fmt , ## args)
 #define oxu_info(oxu, fmt, args...) \
-		dev_info(oxu_to_hcd(oxu)->self.controller , fmt , ## args)
+		dev_dbg(oxu_to_hcd(oxu)->self.controller , fmt , ## args)
 
 #ifdef CONFIG_DYNAMIC_DEBUG
 #define DEBUG
@@ -3677,11 +3677,11 @@ static int oxu_verify_id(struct platform_device *pdev, void *base)
 
 	/* Read controller signature register to find a match */
 	id = oxu_readl(base, OXU_DEVICEID);
-	dev_info(&pdev->dev, "device ID %x\n", id);
+	dev_dbg(&pdev->dev, "device ID %x\n", id);
 	if ((id & OXU_REV_MASK) != (OXU_REV_2100 << OXU_REV_SHIFT))
 		return -1;
 
-	dev_info(&pdev->dev, "found device %x %s (%04x:%04x)\n",
+	dev_dbg(&pdev->dev, "found device %x %s (%04x:%04x)\n",
 		id >> OXU_REV_SHIFT,
 		bo[(id & OXU_BO_MASK) >> OXU_BO_SHIFT],
 		(id & OXU_MAJ_REV_MASK) >> OXU_MAJ_REV_SHIFT,
@@ -3833,7 +3833,7 @@ static int oxu_drv_probe(struct platform_device *pdev)
 		goto error;
 	}
 
-	dev_info(&pdev->dev, "devices enabled and running\n");
+	dev_dbg(&pdev->dev, "devices enabled and running\n");
 	platform_set_drvdata(pdev, info);
 
 	return 0;

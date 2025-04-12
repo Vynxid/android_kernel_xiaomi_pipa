@@ -966,7 +966,7 @@ static noinline_for_stack int em28xx_attach_xc3028(u8 addr, struct em28xx *dev)
 		return -EINVAL;
 	}
 
-	dev_info(&dev->intf->dev, "xc3028 attached\n");
+	dev_dbg(&dev->intf->dev, "xc3028 attached\n");
 
 	return 0;
 }
@@ -1420,7 +1420,7 @@ static int em28xx_dvb_init(struct em28xx *dev)
 		return 0;
 	}
 
-	dev_info(&dev->intf->dev, "Binding DVB extension\n");
+	dev_dbg(&dev->intf->dev, "Binding DVB extension\n");
 
 	dvb = kzalloc(sizeof(*dvb), GFP_KERNEL);
 	if (!dvb)
@@ -1914,7 +1914,7 @@ static int em28xx_dvb_init(struct em28xx *dev)
 
 	udev = interface_to_usbdev(dev->intf);
 	usb_set_interface(udev, dev->ifnum, dvb_alt);
-	dev_info(&dev->intf->dev, "DVB extension successfully initialized\n");
+	dev_dbg(&dev->intf->dev, "DVB extension successfully initialized\n");
 
 	kref_get(&dev->ref);
 
@@ -1954,7 +1954,7 @@ static int em28xx_dvb_fini(struct em28xx *dev)
 	if (!dev->dvb)
 		return 0;
 
-	dev_info(&dev->intf->dev, "Closing DVB extension\n");
+	dev_dbg(&dev->intf->dev, "Closing DVB extension\n");
 
 	dvb = dev->dvb;
 
@@ -1999,17 +1999,17 @@ static int em28xx_dvb_suspend(struct em28xx *dev)
 	if (!dev->board.has_dvb)
 		return 0;
 
-	dev_info(&dev->intf->dev, "Suspending DVB extension\n");
+	dev_dbg(&dev->intf->dev, "Suspending DVB extension\n");
 	if (dev->dvb) {
 		struct em28xx_dvb *dvb = dev->dvb;
 
 		if (dvb->fe[0]) {
 			ret = dvb_frontend_suspend(dvb->fe[0]);
-			dev_info(&dev->intf->dev, "fe0 suspend %d\n", ret);
+			dev_dbg(&dev->intf->dev, "fe0 suspend %d\n", ret);
 		}
 		if (dvb->fe[1]) {
 			dvb_frontend_suspend(dvb->fe[1]);
-			dev_info(&dev->intf->dev, "fe1 suspend %d\n", ret);
+			dev_dbg(&dev->intf->dev, "fe1 suspend %d\n", ret);
 		}
 	}
 
@@ -2026,18 +2026,18 @@ static int em28xx_dvb_resume(struct em28xx *dev)
 	if (!dev->board.has_dvb)
 		return 0;
 
-	dev_info(&dev->intf->dev, "Resuming DVB extension\n");
+	dev_dbg(&dev->intf->dev, "Resuming DVB extension\n");
 	if (dev->dvb) {
 		struct em28xx_dvb *dvb = dev->dvb;
 
 		if (dvb->fe[0]) {
 			ret = dvb_frontend_resume(dvb->fe[0]);
-			dev_info(&dev->intf->dev, "fe0 resume %d\n", ret);
+			dev_dbg(&dev->intf->dev, "fe0 resume %d\n", ret);
 		}
 
 		if (dvb->fe[1]) {
 			ret = dvb_frontend_resume(dvb->fe[1]);
-			dev_info(&dev->intf->dev, "fe1 resume %d\n", ret);
+			dev_dbg(&dev->intf->dev, "fe1 resume %d\n", ret);
 		}
 	}
 

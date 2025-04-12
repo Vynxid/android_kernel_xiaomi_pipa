@@ -152,7 +152,7 @@ static int ssb_pcmcia_switch_core(struct ssb_bus *bus, struct ssb_device *dev)
 	int err;
 
 #if SSB_VERBOSE_PCMCIACORESWITCH_DEBUG
-	pr_info("Switching to %s core, index %d\n",
+	pr_debug("Switching to %s core, index %d\n",
 		ssb_core_name(dev->id.coreid), dev->core_index);
 #endif
 
@@ -546,13 +546,13 @@ static int ssb_pcmcia_sprom_write_all(struct ssb_bus *bus, const u16 *sprom)
 	bool failed = 0;
 	size_t size = SSB_PCMCIA_SPROM_SIZE;
 
-	pr_notice("Writing SPROM. Do NOT turn off the power! Please stand by...\n");
+	pr_debug("Writing SPROM. Do NOT turn off the power! Please stand by...\n");
 	err = ssb_pcmcia_sprom_command(bus, SSB_PCMCIA_SPROMCTL_WRITEEN);
 	if (err) {
-		pr_notice("Could not enable SPROM write access\n");
+		pr_debug("Could not enable SPROM write access\n");
 		return -EBUSY;
 	}
-	pr_notice("[ 0%%");
+	pr_debug("[ 0%%");
 	msleep(500);
 	for (i = 0; i < size; i++) {
 		if (i == size / 4)
@@ -565,20 +565,20 @@ static int ssb_pcmcia_sprom_write_all(struct ssb_bus *bus, const u16 *sprom)
 			pr_cont(".");
 		err = ssb_pcmcia_sprom_write(bus, i, sprom[i]);
 		if (err) {
-			pr_notice("Failed to write to SPROM\n");
+			pr_debug("Failed to write to SPROM\n");
 			failed = 1;
 			break;
 		}
 	}
 	err = ssb_pcmcia_sprom_command(bus, SSB_PCMCIA_SPROMCTL_WRITEDIS);
 	if (err) {
-		pr_notice("Could not disable SPROM write access\n");
+		pr_debug("Could not disable SPROM write access\n");
 		failed = 1;
 	}
 	msleep(500);
 	if (!failed) {
 		pr_cont("100%% ]\n");
-		pr_notice("SPROM written\n");
+		pr_debug("SPROM written\n");
 	}
 
 	return failed ? -EBUSY : 0;

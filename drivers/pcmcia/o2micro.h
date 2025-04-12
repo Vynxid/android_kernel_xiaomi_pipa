@@ -152,14 +152,14 @@ static int o2micro_override(struct yenta_socket *socket)
 				"O2: Unknown parameter, using 'default'");
 
 		if (use_speedup) {
-			dev_info(&socket->dev->dev,
+			dev_dbg(&socket->dev->dev,
 				"O2: enabling read prefetch/write burst. If you experience problems or performance issues, use the yenta_socket parameter 'o2_speedup=off'\n");
 			config_writeb(socket, O2_RESERVED1,
 				      a | O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST);
 			config_writeb(socket, O2_RESERVED2,
 				      b | O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST);
 		} else {
-			dev_info(&socket->dev->dev,
+			dev_dbg(&socket->dev->dev,
 				"O2: disabling read prefetch/write burst. If you experience problems or performance issues, use the yenta_socket parameter 'o2_speedup=on'\n");
 			config_writeb(socket, O2_RESERVED1,
 				      a & ~(O2_RES_READ_PREFETCH | O2_RES_WRITE_BURST));

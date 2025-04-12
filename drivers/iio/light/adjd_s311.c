@@ -278,7 +278,7 @@ static int adjd_s311_probe(struct i2c_client *client,
 	if (err)
 		goto exit_unreg_buffer;
 
-	dev_info(&client->dev, "ADJD-S311 color sensor registered\n");
+	dev_dbg(&client->dev, "ADJD-S311 color sensor registered\n");
 
 	return 0;
 

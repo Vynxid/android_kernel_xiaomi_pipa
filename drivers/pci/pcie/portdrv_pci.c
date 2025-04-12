@@ -204,7 +204,7 @@ static struct pci_driver pcie_portdriver = {
 
 static int __init dmi_pcie_pme_disable_msi(const struct dmi_system_id *d)
 {
-	pr_notice("%s detected: will not use MSI for PCIe PME signaling\n",
+	pr_debug("%s detected: will not use MSI for PCIe PME signaling\n",
 		  d->ident);
 	pcie_pme_disable_msi();
 	return 0;

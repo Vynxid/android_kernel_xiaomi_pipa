@@ -830,7 +830,7 @@ static struct domain_device *sas_ex_discover_end_dev(
 			};
 			int ret;
 
-			pr_notice("ex %016llx phy%02d SATA device linkrate > min pathway connection rate, attempting to lower device linkrate\n",
+			pr_debug("ex %016llx phy%02d SATA device linkrate > min pathway connection rate, attempting to lower device linkrate\n",
 				   SAS_ADDR(child->sas_addr), phy_id);
 			ret = sas_smp_phy_control(parent, phy_id,
 						  PHY_FUNC_LINK_RESET, &rates);
@@ -839,7 +839,7 @@ static struct domain_device *sas_ex_discover_end_dev(
 				       SAS_ADDR(child->sas_addr), phy_id, ret);
 				goto out_free;
 			}
-			pr_notice("ex %016llx phy%02d SATA device set linkrate successfully\n",
+			pr_debug("ex %016llx phy%02d SATA device set linkrate successfully\n",
 				  SAS_ADDR(child->sas_addr), phy_id);
 			child->linkrate = child->min_linkrate;
 		}

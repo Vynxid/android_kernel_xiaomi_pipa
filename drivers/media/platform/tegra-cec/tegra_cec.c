@@ -456,7 +456,7 @@ static int tegra_cec_suspend(struct platform_device *pdev, pm_message_t state)
 
 	clk_disable_unprepare(cec->clk);
 
-	dev_notice(&pdev->dev, "suspended\n");
+	dev_dbg(&pdev->dev, "suspended\n");
 	return 0;
 }
 
@@ -464,7 +464,7 @@ static int tegra_cec_resume(struct platform_device *pdev)
 {
 	struct tegra_cec *cec = platform_get_drvdata(pdev);
 
-	dev_notice(&pdev->dev, "Resuming\n");
+	dev_dbg(&pdev->dev, "Resuming\n");
 
 	return clk_prepare_enable(cec->clk);
 }

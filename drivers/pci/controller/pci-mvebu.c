@@ -1051,7 +1051,7 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
 		}
 
 		if (flags & OF_GPIO_ACTIVE_LOW) {
-			dev_info(dev, "%pOF: reset gpio is active low\n",
+			dev_dbg(dev, "%pOF: reset gpio is active low\n",
 				 child);
 			gpio_flags = GPIOF_ACTIVE_LOW |
 				     GPIOF_OUT_INIT_LOW;

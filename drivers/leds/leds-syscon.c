@@ -134,7 +134,7 @@ static int syscon_led_probe(struct platform_device *pdev)
 		return ret;
 
 	platform_set_drvdata(pdev, sled);
-	dev_info(dev, "registered LED %s\n", sled->cdev.name);
+	dev_dbg(dev, "registered LED %s\n", sled->cdev.name);
 
 	return 0;
 }

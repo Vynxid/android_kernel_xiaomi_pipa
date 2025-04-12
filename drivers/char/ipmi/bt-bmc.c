@@ -434,7 +434,7 @@ static int bt_bmc_probe(struct platform_device *pdev)
 		return -ENODEV;
 
 	dev = &pdev->dev;
-	dev_info(dev, "Found bt bmc device\n");
+	dev_dbg(dev, "Found bt bmc device\n");
 
 	bt_bmc = devm_kzalloc(dev, sizeof(*bt_bmc), GFP_KERNEL);
 	if (!bt_bmc)
@@ -480,9 +480,9 @@ static int bt_bmc_probe(struct platform_device *pdev)
 	bt_bmc_config_irq(bt_bmc, pdev);
 
 	if (bt_bmc->irq) {
-		dev_info(dev, "Using IRQ %d\n", bt_bmc->irq);
+		dev_dbg(dev, "Using IRQ %d\n", bt_bmc->irq);
 	} else {
-		dev_info(dev, "No IRQ; using timer\n");
+		dev_dbg(dev, "No IRQ; using timer\n");
 		timer_setup(&bt_bmc->poll_timer, poll_timer, 0);
 		bt_bmc->poll_timer.expires = jiffies + msecs_to_jiffies(10);
 		add_timer(&bt_bmc->poll_timer);

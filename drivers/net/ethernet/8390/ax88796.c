@@ -759,7 +759,7 @@ static int ax_init_dev(struct net_device *dev)
 
 	if (!is_valid_ether_addr(dev->dev_addr)) {
 		eth_hw_addr_random(dev);
-		dev_info(&dev->dev, "Using random MAC address: %pM\n",
+		dev_dbg(&dev->dev, "Using random MAC address: %pM\n",
 			 dev->dev_addr);
 	}
 

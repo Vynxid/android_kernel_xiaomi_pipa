@@ -65,7 +65,7 @@ static int cs35l41_i2c_probe(struct i2c_client *client,
 	int ret;
 
 
-	dev_info(dev, "cs35l41 i2c probe start\n");
+	dev_dbg(dev, "cs35l41 i2c probe start\n");
 
 	cs35l41 = devm_kzalloc(dev, sizeof(struct cs35l41_private), GFP_KERNEL);
 

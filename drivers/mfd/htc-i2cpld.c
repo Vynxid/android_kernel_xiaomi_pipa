@@ -520,7 +520,7 @@ static int htcpld_setup_chips(struct platform_device *pdev)
 			continue;
 		}
 
-		dev_info(dev, "Registered chip at 0x%x\n", pdata->chip[i].addr);
+		dev_dbg(dev, "Registered chip at 0x%x\n", pdata->chip[i].addr);
 	}
 
 	return 0;
@@ -605,7 +605,7 @@ static int htcpld_core_probe(struct platform_device *pdev)
 		}
 	}
 
-	dev_info(dev, "Initialized successfully\n");
+	dev_dbg(dev, "Initialized successfully\n");
 	return 0;
 }
 

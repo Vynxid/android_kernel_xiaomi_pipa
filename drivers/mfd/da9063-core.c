@@ -209,7 +209,7 @@ int da9063_device_init(struct da9063 *da9063, unsigned int irq)
 
 	variant_code = variant_id >> DA9063_CHIP_VARIANT_SHIFT;
 
-	dev_info(da9063->dev,
+	dev_dbg(da9063->dev,
 		 "Device detected (chip-ID: 0x%02X, var-ID: 0x%02X)\n",
 		 model, variant_id);
 

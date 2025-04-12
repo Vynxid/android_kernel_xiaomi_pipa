@@ -842,7 +842,7 @@ static int twl4030_madc_probe(struct platform_device *pdev)
 
 	/* If MADC clk is not on, turn it on */
 	if (!(regval & TWL4030_GPBR1_MADC_HFCLK_EN)) {
-		dev_info(&pdev->dev, "clk disabled, enabling\n");
+		dev_dbg(&pdev->dev, "clk disabled, enabling\n");
 		regval |= TWL4030_GPBR1_MADC_HFCLK_EN;
 		ret = twl_i2c_write_u8(TWL4030_MODULE_INTBR, regval,
 				       TWL4030_REG_GPBR1);

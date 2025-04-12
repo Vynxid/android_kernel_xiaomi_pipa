@@ -982,7 +982,7 @@ static int ti_hecc_probe(struct platform_device *pdev)
 
 	devm_can_led_init(ndev);
 
-	dev_info(&pdev->dev, "device registered (reg_base=%p, irq=%u)\n",
+	dev_dbg(&pdev->dev, "device registered (reg_base=%p, irq=%u)\n",
 		priv->base, (u32) ndev->irq);
 
 	return 0;

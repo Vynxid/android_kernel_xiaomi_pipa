@@ -369,7 +369,7 @@ static void snd_emu10k1x_pcm_interrupt(struct emu10k1x *emu, struct emu10k1x_voi
 	if (epcm->substream == NULL)
 		return;
 #if 0
-	dev_info(emu->card->dev,
+	dev_dbg(emu->card->dev,
 		 "IRQ: position = 0x%x, period = 0x%x, size = 0x%x\n",
 		   epcm->substream->ops->pointer(epcm->substream),
 		   snd_pcm_lib_period_bytes(epcm->substream),
@@ -961,7 +961,7 @@ static int snd_emu10k1x_create(struct snd_card *card,
 	chip->revision = pci->revision;
 	pci_read_config_dword(pci, PCI_SUBSYSTEM_VENDOR_ID, &chip->serial);
 	pci_read_config_word(pci, PCI_SUBSYSTEM_ID, &chip->model);
-	dev_info(card->dev, "Model %04x Rev %08x Serial %08x\n", chip->model,
+	dev_dbg(card->dev, "Model %04x Rev %08x Serial %08x\n", chip->model,
 		   chip->revision, chip->serial);
 
 	outl(0, chip->port + INTE);	

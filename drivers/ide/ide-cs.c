@@ -236,7 +236,7 @@ static int ide_config(struct pcmcia_device *link)
 
     info->ndev = 1;
     info->host = host;
-    dev_info(&link->dev, "ide-cs: hd%c: Vpp = %d.%d\n",
+    dev_dbg(&link->dev, "ide-cs: hd%c: Vpp = %d.%d\n",
 	    'a' + host->ports[0]->index * 2,
 	    link->vpp / 10, link->vpp % 10);
 

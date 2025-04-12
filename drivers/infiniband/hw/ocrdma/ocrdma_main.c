@@ -293,7 +293,7 @@ static void ocrdma_remove_sysfiles(struct ocrdma_dev *dev)
 		device_remove_file(&dev->ibdev.dev, ocrdma_attributes[i]);
 }
 
-static struct ocrdma_dev *ocrdma_add(struct be_dev_info *dev_info)
+static struct ocrdma_dev *ocrdma_add(struct be_dev_info *dev_dbg)
 {
 	int status = 0, i;
 	u8 lstate = 0;
@@ -308,7 +308,7 @@ static struct ocrdma_dev *ocrdma_add(struct be_dev_info *dev_info)
 	if (!dev->mbx_cmd)
 		goto idr_err;
 
-	memcpy(&dev->nic_info, dev_info, sizeof(*dev_info));
+	memcpy(&dev->nic_info, dev_dbg, sizeof(*dev_dbg));
 	dev->id = idr_alloc(&ocrdma_dev_id, NULL, 0, 0, GFP_KERNEL);
 	if (dev->id < 0)
 		goto idr_err;
@@ -340,11 +340,11 @@ static struct ocrdma_dev *ocrdma_add(struct be_dev_info *dev_info)
 	INIT_DELAYED_WORK(&dev->eqd_work, ocrdma_eqd_set_task);
 	schedule_delayed_work(&dev->eqd_work, msecs_to_jiffies(1000));
 
-	pr_info("%s %s: %s \"%s\" port %d\n",
+	pr_debug("%s %s: %s \"%s\" port %d\n",
 		dev_name(&dev->nic_info.pdev->dev), hca_name(dev),
 		port_speed_string(dev), dev->model_number,
 		dev->hba_port_num);
-	pr_info("%s ocrdma%d driver loaded successfully\n",
+	pr_debug("%s ocrdma%d driver loaded successfully\n",
 		dev_name(&dev->nic_info.pdev->dev), dev->id);
 	return dev;
 

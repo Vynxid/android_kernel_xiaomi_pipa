@@ -324,7 +324,7 @@ struct inode *jffs2_iget(struct super_block *sb, unsigned long ino)
 		/* Read the device numbers from the media */
 		if (f->metadata->size != sizeof(jdev.old_id) &&
 		    f->metadata->size != sizeof(jdev.new_id)) {
-			pr_notice("Device node has strange size %d\n",
+			pr_debug("Device node has strange size %d\n",
 				  f->metadata->size);
 			goto error_io;
 		}
@@ -332,7 +332,7 @@ struct inode *jffs2_iget(struct super_block *sb, unsigned long ino)
 		ret = jffs2_read_dnode(c, f, f->metadata, (char *)&jdev, 0, f->metadata->size);
 		if (ret < 0) {
 			/* Eep */
-			pr_notice("Read device numbers for inode %lu failed\n",
+			pr_debug("Read device numbers for inode %lu failed\n",
 				  (unsigned long)inode->i_ino);
 			goto error;
 		}
@@ -541,7 +541,7 @@ int jffs2_do_fill_super(struct super_block *sb, void *data, int silent)
 	 */
 	if ((c->sector_size * blocks) != c->flash_size) {
 		c->flash_size = c->sector_size * blocks;
-		pr_info("Flash size not aligned to erasesize, reducing to %dKiB\n",
+		pr_debug("Flash size not aligned to erasesize, reducing to %dKiB\n",
 			c->flash_size / 1024);
 	}
 
@@ -668,7 +668,7 @@ struct jffs2_inode_info *jffs2_gc_fetch_inode(struct jffs2_sb_info *c,
 			return ERR_CAST(inode);
 	}
 	if (is_bad_inode(inode)) {
-		pr_notice("Eep. read_inode() failed for ino #%u. unlinked %d\n",
+		pr_debug("Eep. read_inode() failed for ino #%u. unlinked %d\n",
 			  inum, unlinked);
 		/* NB. This will happen again. We need to do something appropriate here. */
 		iput(inode);

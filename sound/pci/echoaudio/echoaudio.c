@@ -2150,7 +2150,7 @@ static int snd_echo_probe(struct pci_dev *pci,
 	err = snd_card_register(card);
 	if (err < 0)
 		goto ctl_error;
-	dev_info(card->dev, "Card registered: %s\n", card->longname);
+	dev_dbg(card->dev, "Card registered: %s\n", card->longname);
 
 	pci_set_drvdata(pci, chip);
 	dev++;

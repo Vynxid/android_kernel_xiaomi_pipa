@@ -69,7 +69,7 @@ static int lan9303_i2c_probe(struct i2c_client *client,
 	if (ret != 0)
 		return ret;
 
-	dev_info(&client->dev, "LAN9303 I2C driver loaded successfully\n");
+	dev_dbg(&client->dev, "LAN9303 I2C driver loaded successfully\n");
 
 	return 0;
 }

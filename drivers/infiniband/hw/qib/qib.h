@@ -1495,7 +1495,7 @@ extern struct mutex qib_mutex;
 		##__VA_ARGS__)
 
 #define qib_devinfo(pcidev, fmt, ...) \
-	dev_info(&(pcidev)->dev, fmt, ##__VA_ARGS__)
+	dev_dbg(&(pcidev)->dev, fmt, ##__VA_ARGS__)
 
 /*
  * this is used for formatting hw error messages...

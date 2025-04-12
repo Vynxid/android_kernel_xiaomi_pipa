@@ -24,9 +24,9 @@
 #define CIF_SUBDEVICE_DEVICENET	0x432
 
 
-static irqreturn_t hilscher_handler(int irq, struct uio_info *dev_info)
+static irqreturn_t hilscher_handler(int irq, struct uio_info *dev_dbg)
 {
-	void __iomem *plx_intscr = dev_info->mem[0].internal_addr
+	void __iomem *plx_intscr = dev_dbg->mem[0].internal_addr
 					+ PLX9030_INTCSR;
 
 	if ((ioread8(plx_intscr) & INT1_ENABLED_AND_ACTIVE)

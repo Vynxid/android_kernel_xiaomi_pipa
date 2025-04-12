@@ -994,7 +994,7 @@ static int helene_x_pon(struct helene_priv *priv)
 	cdata[1] = 0x00;
 	helene_write_regs(priv, 0x41, cdata, sizeof(cdata));
 
-	dev_info(&priv->i2c->dev,
+	dev_dbg(&priv->i2c->dev,
 			"HELENE tuner x_pon done\n");
 
 	return 0;
@@ -1029,7 +1029,7 @@ struct dvb_frontend *helene_attach_s(struct dvb_frontend *fe,
 	memcpy(&fe->ops.tuner_ops, &helene_tuner_ops_s,
 			sizeof(struct dvb_tuner_ops));
 	fe->tuner_priv = priv;
-	dev_info(&priv->i2c->dev,
+	dev_dbg(&priv->i2c->dev,
 			"Sony HELENE Sat attached on addr=%x at I2C adapter %p\n",
 			priv->i2c_address, priv->i2c);
 	return fe;
@@ -1065,7 +1065,7 @@ struct dvb_frontend *helene_attach(struct dvb_frontend *fe,
 	memcpy(&fe->ops.tuner_ops, &helene_tuner_ops_t,
 			sizeof(struct dvb_tuner_ops));
 	fe->tuner_priv = priv;
-	dev_info(&priv->i2c->dev,
+	dev_dbg(&priv->i2c->dev,
 			"Sony HELENE Ter attached on addr=%x at I2C adapter %p\n",
 			priv->i2c_address, priv->i2c);
 	return fe;
@@ -1104,7 +1104,7 @@ static int helene_probe(struct i2c_client *client,
 	fe->tuner_priv = priv;
 	i2c_set_clientdata(client, priv);
 
-	dev_info(dev, "Sony HELENE attached on addr=%x at I2C adapter %p\n",
+	dev_dbg(dev, "Sony HELENE attached on addr=%x at I2C adapter %p\n",
 		 priv->i2c_address, priv->i2c);
 
 	return 0;

@@ -2042,7 +2042,7 @@ static int ov5670_set_ctrl(struct v4l2_ctrl *ctrl)
 		ret = ov5670_enable_test_pattern(ov5670, ctrl->val);
 		break;
 	default:
-		dev_info(&client->dev, "%s Unhandled id:0x%x, val:0x%x\n",
+		dev_dbg(&client->dev, "%s Unhandled id:0x%x, val:0x%x\n",
 			 __func__, ctrl->id, ctrl->val);
 		break;
 	}

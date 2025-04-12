@@ -274,7 +274,7 @@ int dcdbas_smi_request(struct smi_cmd *smi_cmd)
 	int ret;
 
 	if (smi_cmd->magic != SMI_CMD_MAGIC) {
-		dev_info(&dcdbas_pdev->dev, "%s: invalid magic value\n",
+		dev_dbg(&dcdbas_pdev->dev, "%s: invalid magic value\n",
 			 __func__);
 		return -EBADR;
 	}
@@ -562,7 +562,7 @@ static int dcdbas_probe(struct platform_device *dev)
 
 	register_reboot_notifier(&dcdbas_reboot_nb);
 
-	dev_info(&dev->dev, "%s (version %s)\n",
+	dev_dbg(&dev->dev, "%s (version %s)\n",
 		 DRIVER_DESCRIPTION, DRIVER_VERSION);
 
 	return 0;

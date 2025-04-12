@@ -104,19 +104,19 @@ static void tpg110_startup(struct device *dev)
 {
 	u8 val;
 
-	dev_info(dev, "TPG110 display enable\n");
+	dev_dbg(dev, "TPG110 display enable\n");
 	/* De-assert the reset signal */
 	gpiod_set_value_cansleep(grestb, 0);
 	mdelay(1);
-	dev_info(dev, "de-asserted GRESTB\n");
+	dev_dbg(dev, "de-asserted GRESTB\n");
 
 	/* Test display communication */
 	tpg110_write_reg(0x00, 0x55);
 	val = tpg110_read_reg(0x00);
 	if (val == 0x55)
-		dev_info(dev, "passed communication test\n");
+		dev_dbg(dev, "passed communication test\n");
 	val = tpg110_read_reg(0x01);
-	dev_info(dev, "TPG110 chip ID: %d version: %d\n",
+	dev_dbg(dev, "TPG110 chip ID: %d version: %d\n",
 		val>>4, val&0x0f);
 
 	/* Show display resolution */
@@ -124,30 +124,30 @@ static void tpg110_startup(struct device *dev)
 	val &= 7;
 	switch (val) {
 	case 0x0:
-		dev_info(dev, "IN 400x240 RGB -> OUT 800x480 RGB (dual scan)");
+		dev_dbg(dev, "IN 400x240 RGB -> OUT 800x480 RGB (dual scan)");
 		break;
 	case 0x1:
-		dev_info(dev, "IN 480x272 RGB -> OUT 800x480 RGB (dual scan)");
+		dev_dbg(dev, "IN 480x272 RGB -> OUT 800x480 RGB (dual scan)");
 		break;
 	case 0x4:
-		dev_info(dev, "480x640 RGB");
+		dev_dbg(dev, "480x640 RGB");
 		break;
 	case 0x5:
-		dev_info(dev, "480x272 RGB");
+		dev_dbg(dev, "480x272 RGB");
 		break;
 	case 0x6:
-		dev_info(dev, "640x480 RGB");
+		dev_dbg(dev, "640x480 RGB");
 		break;
 	case 0x7:
-		dev_info(dev, "800x480 RGB");
+		dev_dbg(dev, "800x480 RGB");
 		break;
 	default:
-		dev_info(dev, "ILLEGAL RESOLUTION");
+		dev_dbg(dev, "ILLEGAL RESOLUTION");
 		break;
 	}
 
 	val = tpg110_read_reg(0x03);
-	dev_info(dev, "resolution is controlled by %s\n",
+	dev_dbg(dev, "resolution is controlled by %s\n",
 		(val & BIT(7)) ? "software" : "hardware");
 }
 
@@ -172,7 +172,7 @@ static void tpg110_disable(struct clcd_fb *fb)
 {
 	u8 val;
 
-	dev_info(&fb->dev->dev, "TPG110 display disable\n");
+	dev_dbg(&fb->dev->dev, "TPG110 display disable\n");
 	val = tpg110_read_reg(0x03);
 	/* Put into standby */
 	val &= ~BIT(0);
@@ -182,7 +182,7 @@ static void tpg110_disable(struct clcd_fb *fb)
 static void tpg110_init(struct device *dev, struct device_node *np,
 			struct clcd_board *board)
 {
-	dev_info(dev, "TPG110 display init\n");
+	dev_dbg(dev, "TPG110 display init\n");
 
 	/* This asserts the GRESTB signal, putting the display into reset */
 	grestb = devm_fwnode_get_gpiod_from_child(dev, "grestb", &np->fwnode,
@@ -218,7 +218,7 @@ int nomadik_clcd_init_panel(struct clcd_fb *fb, struct device_node *panel)
 	if (of_device_is_compatible(panel, "tpo,tpg110"))
 		tpg110_init(&fb->dev->dev, panel, fb->board);
 	else
-		dev_info(&fb->dev->dev, "unknown panel\n");
+		dev_dbg(&fb->dev->dev, "unknown panel\n");
 
 	/* Unknown panel, fall through */
 	return 0;
@@ -233,7 +233,7 @@ int nomadik_clcd_init_board(struct amba_device *adev,
 {
 	struct regmap *pmu_regmap;
 
-	dev_info(&adev->dev, "Nomadik CLCD board init\n");
+	dev_dbg(&adev->dev, "Nomadik CLCD board init\n");
 	pmu_regmap =
 		syscon_regmap_lookup_by_compatible("stericsson,nomadik-pmu");
 	if (IS_ERR(pmu_regmap)) {
@@ -244,7 +244,7 @@ int nomadik_clcd_init_board(struct amba_device *adev,
 			   PMU_CTRL_OFFSET,
 			   PMU_CTRL_LCDNDIF,
 			   0);
-	dev_info(&adev->dev, "set PMU mux to CLCD mode\n");
+	dev_dbg(&adev->dev, "set PMU mux to CLCD mode\n");
 
 	return 0;
 }

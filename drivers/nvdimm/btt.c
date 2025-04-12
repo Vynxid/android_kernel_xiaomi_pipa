@@ -881,7 +881,7 @@ static int discover_arenas(struct btt *btt)
 		if (!nd_btt_arena_is_valid(btt->nd_btt, super)) {
 			if (remaining == btt->rawsize) {
 				btt->init_state = INIT_NOTFOUND;
-				dev_info(to_dev(arena), "No existing arenas\n");
+				dev_dbg(to_dev(arena), "No existing arenas\n");
 				goto out;
 			} else {
 				dev_err(to_dev(arena),
@@ -1636,7 +1636,7 @@ static struct btt *btt_init(struct nd_btt *nd_btt, unsigned long long rawsize,
 
 		ret = create_arenas(btt);
 		if (ret) {
-			dev_info(dev, "init: create_arenas: %d\n", ret);
+			dev_dbg(dev, "init: create_arenas: %d\n", ret);
 			return NULL;
 		}
 

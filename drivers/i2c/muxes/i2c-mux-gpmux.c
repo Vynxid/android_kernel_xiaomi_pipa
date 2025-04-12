@@ -136,7 +136,7 @@ static int i2c_mux_probe(struct platform_device *pdev)
 			goto err_children;
 	}
 
-	dev_info(dev, "%d-port mux on %s adapter\n", children, parent->name);
+	dev_dbg(dev, "%d-port mux on %s adapter\n", children, parent->name);
 
 	return 0;
 

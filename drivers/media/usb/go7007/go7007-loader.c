@@ -73,7 +73,7 @@ static int go7007_loader_probe(struct usb_interface *interface,
 	fw1 = fw_configs[i].fw_name1;
 	fw2 = fw_configs[i].fw_name2;
 
-	dev_info(&interface->dev, "loading firmware %s\n", fw1);
+	dev_dbg(&interface->dev, "loading firmware %s\n", fw1);
 
 	if (request_firmware(&fw, fw1, &usbdev->dev)) {
 		dev_err(&interface->dev,
@@ -111,7 +111,7 @@ failed2:
 
 static void go7007_loader_disconnect(struct usb_interface *interface)
 {
-	dev_info(&interface->dev, "disconnect\n");
+	dev_dbg(&interface->dev, "disconnect\n");
 	usb_put_dev(interface_to_usbdev(interface));
 	usb_set_intfdata(interface, NULL);
 }

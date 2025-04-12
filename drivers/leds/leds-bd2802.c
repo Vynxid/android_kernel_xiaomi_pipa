@@ -686,7 +686,7 @@ static int bd2802_probe(struct i2c_client *client,
 		dev_err(&client->dev, "failed to detect device\n");
 		return ret;
 	} else
-		dev_info(&client->dev, "return 0x%02x\n", ret);
+		dev_dbg(&client->dev, "return 0x%02x\n", ret);
 
 	/* To save the power, reset BD2802 after detecting */
 	gpio_set_value(led->pdata->reset_gpio, 0);

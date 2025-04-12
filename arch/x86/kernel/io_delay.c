@@ -48,7 +48,7 @@ EXPORT_SYMBOL(native_io_delay);
 static int __init dmi_io_delay_0xed_port(const struct dmi_system_id *id)
 {
 	if (io_delay_type == CONFIG_IO_DELAY_TYPE_0X80) {
-		pr_notice("%s: using 0xed I/O delay port\n", id->ident);
+		pr_debug("%s: using 0xed I/O delay port\n", id->ident);
 		io_delay_type = CONFIG_IO_DELAY_TYPE_0XED;
 	}
 

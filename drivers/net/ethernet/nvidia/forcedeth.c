@@ -5647,7 +5647,7 @@ static int nv_probe(struct pci_dev *pci_dev, const struct pci_device_id *id)
 	static int printed_version;
 
 	if (!printed_version++)
-		pr_info("Reverse Engineered nForce ethernet driver. Version %s.\n",
+		pr_debug("Reverse Engineered nForce ethernet driver. Version %s.\n",
 			FORCEDETH_VERSION);
 
 	dev = alloc_etherdev(sizeof(struct fe_priv));
@@ -5695,7 +5695,7 @@ static int nv_probe(struct pci_dev *pci_dev, const struct pci_device_id *id)
 		}
 	}
 	if (i == DEVICE_COUNT_RESOURCE) {
-		dev_info(&pci_dev->dev, "Couldn't find register window\n");
+		dev_dbg(&pci_dev->dev, "Couldn't find register window\n");
 		goto out_relreg;
 	}
 
@@ -5711,12 +5711,12 @@ static int nv_probe(struct pci_dev *pci_dev, const struct pci_device_id *id)
 		np->txrxctl_bits = NVREG_TXRXCTL_DESC_3;
 		if (dma_64bit) {
 			if (pci_set_dma_mask(pci_dev, DMA_BIT_MASK(39)))
-				dev_info(&pci_dev->dev,
+				dev_dbg(&pci_dev->dev,
 					 "64-bit DMA failed, using 32-bit addressing\n");
 			else
 				dev->features |= NETIF_F_HIGHDMA;
 			if (pci_set_consistent_dma_mask(pci_dev, DMA_BIT_MASK(39))) {
-				dev_info(&pci_dev->dev,
+				dev_dbg(&pci_dev->dev,
 					 "64-bit DMA (consistent) failed, using 32-bit ring buffers\n");
 			}
 		}
@@ -5999,7 +5999,7 @@ static int nv_probe(struct pci_dev *pci_dev, const struct pci_device_id *id)
 		break;
 	}
 	if (i == 33) {
-		dev_info(&pci_dev->dev, "open: Could not find a valid PHY\n");
+		dev_dbg(&pci_dev->dev, "open: Could not find a valid PHY\n");
 		goto out_error;
 	}
 
@@ -6020,7 +6020,7 @@ static int nv_probe(struct pci_dev *pci_dev, const struct pci_device_id *id)
 
 	err = register_netdev(dev);
 	if (err) {
-		dev_info(&pci_dev->dev, "unable to register netdev: %d\n", err);
+		dev_dbg(&pci_dev->dev, "unable to register netdev: %d\n", err);
 		goto out_error;
 	}
 
@@ -6037,10 +6037,10 @@ static int nv_probe(struct pci_dev *pci_dev, const struct pci_device_id *id)
 	if (id->driver_data & DEV_HAS_VLAN)
 		nv_vlan_mode(dev, dev->features);
 
-	dev_info(&pci_dev->dev, "ifname %s, PHY OUI 0x%x @ %d, addr %pM\n",
+	dev_dbg(&pci_dev->dev, "ifname %s, PHY OUI 0x%x @ %d, addr %pM\n",
 		 dev->name, np->phy_oui, np->phyaddr, dev->dev_addr);
 
-	dev_info(&pci_dev->dev, "%s%s%s%s%s%s%s%s%s%s%sdesc-v%u\n",
+	dev_dbg(&pci_dev->dev, "%s%s%s%s%s%s%s%s%s%s%sdesc-v%u\n",
 		 dev->features & NETIF_F_HIGHDMA ? "highdma " : "",
 		 dev->features & (NETIF_F_IP_CSUM | NETIF_F_SG) ?
 			"csum " : "",

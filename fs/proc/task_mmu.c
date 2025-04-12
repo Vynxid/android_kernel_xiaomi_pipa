@@ -1696,7 +1696,7 @@ static inline bool can_reclaim(short before_reclaim_adj,
 			fatal_signal_pending(task) ||
 			task->flags & PF_EXITING ||
 			!list_empty(&mm->mmap_sem.wait_list)) {
-		pr_info("stop reclaim: force\n");
+		pr_debug("stop reclaim: force\n");
 
 		return false;
 	}
@@ -1705,7 +1705,7 @@ static inline bool can_reclaim(short before_reclaim_adj,
 	if ((cur_oom_score_adj < CACHED_APP_MIN_ADJ &&
 			cur_oom_score_adj < before_reclaim_adj) ||
 			FOREGROUND_APP_ADJ == cur_oom_score_adj) {
-		pr_info("[c:%s %d, r:%s %d] adj adjust %d %d\n",
+		pr_debug("[c:%s %d, r:%s %d] adj adjust %d %d\n",
 			current->comm, current->pid,
 			task->comm, task->pid,
 			before_reclaim_adj, cur_oom_score_adj);

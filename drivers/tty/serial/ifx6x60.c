@@ -1085,7 +1085,7 @@ static int ifx_spi_spi_probe(struct spi_device *spi)
 	ifx_dev->gpio.srdy = pl_data->srdy;
 	ifx_dev->gpio.reset_out = pl_data->rst_out;
 
-	dev_info(&spi->dev, "gpios %d, %d, %d, %d, %d",
+	dev_dbg(&spi->dev, "gpios %d, %d, %d, %d, %d",
 		 ifx_dev->gpio.reset, ifx_dev->gpio.po, ifx_dev->gpio.mrdy,
 		 ifx_dev->gpio.srdy, ifx_dev->gpio.reset_out);
 

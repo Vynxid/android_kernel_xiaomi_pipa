@@ -692,7 +692,7 @@ static int ts2020_probe(struct i2c_client *client,
 	if (ret)
 		goto err_regmap_exit;
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "Montage Technology %s successfully identified\n", chip_str);
 
 	memcpy(&fe->ops.tuner_ops, &ts2020_tuner_ops,

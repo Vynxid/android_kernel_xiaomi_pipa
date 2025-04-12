@@ -1155,7 +1155,7 @@ static int lpass_audio_cc_scuba_probe(struct platform_device *pdev)
 	}
 
 	pm_runtime_put_sync(&pdev->dev);
-	dev_info(&pdev->dev, "Registered LPASS Audio clocks\n");
+	dev_dbg(&pdev->dev, "Registered LPASS Audio clocks\n");
 	return 0;
 
 err_put_rpm:

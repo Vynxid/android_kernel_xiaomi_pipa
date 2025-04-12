@@ -315,7 +315,7 @@ static void mcs7830_rev_C_fixup(struct usbnet *dev)
 
 	for (retry = 0; retry < 2; retry++) {
 		if (mcs7830_get_rev(dev) == 2) {
-			dev_info(&dev->udev->dev, "applying rev.C fixup\n");
+			dev_dbg(&dev->udev->dev, "applying rev.C fixup\n");
 			mcs7830_set_reg(dev, HIF_REG_PAUSE_THRESHOLD,
 					1, &pause_threshold);
 		}
@@ -406,14 +406,14 @@ static int mcs7830_apply_base_config(struct usbnet *dev)
 	/* re-configure known MAC (suspend case etc.) */
 	ret = mcs7830_hif_set_mac_address(dev, dev->net->dev_addr);
 	if (ret) {
-		dev_info(&dev->udev->dev, "Cannot set MAC address\n");
+		dev_dbg(&dev->udev->dev, "Cannot set MAC address\n");
 		goto out;
 	}
 
 	/* Set up PHY */
 	ret = mcs7830_set_autoneg(dev, 0);
 	if (ret) {
-		dev_info(&dev->udev->dev, "Cannot set autoneg\n");
+		dev_dbg(&dev->udev->dev, "Cannot set autoneg\n");
 		goto out;
 	}
 

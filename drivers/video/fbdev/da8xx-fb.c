@@ -1332,7 +1332,7 @@ static struct fb_videomode *da8xx_fb_get_videomode(struct platform_device *dev)
 		dev_err(&dev->dev, "no panel found\n");
 		return NULL;
 	}
-	dev_info(&dev->dev, "found %s panel\n", lcdc_info->name);
+	dev_dbg(&dev->dev, "found %s panel\n", lcdc_info->name);
 
 	return lcdc_info;
 }

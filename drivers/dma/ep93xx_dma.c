@@ -1387,7 +1387,7 @@ static int __init ep93xx_dma_probe(struct platform_device *pdev)
 		}
 		kfree(edma);
 	} else {
-		dev_info(dma_dev->dev, "EP93xx M2%s DMA ready\n",
+		dev_dbg(dma_dev->dev, "EP93xx M2%s DMA ready\n",
 			 edma->m2m ? "M" : "P");
 	}
 

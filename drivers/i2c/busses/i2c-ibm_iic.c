@@ -753,7 +753,7 @@ static int iic_probe(struct platform_device *ofdev)
 	if (ret  < 0)
 		goto error_cleanup;
 
-	dev_info(&ofdev->dev, "using %s mode\n",
+	dev_dbg(&ofdev->dev, "using %s mode\n",
 		 dev->fast_mode ? "fast (400 kHz)" : "standard (100 kHz)");
 
 	return 0;

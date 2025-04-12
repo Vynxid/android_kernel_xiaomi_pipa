@@ -491,13 +491,13 @@ static int ak8974_detect(struct ak8974 *ak8974)
 		if (ret)
 			return ret;
 		add_device_randomness(&sn, sizeof(sn));
-		dev_info(&ak8974->i2c->dev,
+		dev_dbg(&ak8974->i2c->dev,
 			 "detected %s, FW ver %02x, S/N: %04x\n",
 			 name, fw, sn);
 		break;
 	case AK8974_WHOAMI_VALUE_AK8974:
 		name = "ak8974";
-		dev_info(&ak8974->i2c->dev, "detected AK8974\n");
+		dev_dbg(&ak8974->i2c->dev, "detected AK8974\n");
 		break;
 	default:
 		dev_err(&ak8974->i2c->dev, "unsupported device (%02x) ",
@@ -528,7 +528,7 @@ static int ak8974_detect(struct ak8974 *ak8974)
 
 			pgain1 &= 0xFF;
 
-			dev_info(&ak8974->i2c->dev,
+			dev_dbg(&ak8974->i2c->dev,
 				 "factory calibration for axis %c: offz=%u sens=%u fine=%u pga%c=%u pga%c=%u\n",
 				 axis[i], offz, sens, fine, pgaxis[i * 2],
 				 pgain1, pgaxis[i * 2 + 1], pgain2);
@@ -815,10 +815,10 @@ static int ak8974_probe(struct i2c_client *i2c,
 	if (irq > 0) {
 		irq_trig = irqd_get_trigger_type(irq_get_irq_data(irq));
 		if (irq_trig == IRQF_TRIGGER_RISING) {
-			dev_info(&i2c->dev, "enable rising edge DRDY IRQ\n");
+			dev_dbg(&i2c->dev, "enable rising edge DRDY IRQ\n");
 		} else if (irq_trig == IRQF_TRIGGER_FALLING) {
 			ak8974->drdy_active_low = true;
-			dev_info(&i2c->dev, "enable falling edge DRDY IRQ\n");
+			dev_dbg(&i2c->dev, "enable falling edge DRDY IRQ\n");
 		} else {
 			irq_trig = IRQF_TRIGGER_RISING;
 		}

@@ -329,7 +329,7 @@ static void mpc_i2c_setup_52xx(struct device_node *node,
 	writeb(fdr & 0xff, i2c->base + MPC_I2C_FDR);
 
 	if (ret >= 0)
-		dev_info(i2c->dev, "clock %u Hz (fdr=%d)\n", i2c->real_clk,
+		dev_dbg(i2c->dev, "clock %u Hz (fdr=%d)\n", i2c->real_clk,
 			 fdr);
 }
 #else /* !(CONFIG_PPC_MPC52xx || CONFIG_PPC_MPC512x) */
@@ -517,7 +517,7 @@ static void mpc_i2c_setup_8xxx(struct device_node *node,
 	writeb((fdr >> 8) & 0xff, i2c->base + MPC_I2C_DFSRR);
 
 	if (ret >= 0)
-		dev_info(i2c->dev, "clock %d Hz (dfsrr=%d fdr=%d)\n",
+		dev_dbg(i2c->dev, "clock %d Hz (dfsrr=%d fdr=%d)\n",
 			 i2c->real_clk, fdr >> 8, fdr & 0xff);
 }
 
@@ -824,7 +824,7 @@ static int fsl_i2c_probe(struct platform_device *op)
 		if (mpc_ops.timeout < 5)
 			mpc_ops.timeout = 5;
 	}
-	dev_info(i2c->dev, "timeout %u us\n", mpc_ops.timeout * 1000000 / HZ);
+	dev_dbg(i2c->dev, "timeout %u us\n", mpc_ops.timeout * 1000000 / HZ);
 
 	platform_set_drvdata(op, i2c);
 	if (of_property_read_bool(op->dev.of_node, "fsl,i2c-erratum-a004447"))

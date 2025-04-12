@@ -524,7 +524,7 @@ out_irqdomain_remove:
 	irq_domain_remove(port->domain);
 out_bgio:
 	clk_disable_unprepare(port->clk);
-	dev_info(&pdev->dev, "%s failed with errno %d\n", __func__, err);
+	dev_dbg(&pdev->dev, "%s failed with errno %d\n", __func__, err);
 	return err;
 }
 

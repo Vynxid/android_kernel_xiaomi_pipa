@@ -469,7 +469,7 @@ struct dvb_frontend *fc0012_attach(struct dvb_frontend *fe,
 		goto err;
 	}
 
-	dev_info(&i2c->dev, "%s: Fitipower FC0012 successfully identified\n",
+	dev_dbg(&i2c->dev, "%s: Fitipower FC0012 successfully identified\n",
 			KBUILD_MODNAME);
 
 	if (priv->cfg->loop_through) {

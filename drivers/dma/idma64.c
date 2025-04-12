@@ -611,7 +611,7 @@ static int idma64_probe(struct idma64_chip *chip)
 	if (ret)
 		return ret;
 
-	dev_info(chip->dev, "Found Intel integrated DMA 64-bit\n");
+	dev_dbg(chip->dev, "Found Intel integrated DMA 64-bit\n");
 	return 0;
 }
 

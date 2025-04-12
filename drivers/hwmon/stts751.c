@@ -339,7 +339,7 @@ static void stts751_alert(struct i2c_client *client,
 
 	if (priv->max_alert) {
 		if (priv->notify_max)
-			dev_notice(priv->dev, "got alert for HIGH temperature");
+			dev_dbg(priv->dev, "got alert for HIGH temperature");
 		priv->notify_max = false;
 
 		/* unblock alert poll */
@@ -348,7 +348,7 @@ static void stts751_alert(struct i2c_client *client,
 
 	if (priv->min_alert) {
 		if (priv->notify_min)
-			dev_notice(priv->dev, "got alert for LOW temperature");
+			dev_dbg(priv->dev, "got alert for LOW temperature");
 		priv->notify_min = false;
 
 		/* unblock alert poll */

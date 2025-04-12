@@ -770,7 +770,7 @@ static void enable_r8a66597_pipe_dma(struct r8a66597 *r8a66597,
 			if ((r8a66597->dma_map & (1 << i)) != 0)
 				continue;
 
-			dev_info(&dev->udev->dev,
+			dev_dbg(&dev->udev->dev,
 				 "address %d, EndpointAddress 0x%02x use "
 				 "DMA FIFO\n", usb_pipedevice(urb->pipe),
 				 info->dir_in ?

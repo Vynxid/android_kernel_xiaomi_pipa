@@ -504,7 +504,7 @@ static int mobiveil_host_init(struct mobiveil_pcie *pcie)
 
 	err = mobiveil_bringup_link(pcie);
 	if (err) {
-		dev_info(&pcie->pdev->dev, "link bring-up failed\n");
+		dev_dbg(&pcie->pdev->dev, "link bring-up failed\n");
 		return err;
 	}
 

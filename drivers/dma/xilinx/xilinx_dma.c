@@ -2787,11 +2787,11 @@ static int xilinx_dma_probe(struct platform_device *pdev)
 	}
 
 	if (xdev->dma_config->dmatype == XDMA_TYPE_AXIDMA)
-		dev_info(&pdev->dev, "Xilinx AXI DMA Engine Driver Probed!!\n");
+		dev_dbg(&pdev->dev, "Xilinx AXI DMA Engine Driver Probed!!\n");
 	else if (xdev->dma_config->dmatype == XDMA_TYPE_CDMA)
-		dev_info(&pdev->dev, "Xilinx AXI CDMA Engine Driver Probed!!\n");
+		dev_dbg(&pdev->dev, "Xilinx AXI CDMA Engine Driver Probed!!\n");
 	else
-		dev_info(&pdev->dev, "Xilinx AXI VDMA Engine Driver Probed!!\n");
+		dev_dbg(&pdev->dev, "Xilinx AXI VDMA Engine Driver Probed!!\n");
 
 	return 0;
 

@@ -5427,7 +5427,7 @@ static irqreturn_t snd_hdspm_interrupt(int irq, void *dev_id)
 	 *          0         64     ~3998231       ~8191558
 	 */
 	/*
-	  dev_info(hdspm->card->dev, "snd_hdspm_interrupt %llu @ %llx\n",
+	  dev_dbg(hdspm->card->dev, "snd_hdspm_interrupt %llu @ %llx\n",
 	   now-hdspm->last_interrupt, status & 0xFFC0);
 	   hdspm->last_interrupt = now;
 	*/
@@ -5564,7 +5564,7 @@ static int snd_hdspm_hw_params(struct snd_pcm_substream *substream,
 	spin_lock_irq(&hdspm->lock);
 	err = hdspm_set_rate(hdspm, params_rate(params), 0);
 	if (err < 0) {
-		dev_info(hdspm->card->dev, "err on hdspm_set_rate: %d\n", err);
+		dev_dbg(hdspm->card->dev, "err on hdspm_set_rate: %d\n", err);
 		spin_unlock_irq(&hdspm->lock);
 		_snd_pcm_hw_param_setempty(params,
 				SNDRV_PCM_HW_PARAM_RATE);
@@ -5575,7 +5575,7 @@ static int snd_hdspm_hw_params(struct snd_pcm_substream *substream,
 	err = hdspm_set_interrupt_interval(hdspm,
 			params_period_size(params));
 	if (err < 0) {
-		dev_info(hdspm->card->dev,
+		dev_dbg(hdspm->card->dev,
 			 "err on hdspm_set_interrupt_interval: %d\n", err);
 		_snd_pcm_hw_param_setempty(params,
 				SNDRV_PCM_HW_PARAM_PERIOD_SIZE);
@@ -5592,7 +5592,7 @@ static int snd_hdspm_hw_params(struct snd_pcm_substream *substream,
 	err =
 		snd_pcm_lib_malloc_pages(substream, HDSPM_DMA_AREA_BYTES);
 	if (err < 0) {
-		dev_info(hdspm->card->dev,
+		dev_dbg(hdspm->card->dev,
 			 "err on snd_pcm_lib_malloc_pages: %d\n", err);
 		return err;
 	}
@@ -5654,13 +5654,13 @@ static int snd_hdspm_hw_params(struct snd_pcm_substream *substream,
 	/* Switch to native float format if requested */
 	if (SNDRV_PCM_FORMAT_FLOAT_LE == params_format(params)) {
 		if (!(hdspm->control_register & HDSPe_FLOAT_FORMAT))
-			dev_info(hdspm->card->dev,
+			dev_dbg(hdspm->card->dev,
 				 "Switching to native 32bit LE float format.\n");
 
 		hdspm->control_register |= HDSPe_FLOAT_FORMAT;
 	} else if (SNDRV_PCM_FORMAT_S32_LE == params_format(params)) {
 		if (hdspm->control_register & HDSPe_FLOAT_FORMAT)
-			dev_info(hdspm->card->dev,
+			dev_dbg(hdspm->card->dev,
 				 "Switching to native 32bit LE integer format.\n");
 
 		hdspm->control_register &= ~HDSPe_FLOAT_FORMAT;
@@ -5705,7 +5705,7 @@ static int snd_hdspm_channel_info(struct snd_pcm_substream *substream,
 
 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
 		if (snd_BUG_ON(channel >= hdspm->max_channels_out)) {
-			dev_info(hdspm->card->dev,
+			dev_dbg(hdspm->card->dev,
 				 "snd_hdspm_channel_info: output channel out of range (%d)\n",
 				 channel);
 			return -EINVAL;
@@ -5713,7 +5713,7 @@ static int snd_hdspm_channel_info(struct snd_pcm_substream *substream,
 
 		channel = array_index_nospec(channel, hdspm->max_channels_out);
 		if (hdspm->channel_map_out[channel] < 0) {
-			dev_info(hdspm->card->dev,
+			dev_dbg(hdspm->card->dev,
 				 "snd_hdspm_channel_info: output channel %d mapped out\n",
 				 channel);
 			return -EINVAL;
@@ -5723,7 +5723,7 @@ static int snd_hdspm_channel_info(struct snd_pcm_substream *substream,
 			HDSPM_CHANNEL_BUFFER_BYTES;
 	} else {
 		if (snd_BUG_ON(channel >= hdspm->max_channels_in)) {
-			dev_info(hdspm->card->dev,
+			dev_dbg(hdspm->card->dev,
 				 "snd_hdspm_channel_info: input channel out of range (%d)\n",
 				 channel);
 			return -EINVAL;
@@ -5731,7 +5731,7 @@ static int snd_hdspm_channel_info(struct snd_pcm_substream *substream,
 
 		channel = array_index_nospec(channel, hdspm->max_channels_in);
 		if (hdspm->channel_map_in[channel] < 0) {
-			dev_info(hdspm->card->dev,
+			dev_dbg(hdspm->card->dev,
 				 "snd_hdspm_channel_info: input channel %d mapped out\n",
 				 channel);
 			return -EINVAL;
@@ -6711,14 +6711,14 @@ static int snd_hdspm_create(struct snd_card *card,
 		hdspm->qs_out_channels = AIO_OUT_QS_CHANNELS;
 
 		if (0 == (hdspm_read(hdspm, HDSPM_statusRegister2) & HDSPM_s2_AEBI_D)) {
-			dev_info(card->dev, "AEB input board found\n");
+			dev_dbg(card->dev, "AEB input board found\n");
 			hdspm->ss_in_channels += 4;
 			hdspm->ds_in_channels += 4;
 			hdspm->qs_in_channels += 4;
 		}
 
 		if (0 == (hdspm_read(hdspm, HDSPM_statusRegister2) & HDSPM_s2_AEBO_D)) {
-			dev_info(card->dev, "AEB output board found\n");
+			dev_dbg(card->dev, "AEB output board found\n");
 			hdspm->ss_out_channels += 4;
 			hdspm->ds_out_channels += 4;
 			hdspm->qs_out_channels += 4;
@@ -6784,7 +6784,7 @@ static int snd_hdspm_create(struct snd_card *card,
 			if (hdspm->tco)
 				hdspm_tco_write(hdspm);
 
-			dev_info(card->dev, "AIO/RayDAT TCO module found\n");
+			dev_dbg(card->dev, "AIO/RayDAT TCO module found\n");
 		} else {
 			hdspm->tco = NULL;
 		}
@@ -6798,7 +6798,7 @@ static int snd_hdspm_create(struct snd_card *card,
 			if (hdspm->tco)
 				hdspm_tco_write(hdspm);
 
-			dev_info(card->dev, "MADI/AES TCO module found\n");
+			dev_dbg(card->dev, "MADI/AES TCO module found\n");
 		} else {
 			hdspm->tco = NULL;
 		}

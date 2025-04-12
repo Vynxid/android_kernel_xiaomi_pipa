@@ -470,7 +470,7 @@ static int atmel_aes_hw_version_init(struct atmel_aes_dev *dd)
 
 	dd->hw_version = atmel_aes_get_version(dd);
 
-	dev_info(dd->dev, "version: 0x%x\n", dd->hw_version);
+	dev_dbg(dd->dev, "version: 0x%x\n", dd->hw_version);
 
 	clk_disable(dd->iclk);
 	return 0;
@@ -2730,7 +2730,7 @@ static int atmel_aes_probe(struct platform_device *pdev)
 	if (err)
 		goto err_algs;
 
-	dev_info(dev, "Atmel AES - Using %s, %s for DMA transfers\n",
+	dev_dbg(dev, "Atmel AES - Using %s, %s for DMA transfers\n",
 			dma_chan_name(aes_dd->src.chan),
 			dma_chan_name(aes_dd->dst.chan));
 

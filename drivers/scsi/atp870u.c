@@ -1263,7 +1263,7 @@ static void atp870_init(struct Scsi_Host *shpnt)
 
 	pci_read_config_byte(pdev, 0x49, &host_id);
 
-	dev_info(&pdev->dev, "ACARD AEC-671X PCI Ultra/W SCSI-2/3 Host Adapter: IO:%lx, IRQ:%d.\n",
+	dev_dbg(&pdev->dev, "ACARD AEC-671X PCI Ultra/W SCSI-2/3 Host Adapter: IO:%lx, IRQ:%d.\n",
 		 shpnt->io_port, shpnt->irq);
 
 	atpdev->ioport[0] = shpnt->io_port;
@@ -1314,7 +1314,7 @@ static void atp880_init(struct Scsi_Host *shpnt)
 
 	host_id = atp_readb_base(atpdev, 0x39) >> 4;
 
-	dev_info(&pdev->dev, "ACARD AEC-67160 PCI Ultra3 LVD Host Adapter: IO:%lx, IRQ:%d.\n",
+	dev_dbg(&pdev->dev, "ACARD AEC-67160 PCI Ultra3 LVD Host Adapter: IO:%lx, IRQ:%d.\n",
 		 shpnt->io_port, shpnt->irq);
 	atpdev->host_id[0] = host_id;
 
@@ -1393,7 +1393,7 @@ static void atp885_init(struct Scsi_Host *shpnt)
 	unsigned int n;
 	unsigned char setupdata[2][16];
 
-	dev_info(&pdev->dev, "ACARD AEC-67162 PCI Ultra3 LVD Host Adapter: IO:%lx, IRQ:%d.\n",
+	dev_dbg(&pdev->dev, "ACARD AEC-67162 PCI Ultra3 LVD Host Adapter: IO:%lx, IRQ:%d.\n",
 		 shpnt->io_port, shpnt->irq);
 
 	atpdev->ioport[0] = shpnt->io_port + 0x80;
@@ -1474,10 +1474,10 @@ static void atp885_init(struct Scsi_Host *shpnt)
 	atp_set_host_id(atpdev, 1, k);
 
 	msleep(600); /* this delay used to be called tscam_885() */
-	dev_info(&pdev->dev, "Scanning Channel A SCSI Device ...\n");
+	dev_dbg(&pdev->dev, "Scanning Channel A SCSI Device ...\n");
 	atp_is(atpdev, 0, true, atp_readb_io(atpdev, 0, 0x1b) >> 7);
 	atp_writeb_io(atpdev, 0, 0x16, 0x80);
-	dev_info(&pdev->dev, "Scanning Channel B SCSI Device ...\n");
+	dev_dbg(&pdev->dev, "Scanning Channel B SCSI Device ...\n");
 	atp_is(atpdev, 1, true, atp_readb_io(atpdev, 1, 0x1b) >> 7);
 	atp_writeb_io(atpdev, 1, 0x16, 0x80);
 	k = atp_readb_base(atpdev, 0x28) & 0xcf;

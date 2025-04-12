@@ -183,7 +183,7 @@ static irqreturn_t pulse8_interrupt(struct serio *serio, unsigned char data,
 		u8 msgcode = pulse8->buf[0];
 
 		if (debug)
-			dev_info(pulse8->dev, "received: %*ph\n",
+			dev_dbg(pulse8->dev, "received: %*ph\n",
 				 pulse8->idx, pulse8->buf);
 		switch (msgcode & 0x3f) {
 		case MSGCODE_FRAME_START:
@@ -249,7 +249,7 @@ static void pulse8_disconnect(struct serio *serio)
 
 	cec_unregister_adapter(pulse8->adap);
 	cancel_delayed_work_sync(&pulse8->ping_eeprom_work);
-	dev_info(&serio->dev, "disconnected\n");
+	dev_dbg(&serio->dev, "disconnected\n");
 	serio_close(serio);
 	serio_set_drvdata(serio, NULL);
 	kfree(pulse8);
@@ -283,7 +283,7 @@ static int pulse8_send_and_wait_once(struct pulse8 *pulse8,
 {
 	int err;
 
-	/*dev_info(pulse8->dev, "transmit: %*ph\n", cmd_len, cmd);*/
+	/*dev_dbg(pulse8->dev, "transmit: %*ph\n", cmd_len, cmd);*/
 	init_completion(&pulse8->cmd_done);
 
 	err = pulse8_send(pulse8->serio, cmd, cmd_len);
@@ -299,7 +299,7 @@ static int pulse8_send_and_wait_once(struct pulse8 *pulse8,
 		return -ENOTTY;
 	if (response &&
 	    ((pulse8->data[0] & 0x3f) != response || pulse8->len < size + 1)) {
-		dev_info(pulse8->dev, "transmit: failed %02x\n",
+		dev_dbg(pulse8->dev, "transmit: failed %02x\n",
 			 pulse8->data[0] & 0x3f);
 		return -EIO;
 	}
@@ -347,7 +347,7 @@ static int pulse8_setup(struct pulse8 *pulse8, struct serio *serio,
 	if (err)
 		return err;
 	pulse8->vers = (data[0] << 8) | data[1];
-	dev_info(pulse8->dev, "Firmware version %04x\n", pulse8->vers);
+	dev_dbg(pulse8->dev, "Firmware version %04x\n", pulse8->vers);
 	if (pulse8->vers < 2) {
 		*pa = CEC_PHYS_ADDR_INVALID;
 		return 0;
@@ -359,7 +359,7 @@ static int pulse8_setup(struct pulse8 *pulse8, struct serio *serio,
 		return err;
 	date = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
 	time64_to_tm(date, 0, &tm);
-	dev_info(pulse8->dev, "Firmware build date %04ld.%02d.%02d %02d:%02d:%02d\n",
+	dev_dbg(pulse8->dev, "Firmware build date %04ld.%02d.%02d %02d:%02d:%02d\n",
 		 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
 		 tm.tm_hour, tm.tm_min, tm.tm_sec);
 
@@ -410,7 +410,7 @@ static int pulse8_setup(struct pulse8 *pulse8, struct serio *serio,
 	default:
 		log_addrs->log_addr_type[0] = CEC_LOG_ADDR_TYPE_UNREGISTERED;
 		log_addrs->all_device_types[0] = CEC_OP_ALL_DEVTYPE_SWITCH;
-		dev_info(pulse8->dev, "Unknown Primary Device Type: %d\n",
+		dev_dbg(pulse8->dev, "Unknown Primary Device Type: %d\n",
 			 log_addrs->primary_device_type[0]);
 		break;
 	}
@@ -733,7 +733,7 @@ static void pulse8_ping_eeprom_work_handler(struct work_struct *work)
 		cmd = MSGCODE_WRITE_EEPROM;
 		if (pulse8_send_and_wait(pulse8, &cmd, 1,
 					 MSGCODE_COMMAND_ACCEPTED, 0))
-			dev_info(pulse8->dev, "failed to write pending config to EEPROM\n");
+			dev_dbg(pulse8->dev, "failed to write pending config to EEPROM\n");
 		else
 			pulse8->config_pending = false;
 	}

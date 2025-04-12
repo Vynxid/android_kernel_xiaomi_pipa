@@ -564,7 +564,7 @@ static int mv_cesa_probe(struct platform_device *pdev)
 		goto err_cleanup;
 	}
 
-	dev_info(dev, "CESA device successfully registered\n");
+	dev_dbg(dev, "CESA device successfully registered\n");
 
 	return 0;
 

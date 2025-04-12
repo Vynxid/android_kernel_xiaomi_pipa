@@ -194,7 +194,7 @@ static int _gb_sdio_process_events(struct gb_sdio_host *host, u8 event)
 		host->read_only = true;
 
 	if (state_changed) {
-		dev_info(mmc_dev(host->mmc), "card %s now event\n",
+		dev_dbg(mmc_dev(host->mmc), "card %s now event\n",
 			 (host->card_present ?  "inserted" : "removed"));
 		mmc_detect_change(host->mmc, 0);
 	}

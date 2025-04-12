@@ -395,7 +395,7 @@ static int wm8350_rtc_probe(struct platform_device *pdev)
 	/* enable the RTC if it's not already enabled */
 	power5 = wm8350_reg_read(wm8350, WM8350_POWER_MGMT_5);
 	if (!(power5 &  WM8350_RTC_TICK_ENA)) {
-		dev_info(wm8350->dev, "Starting RTC\n");
+		dev_dbg(wm8350->dev, "Starting RTC\n");
 
 		wm8350_reg_unlock(wm8350);
 

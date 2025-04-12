@@ -810,7 +810,7 @@ static int timb_probe(struct pci_dev *dev,
 
 	kfree(msix_entries);
 
-	dev_info(&dev->dev,
+	dev_dbg(&dev->dev,
 		"Found Timberdale Card. Rev: %d.%d, HW config: 0x%02x\n",
 		priv->fw.major, priv->fw.minor, priv->fw.config);
 

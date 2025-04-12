@@ -1567,7 +1567,7 @@ int i2400m_dev_bootstrap(struct i2400m *i2400m, enum i2400m_bri flags)
 		dev_err(dev, "can't load firmware now!");
 		goto out;
 	} else if (i2400m_fw != NULL) {
-		dev_info(dev, "firmware %s: loading from cache\n",
+		dev_dbg(dev, "firmware %s: loading from cache\n",
 			 i2400m->fw_name);
 		ret = i2400m_fw_bootstrap(i2400m, i2400m_fw->fw, flags);
 		i2400m_fw_put(i2400m_fw);
@@ -1635,7 +1635,7 @@ void i2400m_fw_cache(struct i2400m *i2400m)
 		kfree(i2400m_fw);
 		i2400m_fw = (void *) ~0;
 	} else
-		dev_info(dev, "firmware %s: cached\n", i2400m->fw_name);
+		dev_dbg(dev, "firmware %s: cached\n", i2400m->fw_name);
 out:
 	spin_lock(&i2400m->rx_lock);
 	i2400m->fw_cached = i2400m_fw;

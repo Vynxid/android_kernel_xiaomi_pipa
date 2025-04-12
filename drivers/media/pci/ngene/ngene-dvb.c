@@ -226,7 +226,7 @@ void *tsin_exchange(void *priv, void *buf, u32 len, u32 clock, u32 flags)
 					buf += tsoff;
 					len -= tsoff;
 
-					dev_info(&dev->pci_dev->dev,
+					dev_dbg(&dev->pci_dev->dev,
 						 "%s(): tsin_offset shift by %d on channel %d\n",
 						 __func__, tsoff,
 						 chan->number);

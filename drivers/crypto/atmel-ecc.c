@@ -717,7 +717,7 @@ static int atmel_ecc_probe(struct i2c_client *client,
 		dev_err(dev, "%s alg registration failed\n",
 			atmel_ecdh.base.cra_driver_name);
 	} else {
-		dev_info(dev, "atmel ecc algorithms registered in /proc/crypto\n");
+		dev_dbg(dev, "atmel ecc algorithms registered in /proc/crypto\n");
 	}
 
 	return ret;

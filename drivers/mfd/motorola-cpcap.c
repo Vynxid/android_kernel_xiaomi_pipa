@@ -73,13 +73,13 @@ static int cpcap_check_revision(struct cpcap_ddata *cpcap)
 	if (ret)
 		return ret;
 
-	dev_info(&cpcap->spi->dev, "CPCAP vendor: %s rev: %i.%i (%x)\n",
+	dev_dbg(&cpcap->spi->dev, "CPCAP vendor: %s rev: %i.%i (%x)\n",
 		 vendor == CPCAP_VENDOR_ST ? "ST" : "TI",
 		 CPCAP_REVISION_MAJOR(rev), CPCAP_REVISION_MINOR(rev),
 		 rev);
 
 	if (rev < CPCAP_REVISION_2_1) {
-		dev_info(&cpcap->spi->dev,
+		dev_dbg(&cpcap->spi->dev,
 			 "Please add old CPCAP revision support as needed\n");
 		return -ENODEV;
 	}

@@ -795,7 +795,7 @@ int ir_lirc_register(struct rc_dev *dev)
 	else
 		tx_type = "no";
 
-	dev_info(&dev->dev, "lirc_dev: driver %s registered at minor = %d, %s receiver, %s transmitter",
+	dev_dbg(&dev->dev, "lirc_dev: driver %s registered at minor = %d, %s receiver, %s transmitter",
 		 dev->driver_name, minor, rx_type, tx_type);
 
 	return 0;

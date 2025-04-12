@@ -1023,7 +1023,7 @@ static ssize_t store_ab9540_dbbrstn(struct device *dev,
 			AB8500_REGU_CTRL2, AB9540_MODEM_CTRL2_REG,
 			AB9540_MODEM_CTRL2_SWDBBRSTN_BIT, bitvalues);
 		if (err)
-			dev_info(ab8500->dev,
+			dev_dbg(ab8500->dev,
 				"Failed to set DBBRSTN %c, err %#x\n",
 				buf[0], err);
 	}
@@ -1147,7 +1147,7 @@ static int ab8500_probe(struct platform_device *pdev)
 
 	ab8500->chip_id = value;
 
-	dev_info(ab8500->dev, "detected chip, %s rev. %1x.%1x\n",
+	dev_dbg(ab8500->dev, "detected chip, %s rev. %1x.%1x\n",
 			ab8500_version_str[ab8500->version],
 			ab8500->chip_id >> 4,
 			ab8500->chip_id & 0x0F);
@@ -1192,7 +1192,7 @@ static int ab8500_probe(struct platform_device *pdev)
 		AB8500_SWITCH_OFF_STATUS, &value);
 	if (ret < 0)
 		return ret;
-	dev_info(ab8500->dev, "switch off cause(s) (%#x): ", value);
+	dev_dbg(ab8500->dev, "switch off cause(s) (%#x): ", value);
 
 	if (value) {
 		for (i = 0; i < ARRAY_SIZE(switch_off_status); i++) {
@@ -1209,7 +1209,7 @@ static int ab8500_probe(struct platform_device *pdev)
 		AB8500_TURN_ON_STATUS, &value);
 	if (ret < 0)
 		return ret;
-	dev_info(ab8500->dev, "turn on reason(s) (%#x): ", value);
+	dev_dbg(ab8500->dev, "turn on reason(s) (%#x): ", value);
 
 	if (value) {
 		for (i = 0; i < ARRAY_SIZE(turn_on_status); i++) {

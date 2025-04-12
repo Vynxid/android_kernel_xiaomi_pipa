@@ -489,7 +489,7 @@ __func__);
 				"%s: Writing firmware failed\n", __func__);
 		release_firmware(fw);
 
-		dev_info(&state->priv->i2c->dev,
+		dev_dbg(&state->priv->i2c->dev,
 			"%s: Firmware upload %s\n", __func__,
 			ret == 0 ? "complete" : "failed");
 
@@ -729,7 +729,7 @@ static int cx24117_load_firmware(struct dvb_frontend *fe,
 			goto error;
 		vers[i] = cx24117_readreg(state, 0x33);
 	}
-	dev_info(&state->priv->i2c->dev,
+	dev_dbg(&state->priv->i2c->dev,
 		"%s: FW version %i.%i.%i.%i\n", __func__,
 		vers[0], vers[1], vers[2], vers[3]);
 	return 0;
@@ -1202,7 +1202,7 @@ struct dvb_frontend *cx24117_attach(const struct cx24117_config *config,
 	state->demod = demod - 1;
 	state->priv = priv;
 
-	dev_info(&state->priv->i2c->dev,
+	dev_dbg(&state->priv->i2c->dev,
 		"%s: Attaching frontend %d\n",
 		KBUILD_MODNAME, state->demod);
 

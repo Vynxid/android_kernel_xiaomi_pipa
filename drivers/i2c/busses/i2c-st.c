@@ -879,7 +879,7 @@ static int st_i2c_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, i2c_dev);
 
-	dev_info(i2c_dev->dev, "%s initialized\n", adap->name);
+	dev_dbg(i2c_dev->dev, "%s initialized\n", adap->name);
 
 	return 0;
 }

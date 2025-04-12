@@ -1491,7 +1491,7 @@ static void asus_input_notify(struct asus_laptop *asus, int event)
 	if (!asus->inputdev)
 		return ;
 	if (!sparse_keymap_report_event(asus->inputdev, event, 1, true))
-		pr_info("Unknown key %x pressed\n", event);
+		pr_debug("Unknown key %x pressed\n", event);
 }
 
 static int asus_input_init(struct asus_laptop *asus)
@@ -1727,7 +1727,7 @@ static int asus_laptop_get_info(struct asus_laptop *asus)
 	if (ACPI_FAILURE(status))
 		pr_warn("Error calling BSTS\n");
 	else if (bsts_result)
-		pr_notice("BSTS called, 0x%02x returned\n",
+		pr_debug("BSTS called, 0x%02x returned\n",
 		       (uint) bsts_result);
 
 	/* This too ... */
@@ -1760,7 +1760,7 @@ static int asus_laptop_get_info(struct asus_laptop *asus)
 	}
 
 	if (string)
-		pr_notice("  %s model detected\n", string);
+		pr_debug("  %s model detected\n", string);
 
 	if (!acpi_check_handle(asus->handle, METHOD_WL_STATUS, NULL))
 		asus->have_rsts = true;
@@ -1851,7 +1851,7 @@ static int asus_acpi_add(struct acpi_device *device)
 	struct asus_laptop *asus;
 	int result;
 
-	pr_notice("Asus Laptop Support version %s\n",
+	pr_debug("Asus Laptop Support version %s\n",
 		  ASUS_LAPTOP_VERSION);
 	asus = kzalloc(sizeof(struct asus_laptop), GFP_KERNEL);
 	if (!asus)

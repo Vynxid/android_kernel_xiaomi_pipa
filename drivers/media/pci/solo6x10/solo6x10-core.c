@@ -466,9 +466,9 @@ static int solo_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 		return -ENOMEM;
 
 	if (id->driver_data == SOLO_DEV_6010)
-		dev_info(&pdev->dev, "Probing Softlogic 6010\n");
+		dev_dbg(&pdev->dev, "Probing Softlogic 6010\n");
 	else
-		dev_info(&pdev->dev, "Probing Softlogic 6110\n");
+		dev_dbg(&pdev->dev, "Probing Softlogic 6110\n");
 
 	solo_dev->type = id->driver_data;
 	solo_dev->pdev = pdev;

@@ -276,7 +276,7 @@ static int acpi_smbus_hc_add(struct acpi_device *device)
 	device->driver_data = hc;
 
 	acpi_ec_add_query_handler(hc->ec, hc->query_bit, NULL, smbus_alarm, hc);
-	dev_info(&device->dev, "SBS HC: offset = 0x%0x, query_bit = 0x%0x\n",
+	dev_dbg(&device->dev, "SBS HC: offset = 0x%0x, query_bit = 0x%0x\n",
 		 hc->offset, hc->query_bit);
 
 	return 0;

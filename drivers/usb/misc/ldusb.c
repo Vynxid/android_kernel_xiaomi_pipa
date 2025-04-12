@@ -733,7 +733,7 @@ static int ld_usb_probe(struct usb_interface *intf, const struct usb_device_id *
 	}
 
 	/* let the user know what node this device is now attached to */
-	dev_info(&intf->dev, "LD USB Device #%d now attached to major %d minor %d\n",
+	dev_dbg(&intf->dev, "LD USB Device #%d now attached to major %d minor %d\n",
 		(intf->minor - USB_LD_MINOR_BASE), USB_MAJOR, intf->minor);
 
 exit:
@@ -780,7 +780,7 @@ static void ld_usb_disconnect(struct usb_interface *intf)
 		mutex_unlock(&dev->mutex);
 	}
 
-	dev_info(&intf->dev, "LD USB Device #%d now disconnected\n",
+	dev_dbg(&intf->dev, "LD USB Device #%d now disconnected\n",
 		 (minor - USB_LD_MINOR_BASE));
 }
 

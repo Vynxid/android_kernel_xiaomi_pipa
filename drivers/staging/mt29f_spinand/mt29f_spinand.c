@@ -669,7 +669,7 @@ static int spinand_read_page_hwecc(struct mtd_info *mtd, struct nand_chip *chip,
 
 		if ((status & STATUS_OIP_MASK) == STATUS_READY) {
 			if ((status & STATUS_ECC_MASK) == STATUS_ECC_ERROR) {
-				pr_info("spinand: ECC error\n");
+				pr_debug("spinand: ECC error\n");
 				mtd->ecc_stats.failed++;
 			} else if ((status & STATUS_ECC_MASK) ==
 					STATUS_ECC_1BIT_CORRECTED)
@@ -750,7 +750,7 @@ static void spinand_reset(struct spi_device *spi_nand)
 	cmd.cmd = CMD_RESET;
 
 	if (spinand_cmd(spi_nand, &cmd) < 0)
-		pr_info("spinand reset failed!\n");
+		pr_debug("spinand reset failed!\n");
 
 	/* elapse 1ms before issuing any other command */
 	usleep_range(1000, 2000);
@@ -908,7 +908,7 @@ static int spinand_probe(struct spi_device *spi_nand)
 	chip->ecc.mode	= NAND_ECC_SOFT;
 	chip->ecc.algo	= NAND_ECC_HAMMING;
 	if (spinand_disable_ecc(spi_nand) < 0)
-		dev_info(&spi_nand->dev, "%s: disable ecc failed!\n",
+		dev_dbg(&spi_nand->dev, "%s: disable ecc failed!\n",
 			 __func__);
 #endif
 

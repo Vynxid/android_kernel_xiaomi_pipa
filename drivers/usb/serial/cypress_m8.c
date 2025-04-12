@@ -654,7 +654,7 @@ static void cypress_close(struct usb_serial_port *port)
 	usb_kill_urb(port->interrupt_out_urb);
 
 	if (stats)
-		dev_info(&port->dev, "Statistics: %d Bytes In | %d Bytes Out | %d Commands Issued\n",
+		dev_dbg(&port->dev, "Statistics: %d Bytes In | %d Bytes Out | %d Commands Issued\n",
 			priv->bytes_in, priv->bytes_out, priv->cmd_count);
 } /* cypress_close */
 

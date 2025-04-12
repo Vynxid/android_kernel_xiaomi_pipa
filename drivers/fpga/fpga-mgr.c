@@ -324,7 +324,7 @@ static int fpga_mgr_firmware_load(struct fpga_manager *mgr,
 	const struct firmware *fw;
 	int ret;
 
-	dev_info(dev, "writing %s to %s\n", image_name, mgr->name);
+	dev_dbg(dev, "writing %s to %s\n", image_name, mgr->name);
 
 	mgr->state = FPGA_MGR_STATE_FIRMWARE_REQ;
 
@@ -649,7 +649,7 @@ int fpga_mgr_register(struct fpga_manager *mgr)
 	if (ret)
 		goto error_device;
 
-	dev_info(&mgr->dev, "%s registered\n", mgr->name);
+	dev_dbg(&mgr->dev, "%s registered\n", mgr->name);
 
 	return 0;
 
@@ -666,7 +666,7 @@ EXPORT_SYMBOL_GPL(fpga_mgr_register);
  */
 void fpga_mgr_unregister(struct fpga_manager *mgr)
 {
-	dev_info(&mgr->dev, "%s %s\n", __func__, mgr->name);
+	dev_dbg(&mgr->dev, "%s %s\n", __func__, mgr->name);
 
 	/*
 	 * If the low level driver provides a method for putting fpga into
@@ -688,7 +688,7 @@ static void fpga_mgr_dev_release(struct device *dev)
 
 static int __init fpga_mgr_class_init(void)
 {
-	pr_info("FPGA manager framework\n");
+	pr_debug("FPGA manager framework\n");
 
 	fpga_mgr_class = class_create(THIS_MODULE, "fpga_manager");
 	if (IS_ERR(fpga_mgr_class))

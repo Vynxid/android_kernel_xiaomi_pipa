@@ -243,7 +243,7 @@ int scmi_base_protocol_init(struct scmi_handle *h)
 	scmi_base_implementation_list_get(handle, prot_imp);
 	scmi_setup_protocol_implemented(handle, prot_imp);
 
-	dev_info(dev, "SCMI Protocol v%d.%d '%s:%s' Firmware version 0x%x\n",
+	dev_dbg(dev, "SCMI Protocol v%d.%d '%s:%s' Firmware version 0x%x\n",
 		 rev->major_ver, rev->minor_ver, rev->vendor_id,
 		 rev->sub_vendor_id, rev->impl_ver);
 	dev_dbg(dev, "Found %d protocol(s) %d agent(s)\n", rev->num_protocols,

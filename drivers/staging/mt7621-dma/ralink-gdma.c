@@ -757,7 +757,7 @@ static void rt305x_gdma_init(struct gdma_dma_dev *dma_dev)
 	gdma_dma_write(dma_dev, GDMA_RT305X_GCT, GDMA_REG_GCT_ARBIT_RR);
 
 	gct = gdma_dma_read(dma_dev, GDMA_RT305X_GCT);
-	dev_info(dma_dev->ddev.dev, "revision: %d, channels: %d\n",
+	dev_dbg(dma_dev->ddev.dev, "revision: %d, channels: %d\n",
 		 (gct >> GDMA_REG_GCT_VER_SHIFT) & GDMA_REG_GCT_VER_MASK,
 		 8 << ((gct >> GDMA_REG_GCT_CHAN_SHIFT) &
 			GDMA_REG_GCT_CHAN_MASK));
@@ -771,7 +771,7 @@ static void rt3883_gdma_init(struct gdma_dma_dev *dma_dev)
 	gdma_dma_write(dma_dev, GDMA_REG_GCT, GDMA_REG_GCT_ARBIT_RR);
 
 	gct = gdma_dma_read(dma_dev, GDMA_REG_GCT);
-	dev_info(dma_dev->ddev.dev, "revision: %d, channels: %d\n",
+	dev_dbg(dma_dev->ddev.dev, "revision: %d, channels: %d\n",
 		 (gct >> GDMA_REG_GCT_VER_SHIFT) & GDMA_REG_GCT_VER_MASK,
 		 8 << ((gct >> GDMA_REG_GCT_CHAN_SHIFT) &
 			GDMA_REG_GCT_CHAN_MASK));

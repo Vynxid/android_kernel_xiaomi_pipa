@@ -94,7 +94,7 @@ static void __iomem *set_cis_map(struct pcmcia_socket *s,
 		mem->res = pcmcia_find_mem_region(0, s->map_size,
 						s->map_size, 0, s);
 		if (mem->res == NULL) {
-			dev_notice(&s->dev, "cs: unable to map card memory!\n");
+			dev_dbg(&s->dev, "cs: unable to map card memory!\n");
 			return NULL;
 		}
 		s->cis_virt = NULL;
@@ -425,7 +425,7 @@ int pcmcia_replace_cis(struct pcmcia_socket *s,
 	}
 	s->fake_cis_len = len;
 	memcpy(s->fake_cis, data, len);
-	dev_info(&s->dev, "Using replacement CIS\n");
+	dev_dbg(&s->dev, "Using replacement CIS\n");
 	mutex_unlock(&s->ops_mutex);
 	return 0;
 }

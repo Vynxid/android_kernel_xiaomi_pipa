@@ -1178,7 +1178,7 @@ mcr20a_phy_init(struct mcr20a_local *lp)
 	if (ret)
 		goto err_ret;
 
-	dev_info(printdev(lp), "MCR20A DAR overwrites version: 0x%02x\n",
+	dev_dbg(printdev(lp), "MCR20A DAR overwrites version: 0x%02x\n",
 		 MCR20A_OVERWRITE_VERSION);
 
 	/* Overwrites direct registers  */

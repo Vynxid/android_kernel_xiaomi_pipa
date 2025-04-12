@@ -251,7 +251,7 @@ void adf_vf2pf_req_hndl(struct adf_accel_vf_info *vf_info)
 	/* Read message from the VF */
 	msg = ADF_CSR_RD(pmisc_addr, hw_data->get_pf2vf_offset(vf_nr));
 	if (!(msg & ADF_VF2PF_INT)) {
-		dev_info(&GET_DEV(accel_dev),
+		dev_dbg(&GET_DEV(accel_dev),
 			 "Spurious VF2PF interrupt, msg %X. Ignored\n", msg);
 		goto out;
 	}

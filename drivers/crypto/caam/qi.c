@@ -801,6 +801,6 @@ int caam_qi_init(struct platform_device *caam_pdev)
 	debugfs_create_file("qi_congested", 0444, ctrlpriv->ctl,
 			    &times_congested, &caam_fops_u64_ro);
 #endif
-	dev_info(qidev, "Linux CAAM Queue I/F driver initialised\n");
+	dev_dbg(qidev, "Linux CAAM Queue I/F driver initialised\n");
 	return 0;
 }

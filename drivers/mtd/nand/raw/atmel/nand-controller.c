@@ -1691,7 +1691,7 @@ atmel_nand_controller_add_nand(struct atmel_nand_controller *nc,
 
 	/* No card inserted, skip this NAND. */
 	if (nand->cdgpio && gpiod_get_value(nand->cdgpio)) {
-		dev_info(nc->dev, "No SmartMedia card inserted.\n");
+		dev_dbg(nc->dev, "No SmartMedia card inserted.\n");
 		return 0;
 	}
 

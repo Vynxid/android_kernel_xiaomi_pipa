@@ -53,7 +53,7 @@ enum xgi_tv_plug {
 struct xgifb_video_info {
 	struct fb_info *fb_info;
 	struct xgi_hw_device_info hw_info;
-	struct vb_device_info dev_info;
+	struct vb_device_info dev_dbg;
 
 	int mode_idx;
 	int rate_idx;

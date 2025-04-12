@@ -852,7 +852,7 @@ static int stm32f4_i2c_probe(struct platform_device *pdev)
 
 	clk_disable(i2c_dev->clk);
 
-	dev_info(i2c_dev->dev, "STM32F4 I2C driver registered\n");
+	dev_dbg(i2c_dev->dev, "STM32F4 I2C driver registered\n");
 
 	return 0;
 

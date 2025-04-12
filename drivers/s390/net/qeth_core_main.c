@@ -660,7 +660,7 @@ static struct qeth_ipa_cmd *qeth_check_ipa_data(struct qeth_card *card,
 				netif_carrier_off(card->dev);
 				return NULL;
 			case IPA_CMD_STARTLAN:
-				dev_info(&card->gdev->dev,
+				dev_dbg(&card->gdev->dev,
 					   "The link for %s on CHPID 0x%X has"
 					   " been restored\n",
 					   QETH_CARD_IFNAME(card),
@@ -1358,7 +1358,7 @@ static void qeth_set_single_write_queues(struct qeth_card *card)
 
 	card->qdio.no_out_queues = 1;
 	if (card->qdio.default_out_queue != 0)
-		dev_info(&card->gdev->dev, "Priority Queueing not supported\n");
+		dev_dbg(&card->gdev->dev, "Priority Queueing not supported\n");
 
 	card->qdio.default_out_queue = 0;
 }
@@ -2727,7 +2727,7 @@ void qeth_print_status_message(struct qeth_card *card)
 	default:
 		memset(&card->info.mcl_level[0], 0, QETH_MCL_LENGTH + 1);
 	}
-	dev_info(&card->gdev->dev,
+	dev_dbg(&card->gdev->dev,
 		 "Device is a%s card%s%s%s\nwith link type %s.\n",
 		 qeth_get_cardname(card),
 		 (card->info.mcl_level[0]) ? " (level: " : "",
@@ -4319,10 +4319,10 @@ static int qeth_setadpparms_set_access_ctrl_cb(struct qeth_card *card,
 	switch (cmd->data.setadapterparms.hdr.return_code) {
 	case SET_ACCESS_CTRL_RC_SUCCESS:
 		if (card->options.isolation == ISOLATION_MODE_NONE) {
-			dev_info(&card->gdev->dev,
+			dev_dbg(&card->gdev->dev,
 			    "QDIO data connection isolation is deactivated\n");
 		} else {
-			dev_info(&card->gdev->dev,
+			dev_dbg(&card->gdev->dev,
 			    "QDIO data connection isolation is activated\n");
 		}
 		break;
@@ -4903,7 +4903,7 @@ static void qeth_determine_capabilities(struct qeth_card *card)
 	if (!((card->ssqd.qfmt != QDIO_IQDIO_QFMT) ||
 	    ((card->ssqd.qdioac1 & CHSC_AC1_INITIATE_INPUTQ) == 0) ||
 	    ((card->ssqd.qdioac3 & CHSC_AC3_FORMAT2_CQ_AVAILABLE) == 0))) {
-		dev_info(&card->gdev->dev,
+		dev_dbg(&card->gdev->dev,
 			"Completion Queueing supported\n");
 	} else {
 		card->options.cq = QETH_CQ_NOTAVAILABLE;
@@ -5028,10 +5028,10 @@ static int qeth_qdio_establish(struct qeth_card *card)
 
 	switch (card->options.cq) {
 	case QETH_CQ_ENABLED:
-		dev_info(&card->gdev->dev, "Completion Queue support enabled");
+		dev_dbg(&card->gdev->dev, "Completion Queue support enabled");
 		break;
 	case QETH_CQ_DISABLED:
-		dev_info(&card->gdev->dev, "Completion Queue support disabled");
+		dev_dbg(&card->gdev->dev, "Completion Queue support disabled");
 		break;
 	default:
 		break;
@@ -6429,7 +6429,7 @@ static int qeth_send_checksum_on(struct qeth_card *card, int cstype,
 		return rc;
 	}
 
-	dev_info(&card->gdev->dev, "HW Checksumming (%sbound IPv%d) enabled\n",
+	dev_dbg(&card->gdev->dev, "HW Checksumming (%sbound IPv%d) enabled\n",
 		 cstype == IPA_INBOUND_CHECKSUM ? "in" : "out", prot);
 	return 0;
 }
@@ -6459,7 +6459,7 @@ static int qeth_set_ipa_tso(struct qeth_card *card, int on)
 				 QETH_CARD_IFNAME(card));
 			return -EIO;
 		}
-		dev_info(&card->gdev->dev, "Outbound TSO enabled\n");
+		dev_dbg(&card->gdev->dev, "Outbound TSO enabled\n");
 	} else {
 		rc = qeth_send_simple_setassparms(card, IPA_OUTBOUND_TSO,
 						  IPA_CMD_ASS_STOP, 0);
@@ -6610,7 +6610,7 @@ static int __init qeth_core_init(void)
 {
 	int rc;
 
-	pr_info("loading core functions\n");
+	pr_debug("loading core functions\n");
 	INIT_LIST_HEAD(&qeth_core_card_list.list);
 	INIT_LIST_HEAD(&qeth_dbf_list);
 	rwlock_init(&qeth_core_card_list.rwlock);
@@ -6677,7 +6677,7 @@ static void __exit qeth_core_exit(void)
 	kmem_cache_destroy(qeth_core_header_cache);
 	root_device_unregister(qeth_core_root_dev);
 	qeth_unregister_dbf_views();
-	pr_info("core functions removed\n");
+	pr_debug("core functions removed\n");
 }
 
 module_init(qeth_core_init);

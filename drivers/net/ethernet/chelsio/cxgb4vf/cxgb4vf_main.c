@@ -217,22 +217,22 @@ void t4vf_os_portmod_changed(struct adapter *adapter, int pidx)
 	const struct port_info *pi = netdev_priv(dev);
 
 	if (pi->mod_type == FW_PORT_MOD_TYPE_NONE)
-		dev_info(adapter->pdev_dev, "%s: port module unplugged\n",
+		dev_dbg(adapter->pdev_dev, "%s: port module unplugged\n",
 			 dev->name);
 	else if (pi->mod_type < ARRAY_SIZE(mod_str))
-		dev_info(adapter->pdev_dev, "%s: %s port module inserted\n",
+		dev_dbg(adapter->pdev_dev, "%s: %s port module inserted\n",
 			 dev->name, mod_str[pi->mod_type]);
 	else if (pi->mod_type == FW_PORT_MOD_TYPE_NOTSUPPORTED)
-		dev_info(adapter->pdev_dev, "%s: unsupported optical port "
+		dev_dbg(adapter->pdev_dev, "%s: unsupported optical port "
 			 "module inserted\n", dev->name);
 	else if (pi->mod_type == FW_PORT_MOD_TYPE_UNKNOWN)
-		dev_info(adapter->pdev_dev, "%s: unknown port module inserted,"
+		dev_dbg(adapter->pdev_dev, "%s: unknown port module inserted,"
 			 "forcing TWINAX\n", dev->name);
 	else if (pi->mod_type == FW_PORT_MOD_TYPE_ERROR)
-		dev_info(adapter->pdev_dev, "%s: transceiver module error\n",
+		dev_dbg(adapter->pdev_dev, "%s: transceiver module error\n",
 			 dev->name);
 	else
-		dev_info(adapter->pdev_dev, "%s: unknown module type %d "
+		dev_dbg(adapter->pdev_dev, "%s: unknown module type %d "
 			 "inserted\n", dev->name, pi->mod_type);
 }
 
@@ -3137,7 +3137,7 @@ static int cxgb4vf_pci_probe(struct pci_dev *pdev,
 					mac);
 				goto err_free_dev;
 			}
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Using assigned MAC ACL: %pM\n", mac);
 		}
 	}
@@ -3151,7 +3151,7 @@ static int cxgb4vf_pci_probe(struct pci_dev *pdev,
 		adapter->flags |= USING_MSIX;
 	else {
 		if (msi == MSI_MSIX) {
-			dev_info(adapter->pdev_dev,
+			dev_dbg(adapter->pdev_dev,
 				 "Unable to use MSI-X Interrupts; falling "
 				 "back to MSI Interrupts\n");
 
@@ -3224,7 +3224,7 @@ static int cxgb4vf_pci_probe(struct pci_dev *pdev,
 	 * VF network device ...
 	 */
 	for_each_port(adapter, pidx) {
-		dev_info(adapter->pdev_dev, "%s: Chelsio VF NIC PCIe %s\n",
+		dev_dbg(adapter->pdev_dev, "%s: Chelsio VF NIC PCIe %s\n",
 			 adapter->port[pidx]->name,
 			 (adapter->flags & USING_MSIX) ? "MSI-X" :
 			 (adapter->flags & USING_MSI)  ? "MSI" : "");

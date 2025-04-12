@@ -189,7 +189,7 @@ static int i2c_mux_reg_probe(struct platform_device *pdev)
 		return -EPROBE_DEFER;
 
 	if (!mux->data.reg) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"Register not set, using platform resource\n");
 		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 		mux->data.reg_size = resource_size(res);

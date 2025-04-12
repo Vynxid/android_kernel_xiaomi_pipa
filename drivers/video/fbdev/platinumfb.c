@@ -542,7 +542,7 @@ static int platinumfb_probe(struct platform_device* odev)
 	volatile __u8		*fbuffer;
 	int			bank0, bank1, bank2, bank3, rc;
 
-	dev_info(&odev->dev, "Found Apple Platinum video hardware\n");
+	dev_dbg(&odev->dev, "Found Apple Platinum video hardware\n");
 
 	info = framebuffer_alloc(sizeof(*pinfo), &odev->dev);
 	if (info == NULL) {

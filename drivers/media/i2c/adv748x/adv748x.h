@@ -185,7 +185,7 @@ struct adv748x_state {
 #define adv748x_afe_to_state(a) container_of(a, struct adv748x_state, afe)
 
 #define adv_err(a, fmt, arg...)	dev_err(a->dev, fmt, ##arg)
-#define adv_info(a, fmt, arg...) dev_info(a->dev, fmt, ##arg)
+#define adv_info(a, fmt, arg...) dev_dbg(a->dev, fmt, ##arg)
 #define adv_dbg(a, fmt, arg...)	dev_dbg(a->dev, fmt, ##arg)
 
 /* Register Mappings */

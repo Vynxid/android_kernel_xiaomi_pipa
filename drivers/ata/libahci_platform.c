@@ -593,7 +593,7 @@ int ahci_platform_init_host(struct platform_device *pdev,
 	if (!(hpriv->cap & HOST_CAP_SSS) || ahci_ignore_sss)
 		host->flags |= ATA_HOST_PARALLEL_SCAN;
 	else
-		dev_info(dev, "SSS flag set, parallel bus scan disabled\n");
+		dev_dbg(dev, "SSS flag set, parallel bus scan disabled\n");
 
 	if (pi.flags & ATA_FLAG_EM)
 		ahci_reset_em(host);

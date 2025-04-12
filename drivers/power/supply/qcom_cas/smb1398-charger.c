@@ -791,7 +791,7 @@ static int smb1398_div2_cp_switcher_en(struct smb1398_chip *chip, bool en)
 
 	chip->switcher_en = en;
 
-	dev_info(chip->dev, "%s switcher\n", en ? "enable" : "disable");
+	dev_dbg(chip->dev, "%s switcher\n", en ? "enable" : "disable");
 	return rc;
 }
 
@@ -1008,7 +1008,7 @@ unlock:
 	mutex_unlock(&chip->die_chan_lock);
 	if (rc >= 0) {
 		*isns_ua = calculate_div2_cp_isns_ua(temp);
-		dev_info(chip->dev, "master isns = %duA\n", *isns_ua);
+		dev_dbg(chip->dev, "master isns = %duA\n", *isns_ua);
 	}
 
 	return rc;
@@ -1083,7 +1083,7 @@ unlock:
 
 	if (rc >= 0) {
 		*isns_ua = calculate_div2_cp_isns_ua(temp);
-		dev_info(chip->dev, "slave isns = %duA\n", *isns_ua);
+		dev_dbg(chip->dev, "slave isns = %duA\n", *isns_ua);
 	}
 
 	return rc;
@@ -1589,7 +1589,7 @@ static int div2_cp_master_set_prop(struct power_supply *psy,
 		vote(chip->passthrough_mode_disable_votable, USER_VOTER, !val->intval, 0);
 		break;
 	case POWER_SUPPLY_PROP_CP_PASSTHROUGH_CONFIG:
-		dev_info(chip->dev, "set POWER_SUPPLY_PROP_CP_PASSTHROUGH_CONFIG to val->intval:%d\n", val->intval);
+		dev_dbg(chip->dev, "set POWER_SUPPLY_PROP_CP_PASSTHROUGH_CONFIG to val->intval:%d\n", val->intval);
 		if (chip->passthrough_mode_allowed && (val->intval > 0 ?
 					(smb1398_is_rev3(chip) || is_vbus_ok_for_passthrough(chip))
 					: val->intval == 0)) {
@@ -1621,11 +1621,11 @@ static int div2_cp_master_set_prop(struct power_supply *psy,
 					rc = power_supply_set_property(chip->div2_cp_slave_psy,
 							POWER_SUPPLY_PROP_CP_PASSTHROUGH_MODE, &pval);
 				}
-				dev_info(chip->dev, "DEBUG: Passthrough Entry Config, rc=%d\n", rc);
+				dev_dbg(chip->dev, "DEBUG: Passthrough Entry Config, rc=%d\n", rc);
 			}
 		} else
 			rc = -EINVAL;//Passthrough only allowed for CC mode
-		dev_info(chip->dev, "set rc:%d, val->intavl:%d\n", rc, val->intval);
+		dev_dbg(chip->dev, "set rc:%d, val->intavl:%d\n", rc, val->intval);
 
 		if (rc < 0 || val->intval < 0) {
 			vote(chip->passthrough_mode_disable_votable, USER_VOTER, true, 0);
@@ -2013,7 +2013,7 @@ static int smb1398_div2_cp_ilim_vote_cb(struct votable *votable,
 	if (!client)
 		return -EINVAL;
 
-	dev_info(chip->dev, "ilim_ua :%d, pass_dis:%d, cp_disable:%d, cp_salve_dis:%d\n", ilim_ua,
+	dev_dbg(chip->dev, "ilim_ua :%d, pass_dis:%d, cp_disable:%d, cp_salve_dis:%d\n", ilim_ua,
 			get_effective_result(chip->passthrough_mode_disable_votable),
 			get_effective_result(chip->div2_cp_disable_votable),
 			get_effective_result(chip->div2_cp_slave_disable_votable));
@@ -2085,7 +2085,7 @@ static int smb1398_div2_cp_ilim_vote_cb(struct votable *votable,
 			if (rc < 0)
 				dev_err(chip->dev, "set CP slave ilim failed, rc=%d\n",
 						rc);
-			dev_info(chip->dev, "set CP slave ilim to %duA\n",
+			dev_dbg(chip->dev, "set CP slave ilim to %duA\n",
 					ilim_ua);
 		}
 
@@ -2096,7 +2096,7 @@ static int smb1398_div2_cp_ilim_vote_cb(struct votable *votable,
 					rc);
 			return rc;
 		}
-		dev_info(chip->dev, "set CP master ilim to %duA\n", ilim_ua);
+		dev_dbg(chip->dev, "set CP master ilim to %duA\n", ilim_ua);
 		vote(chip->div2_cp_disable_votable, ILIM_VOTER, false, 0);
 	}
 
@@ -2228,7 +2228,7 @@ static irqreturn_t default_irq_handler(int irq, void *data)
 
 	for (i = 0; i < NUM_IRQS; i++) {
 		if (irq == chip->irqs[i]) {
-			dev_info(chip->dev, "IRQ %s triggered\n",
+			dev_dbg(chip->dev, "IRQ %s triggered\n",
 					smb_irqs[i].name);
 			//Ignore WIN-UV for CC MODE
 			if (!(pval.intval && (strcmp(smb_irqs[i].name, "div2-win-uv") == 0)))
@@ -2378,7 +2378,7 @@ static int smb1398_charge_get_wireless_adapter_type(struct smb1398_chip *chip, i
 			POWER_SUPPLY_PROP_TX_ADAPTER, &val);
 	if (!ret) {
 		*adpater_type = val.intval;
-		pr_info("TX adapter type is:%d\n", *adpater_type);
+		pr_debug("TX adapter type is:%d\n", *adpater_type);
 	}
 	return ret;
 }
@@ -2502,7 +2502,7 @@ static void smb1398_status_change_work(struct work_struct *work)
 		} else {
 			smb1398_get_wls_charging_icl(chip, &rx_iout_max_ua);
 			wls_icl_ua = min(pval.intval, rx_iout_max_ua);
-			dev_info(chip->dev, "currnet_max: %d wls_icl_ua:%d\n", pval.intval, wls_icl_ua);
+			dev_dbg(chip->dev, "currnet_max: %d wls_icl_ua:%d\n", pval.intval, wls_icl_ua);
 			/** SMB1398 only supports USBIN-USBIN now.
 			* ILIM must be limited to current_max - icl_main
 			*/
@@ -2530,7 +2530,7 @@ static void smb1398_status_change_work(struct work_struct *work)
 				rc);
 		goto out;
 	}
-	pr_info("get charge type:%d, chip->taper_work_running:%d\n", pval.intval, chip->taper_work_running);
+	pr_debug("get charge type:%d, chip->taper_work_running:%d\n", pval.intval, chip->taper_work_running);
 
 	if (pval.intval == POWER_SUPPLY_CHARGE_TYPE_TAPER) {
 		if (!chip->taper_work_running) {
@@ -2899,7 +2899,7 @@ static void smb1398_taper_work(struct work_struct *work)
 			goto out;
 		}
 
-		pr_info("smb1398_taper_work charge type:%d, vcell_volt:%d\n", pval.intval, vcell_volt);
+		pr_debug("smb1398_taper_work charge type:%d, vcell_volt:%d\n", pval.intval, vcell_volt);
 
 		if (pval.intval == POWER_SUPPLY_CHARGE_TYPE_TAPER) {
 			stepper_ua = is_adapter_in_cc_mode(chip) ?
@@ -2910,7 +2910,7 @@ static void smb1398_taper_work(struct work_struct *work)
 				stepper_ua *= 2;
 
 			fcc_ua = get_effective_result(chip->fcc_votable) - stepper_ua;
-			dev_info(chip->dev, "Taper stepper reduce FCC to %d\n",
+			dev_dbg(chip->dev, "Taper stepper reduce FCC to %d\n",
 					fcc_ua);
 			vote(chip->fcc_votable, CP_VOTER, true, fcc_ua);
 			fcc_ua -= main_fcc_ua;
@@ -2946,7 +2946,7 @@ static void smb1398_taper_work(struct work_struct *work)
 					slave_en && is_cps_available(chip)) {
 				vote(chip->div2_cp_slave_disable_votable,
 						TAPER_VOTER, true, 0);
-				dev_info(chip->dev, "Disable slave CP in taper\n");
+				dev_dbg(chip->dev, "Disable slave CP in taper\n");
 				vote_override(chip->div2_cp_ilim_votable,
 						CC_MODE_VOTER,
 						get_effective_result(
@@ -2954,12 +2954,12 @@ static void smb1398_taper_work(struct work_struct *work)
 						DIV2_MAX_ILIM_DUAL_CP_UA);
 			}
 		} else {
-			dev_info(chip->dev, "Not in taper, exit!\n");
+			dev_dbg(chip->dev, "Not in taper, exit!\n");
 		}
 		msleep(500);
 	}
 out:
-	dev_info(chip->dev, "exit taper work\n");
+	dev_dbg(chip->dev, "exit taper work\n");
 	vote(chip->fcc_votable, CP_VOTER, false, 0);
 	vote(chip->awake_votable, TAPER_VOTER, false, 0);
 	chip->taper_work_running = false;
@@ -3221,7 +3221,7 @@ static int smb1398_div2_cp_master_probe(struct smb1398_chip *chip)
 	if (rc)
 		dev_err(chip->dev,  "Failed to register sysfs:%d\n", rc);
 
-	dev_info(chip->dev, "smb1398 DIV2_CP master is probed successfully\n");
+	dev_dbg(chip->dev, "smb1398 DIV2_CP master is probed successfully\n");
 
 	return 0;
 destroy_votable:
@@ -3530,7 +3530,7 @@ static int smb1398_div2_cp_slave_probe(struct smb1398_chip *chip)
 
 	smb1398_clean_irq(chip);
 
-	dev_info(chip->dev, "smb1398 DIV2_CP slave probe successfully\n");
+	dev_dbg(chip->dev, "smb1398 DIV2_CP slave probe successfully\n");
 
 	return 0;
 }

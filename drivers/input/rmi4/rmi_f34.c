@@ -206,13 +206,13 @@ static int rmi_f34_flash_firmware(struct f34_data *f34,
 	f34->update_size = image_size + config_size;
 
 	if (image_size) {
-		dev_info(&fn->dev, "Erasing firmware...\n");
+		dev_dbg(&fn->dev, "Erasing firmware...\n");
 		ret = rmi_f34_command(f34, F34_ERASE_ALL,
 				      F34_ERASE_WAIT_MS, true);
 		if (ret)
 			return ret;
 
-		dev_info(&fn->dev, "Writing firmware (%d bytes)...\n",
+		dev_dbg(&fn->dev, "Writing firmware (%d bytes)...\n",
 			 image_size);
 		ret = rmi_f34_write_firmware(f34, syn_fw->data);
 		if (ret)
@@ -225,14 +225,14 @@ static int rmi_f34_flash_firmware(struct f34_data *f34,
 		 * firmware.
 		 */
 		if (!image_size) {
-			dev_info(&fn->dev, "Erasing config...\n");
+			dev_dbg(&fn->dev, "Erasing config...\n");
 			ret = rmi_f34_command(f34, F34_ERASE_CONFIG,
 					      F34_ERASE_WAIT_MS, true);
 			if (ret)
 				return ret;
 		}
 
-		dev_info(&fn->dev, "Writing config (%d bytes)...\n",
+		dev_dbg(&fn->dev, "Writing config (%d bytes)...\n",
 			 config_size);
 		ret = rmi_f34_write_config(f34, &syn_fw->data[image_size]);
 		if (ret)
@@ -290,7 +290,7 @@ static int rmi_f34_update_firmware(struct f34_data *f34,
 		goto out;
 	}
 
-	dev_info(&f34->fn->dev, "Firmware image OK\n");
+	dev_dbg(&f34->fn->dev, "Firmware image OK\n");
 	mutex_lock(&f34->v5.flash_mutex);
 
 	ret = rmi_f34_flash_firmware(f34, syn_fw);
@@ -426,7 +426,7 @@ static int rmi_firmware_update(struct rmi_driver_data *data,
 		dev_err(&f34->fn->dev,
 			"Firmware update failed, status: %d\n", ret);
 	} else {
-		dev_info(&f34->fn->dev, "Firmware update complete\n");
+		dev_dbg(&f34->fn->dev, "Firmware update complete\n");
 	}
 
 	rmi_disable_irq(rmi_dev, false);
@@ -481,7 +481,7 @@ static ssize_t rmi_driver_update_fw_store(struct device *dev,
 	if (ret)
 		return ret;
 
-	dev_info(dev, "Flashing %s\n", fw_name);
+	dev_dbg(dev, "Flashing %s\n", fw_name);
 
 	ret = rmi_firmware_update(data, fw);
 

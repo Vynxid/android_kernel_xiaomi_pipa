@@ -24,13 +24,13 @@
 static int cfdgml_receive(struct cflayer *layr, struct cfpkt *pkt);
 static int cfdgml_transmit(struct cflayer *layr, struct cfpkt *pkt);
 
-struct cflayer *cfdgml_create(u8 channel_id, struct dev_info *dev_info)
+struct cflayer *cfdgml_create(u8 channel_id, struct dev_dbg *dev_dbg)
 {
 	struct cfsrvl *dgm = kzalloc(sizeof(struct cfsrvl), GFP_ATOMIC);
 	if (!dgm)
 		return NULL;
 	caif_assert(offsetof(struct cfsrvl, layer) == 0);
-	cfsrvl_init(dgm, channel_id, dev_info, true);
+	cfsrvl_init(dgm, channel_id, dev_dbg, true);
 	dgm->layer.receive = cfdgml_receive;
 	dgm->layer.transmit = cfdgml_transmit;
 	snprintf(dgm->layer.name, CAIF_LAYER_NAME_SZ - 1, "dgm%d", channel_id);
@@ -74,7 +74,7 @@ static int cfdgml_receive(struct cflayer *layr, struct cfpkt *pkt)
 		return 0;
 	default:
 		cfpkt_destroy(pkt);
-		pr_info("Unknown datagram control %d (0x%x)\n", cmd, cmd);
+		pr_debug("Unknown datagram control %d (0x%x)\n", cmd, cmd);
 		return -EPROTO;
 	}
 }
@@ -109,6 +109,6 @@ static int cfdgml_transmit(struct cflayer *layr, struct cfpkt *pkt)
 	 * before payload.
 	 */
 	info->hdr_len = 4;
-	info->dev_info = &service->dev_info;
+	info->dev_dbg = &service->dev_dbg;
 	return layr->dn->transmit(layr->dn, pkt);
 }

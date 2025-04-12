@@ -575,7 +575,7 @@ static int smsc47m192_detect(struct i2c_client *client,
 				SMSC47M192_REG_VID) & 0x70) == 0x00
 	 && (i2c_smbus_read_byte_data(client,
 				SMSC47M192_REG_VID4) & 0xfe) == 0x80) {
-		dev_info(&adapter->dev,
+		dev_dbg(&adapter->dev,
 			 "found SMSC47M192 or compatible, "
 			 "version 2, stepping A%d\n", version & 0x0f);
 	} else {

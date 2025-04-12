@@ -377,7 +377,7 @@ static struct mbox_chan *sti_mbox_xlate(struct mbox_controller *mbox,
 
 	chan->con_priv = chan_info;
 
-	dev_info(mbox->dev,
+	dev_dbg(mbox->dev,
 		 "Mbox: %s: Created channel: instance: %d channel: %d\n",
 		 mdev->name, instance, channel);
 
@@ -469,7 +469,7 @@ static int sti_mbox_probe(struct platform_device *pdev)
 	/* It's okay for Tx Mailboxes to not supply IRQs */
 	irq = platform_get_irq(pdev, 0);
 	if (irq < 0) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "%s: Registered Tx only Mailbox\n", mdev->name);
 		return 0;
 	}
@@ -484,7 +484,7 @@ static int sti_mbox_probe(struct platform_device *pdev)
 		return -EINVAL;
 	}
 
-	dev_info(&pdev->dev, "%s: Registered Tx/Rx Mailbox\n", mdev->name);
+	dev_dbg(&pdev->dev, "%s: Registered Tx/Rx Mailbox\n", mdev->name);
 
 	return 0;
 }

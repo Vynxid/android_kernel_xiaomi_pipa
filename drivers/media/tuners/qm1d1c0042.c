@@ -420,7 +420,7 @@ static int qm1d1c0042_probe(struct i2c_client *client,
 	memcpy(&fe->ops.tuner_ops, &qm1d1c0042_ops, sizeof(qm1d1c0042_ops));
 
 	i2c_set_clientdata(client, &state->cfg);
-	dev_info(&client->dev, "Sharp QM1D1C0042 attached.\n");
+	dev_dbg(&client->dev, "Sharp QM1D1C0042 attached.\n");
 	return 0;
 }
 

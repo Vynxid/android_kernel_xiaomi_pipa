@@ -280,7 +280,7 @@ static int xgene_gpio_sb_probe(struct platform_device *pdev)
 	if (!device_property_read_u32(&pdev->dev, XGENE_NGPIO_PROPERTY, &val32))
 		priv->gc.ngpio = val32;
 
-	dev_info(&pdev->dev, "Support %d gpios, %d irqs start from pin %d\n",
+	dev_dbg(&pdev->dev, "Support %d gpios, %d irqs start from pin %d\n",
 			priv->gc.ngpio, priv->nirq, priv->irq_start);
 
 	platform_set_drvdata(pdev, priv);
@@ -301,7 +301,7 @@ static int xgene_gpio_sb_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "X-Gene GPIO Standby driver registered\n");
+	dev_dbg(&pdev->dev, "X-Gene GPIO Standby driver registered\n");
 
 	if (priv->nirq > 0) {
 		/* Register interrupt handlers for gpio signaled acpi events */

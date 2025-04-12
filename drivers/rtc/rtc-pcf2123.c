@@ -269,7 +269,7 @@ static int pcf2123_rtc_read_time(struct device *dev, struct rtc_time *tm)
 		return ret;
 
 	if (rxbuf[0] & OSC_HAS_STOPPED) {
-		dev_info(dev, "clock was stopped. Time is not valid\n");
+		dev_dbg(dev, "clock was stopped. Time is not valid\n");
 		return -EINVAL;
 	}
 
@@ -394,7 +394,7 @@ static int pcf2123_probe(struct spi_device *spi)
 		}
 	}
 
-	dev_info(&spi->dev, "spiclk %u KHz.\n",
+	dev_dbg(&spi->dev, "spiclk %u KHz.\n",
 			(spi->max_speed_hz + 500) / 1000);
 
 	/* Finalize the initialization */

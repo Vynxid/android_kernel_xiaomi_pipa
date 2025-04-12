@@ -762,7 +762,7 @@ static int npu_cc_lagoon_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered NPU CC clocks\n");
+	dev_dbg(&pdev->dev, "Registered NPU CC clocks\n");
 
 	return ret;
 }

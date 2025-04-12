@@ -876,7 +876,7 @@ static int amc6821_detect(
 		return -ENODEV;
 	}
 
-	dev_info(&adapter->dev, "amc6821: chip found at 0x%02x.\n", address);
+	dev_dbg(&adapter->dev, "amc6821: chip found at 0x%02x.\n", address);
 	strlcpy(info->type, "amc6821", I2C_NAME_SIZE);
 
 	return 0;
@@ -913,7 +913,7 @@ static int amc6821_init_client(struct i2c_client *client)
 			return err;
 		}
 
-		dev_info(&client->dev, "Revision %d\n", config & 0x0f);
+		dev_dbg(&client->dev, "Revision %d\n", config & 0x0f);
 
 		config &= ~AMC6821_CONF3_THERM_FAN_EN;
 

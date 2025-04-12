@@ -990,7 +990,7 @@ static int ep93xx_pata_probe(struct platform_device *pdev)
 	/* defaults, pio 0 */
 	ep93xx_pata_enable_pio(ide_base, 0);
 
-	dev_info(&pdev->dev, "version " DRV_VERSION "\n");
+	dev_dbg(&pdev->dev, "version " DRV_VERSION "\n");
 
 	/* activate host */
 	err = ata_host_activate(host, irq, ata_bmdma_interrupt, 0,

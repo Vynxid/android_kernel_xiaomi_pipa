@@ -1363,7 +1363,7 @@ w83781d_init_device(struct device *dev)
 		 * as I see very little reason why this would be needed at
 		 * all.
 		 */
-		dev_info(dev,
+		dev_dbg(dev,
 			 "If reset=1 solved a problem you were having, please report!\n");
 
 		/* save these registers */
@@ -1929,7 +1929,7 @@ w83781d_isa_found(unsigned short address)
 		found = 1;
 
 	if (found)
-		pr_info("Found a %s chip at %#x\n",
+		pr_debug("Found a %s chip at %#x\n",
 			val == 0x30 ? "W83782D" : "W83781D", (int)address);
 
  release:

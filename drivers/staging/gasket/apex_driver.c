@@ -626,7 +626,7 @@ static int apex_pci_probe(struct pci_dev *pci_dev,
 		goto remove_device;
 	}
 
-	ret = gasket_sysfs_create_entries(gasket_dev->dev_info.device,
+	ret = gasket_sysfs_create_entries(gasket_dev->dev_dbg.device,
 					  apex_sysfs_attrs);
 	if (ret)
 		dev_err(&pci_dev->dev, "error creating device sysfs entries\n");

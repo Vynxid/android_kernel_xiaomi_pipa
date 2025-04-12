@@ -4112,7 +4112,7 @@ static int mv_platform_probe(struct platform_device *pdev)
 
 	hpriv->clk = clk_get(&pdev->dev, NULL);
 	if (IS_ERR(hpriv->clk))
-		dev_notice(&pdev->dev, "cannot get optional clkdev\n");
+		dev_dbg(&pdev->dev, "cannot get optional clkdev\n");
 	else
 		clk_prepare_enable(hpriv->clk);
 
@@ -4167,7 +4167,7 @@ static int mv_platform_probe(struct platform_device *pdev)
 	if (rc)
 		goto err;
 
-	dev_info(&pdev->dev, "slots %u ports %d\n",
+	dev_dbg(&pdev->dev, "slots %u ports %d\n",
 		 (unsigned)MV_MAX_Q_DEPTH, host->n_ports);
 
 	rc = ata_host_activate(host, irq, mv_interrupt, IRQF_SHARED, &mv6_sht);
@@ -4401,7 +4401,7 @@ static void mv_print_info(struct ata_host *host)
 	else
 		gen = "?";
 
-	dev_info(&pdev->dev, "Gen-%s %u slots %u ports %s mode IRQ via %s\n",
+	dev_dbg(&pdev->dev, "Gen-%s %u slots %u ports %s mode IRQ via %s\n",
 		 gen, (unsigned)MV_MAX_Q_DEPTH, host->n_ports,
 		 scc_s, (MV_HP_FLAG_MSI & hpriv->hp_flags) ? "MSI" : "INTx");
 }

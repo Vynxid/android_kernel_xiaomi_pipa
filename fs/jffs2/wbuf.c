@@ -420,7 +420,7 @@ static void jffs2_wbuf_recover(struct jffs2_sb_info *c)
 #ifdef BREAKMEHEADER
 		static int breakme;
 		if (breakme++ == 20) {
-			pr_notice("Faking write error at 0x%08x\n", ofs);
+			pr_debug("Faking write error at 0x%08x\n", ofs);
 			breakme = 0;
 			mtd_write(c->mtd, ofs, towrite, &retlen, brokenbuf);
 			ret = -EIO;
@@ -439,7 +439,7 @@ static void jffs2_wbuf_recover(struct jffs2_sb_info *c)
 
 			return;
 		}
-		pr_notice("Recovery of wbuf succeeded to %08x\n", ofs);
+		pr_debug("Recovery of wbuf succeeded to %08x\n", ofs);
 
 		c->wbuf_len = (end - start) - towrite;
 		c->wbuf_ofs = ofs + towrite;
@@ -627,7 +627,7 @@ static int __jffs2_flush_wbuf(struct jffs2_sb_info *c, int pad)
 #ifdef BREAKME
 	static int breakme;
 	if (breakme++ == 20) {
-		pr_notice("Faking write error at 0x%08x\n", c->wbuf_ofs);
+		pr_debug("Faking write error at 0x%08x\n", c->wbuf_ofs);
 		breakme = 0;
 		mtd_write(c->mtd, c->wbuf_ofs, c->wbuf_pagesize, &retlen,
 			  brokenbuf);
@@ -1277,7 +1277,7 @@ int jffs2_dataflash_setup(struct jffs2_sb_info *c) {
 	}
 #endif
 
-	pr_info("write-buffering enabled buffer (%d) erasesize (%d)\n",
+	pr_debug("write-buffering enabled buffer (%d) erasesize (%d)\n",
 		c->wbuf_pagesize, c->sector_size);
 
 	return 0;
@@ -1339,7 +1339,7 @@ int jffs2_ubivol_setup(struct jffs2_sb_info *c) {
 	if (!c->wbuf)
 		return -ENOMEM;
 
-	pr_info("write-buffering enabled buffer (%d) erasesize (%d)\n",
+	pr_debug("write-buffering enabled buffer (%d) erasesize (%d)\n",
 		c->wbuf_pagesize, c->sector_size);
 
 	return 0;

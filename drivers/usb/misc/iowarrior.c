@@ -913,7 +913,7 @@ static int iowarrior_probe(struct usb_interface *interface,
 	dev->minor = interface->minor;
 
 	/* let the user know what node this device is now attached to */
-	dev_info(&interface->dev, "IOWarrior product=0x%x, serial=%s interface=%d "
+	dev_dbg(&interface->dev, "IOWarrior product=0x%x, serial=%s interface=%d "
 		 "now attached to iowarrior%d\n", dev->product_id, dev->chip_serial,
 		 iface_desc->desc.bInterfaceNumber, dev->minor - IOWARRIOR_MINOR_BASE);
 	return retval;
@@ -964,7 +964,7 @@ static void iowarrior_disconnect(struct usb_interface *interface)
 		iowarrior_delete(dev);
 	}
 
-	dev_info(&interface->dev, "I/O-Warror #%d now disconnected\n",
+	dev_dbg(&interface->dev, "I/O-Warror #%d now disconnected\n",
 		 minor - IOWARRIOR_MINOR_BASE);
 }
 

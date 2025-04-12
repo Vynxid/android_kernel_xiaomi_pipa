@@ -860,7 +860,7 @@ static int sh_dmae_probe(struct platform_device *pdev)
 	}
 
 	if (irq_cap)
-		dev_notice(&pdev->dev, "Attempting to register %d DMA "
+		dev_dbg(&pdev->dev, "Attempting to register %d DMA "
 			   "channels when a maximum of %d are supported.\n",
 			   pdata->channel_num, SH_DMAE_MAX_CHANNELS);
 

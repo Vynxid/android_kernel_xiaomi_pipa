@@ -40,7 +40,7 @@ struct cfcnfg_phyinfo {
 	enum cfcnfg_phy_preference pref;
 
 	/* Information about the physical device */
-	struct dev_info dev_info;
+	struct dev_dbg dev_dbg;
 
 	/* Interface index */
 	int ifindex;
@@ -145,7 +145,7 @@ static void cfctrl_enum_resp(void)
 {
 }
 
-static struct dev_info *cfcnfg_get_phyid(struct cfcnfg *cnfg,
+static struct dev_dbg *cfcnfg_get_phyid(struct cfcnfg *cnfg,
 				  enum cfcnfg_phy_preference phy_pref)
 {
 	/* Try to match with specified preference */
@@ -155,13 +155,13 @@ static struct dev_info *cfcnfg_get_phyid(struct cfcnfg *cnfg,
 		if (phy->up && phy->pref == phy_pref &&
 				phy->frm_layer != NULL)
 
-			return &phy->dev_info;
+			return &phy->dev_dbg;
 	}
 
 	/* Otherwise just return something */
 	list_for_each_entry_rcu(phy, &cnfg->phys, node)
 		if (phy->up)
-			return &phy->dev_info;
+			return &phy->dev_dbg;
 
 	return NULL;
 }
@@ -219,7 +219,7 @@ static int caif_connect_req_to_link_param(struct cfcnfg *cnfg,
 					  struct caif_connect_request *s,
 					  struct cfctrl_link_param *l)
 {
-	struct dev_info *dev_info;
+	struct dev_dbg *dev_dbg;
 	enum cfcnfg_phy_preference pref;
 	int res;
 
@@ -243,10 +243,10 @@ static int caif_connect_req_to_link_param(struct cfcnfg *cnfg,
 		default:
 			return -EINVAL;
 		}
-		dev_info = cfcnfg_get_phyid(cnfg, pref);
-		if (dev_info == NULL)
+		dev_dbg = cfcnfg_get_phyid(cnfg, pref);
+		if (dev_dbg == NULL)
 			return -ENODEV;
-		l->phyid = dev_info->id;
+		l->phyid = dev_dbg->id;
 	}
 	switch (s->protocol) {
 	case CAIFPROTO_AT:
@@ -411,25 +411,25 @@ cfcnfg_linkup_rsp(struct cflayer *layer, u8 channel_id, enum cfctrl_srv serv,
 
 	switch (serv) {
 	case CFCTRL_SRV_VEI:
-		servicel = cfvei_create(channel_id, &phyinfo->dev_info);
+		servicel = cfvei_create(channel_id, &phyinfo->dev_dbg);
 		break;
 	case CFCTRL_SRV_DATAGRAM:
 		servicel = cfdgml_create(channel_id,
-					&phyinfo->dev_info);
+					&phyinfo->dev_dbg);
 		break;
 	case CFCTRL_SRV_RFM:
-		netdev = phyinfo->dev_info.dev;
-		servicel = cfrfml_create(channel_id, &phyinfo->dev_info,
+		netdev = phyinfo->dev_dbg.dev;
+		servicel = cfrfml_create(channel_id, &phyinfo->dev_dbg,
 						netdev->mtu);
 		break;
 	case CFCTRL_SRV_UTIL:
-		servicel = cfutill_create(channel_id, &phyinfo->dev_info);
+		servicel = cfutill_create(channel_id, &phyinfo->dev_dbg);
 		break;
 	case CFCTRL_SRV_VIDEO:
-		servicel = cfvidl_create(channel_id, &phyinfo->dev_info);
+		servicel = cfvidl_create(channel_id, &phyinfo->dev_dbg);
 		break;
 	case CFCTRL_SRV_DBG:
-		servicel = cfdbgl_create(channel_id, &phyinfo->dev_info);
+		servicel = cfdbgl_create(channel_id, &phyinfo->dev_dbg);
 		break;
 	default:
 		pr_err("Protocol error. Link setup response - unknown channel type\n");
@@ -486,8 +486,8 @@ got_phyid:
 	phy_layer->id = phyid;
 	phyinfo->pref = pref;
 	phyinfo->id = phyid;
-	phyinfo->dev_info.id = phyid;
-	phyinfo->dev_info.dev = dev;
+	phyinfo->dev_dbg.id = phyid;
+	phyinfo->dev_dbg.dev = dev;
 	phyinfo->phy_layer = phy_layer;
 	phyinfo->ifindex = dev->ifindex;
 	phyinfo->head_room = head_room;
@@ -584,7 +584,7 @@ int cfcnfg_del_phy_layer(struct cfcnfg *cnfg, struct cflayer *phy_layer)
 
 	/* Fail if reference count is not zero */
 	if (cffrml_refcnt_read(phyinfo->frm_layer) != 0) {
-		pr_info("Wait for device inuse\n");
+		pr_debug("Wait for device inuse\n");
 		list_add_rcu(&phyinfo->node, &cnfg->phys);
 		mutex_unlock(&cnfg->lock);
 		return -EAGAIN;

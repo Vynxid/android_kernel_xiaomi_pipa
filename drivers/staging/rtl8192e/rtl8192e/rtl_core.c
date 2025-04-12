@@ -2444,7 +2444,7 @@ static int _rtl92e_pci_probe(struct pci_dev *pdev,
 
 	if (!pci_set_dma_mask(pdev, DMA_BIT_MASK(32))) {
 		if (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(32))) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Unable to obtain 32bit DMA for consistent allocations\n");
 			goto err_pci_disable;
 		}
@@ -2476,7 +2476,7 @@ static int _rtl92e_pci_probe(struct pci_dev *pdev,
 		goto err_rel_rtllib;
 	}
 
-	dev_info(&pdev->dev, "Memory mapped space start: 0x%08lx\n",
+	dev_dbg(&pdev->dev, "Memory mapped space start: 0x%08lx\n",
 		 pmem_start);
 	if (!request_mem_region(pmem_start, pmem_len, DRV_NAME)) {
 		netdev_err(dev, "request_mem_region failed!");
@@ -2576,7 +2576,7 @@ static void _rtl92e_pci_disconnect(struct pci_dev *pdev)
 			_rtl92e_free_tx_ring(dev, i);
 
 		if (priv->irq) {
-			dev_info(&pdev->dev, "Freeing irq %d\n", dev->irq);
+			dev_dbg(&pdev->dev, "Freeing irq %d\n", dev->irq);
 			free_irq(dev->irq, dev);
 			priv->irq = 0;
 		}

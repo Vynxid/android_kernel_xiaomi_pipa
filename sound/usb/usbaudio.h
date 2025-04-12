@@ -78,7 +78,7 @@ struct snd_usb_audio {
 #define usb_audio_warn(chip, fmt, args...) \
 	dev_warn(&(chip)->dev->dev, fmt, ##args)
 #define usb_audio_info(chip, fmt, args...) \
-	dev_info(&(chip)->dev->dev, fmt, ##args)
+	dev_dbg(&(chip)->dev->dev, fmt, ##args)
 #define usb_audio_dbg(chip, fmt, args...) \
 	dev_dbg(&(chip)->dev->dev, fmt, ##args)
 

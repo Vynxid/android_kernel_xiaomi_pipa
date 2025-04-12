@@ -221,7 +221,7 @@ lm73_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	if (IS_ERR(hwmon_dev))
 		return PTR_ERR(hwmon_dev);
 
-	dev_info(dev, "sensor '%s'\n", client->name);
+	dev_dbg(dev, "sensor '%s'\n", client->name);
 
 	return 0;
 }

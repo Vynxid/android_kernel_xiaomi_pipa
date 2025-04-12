@@ -548,7 +548,7 @@ static int __w1_f19_set_i2c_speed(struct w1_slave *sl, u8 speed)
 	/* Update speed in slave specific data. */
 	data->speed = speed;
 
-	dev_info(&sl->dev, "i2c speed set to %d kBaud\n", i2c_speeds[speed]);
+	dev_dbg(&sl->dev, "i2c speed set to %d kBaud\n", i2c_speeds[speed]);
 
 	return 0;
 }

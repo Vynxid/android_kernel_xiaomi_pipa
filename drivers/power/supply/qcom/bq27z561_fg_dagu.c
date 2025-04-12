@@ -288,7 +288,7 @@ struct bq_fg_chip {
 #define bq_dbg(reason, fmt, ...)			\
 	do {						\
 		if (debug_mask & (reason))		\
-			pr_info(fmt, ##__VA_ARGS__);	\
+			pr_debug(fmt, ##__VA_ARGS__);	\
 		else					\
 			pr_debug(fmt, ##__VA_ARGS__);	\
 	} while (0)

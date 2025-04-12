@@ -930,7 +930,7 @@ int __init init_module(void)
 	retval = platform_driver_probe(&ne_driver, ne_drv_probe);
 	if (retval) {
 		if (io[0] == 0)
-			pr_notice("ne.c: You must supply \"io=0xNNN\""
+			pr_debug("ne.c: You must supply \"io=0xNNN\""
 			       " value(s) for ISA cards.\n");
 		ne_loop_rm_unreg(1);
 		return retval;

@@ -689,7 +689,7 @@ static int fimc_md_register_platform_entity(struct fimc_md *fmd,
 dev_unlock:
 	device_unlock(dev);
 	if (ret == -EPROBE_DEFER)
-		dev_info(&fmd->pdev->dev, "deferring %s device registration\n",
+		dev_dbg(&fmd->pdev->dev, "deferring %s device registration\n",
 			dev_name(dev));
 	else if (ret < 0)
 		dev_err(&fmd->pdev->dev, "%s device registration failed (%d)\n",

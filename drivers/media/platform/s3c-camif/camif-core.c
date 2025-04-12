@@ -459,7 +459,7 @@ static int s3c_camif_probe(struct platform_device *pdev)
 	clk_set_rate(camif->clock[CLK_CAM],
 			camif->pdata.sensor.clock_frequency);
 
-	dev_info(dev, "sensor clock frequency: %lu\n",
+	dev_dbg(dev, "sensor clock frequency: %lu\n",
 		 clk_get_rate(camif->clock[CLK_CAM]));
 	/*
 	 * Set initial pixel format, resolution and crop rectangle.

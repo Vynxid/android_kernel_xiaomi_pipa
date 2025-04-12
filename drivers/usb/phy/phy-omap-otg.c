@@ -127,7 +127,7 @@ static int omap_otg_probe(struct platform_device *pdev)
 
 	rev = readl(otg_dev->base);
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "OMAP USB OTG controller rev %d.%d (%s, id=%d, vbus=%d)\n",
 		 (rev >> 4) & 0xf, rev & 0xf, config->extcon, otg_dev->id,
 		 otg_dev->vbus);

@@ -881,7 +881,7 @@ static int skeleton_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	if (ret)
 		goto free_hdl;
 
-	dev_info(&pdev->dev, "V4L2 PCI Skeleton Driver loaded\n");
+	dev_dbg(&pdev->dev, "V4L2 PCI Skeleton Driver loaded\n");
 	return 0;
 
 free_hdl:

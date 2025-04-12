@@ -907,7 +907,7 @@ static int soc_bind_dai_link(struct snd_soc_card *card,
 	cpu_dai_component.dai_name = dai_link->cpu_dai_name;
 	rtd->cpu_dai = snd_soc_find_dai(&cpu_dai_component);
 	if (!rtd->cpu_dai) {
-		dev_info(card->dev, "ASoC: CPU DAI %s not registered\n",
+		dev_dbg(card->dev, "ASoC: CPU DAI %s not registered\n",
 			 dai_link->cpu_dai_name);
 		goto _err_defer;
 	}
@@ -1952,7 +1952,7 @@ static void soc_check_tplg_fes(struct snd_soc_card *card)
 				continue;
 			}
 
-			dev_info(card->dev, "info: override FE DAI link %s\n",
+			dev_dbg(card->dev, "info: override FE DAI link %s\n",
 				 card->dai_link[i].name);
 
 			/* override platform component */

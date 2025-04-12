@@ -274,7 +274,7 @@ static int __init intel_rng_hw_init(void *_intel_rng_hw)
 	if (mfc != INTEL_FWH_MANUFACTURER_CODE ||
 	    (dvc != INTEL_FWH_DEVICE_CODE_8M &&
 	     dvc != INTEL_FWH_DEVICE_CODE_4M)) {
-		pr_notice(PFX "FWH not detected\n");
+		pr_debug(PFX "FWH not detected\n");
 		return -ENODEV;
 	}
 
@@ -391,7 +391,7 @@ fwh_done:
 		goto out;
 	}
 
-	pr_info("Intel 82802 RNG detected\n");
+	pr_debug("Intel 82802 RNG detected\n");
 	err = hwrng_register(&intel_rng);
 	if (err) {
 		pr_err(PFX "RNG registering failed (%d)\n",

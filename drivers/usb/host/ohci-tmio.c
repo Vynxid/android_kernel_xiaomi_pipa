@@ -123,7 +123,7 @@ static void tmio_start_hc(struct platform_device *dev)
 	tmio_iowrite8(1, tmio->ccr + CCR_ILME);
 	tmio_iowrite8(2, tmio->ccr + CCR_INTC);
 
-	dev_info(&dev->dev, "revision %d @ 0x%08llx, irq %d\n",
+	dev_dbg(&dev->dev, "revision %d @ 0x%08llx, irq %d\n",
 			tmio_ioread8(tmio->ccr + CCR_REVID),
 			(u64) hcd->rsrc_start, hcd->irq);
 }

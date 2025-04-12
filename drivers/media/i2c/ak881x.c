@@ -295,7 +295,7 @@ static int ak881x_probe(struct i2c_client *client,
 	/* Hardware default: NTSC-M */
 	ak881x->lines = 480;
 
-	dev_info(&client->dev, "Detected an ak881x chip ID %x, revision %x\n",
+	dev_dbg(&client->dev, "Detected an ak881x chip ID %x, revision %x\n",
 		 data, ak881x->revision);
 
 	return 0;

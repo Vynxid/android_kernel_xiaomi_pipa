@@ -95,7 +95,7 @@ static __init struct key_restriction *get_builtin_and_secondary_restriction(void
  */
 static __init int system_trusted_keyring_init(void)
 {
-	pr_notice("Initialise system trusted keyrings\n");
+	pr_debug("Initialise system trusted keyrings\n");
 
 	builtin_trusted_keys =
 		keyring_alloc(".builtin_trusted_keys",
@@ -141,7 +141,7 @@ static __init int load_system_certificate_list(void)
 	const u8 *p, *end;
 	size_t plen;
 
-	pr_notice("Loading compiled-in X.509 certificates\n");
+	pr_debug("Loading compiled-in X.509 certificates\n");
 
 	p = system_certificate_list;
 	end = p + system_certificate_list_size;
@@ -173,7 +173,7 @@ static __init int load_system_certificate_list(void)
 			pr_err("Problem loading in-kernel X.509 certificate (%ld)\n",
 			       PTR_ERR(key));
 		} else {
-			pr_notice("Loaded X.509 cert '%s'\n",
+			pr_debug("Loaded X.509 cert '%s'\n",
 				  key_ref_to_ptr(key)->description);
 			key_ref_put(key);
 		}

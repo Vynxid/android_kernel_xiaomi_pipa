@@ -392,7 +392,7 @@ static int i2c_sirfsoc_probe(struct platform_device *pdev)
 
 	clk_disable(clk);
 
-	dev_info(&pdev->dev, " I2C adapter ready to operate\n");
+	dev_dbg(&pdev->dev, " I2C adapter ready to operate\n");
 
 	return 0;
 

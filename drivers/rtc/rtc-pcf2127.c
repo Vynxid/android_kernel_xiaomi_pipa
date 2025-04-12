@@ -71,7 +71,7 @@ static int pcf2127_rtc_read_time(struct device *dev, struct rtc_time *tm)
 	}
 
 	if (buf[PCF2127_REG_CTRL3] & PCF2127_REG_CTRL3_BLF)
-		dev_info(dev,
+		dev_dbg(dev,
 			"low voltage detected, check/replace RTC battery.\n");
 
 	if (buf[PCF2127_REG_SC] & PCF2127_OSF) {

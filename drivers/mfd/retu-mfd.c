@@ -256,7 +256,7 @@ static int retu_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
 		return ret;
 	}
 
-	dev_info(rdev->dev, "%s%s%s v%d.%d found\n", rdat->chip_name,
+	dev_dbg(rdev->dev, "%s%s%s v%d.%d found\n", rdat->chip_name,
 		 (ret & RETU_REG_ASICR_VILMA) ? " & " : "",
 		 (ret & RETU_REG_ASICR_VILMA) ? rdat->companion_name : "",
 		 (ret >> 4) & 0x7, ret & 0xf);

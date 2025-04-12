@@ -645,7 +645,7 @@ irqreturn_t isci_error_isr(int vec, void *data)
 static void isci_host_start_complete(struct isci_host *ihost, enum sci_status completion_status)
 {
 	if (completion_status != SCI_SUCCESS)
-		dev_info(&ihost->pdev->dev,
+		dev_dbg(&ihost->pdev->dev,
 			"controller start timed out, continuing...\n");
 	clear_bit(IHOST_START_PENDING, &ihost->flags);
 	wake_up(&ihost->eventq);

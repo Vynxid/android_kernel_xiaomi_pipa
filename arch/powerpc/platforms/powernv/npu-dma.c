@@ -319,7 +319,7 @@ static int pnv_npu_dma_set_bypass(struct pnv_ioda_pe *npe)
 	/* Enable the bypass window */
 
 	top = roundup_pow_of_two(top);
-	dev_info(&npe->pdev->dev, "Enabling bypass for PE %x\n",
+	dev_dbg(&npe->pdev->dev, "Enabling bypass for PE %x\n",
 			npe->pe_number);
 	rc = opal_pci_map_pe_dma_window_real(phb->opal_id,
 			npe->pe_number, npe->pe_number,
@@ -355,11 +355,11 @@ void pnv_npu_try_dma_set_bypass(struct pci_dev *gpdev, bool bypass)
 		npe = &phb->ioda.pe_array[pdn->pe_number];
 
 		if (bypass) {
-			dev_info(&npdev->dev,
+			dev_dbg(&npdev->dev,
 					"Using 64-bit DMA iommu bypass\n");
 			pnv_npu_dma_set_bypass(npe);
 		} else {
-			dev_info(&npdev->dev, "Using 32-bit DMA via iommu\n");
+			dev_dbg(&npdev->dev, "Using 32-bit DMA via iommu\n");
 			pnv_npu_dma_set_32(npe);
 		}
 	}
@@ -999,7 +999,7 @@ int pnv_npu2_init(struct pnv_phb *phb)
 							i, &mmio_atsd); i++)
 		phb->npu.mmio_atsd_regs[i] = ioremap(mmio_atsd, 32);
 
-	pr_info("NPU%lld: Found %d MMIO ATSD registers", phb->opal_id, i);
+	pr_debug("NPU%lld: Found %d MMIO ATSD registers", phb->opal_id, i);
 	phb->npu.mmio_atsd_count = i;
 	phb->npu.mmio_atsd_usage = 0;
 	npu_index++;

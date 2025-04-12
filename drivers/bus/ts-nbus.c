@@ -335,7 +335,7 @@ static int ts_nbus_probe(struct platform_device *pdev)
 	if (ret < 0)
 		return ret;
 
-	dev_info(dev, "initialized\n");
+	dev_dbg(dev, "initialized\n");
 
 	return 0;
 }

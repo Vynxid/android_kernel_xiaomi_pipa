@@ -24,13 +24,13 @@
 static int cfutill_receive(struct cflayer *layr, struct cfpkt *pkt);
 static int cfutill_transmit(struct cflayer *layr, struct cfpkt *pkt);
 
-struct cflayer *cfutill_create(u8 channel_id, struct dev_info *dev_info)
+struct cflayer *cfutill_create(u8 channel_id, struct dev_dbg *dev_dbg)
 {
 	struct cfsrvl *util = kzalloc(sizeof(struct cfsrvl), GFP_ATOMIC);
 	if (!util)
 		return NULL;
 	caif_assert(offsetof(struct cfsrvl, layer) == 0);
-	cfsrvl_init(util, channel_id, dev_info, true);
+	cfsrvl_init(util, channel_id, dev_dbg, true);
 	util->layer.receive = cfutill_receive;
 	util->layer.transmit = cfutill_transmit;
 	snprintf(util->layer.name, CAIF_LAYER_NAME_SZ - 1, "util1");
@@ -99,6 +99,6 @@ static int cfutill_transmit(struct cflayer *layr, struct cfpkt *pkt)
 	 * payload.
 	 */
 	info->hdr_len = 1;
-	info->dev_info = &service->dev_info;
+	info->dev_dbg = &service->dev_dbg;
 	return layr->dn->transmit(layr->dn, pkt);
 }

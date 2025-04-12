@@ -325,7 +325,7 @@ int uwbd_msg_handle_reset(struct uwb_event *evt)
 	struct uwb_rc *rc = evt->rc;
 	int ret;
 
-	dev_info(&rc->uwb_dev.dev, "resetting radio controller\n");
+	dev_dbg(&rc->uwb_dev.dev, "resetting radio controller\n");
 	ret = rc->reset(rc);
 	if (ret < 0) {
 		dev_err(&rc->uwb_dev.dev, "failed to reset hardware: %d\n", ret);

@@ -1222,7 +1222,7 @@ static int s5p_mfc_configure_common_memory(struct s5p_mfc_dev *mfc_dev)
 	mfc_dev->mem_dev[BANK_L_CTX] = mfc_dev->mem_dev[BANK_R_CTX] = dev;
 	vb2_dma_contig_set_max_seg_size(dev, DMA_BIT_MASK(32));
 
-	dev_info(dev, "preallocated %ld MiB buffer for the firmware and context buffers\n",
+	dev_dbg(dev, "preallocated %ld MiB buffer for the firmware and context buffers\n",
 		 (mem_size / SZ_1M));
 
 	return 0;

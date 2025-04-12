@@ -587,7 +587,7 @@ static int thunderx_gpio_probe(struct pci_dev *pdev,
 	if (err)
 		goto out;
 
-	dev_info(dev, "ThunderX GPIO: %d lines with base %d.\n",
+	dev_dbg(dev, "ThunderX GPIO: %d lines with base %d.\n",
 		 ngpio, chip->base);
 	return 0;
 out:

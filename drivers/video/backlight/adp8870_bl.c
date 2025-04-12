@@ -919,7 +919,7 @@ static int adp8870_probe(struct i2c_client *client,
 
 	backlight_update_status(bl);
 
-	dev_info(&client->dev, "Rev.%d Backlight\n", data->revid);
+	dev_dbg(&client->dev, "Rev.%d Backlight\n", data->revid);
 
 	if (pdata->num_leds)
 		adp8870_led_probe(client);

@@ -180,7 +180,7 @@ static int matrox_w1_probe(struct pci_dev *pdev, const struct pci_device_id *ent
 
 	dev->found = 1;
 
-	dev_info(&pdev->dev, "Matrox G400 GPIO transport layer for 1-wire.\n");
+	dev_dbg(&pdev->dev, "Matrox G400 GPIO transport layer for 1-wire.\n");
 
 	return 0;
 

@@ -545,7 +545,7 @@ static int rx8025_probe(struct i2c_client *client,
 	}
 
 	if (client->irq > 0) {
-		dev_info(&client->dev, "IRQ %d supplied\n", client->irq);
+		dev_dbg(&client->dev, "IRQ %d supplied\n", client->irq);
 		err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
 						rx8025_handle_irq,
 						IRQF_ONESHOT,

@@ -1030,14 +1030,14 @@ static int at91_twi_configure_dma(struct at91_twi_dev *dev, u32 phy_addr)
 	dma->xfer_in_progress = false;
 	dev->use_dma = true;
 
-	dev_info(dev->dev, "using %s (tx) and %s (rx) for DMA transfers\n",
+	dev_dbg(dev->dev, "using %s (tx) and %s (rx) for DMA transfers\n",
 		 dma_chan_name(dma->chan_tx), dma_chan_name(dma->chan_rx));
 
 	return ret;
 
 error:
 	if (ret != -EPROBE_DEFER)
-		dev_info(dev->dev, "can't get DMA channel, continue without DMA support\n");
+		dev_dbg(dev->dev, "can't get DMA channel, continue without DMA support\n");
 	if (dma->chan_rx)
 		dma_release_channel(dma->chan_rx);
 	if (dma->chan_tx)
@@ -1117,7 +1117,7 @@ static int at91_twi_probe(struct platform_device *pdev)
 
 	if (!of_property_read_u32(pdev->dev.of_node, "atmel,fifo-size",
 				  &dev->fifo_size)) {
-		dev_info(dev->dev, "Using FIFO (%u data)\n", dev->fifo_size);
+		dev_dbg(dev->dev, "Using FIFO (%u data)\n", dev->fifo_size);
 	}
 
 	rc = of_property_read_u32(dev->dev->of_node, "clock-frequency",
@@ -1154,7 +1154,7 @@ static int at91_twi_probe(struct platform_device *pdev)
 		return rc;
 	}
 
-	dev_info(dev->dev, "AT91 i2c bus driver (hw version: %#x).\n",
+	dev_dbg(dev->dev, "AT91 i2c bus driver (hw version: %#x).\n",
 		 at91_twi_read(dev, AT91_TWI_VER));
 	return 0;
 }

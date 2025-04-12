@@ -299,7 +299,7 @@ static void acerhdf_change_fanstate(int state)
 	unsigned char cmd;
 
 	if (verbose)
-		pr_notice("fan %s\n", state == ACERHDF_FAN_OFF ? "OFF" : "ON");
+		pr_debug("fan %s\n", state == ACERHDF_FAN_OFF ? "OFF" : "ON");
 
 	if ((state != ACERHDF_FAN_OFF) && (state != ACERHDF_FAN_AUTO)) {
 		pr_err("invalid fan state %d requested, setting to auto!\n",
@@ -315,7 +315,7 @@ static void acerhdf_change_fanstate(int state)
 
 	if (bios_cfg->mcmd_enable && state == ACERHDF_FAN_OFF) {
 		if (verbose)
-			pr_notice("turning off fan manually\n");
+			pr_debug("turning off fan manually\n");
 		ec_write(mcmd.mreg, mcmd.moff);
 	}
 }
@@ -335,7 +335,7 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
 			interval = ACERHDF_MAX_INTERVAL;
 		}
 		if (verbose)
-			pr_notice("interval changed to: %d\n", interval);
+			pr_debug("interval changed to: %d\n", interval);
 		thermal->polling_delay = interval*1000;
 		prev_interval = interval;
 	}
@@ -358,7 +358,7 @@ static int acerhdf_get_ec_temp(struct thermal_zone_device *thermal, int *t)
 		return err;
 
 	if (verbose)
-		pr_notice("temp %d\n", temp);
+		pr_debug("temp %d\n", temp);
 
 	*t = temp;
 	return 0;
@@ -399,7 +399,7 @@ static inline void acerhdf_revert_to_bios_mode(void)
 	kernelmode = 0;
 	if (thz_dev)
 		thz_dev->polling_delay = 0;
-	pr_notice("kernel mode fan control OFF\n");
+	pr_debug("kernel mode fan control OFF\n");
 }
 static inline void acerhdf_enable_kernelmode(void)
 {
@@ -407,14 +407,14 @@ static inline void acerhdf_enable_kernelmode(void)
 
 	thz_dev->polling_delay = interval*1000;
 	thermal_zone_device_update(thz_dev, THERMAL_EVENT_UNSPECIFIED);
-	pr_notice("kernel mode fan control ON\n");
+	pr_debug("kernel mode fan control ON\n");
 }
 
 static int acerhdf_get_mode(struct thermal_zone_device *thermal,
 			    enum thermal_device_mode *mode)
 {
 	if (verbose)
-		pr_notice("kernel mode fan control %d\n", kernelmode);
+		pr_debug("kernel mode fan control %d\n", kernelmode);
 
 	*mode = (kernelmode) ? THERMAL_DEVICE_ENABLED
 			     : THERMAL_DEVICE_DISABLED;
@@ -571,7 +571,7 @@ static int acerhdf_suspend(struct device *dev)
 		acerhdf_change_fanstate(ACERHDF_FAN_AUTO);
 
 	if (verbose)
-		pr_notice("going suspend\n");
+		pr_debug("going suspend\n");
 
 	return 0;
 }
@@ -631,22 +631,22 @@ static int acerhdf_check_hardware(void)
 		return -EINVAL;
 	}
 
-	pr_info("Acer Aspire One Fan driver, v.%s\n", DRV_VER);
+	pr_debug("Acer Aspire One Fan driver, v.%s\n", DRV_VER);
 
 	if (force_bios[0]) {
 		version = force_bios;
-		pr_info("forcing BIOS version: %s\n", version);
+		pr_debug("forcing BIOS version: %s\n", version);
 		kernelmode = 0;
 	}
 
 	if (force_product[0]) {
 		product = force_product;
-		pr_info("forcing BIOS product: %s\n", product);
+		pr_debug("forcing BIOS product: %s\n", product);
 		kernelmode = 0;
 	}
 
 	if (verbose)
-		pr_info("BIOS info: %s %s, product: %s\n",
+		pr_debug("BIOS info: %s %s, product: %s\n",
 			vendor, version, product);
 
 	/* search BIOS version and vendor in BIOS settings table */
@@ -674,8 +674,8 @@ static int acerhdf_check_hardware(void)
 	 * off the fan
 	 */
 	if (!kernelmode) {
-		pr_notice("Fan control off, to enable do:\n");
-		pr_notice("echo -n \"enabled\" > /sys/class/thermal/thermal_zone0/mode\n");
+		pr_debug("Fan control off, to enable do:\n");
+		pr_debug("echo -n \"enabled\" > /sys/class/thermal/thermal_zone0/mode\n");
 	}
 
 	return 0;

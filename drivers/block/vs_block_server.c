@@ -191,7 +191,7 @@ vs_block_server_readonly_store(struct device *dev,
 		goto unlock;
 
 	if (bdev_read_only(server->bdev) && !val) {
-		dev_info(dev,
+		dev_dbg(dev,
 				"Cannot set %s to read/write: read-only device\n",
 				server->service->name);
 		err = -EINVAL;

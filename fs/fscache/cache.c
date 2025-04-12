@@ -280,7 +280,7 @@ int fscache_add_cache(struct fscache_cache *cache,
 	spin_unlock(&fscache_fsdef_index.lock);
 	up_write(&fscache_addremove_sem);
 
-	pr_notice("Cache \"%s\" added (type %s)\n",
+	pr_debug("Cache \"%s\" added (type %s)\n",
 		  cache->tag->name, cache->ops->name);
 	kobject_uevent(cache->kobj, KOBJ_ADD);
 
@@ -368,7 +368,7 @@ void fscache_withdraw_cache(struct fscache_cache *cache)
 
 	_enter("");
 
-	pr_notice("Withdrawing cache \"%s\"\n",
+	pr_debug("Withdrawing cache \"%s\"\n",
 		  cache->tag->name);
 
 	/* make the cache unavailable for cookie acquisition */

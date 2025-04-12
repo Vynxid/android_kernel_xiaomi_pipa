@@ -849,7 +849,7 @@ static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
 	release_firmware(fw);
 
 	if (csb_readl(tegra, XUSB_CSB_MP_ILOAD_BASE_LO) != 0) {
-		dev_info(dev, "Firmware already loaded, Falcon state %#x\n",
+		dev_dbg(dev, "Firmware already loaded, Falcon state %#x\n",
 			 csb_readl(tegra, XUSB_FALC_CPUCTL));
 		return 0;
 	}
@@ -928,7 +928,7 @@ static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
 	timestamp = le32_to_cpu(header->fwimg_created_time);
 	time64_to_tm(timestamp, 0, &time);
 
-	dev_info(dev, "Firmware timestamp: %ld-%02d-%02d %02d:%02d:%02d UTC\n",
+	dev_dbg(dev, "Firmware timestamp: %ld-%02d-%02d %02d:%02d:%02d UTC\n",
 		 time.tm_year + 1900, time.tm_mon + 1, time.tm_mday,
 		 time.tm_hour, time.tm_min, time.tm_sec);
 

@@ -474,7 +474,7 @@ static int stmpe_gpio_probe(struct platform_device *pdev)
 
 	irq = platform_get_irq(pdev, 0);
 	if (irq < 0)
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"device configured in no-irq mode: "
 			"irqs are not available\n");
 

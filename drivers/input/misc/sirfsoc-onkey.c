@@ -114,7 +114,7 @@ static int sirfsoc_pwrc_probe(struct platform_device *pdev)
 	pwrcdrv = devm_kzalloc(&pdev->dev, sizeof(struct sirfsoc_pwrc_drvdata),
 			       GFP_KERNEL);
 	if (!pwrcdrv) {
-		dev_info(&pdev->dev, "Not enough memory for the device data\n");
+		dev_dbg(&pdev->dev, "Not enough memory for the device data\n");
 		return -ENOMEM;
 	}
 

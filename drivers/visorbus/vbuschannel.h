@@ -81,7 +81,7 @@ struct visor_vbus_headerinfo {
  * @hdr_info:	    Initialized by server.
  * @chp_info:	    Describes client chipset device and driver.
  * @bus_info:	    Describes client bus device and driver.
- * @dev_info:	    Describes client device and driver for each device on the
+ * @dev_dbg:	    Describes client device and driver for each device on the
  *		    bus.
  */
 struct visor_vbus_channel {
@@ -89,7 +89,7 @@ struct visor_vbus_channel {
 	struct visor_vbus_headerinfo hdr_info;
 	struct visor_vbus_deviceinfo chp_info;
 	struct visor_vbus_deviceinfo bus_info;
-	struct visor_vbus_deviceinfo dev_info[0];
+	struct visor_vbus_deviceinfo dev_dbg[0];
 } __packed;
 
 #endif

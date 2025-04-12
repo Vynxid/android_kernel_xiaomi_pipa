@@ -1880,7 +1880,7 @@ static void w83795_init_client(struct i2c_client *client)
 	/* Start monitoring if needed */
 	config = w83795_read(client, W83795_REG_CONFIG);
 	if (!(config & W83795_REG_CONFIG_START)) {
-		dev_info(&client->dev, "Enabling monitoring operations\n");
+		dev_dbg(&client->dev, "Enabling monitoring operations\n");
 		w83795_write(client, W83795_REG_CONFIG,
 			     config | W83795_REG_CONFIG_START);
 	}
@@ -1981,7 +1981,7 @@ static int w83795_detect(struct i2c_client *client,
 		chip_name = "w83795g";
 
 	strlcpy(info->type, chip_name, I2C_NAME_SIZE);
-	dev_info(&adapter->dev, "Found %s rev. %c at 0x%02hx\n", chip_name,
+	dev_dbg(&adapter->dev, "Found %s rev. %c at 0x%02hx\n", chip_name,
 		 'A' + (device_id & 0xf), address);
 
 	return 0;
@@ -2122,7 +2122,7 @@ static void w83795_check_dynamic_in_limits(struct i2c_client *client)
 				 "Failed to set in%d limits read-only (%d, %d)\n",
 				 i, err_max, err_min);
 		else
-			dev_info(&client->dev,
+			dev_dbg(&client->dev,
 				 "in%d limits set dynamically from VID\n", i);
 	}
 }
@@ -2199,7 +2199,7 @@ static int w83795_probe(struct i2c_client *client,
 			if (!(data->has_dts & (1 << i)))
 				continue;
 			tmp = w83795_read(client, W83795_REG_PECI_TBASE(i));
-			dev_info(&client->dev,
+			dev_dbg(&client->dev,
 				 "PECI agent %d Tbase temperature: %u\n",
 				 i + 1, (unsigned int)tmp & 0x7f);
 		}

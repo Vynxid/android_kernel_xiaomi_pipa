@@ -99,11 +99,11 @@ static int devfreq_event_handler(struct devfreq *df,
 		ret = gov_start(df);
 		if (ret)
 			return ret;
-		dev_info(df->dev.parent,
+		dev_dbg(df->dev.parent,
 			"Successfully started CDSP L3 governor\n");
 		break;
 	case DEVFREQ_GOV_STOP:
-		dev_info(df->dev.parent,
+		dev_dbg(df->dev.parent,
 			"Received stop CDSP L3 governor event\n");
 		ret = gov_stop(df);
 		if (ret)

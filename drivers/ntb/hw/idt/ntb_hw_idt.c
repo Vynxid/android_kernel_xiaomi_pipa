@@ -2297,7 +2297,7 @@ static int idt_init_dbgfs(struct idt_ntb_dev *ndev)
 
 	/* If the top directory is not created then do nothing */
 	if (IS_ERR_OR_NULL(dbgfs_topdir)) {
-		dev_info(&ndev->ntb.pdev->dev, "Top DebugFS directory absent");
+		dev_dbg(&ndev->ntb.pdev->dev, "Top DebugFS directory absent");
 		return PTR_ERR(dbgfs_topdir);
 	}
 
@@ -2405,7 +2405,7 @@ static struct idt_ntb_dev *idt_create_dev(struct pci_dev *pdev,
 	spin_lock_init(&ndev->msg_mask_lock);
 	spin_lock_init(&ndev->gasa_lock);
 
-	dev_info(&pdev->dev, "IDT %s discovered", ndev->swcfg->name);
+	dev_dbg(&pdev->dev, "IDT %s discovered", ndev->swcfg->name);
 
 	dev_dbg(&pdev->dev, "NTB device descriptor created");
 
@@ -2585,7 +2585,7 @@ static int idt_pci_probe(struct pci_dev *pdev,
 	(void)idt_init_dbgfs(ndev);
 
 	/* IDT PCIe-switch NTB driver is finally initialized */
-	dev_info(&pdev->dev, "IDT NTB device is ready");
+	dev_dbg(&pdev->dev, "IDT NTB device is ready");
 
 	/* May the force be with us... */
 	return 0;
@@ -2623,7 +2623,7 @@ static void idt_pci_remove(struct pci_dev *pdev)
 	idt_deinit_pci(ndev);
 
 	/* IDT PCIe-switch NTB driver is finally initialized */
-	dev_info(&pdev->dev, "IDT NTB device is removed");
+	dev_dbg(&pdev->dev, "IDT NTB device is removed");
 
 	/* Sayonara... */
 }
@@ -2693,7 +2693,7 @@ static struct pci_driver idt_pci_driver = {
 static int __init idt_pci_driver_init(void)
 {
 	int ret;
-	pr_info("%s %s\n", NTB_DESC, NTB_VER);
+	pr_debug("%s %s\n", NTB_DESC, NTB_VER);
 
 	/* Create the top DebugFS directory if the FS is initialized */
 	if (debugfs_initialized())

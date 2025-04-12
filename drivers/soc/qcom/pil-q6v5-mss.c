@@ -90,7 +90,7 @@ static irqreturn_t modem_stop_ack_intr_handler(int irq, void *dev_id)
 {
 	struct modem_data *drv = subsys_to_drv(dev_id);
 
-	pr_info("Received stop ack interrupt from modem\n");
+	pr_debug("Received stop ack interrupt from modem\n");
 	complete(&drv->stop_ack);
 	return IRQ_HANDLED;
 }
@@ -99,7 +99,7 @@ static irqreturn_t modem_shutdown_ack_intr_handler(int irq, void *dev_id)
 {
 	struct modem_data *drv = subsys_to_drv(dev_id);
 
-	pr_info("Received stop shutdown interrupt from modem\n");
+	pr_debug("Received stop shutdown interrupt from modem\n");
 	complete_shutdown_ack(drv->subsys);
 	return IRQ_HANDLED;
 }
@@ -108,7 +108,7 @@ static irqreturn_t modem_ramdump_disable_intr_handler(int irq, void *dev_id)
 {
 	struct modem_data *drv = subsys_to_drv(dev_id);
 
-	pr_info("Received ramdump disable interrupt from modem\n");
+	pr_debug("Received ramdump disable interrupt from modem\n");
 	drv->subsys_desc.ramdump_disable = 1;
 	return IRQ_HANDLED;
 }
@@ -415,7 +415,7 @@ static int pil_mss_loadable_init(struct modem_data *drv,
 	ret = of_property_read_u32(pdev->dev.of_node,
 					"qcom,pas-id", &drv->pas_id);
 	if (ret)
-		dev_info(&pdev->dev, "No pas_id found.\n");
+		dev_dbg(&pdev->dev, "No pas_id found.\n");
 
 	drv->subsys_desc.pil_mss_memsetup =
 	of_property_read_bool(pdev->dev.of_node, "qcom,pil-mss-memsetup");

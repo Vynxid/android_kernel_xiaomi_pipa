@@ -1054,18 +1054,18 @@ static int af9013_download_firmware(struct af9013_state *state)
 	if (utmp == 0x0c)
 		return 0;
 
-	dev_info(&client->dev, "found a '%s' in cold state, will try to load a firmware\n",
+	dev_dbg(&client->dev, "found a '%s' in cold state, will try to load a firmware\n",
 		 af9013_ops.info.name);
 
 	/* Request the firmware, will block and timeout */
 	ret = request_firmware(&firmware, name, &client->dev);
 	if (ret) {
-		dev_info(&client->dev, "firmware file '%s' not found %d\n",
+		dev_dbg(&client->dev, "firmware file '%s' not found %d\n",
 			 name, ret);
 		goto err;
 	}
 
-	dev_info(&client->dev, "downloading firmware from file '%s'\n",
+	dev_dbg(&client->dev, "downloading firmware from file '%s'\n",
 		 name);
 
 	/* Write firmware checksum & size */
@@ -1121,7 +1121,7 @@ static int af9013_download_firmware(struct af9013_state *state)
 		goto err;
 	}
 
-	dev_info(&client->dev, "found a '%s' in warm state\n",
+	dev_dbg(&client->dev, "found a '%s' in warm state\n",
 		 af9013_ops.info.name);
 
 	return 0;
@@ -1534,8 +1534,8 @@ static int af9013_probe(struct i2c_client *client,
 	c->block_error.len = 1;
 	c->block_count.len = 1;
 
-	dev_info(&client->dev, "Afatech AF9013 successfully attached\n");
-	dev_info(&client->dev, "firmware version: %d.%d.%d.%d\n",
+	dev_dbg(&client->dev, "Afatech AF9013 successfully attached\n");
+	dev_dbg(&client->dev, "firmware version: %d.%d.%d.%d\n",
 		 firmware_version[0], firmware_version[1],
 		 firmware_version[2], firmware_version[3]);
 	return 0;

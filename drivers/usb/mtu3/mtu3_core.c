@@ -255,7 +255,7 @@ void mtu3_dev_on_off(struct mtu3 *mtu, int is_on)
 	else
 		mtu3_hs_softconn_set(mtu, is_on);
 
-	dev_info(mtu->dev, "gadget (%s) pullup D%s\n",
+	dev_dbg(mtu->dev, "gadget (%s) pullup D%s\n",
 		usb_speed_string(mtu->max_speed), is_on ? "+" : "-");
 }
 
@@ -504,7 +504,7 @@ static int mtu3_mem_alloc(struct mtu3 *mtu)
 	in_ep_num = CAP_TX_EP_NUM(cap_epinfo);
 	out_ep_num = CAP_RX_EP_NUM(cap_epinfo);
 
-	dev_info(mtu->dev, "fifosz/epnum: Tx=%#x/%d, Rx=%#x/%d\n",
+	dev_dbg(mtu->dev, "fifosz/epnum: Tx=%#x/%d, Rx=%#x/%d\n",
 		 mtu3_readl(mbase, U3D_CAP_EPNTXFFSZ), in_ep_num,
 		 mtu3_readl(mbase, U3D_CAP_EPNRXFFSZ), out_ep_num);
 
@@ -566,7 +566,7 @@ static void mtu3_set_speed(struct mtu3 *mtu)
 			     SSUSB_U3_PORT_SSP_SPEED);
 	}
 
-	dev_info(mtu->dev, "max_speed: %s\n",
+	dev_dbg(mtu->dev, "max_speed: %s\n",
 		usb_speed_string(mtu->max_speed));
 }
 
@@ -765,7 +765,7 @@ static int mtu3_hw_init(struct mtu3 *mtu)
 	cap_dev = mtu3_readl(mtu->ippc_base, U3D_SSUSB_IP_DEV_CAP);
 	mtu->is_u3_ip = !!SSUSB_IP_DEV_U3_PORT_NUM(cap_dev);
 
-	dev_info(mtu->dev, "IP version 0x%x(%s IP)\n", mtu->hw_version,
+	dev_dbg(mtu->dev, "IP version 0x%x(%s IP)\n", mtu->hw_version,
 		mtu->is_u3_ip ? "U3" : "U2");
 
 	mtu3_device_reset(mtu);
@@ -812,7 +812,7 @@ static int mtu3_set_dma_mask(struct mtu3 *mtu)
 			ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
 		}
 	}
-	dev_info(dev, "dma mask: %s bits\n", is_36bit ? "36" : "32");
+	dev_dbg(dev, "dma mask: %s bits\n", is_36bit ? "36" : "32");
 
 	return ret;
 }
@@ -834,7 +834,7 @@ int ssusb_gadget_init(struct ssusb_mtk *ssusb)
 		dev_err(dev, "fail to get irq number\n");
 		return mtu->irq;
 	}
-	dev_info(dev, "irq %d\n", mtu->irq);
+	dev_dbg(dev, "irq %d\n", mtu->irq);
 
 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mac");
 	mtu->mac_base = devm_ioremap_resource(dev, res);

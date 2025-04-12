@@ -27,7 +27,7 @@ static int mdev_attach_iommu(struct mdev_device *mdev)
 
 	ret = iommu_group_add_device(group, &mdev->dev);
 	if (!ret)
-		dev_info(&mdev->dev, "MDEV: group_id = %d\n",
+		dev_dbg(&mdev->dev, "MDEV: group_id = %d\n",
 			 iommu_group_id(group));
 
 	iommu_group_put(group);
@@ -37,7 +37,7 @@ static int mdev_attach_iommu(struct mdev_device *mdev)
 static void mdev_detach_iommu(struct mdev_device *mdev)
 {
 	iommu_group_remove_device(&mdev->dev);
-	dev_info(&mdev->dev, "MDEV: detaching iommu\n");
+	dev_dbg(&mdev->dev, "MDEV: detaching iommu\n");
 }
 
 static int mdev_probe(struct device *dev)

@@ -153,7 +153,7 @@ static int jffs2_garbage_collect_thread(void *_c)
 
 		jffs2_dbg(1, "%s(): pass\n", __func__);
 		if (jffs2_garbage_collect_pass(c) == -ENOSPC) {
-			pr_notice("No space for garbage collection. Aborting GC thread\n");
+			pr_debug("No space for garbage collection. Aborting GC thread\n");
 			goto die;
 		}
 	}

@@ -405,7 +405,7 @@ int fpga_bridge_register(struct fpga_bridge *bridge)
 
 	of_platform_populate(dev->of_node, NULL, NULL, dev);
 
-	dev_info(dev->parent, "fpga bridge [%s] registered\n", bridge->name);
+	dev_dbg(dev->parent, "fpga bridge [%s] registered\n", bridge->name);
 
 	return 0;
 }

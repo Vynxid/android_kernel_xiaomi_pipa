@@ -1457,10 +1457,10 @@ static int lm90_detect(struct i2c_client *client,
 			} else
 			if ((chip_id & 0xF0) == 0x30) { /* LM89/LM99 */
 				name = "lm99";
-				dev_info(&adapter->dev,
+				dev_dbg(&adapter->dev,
 					 "Assuming LM99 chip at 0x%02x\n",
 					 address);
-				dev_info(&adapter->dev,
+				dev_dbg(&adapter->dev,
 					 "If it is an LM89, instantiate it "
 					 "with the new_device sysfs "
 					 "interface\n");
@@ -1939,7 +1939,7 @@ static void lm90_alert(struct i2c_client *client, enum i2c_alert_protocol type,
 							  config | 0x80);
 		}
 	} else {
-		dev_info(&client->dev, "Everything OK\n");
+		dev_dbg(&client->dev, "Everything OK\n");
 	}
 }
 

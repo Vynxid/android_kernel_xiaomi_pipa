@@ -579,7 +579,7 @@ static int sta2x11_mfd_probe(struct pci_dev *pdev,
 	int err, i;
 	struct sta2x11_mfd_setup_data *setup_data;
 
-	dev_info(&pdev->dev, "%s\n", __func__);
+	dev_dbg(&pdev->dev, "%s\n", __func__);
 
 	err = pci_enable_device(pdev);
 	if (err) {
@@ -589,7 +589,7 @@ static int sta2x11_mfd_probe(struct pci_dev *pdev,
 
 	err = pci_enable_msi(pdev);
 	if (err)
-		dev_info(&pdev->dev, "Enable msi failed\n");
+		dev_dbg(&pdev->dev, "Enable msi failed\n");
 
 	setup_data = pci_id->device == PCI_DEVICE_ID_STMICRO_GPIO ?
 		&mfd_setup_data[STA2X11_MFD0] :
@@ -641,7 +641,7 @@ static struct pci_driver sta2x11_mfd_driver = {
 
 static int __init sta2x11_mfd_init(void)
 {
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 	return pci_register_driver(&sta2x11_mfd_driver);
 }
 

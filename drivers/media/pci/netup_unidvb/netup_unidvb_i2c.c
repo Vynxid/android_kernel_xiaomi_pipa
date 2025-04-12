@@ -324,7 +324,7 @@ static int netup_i2c_init(struct netup_unidvb_dev *ndev, int bus_num)
 	ret = i2c_add_adapter(&i2c->adap);
 	if (ret)
 		return ret;
-	dev_info(&ndev->pci_dev->dev,
+	dev_dbg(&ndev->pci_dev->dev,
 		"%s(): registered I2C bus %d at 0x%x\n",
 		__func__,
 		bus_num, (bus_num == 0 ?
@@ -346,7 +346,7 @@ static void netup_i2c_remove(struct netup_unidvb_dev *ndev, int bus_num)
 	netup_i2c_reset(i2c);
 	/* remove adapter */
 	i2c_del_adapter(&i2c->adap);
-	dev_info(&ndev->pci_dev->dev,
+	dev_dbg(&ndev->pci_dev->dev,
 		"netup_i2c_remove: unregistered I2C bus %d\n", bus_num);
 }
 

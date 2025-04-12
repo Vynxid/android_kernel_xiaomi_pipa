@@ -503,7 +503,7 @@ static int ar2315_pci_probe(struct platform_device *pdev)
 
 	register_pci_controller(&apc->pci_ctrl);
 
-	dev_info(dev, "register PCI controller\n");
+	dev_dbg(dev, "register PCI controller\n");
 
 	return 0;
 }

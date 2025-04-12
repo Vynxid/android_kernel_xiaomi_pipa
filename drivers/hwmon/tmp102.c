@@ -282,7 +282,7 @@ static int tmp102_probe(struct i2c_client *client,
 		dev_dbg(dev, "unable to register hwmon device\n");
 		return PTR_ERR(hwmon_dev);
 	}
-	dev_info(dev, "initialized\n");
+	dev_dbg(dev, "initialized\n");
 
 	return 0;
 }

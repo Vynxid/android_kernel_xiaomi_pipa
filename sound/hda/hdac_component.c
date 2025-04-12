@@ -296,7 +296,7 @@ int snd_hdac_acomp_init(struct hdac_bus *bus,
 out_err:
 	bus->audio_component = NULL;
 	devres_destroy(dev, hdac_acomp_release, NULL, NULL);
-	dev_info(dev, "failed to add audio component master (%d)\n", ret);
+	dev_dbg(dev, "failed to add audio component master (%d)\n", ret);
 
 	return ret;
 }

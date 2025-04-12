@@ -132,7 +132,7 @@ static int pca_isa_probe(struct device *dev, unsigned int id)
 {
 	init_waitqueue_head(&pca_wait);
 
-	dev_info(dev, "i/o base %#08lx. irq %d\n", base, irq);
+	dev_dbg(dev, "i/o base %#08lx. irq %d\n", base, irq);
 
 #ifdef CONFIG_PPC
 	if (check_legacy_ioport(base)) {

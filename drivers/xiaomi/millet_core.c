@@ -38,17 +38,17 @@ static void dump_send_msg(struct millet_data *msg)
 	if (!millet_debug)
 		return;
 
-	pr_info("-----up-report msg-head dump-----\n");
+	pr_debug("-----up-report msg-head dump-----\n");
 	if (!msg) {
 		pr_err("msg is NULL");
 		return;
 	}
 
-	pr_info("msg: %d\n", msg->msg_type);
-	pr_info("type: %d\n", msg->owner);
-	pr_info("src_port: 0x%x\n", msg->src_port);
-	pr_info("dest_port: 0x%x\n", msg->dst_port);
-	pr_info("uid: %d\n", msg->uid);
+	pr_debug("msg: %d\n", msg->msg_type);
+	pr_debug("type: %d\n", msg->owner);
+	pr_debug("src_port: 0x%x\n", msg->src_port);
+	pr_debug("dest_port: 0x%x\n", msg->dst_port);
+	pr_debug("uid: %d\n", msg->uid);
 }
 
 static void dump_recv_msg(struct millet_userconf *msg)
@@ -56,16 +56,16 @@ static void dump_recv_msg(struct millet_userconf *msg)
 	if (!millet_debug)
 		return;
 
-	pr_info("-----recv msg from user-----\n");
+	pr_debug("-----recv msg from user-----\n");
 	if (!msg) {
 		pr_err("msg is NULL");
 		return;
 	}
 
-	pr_info("msg: %d\n", msg->msg_type);
-	pr_info("type: %d\n", msg->owner);
-	pr_info("src_port: 0x%x\n", msg->src_port);
-	pr_info("dest_port: 0x%x\n", msg->dst_port);
+	pr_debug("msg: %d\n", msg->msg_type);
+	pr_debug("type: %d\n", msg->owner);
+	pr_debug("src_port: 0x%x\n", msg->src_port);
+	pr_debug("dest_port: 0x%x\n", msg->dst_port);
 }
 
 bool judge_millet_freeze_switch(void)
@@ -144,7 +144,7 @@ int millet_sendto_user(struct task_struct *tsk, struct millet_data *data,
 	ret = nlmsg_unicast(sk->sock, skb, monitor_port);
 	if (ret >= 0) {
 		if (millet_debug)
-			pr_info("nlmsg_unicast snd msg success\n");
+			pr_debug("nlmsg_unicast snd msg success\n");
 	} else {
 		pr_err("nlmsg_unicast failed! %s errno %d\n", __func__, ret);
 		return RET_ERR;
@@ -206,7 +206,7 @@ static void recv_handler(struct sk_buff *skb)
 	}
 
 	if (millet_debug)
-		pr_info("kernel millet receive msg now\n");
+		pr_debug("kernel millet receive msg now\n");
 
 	if (unlikely(skb->len < NLMSG_SPACE(0))) {
 		pr_err("msg len is invalid\n");
@@ -339,7 +339,7 @@ static ssize_t millet_stat_write(struct file *filp, const char __user *buf,
 
 	get_user(tmp, buf);
 	if (!kstrtoint(&tmp, 10, &value)) {
-		pr_info("input value number: %d\n", value);
+		pr_debug("input value number: %d\n", value);
 		stat_reset();
 	}
 
@@ -406,7 +406,7 @@ int register_millet_hook(int type, recv_hook recv_from, send_hook send_to,
 	}
 
 	if (millet_debug) {
-		pr_info("type %d register hook\n", type);
+		pr_debug("type %d register hook\n", type);
 		dump_stack();
 	}
 

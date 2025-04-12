@@ -687,7 +687,7 @@ static int atmel_lcdfb_set_par(struct fb_info *info)
 	value = DIV_ROUND_UP(clk_value_khz, PICOS2KHZ(info->var.pixclock));
 
 	if (value < pix_factor) {
-		dev_notice(info->device, "Bypassing pixel clock divider\n");
+		dev_dbg(info->device, "Bypassing pixel clock divider\n");
 		lcdc_writel(sinfo, ATMEL_LCDC_LCDCON1, ATMEL_LCDC_BYPASS);
 	} else {
 		value = (value / pix_factor) - 1;
@@ -952,7 +952,7 @@ static int __init atmel_lcdfb_init_fbinfo(struct atmel_lcdfb_info *sinfo)
 
 	info->var.activate |= FB_ACTIVATE_FORCE | FB_ACTIVATE_NOW;
 
-	dev_info(info->device,
+	dev_dbg(info->device,
 	       "%luKiB frame buffer at %08lx (mapped at %p)\n",
 	       (unsigned long)info->fix.smem_len / 1024,
 	       (unsigned long)info->fix.smem_start,
@@ -1315,7 +1315,7 @@ static int __init atmel_lcdfb_probe(struct platform_device *pdev)
 	/* Power up the LCDC screen */
 	atmel_lcdfb_power_control(sinfo, 1);
 
-	dev_info(dev, "fb%d: Atmel LCDC at 0x%08lx (mapped at %p), irq %d\n",
+	dev_dbg(dev, "fb%d: Atmel LCDC at 0x%08lx (mapped at %p), irq %d\n",
 		       info->node, info->fix.mmio_start, sinfo->mmio, sinfo->irq_base);
 
 	return 0;

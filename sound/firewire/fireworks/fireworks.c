@@ -303,7 +303,7 @@ error:
 	snd_card_free(efw->card);
 	kfree(efw->resp_buf);
 	efw->resp_buf = NULL;
-	dev_info(&efw->unit->device,
+	dev_dbg(&efw->unit->device,
 		 "Sound card registration failed: %d\n", err);
 }
 

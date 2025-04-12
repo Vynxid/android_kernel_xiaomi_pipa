@@ -2828,7 +2828,7 @@ static int cxd2841er_sleep_tc_to_active_c_band(struct cxd2841er_priv *priv,
 	if (bandwidth != 6000000 &&
 			bandwidth != 7000000 &&
 			bandwidth != 8000000) {
-		dev_info(&priv->i2c->dev, "%s(): unsupported bandwidth %d. Forcing 8Mhz!\n",
+		dev_dbg(&priv->i2c->dev, "%s(): unsupported bandwidth %d. Forcing 8Mhz!\n",
 				__func__, bandwidth);
 		bandwidth = 8000000;
 	}
@@ -3852,7 +3852,7 @@ static struct dvb_frontend *cxd2841er_attach(struct cxd2841er_config *cfg,
 	priv->xtal = cfg->xtal;
 	priv->flags = cfg->flags;
 	priv->frontend.demodulator_priv = priv;
-	dev_info(&priv->i2c->dev,
+	dev_dbg(&priv->i2c->dev,
 		"%s(): I2C adapter %p SLVX addr %x SLVT addr %x\n",
 		__func__, priv->i2c,
 		priv->i2c_addr_slvx, priv->i2c_addr_slvt);
@@ -3912,10 +3912,10 @@ static struct dvb_frontend *cxd2841er_attach(struct cxd2841er_config *cfg,
 			sizeof(struct dvb_frontend_ops));
 	}
 
-	dev_info(&priv->i2c->dev,
+	dev_dbg(&priv->i2c->dev,
 		"%s(): attaching %s DVB-%s frontend\n",
 		__func__, name, type);
-	dev_info(&priv->i2c->dev, "%s(): chip ID 0x%02x OK.\n",
+	dev_dbg(&priv->i2c->dev, "%s(): chip ID 0x%02x OK.\n",
 		__func__, chip_id);
 	return &priv->frontend;
 }

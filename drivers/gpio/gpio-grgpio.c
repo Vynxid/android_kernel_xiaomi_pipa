@@ -439,7 +439,7 @@ static int grgpio_probe(struct platform_device *ofdev)
 		return err;
 	}
 
-	dev_info(dev, "regs=0x%p, base=%d, ngpio=%d, irqs=%s\n",
+	dev_dbg(dev, "regs=0x%p, base=%d, ngpio=%d, irqs=%s\n",
 		 priv->regs, gc->base, gc->ngpio, priv->domain ? "on" : "off");
 
 	return 0;

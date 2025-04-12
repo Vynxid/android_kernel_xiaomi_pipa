@@ -782,7 +782,7 @@ static void __init load_keys_from_buffer(const u8 *p, unsigned int buflen)
 			pr_err("Problem loading in-kernel X.509 certificate (%ld)\n",
 			       PTR_ERR(key));
 		} else {
-			pr_notice("Loaded X.509 cert '%s'\n",
+			pr_debug("Loaded X.509 cert '%s'\n",
 				  key_ref_to_ptr(key)->description);
 			key_ref_put(key);
 		}
@@ -806,7 +806,7 @@ static int __init load_builtin_regdb_keys(void)
 	if (IS_ERR(builtin_regdb_keys))
 		return PTR_ERR(builtin_regdb_keys);
 
-	pr_notice("Loading compiled-in X.509 certificates for regulatory database\n");
+	pr_debug("Loading compiled-in X.509 certificates for regulatory database\n");
 
 #ifdef CONFIG_CFG80211_USE_KERNEL_REGDB_KEYS
 	load_keys_from_buffer(shipped_regdb_certs, shipped_regdb_certs_len);
@@ -1055,10 +1055,10 @@ static void regdb_fw_cb(const struct firmware *fw, void *context)
 	void *db;
 
 	if (!fw) {
-		pr_info("failed to load regulatory.db\n");
+		pr_debug("failed to load regulatory.db\n");
 		set_error = -ENODATA;
 	} else if (!valid_regdb(fw->data, fw->size)) {
-		pr_info("loaded regulatory.db is malformed or signature is missing/invalid\n");
+		pr_debug("loaded regulatory.db is malformed or signature is missing/invalid\n");
 		set_error = -EINVAL;
 	}
 

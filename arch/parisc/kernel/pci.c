@@ -191,7 +191,7 @@ void __ref pcibios_init_bridge(struct pci_dev *dev)
 
 	bridge_ctl_new = bridge_ctl | PCI_BRIDGE_CTL_PARITY |
 		PCI_BRIDGE_CTL_SERR | PCI_BRIDGE_CTL_MASTER_ABORT;
-	dev_info(&dev->dev, "Changing bridge control from 0x%08x to 0x%08x\n",
+	dev_dbg(&dev->dev, "Changing bridge control from 0x%08x to 0x%08x\n",
 		bridge_ctl, bridge_ctl_new);
 
 	pci_write_config_word(dev, PCI_BRIDGE_CONTROL, bridge_ctl_new);
@@ -256,7 +256,7 @@ int pcibios_enable_device(struct pci_dev *dev, int mask)
 #endif
 
 	if (cmd != old_cmd) {
-		dev_info(&dev->dev, "enabling SERR and PARITY (%04x -> %04x)\n",
+		dev_dbg(&dev->dev, "enabling SERR and PARITY (%04x -> %04x)\n",
 			old_cmd, cmd);
 		pci_write_config_word(dev, PCI_COMMAND, cmd);
 	}

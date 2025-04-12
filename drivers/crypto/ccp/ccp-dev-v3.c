@@ -436,11 +436,11 @@ static int ccp_init(struct ccp_device *ccp)
 		dev_dbg(dev, "queue #%u available\n", i);
 	}
 	if (ccp->cmd_q_count == 0) {
-		dev_notice(dev, "no command queues available\n");
+		dev_dbg(dev, "no command queues available\n");
 		ret = -EIO;
 		goto e_pool;
 	}
-	dev_notice(dev, "%u command queues available\n", ccp->cmd_q_count);
+	dev_dbg(dev, "%u command queues available\n", ccp->cmd_q_count);
 
 	/* Disable and clear interrupts until ready */
 	ccp_disable_queue_interrupts(ccp);

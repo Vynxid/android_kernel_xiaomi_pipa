@@ -198,7 +198,7 @@ int qlcnic_fw_cmd_set_drv_version(struct qlcnic_adapter *adapter, u32 fw_cmd)
 
 	err = qlcnic_issue_cmd(adapter, &cmd);
 	if (err) {
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			 "Failed to set driver version in firmware\n");
 		err = -EIO;
 	}
@@ -1056,7 +1056,7 @@ int qlcnic_config_port_mirroring(struct qlcnic_adapter *adapter, u8 id,
 		dev_err(dev, "Failed to configure port mirroring for vNIC function %d on eSwitch %d\n",
 			pci_func, id);
 	else
-		dev_info(dev, "Configured port mirroring for vNIC function %d on eSwitch %d\n",
+		dev_dbg(dev, "Configured port mirroring for vNIC function %d on eSwitch %d\n",
 			 pci_func, id);
 	qlcnic_free_mbx_args(&cmd);
 
@@ -1306,7 +1306,7 @@ static int __qlcnic_get_eswitch_port_config(struct qlcnic_adapter *adapter,
 	qlcnic_free_mbx_args(&cmd);
 
 	if (err == QLCNIC_RCODE_SUCCESS)
-		dev_info(dev, "Get eSwitch port config for vNIC function %d\n",
+		dev_dbg(dev, "Get eSwitch port config for vNIC function %d\n",
 			 pci_func);
 	else
 		dev_err(dev, "Failed to get eswitch port config for vNIC function %d\n",
@@ -1397,7 +1397,7 @@ int qlcnic_config_switch_port(struct qlcnic_adapter *adapter,
 		dev_err(dev, "Failed to configure eswitch for vNIC function %d\n",
 			pci_func);
 	else
-		dev_info(dev, "Configured eSwitch for vNIC function %d\n",
+		dev_dbg(dev, "Configured eSwitch for vNIC function %d\n",
 			 pci_func);
 
 	return err;

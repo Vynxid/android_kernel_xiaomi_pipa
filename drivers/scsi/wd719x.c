@@ -420,7 +420,7 @@ static int wd719x_chip_init(struct wd719x *wd)
 		dev_warn(&wd->pdev->dev, "Unable to read firmware version\n");
 		goto wd719x_init_end;
 	}
-	dev_info(&wd->pdev->dev, "RISC initialized with firmware version %.2x.%.2x\n",
+	dev_dbg(&wd->pdev->dev, "RISC initialized with firmware version %.2x.%.2x\n",
 			wd719x_readb(wd, WD719X_AMR_SCB_OUT + 1),
 			wd719x_readb(wd, WD719X_AMR_SCB_OUT));
 
@@ -467,7 +467,7 @@ static int wd719x_abort(struct scsi_cmnd *cmd)
 	struct wd719x_scb *scb = (struct wd719x_scb *)cmd->host_scribble;
 	struct wd719x *wd = shost_priv(cmd->device->host);
 
-	dev_info(&wd->pdev->dev, "abort command, tag: %x\n", cmd->tag);
+	dev_dbg(&wd->pdev->dev, "abort command, tag: %x\n", cmd->tag);
 
 	action = /*cmd->tag ? WD719X_CMD_ABORT_TAG : */WD719X_CMD_ABORT;
 
@@ -487,7 +487,7 @@ static int wd719x_reset(struct scsi_cmnd *cmd, u8 opcode, u8 device)
 	unsigned long flags;
 	struct wd719x *wd = shost_priv(cmd->device->host);
 
-	dev_info(&wd->pdev->dev, "%s reset requested\n",
+	dev_dbg(&wd->pdev->dev, "%s reset requested\n",
 		 (opcode == WD719X_CMD_BUSRESET) ? "bus" : "device");
 
 	spin_lock_irqsave(wd->sh->host_lock, flags);
@@ -517,7 +517,7 @@ static int wd719x_host_reset(struct scsi_cmnd *cmd)
 	unsigned long flags;
 	int result;
 
-	dev_info(&wd->pdev->dev, "host reset requested\n");
+	dev_dbg(&wd->pdev->dev, "host reset requested\n");
 	spin_lock_irqsave(wd->sh->host_lock, flags);
 	/* Try to reinit the RISC */
 	if (wd719x_chip_init(wd) == 0)
@@ -854,7 +854,7 @@ static int wd719x_board_found(struct Scsi_Host *sh)
 
 	sh->this_id = wd->params->own_scsi_id & WD719X_EE_SCSI_ID_MASK;
 
-	dev_info(&wd->pdev->dev, "%s at I/O 0x%lx, IRQ %u, SCSI ID %d\n",
+	dev_dbg(&wd->pdev->dev, "%s at I/O 0x%lx, IRQ %u, SCSI ID %d\n",
 		 card_types[wd->type], sh->base, sh->irq, sh->this_id);
 
 	return 0;

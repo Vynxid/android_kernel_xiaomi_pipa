@@ -770,14 +770,14 @@ static int qti_hwkm_parse_clock_info(struct platform_device *pdev,
 
 	cnt = of_property_count_strings(np, "clock-names");
 	if (cnt <= 0) {
-		dev_info(dev, "%s: Unable to find clocks, assuming enabled\n",
+		dev_dbg(dev, "%s: Unable to find clocks, assuming enabled\n",
 				__func__);
 		ret = cnt;
 		goto out;
 	}
 
 	if (!of_get_property(np, "qcom,op-freq-hz", &len)) {
-		dev_info(dev, "qcom,op-freq-hz property not specified\n");
+		dev_dbg(dev, "qcom,op-freq-hz property not specified\n");
 		goto out;
 	}
 

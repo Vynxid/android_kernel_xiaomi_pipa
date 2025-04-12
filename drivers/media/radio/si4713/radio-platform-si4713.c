@@ -190,7 +190,7 @@ static int radio_si4713_pdriver_probe(struct platform_device *pdev)
 		rval = -EIO;
 		goto unregister_v4l2_dev;
 	}
-	dev_info(&pdev->dev, "New device successfully probed\n");
+	dev_dbg(&pdev->dev, "New device successfully probed\n");
 
 	goto exit;
 

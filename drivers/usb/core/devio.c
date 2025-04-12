@@ -110,7 +110,7 @@ MODULE_PARM_DESC(usbfs_snoop_max,
 #define snoop(dev, format, arg...)				\
 	do {							\
 		if (usbfs_snoop)				\
-			dev_info(dev, format, ## arg);		\
+			dev_dbg(dev, format, ## arg);		\
 	} while (0)
 
 enum snoop_when {
@@ -463,21 +463,21 @@ static void snoop_urb(struct usb_device *udev,
 
 	if (userurb) {		/* Async */
 		if (when == SUBMIT)
-			dev_info(&udev->dev, "userurb %px, ep%d %s-%s, "
+			dev_dbg(&udev->dev, "userurb %px, ep%d %s-%s, "
 					"length %u\n",
 					userurb, ep, t, d, length);
 		else
-			dev_info(&udev->dev, "userurb %px, ep%d %s-%s, "
+			dev_dbg(&udev->dev, "userurb %px, ep%d %s-%s, "
 					"actual_length %u status %d\n",
 					userurb, ep, t, d, length,
 					timeout_or_status);
 	} else {
 		if (when == SUBMIT)
-			dev_info(&udev->dev, "ep%d %s-%s, length %u, "
+			dev_dbg(&udev->dev, "ep%d %s-%s, length %u, "
 					"timeout %d\n",
 					ep, t, d, length, timeout_or_status);
 		else
-			dev_info(&udev->dev, "ep%d %s-%s, actual_length %u, "
+			dev_dbg(&udev->dev, "ep%d %s-%s, actual_length %u, "
 					"status %d\n",
 					ep, t, d, length, timeout_or_status);
 	}
@@ -862,7 +862,7 @@ static int check_ctrlrecip(struct usb_dev_state *ps, unsigned int requesttype,
 			 */
 			ret = findintfep(ps->dev, index ^ 0x80);
 			if (ret >= 0)
-				dev_info(&ps->dev->dev,
+				dev_dbg(&ps->dev->dev,
 					"%s: process %i (%s) requesting ep %02x but needs %02x\n",
 					__func__, task_pid_nr(current),
 					current->comm, index, index ^ 0x80);

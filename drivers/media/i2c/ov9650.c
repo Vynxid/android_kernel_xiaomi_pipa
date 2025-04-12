@@ -1456,14 +1456,14 @@ static int ov965x_configure_gpios(struct ov965x *ov965x)
 	ov965x->gpios[GPIO_PWDN] = devm_gpiod_get_optional(dev, "powerdown",
 							GPIOD_OUT_HIGH);
 	if (IS_ERR(ov965x->gpios[GPIO_PWDN])) {
-		dev_info(dev, "can't get %s GPIO\n", "powerdown");
+		dev_dbg(dev, "can't get %s GPIO\n", "powerdown");
 		return PTR_ERR(ov965x->gpios[GPIO_PWDN]);
 	}
 
 	ov965x->gpios[GPIO_RST] = devm_gpiod_get_optional(dev, "reset",
 							GPIOD_OUT_HIGH);
 	if (IS_ERR(ov965x->gpios[GPIO_RST])) {
-		dev_info(dev, "can't get %s GPIO\n", "reset");
+		dev_dbg(dev, "can't get %s GPIO\n", "reset");
 		return PTR_ERR(ov965x->gpios[GPIO_RST]);
 	}
 

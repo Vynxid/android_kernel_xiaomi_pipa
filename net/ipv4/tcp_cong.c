@@ -81,7 +81,7 @@ int tcp_register_congestion_control(struct tcp_congestion_ops *ca)
 
 	spin_lock(&tcp_cong_list_lock);
 	if (ca->key == TCP_CA_UNSPEC || tcp_ca_find_key(ca->key)) {
-		pr_notice("%s already registered or non-unique key\n",
+		pr_debug("%s already registered or non-unique key\n",
 			  ca->name);
 		ret = -EEXIST;
 	} else {

@@ -121,7 +121,7 @@ static int st_rproc_start(struct rproc *rproc)
 		}
 	}
 
-	dev_info(&rproc->dev, "Started from 0x%x\n", rproc->bootaddr);
+	dev_dbg(&rproc->dev, "Started from 0x%x\n", rproc->bootaddr);
 
 	return 0;
 

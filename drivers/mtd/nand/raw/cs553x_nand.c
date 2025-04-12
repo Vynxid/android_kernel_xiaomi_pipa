@@ -187,11 +187,11 @@ static int __init cs553x_init_one(int cs, int mmio, unsigned long adr)
 	struct nand_chip *this;
 	struct mtd_info *new_mtd;
 
-	pr_notice("Probing CS553x NAND controller CS#%d at %sIO 0x%08lx\n",
+	pr_debug("Probing CS553x NAND controller CS#%d at %sIO 0x%08lx\n",
 		  cs, mmio ? "MM" : "P", adr);
 
 	if (!mmio) {
-		pr_notice("PIO mode not yet implemented for CS553X NAND controller\n");
+		pr_debug("PIO mode not yet implemented for CS553X NAND controller\n");
 		return -ENXIO;
 	}
 
@@ -294,7 +294,7 @@ static int __init cs553x_init(void)
 	/* If it doesn't have the NAND controller enabled, abort */
 	rdmsrl(MSR_DIVIL_BALL_OPTS, val);
 	if (val & PIN_OPT_IDE) {
-		pr_info("CS553x NAND controller: Flash I/O not enabled in MSR_DIVIL_BALL_OPTS.\n");
+		pr_debug("CS553x NAND controller: Flash I/O not enabled in MSR_DIVIL_BALL_OPTS.\n");
 		return -ENXIO;
 	}
 

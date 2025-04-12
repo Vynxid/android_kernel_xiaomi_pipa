@@ -884,7 +884,7 @@ static int pic32_uart_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, port);
 
-	dev_info(&pdev->dev, "%s: uart(%d) driver initialized.\n",
+	dev_dbg(&pdev->dev, "%s: uart(%d) driver initialized.\n",
 		 __func__, uart_idx);
 
 	return 0;

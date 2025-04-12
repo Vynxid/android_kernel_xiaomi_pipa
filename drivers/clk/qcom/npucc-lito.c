@@ -1166,7 +1166,7 @@ static int npu_cc_lito_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered NPU_CC clocks\n");
+	dev_dbg(&pdev->dev, "Registered NPU_CC clocks\n");
 
 	return 0;
 

@@ -393,7 +393,7 @@ void xen_save_time_memory_area(void)
 
 	ret = HYPERVISOR_vcpu_op(VCPUOP_register_vcpu_time_memory_area, 0, &t);
 	if (ret != 0)
-		pr_notice("Cannot save secondary vcpu_time_info (err %d)",
+		pr_debug("Cannot save secondary vcpu_time_info (err %d)",
 			  ret);
 	else
 		clear_page(xen_clock);
@@ -420,7 +420,7 @@ void xen_restore_time_memory_area(void)
 	 * in pvti and fallbacks to a system call for a reliable timestamp.
 	 */
 	if (ret != 0)
-		pr_notice("Cannot restore secondary vcpu_time_info (err %d)",
+		pr_debug("Cannot restore secondary vcpu_time_info (err %d)",
 			  ret);
 
 out:
@@ -443,7 +443,7 @@ static void xen_setup_vsyscall_time_info(void)
 
 	ret = HYPERVISOR_vcpu_op(VCPUOP_register_vcpu_time_memory_area, 0, &t);
 	if (ret) {
-		pr_notice("xen: VCLOCK_PVCLOCK not supported (err %d)\n", ret);
+		pr_debug("xen: VCLOCK_PVCLOCK not supported (err %d)\n", ret);
 		free_page((unsigned long)ti);
 		return;
 	}
@@ -460,7 +460,7 @@ static void xen_setup_vsyscall_time_info(void)
 		if (!ret)
 			free_page((unsigned long)ti);
 
-		pr_notice("xen: VCLOCK_PVCLOCK not supported (tsc unstable)\n");
+		pr_debug("xen: VCLOCK_PVCLOCK not supported (tsc unstable)\n");
 		return;
 	}
 
@@ -575,7 +575,7 @@ void __init xen_hvm_init_time_ops(void)
 	 * __this_cpu_read(xen_vcpu) is available.
 	 */
 	if (!__this_cpu_read(xen_vcpu)) {
-		pr_info("Delay xen_init_time_common() as kernel is running on vcpu=%d\n",
+		pr_debug("Delay xen_init_time_common() as kernel is running on vcpu=%d\n",
 			xen_vcpu_nr(0));
 		return;
 	}

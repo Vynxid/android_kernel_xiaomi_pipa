@@ -477,7 +477,7 @@ static void dt282x_ai_dma_interrupt(struct comedi_device *dev,
 
 	devpriv->nread -= nsamples;
 	if (devpriv->nread < 0) {
-		dev_info(dev->class_dev, "nread off by one\n");
+		dev_dbg(dev->class_dev, "nread off by one\n");
 		devpriv->nread = 0;
 	}
 	if (!devpriv->nread) {

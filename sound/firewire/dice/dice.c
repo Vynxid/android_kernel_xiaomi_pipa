@@ -207,7 +207,7 @@ error:
 	snd_dice_transaction_destroy(dice);
 	snd_dice_stream_destroy_duplex(dice);
 	snd_card_free(dice->card);
-	dev_info(&dice->unit->device,
+	dev_dbg(&dice->unit->device,
 		 "Sound card registration failed: %d\n", err);
 }
 

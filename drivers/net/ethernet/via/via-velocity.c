@@ -2757,7 +2757,7 @@ static int velocity_probe(struct device *dev, int irq,
 	 * can support more than MAX_UNITS.
 	 */
 	if (velocity_nics >= MAX_UNITS) {
-		dev_notice(dev, "already found %d NICs.\n", velocity_nics);
+		dev_dbg(dev, "already found %d NICs.\n", velocity_nics);
 		return -ENODEV;
 	}
 

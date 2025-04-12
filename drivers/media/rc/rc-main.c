@@ -1882,7 +1882,7 @@ int rc_register_device(struct rc_dev *dev)
 		goto out_rx_free;
 
 	path = kobject_get_path(&dev->dev.kobj, GFP_KERNEL);
-	dev_info(&dev->dev, "%s as %s\n",
+	dev_dbg(&dev->dev, "%s as %s\n",
 		 dev->device_name ?: "Unspecified device", path ?: "N/A");
 	kfree(path);
 

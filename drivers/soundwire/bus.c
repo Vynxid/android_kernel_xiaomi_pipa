@@ -457,7 +457,7 @@ static int sdw_assign_device_num(struct sdw_slave *slave)
 			return dev_num;
 		}
 	} else {
-		dev_info(slave->bus->dev,
+		dev_dbg(slave->bus->dev,
 				"Slave already registered dev_num:%d",
 				slave->dev_num);
 

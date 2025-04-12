@@ -453,7 +453,7 @@ static int pca954x_probe(struct i2c_client *client,
 			goto fail_cleanup;
 	}
 
-	dev_info(dev, "registered %d multiplexed busses for I2C %s %s\n",
+	dev_dbg(dev, "registered %d multiplexed busses for I2C %s %s\n",
 		 num, data->chip->muxtype == pca954x_ismux
 				? "mux" : "switch", client->name);
 

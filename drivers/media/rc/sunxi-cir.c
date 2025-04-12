@@ -281,7 +281,7 @@ static int sunxi_ir_probe(struct platform_device *pdev)
 	tmp = readl(ir->base + SUNXI_IR_CTL_REG);
 	writel(tmp | REG_CTL_GEN | REG_CTL_RXEN, ir->base + SUNXI_IR_CTL_REG);
 
-	dev_info(dev, "initialized sunXi IR driver\n");
+	dev_dbg(dev, "initialized sunXi IR driver\n");
 	return 0;
 
 exit_free_dev:

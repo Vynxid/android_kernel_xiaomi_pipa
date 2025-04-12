@@ -52,7 +52,7 @@ static int s3fwrn5_firmware_update(struct s3fwrn5_info *info)
 	if (!need_update)
 		goto out;
 
-	dev_info(&info->ndev->nfc_dev->dev, "Detected new firmware version\n");
+	dev_dbg(&info->ndev->nfc_dev->dev, "Detected new firmware version\n");
 
 	ret = s3fwrn5_fw_download(&info->fw_info);
 	if (ret < 0)

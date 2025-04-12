@@ -666,7 +666,7 @@ static int ipmmu_attach_device(struct iommu_domain *io_domain,
 			dev_err(dev, "Unable to initialize IPMMU context\n");
 			domain->mmu = NULL;
 		} else {
-			dev_info(dev, "Using IPMMU context %u\n",
+			dev_dbg(dev, "Using IPMMU context %u\n",
 				 domain->context_id);
 		}
 	} else if (domain->mmu != mmu) {
@@ -678,7 +678,7 @@ static int ipmmu_attach_device(struct iommu_domain *io_domain,
 			dev_name(mmu->dev), dev_name(domain->mmu->dev));
 		ret = -EINVAL;
 	} else
-		dev_info(dev, "Reusing IPMMU context %u\n", domain->context_id);
+		dev_dbg(dev, "Reusing IPMMU context %u\n", domain->context_id);
 
 	mutex_unlock(&domain->mutex);
 
@@ -1043,7 +1043,7 @@ static int ipmmu_probe(struct platform_device *pdev)
 		ipmmu_device_reset(mmu);
 
 		if (mmu->features->reserved_context) {
-			dev_info(&pdev->dev, "IPMMU context 0 is reserved\n");
+			dev_dbg(&pdev->dev, "IPMMU context 0 is reserved\n");
 			set_bit(0, mmu->ctx);
 		}
 	}

@@ -655,7 +655,7 @@ static int aw2015_check_chipid(struct aw2015_led *led)
 	u8 val = 0;
 
 	aw2015_read(led, AW2015_REG_RESET, &val);
-	dev_info(&led->client->dev, "AW2015 chip id %0x", val);
+	dev_dbg(&led->client->dev, "AW2015 chip id %0x", val);
 	if (val == AW2015_CHIPID)
 		return 0;
 
@@ -934,7 +934,7 @@ static int aw2015_led_get_board_version(void)
 	if (match) {
 		memcpy(boot, (match + strlen("androidboot.hwlevel=")),
 		       sizeof(boot) - 1);
-		pr_info("%s: hwlevel is %s\n", __func__, boot);
+		pr_debug("%s: hwlevel is %s\n", __func__, boot);
 		if (!strncmp(boot, "P0.1", strlen("P0.1")))
 			version = 0;
 		else if (!strncmp(boot, "P1", strlen("P1")))
@@ -959,7 +959,7 @@ static bool aw2015_led_is_global(void)
 	if (match) {
 		memcpy(boot, (match + strlen("androidboot.hwc=")),
 		       sizeof(boot) - 1);
-		pr_info("%s: hw country is %s\n", __func__, boot);
+		pr_debug("%s: hw country is %s\n", __func__, boot);
 		if (!strncmp(boot, "GL", strlen("GL")))
 			global = true;
 	}
@@ -983,7 +983,7 @@ static int aw2015_led_probe(struct i2c_client *client,
 	 * Note: Global P1 is based on China P2 */
 	if (right && aw2015_led_get_board_version() < 2 &&
 	    !aw2015_led_is_global()) {
-		pr_info("%s: China/India P0.1 and P1 hardware don't have right aw2015\n",
+		pr_debug("%s: China/India P0.1 and P1 hardware don't have right aw2015\n",
 			__func__);
 		return -EINVAL;
 	}

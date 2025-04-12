@@ -494,7 +494,7 @@ static int ps3disk_probe(struct ps3_system_bus_device *_dev)
 	set_capacity(gendisk,
 		     dev->regions[dev->region_idx].size*priv->blocking_factor);
 
-	dev_info(&dev->sbd.core,
+	dev_dbg(&dev->sbd.core,
 		 "%s is a %s (%llu MiB total, %lu MiB for OtherOS)\n",
 		 gendisk->disk_name, priv->model, priv->raw_capacity >> 11,
 		 get_capacity(gendisk) >> 11);
@@ -530,7 +530,7 @@ static int ps3disk_remove(struct ps3_system_bus_device *_dev)
 	del_gendisk(priv->gendisk);
 	blk_cleanup_queue(priv->queue);
 	put_disk(priv->gendisk);
-	dev_notice(&dev->sbd.core, "Synchronizing disk cache\n");
+	dev_dbg(&dev->sbd.core, "Synchronizing disk cache\n");
 	ps3disk_sync_cache(dev);
 	ps3stor_teardown(dev);
 	kfree(dev->bounce_buf);
@@ -564,7 +564,7 @@ static int __init ps3disk_init(void)
 	}
 	ps3disk_major = error;
 
-	pr_info("%s:%u: registered block device major %d\n", __func__,
+	pr_debug("%s:%u: registered block device major %d\n", __func__,
 		__LINE__, ps3disk_major);
 
 	error = ps3_system_bus_driver_register(&ps3disk);

@@ -783,7 +783,7 @@ static int omap_rtc_probe(struct platform_device *pdev)
 	if (rtc->type->has_power_up_reset) {
 		mask |= OMAP_RTC_STATUS_POWER_UP;
 		if (reg & OMAP_RTC_STATUS_POWER_UP)
-			dev_info(&pdev->dev, "RTC power up reset detected\n");
+			dev_dbg(&pdev->dev, "RTC power up reset detected\n");
 	}
 
 	if (reg & mask)
@@ -792,7 +792,7 @@ static int omap_rtc_probe(struct platform_device *pdev)
 	/* On boards with split power, RTC_ON_NOFF won't reset the RTC */
 	reg = rtc_read(rtc, OMAP_RTC_CTRL_REG);
 	if (reg & OMAP_RTC_CTRL_STOP)
-		dev_info(&pdev->dev, "already running\n");
+		dev_dbg(&pdev->dev, "already running\n");
 
 	/* force to 24 hour mode */
 	new_ctrl = reg & (OMAP_RTC_CTRL_SPLIT | OMAP_RTC_CTRL_AUTO_COMP);
@@ -814,7 +814,7 @@ static int omap_rtc_probe(struct platform_device *pdev)
 	 */
 
 	if (new_ctrl & OMAP_RTC_CTRL_SPLIT)
-		dev_info(&pdev->dev, "split power mode\n");
+		dev_dbg(&pdev->dev, "split power mode\n");
 
 	if (reg != new_ctrl)
 		rtc_write(rtc, OMAP_RTC_CTRL_REG, new_ctrl);

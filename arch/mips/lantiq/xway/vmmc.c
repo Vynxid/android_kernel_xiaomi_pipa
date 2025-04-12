@@ -41,12 +41,12 @@ static int vmmc_probe(struct platform_device *pdev)
 					     --gpio_count, &flags);
 		if (gpio_request(gpio, "vmmc-relay"))
 			continue;
-		dev_info(&pdev->dev, "requested GPIO %d\n", gpio);
+		dev_dbg(&pdev->dev, "requested GPIO %d\n", gpio);
 		gpio_direction_output(gpio,
 				      (flags & OF_GPIO_ACTIVE_LOW) ? (0) : (1));
 	}
 
-	dev_info(&pdev->dev, "reserved %dMB at 0x%p", CP1_SIZE >> 20, cp1_base);
+	dev_dbg(&pdev->dev, "reserved %dMB at 0x%p", CP1_SIZE >> 20, cp1_base);
 
 	return 0;
 }

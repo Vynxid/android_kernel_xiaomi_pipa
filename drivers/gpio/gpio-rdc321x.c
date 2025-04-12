@@ -192,7 +192,7 @@ static int rdc321x_gpio_probe(struct platform_device *pdev)
 	if (err)
 		return err;
 
-	dev_info(&pdev->dev, "registering %d GPIOs\n",
+	dev_dbg(&pdev->dev, "registering %d GPIOs\n",
 					rdc321x_gpio_dev->chip.ngpio);
 	return devm_gpiochip_add_data(&pdev->dev, &rdc321x_gpio_dev->chip,
 				      rdc321x_gpio_dev);

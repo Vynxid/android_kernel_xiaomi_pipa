@@ -92,7 +92,7 @@ static void check_vbus_state(struct tahvo_usb *tu)
 		default:
 			break;
 		}
-		dev_info(&tu->pt_dev->dev, "USB cable connected\n");
+		dev_dbg(&tu->pt_dev->dev, "USB cable connected\n");
 	} else {
 		switch (tu->phy.otg->state) {
 		case OTG_STATE_B_PERIPHERAL:
@@ -107,7 +107,7 @@ static void check_vbus_state(struct tahvo_usb *tu)
 		default:
 			break;
 		}
-		dev_info(&tu->pt_dev->dev, "USB cable disconnected\n");
+		dev_dbg(&tu->pt_dev->dev, "USB cable disconnected\n");
 	}
 
 	prev_state = tu->vbus_state;
@@ -284,10 +284,10 @@ static ssize_t otg_mode_store(struct device *device,
 			tahvo_usb_stop_peripheral(tu);
 		tu->tahvo_mode = TAHVO_MODE_HOST;
 		if (tu->phy.otg->host) {
-			dev_info(device, "HOST mode: host controller present\n");
+			dev_dbg(device, "HOST mode: host controller present\n");
 			tahvo_usb_become_host(tu);
 		} else {
-			dev_info(device, "HOST mode: no host controller, powering off\n");
+			dev_dbg(device, "HOST mode: no host controller, powering off\n");
 			tahvo_usb_power_off(tu);
 		}
 		r = strlen(buf);
@@ -296,10 +296,10 @@ static ssize_t otg_mode_store(struct device *device,
 			tahvo_usb_stop_host(tu);
 		tu->tahvo_mode = TAHVO_MODE_PERIPHERAL;
 		if (tu->phy.otg->gadget) {
-			dev_info(device, "PERIPHERAL mode: gadget driver present\n");
+			dev_dbg(device, "PERIPHERAL mode: gadget driver present\n");
 			tahvo_usb_become_peripheral(tu);
 		} else {
-			dev_info(device, "PERIPHERAL mode: no gadget driver, powering off\n");
+			dev_dbg(device, "PERIPHERAL mode: no gadget driver, powering off\n");
 			tahvo_usb_power_off(tu);
 		}
 		r = strlen(buf);

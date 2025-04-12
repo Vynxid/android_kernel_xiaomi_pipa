@@ -400,17 +400,17 @@ static int acpi_tad_probe(struct platform_device *pdev)
 	 */
 	status = acpi_evaluate_integer(handle, "_GCP", NULL, &caps);
 	if (ACPI_FAILURE(status)) {
-		dev_info(dev, "Unable to get capabilities\n");
+		dev_dbg(dev, "Unable to get capabilities\n");
 		return -ENODEV;
 	}
 
 	if (!(caps & ACPI_TAD_AC_WAKE)) {
-		dev_info(dev, "Unsupported capabilities\n");
+		dev_dbg(dev, "Unsupported capabilities\n");
 		return -ENODEV;
 	}
 
 	if (!acpi_has_method(handle, "_PRW")) {
-		dev_info(dev, "Missing _PRW\n");
+		dev_dbg(dev, "Missing _PRW\n");
 		return -ENODEV;
 	}
 

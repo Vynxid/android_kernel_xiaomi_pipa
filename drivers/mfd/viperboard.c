@@ -86,7 +86,7 @@ static int vprbrd_probe(struct usb_interface *interface,
 		version = version | vb->buf[0];
 	}
 
-	dev_info(&interface->dev,
+	dev_dbg(&interface->dev,
 		 "version %x.%02x found at bus %03d address %03d\n",
 		 version >> 8, version & 0xff,
 		 vb->usb_dev->bus->busnum, vb->usb_dev->devnum);

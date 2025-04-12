@@ -158,7 +158,7 @@ int rsxx_load_config(struct rsxx_cardinfo *card)
 		if (crc != card->config.hdr.crc) {
 			dev_err(CARD_TO_DEV(card),
 				"Config corruption detected!\n");
-			dev_info(CARD_TO_DEV(card),
+			dev_dbg(CARD_TO_DEV(card),
 				"CRC (sb x%08x is x%08x)\n",
 				card->config.hdr.crc, crc);
 			return -EIO;
@@ -177,7 +177,7 @@ int rsxx_load_config(struct rsxx_cardinfo *card)
 		 */
 		return -EINVAL;
 	} else {
-		dev_info(CARD_TO_DEV(card),
+		dev_dbg(CARD_TO_DEV(card),
 			"Initializing card configuration.\n");
 		initialize_config(&card->config);
 		st = rsxx_save_config(card);

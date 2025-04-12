@@ -1204,7 +1204,7 @@ static void sfp_sm_probe_phy(struct sfp *sfp)
 
 	phy = mdiobus_scan(sfp->i2c_mii, SFP_PHY_ADDR);
 	if (phy == ERR_PTR(-ENODEV)) {
-		dev_info(sfp->dev, "no PHY detected\n");
+		dev_dbg(sfp->dev, "no PHY detected\n");
 		return;
 	}
 	if (IS_ERR(phy)) {
@@ -1363,7 +1363,7 @@ static int sfp_sm_mod_hpower(struct sfp *sfp)
 		goto err;
 	}
 
-	dev_info(sfp->dev, "Module switched to %u.%uW power level\n",
+	dev_dbg(sfp->dev, "Module switched to %u.%uW power level\n",
 		 power / 1000, (power / 100) % 10);
 	return T_HPOWER_LEVEL;
 
@@ -1431,7 +1431,7 @@ static int sfp_sm_mod_probe(struct sfp *sfp)
 
 	sfp->id = id;
 
-	dev_info(sfp->dev, "module %.*s %.*s rev %.*s sn %.*s dc %.*s\n",
+	dev_dbg(sfp->dev, "module %.*s %.*s rev %.*s sn %.*s dc %.*s\n",
 		 (int)sizeof(id.base.vendor_name), id.base.vendor_name,
 		 (int)sizeof(id.base.vendor_pn), id.base.vendor_pn,
 		 (int)sizeof(id.base.vendor_rev), id.base.vendor_rev,
@@ -1475,7 +1475,7 @@ static void sfp_sm_mod_remove(struct sfp *sfp)
 
 	memset(&sfp->id, 0, sizeof(sfp->id));
 
-	dev_info(sfp->dev, "module removed\n");
+	dev_dbg(sfp->dev, "module removed\n");
 }
 
 static void sfp_sm_event(struct sfp *sfp, unsigned int event)
@@ -1608,7 +1608,7 @@ static void sfp_sm_event(struct sfp *sfp, unsigned int event)
 		if (event == SFP_E_TIMEOUT && sfp->state & SFP_F_TX_FAULT) {
 			sfp_sm_fault(sfp, false);
 		} else if (event == SFP_E_TIMEOUT || event == SFP_E_TX_CLEAR) {
-			dev_info(sfp->dev, "module transmit fault recovered\n");
+			dev_dbg(sfp->dev, "module transmit fault recovered\n");
 			sfp_sm_link_check_los(sfp);
 		}
 		break;
@@ -1867,7 +1867,7 @@ static int sfp_probe(struct platform_device *pdev)
 	if (!sfp->max_power_mW)
 		sfp->max_power_mW = 1000;
 
-	dev_info(sfp->dev, "Host maximum power %u.%uW\n",
+	dev_dbg(sfp->dev, "Host maximum power %u.%uW\n",
 		 sfp->max_power_mW / 1000, (sfp->max_power_mW / 100) % 10);
 
 	/* Get the initial state, and always signal TX disable,

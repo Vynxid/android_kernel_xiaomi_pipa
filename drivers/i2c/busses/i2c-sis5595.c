@@ -182,7 +182,7 @@ static int sis5595_setup(struct pci_dev *SIS5595_dev)
 	}
 
 	if (force_addr) {
-		dev_info(&SIS5595_dev->dev, "forcing ISA address 0x%04X\n", sis5595_base);
+		dev_dbg(&SIS5595_dev->dev, "forcing ISA address 0x%04X\n", sis5595_base);
 		if (pci_write_config_word(SIS5595_dev, ACPI_BASE, sis5595_base)
 		    != PCIBIOS_SUCCESSFUL)
 			goto error;
@@ -200,7 +200,7 @@ static int sis5595_setup(struct pci_dev *SIS5595_dev)
 	    != PCIBIOS_SUCCESSFUL)
 		goto error;
 	if ((val & 0x80) == 0) {
-		dev_info(&SIS5595_dev->dev, "enabling ACPI\n");
+		dev_dbg(&SIS5595_dev->dev, "enabling ACPI\n");
 		if (pci_write_config_byte(SIS5595_dev, SIS5595_ENABLE_REG, val | 0x80)
 		    != PCIBIOS_SUCCESSFUL)
 			goto error;

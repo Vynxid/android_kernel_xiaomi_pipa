@@ -669,7 +669,7 @@ static int hisi_lpc_probe(struct platform_device *pdev)
 	dev_set_drvdata(dev, lpcdev);
 
 	io_end = lpcdev->io_host->io_start + lpcdev->io_host->size;
-	dev_info(dev, "registered range [%pa - %pa]\n",
+	dev_dbg(dev, "registered range [%pa - %pa]\n",
 		 &lpcdev->io_host->io_start, &io_end);
 
 	return ret;

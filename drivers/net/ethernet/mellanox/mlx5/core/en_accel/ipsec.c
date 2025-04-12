@@ -230,7 +230,7 @@ static inline int mlx5e_xfrm_validate_state(struct xfrm_state *x)
 	}
 	if (x->props.mode != XFRM_MODE_TRANSPORT &&
 	    x->props.mode != XFRM_MODE_TUNNEL) {
-		dev_info(&netdev->dev, "Only transport and tunnel xfrm states may be offloaded\n");
+		dev_dbg(&netdev->dev, "Only transport and tunnel xfrm states may be offloaded\n");
 		return -EINVAL;
 	}
 	if (x->id.proto != IPPROTO_ESP) {

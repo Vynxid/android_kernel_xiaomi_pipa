@@ -189,7 +189,7 @@ static int send_command(struct mxl *state, u32 size, u8 *buf)
 	if (state->base->fwversion > 0x02010109)  {
 		read_register_unlocked(state, DMA_I2C_INTERRUPT_ADDR, &val);
 		if (DMA_INTR_PROT_WR_CMP & val)
-			dev_info(state->i2cdev, "%s busy\n", __func__);
+			dev_dbg(state->i2cdev, "%s busy\n", __func__);
 		while ((DMA_INTR_PROT_WR_CMP & val) && --count) {
 			mutex_unlock(&state->base->i2c_lock);
 			usleep_range(1000, 2000);
@@ -198,7 +198,7 @@ static int send_command(struct mxl *state, u32 size, u8 *buf)
 					       &val);
 		}
 		if (!count) {
-			dev_info(state->i2cdev, "%s busy\n", __func__);
+			dev_dbg(state->i2cdev, "%s busy\n", __func__);
 			mutex_unlock(&state->base->i2c_lock);
 			return -EBUSY;
 		}
@@ -950,14 +950,14 @@ static int check_fw(struct mxl *state, u8 *mbin, u32 mbin_len)
 	u32 i;
 
 	if (fh->id != 'M' || fh->fmt_version != '1' || flen > 0x3FFF0) {
-		dev_info(state->i2cdev, "Invalid FW Header\n");
+		dev_dbg(state->i2cdev, "Invalid FW Header\n");
 		return -1;
 	}
 	fw = mbin + sizeof(struct MBIN_FILE_HEADER_T);
 	for (i = 0; i < flen; i += 1)
 		cs += fw[i];
 	if (cs != fh->image_checksum) {
-		dev_info(state->i2cdev, "Invalid FW Checksum\n");
+		dev_dbg(state->i2cdev, "Invalid FW Checksum\n");
 		return -1;
 	}
 	return 0;
@@ -1039,7 +1039,7 @@ static int firmware_download(struct mxl *state, u8 *mbin, u32 mbin_len)
 	if (!firmware_is_alive(state))
 		return -1;
 
-	dev_info(state->i2cdev, "Hydra FW alive. Hail!\n");
+	dev_dbg(state->i2cdev, "Hydra FW alive. Hail!\n");
 
 	/* sometimes register values are wrong shortly
 	 * after first heart beats
@@ -1327,8 +1327,8 @@ static int set_drive_strength(struct mxl *state,
 	u32 val;
 
 	read_register(state, 0x90000194, &val);
-	dev_info(state->i2cdev, "DIGIO = %08x\n", val);
-	dev_info(state->i2cdev, "set drive_strength = %u\n", ts_drive_strength);
+	dev_dbg(state->i2cdev, "DIGIO = %08x\n", val);
+	dev_dbg(state->i2cdev, "set drive_strength = %u\n", ts_drive_strength);
 
 
 	stat |= update_by_mnemonic(state, 0x90000194, 0, 3, ts_drive_strength);
@@ -1623,7 +1623,7 @@ static int validate_sku(struct mxl *state)
 	if (status)
 		return -1;
 
-	dev_info(state->i2cdev, "padMuxBond=%08x, prcmChipId=%08x, prcmSoCId=%08x\n",
+	dev_dbg(state->i2cdev, "padMuxBond=%08x, prcmChipId=%08x, prcmSoCId=%08x\n",
 		pad_mux_bond, prcm_chip_id, prcm_so_cid);
 
 	if (prcm_chip_id != 0x560) {
@@ -1667,17 +1667,17 @@ static int get_fwinfo(struct mxl *state)
 	status = read_by_mnemonic(state, 0x90000190, 0, 3, &val);
 	if (status)
 		return status;
-	dev_info(state->i2cdev, "chipID=%08x\n", val);
+	dev_dbg(state->i2cdev, "chipID=%08x\n", val);
 
 	status = read_by_mnemonic(state, 0x80030004, 8, 8, &val);
 	if (status)
 		return status;
-	dev_info(state->i2cdev, "chipVer=%08x\n", val);
+	dev_dbg(state->i2cdev, "chipVer=%08x\n", val);
 
 	status = read_register(state, HYDRA_FIRMWARE_VERSION, &val);
 	if (status)
 		return status;
-	dev_info(state->i2cdev, "FWVer=%08x\n", val);
+	dev_dbg(state->i2cdev, "FWVer=%08x\n", val);
 
 	state->base->fwversion = val;
 	return status;
@@ -1791,7 +1791,7 @@ static int probe(struct mxl *state, struct mxl5xx_cfg *cfg)
 		state->base->chipversion = 0;
 	else
 		state->base->chipversion = (chipver == 2) ? 2 : 1;
-	dev_info(state->i2cdev, "Hydra chip version %u\n",
+	dev_dbg(state->i2cdev, "Hydra chip version %u\n",
 		state->base->chipversion);
 
 	cfg_dev_xtal(state, cfg->clk, cfg->cap, 0);

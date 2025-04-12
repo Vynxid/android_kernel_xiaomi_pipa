@@ -154,7 +154,7 @@ error:
 	snd_tscm_transaction_unregister(tscm);
 	snd_tscm_stream_destroy_duplex(tscm);
 	snd_card_free(tscm->card);
-	dev_info(&tscm->unit->device,
+	dev_dbg(&tscm->unit->device,
 		 "Sound card registration failed: %d\n", err);
 }
 

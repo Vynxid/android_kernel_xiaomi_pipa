@@ -568,7 +568,7 @@ static int probe_itpm(struct tpm_chip *chip)
 
 	rc = tpm_tis_send_data(chip, cmd_getticks, len);
 	if (rc == 0)
-		dev_info(&chip->dev, "Detected an iTPM.\n");
+		dev_dbg(&chip->dev, "Detected an iTPM.\n");
 	else {
 		priv->flags &= ~TPM_TIS_ITPM_WORKAROUND;
 		rc = -EFAULT;
@@ -658,7 +658,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
 
 	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
 			     dev_name(&chip->dev), chip) != 0) {
-		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
+		dev_dbg(&chip->dev, "Unable to request irq: %d for probe\n",
 			 irq);
 		return -1;
 	}
@@ -911,7 +911,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
 	if (rc < 0)
 		goto out_err;
 
-	dev_info(dev, "%s TPM (device-id 0x%X, rev-id %d)\n",
+	dev_dbg(dev, "%s TPM (device-id 0x%X, rev-id %d)\n",
 		 (chip->flags & TPM_CHIP_FLAG_TPM2) ? "2.0" : "1.2",
 		 vendor >> 16, rid);
 

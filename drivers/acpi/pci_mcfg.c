@@ -178,7 +178,7 @@ static void pci_mcfg_apply_quirks(struct acpi_pci_root *root,
 				*cfgres = f->cfgres;
 			if (f->ops)
 				*ecam_ops =  f->ops;
-			dev_info(&root->device->dev, "MCFG quirk: ECAM at %pR for %pR with %ps\n",
+			dev_dbg(&root->device->dev, "MCFG quirk: ECAM at %pR for %pR with %ps\n",
 				 cfgres, bus_range, *ecam_ops);
 			return;
 		}
@@ -270,7 +270,7 @@ static __init int pci_mcfg_parse(struct acpi_table_header *header)
 	mcfg_oem_revision = header->oem_revision;
 #endif
 
-	pr_info("MCFG table detected, %d entries\n", n);
+	pr_debug("MCFG table detected, %d entries\n", n);
 	return 0;
 }
 

@@ -102,35 +102,35 @@ static unsigned long byt_rt5651_quirk = BYT_RT5651_DEFAULT_QUIRKS |
 static void log_quirks(struct device *dev)
 {
 	if (BYT_RT5651_MAP(byt_rt5651_quirk) == BYT_RT5651_DMIC_MAP)
-		dev_info(dev, "quirk DMIC_MAP enabled");
+		dev_dbg(dev, "quirk DMIC_MAP enabled");
 	if (BYT_RT5651_MAP(byt_rt5651_quirk) == BYT_RT5651_IN1_MAP)
-		dev_info(dev, "quirk IN1_MAP enabled");
+		dev_dbg(dev, "quirk IN1_MAP enabled");
 	if (BYT_RT5651_MAP(byt_rt5651_quirk) == BYT_RT5651_IN2_MAP)
-		dev_info(dev, "quirk IN2_MAP enabled");
+		dev_dbg(dev, "quirk IN2_MAP enabled");
 	if (BYT_RT5651_MAP(byt_rt5651_quirk) == BYT_RT5651_IN1_IN2_MAP)
-		dev_info(dev, "quirk IN1_IN2_MAP enabled");
+		dev_dbg(dev, "quirk IN1_IN2_MAP enabled");
 	if (BYT_RT5651_JDSRC(byt_rt5651_quirk)) {
-		dev_info(dev, "quirk realtek,jack-detect-source %ld\n",
+		dev_dbg(dev, "quirk realtek,jack-detect-source %ld\n",
 			 BYT_RT5651_JDSRC(byt_rt5651_quirk));
-		dev_info(dev, "quirk realtek,over-current-threshold-microamp %ld\n",
+		dev_dbg(dev, "quirk realtek,over-current-threshold-microamp %ld\n",
 			 BYT_RT5651_OVCD_TH(byt_rt5651_quirk) * 100);
-		dev_info(dev, "quirk realtek,over-current-scale-factor %ld\n",
+		dev_dbg(dev, "quirk realtek,over-current-scale-factor %ld\n",
 			 BYT_RT5651_OVCD_SF(byt_rt5651_quirk));
 	}
 	if (byt_rt5651_quirk & BYT_RT5651_DMIC_EN)
-		dev_info(dev, "quirk DMIC enabled");
+		dev_dbg(dev, "quirk DMIC enabled");
 	if (byt_rt5651_quirk & BYT_RT5651_MCLK_EN)
-		dev_info(dev, "quirk MCLK_EN enabled");
+		dev_dbg(dev, "quirk MCLK_EN enabled");
 	if (byt_rt5651_quirk & BYT_RT5651_MCLK_25MHZ)
-		dev_info(dev, "quirk MCLK_25MHZ enabled");
+		dev_dbg(dev, "quirk MCLK_25MHZ enabled");
 	if (byt_rt5651_quirk & BYT_RT5651_SSP2_AIF2)
-		dev_info(dev, "quirk SSP2_AIF2 enabled\n");
+		dev_dbg(dev, "quirk SSP2_AIF2 enabled\n");
 	if (byt_rt5651_quirk & BYT_RT5651_SSP0_AIF1)
-		dev_info(dev, "quirk SSP0_AIF1 enabled\n");
+		dev_dbg(dev, "quirk SSP0_AIF1 enabled\n");
 	if (byt_rt5651_quirk & BYT_RT5651_SSP0_AIF2)
-		dev_info(dev, "quirk SSP0_AIF2 enabled\n");
+		dev_dbg(dev, "quirk SSP0_AIF2 enabled\n");
 	if (byt_rt5651_quirk & BYT_RT5651_MONO_SPEAKER)
-		dev_info(dev, "quirk MONO_SPEAKER enabled\n");
+		dev_dbg(dev, "quirk MONO_SPEAKER enabled\n");
 }
 
 #define BYT_CODEC_DAI1	"rt5651-aif1"
@@ -957,13 +957,13 @@ static int snd_byt_rt5651_mc_probe(struct platform_device *pdev)
 							       &pkg_ctx);
 		if (pkg_found) {
 			if (chan_package.aif_value == 1) {
-				dev_info(&pdev->dev, "BIOS Routing: AIF1 connected\n");
+				dev_dbg(&pdev->dev, "BIOS Routing: AIF1 connected\n");
 				byt_rt5651_quirk |= BYT_RT5651_SSP0_AIF1;
 			} else  if (chan_package.aif_value == 2) {
-				dev_info(&pdev->dev, "BIOS Routing: AIF2 connected\n");
+				dev_dbg(&pdev->dev, "BIOS Routing: AIF2 connected\n");
 				byt_rt5651_quirk |= BYT_RT5651_SSP0_AIF2;
 			} else {
-				dev_info(&pdev->dev, "BIOS Routing isn't valid, ignored\n");
+				dev_dbg(&pdev->dev, "BIOS Routing isn't valid, ignored\n");
 				pkg_found = false;
 			}
 		}

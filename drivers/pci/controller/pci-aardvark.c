@@ -341,7 +341,7 @@ static void advk_pcie_issue_perst(struct advk_pcie *pcie)
 		return;
 
 	/* 10ms delay is needed for some cards */
-	dev_info(&pcie->pdev->dev, "issuing PERST via reset GPIO for 10ms\n");
+	dev_dbg(&pcie->pdev->dev, "issuing PERST via reset GPIO for 10ms\n");
 	gpiod_set_value_cansleep(pcie->reset_gpio, 1);
 	usleep_range(10000, 11000);
 	gpiod_set_value_cansleep(pcie->reset_gpio, 0);
@@ -408,7 +408,7 @@ static void advk_pcie_train_link(struct advk_pcie *pcie)
 	if (ret < 0)
 		dev_err(dev, "link never came up\n");
 	else
-		dev_info(dev, "link up\n");
+		dev_dbg(dev, "link up\n");
 }
 
 /*

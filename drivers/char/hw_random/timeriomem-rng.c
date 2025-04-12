@@ -178,7 +178,7 @@ static int timeriomem_rng_probe(struct platform_device *pdev)
 		return err;
 	}
 
-	dev_info(&pdev->dev, "32bits from 0x%p @ %dus\n",
+	dev_dbg(&pdev->dev, "32bits from 0x%p @ %dus\n",
 			priv->io_base, period);
 
 	return 0;

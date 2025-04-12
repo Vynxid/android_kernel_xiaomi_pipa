@@ -47,7 +47,7 @@ struct tb_ctl {
 	dev_warn(&(ctl)->nhi->pdev->dev, format, ## arg)
 
 #define tb_ctl_info(ctl, format, arg...) \
-	dev_info(&(ctl)->nhi->pdev->dev, format, ## arg)
+	dev_dbg(&(ctl)->nhi->pdev->dev, format, ## arg)
 
 #define tb_ctl_dbg(ctl, format, arg...) \
 	dev_dbg(&(ctl)->nhi->pdev->dev, format, ## arg)

@@ -960,7 +960,7 @@ static void pxafb_overlay_init(struct pxafb_info *fbi)
 	/* mask all IU/BS/EOF/SOF interrupts */
 	lcd_writel(fbi, LCCR5, ~0);
 
-	pr_info("PXA Overlay driver loaded successfully!\n");
+	pr_debug("PXA Overlay driver loaded successfully!\n");
 }
 
 static void pxafb_overlay_exit(struct pxafb_info *fbi)
@@ -1909,7 +1909,7 @@ static int parse_opt_mode(struct device *dev, const char *this_opt,
 	}
 done:
 	if (res_specified) {
-		dev_info(dev, "overriding resolution: %dx%d\n", xres, yres);
+		dev_dbg(dev, "overriding resolution: %dx%d\n", xres, yres);
 		inf->modes[0].xres = xres; inf->modes[0].yres = yres;
 	}
 	if (bpp_specified)
@@ -1920,7 +1920,7 @@ done:
 		case 8:
 		case 16:
 			inf->modes[0].bpp = bpp;
-			dev_info(dev, "overriding bit depth: %d\n", bpp);
+			dev_dbg(dev, "overriding bit depth: %d\n", bpp);
 			break;
 		default:
 			dev_err(dev, "Depth %d is not valid\n", bpp);
@@ -2024,7 +2024,7 @@ static int parse_opt(struct device *dev, char *this_opt,
 	}
 
 	if (s[0] != '\0')
-		dev_info(dev, "override %s", s);
+		dev_dbg(dev, "override %s", s);
 
 	return 0;
 }

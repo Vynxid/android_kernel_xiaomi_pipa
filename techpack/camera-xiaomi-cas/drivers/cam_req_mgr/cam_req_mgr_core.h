@@ -284,7 +284,7 @@ struct cam_req_mgr_req_data {
  * @dev_bit  : unique bit assigned to device in link
  * - Device characteristics
  * @pd_tbl   : tracks latest available req id at this device
- * @dev_info : holds dev characteristics such as pipeline delay, dev name
+ * @dev_dbg : holds dev characteristics such as pipeline delay, dev name
  * @ops      : holds func pointer to call methods on this device
  * @parent   : pvt data - like link which this dev hdl belongs to
  */
@@ -292,7 +292,7 @@ struct cam_req_mgr_connected_device {
 	int32_t                         dev_hdl;
 	int64_t                         dev_bit;
 	struct cam_req_mgr_req_tbl     *pd_tbl;
-	struct cam_req_mgr_device_info  dev_info;
+	struct cam_req_mgr_device_info  dev_dbg;
 	struct cam_req_mgr_kmd_ops     *ops;
 	void                           *parent;
 };

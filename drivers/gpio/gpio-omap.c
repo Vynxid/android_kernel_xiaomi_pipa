@@ -1061,7 +1061,7 @@ static int omap_gpio_debounce(struct gpio_chip *chip, unsigned offset,
 	raw_spin_unlock_irqrestore(&bank->lock, flags);
 
 	if (ret)
-		dev_info(chip->parent,
+		dev_dbg(chip->parent,
 			 "Could not set line %u debounce to %u microseconds (%d)",
 			 offset, debounce, ret);
 
@@ -1113,7 +1113,7 @@ static void omap_gpio_show_rev(struct gpio_bank *bank)
 		return;
 
 	rev = readw_relaxed(bank->base + bank->regs->revision);
-	pr_info("OMAP GPIO hardware version %d.%d\n",
+	pr_debug("OMAP GPIO hardware version %d.%d\n",
 		(rev >> 4) & 0x0f, rev & 0x0f);
 
 	called = true;

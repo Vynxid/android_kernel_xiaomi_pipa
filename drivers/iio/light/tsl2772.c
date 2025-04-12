@@ -634,7 +634,7 @@ static int tsl2772_chip_on(struct iio_dev *indio_dev)
 	/* and make sure we're not already on */
 	if (chip->tsl2772_chip_status == TSL2772_CHIP_WORKING) {
 		/* if forcing a register update - turn off, then on */
-		dev_info(&chip->client->dev, "device is already enabled\n");
+		dev_dbg(&chip->client->dev, "device is already enabled\n");
 		return -EINVAL;
 	}
 
@@ -1665,7 +1665,7 @@ static int tsl2772_probe(struct i2c_client *clientp,
 		return ret;
 
 	if (tsl2772_device_id_verif(ret, id->driver_data) <= 0) {
-		dev_info(&chip->client->dev,
+		dev_dbg(&chip->client->dev,
 			 "%s: i2c device found does not match expected id\n",
 				__func__);
 		return -EINVAL;

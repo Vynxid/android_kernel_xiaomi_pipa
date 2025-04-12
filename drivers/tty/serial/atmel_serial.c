@@ -944,7 +944,7 @@ static int atmel_prepare_tx_dma(struct uart_port *port)
 	atmel_port->chan_tx = dma_request_slave_channel(port->dev, "tx");
 	if (atmel_port->chan_tx == NULL)
 		goto chan_err;
-	dev_info(port->dev, "using %s for tx DMA transfers\n",
+	dev_dbg(port->dev, "using %s for tx DMA transfers\n",
 		dma_chan_name(atmel_port->chan_tx));
 
 	spin_lock_init(&atmel_port->lock_tx);
@@ -1126,7 +1126,7 @@ static int atmel_prepare_rx_dma(struct uart_port *port)
 	atmel_port->chan_rx = dma_request_slave_channel(port->dev, "rx");
 	if (atmel_port->chan_rx == NULL)
 		goto chan_err;
-	dev_info(port->dev, "using %s for rx DMA transfers\n",
+	dev_dbg(port->dev, "using %s for rx DMA transfers\n",
 		dma_chan_name(atmel_port->chan_rx));
 
 	spin_lock_init(&atmel_port->lock_rx);
@@ -2717,7 +2717,7 @@ static void atmel_serial_probe_fifos(struct atmel_uart_port *atmel_port,
 	atmel_port->rts_low  = max_t(int, atmel_port->fifo_size >> 2,
 			       atmel_port->fifo_size - ATMEL_RTS_LOW_OFFSET);
 
-	dev_info(&pdev->dev, "Using FIFO (%u data)\n",
+	dev_dbg(&pdev->dev, "Using FIFO (%u data)\n",
 		 atmel_port->fifo_size);
 	dev_dbg(&pdev->dev, "RTS High Threshold : %2u data\n",
 		atmel_port->rts_high);

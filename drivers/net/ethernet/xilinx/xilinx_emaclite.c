@@ -852,7 +852,7 @@ static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
 		struct phy_device *phydev;
 		phydev = of_phy_find_device(lp->phy_node);
 		if (!phydev)
-			dev_info(dev,
+			dev_dbg(dev,
 				 "MDIO of the phy is not registered yet\n");
 		else
 			put_device(&phydev->mdio.dev);
@@ -1113,7 +1113,7 @@ static int xemaclite_of_probe(struct platform_device *ofdev)
 
 	int rc = 0;
 
-	dev_info(dev, "Device Tree Probing\n");
+	dev_dbg(dev, "Device Tree Probing\n");
 
 	/* Create an ethernet device instance */
 	ndev = alloc_etherdev(sizeof(struct net_local));
@@ -1171,7 +1171,7 @@ static int xemaclite_of_probe(struct platform_device *ofdev)
 	lp->phy_node = of_parse_phandle(ofdev->dev.of_node, "phy-handle", 0);
 	xemaclite_mdio_setup(lp, &ofdev->dev);
 
-	dev_info(dev, "MAC address is now %pM\n", ndev->dev_addr);
+	dev_dbg(dev, "MAC address is now %pM\n", ndev->dev_addr);
 
 	ndev->netdev_ops = &xemaclite_netdev_ops;
 	ndev->flags &= ~IFF_MULTICAST;
@@ -1185,7 +1185,7 @@ static int xemaclite_of_probe(struct platform_device *ofdev)
 		goto put_node;
 	}
 
-	dev_info(dev,
+	dev_dbg(dev,
 		 "Xilinx EmacLite at 0x%08X mapped to 0x%p, irq=%d\n",
 		 (unsigned int __force)ndev->mem_start, lp->base_addr, ndev->irq);
 	return 0;

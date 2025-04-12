@@ -372,7 +372,7 @@ static void vpu_wdt_reset_func(struct work_struct *ws)
 	struct vpu_wdt_handler *handler = wdt->handler;
 	int index, ret;
 
-	dev_info(vpu->dev, "vpu reset\n");
+	dev_dbg(vpu->dev, "vpu reset\n");
 	ret = vpu_clock_enable(vpu);
 	if (ret) {
 		dev_err(vpu->dev, "[VPU] wdt enables clock failed %d\n", ret);
@@ -601,7 +601,7 @@ int vpu_load_firmware(struct platform_device *pdev)
 	}
 
 	ret = 0;
-	dev_info(dev, "vpu is ready. Fw version %s\n", run->fw_ver);
+	dev_dbg(dev, "vpu is ready. Fw version %s\n", run->fw_ver);
 
 OUT_LOAD_FW:
 	mutex_unlock(&vpu->vpu_mutex);
@@ -701,7 +701,7 @@ static int vpu_alloc_ext_mem(struct mtk_vpu *vpu, u32 fw_type)
 	vpu_cfg_writel(vpu, (vpu->extmem[fw_type].pa & 0xFFFFF000) + offset_4gb,
 		       vpu_ext_mem1);
 
-	dev_info(dev, "%s extend memory phy=0x%llx virt=0x%p\n",
+	dev_dbg(dev, "%s extend memory phy=0x%llx virt=0x%p\n",
 		 fw_type ? "Data" : "Program",
 		 (unsigned long long)vpu->extmem[fw_type].pa,
 		 vpu->extmem[fw_type].va);
@@ -860,12 +860,12 @@ static int mtk_vpu_probe(struct platform_device *pdev)
 	vpu_cfg_writel(vpu, 0x2, VPU_TCM_CFG);
 
 	vpu->enable_4GB = !!(totalram_pages > (SZ_2G >> PAGE_SHIFT));
-	dev_info(dev, "4GB mode %u\n", vpu->enable_4GB);
+	dev_dbg(dev, "4GB mode %u\n", vpu->enable_4GB);
 
 	if (vpu->enable_4GB) {
 		ret = of_reserved_mem_device_init(dev);
 		if (ret)
-			dev_info(dev, "init reserved memory failed\n");
+			dev_dbg(dev, "init reserved memory failed\n");
 			/* continue to use dynamic allocation if failed */
 	}
 

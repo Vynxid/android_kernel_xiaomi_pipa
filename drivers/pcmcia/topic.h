@@ -159,7 +159,7 @@ static int topic95_override(struct yenta_socket *socket)
 	    && (ppbcn & TOPIC_PCI_CFG_PPBCN_WBEN)) {
 		ppbcn &= ~TOPIC_PCI_CFG_PPBCN_WBEN;
 		pci_write_config_word(socket->dev, TOPIC_PCI_CFG_PPBCN, ppbcn);
-		dev_info(&socket->dev->dev, "Disabled ToPIC95 Cardbus write buffers.\n");
+		dev_dbg(&socket->dev->dev, "Disabled ToPIC95 Cardbus write buffers.\n");
 	}
 
 	return 0;

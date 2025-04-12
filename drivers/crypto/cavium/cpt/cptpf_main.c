@@ -312,7 +312,7 @@ static int cpt_ucode_load_fw(struct cpt_device *cpt, const u8 *fw, bool is_ae)
 		goto fw_release;
 	}
 
-	dev_info(dev, "Microcode Loaded %s\n", mcode->version);
+	dev_dbg(dev, "Microcode Loaded %s\n", mcode->version);
 	mcode->is_mc_valid = 1;
 	cpt->next_mc_idx++;
 
@@ -537,7 +537,7 @@ static int cpt_sriov_init(struct cpt_device *cpt, int num_vfs)
 
 	/* TODO: Optionally enable static VQ priorities feature */
 
-	dev_info(&pdev->dev, "SRIOV enabled, number of VF available %d\n",
+	dev_dbg(&pdev->dev, "SRIOV enabled, number of VF available %d\n",
 		 cpt->num_vf_en);
 
 	cpt->flags |= CPT_FLAG_SRIOV_ENABLED;
@@ -647,7 +647,7 @@ static void cpt_shutdown(struct pci_dev *pdev)
 	if (!cpt)
 		return;
 
-	dev_info(&pdev->dev, "Shutdown device %x:%x.\n",
+	dev_dbg(&pdev->dev, "Shutdown device %x:%x.\n",
 		 (u32)pdev->vendor, (u32)pdev->device);
 
 	cpt_unregister_interrupts(cpt);

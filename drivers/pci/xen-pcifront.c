@@ -191,7 +191,7 @@ static int pcifront_bus_read(struct pci_bus *bus, unsigned int devfn,
 	struct pcifront_device *pdev = pcifront_get_pdev(sd);
 
 	if (verbose_request)
-		dev_info(&pdev->xdev->dev,
+		dev_dbg(&pdev->xdev->dev,
 			 "read dev=%04x:%02x:%02x.%d - offset %x size %d\n",
 			 pci_domain_nr(bus), bus->number, PCI_SLOT(devfn),
 			 PCI_FUNC(devfn), where, size);
@@ -200,7 +200,7 @@ static int pcifront_bus_read(struct pci_bus *bus, unsigned int devfn,
 
 	if (likely(!err)) {
 		if (verbose_request)
-			dev_info(&pdev->xdev->dev, "read got back value %x\n",
+			dev_dbg(&pdev->xdev->dev, "read got back value %x\n",
 				 op.value);
 
 		*val = op.value;
@@ -230,7 +230,7 @@ static int pcifront_bus_write(struct pci_bus *bus, unsigned int devfn,
 	struct pcifront_device *pdev = pcifront_get_pdev(sd);
 
 	if (verbose_request)
-		dev_info(&pdev->xdev->dev,
+		dev_dbg(&pdev->xdev->dev,
 			 "write dev=%04x:%02x:%02x.%d - "
 			 "offset %x size %d val %x\n",
 			 pci_domain_nr(bus), bus->number,
@@ -401,7 +401,7 @@ static int pcifront_claim_resource(struct pci_dev *dev, void *data)
 		r = &dev->resource[i];
 
 		if (!r->parent && r->start && r->flags) {
-			dev_info(&pdev->xdev->dev, "claiming resource %s/%d\n",
+			dev_dbg(&pdev->xdev->dev, "claiming resource %s/%d\n",
 				pci_name(dev), i);
 			if (pci_claim_resource(dev, i)) {
 				dev_err(&pdev->xdev->dev, "Could not claim resource %s/%d! "
@@ -435,7 +435,7 @@ static int pcifront_scan_bus(struct pcifront_device *pdev,
 
 		d = pci_scan_single_device(b, devfn);
 		if (d)
-			dev_info(&pdev->xdev->dev, "New device on "
+			dev_dbg(&pdev->xdev->dev, "New device on "
 				 "%04x:%02x:%02x.%d found.\n", domain, bus,
 				 PCI_SLOT(devfn), PCI_FUNC(devfn));
 	}
@@ -468,7 +468,7 @@ static int pcifront_scan_root(struct pcifront_device *pdev,
 	}
 #endif
 
-	dev_info(&pdev->xdev->dev, "Creating PCI Frontend Bus %04x:%02x\n",
+	dev_dbg(&pdev->xdev->dev, "Creating PCI Frontend Bus %04x:%02x\n",
 		 domain, bus);
 
 	bus_entry = kzalloc(sizeof(*bus_entry), GFP_KERNEL);
@@ -535,7 +535,7 @@ static int pcifront_rescan_root(struct pcifront_device *pdev,
 	}
 #endif
 
-	dev_info(&pdev->xdev->dev, "Rescanning PCI Frontend Bus %04x:%02x\n",
+	dev_dbg(&pdev->xdev->dev, "Rescanning PCI Frontend Bus %04x:%02x\n",
 		 domain, bus);
 
 	b = pci_find_bus(domain, bus);
@@ -693,7 +693,7 @@ static int pcifront_connect_and_init_dma(struct pcifront_device *pdev)
 	spin_lock(&pcifront_dev_lock);
 
 	if (!pcifront_dev) {
-		dev_info(&pdev->xdev->dev, "Installing PCI frontend\n");
+		dev_dbg(&pdev->xdev->dev, "Installing PCI frontend\n");
 		pcifront_dev = pdev;
 	} else
 		err = -EEXIST;
@@ -713,7 +713,7 @@ static void pcifront_disconnect(struct pcifront_device *pdev)
 	spin_lock(&pcifront_dev_lock);
 
 	if (pdev == pcifront_dev) {
-		dev_info(&pdev->xdev->dev,
+		dev_dbg(&pdev->xdev->dev,
 			 "Disconnecting PCI Frontend Buses\n");
 		pcifront_dev = NULL;
 	}

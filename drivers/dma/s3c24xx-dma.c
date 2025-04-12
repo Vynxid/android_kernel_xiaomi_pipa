@@ -1128,7 +1128,7 @@ static int s3c24xx_dma_init_virtual_channels(struct s3c24xx_dma_engine *s3cdma,
 		chan->vc.desc_free = s3c24xx_dma_desc_free;
 		vchan_init(&chan->vc, dmadev);
 	}
-	dev_info(dmadev->dev, "initialized %d virtual %s channels\n",
+	dev_dbg(dmadev->dev, "initialized %d virtual %s channels\n",
 		 i, slave ? "slave" : "memcpy");
 	return i;
 }
@@ -1347,7 +1347,7 @@ static int s3c24xx_dma_probe(struct platform_device *pdev)
 	}
 
 	platform_set_drvdata(pdev, s3cdma);
-	dev_info(&pdev->dev, "Loaded dma driver with %d physical channels\n",
+	dev_dbg(&pdev->dev, "Loaded dma driver with %d physical channels\n",
 		 pdata->num_phy_channels);
 
 	return 0;

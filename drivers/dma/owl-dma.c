@@ -819,7 +819,7 @@ static int owl_dma_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "dma-channels %d, dma-requests %d\n",
+	dev_dbg(&pdev->dev, "dma-channels %d, dma-requests %d\n",
 		 nr_channels, nr_requests);
 
 	od->nr_pchans = nr_channels;

@@ -163,7 +163,7 @@ static int xo15_sci_add(struct acpi_device *device)
 	if (ACPI_FAILURE(status))
 		return -ENODEV;
 
-	dev_info(&device->dev, "Initialized, GPE = 0x%lx\n", xo15_sci_gpe);
+	dev_dbg(&device->dev, "Initialized, GPE = 0x%lx\n", xo15_sci_gpe);
 
 	r = sysfs_create_file(&device->dev.kobj, &lid_wake_on_close_attr.attr);
 	if (r)

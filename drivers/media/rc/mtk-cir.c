@@ -424,7 +424,7 @@ static int mtk_ir_probe(struct platform_device *pdev)
 
 	mtk_irq_enable(ir, MTK_IRINT_EN);
 
-	dev_info(dev, "Initialized MT7623 IR driver, sample period = %dus\n",
+	dev_dbg(dev, "Initialized MT7623 IR driver, sample period = %dus\n",
 		 DIV_ROUND_CLOSEST(MTK_IR_SAMPLE, 1000));
 
 	return 0;

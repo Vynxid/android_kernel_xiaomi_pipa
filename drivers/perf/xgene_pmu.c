@@ -1199,7 +1199,7 @@ xgene_pmu_dev_add(struct xgene_pmu *xgene_pmu, struct xgene_pmu_dev_ctx *ctx)
 		return -ENODEV;
 	}
 
-	dev_info(dev, "%s PMU registered\n", ctx->name);
+	dev_dbg(dev, "%s PMU registered\n", ctx->name);
 
 	return 0;
 }
@@ -1853,7 +1853,7 @@ static int xgene_pmu_probe(struct platform_device *pdev)
 	INIT_LIST_HEAD(&xgene_pmu->mcpmus);
 
 	xgene_pmu->version = version;
-	dev_info(&pdev->dev, "X-Gene PMU version %d\n", xgene_pmu->version);
+	dev_dbg(&pdev->dev, "X-Gene PMU version %d\n", xgene_pmu->version);
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	xgene_pmu->pcppmu_csr = devm_ioremap_resource(&pdev->dev, res);

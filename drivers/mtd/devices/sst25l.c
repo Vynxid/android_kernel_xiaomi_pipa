@@ -383,7 +383,7 @@ static int sst25l_probe(struct spi_device *spi)
 	flash->mtd._read		= sst25l_read;
 	flash->mtd._write 	= sst25l_write;
 
-	dev_info(&spi->dev, "%s (%lld KiB)\n", flash_info->name,
+	dev_dbg(&spi->dev, "%s (%lld KiB)\n", flash_info->name,
 		 (long long)flash->mtd.size >> 10);
 
 	pr_debug("mtd .name = %s, .size = 0x%llx (%lldMiB) "

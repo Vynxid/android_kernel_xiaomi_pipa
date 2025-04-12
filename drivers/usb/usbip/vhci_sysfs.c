@@ -412,9 +412,9 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
 		goto unlock_mutex;
 	}
 
-	dev_info(dev, "pdev(%u) rhport(%u) sockfd(%d)\n",
+	dev_dbg(dev, "pdev(%u) rhport(%u) sockfd(%d)\n",
 		 pdev_nr, rhport, sockfd);
-	dev_info(dev, "devid(%u) speed(%u) speed_str(%s)\n",
+	dev_dbg(dev, "devid(%u) speed(%u) speed_str(%s)\n",
 		 devid, speed, usb_speed_string(speed));
 
 	vdev->devid         = devid;
@@ -434,7 +434,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
 
 	rh_port_connect(vdev, speed);
 
-	dev_info(dev, "Device attached\n");
+	dev_dbg(dev, "Device attached\n");
 
 	mutex_unlock(&vdev->ud.sysfs_lock);
 

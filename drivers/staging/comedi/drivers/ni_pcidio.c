@@ -911,7 +911,7 @@ static int nidio_auto_attach(struct comedi_device *dev,
 	if (ret)
 		return ret;
 
-	dev_info(dev->class_dev, "%s rev=%d\n", dev->board_name,
+	dev_dbg(dev->class_dev, "%s rev=%d\n", dev->board_name,
 		 readb(dev->mmio + Chip_Version));
 
 	s = &dev->subdevices[0];

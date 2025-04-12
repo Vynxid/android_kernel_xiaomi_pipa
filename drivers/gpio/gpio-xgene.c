@@ -210,7 +210,7 @@ static int xgene_gpio_probe(struct platform_device *pdev)
 		goto err;
 	}
 
-	dev_info(&pdev->dev, "X-Gene GPIO driver registered.\n");
+	dev_dbg(&pdev->dev, "X-Gene GPIO driver registered.\n");
 	return 0;
 err:
 	dev_err(&pdev->dev, "X-Gene GPIO driver registration failed.\n");

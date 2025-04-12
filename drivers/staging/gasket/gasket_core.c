@@ -196,7 +196,7 @@ static int gasket_alloc_dev(struct gasket_internal_desc *internal_desc,
 	const struct gasket_driver_desc *driver_desc =
 		internal_desc->driver_desc;
 	struct gasket_dev *gasket_dev;
-	struct gasket_cdev_info *dev_info;
+	struct gasket_cdev_info *dev_dbg;
 
 	pr_debug("Allocating a Gasket device %s.\n", kobj_name);
 
@@ -225,19 +225,19 @@ static int gasket_alloc_dev(struct gasket_internal_desc *internal_desc,
 	/* interrupt_data is not initialized. */
 	/* status is 0, or GASKET_STATUS_DEAD */
 
-	dev_info = &gasket_dev->dev_info;
-	snprintf(dev_info->name, GASKET_NAME_MAX, "%s_%u", driver_desc->name,
+	dev_dbg = &gasket_dev->dev_dbg;
+	snprintf(dev_dbg->name, GASKET_NAME_MAX, "%s_%u", driver_desc->name,
 		 gasket_dev->dev_idx);
-	dev_info->devt =
+	dev_dbg->devt =
 		MKDEV(driver_desc->major, driver_desc->minor +
 		      gasket_dev->dev_idx);
-	dev_info->device = device_create(internal_desc->class, parent,
-		dev_info->devt, gasket_dev, dev_info->name);
+	dev_dbg->device = device_create(internal_desc->class, parent,
+		dev_dbg->devt, gasket_dev, dev_dbg->name);
 
-	dev_dbg(dev_info->device, "Gasket device allocated.\n");
+	dev_dbg(dev_dbg->device, "Gasket device allocated.\n");
 
 	/* cdev has not yet been added; cdev_added is 0 */
-	dev_info->gasket_dev_ptr = gasket_dev;
+	dev_dbg->gasket_dev_ptr = gasket_dev;
 	/* ownership is all 0, indicating no owner or opens. */
 
 	return 0;
@@ -301,7 +301,7 @@ static int gasket_map_pci_bar(struct gasket_dev *gasket_dev, int bar_num)
 
 	if (!request_mem_region(gasket_dev->bar_data[bar_num].phys_base,
 				gasket_dev->bar_data[bar_num].length_bytes,
-				gasket_dev->dev_info.name)) {
+				gasket_dev->dev_dbg.name)) {
 		dev_err(gasket_dev->dev,
 			"Cannot get BAR %d memory region %p\n",
 			bar_num, &gasket_dev->pci_dev->resource[bar_num]);
@@ -548,15 +548,15 @@ static ssize_t gasket_sysfs_data_show(struct device *device,
 		break;
 	case ATTR_IS_DEVICE_OWNED:
 		ret = snprintf(buf, PAGE_SIZE, "%d\n",
-			       gasket_dev->dev_info.ownership.is_owned);
+			       gasket_dev->dev_dbg.ownership.is_owned);
 		break;
 	case ATTR_DEVICE_OWNER:
 		ret = snprintf(buf, PAGE_SIZE, "%d\n",
-			       gasket_dev->dev_info.ownership.owner);
+			       gasket_dev->dev_dbg.ownership.owner);
 		break;
 	case ATTR_WRITE_OPEN_COUNT:
 		ret = snprintf(buf, PAGE_SIZE, "%d\n",
-			       gasket_dev->dev_info.ownership.write_open_count);
+			       gasket_dev->dev_dbg.ownership.write_open_count);
 		break;
 	case ATTR_RESET_COUNT:
 		ret = snprintf(buf, PAGE_SIZE, "%d\n", gasket_dev->reset_count);
@@ -608,21 +608,21 @@ static const struct gasket_sysfs_attribute gasket_sysfs_generic_attrs[] = {
 };
 
 /* Add a char device and related info. */
-static int gasket_add_cdev(struct gasket_cdev_info *dev_info,
+static int gasket_add_cdev(struct gasket_cdev_info *dev_dbg,
 			   const struct file_operations *file_ops,
 			   struct module *owner)
 {
 	int ret;
 
-	cdev_init(&dev_info->cdev, file_ops);
-	dev_info->cdev.owner = owner;
-	ret = cdev_add(&dev_info->cdev, dev_info->devt, 1);
+	cdev_init(&dev_dbg->cdev, file_ops);
+	dev_dbg->cdev.owner = owner;
+	ret = cdev_add(&dev_dbg->cdev, dev_dbg->devt, 1);
 	if (ret) {
-		dev_err(dev_info->gasket_dev_ptr->dev,
+		dev_err(dev_dbg->gasket_dev_ptr->dev,
 			"cannot add char device [ret=%d]\n", ret);
 		return ret;
 	}
-	dev_info->cdev_added = 1;
+	dev_dbg->cdev_added = 1;
 
 	return 0;
 }
@@ -635,8 +635,8 @@ void gasket_disable_device(struct gasket_dev *gasket_dev)
 	int i;
 
 	/* Only delete the device if it has been successfully added. */
-	if (gasket_dev->dev_info.cdev_added)
-		cdev_del(&gasket_dev->dev_info.cdev);
+	if (gasket_dev->dev_dbg.cdev_added)
+		cdev_del(&gasket_dev->dev_dbg.cdev);
 
 	gasket_dev->status = GASKET_STATUS_DEAD;
 
@@ -706,7 +706,7 @@ static bool gasket_mmap_has_permissions(struct gasket_dev *gasket_dev,
 
 	/* Do not allow a non-owner to write. */
 	if ((vma->vm_flags & VM_WRITE) &&
-	    !gasket_owned_by_current_tgid(&gasket_dev->dev_info)) {
+	    !gasket_owned_by_current_tgid(&gasket_dev->dev_dbg)) {
 		dev_dbg(gasket_dev->dev,
 			"Attempting to mmap a region for write without owning "
 			"device.\n");
@@ -1046,7 +1046,7 @@ static int gasket_mmap(struct file *filp, struct vm_area_struct *vma)
 	raw_offset = (vma->vm_pgoff << PAGE_SHIFT) +
 		driver_desc->legacy_mmap_address_offset;
 	vma_size = vma->vm_end - vma->vm_start;
-	trace_gasket_mmap_entry(gasket_dev->dev_info.name, raw_offset,
+	trace_gasket_mmap_entry(gasket_dev->dev_dbg.name, raw_offset,
 				vma_size);
 
 	/*
@@ -1179,14 +1179,14 @@ static int gasket_open(struct inode *inode, struct file *filp)
 	const struct gasket_driver_desc *driver_desc;
 	struct gasket_ownership *ownership;
 	char task_name[TASK_COMM_LEN];
-	struct gasket_cdev_info *dev_info =
+	struct gasket_cdev_info *dev_dbg =
 	    container_of(inode->i_cdev, struct gasket_cdev_info, cdev);
 	struct pid_namespace *pid_ns = task_active_pid_ns(current);
 	bool is_root = ns_capable(pid_ns->user_ns, CAP_SYS_ADMIN);
 
-	gasket_dev = dev_info->gasket_dev_ptr;
+	gasket_dev = dev_dbg->gasket_dev_ptr;
 	driver_desc = gasket_dev->internal_desc->driver_desc;
-	ownership = &dev_info->ownership;
+	ownership = &dev_dbg->ownership;
 	get_task_comm(task_name, current);
 	filp->private_data = gasket_dev;
 	inode->i_size = 0;
@@ -1258,14 +1258,14 @@ static int gasket_release(struct inode *inode, struct file *file)
 	struct gasket_ownership *ownership;
 	const struct gasket_driver_desc *driver_desc;
 	char task_name[TASK_COMM_LEN];
-	struct gasket_cdev_info *dev_info =
+	struct gasket_cdev_info *dev_dbg =
 		container_of(inode->i_cdev, struct gasket_cdev_info, cdev);
 	struct pid_namespace *pid_ns = task_active_pid_ns(current);
 	bool is_root = ns_capable(pid_ns->user_ns, CAP_SYS_ADMIN);
 
-	gasket_dev = dev_info->gasket_dev_ptr;
+	gasket_dev = dev_dbg->gasket_dev_ptr;
 	driver_desc = gasket_dev->internal_desc->driver_desc;
-	ownership = &dev_info->ownership;
+	ownership = &dev_dbg->ownership;
 	get_task_comm(task_name, current);
 	mutex_lock(&gasket_dev->mutex);
 
@@ -1415,7 +1415,7 @@ int gasket_enable_device(struct gasket_dev *gasket_dev)
 	if (gasket_dev->status == GASKET_STATUS_DEAD)
 		dev_err(gasket_dev->dev, "Device reported as unhealthy.\n");
 
-	ret = gasket_add_cdev(&gasket_dev->dev_info, &gasket_file_ops,
+	ret = gasket_add_cdev(&gasket_dev->dev_dbg, &gasket_file_ops,
 			      driver_desc->module);
 	if (ret)
 		return ret;
@@ -1460,10 +1460,10 @@ int gasket_pci_add_device(struct pci_dev *pci_dev,
 	if (ret)
 		return ret;
 	gasket_dev->pci_dev = pci_dev;
-	if (IS_ERR_OR_NULL(gasket_dev->dev_info.device)) {
+	if (IS_ERR_OR_NULL(gasket_dev->dev_dbg.device)) {
 		pr_err("Cannot create %s device %s [ret = %ld]\n",
-		       driver_desc->name, gasket_dev->dev_info.name,
-		       PTR_ERR(gasket_dev->dev_info.device));
+		       driver_desc->name, gasket_dev->dev_dbg.name,
+		       PTR_ERR(gasket_dev->dev_dbg.device));
 		ret = -ENODEV;
 		goto fail1;
 	}
@@ -1472,7 +1472,7 @@ int gasket_pci_add_device(struct pci_dev *pci_dev,
 	if (ret)
 		goto fail2;
 
-	ret = gasket_sysfs_create_mapping(gasket_dev->dev_info.device,
+	ret = gasket_sysfs_create_mapping(gasket_dev->dev_dbg.device,
 					  gasket_dev);
 	if (ret)
 		goto fail3;
@@ -1481,14 +1481,14 @@ int gasket_pci_add_device(struct pci_dev *pci_dev,
 	 * Once we've created the mapping structures successfully, attempt to
 	 * create a symlink to the pci directory of this object.
 	 */
-	ret = sysfs_create_link(&gasket_dev->dev_info.device->kobj,
+	ret = sysfs_create_link(&gasket_dev->dev_dbg.device->kobj,
 				&pci_dev->dev.kobj, dev_name(&pci_dev->dev));
 	if (ret) {
 		dev_err(gasket_dev->dev,
 			"Cannot create sysfs pci link: %d\n", ret);
 		goto fail3;
 	}
-	ret = gasket_sysfs_create_entries(gasket_dev->dev_info.device,
+	ret = gasket_sysfs_create_entries(gasket_dev->dev_dbg.device,
 					  gasket_sysfs_generic_attrs);
 	if (ret)
 		goto fail4;
@@ -1498,10 +1498,10 @@ int gasket_pci_add_device(struct pci_dev *pci_dev,
 
 fail4:
 fail3:
-	gasket_sysfs_remove_mapping(gasket_dev->dev_info.device);
+	gasket_sysfs_remove_mapping(gasket_dev->dev_dbg.device);
 fail2:
 	gasket_cleanup_pci(gasket_dev);
-	device_destroy(internal_desc->class, gasket_dev->dev_info.devt);
+	device_destroy(internal_desc->class, gasket_dev->dev_dbg.devt);
 fail1:
 	gasket_free_dev(gasket_dev);
 	return ret;
@@ -1545,8 +1545,8 @@ void gasket_pci_remove_device(struct pci_dev *pci_dev)
 
 	gasket_cleanup_pci(gasket_dev);
 
-	gasket_sysfs_remove_mapping(gasket_dev->dev_info.device);
-	device_destroy(internal_desc->class, gasket_dev->dev_info.devt);
+	gasket_sysfs_remove_mapping(gasket_dev->dev_dbg.device);
+	device_destroy(internal_desc->class, gasket_dev->dev_dbg.devt);
 	gasket_free_dev(gasket_dev);
 }
 EXPORT_SYMBOL(gasket_pci_remove_device);

@@ -716,7 +716,7 @@ void ishtp_hbm_dispatch(struct ishtp_device *dev,
 			dev_err(dev->devc, "unexpected stop response\n");
 
 		dev->dev_state = ISHTP_DEV_DISABLED;
-		dev_info(dev->devc, "reset: FW stop response\n");
+		dev_dbg(dev->devc, "reset: FW stop response\n");
 		ish_hw_reset(dev);
 		break;
 

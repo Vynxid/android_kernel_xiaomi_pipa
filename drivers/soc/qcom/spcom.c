@@ -83,7 +83,7 @@
 	} while (0)
 
 #define spcom_pr_info(_fmt, ...) do {					\
-	pr_info(_fmt, ##__VA_ARGS__);					\
+	pr_debug(_fmt, ##__VA_ARGS__);					\
 	spcom_ipc_log_string("%s" pr_fmt(_fmt), "", ##__VA_ARGS__);	\
 	} while (0)
 
@@ -2408,7 +2408,7 @@ static void spcom_rpdev_remove(struct rpmsg_device *rpdev)
 		return;
 	}
 
-	dev_info(&rpdev->dev, "rpmsg device %s removed\n", rpdev->id.name);
+	dev_dbg(&rpdev->dev, "rpmsg device %s removed\n", rpdev->id.name);
 	ch = dev_get_drvdata(&rpdev->dev);
 	if (!ch) {
 		spcom_pr_err("channel %s not found\n", rpdev->id.name);

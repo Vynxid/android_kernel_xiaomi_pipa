@@ -539,7 +539,7 @@ static irqreturn_t atmel_ac97c_interrupt(int irq, void *dev)
 	}
 
 	if (sr & AC97C_SR_COEVT) {
-		dev_info(&chip->pdev->dev, "codec channel event%s%s%s%s%s\n",
+		dev_dbg(&chip->pdev->dev, "codec channel event%s%s%s%s%s\n",
 				cosr & AC97C_CSR_OVRUN   ? " OVRUN"   : "",
 				cosr & AC97C_CSR_RXRDY   ? " RXRDY"   : "",
 				cosr & AC97C_CSR_TXEMPTY ? " TXEMPTY" : "",
@@ -821,7 +821,7 @@ static int atmel_ac97c_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, card);
 
-	dev_info(&pdev->dev, "Atmel AC97 controller at 0x%p, irq = %d\n",
+	dev_dbg(&pdev->dev, "Atmel AC97 controller at 0x%p, irq = %d\n",
 			chip->regs, irq);
 
 	return 0;

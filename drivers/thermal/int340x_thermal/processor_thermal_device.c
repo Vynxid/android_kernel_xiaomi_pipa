@@ -360,7 +360,7 @@ static int int3401_add(struct platform_device *pdev)
 	platform_set_drvdata(pdev, proc_priv);
 	proc_thermal_emum_mode = PROC_THERMAL_PLATFORM_DEV;
 
-	dev_info(&pdev->dev, "Creating sysfs group for PROC_THERMAL_PLATFORM_DEV\n");
+	dev_dbg(&pdev->dev, "Creating sysfs group for PROC_THERMAL_PLATFORM_DEV\n");
 
 	return sysfs_create_group(&pdev->dev.kobj,
 					 &power_limit_attribute_group);
@@ -440,7 +440,7 @@ static int  proc_thermal_pci_probe(struct pci_dev *pdev,
 			dev_err(&pdev->dev, "No auxiliary DTSs enabled\n");
 	}
 
-	dev_info(&pdev->dev, "Creating sysfs group for PROC_THERMAL_PCI\n");
+	dev_dbg(&pdev->dev, "Creating sysfs group for PROC_THERMAL_PCI\n");
 
 	return sysfs_create_group(&pdev->dev.kobj,
 					 &power_limit_attribute_group);

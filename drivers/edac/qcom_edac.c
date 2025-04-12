@@ -382,7 +382,7 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
 	/* Request for ecc irq */
 	ecc_irq = llcc_driv_data->ecc_irq;
 	if (ecc_irq < 0) {
-		dev_info(dev, "No ECC IRQ; defaulting to polling mode\n");
+		dev_dbg(dev, "No ECC IRQ; defaulting to polling mode\n");
 		edev_ctl->poll_msec = poll_msec;
 		edev_ctl->edac_check = qcom_llcc_poll_cache_errors;
 		edev_ctl->defer_work = 1;

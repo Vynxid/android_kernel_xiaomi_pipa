@@ -187,7 +187,7 @@ static int surface_button_add(struct acpi_device *device)
 		goto err_free_input;
 
 	device_init_wakeup(&device->dev, true);
-	dev_info(&device->dev,
+	dev_dbg(&device->dev,
 			"%s [%s]\n", name, acpi_device_bid(device));
 	return 0;
 

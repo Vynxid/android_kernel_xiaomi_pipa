@@ -1288,7 +1288,7 @@ static int rcar_drif_bond_available(struct rcar_drif_sdr *sdr,
 		sdr->hw_ch_mask |= BIT(ch->num);
 	} else {
 		/* Defer */
-		dev_info(sdr->dev, "defer probe\n");
+		dev_dbg(sdr->dev, "defer probe\n");
 		ret = -EPROBE_DEFER;
 	}
 	device_unlock(&pdev->dev);

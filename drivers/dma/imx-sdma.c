@@ -1707,7 +1707,7 @@ static void sdma_load_firmware(const struct firmware *fw, void *context)
 	unsigned short *ram_code;
 
 	if (!fw) {
-		dev_info(sdma->dev, "external firmware not found, using ROM firmware\n");
+		dev_dbg(sdma->dev, "external firmware not found, using ROM firmware\n");
 		/* In this case we just use the ROM firmware. */
 		return;
 	}
@@ -1753,7 +1753,7 @@ static void sdma_load_firmware(const struct firmware *fw, void *context)
 
 	sdma_add_scripts(sdma, addr);
 
-	dev_info(sdma->dev, "loaded firmware %d.%d\n",
+	dev_dbg(sdma->dev, "loaded firmware %d.%d\n",
 			header->version_major,
 			header->version_minor);
 

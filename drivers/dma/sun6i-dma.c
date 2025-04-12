@@ -1261,7 +1261,7 @@ static int sun6i_dma_probe(struct platform_device *pdev)
 
 	ret = of_property_read_u32(np, "dma-requests", &sdc->max_request);
 	if (ret && !sdc->max_request) {
-		dev_info(&pdev->dev, "Missing dma-requests, using %u.\n",
+		dev_dbg(&pdev->dev, "Missing dma-requests, using %u.\n",
 			 DMA_CHAN_MAX_DRQ);
 		sdc->max_request = DMA_CHAN_MAX_DRQ;
 	}

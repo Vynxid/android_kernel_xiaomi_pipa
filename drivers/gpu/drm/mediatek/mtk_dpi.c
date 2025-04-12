@@ -691,7 +691,7 @@ static int mtk_dpi_probe(struct platform_device *pdev)
 	if (!bridge_node)
 		return -ENODEV;
 
-	dev_info(dev, "Found bridge node: %pOF\n", bridge_node);
+	dev_dbg(dev, "Found bridge node: %pOF\n", bridge_node);
 
 	dpi->bridge = of_drm_find_bridge(bridge_node);
 	of_node_put(bridge_node);

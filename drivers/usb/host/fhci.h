@@ -455,7 +455,7 @@ static inline u16 get_frame_num(struct fhci_hcd *fhci)
 #define fhci_err(fhci, fmt, args...) \
 		dev_err(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
 #define fhci_info(fhci, fmt, args...) \
-		dev_info(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
+		dev_dbg(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
 #define fhci_warn(fhci, fmt, args...) \
 		dev_warn(fhci_to_hcd(fhci)->self.controller, fmt, ##args)
 

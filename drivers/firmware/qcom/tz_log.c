@@ -526,7 +526,7 @@ static int _disp_tz_boot_stats(void)
 	struct tzdbg_boot_info_t *ptr = NULL;
 	struct tzdbg_boot_info64_t *ptr_64 = NULL;
 
-	pr_info("qsee_version = 0x%x\n", tzdbg.tz_version);
+	pr_debug("qsee_version = 0x%x\n", tzdbg.tz_version);
 	if (tzdbg.tz_version >= QSEE_VERSION_TZ_3_X) {
 		ptr_64 = (struct tzdbg_boot_info64_t *)((unsigned char *)
 			tzdbg.diag_buf + tzdbg.diag_buf->boot_info_off);
@@ -633,7 +633,7 @@ static int _disp_tz_interrupt_stats(void)
 	ptr = ((unsigned char *)tzdbg.diag_buf +
 					tzdbg.diag_buf->int_info_off);
 
-	pr_info("qsee_version = 0x%x\n", tzdbg.tz_version);
+	pr_debug("qsee_version = 0x%x\n", tzdbg.tz_version);
 
 	if (tzdbg.tz_version < QSEE_VERSION_TZ_4_X) {
 		tzdbg_ptr = ptr;
@@ -1550,7 +1550,7 @@ static void tzdbg_encrypted_log_init(void)
 		pr_err("scm_call QUERY_ENCR_LOG_FEATURE failed ret %d\n", ret);
 		tzdbg.is_encrypted_log_enabled = false;
 	} else {
-		pr_info("encrypted qseelog enabled is %d\n", desc.ret[0]);
+		pr_debug("encrypted qseelog enabled is %d\n", desc.ret[0]);
 		tzdbg.is_encrypted_log_enabled = desc.ret[0];
 	}
 }
@@ -1610,7 +1610,7 @@ static int tz_log_probe(struct platform_device *pdev)
 				return -EINVAL;
 			}
 		} else {
-			dev_info(&pdev->dev, "Hyp log service not support\n");
+			dev_dbg(&pdev->dev, "Hyp log service not support\n");
 		}
 	} else {
 		dev_dbg(&pdev->dev, "Device tree data is not found\n");

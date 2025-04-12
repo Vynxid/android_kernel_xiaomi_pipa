@@ -399,7 +399,7 @@ struct dvb_frontend *horus3a_attach(struct dvb_frontend *fe,
 	memcpy(&fe->ops.tuner_ops, &horus3a_tuner_ops,
 				sizeof(struct dvb_tuner_ops));
 	fe->tuner_priv = priv;
-	dev_info(&priv->i2c->dev,
+	dev_dbg(&priv->i2c->dev,
 		"Sony HORUS3A attached on addr=%x at I2C adapter %p\n",
 		priv->i2c_address, priv->i2c);
 	return fe;

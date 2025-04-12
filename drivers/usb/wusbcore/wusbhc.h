@@ -170,7 +170,7 @@ struct wusb_port {
  *
  *                 Read/Write protected by @mutex
  *
- * @dev_info       This array has ports_max elements. It is used to
+ * @dev_dbg       This array has ports_max elements. It is used to
  *                 give the HC information about the WUSB devices (see
  *                 'struct wusb_dev_info').
  *
@@ -247,7 +247,7 @@ struct wusbhc {
 	struct mutex mutex;			/* locks everything else */
 	u16 cluster_id;				/* Wireless USB Cluster ID */
 	struct wusb_port *port;			/* Fake port status handling */
-	struct wusb_dev_info *dev_info;		/* for Set Device Info mgmt */
+	struct wusb_dev_info *dev_dbg;		/* for Set Device Info mgmt */
 	u8 ports_max;
 	unsigned active:1;			/* currently xmit'ing MMCs */
 	struct wuie_keep_alive keep_alive_ie;	/* protected by mutex */

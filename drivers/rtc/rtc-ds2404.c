@@ -238,7 +238,7 @@ static int rtc_probe(struct platform_device *pdev)
 	if (retval)
 		goto err_chip;
 
-	dev_info(&pdev->dev, "using GPIOs RST:%d, CLK:%d, DQ:%d\n",
+	dev_dbg(&pdev->dev, "using GPIOs RST:%d, CLK:%d, DQ:%d\n",
 		 chip->gpio[DS2404_RST].gpio, chip->gpio[DS2404_CLK].gpio,
 		 chip->gpio[DS2404_DQ].gpio);
 

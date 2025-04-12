@@ -747,7 +747,7 @@ static int mt9m032_probe(struct i2c_client *client,
 		goto error_sensor;
 	}
 
-	dev_info(&client->dev, "MT9M032 detected at address 0x%02x\n",
+	dev_dbg(&client->dev, "MT9M032 detected at address 0x%02x\n",
 		 client->addr);
 
 	sensor->frame_interval.numerator = 1;

@@ -261,7 +261,7 @@ static void wacom_handle_model_response(struct wacom *wacom)
 		return;
 	}
 
-	dev_info(&wacom->dev->dev, "%s tablet, version %u.%u\n",
+	dev_dbg(&wacom->dev->dev, "%s tablet, version %u.%u\n",
 		 wacom->dev->name, major_v, minor_v);
 }
 

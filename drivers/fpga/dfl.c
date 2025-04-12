@@ -678,7 +678,7 @@ static int parse_feature_afu(struct build_feature_devs_info *binfo,
 	case PORT_ID:
 		return parse_feature_port_afu(binfo, dfl, ofst);
 	default:
-		dev_info(binfo->dev, "AFU belonging to FIU %s is not supported yet.\n",
+		dev_dbg(binfo->dev, "AFU belonging to FIU %s is not supported yet.\n",
 			 binfo->feature_dev->name);
 	}
 
@@ -757,7 +757,7 @@ static int parse_feature(struct build_feature_devs_info *binfo,
 	case DFH_TYPE_FIU:
 		return parse_feature_fiu(binfo, dfl, ofst);
 	default:
-		dev_info(binfo->dev,
+		dev_dbg(binfo->dev,
 			 "Feature Type %x is not supported.\n", type);
 	}
 

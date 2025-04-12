@@ -1044,7 +1044,7 @@ static void __arm_spe_pmu_dev_probe(void *info)
 		spe_pmu->counter_sz = 12;
 	}
 
-	dev_info(dev,
+	dev_dbg(dev,
 		 "probed for CPUs %*pbl [max_record_sz %u, align %u, features 0x%llx]\n",
 		 cpumask_pr_args(&spe_pmu->supported_cpus),
 		 spe_pmu->max_record_sz, spe_pmu->align, spe_pmu->features);

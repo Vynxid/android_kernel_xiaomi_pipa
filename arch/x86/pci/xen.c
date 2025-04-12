@@ -55,7 +55,7 @@ static int xen_pcifront_enable_irq(struct pci_dev *dev)
 	}
 
 	dev->irq = rc;
-	dev_info(&dev->dev, "Xen PCI mapped GSI%d to IRQ%d\n", gsi, dev->irq);
+	dev_dbg(&dev->dev, "Xen PCI mapped GSI%d to IRQ%d\n", gsi, dev->irq);
 	return 0;
 }
 

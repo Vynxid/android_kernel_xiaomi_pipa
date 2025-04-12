@@ -567,7 +567,7 @@ static int usbhs_omap_probe(struct platform_device *pdev)
 	}
 
 	if (pdata->nports > OMAP3_HS_USB_PORTS) {
-		dev_info(dev, "Too many num_ports <%d> in platform_data. Max %d\n",
+		dev_dbg(dev, "Too many num_ports <%d> in platform_data. Max %d\n",
 				pdata->nports, OMAP3_HS_USB_PORTS);
 		return -ENODEV;
 	}
@@ -816,7 +816,7 @@ err_mem:
 
 static int usbhs_omap_remove_child(struct device *dev, void *data)
 {
-	dev_info(dev, "unregistering\n");
+	dev_dbg(dev, "unregistering\n");
 	platform_device_unregister(to_platform_device(dev));
 	return 0;
 }

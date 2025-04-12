@@ -103,15 +103,15 @@ static int ps5169_get_chipid_revision(struct ps5169_info *info)
 
 	ret |= ps5169_read_reg(info, REG_CHIP_ID_L, &chip_id_l);
 	ret |= ps5169_read_reg(info, REG_CHIP_ID_H, &chip_id_h);
-	pr_info("%s: Chip_ID: 0x%02x, 0x%02x", __func__, chip_id_h, chip_id_l);
+	pr_debug("%s: Chip_ID: 0x%02x, 0x%02x", __func__, chip_id_h, chip_id_l);
 
 	ret |= ps5169_read_reg(info, REG_REVISION_L, &revision_l);
 	ret |= ps5169_read_reg(info, REG_REVISION_L, &revision_l);
-	pr_info("%s: Revision: 0x%02x, 0x%02x", __func__, revision_h, revision_l);
+	pr_debug("%s: Revision: 0x%02x, 0x%02x", __func__, revision_h, revision_l);
 
 	if ((chip_id_h == 0x69) && (chip_id_l == 0x87))  {
 		info->present_flag = true;
-		pr_info("%s: present_flag: true.\n", __func__);
+		pr_debug("%s: present_flag: true.\n", __func__);
 	} else {
 		info->present_flag = false;
 		pr_err("%s: chip id no match, return: %d.\n", __func__, ret);
@@ -133,7 +133,7 @@ static void ps5169_get_chipcfg_and_modeselection(struct ps5169_info *info)
 	ret = ps5169_read_reg(info, REG_AUX_ENABLE, &aux_enable);
 	ret = ps5169_read_reg(info, REG_HPD_PLUG, &hpd_plug);
 
-	pr_info("%s: Cfg:0x%02x, AUX:0x%02x, HPD:0x%02x.\n",
+	pr_debug("%s: Cfg:0x%02x, AUX:0x%02x, HPD:0x%02x.\n",
 			__func__, cfg_mode, aux_enable, hpd_plug);
 }
 
@@ -206,7 +206,7 @@ static void ps5169_set_config(struct ps5169_info *info)
 	if (ret < 0)
 		pr_err("%s: crc err.\n", __func__);
 	else
-		pr_info("%s: cfg set end.\n", __func__);
+		pr_debug("%s: cfg set end.\n", __func__);
 }
 
 static void ps5169_enable_work(struct work_struct *work)
@@ -230,9 +230,9 @@ static void ps5169_enable_work(struct work_struct *work)
 			pr_err("%s: fail to select pinctrl active rc=%d\n", __func__, ret);
 			return;
 		}
-		pr_info("%s: select gpio_active.\n", __func__);
+		pr_debug("%s: select gpio_active.\n", __func__);
 		msleep(50);
-		pr_info("%s: true, set cfg.\n", __func__);
+		pr_debug("%s: true, set cfg.\n", __func__);
 		ps5169_set_config(info);
 	} else {
 		ret = pinctrl_select_state(info->ps5169_pinctrl, info->ps5169_gpio_suspend);
@@ -240,7 +240,7 @@ static void ps5169_enable_work(struct work_struct *work)
 			pr_err("%s: fail to select pinctrl suspend rc=%d\n", __func__, ret);
 			return;
 		}
-		pr_info("%s: select gpio_suspend.\n", __func__);
+		pr_debug("%s: select gpio_suspend.\n", __func__);
 	}
 }
 
@@ -253,7 +253,7 @@ void ps5169_cfg_usb(void)
 
 	msleep(50);
 
-	pr_info("%s: start.\n", __func__);
+	pr_debug("%s: start.\n", __func__);
 	if (g_info->flip == 1)
 		ret |= ps5169_update_reg(g_info, 0x40, 0xc0);     
 	else if (g_info->flip == 2)
@@ -270,7 +270,7 @@ static void ps5169_config_flip(struct ps5169_info *info, int flip)
 		return;
 
 	info->flip = flip;
-	pr_info("%s: flip:%d.\n", __func__, info->flip);
+	pr_debug("%s: flip:%d.\n", __func__, info->flip);
 }
 
 static void ps5169_config_dp_only_mode(struct ps5169_info *info, int flip)
@@ -280,7 +280,7 @@ static void ps5169_config_dp_only_mode(struct ps5169_info *info, int flip)
 	if (!ps5169_present_check(info))
 		return;
 
-	pr_info("%s: flip:%d.\n", __func__, flip);
+	pr_debug("%s: flip:%d.\n", __func__, flip);
 	if (flip == 1)
 		ret |= ps5169_update_reg(info, 0x40, 0xa0);	
 	else if (flip == 2)
@@ -300,7 +300,7 @@ static void ps5169_config_usb_dp_mode(struct ps5169_info *info, int flip)
 	if (!ps5169_present_check(info))
 		return;
 
-	pr_info("%s: flip:%d.\n", __func__, flip);
+	pr_debug("%s: flip:%d.\n", __func__, flip);
 	if (flip == 1)
 		ret |= ps5169_update_reg(info, 0x40, 0xe0);		
 	else if (flip == 2)
@@ -737,7 +737,7 @@ static int ps5169_probe(struct i2c_client *client,
 	static int retry_count = 0;
 	struct ps5169_info *info;
 
-	pr_info("%s: =/START-PROBE/=\n", __func__);
+	pr_debug("%s: =/START-PROBE/=\n", __func__);
 
 	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
 	if (info == NULL)
@@ -792,11 +792,11 @@ static int ps5169_probe(struct i2c_client *client,
 	}
 
 	ps5169_set_config(info);
-	pr_info("%s: set cfg.\n", __func__);
+	pr_debug("%s: set cfg.\n", __func__);
 
 	INIT_DELAYED_WORK(&info->ps_en_work, ps5169_enable_work);
 
-	pr_info("%s: success probe!\n", __func__);
+	pr_debug("%s: success probe!\n", __func__);
 
 	return 0;
 
@@ -842,7 +842,7 @@ static struct i2c_driver ps5169_driver = {
 static int __init ps5169_init(void)
 {
 	int ret;
-	pr_info("%s.\n", __func__);
+	pr_debug("%s.\n", __func__);
 	ret = i2c_add_driver(&ps5169_driver);
 	if (ret)
 		pr_err("ps5169 i2c driver init failed!\n");

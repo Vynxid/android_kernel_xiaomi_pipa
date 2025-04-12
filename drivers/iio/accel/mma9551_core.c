@@ -624,7 +624,7 @@ int mma9551_read_version(struct i2c_client *client)
 	if (ret < 0)
 		return ret;
 
-	dev_info(&client->dev, "device ID 0x%x, firmware version %02x.%02x\n",
+	dev_dbg(&client->dev, "device ID 0x%x, firmware version %02x.%02x\n",
 		 be32_to_cpu(info.device_id), info.fw_version[0],
 		 info.fw_version[1]);
 

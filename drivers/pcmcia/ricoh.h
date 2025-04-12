@@ -182,7 +182,7 @@ static void ricoh_set_clkrun(struct yenta_socket *socket, bool quiet)
 				"CLKRUN feature already disabled\n");
 	} else if (disable_clkrun) {
 		if (!quiet)
-			dev_info(&socket->dev->dev,
+			dev_dbg(&socket->dev->dev,
 				 "Disabling CLKRUN feature\n");
 		misc3 |= RL5C47X_MISC3_CB_CLKRUN_DIS;
 		config_writew(socket, RL5C4XX_MISC3, misc3);

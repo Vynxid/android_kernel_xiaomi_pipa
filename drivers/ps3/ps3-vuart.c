@@ -1060,7 +1060,7 @@ static int ps3_vuart_probe(struct ps3_system_bus_device *dev)
 		result = drv->probe(dev);
 	else {
 		result = 0;
-		dev_info(&dev->core, "%s:%d: no probe method\n", __func__,
+		dev_dbg(&dev->core, "%s:%d: no probe method\n", __func__,
 			__LINE__);
 	}
 

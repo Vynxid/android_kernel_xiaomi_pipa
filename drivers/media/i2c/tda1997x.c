@@ -2458,7 +2458,7 @@ static int tda1997x_pcm_startup(struct snd_pcm_substream *substream,
 			rate);
 		return err;
 	}
-	dev_info(component->dev, "set samplerate constraint to %dHz\n", rate);
+	dev_dbg(component->dev, "set samplerate constraint to %dHz\n", rate);
 
 	return 0;
 }

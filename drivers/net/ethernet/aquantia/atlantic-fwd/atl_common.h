@@ -300,7 +300,7 @@ extern unsigned atl_min_intr_delay;
 #define atl_dev_dbg(fmt, args...)			\
 	dev_dbg(&hw->pdev->dev, fmt, ## args)
 #define atl_dev_info(fmt, args...)			\
-	dev_info(&hw->pdev->dev, fmt, ## args)
+	dev_dbg(&hw->pdev->dev, fmt, ## args)
 #define atl_dev_warn(fmt, args...)			\
 	dev_warn(&hw->pdev->dev, fmt, ## args)
 #define atl_dev_err(fmt, args...)			\
@@ -309,7 +309,7 @@ extern unsigned atl_min_intr_delay;
 #define atl_nic_dbg(fmt, args...)		\
 	dev_dbg(&nic->hw.pdev->dev, fmt, ## args)
 #define atl_nic_info(fmt, args...)		\
-	dev_info(&nic->hw.pdev->dev, fmt, ## args)
+	dev_dbg(&nic->hw.pdev->dev, fmt, ## args)
 #define atl_nic_warn(fmt, args...)		\
 	dev_warn(&nic->hw.pdev->dev, fmt, ## args)
 #define atl_nic_err(fmt, args...)		\

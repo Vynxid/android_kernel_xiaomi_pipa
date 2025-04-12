@@ -172,7 +172,7 @@ static void puv3_rtc_enable(struct device *dev, int en)
 	} else {
 		/* re-enable the device, and check it is ok */
 		if ((readl(RTC_RTSR) & RTC_RTSR_HZE) == 0) {
-			dev_info(dev, "rtc disabled, re-enabling\n");
+			dev_dbg(dev, "rtc disabled, re-enabling\n");
 			writel(readl(RTC_RTSR) | RTC_RTSR_HZE, RTC_RTSR);
 		}
 	}

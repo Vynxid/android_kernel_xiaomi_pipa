@@ -998,7 +998,7 @@ static int moxa_pci_probe(struct pci_dev *pdev,
 
 	pci_set_drvdata(pdev, board);
 
-	dev_info(&pdev->dev, "board '%s' ready (%u ports, firmware loaded)\n",
+	dev_dbg(&pdev->dev, "board '%s' ready (%u ports, firmware loaded)\n",
 			moxa_brdname[board_type - 1], board->numPorts);
 
 	return 0;

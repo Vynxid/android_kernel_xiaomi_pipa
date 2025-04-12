@@ -181,7 +181,7 @@ static int mpic_msgr_probe(struct platform_device *dev)
 	 */
 	if (!mpic_msgrs) {
 		mpic_msgr_count = mpic_msgr_number_of_registers();
-		dev_info(&dev->dev, "Found %d message registers\n",
+		dev_dbg(&dev->dev, "Found %d message registers\n",
 				mpic_msgr_count);
 
 		mpic_msgrs = kcalloc(mpic_msgr_count, sizeof(*mpic_msgrs),
@@ -192,7 +192,7 @@ static int mpic_msgr_probe(struct platform_device *dev)
 			return -ENOMEM;
 		}
 	}
-	dev_info(&dev->dev, "Of-device full name %pOF\n", np);
+	dev_dbg(&dev->dev, "Of-device full name %pOF\n", np);
 
 	/* IO map the message register block. */
 	of_address_to_resource(np, 0, &rsrc);
@@ -209,7 +209,7 @@ static int mpic_msgr_probe(struct platform_device *dev)
 			"Failed to find message register block alias\n");
 		return -ENODEV;
 	}
-	dev_info(&dev->dev, "Setting up message register block %d\n",
+	dev_dbg(&dev->dev, "Setting up message register block %d\n",
 			block_number);
 
 	/* Grab the receive mask which specifies what registers can receive
@@ -251,7 +251,7 @@ static int mpic_msgr_probe(struct platform_device *dev)
 
 		mpic_msgrs[reg_number] = msgr;
 		mpic_msgr_disable(msgr);
-		dev_info(&dev->dev, "Register %d initialized: irq %d\n",
+		dev_dbg(&dev->dev, "Register %d initialized: irq %d\n",
 				reg_number, msgr->irq);
 
 	}

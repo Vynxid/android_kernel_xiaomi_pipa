@@ -624,7 +624,7 @@ static int xvip_composite_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, xdev);
 
-	dev_info(xdev->dev, "device registered\n");
+	dev_dbg(xdev->dev, "device registered\n");
 
 	return 0;
 

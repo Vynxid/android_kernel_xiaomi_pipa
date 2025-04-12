@@ -286,7 +286,7 @@ static irqreturn_t intel_irq(int irq, void *dev_id)
 {
 	struct intel_device *idev = dev_id;
 
-	dev_info(&idev->pdev->dev, "hci_intel irq\n");
+	dev_dbg(&idev->pdev->dev, "hci_intel irq\n");
 
 	mutex_lock(&idev->hu_lock);
 	if (idev->hu)
@@ -1220,7 +1220,7 @@ no_irq:
 	list_add_tail(&idev->list, &intel_device_list);
 	mutex_unlock(&intel_device_list_lock);
 
-	dev_info(&pdev->dev, "registered, gpio(%d)/irq(%d).\n",
+	dev_dbg(&pdev->dev, "registered, gpio(%d)/irq(%d).\n",
 		 desc_to_gpio(idev->reset), idev->irq);
 
 	return 0;
@@ -1236,7 +1236,7 @@ static int intel_remove(struct platform_device *pdev)
 	list_del(&idev->list);
 	mutex_unlock(&intel_device_list_lock);
 
-	dev_info(&pdev->dev, "unregistered.\n");
+	dev_dbg(&pdev->dev, "unregistered.\n");
 
 	return 0;
 }

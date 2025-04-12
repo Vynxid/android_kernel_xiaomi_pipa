@@ -246,7 +246,7 @@ struct redrat3_dev {
 static void redrat3_dump_fw_error(struct redrat3_dev *rr3, int code)
 {
 	if (!rr3->transmitting && (code != 0x40))
-		dev_info(rr3->dev, "fw error code 0x%02x: ", code);
+		dev_dbg(rr3->dev, "fw error code 0x%02x: ", code);
 
 	switch (code) {
 	case 0x00:
@@ -599,7 +599,7 @@ static void redrat3_get_firmware_rev(struct redrat3_dev *rr3)
 			     0, 0, buffer, RR3_FW_VERSION_LEN, 5000);
 
 	if (rc >= 0)
-		dev_info(rr3->dev, "Firmware rev: %s", buffer);
+		dev_dbg(rr3->dev, "Firmware rev: %s", buffer);
 	else
 		dev_err(rr3->dev, "Problem fetching firmware ID\n");
 

@@ -426,7 +426,7 @@ static void pl011_dma_probe(struct uart_amba_port *uap)
 
 		/* We need platform data */
 		if (!plat || !plat->dma_filter) {
-			dev_info(uap->port.dev, "no DMA platform data\n");
+			dev_dbg(uap->port.dev, "no DMA platform data\n");
 			return;
 		}
 
@@ -445,7 +445,7 @@ static void pl011_dma_probe(struct uart_amba_port *uap)
 	dmaengine_slave_config(chan, &tx_conf);
 	uap->dmatx.chan = chan;
 
-	dev_info(uap->port.dev, "DMA channel TX %s\n",
+	dev_dbg(uap->port.dev, "DMA channel TX %s\n",
 		 dma_chan_name(uap->dmatx.chan));
 
 	/* Optionally make use of an RX channel as well */
@@ -480,7 +480,7 @@ static void pl011_dma_probe(struct uart_amba_port *uap)
 			if (caps.residue_granularity ==
 					DMA_RESIDUE_GRANULARITY_DESCRIPTOR) {
 				dma_release_channel(chan);
-				dev_info(uap->port.dev,
+				dev_dbg(uap->port.dev,
 					"RX DMA disabled - no residue processing\n");
 				return;
 			}
@@ -527,7 +527,7 @@ static void pl011_dma_probe(struct uart_amba_port *uap)
 					uap->dmarx.poll_timeout = 3000;
 			}
 		}
-		dev_info(uap->port.dev, "DMA channel RX %s\n",
+		dev_dbg(uap->port.dev, "DMA channel RX %s\n",
 			 dma_chan_name(uap->dmarx.chan));
 	}
 }
@@ -2741,7 +2741,7 @@ static int sbsa_uart_probe(struct platform_device *pdev)
 
 #ifdef CONFIG_ACPI_SPCR_TABLE
 	if (qdf2400_e44_present) {
-		dev_info(&pdev->dev, "working around QDF2400 SoC erratum 44\n");
+		dev_dbg(&pdev->dev, "working around QDF2400 SoC erratum 44\n");
 		uap->vendor = &vendor_qdt_qdf2400_e44;
 	} else
 #endif

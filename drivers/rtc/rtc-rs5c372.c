@@ -651,7 +651,7 @@ static int rs5c372_probe(struct i2c_client *client,
 		goto exit;
 	}
 
-	dev_info(&client->dev, "%s found, %s\n",
+	dev_dbg(&client->dev, "%s found, %s\n",
 			({ char *s; switch (rs5c372->type) {
 			case rtc_r2025sd:	s = "r2025sd"; break;
 			case rtc_r2221tl:	s = "r2221tl"; break;

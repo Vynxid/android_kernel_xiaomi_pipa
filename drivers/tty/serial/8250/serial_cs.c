@@ -658,7 +658,7 @@ static int serial_config(struct pcmcia_device *link)
 	if (info->quirk && info->quirk->multi != -1)
 		info->multi = info->quirk->multi;
 
-	dev_info(&link->dev,
+	dev_dbg(&link->dev,
 		"trying to set up [0x%04x:0x%04x] (pfc: %d, multi: %d, quirk: %p)\n",
 		link->manf_id, link->card_id,
 		link->socket->pcmcia_pfc, info->multi, info->quirk);

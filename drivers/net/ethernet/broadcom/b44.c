@@ -2286,7 +2286,7 @@ static int b44_register_phy_one(struct b44 *bp)
 	if (!mdiobus_is_registered_device(bp->mii_bus, bp->phy_addr) &&
 	    (sprom->boardflags_lo & (B44_BOARDFLAG_ROBO | B44_BOARDFLAG_ADM))) {
 
-		dev_info(sdev->dev,
+		dev_dbg(sdev->dev,
 			 "could not find PHY at %i, use fixed one\n",
 			 bp->phy_addr);
 

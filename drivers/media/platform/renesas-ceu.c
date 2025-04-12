@@ -1701,7 +1701,7 @@ static int ceu_probe(struct platform_device *pdev)
 	if (ret)
 		goto error_v4l2_unregister;
 
-	dev_info(dev, "Renesas Capture Engine Unit %s\n", dev_name(dev));
+	dev_dbg(dev, "Renesas Capture Engine Unit %s\n", dev_name(dev));
 
 	return 0;
 

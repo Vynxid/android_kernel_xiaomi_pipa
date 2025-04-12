@@ -1066,7 +1066,7 @@ static void scsifront_read_backend_params(struct xenbus_device *dev,
 			sizeof(struct scsiif_request_segment));
 
 	if (!info->pause && sg_grant)
-		dev_info(&dev->dev, "using up to %d SG entries\n", nr_segs);
+		dev_dbg(&dev->dev, "using up to %d SG entries\n", nr_segs);
 	else if (info->pause && nr_segs < host->sg_tablesize)
 		dev_warn(&dev->dev,
 			 "SG entries decreased from %d to %u - device may not work properly anymore\n",

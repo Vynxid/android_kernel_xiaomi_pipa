@@ -402,7 +402,7 @@ struct bw_cache {
 };
 
 struct ipa_mpm_context {
-	struct ipa_mpm_dev_info dev_info;
+	struct ipa_mpm_dev_info dev_dbg;
 	struct ipa_mpm_mhi_driver md[IPA_MPM_MAX_MHIP_CHAN];
 	struct mutex mutex;
 	atomic_t probe_cnt;
@@ -607,7 +607,7 @@ static dma_addr_t ipa_mpm_smmu_map(void *va_addr,
 	int ret = 0;
 
 	/* check cache coherent */
-	if (ipa_mpm_ctx->dev_info.is_cache_coherent)  {
+	if (ipa_mpm_ctx->dev_dbg.is_cache_coherent)  {
 		IPA_MPM_DBG_LOW("enable cache coherent\n");
 		prot |= IOMMU_CACHE;
 	}
@@ -624,8 +624,8 @@ static dma_addr_t ipa_mpm_smmu_map(void *va_addr,
 	 * dma_map_single ensures cache is flushed and the memory is not
 	 * touched again until dma_unmap_single() is called
 	 */
-	smmu_enabled = (ipa_mpm_ctx->dev_info.ipa_smmu_enabled &&
-		ipa_mpm_ctx->dev_info.pcie_smmu_enabled) ? 1 : 0;
+	smmu_enabled = (ipa_mpm_ctx->dev_dbg.ipa_smmu_enabled &&
+		ipa_mpm_ctx->dev_dbg.pcie_smmu_enabled) ? 1 : 0;
 
 	if (smmu_enabled) {
 		/* Map the phys addr to both PCIE and IPA AP CB
@@ -727,8 +727,8 @@ static void ipa_mpm_smmu_unmap(dma_addr_t carved_iova, int sz, int dir,
 	u32 size_p = 0;
 	struct iommu_domain *ipa_smmu_domain, *pcie_smmu_domain;
 	struct ipa_smmu_cb_ctx *cb = &ipa_mpm_ctx->carved_smmu_cb;
-	int smmu_enabled = (ipa_mpm_ctx->dev_info.ipa_smmu_enabled &&
-		ipa_mpm_ctx->dev_info.pcie_smmu_enabled) ? 1 : 0;
+	int smmu_enabled = (ipa_mpm_ctx->dev_dbg.ipa_smmu_enabled &&
+		ipa_mpm_ctx->dev_dbg.pcie_smmu_enabled) ? 1 : 0;
 
 	if (carved_iova <= 0) {
 		IPA_MPM_ERR("carved_iova is zero/negative\n");
@@ -794,7 +794,7 @@ static u32 ipa_mpm_smmu_map_doorbell(enum mhip_smmu_domain_type smmu_domain,
 	u64 offset = 0;
 
 	/* check cache coherent */
-	if (ipa_mpm_ctx->dev_info.is_cache_coherent)  {
+	if (ipa_mpm_ctx->dev_dbg.is_cache_coherent)  {
 		IPA_MPM_DBG(" enable cache coherent\n");
 		prot |= IOMMU_CACHE;
 	}
@@ -804,8 +804,8 @@ static u32 ipa_mpm_smmu_map_doorbell(enum mhip_smmu_domain_type smmu_domain,
 		ipa_assert();
 	}
 
-	smmu_enabled = (ipa_mpm_ctx->dev_info.ipa_smmu_enabled &&
-		ipa_mpm_ctx->dev_info.pcie_smmu_enabled) ? 1 : 0;
+	smmu_enabled = (ipa_mpm_ctx->dev_dbg.ipa_smmu_enabled &&
+		ipa_mpm_ctx->dev_dbg.pcie_smmu_enabled) ? 1 : 0;
 
 	if (smmu_enabled) {
 		IPA_SMMU_ROUND_TO_PAGE(carved_iova, pa_addr, IPA_MPM_PAGE_SIZE,
@@ -860,8 +860,8 @@ static void ipa_mpm_smmu_unmap_doorbell(enum mhip_smmu_domain_type smmu_domain,
 	u32 size_p;
 	struct ipa_smmu_cb_ctx *cb = &ipa_mpm_ctx->carved_smmu_cb;
 
-	smmu_enabled = (ipa_mpm_ctx->dev_info.ipa_smmu_enabled &&
-		ipa_mpm_ctx->dev_info.pcie_smmu_enabled) ? 1 : 0;
+	smmu_enabled = (ipa_mpm_ctx->dev_dbg.ipa_smmu_enabled &&
+		ipa_mpm_ctx->dev_dbg.pcie_smmu_enabled) ? 1 : 0;
 
 	if (smmu_enabled) {
 		IPA_SMMU_ROUND_TO_PAGE(iova, iova, IPA_MPM_PAGE_SIZE,
@@ -2245,7 +2245,7 @@ static int ipa_mpm_mhi_probe_cb(struct mhi_device *mhi_dev,
 		/* Store Channel properties */
 		ch->chan_props.id = mhi_dev->ul_chan_id;
 		ch->chan_props.device_db =
-			ipa_mpm_ctx->dev_info.chdb_base +
+			ipa_mpm_ctx->dev_dbg.chdb_base +
 			ch->chan_props.id * 8;
 		/* Fill Channel Conext to be sent to Device side */
 		ch->chan_props.ch_ctx.chtype =
@@ -2262,7 +2262,7 @@ static int ipa_mpm_mhi_probe_cb(struct mhi_device *mhi_dev,
 			GSI_EVT_RING_RE_SIZE_16B;
 		ch->evt_props.ev_ctx.buff_size = TRE_BUFF_SIZE;
 		ch->evt_props.device_db =
-			ipa_mpm_ctx->dev_info.erdb_base +
+			ipa_mpm_ctx->dev_dbg.erdb_base +
 			ch->chan_props.ch_ctx.erindex * 8;
 
 		/* Map uc-db and put in reserve2 */
@@ -2311,7 +2311,7 @@ static int ipa_mpm_mhi_probe_cb(struct mhi_device *mhi_dev,
 		/* Store Channel properties */
 		ch->chan_props.id = mhi_dev->dl_chan_id;
 		ch->chan_props.device_db =
-			ipa_mpm_ctx->dev_info.chdb_base +
+			ipa_mpm_ctx->dev_dbg.chdb_base +
 			ch->chan_props.id * 8;
 		/* Fill Channel Conext to be be sent to Dev side */
 		ch->chan_props.ch_ctx.chstate = 1;
@@ -2328,7 +2328,7 @@ static int ipa_mpm_mhi_probe_cb(struct mhi_device *mhi_dev,
 			GSI_EVT_RING_RE_SIZE_16B;
 		ch->evt_props.ev_ctx.buff_size = TRE_BUFF_SIZE;
 		ch->evt_props.device_db =
-			ipa_mpm_ctx->dev_info.erdb_base +
+			ipa_mpm_ctx->dev_dbg.erdb_base +
 			ch->chan_props.ch_ctx.erindex * 8;
 
 		/* connect Host GSI pipes with MHI' protocol */
@@ -2635,7 +2635,7 @@ fail_start_channel:
 fail_stop_channel:
 fail_smmu:
 fail_flow_control:
-	if (ipa_mpm_ctx->dev_info.ipa_smmu_enabled)
+	if (ipa_mpm_ctx->dev_dbg.ipa_smmu_enabled)
 		IPA_MPM_DBG("SMMU failed\n");
 	if (is_acted)
 		ipa_mpm_vote_unvote_pcie_clk(CLK_OFF, probe_id, true,
@@ -3126,23 +3126,23 @@ static int ipa_mpm_populate_smmu_info(struct platform_device *pdev)
 	/* get IPA SMMU enabled status */
 	smmu_in.smmu_client = IPA_SMMU_AP_CLIENT;
 	if (ipa_get_smmu_params(&smmu_in, &smmu_out))
-		ipa_mpm_ctx->dev_info.ipa_smmu_enabled = false;
+		ipa_mpm_ctx->dev_dbg.ipa_smmu_enabled = false;
 	else
-		ipa_mpm_ctx->dev_info.ipa_smmu_enabled =
+		ipa_mpm_ctx->dev_dbg.ipa_smmu_enabled =
 		smmu_out.smmu_enable;
 
 	/* get cache_coherent enable or not */
-	ipa_mpm_ctx->dev_info.is_cache_coherent = ap_cb->is_cache_coherent;
+	ipa_mpm_ctx->dev_dbg.is_cache_coherent = ap_cb->is_cache_coherent;
 	if (of_property_read_u32_array(pdev->dev.of_node, "qcom,iova-mapping",
 		carved_iova_ap_mapping, 2)) {
 		IPA_MPM_ERR("failed to read of_node %s\n",
 			"qcom,mpm-iova-mapping");
 		return -EINVAL;
 	}
-	ipa_mpm_ctx->dev_info.pcie_smmu_enabled = true;
+	ipa_mpm_ctx->dev_dbg.pcie_smmu_enabled = true;
 
-	if (ipa_mpm_ctx->dev_info.ipa_smmu_enabled !=
-		ipa_mpm_ctx->dev_info.pcie_smmu_enabled) {
+	if (ipa_mpm_ctx->dev_dbg.ipa_smmu_enabled !=
+		ipa_mpm_ctx->dev_dbg.pcie_smmu_enabled) {
 		IPA_MPM_DBG("PCIE/IPA SMMU config mismatch\n");
 		return -EINVAL;
 	}
@@ -3158,11 +3158,11 @@ static int ipa_mpm_populate_smmu_info(struct platform_device *pdev)
 		return -EFAULT;
 	}
 
-	cb->dev = ipa_mpm_ctx->dev_info.dev;
+	cb->dev = ipa_mpm_ctx->dev_dbg.dev;
 	cb->valid = true;
 	cb->next_addr = cb->va_start;
 
-	if (dma_set_mask_and_coherent(ipa_mpm_ctx->dev_info.dev,
+	if (dma_set_mask_and_coherent(ipa_mpm_ctx->dev_dbg.dev,
 		DMA_BIT_MASK(64))) {
 		IPA_MPM_ERR("setting DMA mask to 64 failed.\n");
 		return -EINVAL;
@@ -3207,8 +3207,8 @@ static int ipa_mpm_probe(struct platform_device *pdev)
 	mutex_init(&ipa_mpm_ctx->mutex);
 	ipa_mpm_ctx->cache_index = 0;
 
-	ipa_mpm_ctx->dev_info.pdev = pdev;
-	ipa_mpm_ctx->dev_info.dev = &pdev->dev;
+	ipa_mpm_ctx->dev_dbg.pdev = pdev;
+	ipa_mpm_ctx->dev_dbg.dev = &pdev->dev;
 
 	/* uc_fc_fb, might define in dtsi */
 	ipa_mpm_ctx->uc_fc_db = IPA_UC_FC_DB_ADDR;
@@ -3216,18 +3216,18 @@ static int ipa_mpm_probe(struct platform_device *pdev)
 	ipa_mpm_init_mhip_channel_info();
 
 	if (of_property_read_u32(pdev->dev.of_node, "qcom,mhi-chdb-base",
-		&ipa_mpm_ctx->dev_info.chdb_base)) {
+		&ipa_mpm_ctx->dev_dbg.chdb_base)) {
 		IPA_MPM_ERR("failed to read qcom,mhi-chdb-base\n");
 		goto fail_probe;
 	}
-	IPA_MPM_DBG("chdb-base=0x%x\n", ipa_mpm_ctx->dev_info.chdb_base);
+	IPA_MPM_DBG("chdb-base=0x%x\n", ipa_mpm_ctx->dev_dbg.chdb_base);
 
 	if (of_property_read_u32(pdev->dev.of_node, "qcom,mhi-erdb-base",
-		&ipa_mpm_ctx->dev_info.erdb_base)) {
+		&ipa_mpm_ctx->dev_dbg.erdb_base)) {
 		IPA_MPM_ERR("failed to read qcom,mhi-erdb-base\n");
 		goto fail_probe;
 	}
-	IPA_MPM_DBG("erdb-base=0x%x\n", ipa_mpm_ctx->dev_info.erdb_base);
+	IPA_MPM_DBG("erdb-base=0x%x\n", ipa_mpm_ctx->dev_dbg.erdb_base);
 
 	ret = ipa_mpm_populate_smmu_info(pdev);
 

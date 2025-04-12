@@ -83,7 +83,7 @@ static int rt5033_i2c_probe(struct i2c_client *i2c,
 		dev_err(&i2c->dev, "Device not found\n");
 		return -ENODEV;
 	}
-	dev_info(&i2c->dev, "Device found Device ID: %04x\n", dev_id);
+	dev_dbg(&i2c->dev, "Device found Device ID: %04x\n", dev_id);
 
 	ret = devm_regmap_add_irq_chip(rt5033->dev, rt5033->regmap,
 			rt5033->irq, IRQF_TRIGGER_FALLING | IRQF_ONESHOT,

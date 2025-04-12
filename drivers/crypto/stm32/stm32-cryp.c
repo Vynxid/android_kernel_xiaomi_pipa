@@ -2020,7 +2020,7 @@ static int stm32_cryp_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_aead_algs;
 
-	dev_info(dev, "Initialized\n");
+	dev_dbg(dev, "Initialized\n");
 
 	pm_runtime_put_sync(dev);
 

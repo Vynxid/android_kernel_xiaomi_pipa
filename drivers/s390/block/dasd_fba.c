@@ -179,7 +179,7 @@ dasd_fba_check_characteristics(struct dasd_device *device)
 	/* FBA supports discard, set the according feature bit */
 	dasd_set_feature(cdev, DASD_FEATURE_DISCARD, 1);
 
-	dev_info(&device->cdev->dev,
+	dev_dbg(&device->cdev->dev,
 		 "New FBA DASD %04X/%02X (CU %04X/%02X) with %d MB "
 		 "and %d B/blk%s\n",
 		 cdev->id.dev_type,

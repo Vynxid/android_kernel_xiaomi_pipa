@@ -40,19 +40,19 @@ static int tps6105x_startup(struct tps6105x *tps6105x)
 		return ret;
 	switch (regval >> TPS6105X_REG0_MODE_SHIFT) {
 	case TPS6105X_REG0_MODE_SHUTDOWN:
-		dev_info(&tps6105x->client->dev,
+		dev_dbg(&tps6105x->client->dev,
 			 "TPS6105x found in SHUTDOWN mode\n");
 		break;
 	case TPS6105X_REG0_MODE_TORCH:
-		dev_info(&tps6105x->client->dev,
+		dev_dbg(&tps6105x->client->dev,
 			 "TPS6105x found in TORCH mode\n");
 		break;
 	case TPS6105X_REG0_MODE_TORCH_FLASH:
-		dev_info(&tps6105x->client->dev,
+		dev_dbg(&tps6105x->client->dev,
 			 "TPS6105x found in FLASH mode\n");
 		break;
 	case TPS6105X_REG0_MODE_VOLTAGE:
-		dev_info(&tps6105x->client->dev,
+		dev_dbg(&tps6105x->client->dev,
 			 "TPS6105x found in VOLTAGE mode\n");
 		break;
 	default:
@@ -129,7 +129,7 @@ static int tps6105x_probe(struct i2c_client *client,
 
 	switch (pdata->mode) {
 	case TPS6105X_MODE_SHUTDOWN:
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			 "present, not used for anything, only GPIO\n");
 		break;
 	case TPS6105X_MODE_TORCH:

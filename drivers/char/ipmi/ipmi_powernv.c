@@ -242,7 +242,7 @@ static int ipmi_powernv_probe(struct platform_device *pdev)
 
 	ipmi->irq = irq_of_parse_and_map(dev->of_node, 0);
 	if (!ipmi->irq) {
-		dev_info(dev, "Unable to map irq from device tree\n");
+		dev_dbg(dev, "Unable to map irq from device tree\n");
 		ipmi->irq = opal_event_request(prop);
 	}
 

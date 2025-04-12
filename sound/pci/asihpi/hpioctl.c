@@ -437,7 +437,7 @@ int asihpi_adapter_probe(struct pci_dev *pci_dev,
 		&& hr.u.ax.mode.adapter_mode == HPI_ADAPTER_MODE_LOW_LATENCY)
 		low_latency_mode = 1;
 	else
-		dev_info(&pci_dev->dev,
+		dev_dbg(&pci_dev->dev,
 			"Adapter at index %d is not in low latency mode\n",
 			adapter.adapter->index);
 
@@ -448,7 +448,7 @@ int asihpi_adapter_probe(struct pci_dev *pci_dev,
 	hm.u.ax.property_set.property = HPI_ADAPTER_PROPERTY_SUPPORTS_IRQ;
 	hpi_send_recv_ex(&hm, &hr, HOWNER_KERNEL);
 	if (hr.error || !hr.u.ax.property_get.parameter1) {
-		dev_info(&pci_dev->dev,
+		dev_dbg(&pci_dev->dev,
 			"IRQs not supported by adapter at index %d\n",
 			adapter.adapter->index);
 	} else {
@@ -494,13 +494,13 @@ int asihpi_adapter_probe(struct pci_dev *pci_dev,
 
 		adapters[adapter_index].interrupt_mode = 1;
 
-		dev_info(&pci_dev->dev, "using irq %d\n", pci_dev->irq);
+		dev_dbg(&pci_dev->dev, "using irq %d\n", pci_dev->irq);
 		adapters[adapter_index].irq = pci_dev->irq;
 	} else {
-		dev_info(&pci_dev->dev, "using polled mode\n");
+		dev_dbg(&pci_dev->dev, "using polled mode\n");
 	}
 
-	dev_info(&pci_dev->dev, "probe succeeded for ASI%04X HPI index %d\n",
+	dev_dbg(&pci_dev->dev, "probe succeeded for ASI%04X HPI index %d\n",
 		 adapter.adapter->type, adapter_index);
 
 	return 0;
@@ -557,7 +557,7 @@ void asihpi_adapter_remove(struct pci_dev *pci_dev)
 	vfree(pa->p_buffer);
 
 	if (1)
-		dev_info(&pci_dev->dev,
+		dev_dbg(&pci_dev->dev,
 			 "remove %04x:%04x,%04x:%04x,%04x, HPI index %d\n",
 			 pci_dev->vendor, pci_dev->device,
 			 pci_dev->subsystem_vendor, pci_dev->subsystem_device,

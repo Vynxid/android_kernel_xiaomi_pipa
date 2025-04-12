@@ -391,7 +391,7 @@ static int ast_vhub_probe(struct platform_device *pdev)
 	/* Initialize HW */
 	ast_vhub_init_hw(vhub);
 
-	dev_info(&pdev->dev, "Initialized virtual hub in USB%d mode\n",
+	dev_dbg(&pdev->dev, "Initialized virtual hub in USB%d mode\n",
 		 vhub->force_usb1 ? 1 : 2);
 
 	return 0;

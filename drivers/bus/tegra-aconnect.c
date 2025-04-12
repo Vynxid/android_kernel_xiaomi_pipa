@@ -38,7 +38,7 @@ static int tegra_aconnect_probe(struct platform_device *pdev)
 
 	of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
 
-	dev_info(&pdev->dev, "Tegra ACONNECT bus registered\n");
+	dev_dbg(&pdev->dev, "Tegra ACONNECT bus registered\n");
 
 	return 0;
 

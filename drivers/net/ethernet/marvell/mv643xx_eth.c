@@ -2858,7 +2858,7 @@ static int mv643xx_eth_shared_probe(struct platform_device *pdev)
 	int ret;
 
 	if (!mv643xx_eth_version_printed++)
-		pr_notice("MV-643xx 10/100/1000 ethernet driver version %s\n",
+		pr_debug("MV-643xx 10/100/1000 ethernet driver version %s\n",
 			  mv643xx_eth_driver_version);
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);

@@ -1741,10 +1741,10 @@ static int mxs_auart_probe(struct platform_device *pdev)
 
 	/* ASM9260 don't have version reg */
 	if (is_asm9260_auart(s)) {
-		dev_info(&pdev->dev, "Found APPUART ASM9260\n");
+		dev_dbg(&pdev->dev, "Found APPUART ASM9260\n");
 	} else {
 		version = mxs_read(s, REG_VERSION);
-		dev_info(&pdev->dev, "Found APPUART %d.%d.%d\n",
+		dev_dbg(&pdev->dev, "Found APPUART %d.%d.%d\n",
 			 (version >> 24) & 0xff,
 			 (version >> 16) & 0xff, version & 0xffff);
 	}

@@ -342,7 +342,7 @@ static int asic3_gpio_irq_type(struct irq_data *data, unsigned int type)
 		 * be careful to not unmask them if mask was also called.
 		 * Probably need internal state for mask.
 		 */
-		dev_notice(asic->dev, "irq type not changed\n");
+		dev_dbg(asic->dev, "irq type not changed\n");
 	}
 	asic3_write_register(asic, bank + ASIC3_GPIO_LEVEL_TRIGGER,
 			     level);
@@ -1027,7 +1027,7 @@ static int __init asic3_probe(struct platform_device *pdev)
 	asic3_set_register(asic, ASIC3_OFFSET(EXTCF, SELECT),
 		(ASIC3_EXTCF_CF0_BUF_EN|ASIC3_EXTCF_CF0_PWAIT_EN), 1);
 
-	dev_info(asic->dev, "ASIC3 Core driver\n");
+	dev_dbg(asic->dev, "ASIC3 Core driver\n");
 
 	return 0;
 

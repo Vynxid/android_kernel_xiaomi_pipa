@@ -463,7 +463,7 @@ static int rmi_f01_probe(struct rmi_function *fn)
 		return error;
 	}
 
-	dev_info(&fn->dev, "found RMI device, manufacturer: %s, product: %s, fw id: %d\n",
+	dev_dbg(&fn->dev, "found RMI device, manufacturer: %s, product: %s, fw id: %d\n",
 		 f01->properties.manufacturer_id == 1 ? "Synaptics" : "unknown",
 		 f01->properties.product_id, f01->properties.firmware_id);
 

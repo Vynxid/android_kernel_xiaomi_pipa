@@ -81,7 +81,7 @@ static void sym_print_msg(struct sym_ccb *cp, char *label, u_char *msg)
 static void sym_print_nego_msg(struct sym_hcb *np, int target, char *label, u_char *msg)
 {
 	struct sym_tcb *tp = &np->target[target];
-	dev_info(&tp->starget->dev, "%s: ", label);
+	dev_dbg(&tp->starget->dev, "%s: ", label);
 
 	spi_print_msg(msg);
 	printf("\n");
@@ -3598,7 +3598,7 @@ static void sym_sir_task_recovery(struct sym_hcb *np, int num)
 	 *  Print to the log the message we intend to send.
 	 */
 	if (num == SIR_TARGET_SELECTED) {
-		dev_info(&tp->starget->dev, "control msgout:");
+		dev_dbg(&tp->starget->dev, "control msgout:");
 		sym_printl_hex(np->abrt_msg, np->abrt_tbl.size);
 		np->abrt_tbl.size = cpu_to_scr(np->abrt_tbl.size);
 	}
@@ -5377,7 +5377,7 @@ void sym_complete_error(struct sym_hcb *np, struct sym_ccb *cp)
 	cmd = cp->cmd;
 	sdev = cmd->device;
 	if (DEBUG_FLAGS & (DEBUG_TINY|DEBUG_RESULT)) {
-		dev_info(&sdev->sdev_gendev, "CCB=%p STAT=%x/%x/%x\n", cp,
+		dev_dbg(&sdev->sdev_gendev, "CCB=%p STAT=%x/%x/%x\n", cp,
 			cp->host_status, cp->ssss_status, cp->host_flags);
 	}
 

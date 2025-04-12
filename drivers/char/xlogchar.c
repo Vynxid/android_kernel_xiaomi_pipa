@@ -59,7 +59,7 @@ static ssize_t xlogchar_read(struct file *file, char __user *buf, size_t count,
 	mutex_lock(&xlogdriver->xlog_mutex);
 	while ((XLOGBUF_SIZE - xlogdriver->free_size) < count) {
 		mutex_unlock(&xlogdriver->xlog_mutex);
-		pr_info("%s going to sleep\n", __func__);
+		pr_debug("%s going to sleep\n", __func__);
 
 		err = wait_event_interruptible(
 			xlogdriver->wait_q,
@@ -67,7 +67,7 @@ static ssize_t xlogchar_read(struct file *file, char __user *buf, size_t count,
 		if (err == -ERESTARTSYS)
 			return -ERESTARTSYS;
 
-		pr_info("%s wakeup\n", __func__);
+		pr_debug("%s wakeup\n", __func__);
 		mutex_lock(&xlogdriver->xlog_mutex);
 	}
 	if (XLOGBUF_SIZE < xlogdriver->readindex + count) {
@@ -96,7 +96,7 @@ static ssize_t xlogchar_write(struct file *file, const char __user *buf,
 	size_t copy_bytes;
 	u64 temp = count;
 
-	pr_info("%s: count is %zu\n", __func__, count);
+	pr_debug("%s: count is %zu\n", __func__, count);
 	if (do_div(temp, XLOGPKG_SIZE) || (count > XLOGBUF_SIZE)) {
 		pr_err("xlog: invalide count %zu\n", count);
 		return -EBADMSG;
@@ -122,7 +122,7 @@ static ssize_t xlogchar_write(struct file *file, const char __user *buf,
 	}
 	xlogdriver->free_size -= count;
 	mutex_unlock(&xlogdriver->xlog_mutex);
-	pr_info("%s wakeup reader\n", __func__);
+	pr_debug("%s wakeup reader\n", __func__);
 	wake_up_interruptible(&xlogdriver->wait_q);
 	return count;
 }
@@ -133,7 +133,7 @@ ssize_t xlogchar_kwrite(const char *buf, size_t count)
 	u64 temp = count;
 
 	pr_err("%s: start\n", __func__);
-	pr_info("%s: count is %zu\n", __func__, count);
+	pr_debug("%s: count is %zu\n", __func__, count);
 	if (do_div(temp, XLOGPKG_SIZE) || (count > XLOGBUF_SIZE)) {
 		pr_err("xlog: invalide count %zu\n", count);
 		return -EBADMSG;
@@ -157,7 +157,7 @@ ssize_t xlogchar_kwrite(const char *buf, size_t count)
 	}
 	xlogdriver->free_size -= count;
 	mutex_unlock(&xlogdriver->xlog_mutex);
-	pr_info("%s: wakeup reader\n", __func__);
+	pr_debug("%s: wakeup reader\n", __func__);
 	wake_up_interruptible(&xlogdriver->wait_q);
 	return count;
 }
@@ -190,7 +190,7 @@ static int xlogchar_setup_cdev(dev_t devno)
 	err = cdev_add(xlogdriver->cdev, devno, 1);
 
 	if (err) {
-		pr_info("xlog cdev registration failed !\n");
+		pr_debug("xlog cdev registration failed !\n");
 		return err;
 	}
 
@@ -215,7 +215,7 @@ static int __init xlogchar_init(void)
 	dev_t dev;
 	int ret;
 
-	pr_info("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 	ret = 0;
 	xlogdriver = kzalloc(sizeof(struct xlogchar_dev) + 5, GFP_KERNEL);
 	if (!xlogdriver)
@@ -247,7 +247,7 @@ static int __init xlogchar_init(void)
 	if (ret)
 		pr_err("xlogchar_setup_cdev failed\n");
 
-	pr_info("%s: done\n", __func__);
+	pr_debug("%s: done\n", __func__);
 
 	return ret;
 }
@@ -267,7 +267,7 @@ static void xlogchar_exit(void)
 			class_destroy(xlogdriver->xlogchar_class);
 		kfree(xlogdriver);
 	}
-	pr_info("%s: done\n", __func__);
+	pr_debug("%s: done\n", __func__);
 }
 
 core_initcall(xlogchar_init);

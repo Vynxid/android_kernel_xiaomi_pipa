@@ -338,7 +338,7 @@ static int cytherm_probe(struct usb_interface *interface,
 	if (retval)
 		goto error;
 
-	dev_info (&interface->dev,
+	dev_dbg (&interface->dev,
 		  "Cypress thermometer device now attached\n");
 	return 0;
 error:
@@ -373,7 +373,7 @@ static void cytherm_disconnect(struct usb_interface *interface)
 
 	kfree(dev);
 
-	dev_info(&interface->dev, "Cypress thermometer now disconnected\n");
+	dev_dbg(&interface->dev, "Cypress thermometer now disconnected\n");
 }
 
 module_usb_driver(cytherm_driver);

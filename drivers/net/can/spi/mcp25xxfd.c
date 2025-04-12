@@ -1414,7 +1414,7 @@ static int mcp25xxfd_hw_check_clock(struct spi_device *spi)
 
 	/* ignore all those ready bits on second try */
 	if ((val & 0xff) == (priv->regs.osc & 0xff)) {
-		dev_info(&spi->dev,
+		dev_dbg(&spi->dev,
 			 "The oscillator register value %08x does not match what we expect: %08x - it is still reasonable, but please investigate\n",
 			val, priv->regs.osc);
 		return 0;
@@ -3535,7 +3535,7 @@ static int mcp25xxfd_setup_fifo(struct net_device *net,
 
 	/* if defined as a module modify the number of tx_fifos */
 	if (tx_fifos) {
-		dev_info(&spi->dev,
+		dev_dbg(&spi->dev,
 			 "Using %i tx-fifos as per module parameter\n",
 			 tx_fifos);
 		priv->fifos.tx_fifos = tx_fifos;
@@ -4351,7 +4351,7 @@ static int mcp25xxfd_can_probe(struct spi_device *spi)
 	if (ret == -ENODEV) {
 		ret = mcp25xxfd_hw_probe(spi);
 		if (!ret)
-			dev_info(&spi->dev,
+			dev_dbg(&spi->dev,
 				 "found device only during retry\n");
 	}
 	if (ret) {

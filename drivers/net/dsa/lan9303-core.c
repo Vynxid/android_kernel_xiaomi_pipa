@@ -883,7 +883,7 @@ static int lan9303_check_device(struct lan9303 *chip)
 	if (ret)
 		dev_warn(chip->dev, "failed to disable switching %d\n", ret);
 
-	dev_info(chip->dev, "Found LAN9303 rev. %u\n", reg & 0xffff);
+	dev_dbg(chip->dev, "Found LAN9303 rev. %u\n", reg & 0xffff);
 
 	ret = lan9303_detect_phy_setup(chip);
 	if (ret) {

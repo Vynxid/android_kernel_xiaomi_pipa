@@ -569,7 +569,7 @@ static int sirfsoc_dma_alloc_chan_resources(struct dma_chan *chan)
 	for (i = 0; i < SIRFSOC_DMA_DESCRIPTORS; i++) {
 		sdesc = kzalloc(sizeof(*sdesc), GFP_KERNEL);
 		if (!sdesc) {
-			dev_notice(sdma->dma.dev, "Memory allocation error. "
+			dev_dbg(sdma->dma.dev, "Memory allocation error. "
 				"Allocated only %u descriptors\n", i);
 			break;
 		}
@@ -956,7 +956,7 @@ static int sirfsoc_dma_probe(struct platform_device *op)
 	}
 
 	pm_runtime_enable(&op->dev);
-	dev_info(dev, "initialized SIRFSOC DMAC driver\n");
+	dev_dbg(dev, "initialized SIRFSOC DMAC driver\n");
 
 	return 0;
 

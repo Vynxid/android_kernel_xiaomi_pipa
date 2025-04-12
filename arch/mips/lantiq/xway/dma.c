@@ -249,7 +249,7 @@ ltq_dma_init(struct platform_device *pdev)
 		ltq_dma_w32_mask(DMA_CHAN_ON, 0, LTQ_DMA_CCTRL);
 	}
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"Init done - hw rev: %X, ports: %d, channels: %d\n",
 		id & 0x1f, (id >> 16) & 0xf, nchannels);
 

@@ -301,7 +301,7 @@ static int fix_northbridge(struct pci_dev *nb, struct pci_dev *agp, u16 cap)
 	 * so let double check that order, and lets trust the AMD NB settings
 	 */
 	if (order >=0 && aper + (32ULL<<(20 + order)) > 0x100000000ULL) {
-		dev_info(&agp->dev, "aperture size %u MB is not right, using settings from NB\n",
+		dev_dbg(&agp->dev, "aperture size %u MB is not right, using settings from NB\n",
 			 32 << order);
 		order = nb_order;
 	}
@@ -311,7 +311,7 @@ static int fix_northbridge(struct pci_dev *nb, struct pci_dev *agp, u16 cap)
 			return 0;
 	}
 
-	dev_info(&agp->dev, "aperture from AGP @ %Lx size %u MB\n",
+	dev_dbg(&agp->dev, "aperture from AGP @ %Lx size %u MB\n",
 		 aper, 32 << order);
 	if (order < 0 || !agp_aperture_valid(aper, (32*1024*1024)<<order))
 		return -1;
@@ -362,14 +362,14 @@ static void amd8151_init(struct pci_dev *pdev, struct agp_bridge_data *bridge)
 	default:   revstring="??"; break;
 	}
 
-	dev_info(&pdev->dev, "AMD 8151 AGP Bridge rev %s\n", revstring);
+	dev_dbg(&pdev->dev, "AMD 8151 AGP Bridge rev %s\n", revstring);
 
 	/*
 	 * Work around errata.
 	 * Chips before B2 stepping incorrectly reporting v3.5
 	 */
 	if (pdev->revision < 0x13) {
-		dev_info(&pdev->dev, "correcting AGP revision (reports 3.5, is really 3.0)\n");
+		dev_dbg(&pdev->dev, "correcting AGP revision (reports 3.5, is really 3.0)\n");
 		bridge->major_version = 3;
 		bridge->minor_version = 0;
 	}
@@ -393,10 +393,10 @@ static int uli_agp_init(struct pci_dev *pdev)
 	int i, ret;
 	unsigned size = amd64_fetch_size();
 
-	dev_info(&pdev->dev, "setting up ULi AGP\n");
+	dev_dbg(&pdev->dev, "setting up ULi AGP\n");
 	dev1 = pci_get_slot (pdev->bus,PCI_DEVFN(0,0));
 	if (dev1 == NULL) {
-		dev_info(&pdev->dev, "can't find ULi secondary device\n");
+		dev_dbg(&pdev->dev, "can't find ULi secondary device\n");
 		return -ENODEV;
 	}
 
@@ -405,7 +405,7 @@ static int uli_agp_init(struct pci_dev *pdev)
 			break;
 
 	if (i == ARRAY_SIZE(uli_sizes)) {
-		dev_info(&pdev->dev, "no ULi size found for %d\n", size);
+		dev_dbg(&pdev->dev, "no ULi size found for %d\n", size);
 		ret = -ENODEV;
 		goto put;
 	}
@@ -455,11 +455,11 @@ static int nforce3_agp_init(struct pci_dev *pdev)
 	int i, ret;
 	unsigned size = amd64_fetch_size();
 
-	dev_info(&pdev->dev, "setting up Nforce3 AGP\n");
+	dev_dbg(&pdev->dev, "setting up Nforce3 AGP\n");
 
 	dev1 = pci_get_slot(pdev->bus, PCI_DEVFN(11, 0));
 	if (dev1 == NULL) {
-		dev_info(&pdev->dev, "can't find Nforce3 secondary device\n");
+		dev_dbg(&pdev->dev, "can't find Nforce3 secondary device\n");
 		return -ENODEV;
 	}
 
@@ -468,7 +468,7 @@ static int nforce3_agp_init(struct pci_dev *pdev)
 			break;
 
 	if (i == ARRAY_SIZE(nforce3_sizes)) {
-		dev_info(&pdev->dev, "no NForce3 size found for %d\n", size);
+		dev_dbg(&pdev->dev, "no NForce3 size found for %d\n", size);
 		ret = -ENODEV;
 		goto put;
 	}
@@ -484,7 +484,7 @@ static int nforce3_agp_init(struct pci_dev *pdev)
 
 	/* if x86-64 aperture base is beyond 4G, exit here */
 	if ( (apbase & 0x7fff) >> (32 - 25) ) {
-		dev_info(&pdev->dev, "aperture base > 4G\n");
+		dev_dbg(&pdev->dev, "aperture base > 4G\n");
 		ret = -ENODEV;
 		goto put;
 	}
@@ -534,7 +534,7 @@ static int agp_amd64_probe(struct pci_dev *pdev,
 	    pdev->device == PCI_DEVICE_ID_AMD_8151_0) {
 		amd8151_init(pdev, bridge);
 	} else {
-		dev_info(&pdev->dev, "AGP bridge [%04x/%04x]\n",
+		dev_dbg(&pdev->dev, "AGP bridge [%04x/%04x]\n",
 			 pdev->vendor, pdev->device);
 	}
 

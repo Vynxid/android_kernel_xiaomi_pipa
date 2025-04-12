@@ -548,7 +548,7 @@ static int ps8622_probe(struct i2c_client *client,
 
 	ps8622->v12 = devm_regulator_get(dev, "vdd12");
 	if (IS_ERR(ps8622->v12)) {
-		dev_info(dev, "no 1.2v regulator found for PS8622\n");
+		dev_dbg(dev, "no 1.2v regulator found for PS8622\n");
 		ps8622->v12 = NULL;
 	}
 
@@ -576,7 +576,7 @@ static int ps8622_probe(struct i2c_client *client,
 						&ps8622->lane_count)) {
 		ps8622->lane_count = ps8622->max_lane_count;
 	} else if (ps8622->lane_count > ps8622->max_lane_count) {
-		dev_info(dev, "lane-count property is too high,"
+		dev_dbg(dev, "lane-count property is too high,"
 						"using max_lane_count\n");
 		ps8622->lane_count = ps8622->max_lane_count;
 	}

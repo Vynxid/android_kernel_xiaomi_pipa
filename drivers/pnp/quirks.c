@@ -41,7 +41,7 @@ static void quirk_awe32_add_ports(struct pnp_dev *dev,
 	new_option->u.port.max += offset;
 	list_add(&new_option->list, &option->list);
 
-	dev_info(&dev->dev, "added ioport region %#llx-%#llx to set %d\n",
+	dev_dbg(&dev->dev, "added ioport region %#llx-%#llx to set %d\n",
 		(unsigned long long) new_option->u.port.min,
 		(unsigned long long) new_option->u.port.max,
 		pnp_option_set(option));
@@ -82,7 +82,7 @@ static void quirk_cmi8330_resources(struct pnp_dev *dev)
 			__set_bit(5, irq->map.bits);
 			__set_bit(7, irq->map.bits);
 			__set_bit(10, irq->map.bits);
-			dev_info(&dev->dev, "set possible IRQs in "
+			dev_dbg(&dev->dev, "set possible IRQs in "
 				 "option set %d to 5, 7, 10\n",
 				 pnp_option_set(option));
 		} else if (option->type == IORESOURCE_DMA) {
@@ -90,7 +90,7 @@ static void quirk_cmi8330_resources(struct pnp_dev *dev)
 			if ((dma->flags & IORESOURCE_DMA_TYPE_MASK) ==
 						IORESOURCE_DMA_8BIT &&
 			    dma->map != 0x0A) {
-				dev_info(&dev->dev, "changing possible "
+				dev_dbg(&dev->dev, "changing possible "
 					 "DMA channel mask in option set %d "
 					 "from %#02x to 0x0A (1, 3)\n",
 					 pnp_option_set(option), dma->map);
@@ -123,7 +123,7 @@ static void quirk_sb16audio_resources(struct pnp_dev *dev)
 			port = &option->u.port;
 			if (n == 3 && port->min == port->max) {
 				port->max += 0x70;
-				dev_info(&dev->dev, "increased option port "
+				dev_dbg(&dev->dev, "increased option port "
 					 "range from %#llx-%#llx to "
 					 "%#llx-%#llx\n",
 					 (unsigned long long) port->min,
@@ -200,7 +200,7 @@ static void quirk_add_irq_optional_dependent_sets(struct pnp_dev *dev)
 						struct pnp_option, list);
 		}
 
-		dev_info(&dev->dev, "added dependent option set %d (same as "
+		dev_dbg(&dev->dev, "added dependent option set %d (same as "
 			 "set %d except IRQ optional)\n", set, i);
 	}
 }
@@ -223,7 +223,7 @@ static void quirk_ad1815_mpu_resources(struct pnp_dev *dev)
 		return;
 
 	irq->flags |= IORESOURCE_IRQ_OPTIONAL;
-	dev_info(&dev->dev, "made independent IRQ optional\n");
+	dev_dbg(&dev->dev, "made independent IRQ optional\n");
 }
 
 #include <linux/pci.h>
@@ -320,7 +320,7 @@ static void quirk_amd_mmconfig_area(struct pnp_dev *dev)
 		    (res->start == mmconfig->start && res->end == mmconfig->end))
 			continue;
 
-		dev_info(&dev->dev, FW_BUG
+		dev_dbg(&dev->dev, FW_BUG
 			 "%pR covers only part of AMD MMCONFIG area %pR; adding more reservations\n",
 			 res, mmconfig);
 		if (mmconfig->start < res->start) {
@@ -404,7 +404,7 @@ static void quirk_intel_mch(struct pnp_dev *dev)
 		if (res->start == mch.start && res->end == mch.end)
 			continue;	/* exact match */
 
-		dev_info(&dev->dev, FW_BUG "PNP resource %pR covers only part of %s Intel MCH; extending to %pR\n",
+		dev_dbg(&dev->dev, FW_BUG "PNP resource %pR covers only part of %s Intel MCH; extending to %pR\n",
 			 res, pci_name(host), &mch);
 		res->start = mch.start;
 		res->end = mch.end;

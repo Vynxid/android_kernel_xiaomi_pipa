@@ -212,7 +212,7 @@ static int atlas_check_ec_calibration(struct atlas_data *data)
 		return ret;
 
 	val = be16_to_cpu(rval);
-	dev_info(dev, "probe set to K = %d.%.2d", val / 100, val % 100);
+	dev_dbg(dev, "probe set to K = %d.%.2d", val / 100, val % 100);
 
 	ret = regmap_read(data->regmap, ATLAS_REG_EC_CALIB_STATUS, &val);
 	if (ret)

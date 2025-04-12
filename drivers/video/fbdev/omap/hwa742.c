@@ -587,7 +587,7 @@ static int hwa742_set_update_mode(enum omapfb_update_mode mode)
 	if (mode == hwa742.update_mode)
 		return 0;
 
-	dev_info(hwa742.fbdev->dev, "HWA742: setting update mode to %s\n",
+	dev_dbg(hwa742.fbdev->dev, "HWA742: setting update mode to %s\n",
 			mode == OMAPFB_UPDATE_DISABLED ? "disabled" :
 			(mode == OMAPFB_AUTO_UPDATE ? "auto" : "manual"));
 
@@ -1017,7 +1017,7 @@ static int hwa742_init(struct omapfb_device *fbdev, int ext_mode,
 	sema_init(&hwa742.req_sema, i - IRQ_REQ_POOL_SIZE);
 
 	conf = hwa742_read_reg(HWA742_CONFIG_REG);
-	dev_info(fbdev->dev, ": Epson HWA742 LCD controller rev %d "
+	dev_dbg(fbdev->dev, ": Epson HWA742 LCD controller rev %d "
 			"initialized (CNF pins %x)\n", rev & 0x03, conf & 0x07);
 
 	return 0;

@@ -350,7 +350,7 @@ static int dio200_pci_auto_attach(struct comedi_device *dev,
 	dev->board_ptr = board;
 	dev->board_name = board->name;
 
-	dev_info(dev->class_dev, "%s: attach pci %s (%s)\n",
+	dev_dbg(dev->class_dev, "%s: attach pci %s (%s)\n",
 		 dev->driver->driver_name, pci_name(pci_dev), dev->board_name);
 
 	ret = comedi_pci_enable(dev);

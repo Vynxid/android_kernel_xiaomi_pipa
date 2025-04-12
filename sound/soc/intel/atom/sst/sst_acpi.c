@@ -170,12 +170,12 @@ static int sst_platform_get_resources(struct intel_sst_drv *ctx)
 		dev_err(ctx->dev, "Invalid SHIM base from IFWI\n");
 		return -EIO;
 	}
-	dev_info(ctx->dev, "LPE base: %#x size:%#x", (unsigned int) rsrc->start,
+	dev_dbg(ctx->dev, "LPE base: %#x size:%#x", (unsigned int) rsrc->start,
 					(unsigned int)resource_size(rsrc));
 
 	ctx->iram_base = rsrc->start + ctx->pdata->res_info->iram_offset;
 	ctx->iram_end =  ctx->iram_base + ctx->pdata->res_info->iram_size - 1;
-	dev_info(ctx->dev, "IRAM base: %#x", ctx->iram_base);
+	dev_dbg(ctx->dev, "IRAM base: %#x", ctx->iram_base);
 	ctx->iram = devm_ioremap_nocache(ctx->dev, ctx->iram_base,
 					 ctx->pdata->res_info->iram_size);
 	if (!ctx->iram) {
@@ -185,7 +185,7 @@ static int sst_platform_get_resources(struct intel_sst_drv *ctx)
 
 	ctx->dram_base = rsrc->start + ctx->pdata->res_info->dram_offset;
 	ctx->dram_end = ctx->dram_base + ctx->pdata->res_info->dram_size - 1;
-	dev_info(ctx->dev, "DRAM base: %#x", ctx->dram_base);
+	dev_dbg(ctx->dev, "DRAM base: %#x", ctx->dram_base);
 	ctx->dram = devm_ioremap_nocache(ctx->dev, ctx->dram_base,
 					 ctx->pdata->res_info->dram_size);
 	if (!ctx->dram) {
@@ -194,7 +194,7 @@ static int sst_platform_get_resources(struct intel_sst_drv *ctx)
 	}
 
 	ctx->shim_phy_add = rsrc->start + ctx->pdata->res_info->shim_offset;
-	dev_info(ctx->dev, "SHIM base: %#x", ctx->shim_phy_add);
+	dev_dbg(ctx->dev, "SHIM base: %#x", ctx->shim_phy_add);
 	ctx->shim = devm_ioremap_nocache(ctx->dev, ctx->shim_phy_add,
 					ctx->pdata->res_info->shim_size);
 	if (!ctx->shim) {
@@ -207,7 +207,7 @@ static int sst_platform_get_resources(struct intel_sst_drv *ctx)
 
 	/* Get mailbox addr */
 	ctx->mailbox_add = rsrc->start + ctx->pdata->res_info->mbox_offset;
-	dev_info(ctx->dev, "Mailbox base: %#x", ctx->mailbox_add);
+	dev_dbg(ctx->dev, "Mailbox base: %#x", ctx->mailbox_add);
 	ctx->mailbox = devm_ioremap_nocache(ctx->dev, ctx->mailbox_add,
 					    ctx->pdata->res_info->mbox_size);
 	if (!ctx->mailbox) {
@@ -226,7 +226,7 @@ static int sst_platform_get_resources(struct intel_sst_drv *ctx)
 	}
 	ctx->ddr_base = rsrc->start;
 	ctx->ddr_end = rsrc->end;
-	dev_info(ctx->dev, "DDR base: %#x", ctx->ddr_base);
+	dev_dbg(ctx->dev, "DDR base: %#x", ctx->ddr_base);
 	ctx->ddr = devm_ioremap_nocache(ctx->dev, ctx->ddr_base,
 					resource_size(rsrc));
 	if (!ctx->ddr) {
@@ -281,10 +281,10 @@ static int is_byt_cr(struct device *dev, bool *bytcr)
 			if ((bios_status == 1) || (bios_status == 3))
 				*bytcr = true;
 			else
-				dev_info(dev, "BYT-CR not detected\n");
+				dev_dbg(dev, "BYT-CR not detected\n");
 		}
 	} else {
-		dev_info(dev, "IOSF_MBI not enabled, no BYT-CR detection\n");
+		dev_dbg(dev, "IOSF_MBI not enabled, no BYT-CR detection\n");
 	}
 	return status;
 }
@@ -335,7 +335,7 @@ static int sst_acpi_probe(struct platform_device *pdev)
 
 	ret = is_byt_cr(dev, &bytcr);
 	if (!((ret < 0) || (bytcr == false))) {
-		dev_info(dev, "Detected Baytrail-CR platform\n");
+		dev_dbg(dev, "Detected Baytrail-CR platform\n");
 
 		/* override resource info */
 		byt_rvp_platform_data.res_info = &bytcr_res_info;

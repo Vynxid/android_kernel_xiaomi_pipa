@@ -1347,7 +1347,7 @@ static int reset_card(struct pci_dev *pdev,
 		board->shift_count = 11;
 		break;
 	}
-	dev_info(&pdev->dev, "-Done\n");
+	dev_dbg(&pdev->dev, "-Done\n");
 	*signature = sig;
 
 end:
@@ -1550,7 +1550,7 @@ static int isicom_probe(struct pci_dev *pdev,
 		goto err;
 	}
 
-	dev_info(&pdev->dev, "ISI PCI Card(Device ID 0x%x)\n", ent->device);
+	dev_dbg(&pdev->dev, "ISI PCI Card(Device ID 0x%x)\n", ent->device);
 
 	/* allot the first empty slot in the array */
 	for (index = 0; index < BOARD_COUNT; index++) {

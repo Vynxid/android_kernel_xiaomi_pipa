@@ -409,7 +409,7 @@ static irqreturn_t xilinx_pcie_intr_handler(int irq, void *data)
 		dev_warn(dev, "Streaming error\n");
 
 	if (status & XILINX_PCIE_INTR_HOT_RESET)
-		dev_info(dev, "Hot reset\n");
+		dev_dbg(dev, "Hot reset\n");
 
 	if (status & XILINX_PCIE_INTR_CFG_TIMEOUT)
 		dev_warn(dev, "ECAM access timeout\n");
@@ -549,9 +549,9 @@ static void xilinx_pcie_init_port(struct xilinx_pcie_port *port)
 	struct device *dev = port->dev;
 
 	if (xilinx_pcie_link_up(port))
-		dev_info(dev, "PCIe Link is UP\n");
+		dev_dbg(dev, "PCIe Link is UP\n");
 	else
-		dev_info(dev, "PCIe Link is DOWN\n");
+		dev_dbg(dev, "PCIe Link is DOWN\n");
 
 	/* Disable all interrupts */
 	pcie_write(port, ~XILINX_PCIE_IDR_ALL_MASK,

@@ -187,7 +187,7 @@ static int bcm2835_rng_probe(struct platform_device *pdev)
 	if (err)
 		dev_err(dev, "hwrng registration failed\n");
 	else
-		dev_info(dev, "hwrng registered\n");
+		dev_dbg(dev, "hwrng registered\n");
 
 	return err;
 }

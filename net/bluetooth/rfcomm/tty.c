@@ -520,7 +520,7 @@ static int rfcomm_get_dev_list(void __user *arg)
 	if (!dl)
 		return -ENOMEM;
 
-	di = dl->dev_info;
+	di = dl->dev_dbg;
 
 	mutex_lock(&rfcomm_dev_lock);
 

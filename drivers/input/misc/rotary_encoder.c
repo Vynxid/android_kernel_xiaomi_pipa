@@ -223,11 +223,11 @@ static int rotary_encoder_probe(struct platform_device *pdev)
 	if (!device_property_present(dev, "rotary-encoder,encoding") ||
 	    !device_property_match_string(dev, "rotary-encoder,encoding",
 					  "gray")) {
-		dev_info(dev, "gray");
+		dev_dbg(dev, "gray");
 		encoder->encoding = ROTENC_GRAY;
 	} else if (!device_property_match_string(dev, "rotary-encoder,encoding",
 						 "binary")) {
-		dev_info(dev, "binary");
+		dev_dbg(dev, "binary");
 		encoder->encoding = ROTENC_BINARY;
 	} else {
 		dev_err(dev, "unknown encoding setting\n");

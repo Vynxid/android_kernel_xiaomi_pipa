@@ -351,13 +351,13 @@ static void fec_dump(struct net_device *ndev)
 	int index = 0;
 
 	netdev_info(ndev, "TX ring dump\n");
-	pr_info("Nr     SC     addr       len  SKB\n");
+	pr_debug("Nr     SC     addr       len  SKB\n");
 
 	txq = fep->tx_queue[0];
 	bdp = txq->bd.base;
 
 	do {
-		pr_info("%3u %c%c 0x%04x 0x%08x %4u %p\n",
+		pr_debug("%3u %c%c 0x%04x 0x%08x %4u %p\n",
 			index,
 			bdp == txq->bd.cur ? 'S' : ' ',
 			bdp == txq->dirty_tx ? 'H' : ' ',
@@ -1793,7 +1793,7 @@ static void fec_get_mac(struct net_device *ndev)
 		/* Report it and use a random ethernet address instead */
 		dev_err(&fep->pdev->dev, "Invalid MAC address: %pM\n", iap);
 		eth_hw_addr_random(ndev);
-		dev_info(&fep->pdev->dev, "Using random MAC address: %pM\n",
+		dev_dbg(&fep->pdev->dev, "Using random MAC address: %pM\n",
 			 ndev->dev_addr);
 		return;
 	}
@@ -3488,13 +3488,13 @@ static int fec_enet_get_irq_cnt(struct platform_device *pdev)
 }
 
 static int fec_enet_init_stop_mode(struct fec_enet_private *fep,
-				   struct fec_devinfo *dev_info,
+				   struct fec_devinfo *dev_dbg,
 				   struct device_node *np)
 {
 	struct device_node *gpr_np;
 	int ret = 0;
 
-	if (!dev_info)
+	if (!dev_dbg)
 		return 0;
 
 	gpr_np = of_parse_phandle(np, "gpr", 0);
@@ -3509,8 +3509,8 @@ static int fec_enet_init_stop_mode(struct fec_enet_private *fep,
 		goto out;
 	}
 
-	fep->stop_gpr.reg = dev_info->stop_gpr_reg;
-	fep->stop_gpr.bit = dev_info->stop_gpr_bit;
+	fep->stop_gpr.reg = dev_dbg->stop_gpr_reg;
+	fep->stop_gpr.bit = dev_dbg->stop_gpr_bit;
 
 out:
 	of_node_put(gpr_np);
@@ -3533,7 +3533,7 @@ fec_probe(struct platform_device *pdev)
 	int num_rx_qs;
 	char irq_name[8];
 	int irq_cnt;
-	struct fec_devinfo *dev_info;
+	struct fec_devinfo *dev_dbg;
 
 	fec_enet_get_queue_num(pdev, &num_tx_qs, &num_rx_qs);
 
@@ -3551,9 +3551,9 @@ fec_probe(struct platform_device *pdev)
 	of_id = of_match_device(fec_dt_ids, &pdev->dev);
 	if (of_id)
 		pdev->id_entry = of_id->data;
-	dev_info = (struct fec_devinfo *)pdev->id_entry->driver_data;
-	if (dev_info)
-		fep->quirks = dev_info->quirks;
+	dev_dbg = (struct fec_devinfo *)pdev->id_entry->driver_data;
+	if (dev_dbg)
+		fep->quirks = dev_dbg->quirks;
 
 	fep->netdev = ndev;
 	fep->num_rx_queues = num_rx_qs;
@@ -3588,7 +3588,7 @@ fec_probe(struct platform_device *pdev)
 	if (of_get_property(np, "fsl,magic-packet", NULL))
 		fep->wol_flag |= FEC_WOL_HAS_MAGIC_PACKET;
 
-	ret = fec_enet_init_stop_mode(fep, dev_info, np);
+	ret = fec_enet_init_stop_mode(fep, dev_dbg, np);
 	if (ret)
 		goto failed_stop_mode;
 

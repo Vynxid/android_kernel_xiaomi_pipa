@@ -312,7 +312,7 @@ static int sch311x_gpio_probe(struct platform_device *pdev)
 				"Could not register gpiochip, %d\n", err);
 			goto exit_err;
 		}
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "SMSC SCH311x GPIO block %d registered.\n", i);
 	}
 
@@ -332,7 +332,7 @@ static int sch311x_gpio_remove(struct platform_device *pdev)
 
 	for (i = 0; i < ARRAY_SIZE(priv->blocks); i++) {
 		gpiochip_remove(&priv->blocks[i].chip);
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "SMSC SCH311x GPIO block %d unregistered.\n", i);
 	}
 	return 0;
@@ -381,7 +381,7 @@ static int __init sch311x_detect(int sio_config_port, unsigned short *addr)
 
 	/* Check if Logical Device Register is currently active */
 	if ((sch311x_sio_inb(sio_config_port, 0x30) & 0x01) == 0)
-		pr_info("Seems that LDN 0x0a is not active...\n");
+		pr_debug("Seems that LDN 0x0a is not active...\n");
 
 	/* Get the base address of the runtime registers */
 	base_addr = (sch311x_sio_inb(sio_config_port, 0x60) << 8) |
@@ -393,7 +393,7 @@ static int __init sch311x_detect(int sio_config_port, unsigned short *addr)
 	}
 	*addr = base_addr;
 
-	pr_info("Found an SMSC SCH311%d chip at 0x%04x\n", dev_id, base_addr);
+	pr_debug("Found an SMSC SCH311%d chip at 0x%04x\n", dev_id, base_addr);
 
 exit:
 	sch311x_sio_exit(sio_config_port);

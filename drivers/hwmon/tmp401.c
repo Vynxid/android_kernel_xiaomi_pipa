@@ -751,7 +751,7 @@ static int tmp401_probe(struct i2c_client *client,
 	if (IS_ERR(hwmon_dev))
 		return PTR_ERR(hwmon_dev);
 
-	dev_info(dev, "Detected TI %s chip\n", names[data->kind]);
+	dev_dbg(dev, "Detected TI %s chip\n", names[data->kind]);
 
 	return 0;
 }

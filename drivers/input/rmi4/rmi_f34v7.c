@@ -655,7 +655,7 @@ static int rmi_f34v7_erase_config(struct f34_data *f34)
 {
 	int ret;
 
-	dev_info(&f34->fn->dev, "Erasing config...\n");
+	dev_dbg(&f34->fn->dev, "Erasing config...\n");
 
 	init_completion(&f34->v7.cmd_done);
 
@@ -688,7 +688,7 @@ static int rmi_f34v7_erase_guest_code(struct f34_data *f34)
 {
 	int ret;
 
-	dev_info(&f34->fn->dev, "Erasing guest code...\n");
+	dev_dbg(&f34->fn->dev, "Erasing guest code...\n");
 
 	init_completion(&f34->v7.cmd_done);
 
@@ -707,7 +707,7 @@ static int rmi_f34v7_erase_all(struct f34_data *f34)
 {
 	int ret;
 
-	dev_info(&f34->fn->dev, "Erasing firmware...\n");
+	dev_dbg(&f34->fn->dev, "Erasing firmware...\n");
 
 	init_completion(&f34->v7.cmd_done);
 
@@ -1240,18 +1240,18 @@ int rmi_f34v7_do_reflash(struct f34_data *f34, const struct firmware *fw)
 		ret = rmi_f34v7_write_partition_table(f34);
 		if (ret < 0)
 			goto fail;
-		dev_info(&f34->fn->dev, "%s: Partition table programmed\n",
+		dev_dbg(&f34->fn->dev, "%s: Partition table programmed\n",
 			 __func__);
 	}
 
-	dev_info(&f34->fn->dev, "Writing firmware (%d bytes)...\n",
+	dev_dbg(&f34->fn->dev, "Writing firmware (%d bytes)...\n",
 		 f34->v7.img.ui_firmware.size);
 
 	ret = rmi_f34v7_write_firmware(f34);
 	if (ret < 0)
 		goto fail;
 
-	dev_info(&f34->fn->dev, "Writing config (%d bytes)...\n",
+	dev_dbg(&f34->fn->dev, "Writing config (%d bytes)...\n",
 		 f34->v7.img.ui_config.size);
 
 	f34->v7.config_area = v7_UI_CONFIG_AREA;
@@ -1260,7 +1260,7 @@ int rmi_f34v7_do_reflash(struct f34_data *f34, const struct firmware *fw)
 		goto fail;
 
 	if (f34->v7.has_display_cfg && f34->v7.img.contains_display_cfg) {
-		dev_info(&f34->fn->dev, "Writing display config...\n");
+		dev_dbg(&f34->fn->dev, "Writing display config...\n");
 
 		ret = rmi_f34v7_write_dp_config(f34);
 		if (ret < 0)
@@ -1269,7 +1269,7 @@ int rmi_f34v7_do_reflash(struct f34_data *f34, const struct firmware *fw)
 
 	if (f34->v7.new_partition_table) {
 		if (f34->v7.has_guest_code && f34->v7.img.contains_guest_code) {
-			dev_info(&f34->fn->dev, "Writing guest code...\n");
+			dev_dbg(&f34->fn->dev, "Writing guest code...\n");
 
 			ret = rmi_f34v7_write_guest_code(f34);
 			if (ret < 0)
@@ -1327,14 +1327,14 @@ int rmi_f34v7_start_reflash(struct f34_data *f34, const struct firmware *fw)
 		goto exit;
 	}
 
-	dev_info(&f34->fn->dev, "Firmware image OK\n");
+	dev_dbg(&f34->fn->dev, "Firmware image OK\n");
 
 	ret = rmi_f34v7_read_flash_status(f34);
 	if (ret < 0)
 		goto exit;
 
 	if (f34->v7.in_bl_mode) {
-		dev_info(&f34->fn->dev, "%s: Device in bootloader mode\n",
+		dev_dbg(&f34->fn->dev, "%s: Device in bootloader mode\n",
 				__func__);
 	}
 

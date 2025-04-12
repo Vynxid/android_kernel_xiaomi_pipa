@@ -217,7 +217,7 @@ int mdev_register_device(struct device *dev, const struct mdev_parent_ops *ops)
 	list_add(&parent->next, &parent_list);
 	mutex_unlock(&parent_list_lock);
 
-	dev_info(dev, "MDEV: Registered\n");
+	dev_dbg(dev, "MDEV: Registered\n");
 	return 0;
 
 add_dev_err:
@@ -249,7 +249,7 @@ void mdev_unregister_device(struct device *dev)
 		mutex_unlock(&parent_list_lock);
 		return;
 	}
-	dev_info(dev, "MDEV: Unregistering\n");
+	dev_dbg(dev, "MDEV: Unregistering\n");
 
 	list_del(&parent->next);
 	class_compat_remove_link(mdev_bus_compat_class, dev, NULL);

@@ -566,7 +566,7 @@ static int atread_submit(struct cardstate *cs, int timeout)
 	}
 
 	if (basstate & BS_SUSPEND) {
-		dev_notice(cs->dev,
+		dev_dbg(cs->dev,
 			   "HD_READ_ATMESSAGE not submitted, "
 			   "suspend in progress\n");
 		update_basstate(ucs, 0, BS_ATRDPEND);
@@ -821,7 +821,7 @@ static void read_int_callback(struct urb *urb)
 
 	case HD_RESET_INTERRUPT_PIPE_ACK:
 		update_basstate(ucs, 0, BS_RESETTING);
-		dev_notice(cs->dev, "interrupt pipe reset\n");
+		dev_dbg(cs->dev, "interrupt pipe reset\n");
 		break;
 
 	case HD_SUSPEND_END:
@@ -1555,7 +1555,7 @@ static void write_ctrl_callback(struct urb *urb)
 				get_usb_statmsg(status));
 			break;		/* give up */
 		}
-		dev_notice(&ucs->interface->dev,
+		dev_dbg(&ucs->interface->dev,
 			   "control request 0x%02x: %s, retry %d\n",
 			   ucs->dr_ctrl.bRequest, get_usb_statmsg(status),
 			   ucs->retry_ctrl);
@@ -1661,7 +1661,7 @@ static int gigaset_init_bchannel(struct bc_state *bcs)
 	}
 
 	if (cs->hw.bas->basstate & BS_SUSPEND) {
-		dev_notice(cs->dev,
+		dev_dbg(cs->dev,
 			   "not starting isoc I/O, suspend in progress\n");
 		spin_unlock_irqrestore(&cs->lock, flags);
 		return -EHOSTUNREACH;
@@ -1820,7 +1820,7 @@ static void write_command_callback(struct urb *urb)
 				 get_usb_statmsg(status));
 			break;
 		}
-		dev_notice(cs->dev, "command write: %s, retry %d\n",
+		dev_dbg(cs->dev, "command write: %s, retry %d\n",
 			   get_usb_statmsg(status), ucs->retry_cmd_out);
 		if (atwrite_submit(cs, cs->cmdbuf->buf, cs->cmdbuf->len) >= 0)
 			/* resubmitted - bypass regular exit block */
@@ -2316,7 +2316,7 @@ static int gigaset_probe(struct usb_interface *interface,
 	if (hostif->desc.bNumEndpoints < 1)
 		return -ENODEV;
 
-	dev_info(&udev->dev,
+	dev_dbg(&udev->dev,
 		 "%s: Device matched (Vendor: 0x%x, Product: 0x%x)\n",
 		 __func__, le16_to_cpu(udev->descriptor.idVendor),
 		 le16_to_cpu(udev->descriptor.idProduct));
@@ -2417,7 +2417,7 @@ static void gigaset_disconnect(struct usb_interface *interface)
 
 	ucs = cs->hw.bas;
 
-	dev_info(cs->dev, "disconnecting Gigaset base\n");
+	dev_dbg(cs->dev, "disconnecting Gigaset base\n");
 
 	/* mark base as not ready, all channels disconnected */
 	ucs->basstate = 0;
@@ -2603,7 +2603,7 @@ static int __init bas_gigaset_init(void)
 		goto error;
 	}
 
-	pr_info(DRIVER_DESC "\n");
+	pr_debug(DRIVER_DESC "\n");
 	return 0;
 
 error:

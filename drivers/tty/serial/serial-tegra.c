@@ -1393,12 +1393,12 @@ static int tegra_uart_parse_dt(struct platform_device *pdev,
 	index = of_property_match_string(np, "dma-names", "rx");
 	if (index < 0) {
 		tup->use_rx_pio = true;
-		dev_info(&pdev->dev, "RX in PIO mode\n");
+		dev_dbg(&pdev->dev, "RX in PIO mode\n");
 	}
 	index = of_property_match_string(np, "dma-names", "tx");
 	if (index < 0) {
 		tup->use_tx_pio = true;
-		dev_info(&pdev->dev, "TX in PIO mode\n");
+		dev_dbg(&pdev->dev, "TX in PIO mode\n");
 	}
 
 	n_entries = of_property_count_u32_elems(np, "nvidia,adjust-baud-rates");
@@ -1649,7 +1649,7 @@ static int __init tegra_uart_init(void)
 
 static void __exit tegra_uart_exit(void)
 {
-	pr_info("Unloading tegra uart driver\n");
+	pr_debug("Unloading tegra uart driver\n");
 	platform_driver_unregister(&tegra_uart_platform_driver);
 	uart_unregister_driver(&tegra_uart_driver);
 }

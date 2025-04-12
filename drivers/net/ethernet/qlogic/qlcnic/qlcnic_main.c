@@ -406,7 +406,7 @@ static int qlcnic_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
 
 	if (!(adapter->flags & QLCNIC_ESWITCH_ENABLED) &&
 	    !qlcnic_sriov_check(adapter)) {
-		pr_info("%s: FDB e-switch is not enabled\n", __func__);
+		pr_debug("%s: FDB e-switch is not enabled\n", __func__);
 		return -EOPNOTSUPP;
 	}
 
@@ -778,12 +778,12 @@ enable_msix:
 		if (err == num_msix) {
 			adapter->flags |= QLCNIC_MSIX_ENABLED;
 			adapter->ahw->num_msix = num_msix;
-			dev_info(&pdev->dev, "using msi-x interrupts\n");
+			dev_dbg(&pdev->dev, "using msi-x interrupts\n");
 			return 0;
 		} else if (err > 0) {
 			pci_disable_msix(pdev);
 
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Unable to allocate %d MSI-X vectors, Available vectors %d\n",
 				 num_msix, err);
 
@@ -809,13 +809,13 @@ enable_msix:
 			}
 
 			if (num_msix) {
-				dev_info(&pdev->dev,
+				dev_dbg(&pdev->dev,
 					 "Trying to allocate %d MSI-X interrupt vectors\n",
 					 num_msix);
 				goto enable_msix;
 			}
 		} else {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Unable to allocate %d MSI-X vectors, err=%d\n",
 				 num_msix, err);
 			return err;
@@ -852,7 +852,7 @@ static int qlcnic_enable_msi_legacy(struct qlcnic_adapter *adapter)
 		offset = msi_tgt_status[adapter->ahw->pci_func];
 		adapter->tgt_status_reg = qlcnic_get_ioaddr(adapter->ahw,
 							    offset);
-		dev_info(&pdev->dev, "using msi interrupts\n");
+		dev_dbg(&pdev->dev, "using msi interrupts\n");
 		adapter->msix_entries[0].vector = pdev->irq;
 		return err;
 	}
@@ -868,7 +868,7 @@ static int qlcnic_enable_msi_legacy(struct qlcnic_adapter *adapter)
 	adapter->tgt_mask_reg = qlcnic_get_ioaddr(ahw, mask_reg);
 	adapter->isr_int_vec = qlcnic_get_ioaddr(ahw, ISR_INT_VECTOR);
 	adapter->crb_int_state_reg = qlcnic_get_ioaddr(ahw, ISR_INT_STATE_REG);
-	dev_info(&pdev->dev, "using legacy interrupts\n");
+	dev_dbg(&pdev->dev, "using legacy interrupts\n");
 	adapter->msix_entries[0].vector = pdev->irq;
 	return err;
 }
@@ -1137,7 +1137,7 @@ static void qlcnic_check_vf(struct qlcnic_adapter *adapter,
 
 	if (priv_level == QLCNIC_NON_PRIV_FUNC) {
 		adapter->ahw->op_mode = QLCNIC_NON_PRIV_FUNC;
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 			"HAL Version: %d Non Privileged function\n",
 			 adapter->ahw->fw_hal_version);
 		adapter->nic_ops = &qlcnic_vf_ops;
@@ -1189,7 +1189,7 @@ static int qlcnic_setup_pci_map(struct pci_dev *pdev,
 		return -EIO;
 	}
 
-	dev_info(&pdev->dev, "%dKB memory map\n", (int)(mem_len >> 10));
+	dev_dbg(&pdev->dev, "%dKB memory map\n", (int)(mem_len >> 10));
 
 	ahw->pci_base0 = mem_ptr0;
 	ahw->pci_len0 = pci_len0;
@@ -1268,12 +1268,12 @@ qlcnic_check_options(struct qlcnic_adapter *adapter)
 				adapter->fw_version > prev_fw_version) {
 			vfree(fw_dump->tmpl_hdr);
 			if (!qlcnic_fw_cmd_get_minidump_temp(adapter))
-				dev_info(&pdev->dev,
+				dev_dbg(&pdev->dev,
 					"Supports FW dump capability\n");
 		}
 	}
 
-	dev_info(&pdev->dev, "Driver v%s, firmware v%d.%d.%d\n",
+	dev_dbg(&pdev->dev, "Driver v%s, firmware v%d.%d.%d\n",
 		 QLCNIC_LINUX_VERSIONID, fw_major, fw_minor, fw_build);
 
 	if (adapter->ahw->port_type == QLCNIC_XGBE) {
@@ -1338,7 +1338,7 @@ qlcnic_initialize_nic(struct qlcnic_adapter *adapter)
 		adapter->max_tx_rings = QLCNIC_MAX_HW_VNIC_TX_RINGS;
 		adapter->max_sds_rings = QLCNIC_MAX_VNIC_SDS_RINGS;
 
-		dev_info(&adapter->pdev->dev, "vNIC mode enabled.\n");
+		dev_dbg(&adapter->pdev->dev, "vNIC mode enabled.\n");
 	} else {
 		adapter->ahw->nic_mode = QLCNIC_DEFAULT_MODE;
 		adapter->max_tx_rings = QLCNIC_MAX_HW_TX_RINGS;
@@ -1483,12 +1483,12 @@ qlcnic_check_eswitch_mode(struct qlcnic_adapter *adapter)
 				return err;
 			/* Set privilege level for other functions */
 			qlcnic_set_function_modes(adapter);
-			dev_info(&adapter->pdev->dev,
+			dev_dbg(&adapter->pdev->dev,
 				"HAL Version: %d, Management function\n",
 				 adapter->ahw->fw_hal_version);
 		} else if (priv_level == QLCNIC_PRIV_FUNC) {
 			adapter->ahw->op_mode = QLCNIC_PRIV_FUNC;
-			dev_info(&adapter->pdev->dev,
+			dev_dbg(&adapter->pdev->dev,
 				"HAL Version: %d, Privileged function\n",
 				 adapter->ahw->fw_hal_version);
 		}
@@ -2627,7 +2627,7 @@ qlcnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	if (adapter->portnum == 0) {
 		qlcnic_get_board_name(adapter, board_name);
 
-		pr_info("%s: %s Board Chip rev 0x%x\n",
+		pr_debug("%s: %s Board Chip rev 0x%x\n",
 			module_name(THIS_MODULE),
 			board_name, adapter->ahw->revision_id);
 	}
@@ -2673,11 +2673,11 @@ qlcnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 
 	switch (adapter->ahw->port_type) {
 	case QLCNIC_GBE:
-		dev_info(&adapter->pdev->dev, "%s: GbE port initialized\n",
+		dev_dbg(&adapter->pdev->dev, "%s: GbE port initialized\n",
 				adapter->netdev->name);
 		break;
 	case QLCNIC_XGBE:
-		dev_info(&adapter->pdev->dev, "%s: XGbE port initialized\n",
+		dev_dbg(&adapter->pdev->dev, "%s: XGbE port initialized\n",
 				adapter->netdev->name);
 		break;
 	}
@@ -2989,7 +2989,7 @@ int qlcnic_check_temp(struct qlcnic_adapter *adapter)
 		}
 	} else {
 		if (adapter->ahw->temp == QLCNIC_TEMP_WARN) {
-			dev_info(&netdev->dev,
+			dev_dbg(&netdev->dev,
 			       "Device temperature is now %d degrees C"
 			       " in normal range.\n", temp_val);
 		}
@@ -3005,7 +3005,7 @@ static inline void dump_tx_ring_desc(struct qlcnic_host_tx_ring *tx_ring)
 
 	for (i = 0; i < tx_ring->num_desc; i++) {
 		tx_desc_info = &tx_ring->desc_head[i];
-		pr_info("TX Desc: %d\n", i);
+		pr_debug("TX Desc: %d\n", i);
 		print_hex_dump(KERN_INFO, "TX: ", DUMP_PREFIX_OFFSET, 16, 1,
 			       &tx_ring->desc_head[i],
 			       sizeof(struct cmd_desc_type0), true);
@@ -3271,7 +3271,7 @@ void qlcnic_clr_all_drv_state(struct qlcnic_adapter *adapter, u8 failed)
 	if (failed) {
 		QLC_SHARED_REG_WR32(adapter, QLCNIC_CRB_DEV_STATE,
 				    QLCNIC_DEV_FAILED);
-		dev_info(&adapter->pdev->dev,
+		dev_dbg(&adapter->pdev->dev,
 				"Device state set to Failed. Please Reboot\n");
 	} else if (!(val & 0x11111111))
 		QLC_SHARED_REG_WR32(adapter, QLCNIC_CRB_DEV_STATE,
@@ -3439,13 +3439,13 @@ qlcnic_fwinit_work(struct work_struct *work)
 
 	if (dev_state == QLCNIC_DEV_INITIALIZING ||
 	    dev_state == QLCNIC_DEV_READY) {
-		dev_info(&adapter->pdev->dev, "Detected state change from "
+		dev_dbg(&adapter->pdev->dev, "Detected state change from "
 				"DEV_NEED_RESET, skipping ack check\n");
 		goto skip_ack_check;
 	}
 
 	if (adapter->fw_wait_cnt++ > adapter->reset_ack_timeo) {
-		dev_info(&adapter->pdev->dev, "Reset:Failed to get ack %d sec\n",
+		dev_dbg(&adapter->pdev->dev, "Reset:Failed to get ack %d sec\n",
 					adapter->reset_ack_timeo);
 		goto skip_ack_check;
 	}
@@ -3607,7 +3607,7 @@ static void qlcnic_82xx_dev_request_reset(struct qlcnic_adapter *adapter,
 	qlcnic_gb_set_gb2_mask(gb_val);
 	qlcnic_gb_set_gb3_mask(gb_val);
 	QLCWR32(adapter, QLCNIC_NIU_GB_PAUSE_CTL, gb_val);
-	dev_info(&adapter->pdev->dev, "Pause control frames disabled"
+	dev_dbg(&adapter->pdev->dev, "Pause control frames disabled"
 				" on all ports\n");
 	adapter->need_fw_reset = 1;
 

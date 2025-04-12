@@ -617,7 +617,7 @@ static int pdm_pwm_probe(struct platform_device *pdev)
 #ifdef CONFIG_DEBUG_FS
 	pdm_dwm_debug_init(&chip->pwm_chip);
 #endif
-	dev_info(chip->dev, "pwmchip driver success.\n");
+	dev_dbg(chip->dev, "pwmchip driver success.\n");
 	return rc;
 err_out:
 	mutex_destroy(&chip->lock);

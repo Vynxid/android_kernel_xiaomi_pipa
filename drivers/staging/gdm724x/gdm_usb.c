@@ -548,7 +548,7 @@ static void gdm_usb_send_complete(struct urb *urb)
 	unsigned long flags;
 
 	if (urb->status == -ECONNRESET) {
-		dev_info(&urb->dev->dev, "CONNRESET\n");
+		dev_dbg(&urb->dev->dev, "CONNRESET\n");
 		return;
 	}
 
@@ -814,10 +814,10 @@ static int gdm_usb_probe(struct usb_interface *intf,
 	idVendor = __le16_to_cpu(usbdev->descriptor.idVendor);
 	idProduct = __le16_to_cpu(usbdev->descriptor.idProduct);
 
-	pr_info("net vid = 0x%04x pid = 0x%04x\n", idVendor, idProduct);
+	pr_debug("net vid = 0x%04x pid = 0x%04x\n", idVendor, idProduct);
 
 	if (bInterfaceNumber > NETWORK_INTERFACE) {
-		pr_info("not a network device\n");
+		pr_debug("not a network device\n");
 		return -ENODEV;
 	}
 

@@ -218,7 +218,7 @@ ufsdbg_intr_fail_request(struct ufs_hba *hba, u32 *intr_status)
 {
 	u8 ocs_err;
 
-	dev_info(hba->dev, "%s: fault-inject error: 0x%x\n",
+	dev_dbg(hba->dev, "%s: fault-inject error: 0x%x\n",
 			__func__, *intr_status);
 
 	switch (*intr_status) {

@@ -94,7 +94,7 @@ void vnt_run_command(struct work_struct *work)
 		if (priv->mac_hw)
 			break;
 
-		dev_info(&priv->usb->dev, "Starting mac80211\n");
+		dev_dbg(&priv->usb->dev, "Starting mac80211\n");
 
 		if (vnt_init(priv)) {
 			/* If fail all ends TODO retry */

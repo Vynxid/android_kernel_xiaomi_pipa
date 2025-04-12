@@ -537,7 +537,7 @@ int dmabounce_register_dev(struct device *dev, unsigned long small_buffer_size,
 	dev->archdata.dmabounce = device_info;
 	set_dma_ops(dev, &dmabounce_ops);
 
-	dev_info(dev, "dmabounce: registered device\n");
+	dev_dbg(dev, "dmabounce: registered device\n");
 
 	return 0;
 
@@ -581,7 +581,7 @@ void dmabounce_unregister_dev(struct device *dev)
 
 	kfree(device_info);
 
-	dev_info(dev, "dmabounce: device unregistered\n");
+	dev_dbg(dev, "dmabounce: device unregistered\n");
 }
 EXPORT_SYMBOL(dmabounce_unregister_dev);
 

@@ -1020,7 +1020,7 @@ i2c_sysfs_new_device(struct device *dev, struct device_attribute *attr,
 	mutex_lock(&adap->userspace_clients_lock);
 	list_add_tail(&client->detected, &adap->userspace_clients);
 	mutex_unlock(&adap->userspace_clients_lock);
-	dev_info(dev, "%s: Instantiated device %s at 0x%02hx\n", "new_device",
+	dev_dbg(dev, "%s: Instantiated device %s at 0x%02hx\n", "new_device",
 		 info.type, info.addr);
 
 	return count;
@@ -1064,7 +1064,7 @@ i2c_sysfs_delete_device(struct device *dev, struct device_attribute *attr,
 	list_for_each_entry_safe(client, next, &adap->userspace_clients,
 				 detected) {
 		if (i2c_encode_flags_to_addr(client) == addr) {
-			dev_info(dev, "%s: Deleting device %s at 0x%02hx\n",
+			dev_dbg(dev, "%s: Deleting device %s at 0x%02hx\n",
 				 "delete_device", client->name, client->addr);
 
 			list_del(&client->detected);

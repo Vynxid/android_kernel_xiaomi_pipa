@@ -100,7 +100,7 @@ int cx231xx_register_extension(struct cx231xx_ops *ops)
 	list_add_tail(&ops->next, &cx231xx_extension_devlist);
 	list_for_each_entry(dev, &cx231xx_devlist, devlist) {
 		ops->init(dev);
-		dev_info(dev->dev, "%s initialized\n", ops->name);
+		dev_dbg(dev->dev, "%s initialized\n", ops->name);
 	}
 	mutex_unlock(&cx231xx_devlist_mutex);
 	return 0;
@@ -114,7 +114,7 @@ void cx231xx_unregister_extension(struct cx231xx_ops *ops)
 	mutex_lock(&cx231xx_devlist_mutex);
 	list_for_each_entry(dev, &cx231xx_devlist, devlist) {
 		ops->fini(dev);
-		dev_info(dev->dev, "%s removed\n", ops->name);
+		dev_dbg(dev->dev, "%s removed\n", ops->name);
 	}
 
 	list_del(&ops->next);

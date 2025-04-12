@@ -289,7 +289,7 @@ static void max14577_print_dev_type(struct max14577 *max14577)
 	device_id = ((reg_data & DEVID_DEVICEID_MASK) >>
 				DEVID_DEVICEID_SHIFT);
 
-	dev_info(max14577->dev, "Device type: %u (ID: 0x%x, vendor: 0x%x)\n",
+	dev_dbg(max14577->dev, "Device type: %u (ID: 0x%x, vendor: 0x%x)\n",
 			max14577->dev_type, device_id, vendor_id);
 }
 

@@ -2156,7 +2156,7 @@ static int omap_sham_probe(struct platform_device *pdev)
 	rev = omap_sham_read(dd, SHA_REG_REV(dd));
 	pm_runtime_put_sync(&pdev->dev);
 
-	dev_info(dev, "hw accel on OMAP rev %u.%u\n",
+	dev_dbg(dev, "hw accel on OMAP rev %u.%u\n",
 		(rev & dd->pdata->major_mask) >> dd->pdata->major_shift,
 		(rev & dd->pdata->minor_mask) >> dd->pdata->minor_shift);
 

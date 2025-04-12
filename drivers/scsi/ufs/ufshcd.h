@@ -1045,7 +1045,7 @@ struct ufs_hba {
 	ktime_t last_dme_cmd_tstamp;
 
 	/* Keeps information of the UFS device connected to this host */
-	struct ufs_dev_info dev_info;
+	struct ufs_dev_info dev_dbg;
 	bool auto_bkops_enabled;
 	bool wb_buf_flush_enabled;
 
@@ -1395,8 +1395,8 @@ static inline bool ufshcd_is_hs_mode(struct ufs_pa_layer_attr *pwr_info)
 
 static inline bool ufshcd_is_embedded_dev(struct ufs_hba *hba)
 {
-	if ((hba->dev_info.b_device_sub_class == UFS_DEV_EMBEDDED_BOOTABLE) ||
-	    (hba->dev_info.b_device_sub_class == UFS_DEV_EMBEDDED_NON_BOOTABLE))
+	if ((hba->dev_dbg.b_device_sub_class == UFS_DEV_EMBEDDED_BOOTABLE) ||
+	    (hba->dev_dbg.b_device_sub_class == UFS_DEV_EMBEDDED_NON_BOOTABLE))
 		return true;
 	return false;
 }

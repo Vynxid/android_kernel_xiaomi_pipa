@@ -337,7 +337,7 @@ unsigned long glk_cal_freq(struct cpufreq_policy *policy, unsigned long util,
 	target_freq = max(soft_minfreq, min(soft_maxfreq, target_freq));
 
 	if (unlikely(game_load_debug))
-		pr_info("glk_load %d, target_freq %d\n", glk_load, target_freq);
+		pr_debug("glk_load %d, target_freq %d\n", glk_load, target_freq);
 
 	return target_freq;
 }
@@ -675,7 +675,7 @@ static int proc_glk_dotload(struct ctl_table *table, int write,
 		return ret;
 
 	for (i = 0; i < MAX_CLUSTERS; i++)
-		pr_info("cid %d minload %d maxload %d\n", i,
+		pr_debug("cid %d minload %d maxload %d\n", i,
 			glk_lowspeed_load[i], glk_highspeed_load[i]);
 	return ret;
 }
@@ -689,7 +689,7 @@ static int proc_glk_dofreq(struct ctl_table *table, int write,
 		return ret;
 
 	for (i = 0; i < MAX_CLUSTERS; i++)
-		pr_info("cid %d minfreq %d maxfreq %d\n", i, glk_minfreq[i],
+		pr_debug("cid %d minfreq %d maxfreq %d\n", i, glk_minfreq[i],
 			glk_minfreq[i]);
 	return ret;
 }

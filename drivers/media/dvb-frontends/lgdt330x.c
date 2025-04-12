@@ -909,7 +909,7 @@ static int lgdt330x_probe(struct i2c_client *client,
 	state->current_frequency = -1;
 	state->current_modulation = -1;
 
-	dev_info(&state->client->dev,
+	dev_dbg(&state->client->dev,
 		"Demod loaded for LGDT330%s chip\n",
 		state->config.demod_chip == LGDT3302 ? "2" : "3");
 

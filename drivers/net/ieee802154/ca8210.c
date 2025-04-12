@@ -753,11 +753,11 @@ static void ca8210_rx_done(struct cas_control *cas_ctl)
 	ca8210_net_rx(priv->hw, buf, len);
 	if (buf[0] == SPI_MCPS_DATA_CONFIRM) {
 		if (buf[3] == MAC_TRANSACTION_OVERFLOW) {
-			dev_info(
+			dev_dbg(
 				&priv->spi->dev,
 				"Waiting for transaction overflow to stabilise...\n");
 			msleep(2000);
-			dev_info(
+			dev_dbg(
 				&priv->spi->dev,
 				"Resetting MAC...\n");
 
@@ -773,48 +773,48 @@ static void ca8210_rx_done(struct cas_control *cas_ctl)
 			queue_work(priv->mlme_workqueue, &mlme_reset_wpc->work);
 		}
 	} else if (buf[0] == SPI_HWME_WAKEUP_INDICATION) {
-		dev_notice(
+		dev_dbg(
 			&priv->spi->dev,
 			"Wakeup indication received, reason:\n"
 		);
 		switch (buf[2]) {
 		case 0:
-			dev_notice(
+			dev_dbg(
 				&priv->spi->dev,
 				"Transceiver woken up from Power Up / System Reset\n"
 			);
 			break;
 		case 1:
-			dev_notice(
+			dev_dbg(
 				&priv->spi->dev,
 				"Watchdog Timer Time-Out\n"
 			);
 			break;
 		case 2:
-			dev_notice(
+			dev_dbg(
 				&priv->spi->dev,
 				"Transceiver woken up from Power-Off by Sleep Timer Time-Out\n");
 			break;
 		case 3:
-			dev_notice(
+			dev_dbg(
 				&priv->spi->dev,
 				"Transceiver woken up from Power-Off by GPIO Activity\n"
 			);
 			break;
 		case 4:
-			dev_notice(
+			dev_dbg(
 				&priv->spi->dev,
 				"Transceiver woken up from Standby by Sleep Timer Time-Out\n"
 			);
 			break;
 		case 5:
-			dev_notice(
+			dev_dbg(
 				&priv->spi->dev,
 				"Transceiver woken up from Standby by GPIO Activity\n"
 			);
 			break;
 		case 6:
-			dev_notice(
+			dev_dbg(
 				&priv->spi->dev,
 				"Sleep-Timer Time-Out in Active Mode\n"
 			);
@@ -850,7 +850,7 @@ static void ca8210_spi_transfer_complete(void *context)
 		cas_ctl->tx_in_buf[1] == SPI_NACK)
 	) {
 		/* ca8210 is busy */
-		dev_info(&priv->spi->dev, "ca8210 was busy during attempted write\n");
+		dev_dbg(&priv->spi->dev, "ca8210 was busy during attempted write\n");
 		if (cas_ctl->tx_buf[0] == SPI_IDLE) {
 			dev_warn(
 				&priv->spi->dev,
@@ -873,7 +873,7 @@ static void ca8210_spi_transfer_complete(void *context)
 			CA8210_SPI_BUF_SIZE
 		);
 		priv->retries++;
-		dev_info(&priv->spi->dev, "retried spi write\n");
+		dev_dbg(&priv->spi->dev, "retried spi write\n");
 		return;
 	} else if (
 			cas_ctl->tx_in_buf[0] != SPI_IDLE &&
@@ -2738,7 +2738,7 @@ static int ca8210_config_extern_clk(
 	u8 clkparam[2];
 
 	if (on) {
-		dev_info(&spi->dev, "Switching external clock on\n");
+		dev_dbg(&spi->dev, "Switching external clock on\n");
 		switch (pdata->extclockfreq) {
 		case SIXTEEN_MHZ:
 			clkparam[0] = 1;
@@ -2761,7 +2761,7 @@ static int ca8210_config_extern_clk(
 		}
 		clkparam[1] = pdata->extclockgpio;
 	} else {
-		dev_info(&spi->dev, "Switching external clock off\n");
+		dev_dbg(&spi->dev, "Switching external clock off\n");
 		clkparam[0] = 0; /* off */
 		clkparam[1] = 0;
 	}
@@ -2815,7 +2815,7 @@ static void ca8210_unregister_ext_clock(struct spi_device *spi)
 
 	of_clk_del_provider(spi->dev.of_node);
 	clk_unregister(priv->clk);
-	dev_info(&spi->dev, "External clock unregistered\n");
+	dev_dbg(&spi->dev, "External clock unregistered\n");
 }
 
 /**
@@ -3037,7 +3037,7 @@ static void ca8210_test_interface_clear(struct ca8210_priv *priv)
 
 	debugfs_remove(test->ca8210_dfs_spi_int);
 	kfifo_free(&test->up_fifo);
-	dev_info(&priv->spi->dev, "Test interface removed\n");
+	dev_dbg(&priv->spi->dev, "Test interface removed\n");
 }
 
 /**
@@ -3051,7 +3051,7 @@ static int ca8210_remove(struct spi_device *spi_device)
 	struct ca8210_priv *priv;
 	struct ca8210_platform_data *pdata;
 
-	dev_info(&spi_device->dev, "Removing ca8210\n");
+	dev_dbg(&spi_device->dev, "Removing ca8210\n");
 
 	pdata = spi_device->dev.platform_data;
 	if (pdata) {
@@ -3066,7 +3066,7 @@ static int ca8210_remove(struct spi_device *spi_device)
 	/* get spi_device private data */
 	priv = spi_get_drvdata(spi_device);
 	if (priv) {
-		dev_info(
+		dev_dbg(
 			&spi_device->dev,
 			"sync_down = %d, sync_up = %d\n",
 			priv->sync_down,
@@ -3078,7 +3078,7 @@ static int ca8210_remove(struct spi_device *spi_device)
 				ieee802154_unregister_hw(priv->hw);
 			ieee802154_free_hw(priv->hw);
 			priv->hw = NULL;
-			dev_info(
+			dev_dbg(
 				&spi_device->dev,
 				"Unregistered & freed ieee802154_hw.\n"
 			);
@@ -3103,7 +3103,7 @@ static int ca8210_probe(struct spi_device *spi_device)
 	struct ca8210_platform_data *pdata;
 	int ret;
 
-	dev_info(&spi_device->dev, "Inserting ca8210\n");
+	dev_dbg(&spi_device->dev, "Inserting ca8210\n");
 
 	/* allocate ieee802154_hw and private data */
 	hw = ieee802154_alloc_hw(sizeof(struct ca8210_priv), &ca8210_phy_ops);

@@ -815,7 +815,7 @@ static int lpass_aon_cc_scuba_probe(struct platform_device *pdev)
 	}
 
 	pm_runtime_put_sync(&pdev->dev);
-	dev_info(&pdev->dev, "Registered LPASS Aon clocks\n");
+	dev_dbg(&pdev->dev, "Registered LPASS Aon clocks\n");
 	return 0;
 
 err_put_rpm:

@@ -710,7 +710,7 @@ static int e4000_probe(struct i2c_client *client,
 	v4l2_set_subdevdata(&dev->sd, client);
 	i2c_set_clientdata(client, &dev->sd);
 
-	dev_info(&client->dev, "Elonics E4000 successfully identified\n");
+	dev_dbg(&client->dev, "Elonics E4000 successfully identified\n");
 	return 0;
 err_kfree:
 	kfree(dev);

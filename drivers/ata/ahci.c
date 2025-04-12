@@ -635,7 +635,7 @@ static void ahci_pci_save_initial_config(struct pci_dev *pdev,
 					 struct ahci_host_priv *hpriv)
 {
 	if (pdev->vendor == PCI_VENDOR_ID_JMICRON && pdev->device == 0x2361) {
-		dev_info(&pdev->dev, "JMB361 has only one port\n");
+		dev_dbg(&pdev->dev, "JMB361 has only one port\n");
 		hpriv->force_port_map = 1;
 	}
 
@@ -649,7 +649,7 @@ static void ahci_pci_save_initial_config(struct pci_dev *pdev,
 			hpriv->mask_port_map = 0x3;
 		else
 			hpriv->mask_port_map = 0xf;
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			  "Disabling your PATA port. Use the boot option 'ahci.marvell_enable=0' to avoid this.\n");
 	}
 
@@ -1021,7 +1021,7 @@ static void ahci_p5wdh_workaround(struct ata_host *host)
 	    dmi_check_system(sysids)) {
 		struct ata_port *ap = host->ports[1];
 
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "enabling ASUS P5W DH Deluxe on-board SIMG4726 workaround\n");
 
 		ap->ops = &ahci_p5wdh_ops;
@@ -1437,7 +1437,7 @@ static void ahci_gtf_filter_workaround(struct ata_host *host)
 		return;
 
 	filter = (unsigned long)dmi->driver_data;
-	dev_info(host->dev, "applying extra ACPI _GTF filter 0x%x for %s\n",
+	dev_dbg(host->dev, "applying extra ACPI _GTF filter 0x%x for %s\n",
 		 filter, dmi->ident);
 
 	for (i = 0; i < host->n_ports; i++) {
@@ -1481,7 +1481,7 @@ static void acer_sa5_271_workaround(struct ahci_host_priv *hpriv,
 	};
 
 	if (dmi_check_system(sysids)) {
-		dev_info(&pdev->dev, "enabling Acer Switch Alpha 12 workaround\n");
+		dev_dbg(&pdev->dev, "enabling Acer Switch Alpha 12 workaround\n");
 		if ((hpriv->saved_cap & 0xC734FF00) == 0xC734FF00) {
 			hpriv->port_map = 0x7;
 			hpriv->cap = 0xC734FF02;
@@ -1707,7 +1707,7 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	 * that for SAS drives they're out of luck.
 	 */
 	if (pdev->vendor == PCI_VENDOR_ID_PROMISE)
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "PDC42819 can only drive SATA devices with this driver\n");
 
 	/* Some devices use non-standard BARs */
@@ -1737,7 +1737,7 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 		 */
 		pci_read_config_byte(pdev, ICH_MAP, &map);
 		if (map & 0x3) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "controller is in combined mode, can't enable AHCI mode\n");
 			return -ENODEV;
 		}
@@ -1815,7 +1815,7 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 
 	if (ahci_broken_system_poweroff(pdev)) {
 		pi.flags |= ATA_FLAG_NO_POWEROFF_SPINDOWN;
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"quirky BIOS, skipping spindown on poweroff\n");
 	}
 
@@ -1833,7 +1833,7 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 
 	if (ahci_broken_online(pdev)) {
 		hpriv->flags |= AHCI_HFLAG_SRST_TOUT_IS_OFFLINE;
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "online status unreliable, applying workaround\n");
 	}
 
@@ -1862,7 +1862,7 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 	if (!(hpriv->cap & HOST_CAP_SSS) || ahci_ignore_sss)
 		host->flags |= ATA_HOST_PARALLEL_SCAN;
 	else
-		dev_info(&pdev->dev, "SSS flag set, parallel bus scan disabled\n");
+		dev_dbg(&pdev->dev, "SSS flag set, parallel bus scan disabled\n");
 
 	if (!(hpriv->cap & HOST_CAP_PART))
 		host->flags |= ATA_HOST_NO_PART;

@@ -149,7 +149,7 @@ static int bd9571mwv_identify(struct bd9571mwv *bd)
 		return ret;
 	}
 
-	dev_info(dev, "Device: BD9571MWV rev. %d\n", value & 0xff);
+	dev_dbg(dev, "Device: BD9571MWV rev. %d\n", value & 0xff);
 
 	return 0;
 }

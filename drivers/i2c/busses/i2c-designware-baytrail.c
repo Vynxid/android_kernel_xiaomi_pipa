@@ -161,7 +161,7 @@ int i2c_dw_probe_lock_support(struct dw_i2c_dev *dev)
 	if (!iosf_mbi_available())
 		return -EPROBE_DEFER;
 
-	dev_info(dev->dev, "I2C bus managed by PUNIT\n");
+	dev_dbg(dev->dev, "I2C bus managed by PUNIT\n");
 	dev->acquire_lock = baytrail_i2c_acquire;
 	dev->release_lock = baytrail_i2c_release;
 	dev->pm_disabled = true;

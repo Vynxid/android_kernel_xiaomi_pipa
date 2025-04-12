@@ -1208,7 +1208,7 @@ static int udf_load_vat(struct super_block *sb, int p_index, int type1_index)
 	udf_find_vat_block(sb, p_index, type1_index, sbi->s_last_block);
 	if (!sbi->s_vat_inode &&
 	    sbi->s_last_block != blocks - 1) {
-		pr_notice("Failed to read VAT inode from the last recorded block (%lu), retrying with the last block of the device (%lu).\n",
+		pr_debug("Failed to read VAT inode from the last recorded block (%lu), retrying with the last block of the device (%lu).\n",
 			  (unsigned long)sbi->s_last_block,
 			  (unsigned long)blocks - 1);
 		udf_find_vat_block(sb, p_index, type1_index, blocks - 1);
@@ -2216,7 +2216,7 @@ static int udf_fill_super(struct super_block *sb, void *options, int silent)
 			ret = udf_load_vrs(sb, &uopt, silent, &fileset);
 			if (ret < 0) {
 				if (!silent && ret != -EACCES) {
-					pr_notice("Scanning with blocksize %u failed\n",
+					pr_debug("Scanning with blocksize %u failed\n",
 						  uopt.blocksize);
 				}
 				brelse(sbi->s_lvid_bh);

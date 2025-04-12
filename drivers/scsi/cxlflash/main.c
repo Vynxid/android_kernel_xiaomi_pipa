@@ -2589,7 +2589,7 @@ static ssize_t cxlflash_show_port_status(u32 port,
 	WARN_ON(port >= MAX_FC_PORTS);
 
 	if (port >= cfg->num_fc_ports) {
-		dev_info(dev, "%s: Port %d not supported on this card.\n",
+		dev_dbg(dev, "%s: Port %d not supported on this card.\n",
 			__func__, port);
 		return -EINVAL;
 	}
@@ -2787,7 +2787,7 @@ static ssize_t cxlflash_show_port_lun_table(u32 port,
 	WARN_ON(port >= MAX_FC_PORTS);
 
 	if (port >= cfg->num_fc_ports) {
-		dev_info(dev, "%s: Port %d not supported on this card.\n",
+		dev_dbg(dev, "%s: Port %d not supported on this card.\n",
 			__func__, port);
 		return -EINVAL;
 	}
@@ -2917,13 +2917,13 @@ static ssize_t irqpoll_weight_store(struct device *dev,
 		return -EINVAL;
 
 	if (weight > 256) {
-		dev_info(cfgdev,
+		dev_dbg(cfgdev,
 			 "Invalid IRQ poll weight. It must be 256 or less.\n");
 		return -EINVAL;
 	}
 
 	if (weight == afu->irqpoll_weight) {
-		dev_info(cfgdev,
+		dev_dbg(cfgdev,
 			 "Current IRQ poll weight has the same weight.\n");
 		return -EINVAL;
 	}
@@ -3084,12 +3084,12 @@ static ssize_t hwq_mode_store(struct device *dev,
 	}
 
 	if (mode >= MAX_HWQ_MODE) {
-		dev_info(cfgdev, "Invalid HWQ steering mode.\n");
+		dev_dbg(cfgdev, "Invalid HWQ steering mode.\n");
 		return -EINVAL;
 	}
 
 	if ((mode == HWQ_MODE_TAG) && !shost_use_blk_mq(shost)) {
-		dev_info(cfgdev, "SCSI-MQ is not enabled, use a different "
+		dev_dbg(cfgdev, "SCSI-MQ is not enabled, use a different "
 			 "HWQ steering mode.\n");
 		return -EINVAL;
 	}

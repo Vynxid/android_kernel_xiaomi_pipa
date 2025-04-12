@@ -2033,7 +2033,7 @@ static int trf7970a_probe(struct spi_device *spi)
 	trf->en2_gpiod = devm_gpiod_get_index_optional(trf->dev, "ti,enable", 1,
 						       GPIOD_OUT_LOW);
 	if (!trf->en2_gpiod) {
-		dev_info(trf->dev, "No EN2 GPIO property\n");
+		dev_dbg(trf->dev, "No EN2 GPIO property\n");
 	} else if (IS_ERR(trf->en2_gpiod)) {
 		dev_err(trf->dev, "Error getting EN2 GPIO property: %ld\n",
 			PTR_ERR(trf->en2_gpiod));

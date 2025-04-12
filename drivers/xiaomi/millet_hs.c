@@ -35,7 +35,7 @@ static void hs_init_millet(struct millet_sock *sk)
 
 static int __init millet_hs_init(void)
 {
-	pr_info("hs_register_hooks(millet hooks) success\n");
+	pr_debug("hs_register_hooks(millet hooks) success\n");
 	register_millet_hook(HANDSHK_TYPE, hs_recv_hook, hs_sendmsg,
 			     hs_init_millet);
 

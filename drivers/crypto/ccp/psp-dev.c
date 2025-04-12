@@ -483,7 +483,7 @@ static int sev_update_firmware(struct device *dev)
 	if (ret)
 		dev_dbg(dev, "Failed to update SEV firmware: %#x\n", error);
 	else
-		dev_info(dev, "SEV firmware update successful\n");
+		dev_dbg(dev, "SEV firmware update successful\n");
 
 	__free_pages(p, order);
 
@@ -874,7 +874,7 @@ int psp_dev_init(struct sp_device *sp)
 	/* Enable interrupt */
 	iowrite32(-1, psp->io_regs + psp->vdata->inten_reg);
 
-	dev_notice(dev, "psp enabled\n");
+	dev_dbg(dev, "psp enabled\n");
 
 	return 0;
 
@@ -883,7 +883,7 @@ e_irq:
 e_err:
 	sp->psp_data = NULL;
 
-	dev_notice(dev, "psp initialization failed\n");
+	dev_dbg(dev, "psp initialization failed\n");
 
 	return ret;
 }
@@ -938,7 +938,7 @@ void psp_pci_init(void)
 		return;
 	}
 
-	dev_info(sp->dev, "SEV API:%d.%d build:%d\n", psp_master->api_major,
+	dev_dbg(sp->dev, "SEV API:%d.%d build:%d\n", psp_master->api_major,
 		 psp_master->api_minor, psp_master->build);
 
 	return;

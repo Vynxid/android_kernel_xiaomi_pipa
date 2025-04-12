@@ -3683,7 +3683,7 @@ int hns3_set_channels(struct net_device *netdev,
 				"Revert to old tqp num fail, ret=%d", ret);
 			return ret;
 		}
-		dev_info(&netdev->dev,
+		dev_dbg(&netdev->dev,
 			 "Change tqp num fail, Revert to old tqp num");
 	}
 
@@ -3710,8 +3710,8 @@ static int __init hns3_init_module(void)
 {
 	int ret;
 
-	pr_info("%s: %s - version\n", hns3_driver_name, hns3_driver_string);
-	pr_info("%s: %s\n", hns3_driver_name, hns3_copyright);
+	pr_debug("%s: %s - version\n", hns3_driver_name, hns3_driver_string);
+	pr_debug("%s: %s\n", hns3_driver_name, hns3_copyright);
 
 	client.type = HNAE3_CLIENT_KNIC;
 	snprintf(client.name, HNAE3_CLIENT_NAME_LENGTH - 1, "%s",

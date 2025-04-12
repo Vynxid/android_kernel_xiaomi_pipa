@@ -994,13 +994,13 @@ static int __init af_rxrpc_init(void)
 		"rxrpc_call_jar", sizeof(struct rxrpc_call), 0,
 		SLAB_HWCACHE_ALIGN, NULL);
 	if (!rxrpc_call_jar) {
-		pr_notice("Failed to allocate call jar\n");
+		pr_debug("Failed to allocate call jar\n");
 		goto error_call_jar;
 	}
 
 	rxrpc_workqueue = alloc_workqueue("krxrpcd", 0, 1);
 	if (!rxrpc_workqueue) {
-		pr_notice("Failed to allocate work queue\n");
+		pr_debug("Failed to allocate work queue\n");
 		goto error_work_queue;
 	}
 

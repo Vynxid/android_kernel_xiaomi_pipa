@@ -797,7 +797,7 @@ static int tegra_bpmp_probe(struct platform_device *pdev)
 		goto free_mrq;
 	}
 
-	dev_info(&pdev->dev, "firmware: %s\n", tag);
+	dev_dbg(&pdev->dev, "firmware: %s\n", tag);
 
 	platform_set_drvdata(pdev, bpmp);
 

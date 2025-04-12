@@ -2341,7 +2341,7 @@ static int snd_vt1724_read_eeprom(struct snd_ice1712 *ice,
 		for (c = *tbl; c->name; c++) {
 			if (modelname && c->model &&
 			    !strcmp(modelname, c->model)) {
-				dev_info(ice->card->dev,
+				dev_dbg(ice->card->dev,
 					 "Using board model %s\n",
 				       c->name);
 				ice->eeprom.subvendor = c->subvendor;

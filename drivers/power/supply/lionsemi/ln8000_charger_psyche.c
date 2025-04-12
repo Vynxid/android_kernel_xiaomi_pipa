@@ -1699,7 +1699,7 @@ static int ln8000_get_dev_role(struct i2c_client *client)
 		return -EINVAL;
 	}
 
-	dev_info(&client->dev, "%s: matched to %s\n", __func__,
+	dev_dbg(&client->dev, "%s: matched to %s\n", __func__,
 		 of_id->compatible);
 
 	return (int)of_id->data;
@@ -1877,7 +1877,7 @@ static int ln8000_probe(struct i2c_client *client,
 			return -ENODEV;
 		}
 	}
-	dev_info(&client->dev, "device id=0x%x\n", ret);
+	dev_dbg(&client->dev, "device id=0x%x\n", ret);
 
 	info->dev_role = ln8000_get_dev_role(client);
 	if (IS_ERR_VALUE((unsigned long)info->dev_role)) {

@@ -295,7 +295,7 @@ static int stmp3xxx_rtc_probe(struct platform_device *pdev)
 	 */
 	if (readl(rtc_data->io + STMP3XXX_RTC_CTRL) &
 	    STMP3XXX_RTC_CTRL_WATCHDOGEN) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Watchdog is running, skip resetting rtc\n");
 	} else {
 		err = stmp_reset_block(rtc_data->io);

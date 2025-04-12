@@ -563,11 +563,11 @@ set_card_type(struct pcmcia_device *link)
     local->modem = 0;
     local->card_type = XIR_UNKNOWN;
     if (!(prodid & 0x40)) {
-	pr_notice("Oops: Not a creditcard\n");
+	pr_debug("Oops: Not a creditcard\n");
 	return 0;
     }
     if (!(mediaid & 0x01)) {
-	pr_notice("Not an Ethernet card\n");
+	pr_debug("Not an Ethernet card\n");
 	return 0;
     }
     if (mediaid & 0x10) {
@@ -598,11 +598,11 @@ set_card_type(struct pcmcia_device *link)
 	}
     }
     if (local->card_type == XIR_CE || local->card_type == XIR_CEM) {
-	pr_notice("Sorry, this is an old CE card\n");
+	pr_debug("Sorry, this is an old CE card\n");
 	return 0;
     }
     if (local->card_type == XIR_UNKNOWN)
-	pr_notice("unknown card (mediaid=%02x prodid=%02x)\n", mediaid, prodid);
+	pr_debug("unknown card (mediaid=%02x prodid=%02x)\n", mediaid, prodid);
 
     return 1;
 }
@@ -706,7 +706,7 @@ xirc2ps_config(struct pcmcia_device * link)
 
     /* Is this a valid	card */
     if (link->has_manf_id == 0) {
-	pr_notice("manfid not found in CIS\n");
+	pr_debug("manfid not found in CIS\n");
 	goto failure;
     }
 
@@ -728,14 +728,14 @@ xirc2ps_config(struct pcmcia_device * link)
 	local->manf_str = "Toshiba";
 	break;
       default:
-	pr_notice("Unknown Card Manufacturer ID: 0x%04x\n",
+	pr_debug("Unknown Card Manufacturer ID: 0x%04x\n",
 		  (unsigned)link->manf_id);
 	goto failure;
     }
     dev_dbg(&link->dev, "found %s card\n", local->manf_str);
 
     if (!set_card_type(link)) {
-	pr_notice("this card is not supported\n");
+	pr_debug("this card is not supported\n");
 	goto failure;
     }
 
@@ -761,7 +761,7 @@ xirc2ps_config(struct pcmcia_device * link)
 	err = pcmcia_loop_tuple(link, CISTPL_FUNCE, pcmcia_get_mac_ce, dev);
 
     if (err) {
-	pr_notice("node-id not found in CIS\n");
+	pr_debug("node-id not found in CIS\n");
 	goto failure;
     }
 
@@ -788,7 +788,7 @@ xirc2ps_config(struct pcmcia_device * link)
 	     * try to configure as Ethernet only.
 	     * .... */
 	}
-	pr_notice("no ports available\n");
+	pr_debug("no ports available\n");
     } else {
 	link->io_lines = 10;
 	link->resource[0]->end = 16;
@@ -861,19 +861,19 @@ xirc2ps_config(struct pcmcia_device * link)
       #if 0
 	{
 	    u_char tmp;
-	    pr_info("ECOR:");
+	    pr_debug("ECOR:");
 	    for (i=0; i < 7; i++) {
 		tmp = readb(local->dingo_ccr + i*2);
 		pr_cont(" %02x", tmp);
 	    }
 	    pr_cont("\n");
-	    pr_info("DCOR:");
+	    pr_debug("DCOR:");
 	    for (i=0; i < 4; i++) {
 		tmp = readb(local->dingo_ccr + 0x20 + i*2);
 		pr_cont(" %02x", tmp);
 	    }
 	    pr_cont("\n");
-	    pr_info("SCOR:");
+	    pr_debug("SCOR:");
 	    for (i=0; i < 10; i++) {
 		tmp = readb(local->dingo_ccr + 0x40 + i*2);
 		pr_cont(" %02x", tmp);
@@ -897,7 +897,7 @@ xirc2ps_config(struct pcmcia_device * link)
 	       (local->mohawk && if_port==4))
 	dev->if_port = if_port;
     else
-	pr_notice("invalid if_port requested\n");
+	pr_debug("invalid if_port requested\n");
 
     /* we can now register the device with the net subsystem */
     dev->irq = link->irq;
@@ -909,7 +909,7 @@ xirc2ps_config(struct pcmcia_device * link)
     SET_NETDEV_DEV(dev, &link->dev);
 
     if ((err=register_netdev(dev))) {
-	pr_notice("register_netdev() failed\n");
+	pr_debug("register_netdev() failed\n");
 	goto config_error;
     }
 

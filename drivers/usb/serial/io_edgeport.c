@@ -2865,7 +2865,7 @@ static int edge_startup(struct usb_serial *serial)
 	usb_string(dev, dev->descriptor.iProduct,
 	    &edge_serial->name[i], MAX_NAME_LEN+2 - i);
 
-	dev_info(&serial->dev->dev, "%s detected\n", edge_serial->name);
+	dev_dbg(&serial->dev->dev, "%s detected\n", edge_serial->name);
 
 	/* Read the epic descriptor */
 	if (get_epic_descriptor(edge_serial) < 0) {

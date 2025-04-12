@@ -41,7 +41,7 @@
 #define pil_err(desc, fmt, ...)						\
 	dev_err(desc->dev, "%s: " fmt, desc->name, ##__VA_ARGS__)
 #define pil_info(desc, fmt, ...)					\
-	dev_info(desc->dev, "%s: " fmt, desc->name, ##__VA_ARGS__)
+	dev_dbg(desc->dev, "%s: " fmt, desc->name, ##__VA_ARGS__)
 
 #if defined(CONFIG_ARM)
 #define pil_memset_io(d, c, count) memset(d, c, count)
@@ -1684,7 +1684,7 @@ static int __init msm_pil_init(void)
 		goto out;
 	}
 	if (__raw_readl(pil_info_base) == 0x53444247) {
-		pr_info("pil: pil-imem set to disable pil timeouts\n");
+		pr_debug("pil: pil-imem set to disable pil timeouts\n");
 		disable_timeouts = true;
 	}
 	for (i = 0; i < resource_size(&res)/sizeof(u32); i++)

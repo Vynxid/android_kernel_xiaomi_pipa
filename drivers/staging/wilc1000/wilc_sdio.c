@@ -131,7 +131,7 @@ static int linux_sdio_probe(struct sdio_func *func,
 	wilc->dev = &func->dev;
 	wilc->gpio_irq = gpio;
 
-	dev_info(&func->dev, "Driver Initializing success\n");
+	dev_dbg(&func->dev, "Driver Initializing success\n");
 	return 0;
 }
 
@@ -170,7 +170,7 @@ static int wilc_sdio_suspend(struct device *dev)
 	struct wilc *wilc = sdio_get_drvdata(func);
 	int ret;
 
-	dev_info(dev, "sdio suspend\n");
+	dev_dbg(dev, "sdio suspend\n");
 	chip_wakeup(wilc);
 
 	if (!wilc->suspend_event) {
@@ -195,7 +195,7 @@ static int wilc_sdio_resume(struct device *dev)
 	struct sdio_func *func = dev_to_sdio_func(dev);
 	struct wilc *wilc = sdio_get_drvdata(func);
 
-	dev_info(dev, "sdio resume\n");
+	dev_dbg(dev, "sdio resume\n");
 	sdio_release_host(func);
 	chip_wakeup(wilc);
 	sdio_init(wilc, true);
@@ -782,7 +782,7 @@ static int sdio_init(struct wilc *wilc, bool resume)
 			g_sdio.has_thrpt_enh3 = 1;
 		else
 			g_sdio.has_thrpt_enh3 = 0;
-		dev_info(&func->dev, "has_thrpt_enh3 = %d...\n",
+		dev_dbg(&func->dev, "has_thrpt_enh3 = %d...\n",
 			 g_sdio.has_thrpt_enh3);
 	}
 

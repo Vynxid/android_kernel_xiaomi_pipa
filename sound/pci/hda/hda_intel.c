@@ -696,7 +696,7 @@ static int azx_get_delay_from_lpib(struct azx *chip, struct azx_dev *azx_dev,
 	}
 
 	if (delay >= azx_dev->core.period_bytes) {
-		dev_info(chip->card->dev,
+		dev_dbg(chip->card->dev,
 			 "Unstable LPIB (%d >= %d); disabling LPIB delay counting\n",
 			 delay, azx_dev->core.period_bytes);
 		delay = 0;
@@ -764,7 +764,7 @@ static int azx_position_ok(struct azx *chip, struct azx_dev *azx_dev)
 	else { /* use the position buffer as default */
 		pos = azx_get_pos_posbuf(chip, azx_dev);
 		if (!pos || pos == (u32)-1) {
-			dev_info(chip->card->dev,
+			dev_dbg(chip->card->dev,
 				 "Invalid position buffer, using LPIB read method instead.\n");
 			chip->get_position[stream] = azx_get_pos_lpib;
 			if (chip->get_position[0] == azx_get_pos_lpib &&
@@ -823,7 +823,7 @@ static void azx_irq_pending_work(struct work_struct *work)
 	int pending, ok;
 
 	if (!hda->irq_pending_warned) {
-		dev_info(chip->card->dev,
+		dev_dbg(chip->card->dev,
 			 "IRQ timing workaround is activated for card #%d. Suggest a bigger bdl_pos_adj.\n",
 			 chip->card->number);
 		hda->irq_pending_warned = 1;
@@ -1317,7 +1317,7 @@ static void azx_vs_set_state(struct pci_dev *pci,
 	if (!hda->probe_continued) {
 		chip->disabled = disabled;
 		if (!disabled) {
-			dev_info(chip->card->dev,
+			dev_dbg(chip->card->dev,
 				 "Start delayed initialization\n");
 			if (azx_probe_continue(chip) < 0) {
 				dev_err(chip->card->dev, "initialization error\n");
@@ -1325,7 +1325,7 @@ static void azx_vs_set_state(struct pci_dev *pci,
 			}
 		}
 	} else {
-		dev_info(chip->card->dev, "%s via vga_switcheroo\n",
+		dev_dbg(chip->card->dev, "%s via vga_switcheroo\n",
 			 disabled ? "Disabling" : "Enabling");
 		if (disabled) {
 			list_for_each_codec(codec, &chip->bus) {
@@ -1406,7 +1406,7 @@ static void init_vga_switcheroo(struct azx *chip)
 	struct hda_intel *hda = container_of(chip, struct hda_intel, chip);
 	struct pci_dev *p = get_bound_vga(chip->pci);
 	if (p) {
-		dev_info(chip->card->dev,
+		dev_dbg(chip->card->dev,
 			 "Handle vga_switcheroo audio client\n");
 		hda->use_vga_switcheroo = 1;
 		hda->need_eld_notify_link = 1; /* cleared in gpu_bound op */
@@ -1602,7 +1602,7 @@ static int check_position_fix(struct azx *chip, int fix)
 
 	q = snd_pci_quirk_lookup(chip->pci, position_fix_list);
 	if (q) {
-		dev_info(chip->card->dev,
+		dev_dbg(chip->card->dev,
 			 "position_fix set to %d for device %04x:%04x\n",
 			 q->value, q->subvendor, q->subdevice);
 		return q->value;
@@ -1690,7 +1690,7 @@ static void check_probe_mask(struct azx *chip, int dev)
 	if (chip->codec_probe_mask == -1) {
 		q = snd_pci_quirk_lookup(chip->pci, probe_mask_list);
 		if (q) {
-			dev_info(chip->card->dev,
+			dev_dbg(chip->card->dev,
 				 "probe_mask set to 0x%x for device %04x:%04x\n",
 				 q->value, q->subvendor, q->subdevice);
 			chip->codec_probe_mask = q->value;
@@ -1701,7 +1701,7 @@ static void check_probe_mask(struct azx *chip, int dev)
 	if (chip->codec_probe_mask != -1 &&
 	    (chip->codec_probe_mask & AZX_FORCE_CODEC_MASK)) {
 		azx_bus(chip)->codec_mask = chip->codec_probe_mask & 0xff;
-		dev_info(chip->card->dev, "codec_mask forced to 0x%x\n",
+		dev_dbg(chip->card->dev, "codec_mask forced to 0x%x\n",
 			 (int)azx_bus(chip)->codec_mask);
 	}
 }
@@ -1734,7 +1734,7 @@ static void check_msi(struct azx *chip)
 	chip->msi = 1;	/* enable MSI as default */
 	q = snd_pci_quirk_lookup(chip->pci, msi_black_list);
 	if (q) {
-		dev_info(chip->card->dev,
+		dev_dbg(chip->card->dev,
 			 "msi for device %04x:%04x set to %d\n",
 			 q->subvendor, q->subdevice, q->value);
 		chip->msi = q->value;
@@ -1743,7 +1743,7 @@ static void check_msi(struct azx *chip)
 
 	/* NVidia chipsets seem to cause troubles with MSI */
 	if (chip->driver_caps & AZX_DCAPS_NO_MSI) {
-		dev_info(chip->card->dev, "Disabling MSI\n");
+		dev_dbg(chip->card->dev, "Disabling MSI\n");
 		chip->msi = 0;
 	}
 }
@@ -1754,7 +1754,7 @@ static void azx_check_snoop_available(struct azx *chip)
 	int snoop = hda_snoop;
 
 	if (snoop >= 0) {
-		dev_info(chip->card->dev, "Force to %s mode by module option\n",
+		dev_dbg(chip->card->dev, "Force to %s mode by module option\n",
 			 snoop ? "snoop" : "non-snoop");
 		chip->snoop = snoop;
 		chip->uc_buffer = !snoop;
@@ -1779,7 +1779,7 @@ static void azx_check_snoop_available(struct azx *chip)
 
 	chip->snoop = snoop;
 	if (!snoop) {
-		dev_info(chip->card->dev, "Force to non-snoop mode\n");
+		dev_dbg(chip->card->dev, "Force to non-snoop mode\n");
 		/* C-Media requires non-cached pages only for CORB/RIRB */
 		if (chip->driver_type != AZX_DRIVER_CMEDIA)
 			chip->uc_buffer = true;
@@ -2260,7 +2260,7 @@ static int azx_probe(struct pci_dev *pci,
 	int err;
 
 	if (pci_match_id(driver_blacklist, pci)) {
-		dev_info(&pci->dev, "Skipping the blacklisted device\n");
+		dev_dbg(&pci->dev, "Skipping the blacklisted device\n");
 		return -ENODEV;
 	}
 
@@ -2293,8 +2293,8 @@ static int azx_probe(struct pci_dev *pci,
 	}
 
 	if (check_hdmi_disabled(pci)) {
-		dev_info(card->dev, "VGA controller is disabled\n");
-		dev_info(card->dev, "Delaying initialization\n");
+		dev_dbg(card->dev, "VGA controller is disabled\n");
+		dev_dbg(card->dev, "Delaying initialization\n");
 		chip->disabled = true;
 	}
 
@@ -2302,7 +2302,7 @@ static int azx_probe(struct pci_dev *pci,
 
 #ifdef CONFIG_SND_HDA_PATCH_LOADER
 	if (patch[dev] && *patch[dev]) {
-		dev_info(card->dev, "Applying patch firmware '%s'\n",
+		dev_dbg(card->dev, "Applying patch firmware '%s'\n",
 			 patch[dev]);
 		err = request_firmware_nowait(THIS_MODULE, true, patch[dev],
 					      &pci->dev, GFP_KERNEL, card,
@@ -2389,7 +2389,7 @@ static void set_default_power_save(struct azx *chip)
 
 		q = snd_pci_quirk_lookup(chip->pci, power_save_blacklist);
 		if (q && val) {
-			dev_info(chip->card->dev, "device %04x:%04x is on the power_save blacklist, forcing power_save to 0\n",
+			dev_dbg(chip->card->dev, "device %04x:%04x is on the power_save blacklist, forcing power_save to 0\n",
 				 q->subvendor, q->subdevice);
 			val = 0;
 		}

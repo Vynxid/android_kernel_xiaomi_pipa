@@ -41,7 +41,7 @@ irqreturn_t snd_emu10k1_interrupt(int irq, void *dev_id)
 		orig_status = status;
 		handled = 1;
 		if ((status & 0xffffffff) == 0xffffffff) {
-			dev_info(emu->card->dev,
+			dev_dbg(emu->card->dev,
 				 "Suspected sound card removal\n");
 			break;
 		}
@@ -171,9 +171,9 @@ irqreturn_t snd_emu10k1_interrupt(int irq, void *dev_id)
 					}
 				}
 				if(status2 & 0x110000) {
-					/* dev_info(emu->card->dev, "capture int found\n"); */
+					/* dev_dbg(emu->card->dev, "capture int found\n"); */
 					if(cvoice->use) {
-						/* dev_info(emu->card->dev, "capture period_elapsed\n"); */
+						/* dev_dbg(emu->card->dev, "capture period_elapsed\n"); */
 						snd_pcm_period_elapsed(cvoice->epcm->substream);
 					}
 				}
@@ -207,7 +207,7 @@ irqreturn_t snd_emu10k1_interrupt(int irq, void *dev_id)
 		outl(orig_status, emu->port + IPR); /* ack all */
 	}
 	if (timeout == 1000)
-		dev_info(emu->card->dev, "emu10k1 irq routine failure\n");
+		dev_dbg(emu->card->dev, "emu10k1 irq routine failure\n");
 
 	return IRQ_RETVAL(handled);
 }

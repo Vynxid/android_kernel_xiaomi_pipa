@@ -203,7 +203,7 @@ static int das08_ai_insn_read(struct comedi_device *dev,
 		/* clear over-range bits for 16-bit boards */
 		if (board->ai_nbits == 16)
 			if (inb(dev->iobase + DAS08_AI_MSB_REG) & 0x80)
-				dev_info(dev->class_dev, "over-range\n");
+				dev_dbg(dev->class_dev, "over-range\n");
 
 		/* trigger conversion */
 		outb_p(0, dev->iobase + DAS08_AI_TRIG_REG);

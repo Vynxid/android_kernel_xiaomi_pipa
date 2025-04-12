@@ -2002,7 +2002,7 @@ static int gpmi_nand_probe(struct platform_device *pdev)
 	if (ret)
 		goto exit_nfc_init;
 
-	dev_info(this->dev, "driver registered.\n");
+	dev_dbg(this->dev, "driver registered.\n");
 
 	return 0;
 

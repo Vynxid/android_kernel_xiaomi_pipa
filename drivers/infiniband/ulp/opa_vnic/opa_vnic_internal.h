@@ -254,7 +254,7 @@ struct opa_vnic_mac_tbl_node {
 #define c_err(format, arg...) \
 	dev_err(&cport->ibdev->dev, format, ## arg)
 #define c_info(format, arg...) \
-	dev_info(&cport->ibdev->dev, format, ## arg)
+	dev_dbg(&cport->ibdev->dev, format, ## arg)
 #define c_dbg(format, arg...) \
 	dev_dbg(&cport->ibdev->dev, format, ## arg)
 

@@ -347,7 +347,7 @@ int pnp_start_dev(struct pnp_dev *dev)
 		return -EIO;
 	}
 
-	dev_info(&dev->dev, "activated\n");
+	dev_dbg(&dev->dev, "activated\n");
 	return 0;
 }
 
@@ -368,7 +368,7 @@ int pnp_stop_dev(struct pnp_dev *dev)
 		return -EIO;
 	}
 
-	dev_info(&dev->dev, "disabled\n");
+	dev_dbg(&dev->dev, "disabled\n");
 	return 0;
 }
 

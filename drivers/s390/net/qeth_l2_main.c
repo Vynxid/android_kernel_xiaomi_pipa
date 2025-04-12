@@ -119,7 +119,7 @@ static int qeth_l2_send_setmac(struct qeth_card *card, __u8 *mac)
 	QETH_CARD_TEXT(card, 2, "L2Setmac");
 	rc = qeth_l2_send_setdelmac(card, mac, IPA_CMD_SETVMAC);
 	if (rc == 0) {
-		dev_info(&card->gdev->dev,
+		dev_dbg(&card->gdev->dev,
 			 "MAC address %pM successfully registered on device %s\n",
 			 mac, card->dev->name);
 	} else {
@@ -984,7 +984,7 @@ static int __qeth_l2_set_online(struct ccwgroup_device *gdev, int recovery_mode)
 	}
 	qeth_bridgeport_query_support(card);
 	if (card->options.sbp.supported_funcs)
-		dev_info(&card->gdev->dev,
+		dev_dbg(&card->gdev->dev,
 		"The device represents a Bridge Capable Port\n");
 
 	rc = qeth_l2_setup_netdev(card);
@@ -1137,7 +1137,7 @@ static int qeth_l2_recover(void *ptr)
 	__qeth_l2_set_offline(card->gdev, 1);
 	rc = __qeth_l2_set_online(card->gdev, 1);
 	if (!rc)
-		dev_info(&card->gdev->dev,
+		dev_dbg(&card->gdev->dev,
 			"Device successfully recovered!\n");
 	else {
 		qeth_close_dev(card);
@@ -1152,13 +1152,13 @@ static int qeth_l2_recover(void *ptr)
 
 static int __init qeth_l2_init(void)
 {
-	pr_info("register layer 2 discipline\n");
+	pr_debug("register layer 2 discipline\n");
 	return 0;
 }
 
 static void __exit qeth_l2_exit(void)
 {
-	pr_info("unregister layer 2 discipline\n");
+	pr_debug("unregister layer 2 discipline\n");
 }
 
 static int qeth_l2_pm_suspend(struct ccwgroup_device *gdev)
@@ -1498,7 +1498,7 @@ static void qeth_bridge_host_event_worker(struct work_struct *work)
 	int i;
 
 	if (data->hostevs.lost_event_mask) {
-		dev_info(&data->card->gdev->dev,
+		dev_dbg(&data->card->gdev->dev,
 "Address notification from the Bridge Port stopped %s (%s)\n",
 			data->card->dev->name,
 			(data->hostevs.lost_event_mask == 0x01)

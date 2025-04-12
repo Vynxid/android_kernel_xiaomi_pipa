@@ -1193,7 +1193,7 @@ static int fsl_dma_chan_probe(struct fsldma_device *fdev,
 	/* Add the channel to DMA device channel list */
 	list_add_tail(&chan->common.device_node, &fdev->common.channels);
 
-	dev_info(fdev->dev, "#%d (%s), irq %d\n", chan->id, compatible,
+	dev_dbg(fdev->dev, "#%d (%s), irq %d\n", chan->id, compatible,
 		 chan->irq ? chan->irq : fdev->irq);
 
 	return 0;
@@ -1418,7 +1418,7 @@ static struct platform_driver fsldma_of_driver = {
 
 static __init int fsldma_init(void)
 {
-	pr_info("Freescale Elo series DMA driver\n");
+	pr_debug("Freescale Elo series DMA driver\n");
 	return platform_driver_register(&fsldma_of_driver);
 }
 

@@ -793,7 +793,7 @@ static int usb_get_langid(struct usb_device *dev, unsigned char *tbuf)
 	 * deal with strings at all. Set string_langid to -1 in order to
 	 * prevent any string to be retrieved from the device */
 	if (err < 0) {
-		dev_info(&dev->dev, "string descriptor 0 read error: %d\n",
+		dev_dbg(&dev->dev, "string descriptor 0 read error: %d\n",
 					err);
 		dev->string_langid = -1;
 		return -EPIPE;
@@ -1431,7 +1431,7 @@ int usb_set_interface(struct usb_device *dev, int interface, int alternate)
 
 	ret = usb_hcd_alloc_bandwidth(dev, NULL, iface->cur_altsetting, alt);
 	if (ret < 0) {
-		dev_info(&dev->dev, "Not enough bandwidth for altsetting %d\n",
+		dev_dbg(&dev->dev, "Not enough bandwidth for altsetting %d\n",
 				alternate);
 		usb_enable_lpm(dev);
 		mutex_unlock(hcd->bandwidth_mutex);
@@ -1600,7 +1600,7 @@ int usb_set_interface_timeout(struct usb_device *dev, int interface,
 
 	ret = usb_hcd_alloc_bandwidth(dev, NULL, iface->cur_altsetting, alt);
 	if (ret < 0) {
-		dev_info(&dev->dev, "Not enough bandwidth for altsetting %d\n",
+		dev_dbg(&dev->dev, "Not enough bandwidth for altsetting %d\n",
 				alternate);
 		usb_enable_lpm(dev);
 		mutex_unlock(hcd->bandwidth_mutex);

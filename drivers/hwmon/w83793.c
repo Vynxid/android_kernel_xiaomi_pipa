@@ -1917,7 +1917,7 @@ static int w83793_probe(struct i2c_client *client,
 
 		list_add(&data->list, &watchdog_data_list);
 
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			"Registered watchdog chardev major 10, minor: %d\n",
 			watchdog_minors[i]);
 		break;

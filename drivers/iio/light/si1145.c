@@ -1316,7 +1316,7 @@ static int si1145_probe(struct i2c_client *client,
 						SI1145_REG_SEQ_ID);
 	if (ret < 0)
 		return ret;
-	dev_info(&client->dev, "device ID part %#02hhx rev %#02hhx seq %#02hhx\n",
+	dev_dbg(&client->dev, "device ID part %#02hhx rev %#02hhx seq %#02hhx\n",
 			part_id, rev_id, seq_id);
 	if (part_id != data->part_info->part) {
 		dev_err(&client->dev, "part ID mismatch got %#02hhx, expected %#02x\n",
@@ -1348,7 +1348,7 @@ static int si1145_probe(struct i2c_client *client,
 		if (ret < 0)
 			goto error_free_buffer;
 	} else {
-		dev_info(&client->dev, "no irq, using polling\n");
+		dev_dbg(&client->dev, "no irq, using polling\n");
 	}
 
 	ret = iio_device_register(indio_dev);

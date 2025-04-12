@@ -592,7 +592,7 @@ static int dvb_net_ule_new_payload(struct dvb_net_ule_handle *h)
 	h->priv->ule_skb = dev_alloc_skb(h->priv->ule_sndu_len +
 					 ETH_HLEN + ETH_ALEN);
 	if (!h->priv->ule_skb) {
-		pr_notice("%s: Memory squeeze, dropping packet.\n",
+		pr_debug("%s: Memory squeeze, dropping packet.\n",
 			  h->dev->name);
 		h->dev->stats.rx_dropped++;
 		return -1;
@@ -893,7 +893,7 @@ static int dvb_net_ts_callback(const u8 *buffer1, size_t buffer1_len,
 		pr_warn("buffer2 not NULL: %p.\n", buffer2);
 	if (buffer1_len > 32768)
 		pr_warn("length > 32k: %zu.\n", buffer1_len);
-	/* pr_info("TS callback: %u bytes, %u TS cells @ %p.\n",
+	/* pr_debug("TS callback: %u bytes, %u TS cells @ %p.\n",
 		  buffer1_len, buffer1_len / TS_SZ, buffer1); */
 	dvb_net_ule(dev, buffer1, buffer1_len);
 	return 0;
@@ -948,7 +948,7 @@ static void dvb_net_sec(struct net_device *dev,
 	 * 12 byte MPE header; 4 byte checksum; + 2 byte alignment, 8 byte LLC/SNAP
 	 */
 	if (!(skb = dev_alloc_skb(pkt_len - 4 - 12 + 14 + 2 - snap))) {
-		//pr_notice("%s: Memory squeeze, dropping packet.\n", dev->name);
+		//pr_debug("%s: Memory squeeze, dropping packet.\n", dev->name);
 		stats->rx_dropped++;
 		return;
 	}
@@ -1404,7 +1404,7 @@ static int dvb_net_add_if(struct dvb_net *dvbnet, u16 pid, u8 feedtype)
 		free_netdev(net);
 		return result;
 	}
-	pr_info("created network interface %s\n", net->name);
+	pr_debug("created network interface %s\n", net->name);
 
 	return if_num;
 }
@@ -1423,7 +1423,7 @@ static int dvb_net_remove_if(struct dvb_net *dvbnet, unsigned long num)
 	dvb_net_stop(net);
 	flush_work(&priv->set_multicast_list_wq);
 	flush_work(&priv->restart_net_feed_wq);
-	pr_info("removed network interface %s\n", net->name);
+	pr_debug("removed network interface %s\n", net->name);
 	unregister_netdev(net);
 	dvbnet->state[num]=0;
 	dvbnet->device[num] = NULL;

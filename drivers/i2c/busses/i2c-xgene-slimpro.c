@@ -571,7 +571,7 @@ static int xgene_slimpro_i2c_probe(struct platform_device *pdev)
 	if (rc)
 		goto mbox_err;
 
-	dev_info(&pdev->dev, "Mailbox I2C Adapter registered\n");
+	dev_dbg(&pdev->dev, "Mailbox I2C Adapter registered\n");
 	return 0;
 
 mbox_err:

@@ -1521,7 +1521,7 @@ static int octeon_mgmt_probe(struct platform_device *pdev)
 	if (result)
 		goto err;
 
-	dev_info(&pdev->dev, "Version " DRV_VERSION "\n");
+	dev_dbg(&pdev->dev, "Version " DRV_VERSION "\n");
 	return 0;
 
 err:

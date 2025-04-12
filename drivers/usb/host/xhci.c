@@ -1992,9 +1992,9 @@ static void xhci_zero_in_ctx(struct xhci_hcd *xhci, struct xhci_virt_device *vir
 	ctrl_ctx->drop_flags = 0;
 	ctrl_ctx->add_flags = 0;
 	slot_ctx = xhci_get_slot_ctx(xhci, virt_dev->in_ctx);
-	slot_ctx->dev_info &= cpu_to_le32(~LAST_CTX_MASK);
+	slot_ctx->dev_dbg &= cpu_to_le32(~LAST_CTX_MASK);
 	/* Endpoint 0 is always valid */
-	slot_ctx->dev_info |= cpu_to_le32(LAST_CTX(1));
+	slot_ctx->dev_dbg |= cpu_to_le32(LAST_CTX(1));
 	for (i = 1; i < 31; i++) {
 		ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->in_ctx, i);
 		ep_ctx->ep_info = 0;
@@ -2955,8 +2955,8 @@ static int xhci_check_bandwidth(struct usb_hcd *hcd, struct usb_device *udev)
 
 		if ((virt_dev->eps[i-1].ring && !(ctrl_ctx->drop_flags & le32))
 		    || (ctrl_ctx->add_flags & le32) || i == 1) {
-			slot_ctx->dev_info &= cpu_to_le32(~LAST_CTX_MASK);
-			slot_ctx->dev_info |= cpu_to_le32(LAST_CTX(i));
+			slot_ctx->dev_dbg &= cpu_to_le32(~LAST_CTX_MASK);
+			slot_ctx->dev_dbg |= cpu_to_le32(LAST_CTX(i));
 			break;
 		}
 	}
@@ -4133,7 +4133,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
 	 * virt_device realloaction after a resume with an xHCI power loss,
 	 * then set up the slot context.
 	 */
-	if (!slot_ctx->dev_info)
+	if (!slot_ctx->dev_dbg)
 		xhci_setup_addressable_virt_dev(xhci, udev);
 	/* Otherwise, update the control endpoint ring enqueue pointer. */
 	else
@@ -4142,7 +4142,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
 	ctrl_ctx->drop_flags = 0;
 
 	trace_xhci_address_ctx(xhci, virt_dev->in_ctx,
-				le32_to_cpu(slot_ctx->dev_info) >> 27);
+				le32_to_cpu(slot_ctx->dev_dbg) >> 27);
 
 	spin_lock_irqsave(&xhci->lock, flags);
 	trace_xhci_setup_device(virt_dev);
@@ -4221,13 +4221,13 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
 			"Output Context DMA address = %#08llx",
 			(unsigned long long)virt_dev->out_ctx->dma);
 	trace_xhci_address_ctx(xhci, virt_dev->in_ctx,
-				le32_to_cpu(slot_ctx->dev_info) >> 27);
+				le32_to_cpu(slot_ctx->dev_dbg) >> 27);
 	/*
 	 * USB core uses address 1 for the roothubs, so we add one to the
 	 * address given back to us by the HC.
 	 */
 	trace_xhci_address_ctx(xhci, virt_dev->out_ctx,
-				le32_to_cpu(slot_ctx->dev_info) >> 27);
+				le32_to_cpu(slot_ctx->dev_dbg) >> 27);
 	/* Zero the input context control for later use */
 	ctrl_ctx->add_flags = 0;
 	ctrl_ctx->drop_flags = 0;
@@ -5074,16 +5074,16 @@ static int xhci_update_hub_device(struct usb_hcd *hcd, struct usb_device *hdev,
 	xhci_slot_copy(xhci, config_cmd->in_ctx, vdev->out_ctx);
 	ctrl_ctx->add_flags |= cpu_to_le32(SLOT_FLAG);
 	slot_ctx = xhci_get_slot_ctx(xhci, config_cmd->in_ctx);
-	slot_ctx->dev_info |= cpu_to_le32(DEV_HUB);
+	slot_ctx->dev_dbg |= cpu_to_le32(DEV_HUB);
 	/*
 	 * refer to section 6.2.2: MTT should be 0 for full speed hub,
 	 * but it may be already set to 1 when setup an xHCI virtual
 	 * device, so clear it anyway.
 	 */
 	if (tt->multi)
-		slot_ctx->dev_info |= cpu_to_le32(DEV_MTT);
+		slot_ctx->dev_dbg |= cpu_to_le32(DEV_MTT);
 	else if (hdev->speed == USB_SPEED_FULL)
-		slot_ctx->dev_info &= cpu_to_le32(~DEV_MTT);
+		slot_ctx->dev_dbg &= cpu_to_le32(~DEV_MTT);
 
 	if (xhci->hci_version > 0x95) {
 		xhci_dbg(xhci, "xHCI version %x needs hub "

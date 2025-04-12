@@ -781,7 +781,7 @@ static void ntb_qp_link_cleanup(struct ntb_transport_qp *qp)
 	struct ntb_transport_ctx *nt = qp->transport;
 	struct pci_dev *pdev = nt->ndev->pdev;
 
-	dev_info(&pdev->dev, "qp %d: Link Cleanup\n", qp->qp_num);
+	dev_dbg(&pdev->dev, "qp %d: Link Cleanup\n", qp->qp_num);
 
 	cancel_delayed_work_sync(&qp->link_work);
 	ntb_qp_link_down_reset(qp);
@@ -965,7 +965,7 @@ static void ntb_qp_link_work(struct work_struct *work)
 
 	/* See if the remote side is up */
 	if (val & BIT(qp->qp_num)) {
-		dev_info(&pdev->dev, "qp %d: Link Up\n", qp->qp_num);
+		dev_dbg(&pdev->dev, "qp %d: Link Up\n", qp->qp_num);
 		qp->link_is_up = true;
 		qp->active = true;
 
@@ -1726,7 +1726,7 @@ static void ntb_send_link_down(struct ntb_transport_qp *qp)
 	if (!qp->link_is_up)
 		return;
 
-	dev_info(&pdev->dev, "qp %d: Send Link Down\n", qp->qp_num);
+	dev_dbg(&pdev->dev, "qp %d: Send Link Down\n", qp->qp_num);
 
 	for (i = 0; i < NTB_LINK_DOWN_TIMEOUT; i++) {
 		entry = ntb_list_rm(&qp->ntb_tx_free_q_lock, &qp->tx_free_q);
@@ -1816,13 +1816,13 @@ ntb_transport_create_queue(void *data, struct device *client_dev,
 			dma_request_channel(dma_mask, ntb_dma_filter_fn,
 					    (void *)(unsigned long)node);
 		if (!qp->tx_dma_chan)
-			dev_info(&pdev->dev, "Unable to allocate TX DMA channel\n");
+			dev_dbg(&pdev->dev, "Unable to allocate TX DMA channel\n");
 
 		qp->rx_dma_chan =
 			dma_request_channel(dma_mask, ntb_dma_filter_fn,
 					    (void *)(unsigned long)node);
 		if (!qp->rx_dma_chan)
-			dev_info(&pdev->dev, "Unable to allocate RX DMA channel\n");
+			dev_dbg(&pdev->dev, "Unable to allocate RX DMA channel\n");
 	} else {
 		qp->tx_dma_chan = NULL;
 		qp->rx_dma_chan = NULL;
@@ -1858,7 +1858,7 @@ ntb_transport_create_queue(void *data, struct device *client_dev,
 	ntb_db_clear(qp->ndev, qp_bit);
 	ntb_db_clear_mask(qp->ndev, qp_bit);
 
-	dev_info(&pdev->dev, "NTB Transport QP %d created\n", qp->qp_num);
+	dev_dbg(&pdev->dev, "NTB Transport QP %d created\n", qp->qp_num);
 
 	return qp;
 
@@ -1958,7 +1958,7 @@ void ntb_transport_free_queue(struct ntb_transport_qp *qp)
 
 	qp->transport->qp_bitmap_free |= qp_bit;
 
-	dev_info(&pdev->dev, "NTB Transport QP %d freed\n", qp->qp_num);
+	dev_dbg(&pdev->dev, "NTB Transport QP %d freed\n", qp->qp_num);
 }
 EXPORT_SYMBOL_GPL(ntb_transport_free_queue);
 
@@ -2240,7 +2240,7 @@ static int __init ntb_transport_init(void)
 {
 	int rc;
 
-	pr_info("%s, version %s\n", NTB_TRANSPORT_DESC, NTB_TRANSPORT_VER);
+	pr_debug("%s, version %s\n", NTB_TRANSPORT_DESC, NTB_TRANSPORT_VER);
 
 	if (debugfs_initialized())
 		nt_debugfs_dir = debugfs_create_dir(KBUILD_MODNAME, NULL);

@@ -1436,7 +1436,7 @@ static int stm32_hash_get_of_match(struct stm32_hash_dev *hdev,
 
 	if (of_property_read_u32(dev->of_node, "dma-maxburst",
 				 &hdev->dma_maxburst)) {
-		dev_info(dev, "dma-maxburst not specified, using 0\n");
+		dev_dbg(dev, "dma-maxburst not specified, using 0\n");
 		hdev->dma_maxburst = 0;
 	}
 
@@ -1536,7 +1536,7 @@ static int stm32_hash_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_algs;
 
-	dev_info(dev, "Init HASH done HW ver %x DMA mode %u\n",
+	dev_dbg(dev, "Init HASH done HW ver %x DMA mode %u\n",
 		 stm32_hash_read(hdev, HASH_VER), hdev->dma_mode);
 
 	pm_runtime_put_sync(dev);

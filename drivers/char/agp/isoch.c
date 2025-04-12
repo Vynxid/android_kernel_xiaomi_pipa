@@ -361,7 +361,7 @@ int agp_3_5_enable(struct agp_bridge_data *bridge)
 			case 0x0001:    /* Unclassified device */
 				/* Don't know what this is, but log it for investigation. */
 				if (mcapndx != 0) {
-					dev_info(&td->dev, "wacky, found unclassified AGP device %s [%04x/%04x]\n",
+					dev_dbg(&td->dev, "wacky, found unclassified AGP device %s [%04x/%04x]\n",
 						 pci_name(dev),
 						 dev->vendor, dev->device);
 				}
@@ -448,7 +448,7 @@ int agp_3_5_enable(struct agp_bridge_data *bridge)
 	if (isoch) {
 		ret = agp_3_5_isochronous_node_enable(bridge, dev_list, ndevs);
 		if (ret) {
-			dev_info(&td->dev, "something bad happened setting "
+			dev_dbg(&td->dev, "something bad happened setting "
 				 "up isochronous xfers; falling back to "
 				 "non-isochronous xfer mode\n");
 		} else {

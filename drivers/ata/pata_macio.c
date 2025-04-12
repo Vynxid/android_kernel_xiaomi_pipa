@@ -1106,7 +1106,7 @@ static int pata_macio_common_init(struct pata_macio_priv *priv,
 	if (priv->pdev && dma_regs)
 		pci_set_master(priv->pdev);
 
-	dev_info(priv->dev, "Activating pata-macio chipset %s, Apple bus ID %d\n",
+	dev_dbg(priv->dev, "Activating pata-macio chipset %s, Apple bus ID %d\n",
 		 macio_ata_names[priv->kind], priv->aapl_bus_id);
 
 	/* Start it up */

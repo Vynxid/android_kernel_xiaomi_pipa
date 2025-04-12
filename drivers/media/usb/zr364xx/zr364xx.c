@@ -599,7 +599,7 @@ static int zr364xx_read_video_callback(struct zr364xx_camera *cam,
 	if (frm->ulState == ZR364XX_READ_IDLE) {
 		if (purb->actual_length < 128) {
 			/* header incomplete */
-			dev_info(&cam->udev->dev,
+			dev_dbg(&cam->udev->dev,
 				 "%s: buffer (%d bytes) too small to hold jpeg header. Discarding.\n",
 				 __func__, purb->actual_length);
 			return -EINVAL;
@@ -633,7 +633,7 @@ static int zr364xx_read_video_callback(struct zr364xx_camera *cam,
 		frm->cur_size = ptr - pdest;
 	} else {
 		if (frm->cur_size + purb->actual_length > MAX_FRAME_SIZE) {
-			dev_info(&cam->udev->dev,
+			dev_dbg(&cam->udev->dev,
 				 "%s: buffer (%d bytes) too small to hold frame data. Discarding frame data.\n",
 				 __func__, MAX_FRAME_SIZE);
 		} else {
@@ -1417,8 +1417,8 @@ static int zr364xx_probe(struct usb_interface *intf,
 
 	DBG("probing...\n");
 
-	dev_info(&intf->dev, DRIVER_DESC " compatible webcam plugged\n");
-	dev_info(&intf->dev, "model %04x:%04x detected\n",
+	dev_dbg(&intf->dev, DRIVER_DESC " compatible webcam plugged\n");
+	dev_dbg(&intf->dev, "model %04x:%04x detected\n",
 		 le16_to_cpu(udev->descriptor.idVendor),
 		 le16_to_cpu(udev->descriptor.idProduct));
 
@@ -1455,17 +1455,17 @@ static int zr364xx_probe(struct usb_interface *intf,
 
 	switch (mode) {
 	case 1:
-		dev_info(&udev->dev, "160x120 mode selected\n");
+		dev_dbg(&udev->dev, "160x120 mode selected\n");
 		cam->width = 160;
 		cam->height = 120;
 		break;
 	case 2:
-		dev_info(&udev->dev, "640x480 mode selected\n");
+		dev_dbg(&udev->dev, "640x480 mode selected\n");
 		cam->width = 640;
 		cam->height = 480;
 		break;
 	default:
-		dev_info(&udev->dev, "320x240 mode selected\n");
+		dev_dbg(&udev->dev, "320x240 mode selected\n");
 		cam->width = 320;
 		cam->height = 240;
 		break;
@@ -1545,7 +1545,7 @@ static int zr364xx_probe(struct usb_interface *intf,
 		goto fail;
 	}
 
-	dev_info(&udev->dev, DRIVER_DESC " controlling device %s\n",
+	dev_dbg(&udev->dev, DRIVER_DESC " controlling device %s\n",
 		 video_device_node_name(&cam->vdev));
 	return 0;
 
@@ -1563,7 +1563,7 @@ static void zr364xx_disconnect(struct usb_interface *intf)
 
 	mutex_lock(&cam->lock);
 	usb_set_intfdata(intf, NULL);
-	dev_info(&intf->dev, DRIVER_DESC " webcam unplugged\n");
+	dev_dbg(&intf->dev, DRIVER_DESC " webcam unplugged\n");
 	video_unregister_device(&cam->vdev);
 	v4l2_device_disconnect(&cam->v4l2_dev);
 

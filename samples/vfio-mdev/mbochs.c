@@ -144,7 +144,7 @@ struct mdev_state {
 	u32 memory_bar_mask;
 	struct mutex ops_lock;
 	struct mdev_device *mdev;
-	struct vfio_device_info dev_info;
+	struct vfio_device_info dev_dbg;
 
 	const struct mbochs_type *type;
 	u16 vbe[VBE_DISPI_INDEX_COUNT];
@@ -297,7 +297,7 @@ static void handle_pci_cfg_write(struct mdev_state *mdev_state, u16 offset,
 		} else {
 			cfg_addr &= PCI_BASE_ADDRESS_MEM_MASK;
 			if (cfg_addr)
-				dev_info(dev, "BAR #%d @ 0x%x\n",
+				dev_dbg(dev, "BAR #%d @ 0x%x\n",
 					 index, cfg_addr);
 		}
 
@@ -461,7 +461,7 @@ static int mbochs_create(struct kobject *kobj, struct mdev_device *mdev)
 	if (!mdev_state->pages)
 		goto err_mem;
 
-	dev_info(dev, "%s: %s, %d MB, %ld pages\n", __func__,
+	dev_dbg(dev, "%s: %s, %d MB, %ld pages\n", __func__,
 		 kobj->name, type->mbytes, mdev_state->pagecount);
 
 	mutex_init(&mdev_state->ops_lock);
@@ -981,11 +981,11 @@ static int mbochs_get_irq_info(struct mdev_device *mdev,
 }
 
 static int mbochs_get_device_info(struct mdev_device *mdev,
-				  struct vfio_device_info *dev_info)
+				  struct vfio_device_info *dev_dbg)
 {
-	dev_info->flags = VFIO_DEVICE_FLAGS_PCI;
-	dev_info->num_regions = VFIO_PCI_NUM_REGIONS;
-	dev_info->num_irqs = VFIO_PCI_NUM_IRQS;
+	dev_dbg->flags = VFIO_DEVICE_FLAGS_PCI;
+	dev_dbg->num_regions = VFIO_PCI_NUM_REGIONS;
+	dev_dbg->num_irqs = VFIO_PCI_NUM_IRQS;
 	return 0;
 }
 
@@ -1106,7 +1106,7 @@ static long mbochs_ioctl(struct mdev_device *mdev, unsigned int cmd,
 		if (ret)
 			return ret;
 
-		memcpy(&mdev_state->dev_info, &info, sizeof(info));
+		memcpy(&mdev_state->dev_dbg, &info, sizeof(info));
 
 		if (copy_to_user((void __user *)arg, &info, minsz))
 			return -EFAULT;
@@ -1148,7 +1148,7 @@ static long mbochs_ioctl(struct mdev_device *mdev, unsigned int cmd,
 			return -EFAULT;
 
 		if ((info.argsz < minsz) ||
-		    (info.index >= mdev_state->dev_info.num_irqs))
+		    (info.index >= mdev_state->dev_dbg.num_irqs))
 			return -EINVAL;
 
 		ret = mbochs_get_irq_info(mdev, &info);
@@ -1357,7 +1357,7 @@ static int __init mbochs_dev_init(void)
 	}
 	cdev_init(&mbochs_cdev, &vd_fops);
 	cdev_add(&mbochs_cdev, mbochs_devt, MINORMASK);
-	pr_info("%s: major %d\n", __func__, MAJOR(mbochs_devt));
+	pr_debug("%s: major %d\n", __func__, MAJOR(mbochs_devt));
 
 	mbochs_class = class_create(THIS_MODULE, MBOCHS_CLASS_NAME);
 	if (IS_ERR(mbochs_class)) {

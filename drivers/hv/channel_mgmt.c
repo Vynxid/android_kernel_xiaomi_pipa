@@ -193,7 +193,7 @@ static u16 hv_get_dev_type(const struct vmbus_channel *channel)
 		if (!uuid_le_cmp(*guid, vmbus_devs[i].guid))
 			return i;
 	}
-	pr_info("Unknown GUID: %pUl\n", guid);
+	pr_debug("Unknown GUID: %pUl\n", guid);
 	return i;
 }
 
@@ -850,7 +850,7 @@ static void vmbus_wait_for_unload(void)
 		 * serial output won't think it is completely hung.
 		 */
 		if (!(i % UNLOAD_MSG_LOOPS))
-			pr_notice("Waiting for VMBus UNLOAD to complete\n");
+			pr_debug("Waiting for VMBus UNLOAD to complete\n");
 
 		mdelay(UNLOAD_DELAY_UNIT_MS);
 	}

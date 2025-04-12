@@ -658,7 +658,7 @@ static void parse_driver_options(struct arm_smmu_device *smmu)
 		if (of_property_read_bool(smmu->dev->of_node,
 						arm_smmu_options[i].prop)) {
 			smmu->options |= arm_smmu_options[i].opt;
-			dev_notice(smmu->dev, "option %s\n",
+			dev_dbg(smmu->dev, "option %s\n",
 				arm_smmu_options[i].prop);
 		}
 	} while (arm_smmu_options[++i].opt);
@@ -1244,9 +1244,9 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
 		while (!queue_remove_raw(q, evt)) {
 			u8 id = FIELD_GET(EVTQ_0_ID, evt[0]);
 
-			dev_info(smmu->dev, "event 0x%02x received:\n", id);
+			dev_dbg(smmu->dev, "event 0x%02x received:\n", id);
 			for (i = 0; i < ARRAY_SIZE(evt); ++i)
-				dev_info(smmu->dev, "\t0x%016llx\n",
+				dev_dbg(smmu->dev, "\t0x%016llx\n",
 					 (unsigned long long)evt[i]);
 
 			cond_resched();
@@ -1277,8 +1277,8 @@ static void arm_smmu_handle_ppr(struct arm_smmu_device *smmu, u64 *evt)
 	last = FIELD_GET(PRIQ_0_PRG_LAST, evt[0]);
 	grpid = FIELD_GET(PRIQ_1_PRG_IDX, evt[1]);
 
-	dev_info(smmu->dev, "unexpected PRI request received:\n");
-	dev_info(smmu->dev,
+	dev_dbg(smmu->dev, "unexpected PRI request received:\n");
+	dev_dbg(smmu->dev,
 		 "\tsid 0x%08x.0x%05x: [%u%s] %sprivileged %s%s%s access at iova 0x%016llx\n",
 		 sid, ssid, grpid, last ? "L" : "",
 		 evt[0] & PRIQ_0_PERM_PRIV ? "" : "un",
@@ -2276,7 +2276,7 @@ static void arm_smmu_setup_msis(struct arm_smmu_device *smmu)
 		return;
 
 	if (!dev->msi_domain) {
-		dev_info(smmu->dev, "msi_domain absent - falling back to wired irqs\n");
+		dev_dbg(smmu->dev, "msi_domain absent - falling back to wired irqs\n");
 		return;
 	}
 
@@ -2699,7 +2699,7 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
 		smmu->pgsize_bitmap |= 1ULL << 42; /* 4TB */
 		break;
 	default:
-		dev_info(smmu->dev,
+		dev_dbg(smmu->dev,
 			"unknown output address size. Truncating to 48-bit\n");
 		/* Fallthrough */
 	case IDR5_OAS_48_BIT:
@@ -2718,7 +2718,7 @@ static int arm_smmu_device_hw_probe(struct arm_smmu_device *smmu)
 
 	smmu->ias = max(smmu->ias, smmu->oas);
 
-	dev_info(smmu->dev, "ias %lu-bit, oas %lu-bit (features 0x%08x)\n",
+	dev_dbg(smmu->dev, "ias %lu-bit, oas %lu-bit (features 0x%08x)\n",
 		 smmu->ias, smmu->oas, smmu->features);
 	return 0;
 }
@@ -2735,7 +2735,7 @@ static void acpi_smmu_get_options(u32 model, struct arm_smmu_device *smmu)
 		break;
 	}
 
-	dev_notice(smmu->dev, "option mask 0x%x\n", smmu->options);
+	dev_dbg(smmu->dev, "option mask 0x%x\n", smmu->options);
 }
 
 static int arm_smmu_device_acpi_probe(struct platform_device *pdev,

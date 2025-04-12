@@ -175,7 +175,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
 		dev_dbg(ec_dev->dev, "Error %d clearing sleep event to ec",
 			err);
 
-	dev_info(dev, "Chrome EC device registered\n");
+	dev_dbg(dev, "Chrome EC device registered\n");
 
 	return 0;
 }

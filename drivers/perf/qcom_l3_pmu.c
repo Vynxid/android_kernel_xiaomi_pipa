@@ -813,7 +813,7 @@ static int qcom_l3_cache_pmu_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered %s, type: %d\n", name, l3pmu->pmu.type);
+	dev_dbg(&pdev->dev, "Registered %s, type: %d\n", name, l3pmu->pmu.type);
 
 	return 0;
 }

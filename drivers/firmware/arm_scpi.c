@@ -1016,9 +1016,9 @@ static int scpi_probe(struct platform_device *pdev)
 
 	if (scpi_drvinfo->is_legacy && !scpi_drvinfo->protocol_version &&
 	    !scpi_drvinfo->firmware_version)
-		dev_info(dev, "SCP Protocol legacy pre-1.0 firmware\n");
+		dev_dbg(dev, "SCP Protocol legacy pre-1.0 firmware\n");
 	else
-		dev_info(dev, "SCP Protocol %lu.%lu Firmware %lu.%lu.%lu version\n",
+		dev_dbg(dev, "SCP Protocol %lu.%lu Firmware %lu.%lu.%lu version\n",
 			 FIELD_GET(PROTO_REV_MAJOR_MASK,
 				   scpi_drvinfo->protocol_version),
 			 FIELD_GET(PROTO_REV_MINOR_MASK,

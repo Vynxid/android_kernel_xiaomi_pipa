@@ -963,7 +963,7 @@ static int mxsfb_probe(struct platform_device *pdev)
 		mxsfb_enable_controller(fb_info);
 	}
 
-	dev_info(&pdev->dev, "initialized\n");
+	dev_dbg(&pdev->dev, "initialized\n");
 
 	return 0;
 

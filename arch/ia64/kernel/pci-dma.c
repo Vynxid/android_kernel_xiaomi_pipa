@@ -74,7 +74,7 @@ int iommu_dma_supported(struct device *dev, u64 mask)
 	   type. Normally this doesn't make any difference, but gives
 	   more gentle handling of IOMMU overflow. */
 	if (iommu_sac_force && (mask >= DMA_BIT_MASK(40))) {
-		dev_info(dev, "Force SAC with mask %llx\n", mask);
+		dev_dbg(dev, "Force SAC with mask %llx\n", mask);
 		return 0;
 	}
 

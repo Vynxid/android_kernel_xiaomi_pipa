@@ -14,19 +14,19 @@ static ssize_t mm_register_show(struct kobject *dev,
 	switch (mi->mm_id) {
 		case MM_HW_HAPTIC_1:
 			if (!mi->on_register) {
-				pr_info("%s: 0x%x is not registered\n", __func__, mi->mm_id);
+				pr_debug("%s: 0x%x is not registered\n", __func__, mi->mm_id);
 			}
 			return sprintf(buf, "%d\n", mi->on_register);
 			break;
 		case MM_HW_HAPTIC_2:
 			if (!mi->on_register) {
-				pr_info("%s: 0x%x is not registered\n", __func__, mi->mm_id);
+				pr_debug("%s: 0x%x is not registered\n", __func__, mi->mm_id);
 			}
 			return sprintf(buf, "%d\n", mi->on_register);
 			break;
 		case MM_HW_AS:
 			if (!mi->on_register) {
-				pr_info("%s: 0x%x is not registered\n", __func__, mi->mm_id);
+				pr_debug("%s: 0x%x is not registered\n", __func__, mi->mm_id);
 			}
 			return sprintf(buf, "%d\n", mi->on_register);
 			break;
@@ -109,7 +109,7 @@ int register_otherkobj_under_mmsysfs(enum hardware_id mm_id, const char *name)
 		if (mm_id == mi->mm_id) {
 			find_id = 1;
 			if (mi->on_register) {
-				pr_info("%s: device(id:%d name:%s) has already registered\n", __func__, mi->mm_id, name);
+				pr_debug("%s: device(id:%d name:%s) has already registered\n", __func__, mi->mm_id, name);
 				ret = -4;
 				goto err;
 			}

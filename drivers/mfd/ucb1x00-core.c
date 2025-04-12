@@ -579,7 +579,7 @@ static int ucb1x00_probe(struct mcp *mcp)
 		if (ret)
 			goto err_gpio_add;
 	} else
-		dev_info(&ucb->dev, "gpio_base not set so no gpiolib support");
+		dev_dbg(&ucb->dev, "gpio_base not set so no gpiolib support");
 
 	mcp_set_drvdata(mcp, ucb);
 

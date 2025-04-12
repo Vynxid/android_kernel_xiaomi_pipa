@@ -333,7 +333,7 @@ static int at91_cf_probe(struct platform_device *pdev)
 		goto fail0a;
 	}
 
-	dev_info(&pdev->dev, "irqs det #%d, io #%d\n",
+	dev_dbg(&pdev->dev, "irqs det #%d, io #%d\n",
 		gpio_to_irq(board->det_pin), gpio_to_irq(board->irq_pin));
 
 	cf->socket.owner = THIS_MODULE;

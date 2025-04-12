@@ -4579,7 +4579,7 @@ static int mv88e6xxx_detect(struct mv88e6xxx_chip *chip)
 	if (err)
 		return err;
 
-	dev_info(chip->dev, "switch 0x%x detected: %s, revision %u\n",
+	dev_dbg(chip->dev, "switch 0x%x detected: %s, revision %u\n",
 		 chip->info->prod_num, chip->info->name, rev);
 
 	return 0;

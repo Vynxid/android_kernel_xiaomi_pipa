@@ -245,7 +245,7 @@ static int xps2_of_probe(struct platform_device *ofdev)
 	unsigned int irq;
 	int error;
 
-	dev_info(dev, "Device Tree Probing \'%s\'\n", dev->of_node->name);
+	dev_dbg(dev, "Device Tree Probing \'%s\'\n", dev->of_node->name);
 
 	/* Get iospace for the device */
 	error = of_address_to_resource(dev->of_node, 0, &r_mem);
@@ -300,7 +300,7 @@ static int xps2_of_probe(struct platform_device *ofdev)
 	 */
 	out_be32(drvdata->base_address + XPS2_SRST_OFFSET, XPS2_SRST_RESET);
 
-	dev_info(dev, "Xilinx PS2 at 0x%08llX mapped to 0x%p, irq=%d\n",
+	dev_dbg(dev, "Xilinx PS2 at 0x%08llX mapped to 0x%p, irq=%d\n",
 		 (unsigned long long)phys_addr, drvdata->base_address,
 		 drvdata->irq);
 

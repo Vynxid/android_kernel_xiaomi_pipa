@@ -184,7 +184,7 @@ static struct fw_request *find_firmware(struct fw_download *fw_download,
 		 intf->ddbl1_manufacturer_id, intf->ddbl1_product_id,
 		 intf->vendor_id, intf->product_id, tag);
 
-	dev_info(fw_download->parent, "Requested firmware package '%s'\n",
+	dev_dbg(fw_download->parent, "Requested firmware package '%s'\n",
 		 fw_req->name);
 
 	ret = request_firmware(&fw_req->fw, fw_req->name, fw_download->parent);

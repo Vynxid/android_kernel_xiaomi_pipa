@@ -668,7 +668,7 @@ static int serial_netx_probe(struct platform_device *pdev)
 {
 	struct uart_port *port = &netx_ports[pdev->id].port;
 
-	dev_info(&pdev->dev, "initialising\n");
+	dev_dbg(&pdev->dev, "initialising\n");
 
 	port->dev = &pdev->dev;
 

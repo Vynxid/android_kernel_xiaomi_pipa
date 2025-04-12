@@ -549,7 +549,7 @@ static int si470x_start_usb(struct si470x_device *radio)
 
 	retval = usb_submit_urb(radio->int_in_urb, GFP_KERNEL);
 	if (retval) {
-		dev_info(&radio->intf->dev,
+		dev_dbg(&radio->intf->dev,
 				"submitting int urb failed (%d)\n", retval);
 		radio->int_in_running = 0;
 	}
@@ -613,7 +613,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
 			radio->int_in_endpoint = endpoint;
 	}
 	if (!radio->int_in_endpoint) {
-		dev_info(&intf->dev, "could not find interrupt in endpoint\n");
+		dev_dbg(&intf->dev, "could not find interrupt in endpoint\n");
 		retval = -EIO;
 		goto err_usbbuf;
 	}
@@ -622,7 +622,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
 
 	radio->int_in_buffer = kmalloc(int_end_size, GFP_KERNEL);
 	if (!radio->int_in_buffer) {
-		dev_info(&intf->dev, "could not allocate int_in_buffer");
+		dev_dbg(&intf->dev, "could not allocate int_in_buffer");
 		retval = -ENOMEM;
 		goto err_usbbuf;
 	}
@@ -652,7 +652,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
 				radio->usb_buf, 3, 500);
 		if (retval != 3 ||
 		    (get_unaligned_be16(&radio->usb_buf[1]) & 0xfff) != 0x0242) {
-			dev_info(&intf->dev, "this is not a si470x device.\n");
+			dev_dbg(&intf->dev, "this is not a si470x device.\n");
 			retval = -ENODEV;
 			goto err_urb;
 		}
@@ -686,7 +686,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
 		retval = -EIO;
 		goto err_ctrl;
 	}
-	dev_info(&intf->dev, "DeviceID=0x%4.4hx ChipID=0x%4.4hx\n",
+	dev_dbg(&intf->dev, "DeviceID=0x%4.4hx ChipID=0x%4.4hx\n",
 			radio->registers[DEVICEID], radio->registers[SI_CHIPID]);
 	if ((radio->registers[SI_CHIPID] & SI_CHIPID_FIRMWARE) < RADIO_FW_VERSION) {
 		dev_warn(&intf->dev,
@@ -703,7 +703,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
 		retval = -EIO;
 		goto err_ctrl;
 	}
-	dev_info(&intf->dev, "software version %d, hardware version %d\n",
+	dev_dbg(&intf->dev, "software version %d, hardware version %d\n",
 			radio->software_version, radio->hardware_version);
 	if (radio->hardware_version < RADIO_HW_VERSION) {
 		dev_warn(&intf->dev,
@@ -788,7 +788,7 @@ static int si470x_usb_driver_suspend(struct usb_interface *intf,
 {
 	struct si470x_device *radio = usb_get_intfdata(intf);
 
-	dev_info(&intf->dev, "suspending now...\n");
+	dev_dbg(&intf->dev, "suspending now...\n");
 
 	/* shutdown interrupt handler */
 	if (radio->int_in_running) {
@@ -814,7 +814,7 @@ static int si470x_usb_driver_resume(struct usb_interface *intf)
 	struct si470x_device *radio = usb_get_intfdata(intf);
 	int ret;
 
-	dev_info(&intf->dev, "resuming now...\n");
+	dev_dbg(&intf->dev, "resuming now...\n");
 
 	/* start radio */
 	ret = si470x_start_usb(radio);

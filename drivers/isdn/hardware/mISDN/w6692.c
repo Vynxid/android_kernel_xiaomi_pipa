@@ -167,7 +167,7 @@ W6692Version(struct w6692_hw *card)
 	int val;
 
 	val = ReadW6692(card, W_D_RBCH);
-	pr_notice("%s: Winbond W6692 version: %s\n", card->name,
+	pr_debug("%s: Winbond W6692 version: %s\n", card->name,
 		  W6692Ver[(val >> 6) & 3]);
 }
 
@@ -261,7 +261,7 @@ W6692_empty_Dfifo(struct w6692_hw *card, int count)
 	if (!dch->rx_skb) {
 		dch->rx_skb = mI_alloc_skb(card->dch.maxlen, GFP_ATOMIC);
 		if (!dch->rx_skb) {
-			pr_info("%s: D receive out of memory\n", card->name);
+			pr_debug("%s: D receive out of memory\n", card->name);
 			WriteW6692(card, W_D_CMDR, W_D_CMDR_RACK);
 			return;
 		}
@@ -333,12 +333,12 @@ d_retransmit(struct w6692_hw *card)
 		dch->tx_idx = 0;
 		W6692_fill_Dfifo(card);
 	} else if (dch->tx_skb) { /* should not happen */
-		pr_info("%s: %s without TX_BUSY\n", card->name, __func__);
+		pr_debug("%s: %s without TX_BUSY\n", card->name, __func__);
 		test_and_set_bit(FLG_TX_BUSY, &dch->Flags);
 		dch->tx_idx = 0;
 		W6692_fill_Dfifo(card);
 	} else {
-		pr_info("%s: XDU no TX_BUSY\n", card->name);
+		pr_debug("%s: XDU no TX_BUSY\n", card->name);
 		if (get_next_dframe(dch))
 			W6692_fill_Dfifo(card);
 	}
@@ -636,7 +636,7 @@ w6692_mode(struct w6692_ch *wch, u32 pr)
 		test_and_set_bit(FLG_HDLC, &wch->bch.Flags);
 		break;
 	default:
-		pr_info("%s: protocol %x not known\n", card->name, pr);
+		pr_debug("%s: protocol %x not known\n", card->name, pr);
 		return -ENOPROTOOPT;
 	}
 	wch->bch.state = pr;
@@ -836,7 +836,7 @@ dbusy_timer_handler(struct timer_list *t)
 			if (dch->tx_idx)
 				dch->tx_idx = 0;
 			else
-				pr_info("%s: W6692 D-Channel Busy no tx_idx\n",
+				pr_debug("%s: W6692 D-Channel Busy no tx_idx\n",
 					card->name);
 			/* Transmitter reset */
 			WriteW6692(card, W_D_CMDR, W_D_CMDR_XRST);
@@ -894,7 +894,7 @@ static void initW6692(struct w6692_hw *card)
 			WriteW6692(card, W_XDATA, card->xdata);
 			val = ReadW6692(card, W_XADDR);
 			if (debug & DEBUG_HW)
-				pr_notice("%s: W_XADDR=%02x\n",
+				pr_debug("%s: W_XADDR=%02x\n",
 					  card->name, val);
 		}
 	}
@@ -918,7 +918,7 @@ init_card(struct w6692_hw *card)
 	disable_hwirq(card);
 	spin_unlock_irqrestore(&card->lock, flags);
 	if (request_irq(card->irq, w6692_irq, IRQF_SHARED, card->name, card)) {
-		pr_info("%s: couldn't get interrupt %d\n", card->name,
+		pr_debug("%s: couldn't get interrupt %d\n", card->name,
 			card->irq);
 		return -EIO;
 	}
@@ -930,10 +930,10 @@ init_card(struct w6692_hw *card)
 		/* Timeout 10ms */
 		msleep_interruptible(10);
 		if (debug & DEBUG_HW)
-			pr_notice("%s: IRQ %d count %d\n", card->name,
+			pr_debug("%s: IRQ %d count %d\n", card->name,
 				  card->irq, card->irqcnt);
 		if (!card->irqcnt) {
-			pr_info("%s: IRQ(%d) getting no IRQs during init %d\n",
+			pr_debug("%s: IRQ(%d) getting no IRQs during init %d\n",
 				card->name, card->irq, 3 - cnt);
 			reset_w6692(card);
 		} else
@@ -984,7 +984,7 @@ w6692_l2l1B(struct mISDNchannel *ch, struct sk_buff *skb)
 		ret = 0;
 		break;
 	default:
-		pr_info("%s: %s unknown prim(%x,%x)\n",
+		pr_debug("%s: %s unknown prim(%x,%x)\n",
 			card->name, __func__, hh->prim, hh->id);
 		ret = -EINVAL;
 	}
@@ -1029,7 +1029,7 @@ channel_ctrl(struct w6692_hw *card, struct mISDN_ctrl_req *cq)
 		ret = l1_event(card->dch.l1, HW_TIMER3_VALUE | (cq->p1 & 0xff));
 		break;
 	default:
-		pr_info("%s: unknown CTRL OP %x\n", card->name, cq->op);
+		pr_debug("%s: unknown CTRL OP %x\n", card->name, cq->op);
 		ret = -EINVAL;
 		break;
 	}
@@ -1063,7 +1063,7 @@ w6692_bctrl(struct mISDNchannel *ch, u32 cmd, void *arg)
 		ret = channel_bctrl(bch, arg);
 		break;
 	default:
-		pr_info("%s: %s unknown prim(%x)\n",
+		pr_debug("%s: %s unknown prim(%x)\n",
 			card->name, __func__, cmd);
 	}
 	return ret;
@@ -1208,7 +1208,7 @@ w6692_dctrl(struct mISDNchannel *ch, u32 cmd, void *arg)
 		if (err)
 			break;
 		if (!try_module_get(THIS_MODULE))
-			pr_info("%s: cannot get module\n", card->name);
+			pr_debug("%s: cannot get module\n", card->name);
 		break;
 	case CLOSE_CHANNEL:
 		pr_debug("%s: dev(%d) close from %p\n", card->name,
@@ -1231,7 +1231,7 @@ setup_w6692(struct w6692_hw *card)
 	u32	val;
 
 	if (!request_region(card->addr, 256, card->name)) {
-		pr_info("%s: config port %x-%x already in use\n", card->name,
+		pr_debug("%s: config port %x-%x already in use\n", card->name,
 			card->addr, card->addr + 255);
 		return -EIO;
 	}
@@ -1240,19 +1240,19 @@ setup_w6692(struct w6692_hw *card)
 	card->bc[1].addr = card->addr + 0x40;
 	val = ReadW6692(card, W_ISTA);
 	if (debug & DEBUG_HW)
-		pr_notice("%s ISTA=%02x\n", card->name, val);
+		pr_debug("%s ISTA=%02x\n", card->name, val);
 	val = ReadW6692(card, W_IMASK);
 	if (debug & DEBUG_HW)
-		pr_notice("%s IMASK=%02x\n", card->name, val);
+		pr_debug("%s IMASK=%02x\n", card->name, val);
 	val = ReadW6692(card, W_D_EXIR);
 	if (debug & DEBUG_HW)
-		pr_notice("%s D_EXIR=%02x\n", card->name, val);
+		pr_debug("%s D_EXIR=%02x\n", card->name, val);
 	val = ReadW6692(card, W_D_EXIM);
 	if (debug & DEBUG_HW)
-		pr_notice("%s D_EXIM=%02x\n", card->name, val);
+		pr_debug("%s D_EXIM=%02x\n", card->name, val);
 	val = ReadW6692(card, W_D_RSTA);
 	if (debug & DEBUG_HW)
-		pr_notice("%s D_RSTA=%02x\n", card->name, val);
+		pr_debug("%s D_RSTA=%02x\n", card->name, val);
 	return 0;
 }
 
@@ -1330,7 +1330,7 @@ setup_instance(struct w6692_hw *card)
 	err = create_l1(&card->dch, w6692_l1callback);
 	if (!err) {
 		w6692_cnt++;
-		pr_notice("W6692 %d cards installed\n", w6692_cnt);
+		pr_debug("W6692 %d cards installed\n", w6692_cnt);
 		return 0;
 	}
 
@@ -1359,7 +1359,7 @@ w6692_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 
 	card = kzalloc(sizeof(struct w6692_hw), GFP_KERNEL);
 	if (!card) {
-		pr_info("No kmem for w6692 card\n");
+		pr_debug("No kmem for w6692 card\n");
 		return err;
 	}
 	card->pdev = pdev;
@@ -1391,7 +1391,7 @@ w6692_remove_pci(struct pci_dev *pdev)
 		release_card(card);
 	else
 		if (debug)
-			pr_notice("%s: drvdata already removed\n", __func__);
+			pr_debug("%s: drvdata already removed\n", __func__);
 }
 
 static const struct pci_device_id w6692_ids[] = {
@@ -1417,7 +1417,7 @@ static int __init w6692_init(void)
 {
 	int err;
 
-	pr_notice("Winbond W6692 PCI driver Rev. %s\n", W6692_REV);
+	pr_debug("Winbond W6692 PCI driver Rev. %s\n", W6692_REV);
 
 	err = pci_register_driver(&w6692_driver);
 	return err;

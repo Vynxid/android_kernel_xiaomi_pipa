@@ -174,7 +174,7 @@ struct imp_mhi_driver {
 };
 
 struct imp_context {
-	struct imp_dev_info dev_info;
+	struct imp_dev_info dev_dbg;
 	struct imp_mhi_driver md;
 	struct mutex mutex;
 	struct mutex lpm_mutex;
@@ -190,10 +190,10 @@ static struct imp_context *imp_ctx;
 static void _populate_smmu_info(struct ipa_mhi_ready_indication_msg_v01 *req)
 {
 	req->smmu_info_valid = true;
-	req->smmu_info.iova_ctl_base_addr = imp_ctx->dev_info.ctrl.base;
-	req->smmu_info.iova_ctl_size = imp_ctx->dev_info.ctrl.size;
-	req->smmu_info.iova_data_base_addr = imp_ctx->dev_info.data.base;
-	req->smmu_info.iova_data_size = imp_ctx->dev_info.data.size;
+	req->smmu_info.iova_ctl_base_addr = imp_ctx->dev_dbg.ctrl.base;
+	req->smmu_info.iova_ctl_size = imp_ctx->dev_dbg.ctrl.size;
+	req->smmu_info.iova_data_base_addr = imp_ctx->dev_dbg.data.base;
+	req->smmu_info.iova_data_size = imp_ctx->dev_dbg.data.size;
 }
 
 static void imp_mhi_trigger_ready_ind(void)
@@ -210,7 +210,7 @@ static void imp_mhi_trigger_ready_ind(void)
 		goto exit;
 	}
 
-	if (imp_ctx->dev_info.smmu_enabled)
+	if (imp_ctx->dev_dbg.smmu_enabled)
 		_populate_smmu_info(req);
 
 	req->ch_info_arr_len = 0;
@@ -500,7 +500,7 @@ struct ipa_mhi_alloc_channel_resp_msg_v01 *imp_handle_allocate_channel_req(
 
 	if ((req->ctrl_addr_map_info_len == 0 ||
 	     req->data_addr_map_info_len == 0) &&
-	     imp_ctx->dev_info.smmu_enabled) {
+	     imp_ctx->dev_dbg.smmu_enabled) {
 		IMP_ERR("no mapping provided, but smmu is enabled\n");
 		resp->resp.result = IPA_QMI_RESULT_FAILURE_V01;
 		resp->resp.error = IPA_QMI_ERR_INTERNAL_V01;
@@ -508,17 +508,17 @@ struct ipa_mhi_alloc_channel_resp_msg_v01 *imp_handle_allocate_channel_req(
 		return resp;
 	}
 
-	if (imp_ctx->dev_info.smmu_enabled) {
+	if (imp_ctx->dev_dbg.smmu_enabled) {
 		/* map CTRL */
 		__map_smmu_info(imp_ctx->md.mhi_dev->dev.parent,
-			&imp_ctx->dev_info.ctrl,
+			&imp_ctx->dev_dbg.ctrl,
 			req->ctrl_addr_map_info_len,
 			req->ctrl_addr_map_info,
 			true);
 
 		/* map DATA */
 		__map_smmu_info(imp_ctx->md.mhi_dev->dev.parent,
-			&imp_ctx->dev_info.data,
+			&imp_ctx->dev_dbg.data,
 			req->data_addr_map_info_len,
 			req->data_addr_map_info,
 			true);
@@ -571,17 +571,17 @@ struct ipa_mhi_alloc_channel_resp_msg_v01 *imp_handle_allocate_channel_req(
 	return resp;
 
 fail_smmu:
-	if (imp_ctx->dev_info.smmu_enabled) {
+	if (imp_ctx->dev_dbg.smmu_enabled) {
 		/* unmap CTRL */
 		__map_smmu_info(imp_ctx->md.mhi_dev->dev.parent,
-			&imp_ctx->dev_info.ctrl,
+			&imp_ctx->dev_dbg.ctrl,
 			req->ctrl_addr_map_info_len,
 			req->ctrl_addr_map_info,
 			false);
 
 		/* unmap DATA */
 		__map_smmu_info(imp_ctx->md.mhi_dev->dev.parent,
-			&imp_ctx->dev_info.data,
+			&imp_ctx->dev_dbg.data,
 			req->data_addr_map_info_len,
 			req->data_addr_map_info,
 			false);
@@ -670,7 +670,7 @@ struct ipa_mhi_clk_vote_resp_msg_v01
 static int imp_read_iova_from_dtsi(const char *node, struct imp_iova_addr *out)
 {
 	u32 iova_mapping[2];
-	struct device_node *of_node = imp_ctx->dev_info.pdev->dev.of_node;
+	struct device_node *of_node = imp_ctx->dev_dbg.pdev->dev.of_node;
 
 	if (of_property_read_u32_array(of_node, node, iova_mapping, 2)) {
 		IMP_DBG("failed to read of_node %s\n", node);
@@ -695,20 +695,20 @@ static void imp_mhi_shutdown(void)
 		req.cleanup_valid = true;
 		req.cleanup = true;
 		ipa3_qmi_send_mhi_cleanup_request(&req);
-		if (imp_ctx->dev_info.smmu_enabled) {
+		if (imp_ctx->dev_dbg.smmu_enabled) {
 			struct ipa_mhi_alloc_channel_req_msg_v01 *creq
 				= &imp_ctx->qmi.alloc_ch_req;
 
 			/* unmap CTRL */
 			__map_smmu_info(imp_ctx->md.mhi_dev->dev.parent,
-				&imp_ctx->dev_info.ctrl,
+				&imp_ctx->dev_dbg.ctrl,
 				creq->ctrl_addr_map_info_len,
 				creq->ctrl_addr_map_info,
 				false);
 
 			/* unmap DATA */
 			__map_smmu_info(imp_ctx->md.mhi_dev->dev.parent,
-				&imp_ctx->dev_info.data,
+				&imp_ctx->dev_dbg.data,
 				creq->data_addr_map_info_len,
 				creq->data_addr_map_info,
 				false);
@@ -726,8 +726,8 @@ static void imp_mhi_shutdown(void)
 			phys_addr_t pa_p;
 			u32 size_p;
 
-			imp_smmu_round_to_page(imp_ctx->dev_info.chdb_base,
-				imp_ctx->dev_info.chdb_base, PAGE_SIZE,
+			imp_smmu_round_to_page(imp_ctx->dev_dbg.chdb_base,
+				imp_ctx->dev_dbg.chdb_base, PAGE_SIZE,
 				&iova_p, &pa_p, &size_p);
 
 			iommu_unmap(cb->iommu_domain, iova_p, size_p);
@@ -772,7 +772,7 @@ static int imp_mhi_probe_cb(struct mhi_device *mhi_dev,
 
 	ch->props.id = mhi_dev->ul_chan_id;
 	ch->props.dir = DMA_TO_DEVICE;
-	ch->props.doorbell = imp_ctx->dev_info.chdb_base + ch->props.id * 8;
+	ch->props.doorbell = imp_ctx->dev_dbg.chdb_base + ch->props.id * 8;
 	ch->props.uc_mbox_n = IMP_IPA_UC_UL_CH_n;
 	IMP_DBG("ul ch id %d doorbell 0x%pa uc_mbox_n %d\n",
 		ch->props.id, &ch->props.doorbell, ch->props.uc_mbox_n);
@@ -785,7 +785,7 @@ static int imp_mhi_probe_cb(struct mhi_device *mhi_dev,
 			ch->props.uc_mbox_n);
 
 	ev->props.id = mhi_dev->ul_event_id;
-	ev->props.doorbell = imp_ctx->dev_info.erdb_base + ev->props.id * 8;
+	ev->props.doorbell = imp_ctx->dev_dbg.erdb_base + ev->props.id * 8;
 	ev->props.uc_mbox_n = IMP_IPA_UC_UL_EV_n;
 	IMP_DBG("allocated ev %d\n", ev->props.id);
 
@@ -802,7 +802,7 @@ static int imp_mhi_probe_cb(struct mhi_device *mhi_dev,
 
 	ch->props.dir = DMA_FROM_DEVICE;
 	ch->props.id = mhi_dev->dl_chan_id;
-	ch->props.doorbell = imp_ctx->dev_info.chdb_base + ch->props.id * 8;
+	ch->props.doorbell = imp_ctx->dev_dbg.chdb_base + ch->props.id * 8;
 	ch->props.uc_mbox_n = IMP_IPA_UC_DL_CH_n;
 	IMP_DBG("dl ch id %d doorbell 0x%pa uc_mbox_n %d\n",
 		ch->props.id, &ch->props.doorbell, ch->props.uc_mbox_n);
@@ -815,7 +815,7 @@ static int imp_mhi_probe_cb(struct mhi_device *mhi_dev,
 		ch->props.uc_mbox_n);
 
 	ev->props.id = mhi_dev->dl_event_id;
-	ev->props.doorbell = imp_ctx->dev_info.erdb_base + ev->props.id * 8;
+	ev->props.doorbell = imp_ctx->dev_dbg.erdb_base + ev->props.id * 8;
 	ev->props.uc_mbox_n = IMP_IPA_UC_DL_EV_n;
 	IMP_DBG("allocated ev %d\n", ev->props.id);
 
@@ -837,8 +837,8 @@ static int imp_mhi_probe_cb(struct mhi_device *mhi_dev,
 		phys_addr_t pa_p;
 		u32 size_p;
 
-		imp_smmu_round_to_page(imp_ctx->dev_info.chdb_base,
-			imp_ctx->dev_info.chdb_base, PAGE_SIZE,
+		imp_smmu_round_to_page(imp_ctx->dev_dbg.chdb_base,
+			imp_ctx->dev_dbg.chdb_base, PAGE_SIZE,
 			&iova_p, &pa_p, &size_p);
 
 		ret = ipa3_iommu_map(cb->iommu_domain, iova_p, pa_p, size_p,
@@ -925,33 +925,33 @@ static int imp_probe(struct platform_device *pdev)
 		return -EPROBE_DEFER;
 	}
 
-	imp_ctx->dev_info.pdev = pdev;
-	imp_ctx->dev_info.smmu_enabled = true;
+	imp_ctx->dev_dbg.pdev = pdev;
+	imp_ctx->dev_dbg.smmu_enabled = true;
 	ret = imp_read_iova_from_dtsi("qcom,ctrl-iova",
-		&imp_ctx->dev_info.ctrl);
+		&imp_ctx->dev_dbg.ctrl);
 	if (ret)
-		imp_ctx->dev_info.smmu_enabled = false;
+		imp_ctx->dev_dbg.smmu_enabled = false;
 
 	ret = imp_read_iova_from_dtsi("qcom,data-iova",
-		&imp_ctx->dev_info.data);
+		&imp_ctx->dev_dbg.data);
 	if (ret)
-		imp_ctx->dev_info.smmu_enabled = false;
+		imp_ctx->dev_dbg.smmu_enabled = false;
 
-	IMP_DBG("smmu_enabled=%d\n", imp_ctx->dev_info.smmu_enabled);
+	IMP_DBG("smmu_enabled=%d\n", imp_ctx->dev_dbg.smmu_enabled);
 
 	if (of_property_read_u32(pdev->dev.of_node, "qcom,mhi-chdb-base",
-		&imp_ctx->dev_info.chdb_base)) {
+		&imp_ctx->dev_dbg.chdb_base)) {
 		IMP_ERR("failed to read of_node %s\n", "qcom,mhi-chdb-base");
 		return -EINVAL;
 	}
-	IMP_DBG("chdb-base=0x%x\n", imp_ctx->dev_info.chdb_base);
+	IMP_DBG("chdb-base=0x%x\n", imp_ctx->dev_dbg.chdb_base);
 
 	if (of_property_read_u32(pdev->dev.of_node, "qcom,mhi-erdb-base",
-		&imp_ctx->dev_info.erdb_base)) {
+		&imp_ctx->dev_dbg.erdb_base)) {
 		IMP_ERR("failed to read of_node %s\n", "qcom,mhi-erdb-base");
 		return -EINVAL;
 	}
-	IMP_DBG("erdb-base=0x%x\n", imp_ctx->dev_info.erdb_base);
+	IMP_DBG("erdb-base=0x%x\n", imp_ctx->dev_dbg.erdb_base);
 
 	imp_ctx->state = IMP_PROBED;
 	ret = mhi_driver_register(&mhi_driver);
@@ -1057,20 +1057,20 @@ void imp_handle_modem_shutdown(void)
 	}
 
 	if (imp_ctx->state == IMP_READY) {
-		if (imp_ctx->dev_info.smmu_enabled) {
+		if (imp_ctx->dev_dbg.smmu_enabled) {
 			struct ipa_mhi_alloc_channel_req_msg_v01 *creq
 				= &imp_ctx->qmi.alloc_ch_req;
 
 			/* unmap CTRL */
 			__map_smmu_info(imp_ctx->md.mhi_dev->dev.parent,
-				&imp_ctx->dev_info.ctrl,
+				&imp_ctx->dev_dbg.ctrl,
 				creq->ctrl_addr_map_info_len,
 				creq->ctrl_addr_map_info,
 				false);
 
 			/* unmap DATA */
 			__map_smmu_info(imp_ctx->md.mhi_dev->dev.parent,
-				&imp_ctx->dev_info.data,
+				&imp_ctx->dev_dbg.data,
 				creq->data_addr_map_info_len,
 				creq->data_addr_map_info,
 				false);

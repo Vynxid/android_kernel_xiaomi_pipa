@@ -169,7 +169,7 @@ static int iproc_mdio_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, priv);
 
-	dev_info(&pdev->dev, "Broadcom iProc MDIO bus at 0x%p\n", priv->base);
+	dev_dbg(&pdev->dev, "Broadcom iProc MDIO bus at 0x%p\n", priv->base);
 
 	return 0;
 

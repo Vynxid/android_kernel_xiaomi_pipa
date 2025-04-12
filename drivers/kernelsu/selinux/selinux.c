@@ -33,7 +33,7 @@ static int transive_to_domain(const char *domain)
 
 	error = security_secctx_to_secid(domain, strlen(domain), &sid);
 	if (error) {
-		pr_info("security_secctx_to_secid %s -> sid: %d, error: %d\n",
+		pr_debug("security_secctx_to_secid %s -> sid: %d, error: %d\n",
 			domain, sid, error);
 	}
 	if (!error) {
@@ -155,7 +155,7 @@ static inline void susfs_set_sid(const char *secctx_name, u32 *out_sid)
 		pr_err("failed setting sid for '%s', err: %d\n", secctx_name, err);
 		return;
 	}
-	pr_info("sid '%u' is set for secctx_name '%s'\n", *out_sid, secctx_name);
+	pr_debug("sid '%u' is set for secctx_name '%s'\n", *out_sid, secctx_name);
 }
 
 bool susfs_is_sid_equal(void *sec, u32 sid2) {
@@ -224,7 +224,7 @@ u32 ksu_get_devpts_sid()
 	int err = security_secctx_to_secid(DEVPTS_DOMAIN, strlen(DEVPTS_DOMAIN),
 					   &devpts_sid);
 	if (err) {
-		pr_info("get devpts sid err %d\n", err);
+		pr_debug("get devpts sid err %d\n", err);
 	}
 	return devpts_sid;
 }

@@ -622,7 +622,7 @@ static void svia_configure(struct pci_dev *pdev, int board_id,
 	u8 tmp8;
 
 	pci_read_config_byte(pdev, PCI_INTERRUPT_LINE, &tmp8);
-	dev_info(&pdev->dev, "routed to hard irq line %d\n",
+	dev_dbg(&pdev->dev, "routed to hard irq line %d\n",
 		 (int) (tmp8 & 0xf0) == 0xf0 ? 0 : tmp8 & 0x0f);
 
 	/* make sure SATA channels are enabled */

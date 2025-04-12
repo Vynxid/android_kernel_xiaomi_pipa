@@ -1201,7 +1201,7 @@ static void mceusb_handle_command(struct mceusb_dev *ir, int index)
 	case MCE_RSP_EQIRRXPORTEN:
 		ir->learning_active = ((hi & 0x02) == 0x02);
 		if (ir->rxports_active != hi) {
-			dev_info(ir->dev, "%s-range (0x%x) receiver active",
+			dev_dbg(ir->dev, "%s-range (0x%x) receiver active",
 				 ir->learning_active ? "short" : "long", hi);
 			ir->rxports_active = hi;
 		}
@@ -1725,9 +1725,9 @@ static int mceusb_dev_probe(struct usb_interface *intf,
 	device_set_wakeup_capable(ir->dev, true);
 	device_set_wakeup_enable(ir->dev, true);
 
-	dev_info(&intf->dev, "Registered %s with mce emulator interface version %x",
+	dev_dbg(&intf->dev, "Registered %s with mce emulator interface version %x",
 		name, ir->emver);
-	dev_info(&intf->dev, "%x tx ports (0x%x cabled) and %x rx sensors (0x%x active)",
+	dev_dbg(&intf->dev, "%x tx ports (0x%x cabled) and %x rx sensors (0x%x active)",
 		 ir->num_txports, ir->txports_cabled,
 		 ir->num_rxports, ir->rxports_active);
 
@@ -1774,7 +1774,7 @@ static void mceusb_dev_disconnect(struct usb_interface *intf)
 static int mceusb_dev_suspend(struct usb_interface *intf, pm_message_t message)
 {
 	struct mceusb_dev *ir = usb_get_intfdata(intf);
-	dev_info(ir->dev, "suspend");
+	dev_dbg(ir->dev, "suspend");
 	usb_kill_urb(ir->urb_in);
 	return 0;
 }
@@ -1782,7 +1782,7 @@ static int mceusb_dev_suspend(struct usb_interface *intf, pm_message_t message)
 static int mceusb_dev_resume(struct usb_interface *intf)
 {
 	struct mceusb_dev *ir = usb_get_intfdata(intf);
-	dev_info(ir->dev, "resume");
+	dev_dbg(ir->dev, "resume");
 	if (usb_submit_urb(ir->urb_in, GFP_ATOMIC))
 		return -EIO;
 	return 0;

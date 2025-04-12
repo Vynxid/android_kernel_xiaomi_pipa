@@ -93,7 +93,7 @@ static int tweak_clear_halt_cmd(struct urb *urb)
 			"usb_clear_halt error: devnum %d endp %d ret %d\n",
 			urb->dev->devnum, target_endp, ret);
 	else
-		dev_info(&urb->dev->dev,
+		dev_dbg(&urb->dev->dev,
 			 "usb_clear_halt done: devnum %d endp %d\n",
 			 urb->dev->devnum, target_endp);
 
@@ -120,7 +120,7 @@ static int tweak_set_interface_cmd(struct urb *urb)
 			"usb_set_interface error: inf %u alt %u ret %d\n",
 			interface, alternate, ret);
 	else
-		dev_info(&urb->dev->dev,
+		dev_dbg(&urb->dev->dev,
 			"usb_set_interface done: inf %u alt %u\n",
 			interface, alternate);
 
@@ -153,7 +153,7 @@ static int tweak_reset_device_cmd(struct urb *urb)
 	struct stub_device *sdev = priv->sdev;
 	int err;
 
-	dev_info(&urb->dev->dev, "usb_queue_reset_device\n");
+	dev_dbg(&urb->dev->dev, "usb_queue_reset_device\n");
 
 	err = usb_lock_device_for_reset(sdev->udev, NULL);
 	if (err < 0) {

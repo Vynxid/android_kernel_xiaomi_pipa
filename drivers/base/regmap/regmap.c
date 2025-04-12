@@ -1764,7 +1764,7 @@ int _regmap_write(struct regmap *map, unsigned int reg,
 
 #ifdef LOG_DEVICE
 	if (map->dev && strcmp(dev_name(map->dev), LOG_DEVICE) == 0)
-		dev_info(map->dev, "%x <= %x\n", reg, val);
+		dev_dbg(map->dev, "%x <= %x\n", reg, val);
 #endif
 
 	trace_regmap_reg_write(map, reg, val);
@@ -2461,7 +2461,7 @@ static int _regmap_read(struct regmap *map, unsigned int reg,
 	if (ret == 0) {
 #ifdef LOG_DEVICE
 		if (map->dev && strcmp(dev_name(map->dev), LOG_DEVICE) == 0)
-			dev_info(map->dev, "%x => %x\n", reg, *val);
+			dev_dbg(map->dev, "%x => %x\n", reg, *val);
 #endif
 
 		trace_regmap_reg_read(map, reg, *val);

@@ -3966,13 +3966,13 @@ int snd_cs46xx_create(struct snd_card *card,
 	}
 
 	if (external_amp) {
-		dev_info(chip->card->dev,
+		dev_dbg(chip->card->dev,
 			 "Crystal EAPD support forced on.\n");
 		chip->amplifier_ctrl = amp_voyetra;
 	}
 
 	if (thinkpad) {
-		dev_info(chip->card->dev,
+		dev_dbg(chip->card->dev,
 			 "Activating CLKRUN hack for Thinkpad.\n");
 		chip->active_ctrl = clkrun_hack;
 		clkrun_init(chip);

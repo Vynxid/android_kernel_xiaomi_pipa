@@ -112,7 +112,7 @@ static int octeon_gpio_probe(struct platform_device *pdev)
 	if (err)
 		return err;
 
-	dev_info(&pdev->dev, "OCTEON GPIO driver probed.\n");
+	dev_dbg(&pdev->dev, "OCTEON GPIO driver probed.\n");
 	return 0;
 }
 

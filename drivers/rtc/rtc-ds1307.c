@@ -1695,7 +1695,7 @@ read_rtc:
 		return PTR_ERR(ds1307->rtc);
 
 	if (ds1307_can_wakeup_device && !want_irq) {
-		dev_info(ds1307->dev,
+		dev_dbg(ds1307->dev,
 			 "'wakeup-source' is set, request for an IRQ is disabled!\n");
 		/* We cannot support UIE mode if we do not have an IRQ line */
 		ds1307->rtc->uie_unsupported = 1;

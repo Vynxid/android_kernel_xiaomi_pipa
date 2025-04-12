@@ -348,7 +348,7 @@ static void thunder_pem_reserve_range(struct device *dev, int seg,
 	else
 		kfree(regionid);
 
-	dev_info(dev, "%pR %s reserved\n", r,
+	dev_dbg(dev, "%pR %s reserved\n", r,
 		 res ? "has been" : "could not be");
 }
 

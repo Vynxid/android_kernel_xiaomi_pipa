@@ -610,7 +610,7 @@ int virtio_pci_modern_probe(struct virtio_pci_device *vp_dev)
 					    IORESOURCE_IO | IORESOURCE_MEM,
 					    &vp_dev->modern_bars);
 	if (!common) {
-		dev_info(&pci_dev->dev,
+		dev_dbg(&pci_dev->dev,
 			 "virtio_pci: leaving for legacy driver\n");
 		return -ENODEV;
 	}

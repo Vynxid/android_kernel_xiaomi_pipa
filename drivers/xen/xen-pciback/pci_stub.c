@@ -108,7 +108,7 @@ static void pcistub_device_release(struct kref *kref)
 	__pci_reset_function_locked(dev);
 	if (dev_data &&
 	    pci_load_and_free_saved_state(dev, &dev_data->pci_saved_state))
-		dev_info(&dev->dev, "Could not reload PCI state\n");
+		dev_dbg(&dev->dev, "Could not reload PCI state\n");
 	else
 		pci_restore_state(dev);
 
@@ -296,7 +296,7 @@ void pcistub_put_pci_dev(struct pci_dev *dev)
 		 */
 		pci_restore_state(dev);
 	} else
-		dev_info(&dev->dev, "Could not reload PCI state\n");
+		dev_dbg(&dev->dev, "Could not reload PCI state\n");
 	/* This disables the device. */
 	xen_pcibk_reset_device(dev);
 
@@ -585,7 +585,7 @@ static int pcistub_probe(struct pci_dev *dev, const struct pci_device_id *id)
 			}
 		}
 
-		dev_info(&dev->dev, "seizing device\n");
+		dev_dbg(&dev->dev, "seizing device\n");
 		err = pcistub_seize(dev, pci_dev_id);
 	} else
 		/* Didn't find the device */

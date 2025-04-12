@@ -544,7 +544,7 @@ static int init_xo2(struct ngene_channel *chan, struct i2c_adapter *i2c)
 		return res;
 
 	if (data[0] != 0x01)  {
-		dev_info(pdev, "Invalid XO2 on channel %d\n", chan->number);
+		dev_dbg(pdev, "Invalid XO2 on channel %d\n", chan->number);
 		return -1;
 	}
 
@@ -636,7 +636,7 @@ static int cineS2_probe(struct ngene_channel *chan)
 			case DEMOD_TYPE_SONY_ISDBT:
 			case DEMOD_TYPE_SONY_C2T2:
 			case DEMOD_TYPE_SONY_C2T2I:
-				dev_info(pdev, "%s (XO2) on channel %d\n",
+				dev_dbg(pdev, "%s (XO2) on channel %d\n",
 					 xo2names[xo2_id], chan->number);
 				chan->demod_type = xo2_demodtype;
 				if (xo2_demodtype == DEMOD_TYPE_SONY_C2T2I)
@@ -645,7 +645,7 @@ static int cineS2_probe(struct ngene_channel *chan)
 				demod_attach_cxd28xx(chan, i2c, sony_osc24);
 				break;
 			case DEMOD_TYPE_STV0910:
-				dev_info(pdev, "%s (XO2) on channel %d\n",
+				dev_dbg(pdev, "%s (XO2) on channel %d\n",
 					 xo2names[xo2_id], chan->number);
 				chan->demod_type = xo2_demodtype;
 				demod_attach_stv0910(chan, i2c);
@@ -658,10 +658,10 @@ static int cineS2_probe(struct ngene_channel *chan)
 			}
 			break;
 		case NGENE_XO2_TYPE_CI:
-			dev_info(pdev, "DuoFlex CI modules not supported\n");
+			dev_dbg(pdev, "DuoFlex CI modules not supported\n");
 			return -ENODEV;
 		default:
-			dev_info(pdev, "Unsupported XO2 module type\n");
+			dev_dbg(pdev, "Unsupported XO2 module type\n");
 			return -ENODEV;
 		}
 	} else if (port_has_stv0900(i2c, chan->number)) {
@@ -698,10 +698,10 @@ static int cineS2_probe(struct ngene_channel *chan)
 		demod_attach_drxk(chan, i2c);
 	} else if (port_has_stv0367(i2c)) {
 		chan->demod_type = DEMOD_TYPE_STV0367;
-		dev_info(pdev, "STV0367 on channel %d\n", chan->number);
+		dev_dbg(pdev, "STV0367 on channel %d\n", chan->number);
 		demod_attach_stv0367(chan, i2c);
 	} else {
-		dev_info(pdev, "No demod found on chan %d\n", chan->number);
+		dev_dbg(pdev, "No demod found on chan %d\n", chan->number);
 		return -ENODEV;
 	}
 	return 0;
@@ -967,13 +967,13 @@ static s16 osc_deviation(void *priv, s16 deviation, int flag)
 
 	if (flag) {
 		data = (u16) deviation;
-		dev_info(pdev, "write deviation %d\n",
+		dev_dbg(pdev, "write deviation %d\n",
 			 deviation);
 		eeprom_write_ushort(adap, 0x1000 + chan->number, data);
 	} else {
 		if (eeprom_read_ushort(adap, 0x1000 + chan->number, &data))
 			data = 0;
-		dev_info(pdev, "read deviation %d\n",
+		dev_dbg(pdev, "read deviation %d\n",
 			 (s16)data);
 	}
 
@@ -1211,13 +1211,13 @@ static pci_ers_result_t ngene_error_detected(struct pci_dev *dev,
 
 static pci_ers_result_t ngene_slot_reset(struct pci_dev *dev)
 {
-	dev_info(&dev->dev, "slot reset\n");
+	dev_dbg(&dev->dev, "slot reset\n");
 	return 0;
 }
 
 static void ngene_resume(struct pci_dev *dev)
 {
-	dev_info(&dev->dev, "resume\n");
+	dev_dbg(&dev->dev, "resume\n");
 }
 
 static const struct pci_error_handlers ngene_errors = {
@@ -1238,7 +1238,7 @@ static struct pci_driver ngene_pci_driver = {
 static __init int module_init_ngene(void)
 {
 	/* pr_*() since we don't have a device to use with dev_*() yet */
-	pr_info("nGene PCIE bridge driver, Copyright (C) 2005-2007 Micronas\n");
+	pr_debug("nGene PCIE bridge driver, Copyright (C) 2005-2007 Micronas\n");
 
 	return pci_register_driver(&ngene_pci_driver);
 }

@@ -728,7 +728,7 @@ static void sym_tune_dev_queuing(struct sym_tcb *tp, int lun, u_short reqtags)
 	lp->s.reqtags     = reqtags;
 
 	if (reqtags != oldtags) {
-		dev_info(&tp->starget->dev,
+		dev_dbg(&tp->starget->dev,
 		         "tagged command queuing %s, command queue depth %d.\n",
 		          lp->s.reqtags ? "enabled" : "disabled", reqtags);
 	}
@@ -1438,7 +1438,7 @@ static int sym_check_supported(struct sym_device *device)
 	 */
 	chip = sym_lookup_chip_table(pdev->device, pdev->revision);
 	if (!chip) {
-		dev_info(&pdev->dev, "device not supported\n");
+		dev_dbg(&pdev->dev, "device not supported\n");
 		return -ENODEV;
 	}
 	memcpy(&device->chip, chip, sizeof(device->chip));
@@ -1466,7 +1466,7 @@ static int sym_check_raid(struct sym_device *device)
 	if (ram_val != 0x52414944)
 		return 0;
 
-	dev_info(&device->pdev->dev,
+	dev_dbg(&device->pdev->dev,
 			"not initializing, driven by RAID controller.\n");
 	return -ENODEV;
 }

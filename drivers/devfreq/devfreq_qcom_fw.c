@@ -327,7 +327,7 @@ static int devfreq_qcom_fw_driver_probe(struct platform_device *pdev)
 	 */
 	if (of_get_available_child_count(dev->of_node)) {
 		of_platform_populate(dev->of_node, NULL, NULL, dev);
-		dev_info(dev, "Devfreq QCOM Firmware parent dev inited.\n");
+		dev_dbg(dev, "Devfreq QCOM Firmware parent dev inited.\n");
 		return 0;
 	}
 
@@ -343,7 +343,7 @@ static int devfreq_qcom_fw_driver_probe(struct platform_device *pdev)
 		return PTR_ERR(df);
 	}
 
-	dev_info(dev, "Devfreq QCOM Firmware dev registered.\n");
+	dev_dbg(dev, "Devfreq QCOM Firmware dev registered.\n");
 
 	return 0;
 }

@@ -39,8 +39,8 @@ static int usb_serial_generic_probe(struct usb_serial *serial,
 {
 	struct device *dev = &serial->interface->dev;
 
-	dev_info(dev, "The \"generic\" usb-serial driver is only for testing and one-off prototypes.\n");
-	dev_info(dev, "Tell linux-usb@vger.kernel.org to add your device to a proper driver.\n");
+	dev_dbg(dev, "The \"generic\" usb-serial driver is only for testing and one-off prototypes.\n");
+	dev_dbg(dev, "Tell linux-usb@vger.kernel.org to add your device to a proper driver.\n");
 
 	return 0;
 }

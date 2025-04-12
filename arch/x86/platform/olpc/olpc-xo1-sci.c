@@ -319,10 +319,10 @@ static int setup_sci_interrupt(struct platform_device *pdev)
 	sci_irq = (lo >> 20) & 15;
 
 	if (sci_irq) {
-		dev_info(&pdev->dev, "SCI is mapped to IRQ %d\n", sci_irq);
+		dev_dbg(&pdev->dev, "SCI is mapped to IRQ %d\n", sci_irq);
 	} else {
 		/* Zero means masked */
-		dev_info(&pdev->dev, "SCI unmapped. Mapping to IRQ 3\n");
+		dev_dbg(&pdev->dev, "SCI unmapped. Mapping to IRQ 3\n");
 		sci_irq = 3;
 		lo |= 0x00300000;
 		wrmsrl(0x51400020, lo);

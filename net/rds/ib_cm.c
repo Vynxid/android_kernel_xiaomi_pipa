@@ -134,7 +134,7 @@ void rds_ib_cm_connect_complete(struct rds_connection *conn, struct rdma_cm_even
 	}
 
 	if (conn->c_version < RDS_PROTOCOL(3, 1)) {
-		pr_notice("RDS/IB: Connection <%pI6c,%pI6c> version %u.%u no longer supported\n",
+		pr_debug("RDS/IB: Connection <%pI6c,%pI6c> version %u.%u no longer supported\n",
 			  &conn->c_laddr, &conn->c_faddr,
 			  RDS_PROTOCOL_MAJOR(conn->c_version),
 			  RDS_PROTOCOL_MINOR(conn->c_version));
@@ -142,7 +142,7 @@ void rds_ib_cm_connect_complete(struct rds_connection *conn, struct rdma_cm_even
 		rds_conn_destroy(conn);
 		return;
 	} else {
-		pr_notice("RDS/IB: %s conn connected <%pI6c,%pI6c> version %u.%u%s\n",
+		pr_debug("RDS/IB: %s conn connected <%pI6c,%pI6c> version %u.%u%s\n",
 			  ic->i_active_side ? "Active" : "Passive",
 			  &conn->c_laddr, &conn->c_faddr,
 			  RDS_PROTOCOL_MAJOR(conn->c_version),

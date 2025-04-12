@@ -46,7 +46,7 @@ static int tps68470_chip_init(struct device *dev, struct regmap *regmap)
 		return ret;
 	}
 
-	dev_info(dev, "TPS68470 REVID: 0x%x\n", version);
+	dev_dbg(dev, "TPS68470 REVID: 0x%x\n", version);
 
 	return 0;
 }

@@ -276,7 +276,7 @@ static void set_adapter_info(struct ibmvscsi_host_data *hostdata)
 	memset(&hostdata->madapter_info, 0x00,
 			sizeof(hostdata->madapter_info));
 
-	dev_info(hostdata->dev, "SRP_VERSION: %s\n", SRP_VERSION);
+	dev_dbg(hostdata->dev, "SRP_VERSION: %s\n", SRP_VERSION);
 	strcpy(hostdata->madapter_info.srp_version, SRP_VERSION);
 
 	strncpy(hostdata->madapter_info.partition_name, partition_name,
@@ -1157,7 +1157,7 @@ static void login_rsp(struct srp_event_struct *evt_struct)
 	case SRP_LOGIN_RSP:	/* it worked! */
 		break;
 	case SRP_LOGIN_REJ:	/* refused! */
-		dev_info(hostdata->dev, "SRP_LOGIN_REJ reason %u\n",
+		dev_dbg(hostdata->dev, "SRP_LOGIN_REJ reason %u\n",
 			 evt_struct->xfer_iu->srp.login_rej.reason);
 		/* Login failed.  */
 		atomic_set(&hostdata->request_limit, -1);
@@ -1170,7 +1170,7 @@ static void login_rsp(struct srp_event_struct *evt_struct)
 		return;
 	}
 
-	dev_info(hostdata->dev, "SRP_LOGIN succeeded\n");
+	dev_dbg(hostdata->dev, "SRP_LOGIN succeeded\n");
 	hostdata->client_migrated = 0;
 
 	/* Now we know what the real request-limit is.
@@ -1217,7 +1217,7 @@ static int send_srp_login(struct ibmvscsi_host_data *hostdata)
 
 	rc = ibmvscsi_send_srp_event(evt_struct, hostdata, login_timeout * 2);
 	spin_unlock_irqrestore(hostdata->host->host_lock, flags);
-	dev_info(hostdata->dev, "sent SRP login\n");
+	dev_dbg(hostdata->dev, "sent SRP login\n");
 	return rc;
 };
 
@@ -1237,14 +1237,14 @@ static void capabilities_rsp(struct srp_event_struct *evt_struct)
 	} else {
 		if (hostdata->caps.migration.common.server_support !=
 		    cpu_to_be16(SERVER_SUPPORTS_CAP))
-			dev_info(hostdata->dev, "Partition migration not supported\n");
+			dev_dbg(hostdata->dev, "Partition migration not supported\n");
 
 		if (client_reserve) {
 			if (hostdata->caps.reserve.common.server_support ==
 			    cpu_to_be16(SERVER_SUPPORTS_CAP))
-				dev_info(hostdata->dev, "Client reserve enabled\n");
+				dev_dbg(hostdata->dev, "Client reserve enabled\n");
 			else
-				dev_info(hostdata->dev, "Client reserve not supported\n");
+				dev_dbg(hostdata->dev, "Client reserve not supported\n");
 		}
 	}
 
@@ -1387,7 +1387,7 @@ static void adapter_info_rsp(struct srp_event_struct *evt_struct)
 		dev_err(hostdata->dev, "error %d getting adapter info\n",
 			evt_struct->xfer_iu->mad.adapter_info.common.status);
 	} else {
-		dev_info(hostdata->dev, "host srp version: %s, "
+		dev_dbg(hostdata->dev, "host srp version: %s, "
 			 "host partition %s (%d), OS %d, max io %u\n",
 			 hostdata->madapter_info.srp_version,
 			 hostdata->madapter_info.partition_name,
@@ -1771,7 +1771,7 @@ static void ibmvscsi_handle_crq(struct viosrp_crq *crq,
 	case VIOSRP_CRQ_INIT_RSP:		/* initialization */
 		switch (crq->format) {
 		case VIOSRP_CRQ_INIT:	/* Initialization message */
-			dev_info(hostdata->dev, "partner initialized\n");
+			dev_dbg(hostdata->dev, "partner initialized\n");
 			/* Send back a response */
 			rc = ibmvscsi_send_crq(hostdata, 0xC002000000000000LL, 0);
 			if (rc == 0) {
@@ -1783,7 +1783,7 @@ static void ibmvscsi_handle_crq(struct viosrp_crq *crq,
 
 			break;
 		case VIOSRP_CRQ_INIT_COMPLETE:	/* Initialization response */
-			dev_info(hostdata->dev, "partner initialization complete\n");
+			dev_dbg(hostdata->dev, "partner initialization complete\n");
 
 			/* Now login */
 			init_adapter(hostdata);
@@ -1797,7 +1797,7 @@ static void ibmvscsi_handle_crq(struct viosrp_crq *crq,
 		atomic_set(&hostdata->request_limit, 0);
 		if (crq->format == 0x06) {
 			/* We need to re-setup the interpartition connection */
-			dev_info(hostdata->dev, "Re-enabling adapter!\n");
+			dev_dbg(hostdata->dev, "Re-enabling adapter!\n");
 			hostdata->client_migrated = 1;
 			hostdata->reenable_crq = 1;
 			purge_requests(hostdata, DID_REQUEUE);
@@ -2234,7 +2234,7 @@ static int ibmvscsi_probe(struct vio_dev *vdev, const struct vio_device_id *id)
 	host->max_channel = max_channel;
 	host->max_cmd_len = 16;
 
-	dev_info(dev,
+	dev_dbg(dev,
 		 "Maximum ID: %d Maximum LUN: %llu Maximum Channel: %d\n",
 		 host->max_id, host->max_lun, host->max_channel);
 

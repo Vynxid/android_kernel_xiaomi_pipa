@@ -1561,7 +1561,7 @@ static int mma8452_probe(struct i2c_client *client,
 		return -ENODEV;
 	}
 
-	dev_info(&client->dev, "registering %s accelerometer; ID 0x%x\n",
+	dev_dbg(&client->dev, "registering %s accelerometer; ID 0x%x\n",
 		 match->compatible, data->chip_info->chip_id);
 
 	i2c_set_clientdata(client, indio_dev);

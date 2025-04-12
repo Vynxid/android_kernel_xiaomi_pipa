@@ -317,10 +317,10 @@ static int hisi_sas_task_prep(struct sas_task *task,
 
 	if (DEV_IS_GONE(sas_dev)) {
 		if (sas_dev)
-			dev_info(dev, "task prep: device %d not ready\n",
+			dev_dbg(dev, "task prep: device %d not ready\n",
 				 sas_dev->device_id);
 		else
-			dev_info(dev, "task prep: device %016llx not ready\n",
+			dev_dbg(dev, "task prep: device %016llx not ready\n",
 				 SAS_ADDR(device->sas_addr));
 
 		return -ECOMM;
@@ -330,7 +330,7 @@ static int hisi_sas_task_prep(struct sas_task *task,
 
 	port = to_hisi_sas_port(sas_port);
 	if (port && !port->port_attached) {
-		dev_info(dev, "task prep: %s port%d not attach device\n",
+		dev_dbg(dev, "task prep: %s port%d not attach device\n",
 			 (dev_is_sata(device)) ?
 			 "SATA/STP" : "SAS",
 			 device->port->id);
@@ -656,7 +656,7 @@ static int hisi_sas_dev_found(struct domain_device *device)
 		}
 
 		if (phy_no == phy_num) {
-			dev_info(dev, "dev found: no attached "
+			dev_dbg(dev, "dev found: no attached "
 				 "dev:%016llx at ex:%016llx\n",
 				 SAS_ADDR(device->sas_addr),
 				 SAS_ADDR(parent_dev->sas_addr));
@@ -665,7 +665,7 @@ static int hisi_sas_dev_found(struct domain_device *device)
 		}
 	}
 
-	dev_info(dev, "dev[%d:%x] found\n",
+	dev_dbg(dev, "dev[%d:%x] found\n",
 		sas_dev->device_id, sas_dev->dev_type);
 
 	rc = hisi_sas_init_device(device);
@@ -868,7 +868,7 @@ static void hisi_sas_dev_gone(struct domain_device *device)
 	struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
 	struct device *dev = hisi_hba->dev;
 
-	dev_info(dev, "dev[%d:%x] is gone\n",
+	dev_dbg(dev, "dev[%d:%x] is gone\n",
 		 sas_dev->device_id, sas_dev->dev_type);
 
 	if (!test_bit(HISI_SAS_RESET_BIT, &hisi_hba->flags)) {
@@ -1386,7 +1386,7 @@ static int hisi_sas_controller_reset(struct hisi_hba *hisi_hba)
 	if (test_and_set_bit(HISI_SAS_RESET_BIT, &hisi_hba->flags))
 		return -EPERM;
 
-	dev_info(dev, "controller resetting...\n");
+	dev_dbg(dev, "controller resetting...\n");
 	hisi_sas_controller_reset_prepare(hisi_hba);
 
 	rc = hisi_hba->hw->soft_reset(hisi_hba);
@@ -1400,7 +1400,7 @@ static int hisi_sas_controller_reset(struct hisi_hba *hisi_hba)
 	}
 
 	hisi_sas_controller_reset_done(hisi_hba);
-	dev_info(dev, "controller reset complete\n");
+	dev_dbg(dev, "controller reset complete\n");
 
 	return 0;
 }
@@ -1507,7 +1507,7 @@ static int hisi_sas_abort_task(struct sas_task *task)
 
 out:
 	if (rc != TMF_RESP_FUNC_COMPLETE)
-		dev_notice(dev, "abort task: rc=%d\n", rc);
+		dev_dbg(dev, "abort task: rc=%d\n", rc);
 	return rc;
 }
 
@@ -1682,7 +1682,7 @@ static int hisi_sas_clear_nexus_ha(struct sas_ha_struct *sas_ha)
 
 		rc = hisi_sas_debug_I_T_nexus_reset(device);
 		if (rc != TMF_RESP_FUNC_COMPLETE)
-			dev_info(dev, "clear nexus ha: for device[%d] rc=%d\n",
+			dev_dbg(dev, "clear nexus ha: for device[%d] rc=%d\n",
 				 sas_dev->device_id, rc);
 	}
 
@@ -1963,7 +1963,7 @@ void hisi_sas_phy_down(struct hisi_hba *hisi_hba, int phy_no, int rdy)
 
 		if (test_bit(HISI_SAS_RESET_BIT, &hisi_hba->flags) ||
 		    phy->in_reset) {
-			dev_info(dev, "ignore flutter phy%d down\n", phy_no);
+			dev_dbg(dev, "ignore flutter phy%d down\n", phy_no);
 			return;
 		}
 		/* Phy down and not ready */

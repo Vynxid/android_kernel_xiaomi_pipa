@@ -173,7 +173,7 @@ static int ark3116_port_probe(struct usb_serial_port *port)
 	if (priv->irda)
 		ark3116_write_reg(serial, 0x9, 0);
 
-	dev_info(&port->dev, "using %s mode\n", priv->irda ? "IrDA" : "RS232");
+	dev_dbg(&port->dev, "using %s mode\n", priv->irda ? "IrDA" : "RS232");
 
 	return 0;
 }

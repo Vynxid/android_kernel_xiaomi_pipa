@@ -199,7 +199,7 @@ static __init int add_rtc_cmos(void)
 		return -ENODEV;
 
 	platform_device_register(&rtc_device);
-	dev_info(&rtc_device.dev,
+	dev_dbg(&rtc_device.dev,
 		 "registered platform RTC device (no PNP device found)\n");
 
 	return 0;

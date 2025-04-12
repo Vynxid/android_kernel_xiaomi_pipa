@@ -518,7 +518,7 @@ static int sh7760_i2c_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, id);
 
-	dev_info(&pdev->dev, "%d kHz mmio %08x irq %d\n",
+	dev_dbg(&pdev->dev, "%d kHz mmio %08x irq %d\n",
 		 pd->speed_khz, res->start, id->irq);
 
 	return 0;

@@ -90,28 +90,28 @@ static inline void susfs_on_post_fs_data(void) {
 		susfs_is_umount_for_zygote_system_process_enabled = true;
 		path_put(&path);
 	}
-	pr_info("susfs_is_umount_for_zygote_system_process_enabled: %d\n", susfs_is_umount_for_zygote_system_process_enabled);
+	pr_debug("susfs_is_umount_for_zygote_system_process_enabled: %d\n", susfs_is_umount_for_zygote_system_process_enabled);
 #endif // #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
 #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT
 	if (!kern_path(DATA_ADB_NO_AUTO_ADD_SUS_BIND_MOUNT, 0, &path)) {
 		susfs_is_auto_add_sus_bind_mount_enabled = false;
 		path_put(&path);
 	}
-	pr_info("susfs_is_auto_add_sus_bind_mount_enabled: %d\n", susfs_is_auto_add_sus_bind_mount_enabled);
+	pr_debug("susfs_is_auto_add_sus_bind_mount_enabled: %d\n", susfs_is_auto_add_sus_bind_mount_enabled);
 #endif // #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT
 #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT
 	if (!kern_path(DATA_ADB_NO_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT, 0, &path)) {
 		susfs_is_auto_add_sus_ksu_default_mount_enabled = false;
 		path_put(&path);
 	}
-	pr_info("susfs_is_auto_add_sus_ksu_default_mount_enabled: %d\n", susfs_is_auto_add_sus_ksu_default_mount_enabled);
+	pr_debug("susfs_is_auto_add_sus_ksu_default_mount_enabled: %d\n", susfs_is_auto_add_sus_ksu_default_mount_enabled);
 #endif // #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT
 #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT
 	if (!kern_path(DATA_ADB_NO_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT, 0, &path)) {
 		susfs_is_auto_add_try_umount_for_bind_mount_enabled = false;
 		path_put(&path);
 	}
-	pr_info("susfs_is_auto_add_try_umount_for_bind_mount_enabled: %d\n", susfs_is_auto_add_try_umount_for_bind_mount_enabled);
+	pr_debug("susfs_is_auto_add_try_umount_for_bind_mount_enabled: %d\n", susfs_is_auto_add_try_umount_for_bind_mount_enabled);
 #endif // #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT
 }
 #endif // #ifdef CONFIG_KSU_SUSFS
@@ -311,7 +311,7 @@ int ksu_handle_rename(struct dentry *old_dentry, struct dentry *new_dentry)
 	if (!strstr(buf, "/system/packages.list")) {
 		return 0;
 	}
-	pr_info("renameat: %s -> %s, new path: %s\n", old_dentry->d_iname,
+	pr_debug("renameat: %s -> %s, new path: %s\n", old_dentry->d_iname,
 		new_dentry->d_iname, buf);
 
 	ksu_track_throne();
@@ -330,7 +330,7 @@ static void nuke_ext4_sysfs() {
 	struct super_block* sb = path.dentry->d_inode->i_sb;
 	const char* name = sb->s_type->name;
 	if (strcmp(name, "ext4") != 0) {
-		pr_info("nuke but module aren't mounted\n");
+		pr_debug("nuke but module aren't mounted\n");
 		path_put(&path);
 		return;
 	}
@@ -367,7 +367,7 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 	}
 
 #ifdef CONFIG_KSU_DEBUG
-	pr_info("option: 0x%x, cmd: %ld\n", option, arg2);
+	pr_debug("option: 0x%x, cmd: %ld\n", option, arg2);
 #endif
 
 	if (arg2 == CMD_BECOME_MANAGER) {
@@ -382,7 +382,7 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 
 	if (arg2 == CMD_GRANT_ROOT) {
 		if (is_allow_su()) {
-			pr_info("allow root for: %d\n", current_uid().val);
+			pr_debug("allow root for: %d\n", current_uid().val);
 			ksu_escape_to_root();
 			if (copy_to_user(result, &reply_ok, sizeof(reply_ok))) {
 				pr_err("grant_root: prctl reply error\n");
@@ -420,7 +420,7 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 #endif
 			if (!post_fs_data_lock) {
 				post_fs_data_lock = true;
-				pr_info("post-fs-data triggered\n");
+				pr_debug("post-fs-data triggered\n");
 				ksu_on_post_fs_data();
 			}
 			break;
@@ -429,13 +429,13 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 			static bool boot_complete_lock = false;
 			if (!boot_complete_lock) {
 				boot_complete_lock = true;
-				pr_info("boot_complete triggered\n");
+				pr_debug("boot_complete triggered\n");
 			}
 			break;
 		}
 		case EVENT_MODULE_MOUNTED: {
 			ksu_module_mounted = true;
-			pr_info("module mounted!\n");
+			pr_debug("module mounted!\n");
 			nuke_ext4_sysfs();
 			break;
 		}
@@ -524,9 +524,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_add_sus_path((struct st_susfs_sus_path __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_ADD_SUS_PATH -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_ADD_SUS_PATH -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 #endif //#ifdef CONFIG_KSU_SUSFS_SUS_PATH
@@ -542,9 +542,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_add_sus_mount((struct st_susfs_sus_mount __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_ADD_SUS_MOUNT -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_ADD_SUS_MOUNT -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 #endif //#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
@@ -560,9 +560,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_add_sus_kstat((struct st_susfs_sus_kstat __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_ADD_SUS_KSTAT -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_ADD_SUS_KSTAT -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 		if (arg2 == CMD_SUSFS_UPDATE_SUS_KSTAT) {
@@ -576,9 +576,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_update_sus_kstat((struct st_susfs_sus_kstat __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_UPDATE_SUS_KSTAT -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_UPDATE_SUS_KSTAT -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 		if (arg2 == CMD_SUSFS_ADD_SUS_KSTAT_STATICALLY) {
@@ -592,9 +592,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_add_sus_kstat((struct st_susfs_sus_kstat __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_ADD_SUS_KSTAT_STATICALLY -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_ADD_SUS_KSTAT_STATICALLY -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
         }
 #endif //#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
@@ -610,15 +610,15 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_add_try_umount((struct st_susfs_try_umount __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_ADD_TRY_UMOUNT -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_ADD_TRY_UMOUNT -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 		if (arg2 == CMD_SUSFS_RUN_UMOUNT_FOR_CURRENT_MNT_NS) {
 			int error = 0;
 			susfs_run_try_umount_for_current_mnt_ns();
-			pr_info("susfs: CMD_SUSFS_RUN_UMOUNT_FOR_CURRENT_MNT_NS -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_RUN_UMOUNT_FOR_CURRENT_MNT_NS -> ret: %d\n", error);
 		}
 #endif //#ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
 #ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
@@ -633,9 +633,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_set_uname((struct st_susfs_uname __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_SET_UNAME -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_SET_UNAME -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 #endif //#ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
@@ -648,7 +648,7 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 			}
 			susfs_set_log(arg3);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 #endif //#ifdef CONFIG_KSU_SUSFS_ENABLE_LOG
@@ -664,9 +664,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_set_cmdline_or_bootconfig((char __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_SET_CMDLINE_OR_BOOTCONFIG -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_SET_CMDLINE_OR_BOOTCONFIG -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 #endif //#ifdef CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG
@@ -682,9 +682,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_add_open_redirect((struct st_susfs_open_redirect __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_ADD_OPEN_REDIRECT -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_ADD_OPEN_REDIRECT -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 #endif //#ifdef CONFIG_KSU_SUSFS_OPEN_REDIRECT
@@ -700,9 +700,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = susfs_sus_su((struct st_sus_su __user*)arg3);
-			pr_info("susfs: CMD_SUSFS_SUS_SU -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_SUS_SU -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 #endif //#ifdef CONFIG_KSU_SUSFS_SUS_SU
@@ -719,9 +719,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = copy_to_user((void __user*)arg3, (void*)susfs_version, len_of_susfs_version+1);
-			pr_info("susfs: CMD_SUSFS_SHOW_VERSION -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_SHOW_VERSION -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 		if (arg2 == CMD_SUSFS_SHOW_ENABLED_FEATURES) {
@@ -781,9 +781,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 			enabled_features |= (1 << 14);
 #endif
 			error = copy_to_user((void __user*)arg3, (void*)&enabled_features, sizeof(enabled_features));
-			pr_info("susfs: CMD_SUSFS_SHOW_ENABLED_FEATURES -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_SHOW_ENABLED_FEATURES -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 		if (arg2 == CMD_SUSFS_SHOW_VARIANT) {
@@ -799,9 +799,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = copy_to_user((void __user*)arg3, (void*)susfs_variant, len_of_variant+1);
-			pr_info("susfs: CMD_SUSFS_SHOW_VARIANT -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_SHOW_VARIANT -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 #ifdef CONFIG_KSU_SUSFS_SUS_SU
@@ -816,9 +816,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = copy_to_user((void __user*)arg3, (void*)&susfs_is_sus_su_ready, sizeof(susfs_is_sus_su_ready));
-			pr_info("susfs: CMD_SUSFS_IS_SUS_SU_READY -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_IS_SUS_SU_READY -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 		if (arg2 == CMD_SUSFS_SHOW_SUS_SU_WORKING_MODE) {
@@ -833,9 +833,9 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				return 0;
 			}
 			error = copy_to_user((void __user*)arg3, (void*)&working_mode, sizeof(working_mode));
-			pr_info("susfs: CMD_SUSFS_SHOW_SUS_SU_WORKING_MODE -> ret: %d\n", error);
+			pr_debug("susfs: CMD_SUSFS_SHOW_SUS_SU_WORKING_MODE -> ret: %d\n", error);
 			if (copy_to_user((void __user*)arg5, &error, sizeof(error)))
-				pr_info("susfs: copy_to_user() failed\n");
+				pr_debug("susfs: copy_to_user() failed\n");
 			return 0;
 		}
 #endif // #ifdef CONFIG_KSU_SUSFS_SUS_SU
@@ -899,7 +899,7 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 	if (arg2 == CMD_ENABLE_SU) {
 		bool enabled = (arg3 != 0);
 		if (enabled == ksu_su_compat_enabled) {
-			pr_info("cmd enable su but no need to change.\n");
+			pr_debug("cmd enable su but no need to change.\n");
 			return 0;
 		}
 
@@ -937,7 +937,7 @@ static bool should_umount(struct path *path)
 	}
 
 	if (current->nsproxy->mnt_ns == init_nsproxy.mnt_ns) {
-		pr_info("ignore global mnt namespace process: %d\n",
+		pr_debug("ignore global mnt namespace process: %d\n",
 			current_uid().val);
 		return false;
 	}
@@ -987,7 +987,7 @@ static void ksu_try_umount(const char *mnt, bool check_mnt, int flags)
 
 #ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
 	if (susfs_is_log_enabled) {
-		pr_info("susfs: umounting '%s' for uid: %d\n", mnt, uid);
+		pr_debug("susfs: umounting '%s' for uid: %d\n", mnt, uid);
 	}
 #endif
 
@@ -1056,12 +1056,12 @@ int ksu_handle_setuid(struct cred *new, const struct cred *old)
 #endif
 
 	if (!is_appuid(new_uid) || is_unsupported_uid(new_uid.val)) {
-		// pr_info("handle setuid ignore non application or isolated uid: %d\n", new_uid.val);
+		// pr_debug("handle setuid ignore non application or isolated uid: %d\n", new_uid.val);
 		return 0;
 	}
 
 	if (ksu_is_allow_uid(new_uid.val)) {
-		// pr_info("handle setuid ignore allowed application: %d\n", new_uid.val);
+		// pr_debug("handle setuid ignore allowed application: %d\n", new_uid.val);
 		return 0;
 	}
 #ifdef CONFIG_KSU_SUSFS
@@ -1079,7 +1079,7 @@ out_ksu_try_umount:
 		return 0;
 	} else {
 #ifdef CONFIG_KSU_DEBUG
-		pr_info("uid: %d should not umount!\n", current_uid().val);
+		pr_debug("uid: %d should not umount!\n", current_uid().val);
 #endif
 	}
 #ifndef CONFIG_KSU_SUSFS_SUS_MOUNT
@@ -1089,13 +1089,13 @@ out_ksu_try_umount:
 	bool is_zygote_child = ksu_is_zygote(old->security);
 #endif
 	if (!is_zygote_child) {
-		pr_info("handle umount ignore non zygote child: %d\n",
+		pr_debug("handle umount ignore non zygote child: %d\n",
 			current->pid);
 		return 0;
 	}
 #ifdef CONFIG_KSU_DEBUG
 	// umount the target mnt
-	pr_info("handle umount for uid: %d, pid: %d\n", new_uid.val,
+	pr_debug("handle umount for uid: %d, pid: %d\n", new_uid.val,
 		current->pid);
 #endif
 
@@ -1178,12 +1178,12 @@ __maybe_unused int ksu_kprobe_init(void)
 	rc = register_kprobe(&prctl_kp);
 
 	if (rc) {
-		pr_info("prctl kprobe failed: %d.\n", rc);
+		pr_debug("prctl kprobe failed: %d.\n", rc);
 		return rc;
 	}
 
 	rc = register_kprobe(&renameat_kp);
-	pr_info("renameat kp: %d\n", rc);
+	pr_debug("renameat kp: %d\n", rc);
 
 	return rc;
 }
@@ -1214,7 +1214,7 @@ static int ksu_key_permission(key_ref_t key_ref, const struct cred *cred,
 		return 0;
 	}
 	init_session_keyring = cred->session_keyring;
-	pr_info("kernel_compat: got init_session_keyring\n");
+	pr_debug("kernel_compat: got init_session_keyring\n");
 	return 0;
 }
 #endif
@@ -1426,7 +1426,7 @@ void __init ksu_core_init(void)
 void ksu_core_exit(void)
 {
 #ifdef CONFIG_KSU_WITH_KPROBES
-	pr_info("ksu_core_kprobe_exit\n");
+	pr_debug("ksu_core_kprobe_exit\n");
 	// we dont use this now
 	// ksu_kprobe_exit();
 #endif

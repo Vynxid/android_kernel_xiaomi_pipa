@@ -299,7 +299,7 @@ int qrc_register_device(struct qrc_dev *qdev, struct device *dev)
 		goto del_cdev;
 	}
 
-	dev_info(dev, "qrc device  registered\n");
+	dev_dbg(dev, "qrc device  registered\n");
 	return 0;
 
 del_cdev:
@@ -311,5 +311,5 @@ void qrc_unregister(struct qrc_dev *qdev)
 {
 	device_destroy(qrc_class, qdev->dev->devt);
 	qrc_control_gpio_uninit(qdev);
-	dev_info(qdev->dev, "qrc drv unregistered\n");
+	dev_dbg(qdev->dev, "qrc drv unregistered\n");
 }

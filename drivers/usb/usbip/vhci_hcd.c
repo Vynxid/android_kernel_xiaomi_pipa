@@ -683,7 +683,7 @@ static void vhci_tx_urb(struct urb *urb, struct vhci_device *vdev)
 
 	priv->seqnum = atomic_inc_return(&vhci_hcd->seqnum);
 	if (priv->seqnum == 0xffff)
-		dev_info(&urb->dev->dev, "seqnum max\n");
+		dev_dbg(&urb->dev->dev, "seqnum max\n");
 
 	priv->vdev = vdev;
 	priv->urb = urb;
@@ -766,7 +766,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
 		switch (ctrlreq->bRequest) {
 		case USB_REQ_SET_ADDRESS:
 			/* set_address may come when a device is reset */
-			dev_info(dev, "SetAddress Request (%d) to port %d\n",
+			dev_dbg(dev, "SetAddress Request (%d) to port %d\n",
 				 ctrlreq->wValue, vdev->rhport);
 
 			vdev->udev = usb_get_dev(urb->dev);
@@ -935,7 +935,7 @@ static int vhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
 
 		unlink->seqnum = atomic_inc_return(&vhci_hcd->seqnum);
 		if (unlink->seqnum == 0xffff)
-			pr_info("seqnum max\n");
+			pr_debug("seqnum max\n");
 
 		unlink->unlink_seqnum = priv->seqnum;
 
@@ -968,7 +968,7 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
 		struct urb *urb;
 
 		/* give back urb of unsent unlink request */
-		pr_info("unlink cleanup tx %lu\n", unlink->unlink_seqnum);
+		pr_debug("unlink cleanup tx %lu\n", unlink->unlink_seqnum);
 
 		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
 		if (!urb) {
@@ -1001,11 +1001,11 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
 			list);
 
 		/* give back URB of unanswered unlink request */
-		pr_info("unlink cleanup rx %lu\n", unlink->unlink_seqnum);
+		pr_debug("unlink cleanup rx %lu\n", unlink->unlink_seqnum);
 
 		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
 		if (!urb) {
-			pr_info("the urb (seqnum %lu) was already given back\n",
+			pr_debug("the urb (seqnum %lu) was already given back\n",
 				unlink->unlink_seqnum);
 			list_del(&unlink->list);
 			kfree(unlink);
@@ -1057,7 +1057,7 @@ static void vhci_shutdown_connection(struct usbip_device *ud)
 		kthread_stop_put(vdev->ud.tcp_tx);
 		vdev->ud.tcp_tx = NULL;
 	}
-	pr_info("stop threads\n");
+	pr_debug("stop threads\n");
 
 	/* active connection is closed */
 	if (vdev->ud.tcp_socket) {
@@ -1065,7 +1065,7 @@ static void vhci_shutdown_connection(struct usbip_device *ud)
 		vdev->ud.tcp_socket = NULL;
 		vdev->ud.sockfd = -1;
 	}
-	pr_info("release socket\n");
+	pr_debug("release socket\n");
 
 	vhci_device_unlink_cleanup(vdev);
 
@@ -1091,7 +1091,7 @@ static void vhci_shutdown_connection(struct usbip_device *ud)
 	 */
 	rh_port_disconnect(vdev);
 
-	pr_info("disconnect device\n");
+	pr_debug("disconnect device\n");
 }
 
 static void vhci_device_reset(struct usbip_device *ud)
@@ -1247,7 +1247,7 @@ static int vhci_start(struct usb_hcd *hcd)
 			vhci_finish_attr_group();
 			return err;
 		}
-		pr_info("created sysfs %s\n", hcd_name(hcd));
+		pr_debug("created sysfs %s\n", hcd_name(hcd));
 	}
 
 	return 0;
@@ -1480,12 +1480,12 @@ static int vhci_hcd_suspend(struct platform_device *pdev, pm_message_t state)
 	spin_unlock_irqrestore(&vhci->lock, flags);
 
 	if (connected > 0) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "We have %d active connection%s. Do not suspend.\n",
 			 connected, (connected == 1 ? "" : "s"));
 		ret =  -EBUSY;
 	} else {
-		dev_info(&pdev->dev, "suspend vhci_hcd");
+		dev_dbg(&pdev->dev, "suspend vhci_hcd");
 		clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
 	}
 

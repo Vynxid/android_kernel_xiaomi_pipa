@@ -1355,7 +1355,7 @@ static void xgene_dma_init_hw(struct xgene_dma *pdma)
 		iowrite32(XGENE_DMA_RAID6_MULTI_CTRL(0x1D),
 			  pdma->csr_dma + XGENE_DMA_RAID6_CONT);
 	else
-		dev_info(pdma->dev, "PQ is disabled in HW\n");
+		dev_dbg(pdma->dev, "PQ is disabled in HW\n");
 
 	xgene_dma_enable(pdma);
 	xgene_dma_unmask_interrupts(pdma);
@@ -1364,7 +1364,7 @@ static void xgene_dma_init_hw(struct xgene_dma *pdma)
 	val = ioread32(pdma->csr_dma + XGENE_DMA_IPBRR);
 
 	/* DMA device info */
-	dev_info(pdma->dev,
+	dev_dbg(pdma->dev,
 		 "X-Gene DMA v%d.%02d.%02d driver registered %d channels",
 		 XGENE_DMA_REV_NO_RD(val), XGENE_DMA_BUS_ID_RD(val),
 		 XGENE_DMA_DEV_ID_RD(val), XGENE_DMA_MAX_CHANNEL);
@@ -1573,7 +1573,7 @@ static int xgene_dma_async_register(struct xgene_dma *pdma, int id)
 	}
 
 	/* DMA capability info */
-	dev_info(pdma->dev,
+	dev_dbg(pdma->dev,
 		 "%s: CAPABILITY ( %s%s)\n", dma_chan_name(&chan->dma_chan),
 		 dma_has_cap(DMA_XOR, dma_dev->cap_mask) ? "XOR " : "",
 		 dma_has_cap(DMA_PQ, dma_dev->cap_mask) ? "PQ " : "");

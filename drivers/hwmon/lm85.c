@@ -1428,7 +1428,7 @@ static void lm85_init_client(struct i2c_client *client)
 	/* Start monitoring if needed */
 	value = lm85_read_value(client, LM85_REG_CONFIG);
 	if (!(value & 0x01)) {
-		dev_info(&client->dev, "Starting monitoring\n");
+		dev_dbg(&client->dev, "Starting monitoring\n");
 		lm85_write_value(client, LM85_REG_CONFIG, value | 0x01);
 	}
 

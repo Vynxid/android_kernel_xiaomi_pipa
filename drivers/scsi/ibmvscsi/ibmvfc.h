@@ -739,10 +739,10 @@ struct ibmvfc_host {
 #define DBG_CMD(CMD) do { if (ibmvfc_debug) CMD; } while (0)
 
 #define tgt_dbg(t, fmt, ...)			\
-	DBG_CMD(dev_info((t)->vhost->dev, "%llX: " fmt, (t)->scsi_id, ##__VA_ARGS__))
+	DBG_CMD(dev_dbg((t)->vhost->dev, "%llX: " fmt, (t)->scsi_id, ##__VA_ARGS__))
 
 #define tgt_info(t, fmt, ...)		\
-	dev_info((t)->vhost->dev, "%llX: " fmt, (t)->scsi_id, ##__VA_ARGS__)
+	dev_dbg((t)->vhost->dev, "%llX: " fmt, (t)->scsi_id, ##__VA_ARGS__)
 
 #define tgt_err(t, fmt, ...)		\
 	dev_err((t)->vhost->dev, "%llX: " fmt, (t)->scsi_id, ##__VA_ARGS__)
@@ -754,7 +754,7 @@ struct ibmvfc_host {
 	} while (0)
 
 #define ibmvfc_dbg(vhost, ...) \
-	DBG_CMD(dev_info((vhost)->dev, ##__VA_ARGS__))
+	DBG_CMD(dev_dbg((vhost)->dev, ##__VA_ARGS__))
 
 #define ibmvfc_log(vhost, level, ...) \
 	do { \

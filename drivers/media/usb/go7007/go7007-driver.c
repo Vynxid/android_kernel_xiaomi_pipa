@@ -223,7 +223,7 @@ static int init_i2c_module(struct i2c_adapter *adapter, const struct go_i2c *con
 		return 0;
 	}
 
-	pr_info("go7007: probing for module i2c:%s failed\n", i2c->type);
+	pr_debug("go7007: probing for module i2c:%s failed\n", i2c->type);
 	return -EINVAL;
 }
 
@@ -261,7 +261,7 @@ int go7007_register_encoder(struct go7007 *go, unsigned num_i2c_devs)
 {
 	int i, ret;
 
-	dev_info(go->dev, "go7007: registering new %s\n", go->name);
+	dev_dbg(go->dev, "go7007: registering new %s\n", go->name);
 
 	go->v4l2_dev.release = go7007_remove;
 	ret = v4l2_device_register(go->dev, &go->v4l2_dev);

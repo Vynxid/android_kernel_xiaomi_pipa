@@ -90,7 +90,7 @@ static void mv_otg_timer_await_bcon(struct timer_list *t)
 
 	mvotg->otg_ctrl.a_wait_bcon_timeout = 1;
 
-	dev_info(&mvotg->pdev->dev, "B Device No Response!\n");
+	dev_dbg(&mvotg->pdev->dev, "B Device No Response!\n");
 
 	if (spin_trylock(&mvotg->wq_lock)) {
 		mv_otg_run_state_machine(mvotg, 0);
@@ -199,7 +199,7 @@ static void mv_otg_start_host(struct mv_otg *mvotg, int on)
 	if (!otg->host)
 		return;
 
-	dev_info(&mvotg->pdev->dev, "%s host\n", on ? "start" : "stop");
+	dev_dbg(&mvotg->pdev->dev, "%s host\n", on ? "start" : "stop");
 
 	hcd = bus_to_hcd(otg->host);
 
@@ -219,7 +219,7 @@ static void mv_otg_start_periphrals(struct mv_otg *mvotg, int on)
 	if (!otg->gadget)
 		return;
 
-	dev_info(mvotg->phy.dev, "gadget %s\n", on ? "on" : "off");
+	dev_dbg(mvotg->phy.dev, "gadget %s\n", on ? "on" : "off");
 
 	if (on)
 		usb_gadget_vbus_connect(otg->gadget);
@@ -420,7 +420,7 @@ run:
 	mv_otg_update_state(mvotg);
 
 	if (old_state != mvotg->phy.otg->state) {
-		dev_info(&mvotg->pdev->dev, "change from state %s to %s\n",
+		dev_dbg(&mvotg->pdev->dev, "change from state %s to %s\n",
 			 state_string[old_state],
 			 state_string[mvotg->phy.otg->state]);
 
@@ -761,7 +761,7 @@ static int mv_otg_probe(struct platform_device *pdev)
 						NULL, mv_otg_inputs_irq,
 						IRQF_ONESHOT, "id", mvotg);
 		if (retval) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Failed to request irq for ID\n");
 			pdata->id = NULL;
 		}
@@ -773,7 +773,7 @@ static int mv_otg_probe(struct platform_device *pdev)
 						NULL, mv_otg_inputs_irq,
 						IRQF_ONESHOT, "vbus", mvotg);
 		if (retval) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "Failed to request irq for VBUS, "
 				 "disable clock gating\n");
 			mvotg->clock_gating = 0;
@@ -824,7 +824,7 @@ static int mv_otg_probe(struct platform_device *pdev)
 		spin_unlock(&mvotg->wq_lock);
 	}
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "successful probe OTG device %s clock gating.\n",
 		 mvotg->clock_gating ? "with" : "without");
 
@@ -847,7 +847,7 @@ static int mv_otg_suspend(struct platform_device *pdev, pm_message_t state)
 	struct mv_otg *mvotg = platform_get_drvdata(pdev);
 
 	if (mvotg->phy.otg->state != OTG_STATE_B_IDLE) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "OTG state is not B_IDLE, it is %d!\n",
 			 mvotg->phy.otg->state);
 		return -EAGAIN;

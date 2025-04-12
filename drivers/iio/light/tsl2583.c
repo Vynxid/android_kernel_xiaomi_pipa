@@ -876,7 +876,7 @@ static int tsl2583_probe(struct i2c_client *clientp,
 	/* Load up the V2 defaults (these are hard coded defaults for now) */
 	tsl2583_defaults(chip);
 
-	dev_info(&clientp->dev, "Light sensor found.\n");
+	dev_dbg(&clientp->dev, "Light sensor found.\n");
 
 	return 0;
 }

@@ -891,7 +891,7 @@ static void mvs_94xx_fix_phy_info(struct mvs_info *mvi, int i,
 	phy->minimum_linkrate = SAS_LINK_RATE_1_5_GBPS;
 	phy->maximum_linkrate = SAS_LINK_RATE_6_0_GBPS;
 	mvs_94xx_get_dev_identify_frame(mvi, i, id);
-	phy->dev_info = mvs_94xx_make_dev_info(id);
+	phy->dev_dbg = mvs_94xx_make_dev_info(id);
 
 	if (phy->phy_type & PORT_TYPE_SAS) {
 		mvs_94xx_get_att_identify_frame(mvi, i, id);

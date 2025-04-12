@@ -134,7 +134,7 @@ static int lan9303_mdio_probe(struct mdio_device *mdiodev)
 	if (ret != 0)
 		return ret;
 
-	dev_info(&mdiodev->dev, "LAN9303 MDIO driver loaded successfully\n");
+	dev_dbg(&mdiodev->dev, "LAN9303 MDIO driver loaded successfully\n");
 
 	return 0;
 }

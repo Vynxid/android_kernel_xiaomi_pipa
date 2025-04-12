@@ -2963,7 +2963,7 @@ static int msm_tspp_probe(struct platform_device *pdev)
 		rc = PTR_ERR(device->tsif_vreg);
 		device->tsif_vreg = NULL;
 		if (rc == -ENODEV) {
-			pr_notice("%s: vdd_cx regulator will not be used\n",
+			pr_debug("%s: vdd_cx regulator will not be used\n",
 				__func__);
 		} else {
 			pr_err("%s: failed to get CX regulator, err=%d\n",

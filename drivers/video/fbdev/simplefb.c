@@ -485,10 +485,10 @@ static int simplefb_probe(struct platform_device *pdev)
 	simplefb_clocks_enable(par, pdev);
 	simplefb_regulators_enable(par, pdev);
 
-	dev_info(&pdev->dev, "framebuffer at 0x%lx, 0x%x bytes, mapped to 0x%p\n",
+	dev_dbg(&pdev->dev, "framebuffer at 0x%lx, 0x%x bytes, mapped to 0x%p\n",
 			     info->fix.smem_start, info->fix.smem_len,
 			     info->screen_base);
-	dev_info(&pdev->dev, "format=%s, mode=%dx%dx%d, linelength=%d\n",
+	dev_dbg(&pdev->dev, "format=%s, mode=%dx%dx%d, linelength=%d\n",
 			     params.format->name,
 			     info->var.xres, info->var.yres,
 			     info->var.bits_per_pixel, info->fix.line_length);
@@ -499,7 +499,7 @@ static int simplefb_probe(struct platform_device *pdev)
 		goto error_regulators;
 	}
 
-	dev_info(&pdev->dev, "fb%d: simplefb registered!\n", info->node);
+	dev_dbg(&pdev->dev, "fb%d: simplefb registered!\n", info->node);
 
 	return 0;
 

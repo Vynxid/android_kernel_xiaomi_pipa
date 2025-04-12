@@ -297,7 +297,7 @@ struct gasket_dev {
 	uint reset_count;
 
 	/* Dev information for the cdev node. */
-	struct gasket_cdev_info dev_info;
+	struct gasket_cdev_info dev_dbg;
 
 	/* Hardware revision value for this device. */
 	int hardware_revision;

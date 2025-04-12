@@ -760,7 +760,7 @@ static int dcc_enable(struct dcc_drvdata *drvdata)
 		dcc_writel(drvdata, (BIT(0) | BIT(1) | BIT(2)),
 			   DCC_LL_INT_STATUS(list));
 
-		dev_info(drvdata->dev, "All values written to enable.\n");
+		dev_dbg(drvdata->dev, "All values written to enable.\n");
 		/* Make sure all config is written in sram */
 		mb();
 

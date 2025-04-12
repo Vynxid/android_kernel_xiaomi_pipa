@@ -136,7 +136,7 @@ static int max77843_probe(struct i2c_client *i2c,
 		dev_err(&i2c->dev, "Failed to read PMIC ID\n");
 		goto err_pmic_id;
 	}
-	dev_info(&i2c->dev, "device ID: 0x%x\n", reg_data);
+	dev_dbg(&i2c->dev, "device ID: 0x%x\n", reg_data);
 
 	ret = max77843_chg_init(max77843);
 	if (ret) {

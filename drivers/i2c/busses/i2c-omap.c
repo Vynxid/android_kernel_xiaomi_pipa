@@ -1465,7 +1465,7 @@ omap_i2c_probe(struct platform_device *pdev)
 	if (r)
 		goto err_unuse_clocks;
 
-	dev_info(omap->dev, "bus %d rev%d.%d at %d kHz\n", adap->nr,
+	dev_dbg(omap->dev, "bus %d rev%d.%d at %d kHz\n", adap->nr,
 		 major, minor, omap->speed);
 
 	pm_runtime_mark_last_busy(omap->dev);

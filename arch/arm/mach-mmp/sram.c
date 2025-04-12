@@ -113,7 +113,7 @@ static int sram_probe(struct platform_device *pdev)
 	list_add(&info->node, &sram_bank_list);
 	mutex_unlock(&sram_lock);
 
-	dev_info(&pdev->dev, "initialized\n");
+	dev_dbg(&pdev->dev, "initialized\n");
 	return 0;
 
 add_chunk_err:

@@ -705,7 +705,7 @@ static int lm95234_init_client(struct i2c_client *client)
 	if (model < 0)
 		return model;
 	if (model & val) {
-		dev_notice(&client->dev,
+		dev_dbg(&client->dev,
 			   "Fixing remote diode type misconfiguration (0x%x)\n",
 			   val);
 		i2c_smbus_write_byte_data(client, LM95234_REG_REM_MODEL,

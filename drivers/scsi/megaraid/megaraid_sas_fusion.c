@@ -273,7 +273,7 @@ megasas_fusion_update_can_queue(struct megasas_instance *instance, int fw_boot_c
 		ldio_threshold =
 			(instance->instancet->read_fw_status_reg(reg_set) & 0x00FFFF) - MEGASAS_FUSION_IOCTL_CMDS;
 
-	dev_info(&instance->pdev->dev,
+	dev_dbg(&instance->pdev->dev,
 		 "Current firmware supports maximum commands: %d\t LDIO threshold: %d\n",
 		 cur_max_fw_cmds, ldio_threshold);
 
@@ -879,7 +879,7 @@ megasas_alloc_cmds_fusion(struct megasas_instance *instance)
 	if (megasas_alloc_cmdlist_fusion(instance))
 		goto fail_exit;
 
-	dev_info(&instance->pdev->dev, "Configured max firmware commands: %d\n",
+	dev_dbg(&instance->pdev->dev, "Configured max firmware commands: %d\n",
 		 instance->max_fw_cmds);
 
 	/* The first 256 bytes (SMID 0) is not used. Don't add to the cmd list */
@@ -1013,7 +1013,7 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
 
 	instance->fw_sync_cache_support = (scratch_pad_2 &
 		MR_CAN_HANDLE_SYNC_CACHE_OFFSET) ? 1 : 0;
-	dev_info(&instance->pdev->dev, "FW supports sync cache\t: %s\n",
+	dev_dbg(&instance->pdev->dev, "FW supports sync cache\t: %s\n",
 		 instance->fw_sync_cache_support ? "Yes" : "No");
 
 	memset(IOCInitMessage, 0, sizeof(struct MPI2_IOC_INIT_REQUEST));
@@ -1414,22 +1414,22 @@ megasas_display_intel_branding(struct megasas_instance *instance)
 	case PCI_DEVICE_ID_LSI_INVADER:
 		switch (instance->pdev->subsystem_device) {
 		case MEGARAID_INTEL_RS3DC080_SSDID:
-			dev_info(&instance->pdev->dev, "scsi host %d: %s\n",
+			dev_dbg(&instance->pdev->dev, "scsi host %d: %s\n",
 				instance->host->host_no,
 				MEGARAID_INTEL_RS3DC080_BRANDING);
 			break;
 		case MEGARAID_INTEL_RS3DC040_SSDID:
-			dev_info(&instance->pdev->dev, "scsi host %d: %s\n",
+			dev_dbg(&instance->pdev->dev, "scsi host %d: %s\n",
 				instance->host->host_no,
 				MEGARAID_INTEL_RS3DC040_BRANDING);
 			break;
 		case MEGARAID_INTEL_RS3SC008_SSDID:
-			dev_info(&instance->pdev->dev, "scsi host %d: %s\n",
+			dev_dbg(&instance->pdev->dev, "scsi host %d: %s\n",
 				instance->host->host_no,
 				MEGARAID_INTEL_RS3SC008_BRANDING);
 			break;
 		case MEGARAID_INTEL_RS3MC044_SSDID:
-			dev_info(&instance->pdev->dev, "scsi host %d: %s\n",
+			dev_dbg(&instance->pdev->dev, "scsi host %d: %s\n",
 				instance->host->host_no,
 				MEGARAID_INTEL_RS3MC044_BRANDING);
 			break;
@@ -1440,12 +1440,12 @@ megasas_display_intel_branding(struct megasas_instance *instance)
 	case PCI_DEVICE_ID_LSI_FURY:
 		switch (instance->pdev->subsystem_device) {
 		case MEGARAID_INTEL_RS3WC080_SSDID:
-			dev_info(&instance->pdev->dev, "scsi host %d: %s\n",
+			dev_dbg(&instance->pdev->dev, "scsi host %d: %s\n",
 				instance->host->host_no,
 				MEGARAID_INTEL_RS3WC080_BRANDING);
 			break;
 		case MEGARAID_INTEL_RS3WC040_SSDID:
-			dev_info(&instance->pdev->dev, "scsi host %d: %s\n",
+			dev_dbg(&instance->pdev->dev, "scsi host %d: %s\n",
 				instance->host->host_no,
 				MEGARAID_INTEL_RS3WC040_BRANDING);
 			break;
@@ -1457,7 +1457,7 @@ megasas_display_intel_branding(struct megasas_instance *instance)
 	case PCI_DEVICE_ID_LSI_CUTLASS_53:
 		switch (instance->pdev->subsystem_device) {
 		case MEGARAID_INTEL_RMS3BC160_SSDID:
-			dev_info(&instance->pdev->dev, "scsi host %d: %s\n",
+			dev_dbg(&instance->pdev->dev, "scsi host %d: %s\n",
 				instance->host->host_no,
 				MEGARAID_INTEL_RMS3BC160_BRANDING);
 			break;
@@ -3721,7 +3721,7 @@ megasas_alloc_host_crash_buffer(struct megasas_instance *instance)
 	for (i = 0; i < MAX_CRASH_DUMP_SIZE; i++) {
 		instance->crash_buf[i] = vzalloc(CRASH_DMA_BUF_SIZE);
 		if (!instance->crash_buf[i]) {
-			dev_info(&instance->pdev->dev, "Firmware crash dump "
+			dev_dbg(&instance->pdev->dev, "Firmware crash dump "
 				"memory allocation failed at index %d\n", i);
 			break;
 		}
@@ -3862,7 +3862,7 @@ int megasas_wait_for_outstanding_fusion(struct megasas_instance *instance,
 		}
 
 		if (reason == MFI_IO_TIMEOUT_OCR) {
-			dev_info(&instance->pdev->dev,
+			dev_dbg(&instance->pdev->dev,
 				"MFI IO is timed out, initiating OCR\n");
 			megasas_complete_cmd_dpc_fusion((unsigned long)instance);
 			retval = 1;
@@ -3905,7 +3905,7 @@ int megasas_wait_for_outstanding_fusion(struct megasas_instance *instance,
 			goto out;
 
 		if (!(i % MEGASAS_RESET_NOTICE_INTERVAL)) {
-			dev_notice(&instance->pdev->dev, "[%2d]waiting for %d "
+			dev_dbg(&instance->pdev->dev, "[%2d]waiting for %d "
 			       "commands to complete for scsi%d\n", i,
 			       outstanding, instance->host->host_no);
 		}
@@ -4042,7 +4042,7 @@ static int megasas_track_scsiio(struct megasas_instance *instance,
 		if (cmd_fusion->scmd &&
 			(cmd_fusion->scmd->device->id == id &&
 			cmd_fusion->scmd->device->channel == channel)) {
-			dev_info(&instance->pdev->dev,
+			dev_dbg(&instance->pdev->dev,
 				"SCSI commands pending to target"
 				"channel %d id %d \tSMID: 0x%x\n",
 				channel, id, cmd_fusion->index);
@@ -4540,7 +4540,7 @@ int megasas_reset_fusion(struct Scsi_Host *shost, int reason)
 	/* IO timeout detected, forcibly put FW in FAULT state */
 	if (abs_state != MFI_STATE_FAULT && instance->crash_dump_buf &&
 		instance->crash_dump_app_support && reason) {
-		dev_info(&instance->pdev->dev, "IO/DCMD timeout is detected, "
+		dev_dbg(&instance->pdev->dev, "IO/DCMD timeout is detected, "
 			"forcibly FAULT Firmware\n");
 		atomic_set(&instance->adprecovery, MEGASAS_ADPRESET_SM_INFAULT);
 		status_reg = readl(&instance->reg_set->doorbell);
@@ -4558,11 +4558,11 @@ int megasas_reset_fusion(struct Scsi_Host *shost, int reason)
 			(io_timeout_in_crash_mode < 80));
 
 		if (atomic_read(&instance->adprecovery) == MEGASAS_HBA_OPERATIONAL) {
-			dev_info(&instance->pdev->dev, "OCR done for IO "
+			dev_dbg(&instance->pdev->dev, "OCR done for IO "
 				"timeout case\n");
 			retval = SUCCESS;
 		} else {
-			dev_info(&instance->pdev->dev, "Controller is not "
+			dev_dbg(&instance->pdev->dev, "Controller is not "
 				"operational after 240 seconds wait for IO "
 				"timeout case in FW crash dump mode\n do "
 				"OCR/kill adapter\n");
@@ -4589,7 +4589,7 @@ int megasas_reset_fusion(struct Scsi_Host *shost, int reason)
 			reason = 0;
 
 		if (megasas_dbg_lvl & OCR_LOGS)
-			dev_info(&instance->pdev->dev, "\nPending SCSI commands:\n");
+			dev_dbg(&instance->pdev->dev, "\nPending SCSI commands:\n");
 
 		/* Now return commands back to the OS */
 		for (i = 0 ; i < instance->max_scsi_cmds; i++) {
@@ -4672,7 +4672,7 @@ transition_to_ready:
 			}
 
 			if (megasas_get_ctrl_info(instance)) {
-				dev_info(&instance->pdev->dev,
+				dev_dbg(&instance->pdev->dev,
 					"Failed from %s %d\n",
 					__func__, __LINE__);
 				megaraid_sas_kill_hba(instance);
@@ -4718,7 +4718,7 @@ transition_to_ready:
 
 			atomic_set(&instance->adprecovery, MEGASAS_HBA_OPERATIONAL);
 
-			dev_info(&instance->pdev->dev, "Interrupts are enabled and"
+			dev_dbg(&instance->pdev->dev, "Interrupts are enabled and"
 				" controller is OPERATIONAL for scsi:%d\n",
 				instance->host->host_no);
 
@@ -4789,7 +4789,7 @@ void  megasas_fusion_crash_dump_wq(struct work_struct *work)
 		 * Do OCR and do not wait for crash dump collection
 		 */
 		if (instance->drv_buf_alloc) {
-			dev_info(&instance->pdev->dev, "earlier crash dump is "
+			dev_dbg(&instance->pdev->dev, "earlier crash dump is "
 				"not yet copied by application, ignoring this "
 				"crash dump and initiating OCR\n");
 			status_reg |= MFI_STATE_CRASH_DUMP_DONE;
@@ -4799,7 +4799,7 @@ void  megasas_fusion_crash_dump_wq(struct work_struct *work)
 			return;
 		}
 		megasas_alloc_host_crash_buffer(instance);
-		dev_info(&instance->pdev->dev, "Number of host crash buffers "
+		dev_dbg(&instance->pdev->dev, "Number of host crash buffers "
 			"allocated: %d\n", instance->drv_buf_alloc);
 	}
 
@@ -4809,7 +4809,7 @@ void  megasas_fusion_crash_dump_wq(struct work_struct *work)
 	 * ignore the data.
 	 */
 	if (instance->drv_buf_index >= (instance->drv_buf_alloc)) {
-		dev_info(&instance->pdev->dev, "Driver is done copying "
+		dev_dbg(&instance->pdev->dev, "Driver is done copying "
 			"the buffer: %d\n", instance->drv_buf_alloc);
 		status_reg |= MFI_STATE_CRASH_DUMP_DONE;
 		partial_copy = 1;
@@ -4821,7 +4821,7 @@ void  megasas_fusion_crash_dump_wq(struct work_struct *work)
 	}
 
 	if (status_reg & MFI_STATE_CRASH_DUMP_DONE) {
-		dev_info(&instance->pdev->dev, "Crash Dump is available,number "
+		dev_dbg(&instance->pdev->dev, "Crash Dump is available,number "
 			"of copied buffers: %d\n", instance->drv_buf_index);
 		instance->fw_crash_buffer_size =  instance->drv_buf_index;
 		instance->fw_crash_state = AVAILABLE;

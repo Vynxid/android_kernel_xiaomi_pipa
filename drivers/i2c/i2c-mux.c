@@ -419,7 +419,7 @@ int i2c_mux_add_adapter(struct i2c_mux_core *muxc,
 	WARN(sysfs_create_link(&muxc->dev->kobj, &priv->adap.dev.kobj,
 			       symlink_name),
 	     "can't create symlink to channel %u\n", chan_id);
-	dev_info(&parent->dev, "Added multiplexed i2c bus %d\n",
+	dev_dbg(&parent->dev, "Added multiplexed i2c bus %d\n",
 		 i2c_adapter_id(&priv->adap));
 
 	muxc->adapter[muxc->num_adapters++] = &priv->adap;

@@ -134,14 +134,14 @@ static struct cflayer *get_up(struct cfmuxl *muxl, u16 id)
 	return up;
 }
 
-static struct cflayer *get_dn(struct cfmuxl *muxl, struct dev_info *dev_info)
+static struct cflayer *get_dn(struct cfmuxl *muxl, struct dev_dbg *dev_dbg)
 {
 	struct cflayer *dn;
-	int idx = dev_info->id % DN_CACHE_SIZE;
+	int idx = dev_dbg->id % DN_CACHE_SIZE;
 	dn = rcu_dereference(muxl->dn_cache[idx]);
-	if (dn == NULL || dn->id != dev_info->id) {
+	if (dn == NULL || dn->id != dev_dbg->id) {
 		spin_lock_bh(&muxl->transmit_lock);
-		dn = get_from_id(&muxl->frml_list, dev_info->id);
+		dn = get_from_id(&muxl->frml_list, dev_dbg->id);
 		rcu_assign_pointer(muxl->dn_cache[idx], dn);
 		spin_unlock_bh(&muxl->transmit_lock);
 	}
@@ -219,10 +219,10 @@ static int cfmuxl_transmit(struct cflayer *layr, struct cfpkt *pkt)
 
 	rcu_read_lock();
 
-	dn = get_dn(muxl, info->dev_info);
+	dn = get_dn(muxl, info->dev_dbg);
 	if (dn == NULL) {
 		pr_debug("Send data on unknown phy ID = %d (0x%x)\n",
-			info->dev_info->id, info->dev_info->id);
+			info->dev_dbg->id, info->dev_dbg->id);
 		rcu_read_unlock();
 		cfpkt_destroy(pkt);
 		return -ENOTCONN;

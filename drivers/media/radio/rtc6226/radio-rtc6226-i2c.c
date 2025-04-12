@@ -866,7 +866,7 @@ static int rtc6226_i2c_probe(struct i2c_client *client,
 	retval = video_register_device(&radio->videodev, VFL_TYPE_RADIO,
 		radio_nr);
 	if (retval) {
-		dev_info(&client->dev, "Could not register video device\n");
+		dev_dbg(&client->dev, "Could not register video device\n");
 		goto err_all;
 	}
 

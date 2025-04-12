@@ -387,7 +387,7 @@ static int usb_keene_probe(struct usb_interface *intf,
 		goto err_vdev;
 	}
 	v4l2_ctrl_handler_setup(hdl);
-	dev_info(&intf->dev, "V4L2 device registered as %s\n",
+	dev_dbg(&intf->dev, "V4L2 device registered as %s\n",
 			video_device_node_name(&radio->vdev));
 	return 0;
 

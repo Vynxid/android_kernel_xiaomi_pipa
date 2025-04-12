@@ -986,7 +986,7 @@ static int s3c24xxfb_probe(struct platform_device *pdev,
 	if (ret)
 		dev_err(&pdev->dev, "failed to add debug attribute\n");
 
-	dev_info(&pdev->dev, "fb%d: %s frame buffer device\n",
+	dev_dbg(&pdev->dev, "fb%d: %s frame buffer device\n",
 		fbinfo->node, fbinfo->fix.id);
 
 	return 0;

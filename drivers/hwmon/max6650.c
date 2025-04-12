@@ -678,7 +678,7 @@ static int max6650_init_client(struct max6650_data *data,
 		dev_err(dev, "illegal value for prescaler (%d)\n", prescale);
 	}
 
-	dev_info(dev, "Fan voltage: %dV, prescaler: %d.\n",
+	dev_dbg(dev, "Fan voltage: %dV, prescaler: %d.\n",
 		 (config & MAX6650_CFG_V12) ? 12 : 5,
 		 1 << (config & MAX6650_CFG_PRESCALER_MASK));
 

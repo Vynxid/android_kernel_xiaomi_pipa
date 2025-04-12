@@ -956,7 +956,7 @@ static int stm32_of_dma_rx_probe(struct stm32_port *stm32port,
 	/* Request DMA RX channel */
 	stm32port->rx_ch = dma_request_slave_channel(dev, "rx");
 	if (!stm32port->rx_ch) {
-		dev_info(dev, "rx dma alloc failed\n");
+		dev_dbg(dev, "rx dma alloc failed\n");
 		return -ENODEV;
 	}
 	stm32port->rx_buf = dma_alloc_coherent(&pdev->dev, RX_BUF_L,
@@ -1028,7 +1028,7 @@ static int stm32_of_dma_tx_probe(struct stm32_port *stm32port,
 	/* Request DMA TX channel */
 	stm32port->tx_ch = dma_request_slave_channel(dev, "tx");
 	if (!stm32port->tx_ch) {
-		dev_info(dev, "tx dma alloc failed\n");
+		dev_dbg(dev, "tx dma alloc failed\n");
 		return -ENODEV;
 	}
 	stm32port->tx_buf = dma_alloc_coherent(&pdev->dev, TX_BUF_L,
@@ -1104,11 +1104,11 @@ static int stm32_serial_probe(struct platform_device *pdev)
 
 	ret = stm32_of_dma_rx_probe(stm32port, pdev);
 	if (ret)
-		dev_info(&pdev->dev, "interrupt mode used for rx (no dma)\n");
+		dev_dbg(&pdev->dev, "interrupt mode used for rx (no dma)\n");
 
 	ret = stm32_of_dma_tx_probe(stm32port, pdev);
 	if (ret)
-		dev_info(&pdev->dev, "interrupt mode used for tx (no dma)\n");
+		dev_dbg(&pdev->dev, "interrupt mode used for tx (no dma)\n");
 
 	platform_set_drvdata(pdev, &stm32port->port);
 
@@ -1334,7 +1334,7 @@ static int __init usart_init(void)
 	static char banner[] __initdata = "STM32 USART driver initialized";
 	int ret;
 
-	pr_info("%s\n", banner);
+	pr_debug("%s\n", banner);
 
 	ret = uart_register_driver(&stm32_usart_driver);
 	if (ret)

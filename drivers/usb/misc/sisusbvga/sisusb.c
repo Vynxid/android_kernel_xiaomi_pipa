@@ -2118,7 +2118,7 @@ static void sisusb_get_ramconfig(struct sisusb_usb_data *sisusb)
 		break;
 	}
 
-	dev_info(&sisusb->sisusb_dev->dev,
+	dev_dbg(&sisusb->sisusb_dev->dev,
 			"%dMB %s %cDR S%cRAM, bus width %d\n",
 			sisusb->vramsize >> 20, ramtypetext1,
 			ram_datarate[ramtype], ram_dynamictype[ramtype], bw);
@@ -3031,7 +3031,7 @@ static int sisusb_probe(struct usb_interface *intf,
 		return -EINVAL;
 	}
 
-	dev_info(&dev->dev, "USB2VGA dongle found at address %d\n",
+	dev_dbg(&dev->dev, "USB2VGA dongle found at address %d\n",
 			dev->devnum);
 
 	/* Allocate memory for our private */
@@ -3103,7 +3103,7 @@ static int sisusb_probe(struct usb_interface *intf,
 		sisusb->urbstatus[i] = 0;
 	}
 
-	dev_info(&sisusb->sisusb_dev->dev, "Allocated %d output buffers\n",
+	dev_dbg(&sisusb->sisusb_dev->dev, "Allocated %d output buffers\n",
 			sisusb->numobufs);
 
 #ifdef INCL_SISUSB_CON
@@ -3138,7 +3138,7 @@ static int sisusb_probe(struct usb_interface *intf,
 					"Failed to early initialize device\n");
 
 	} else
-		dev_info(&sisusb->sisusb_dev->dev,
+		dev_dbg(&sisusb->sisusb_dev->dev,
 				"Not attached to USB 2.0 hub, deferring init\n");
 
 	sisusb->ready = 1;

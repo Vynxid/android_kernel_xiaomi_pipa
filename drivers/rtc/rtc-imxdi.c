@@ -438,7 +438,7 @@ static int di_handle_state(struct imxdi_dev *imxdi)
 		rc = di_handle_invalid_and_failure_state(imxdi, dsr);
 		break;
 	default:
-		dev_notice(&imxdi->pdev->dev, "Unlocked unit detected\n");
+		dev_dbg(&imxdi->pdev->dev, "Unlocked unit detected\n");
 		rc = di_handle_valid_state(imxdi, dsr);
 	}
 

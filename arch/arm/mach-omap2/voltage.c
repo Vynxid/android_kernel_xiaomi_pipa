@@ -201,7 +201,7 @@ struct omap_volt_data *omap_voltage_get_voltdata(struct voltagedomain *voltdm,
 			return &voltdm->volt_data[i];
 	}
 
-	pr_notice("%s: Unable to match the current voltage with the voltage table for vdd_%s\n",
+	pr_debug("%s: Unable to match the current voltage with the voltage table for vdd_%s\n",
 		  __func__, voltdm->name);
 
 	return ERR_PTR(-ENODATA);

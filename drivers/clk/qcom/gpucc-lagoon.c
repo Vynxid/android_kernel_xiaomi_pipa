@@ -532,7 +532,7 @@ static int gpu_cc_lagoon_probe(struct platform_device *pdev)
 	regmap_update_bits(regmap, gpu_cc_cx_gmu_clk.clkr.enable_reg,
 								mask, value);
 
-	dev_info(&pdev->dev, "Registered GPU CC clocks\n");
+	dev_dbg(&pdev->dev, "Registered GPU CC clocks\n");
 	return 0;
 }
 

@@ -2547,7 +2547,7 @@ static int bcm_sysport_probe(struct platform_device *pdev)
 	}
 
 	priv->rev = topctrl_readl(priv, REV_CNTL) & REV_MASK;
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "Broadcom SYSTEMPORT%s" REV_FMT
 		 " at 0x%p (irqs: %d, %d, TXQs: %d, RXQs: %d)\n",
 		 priv->is_lite ? " Lite" : "",

@@ -67,7 +67,7 @@ static void process_recv(struct ishtp_cl *hid_ishtp_cl, void *recv_buf,
 {
 	struct hostif_msg *recv_msg;
 	unsigned char *payload;
-	struct device_info *dev_info;
+	struct device_info *dev_dbg;
 	int i, j;
 	size_t	payload_len, total_len, cur_pos;
 	int report_type;
@@ -145,11 +145,11 @@ static void process_recv(struct ishtp_cl *hid_ishtp_cl, void *recv_buf,
 						data_len)
 					break;
 
-				dev_info = (struct device_info *)(payload + 1 +
+				dev_dbg = (struct device_info *)(payload + 1 +
 					sizeof(struct device_info) * i);
 				if (client_data->hid_devices)
 					memcpy(client_data->hid_devices + i,
-					       dev_info,
+					       dev_dbg,
 					       sizeof(struct device_info));
 			}
 
@@ -523,7 +523,7 @@ static int ishtp_enum_enum_devices(struct ishtp_cl *hid_ishtp_cl)
 	}
 
 	client_data->num_hid_devices = client_data->hid_dev_count;
-	dev_info(&hid_ishtp_cl->device->dev,
+	dev_dbg(&hid_ishtp_cl->device->dev,
 		"[hid-ish]: enum_devices_done OK, num_hid_devices=%d\n",
 		client_data->num_hid_devices);
 

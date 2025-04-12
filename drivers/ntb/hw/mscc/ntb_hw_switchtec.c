@@ -540,7 +540,7 @@ static void switchtec_ntb_check_link(struct switchtec_ntb *sndev,
 		if (sndev->link_is_up) {
 			sndev->link_is_up = 0;
 			ntb_link_event(&sndev->ntb);
-			dev_info(&sndev->stdev->dev, "ntb link forced down\n");
+			dev_dbg(&sndev->stdev->dev, "ntb link forced down\n");
 		}
 
 		return;
@@ -562,7 +562,7 @@ static void switchtec_ntb_check_link(struct switchtec_ntb *sndev,
 	if (link_sta != old) {
 		switchtec_ntb_send_msg(sndev, LINK_MESSAGE, MSG_CHECK_LINK);
 		ntb_link_event(&sndev->ntb);
-		dev_info(&sndev->stdev->dev, "ntb link %s\n",
+		dev_dbg(&sndev->stdev->dev, "ntb link %s\n",
 			 link_sta ? "up" : "down");
 
 		if (link_sta)
@@ -1144,7 +1144,7 @@ static int switchtec_ntb_init_crosslink(struct switchtec_ntb *sndev)
 	if (!crosslink_is_enabled(sndev))
 		return 0;
 
-	dev_info(&sndev->stdev->dev, "Using crosslink configuration\n");
+	dev_dbg(&sndev->stdev->dev, "Using crosslink configuration\n");
 	sndev->ntb.topo = NTB_TOPO_CROSSLINK;
 
 	bar_cnt = crosslink_enum_partition(sndev, bar_addrs);
@@ -1473,7 +1473,7 @@ static void switchtec_ntb_deinit_db_msg_irq(struct switchtec_ntb *sndev)
 
 static int switchtec_ntb_reinit_peer(struct switchtec_ntb *sndev)
 {
-	dev_info(&sndev->stdev->dev, "peer reinitialized\n");
+	dev_dbg(&sndev->stdev->dev, "peer reinitialized\n");
 	switchtec_ntb_deinit_shared_mw(sndev);
 	switchtec_ntb_init_mw(sndev);
 	return switchtec_ntb_init_shared_mw(sndev);
@@ -1534,7 +1534,7 @@ static int switchtec_ntb_add(struct device *dev,
 
 	stdev->sndev = sndev;
 	stdev->link_notifier = switchtec_ntb_link_notification;
-	dev_info(dev, "NTB device registered\n");
+	dev_dbg(dev, "NTB device registered\n");
 
 	return 0;
 
@@ -1566,7 +1566,7 @@ static void switchtec_ntb_remove(struct device *dev,
 	switchtec_ntb_deinit_shared_mw(sndev);
 	switchtec_ntb_deinit_crosslink(sndev);
 	kfree(sndev);
-	dev_info(dev, "ntb device unregistered\n");
+	dev_dbg(dev, "ntb device unregistered\n");
 }
 
 static struct class_interface switchtec_interface  = {

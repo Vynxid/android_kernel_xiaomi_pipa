@@ -63,7 +63,7 @@ struct stm32_i2c_dma *stm32_i2c_dma_request(struct device *dev,
 
 	init_completion(&dma->dma_complete);
 
-	dev_info(dev, "using %s (tx) and %s (rx) for DMA transfers\n",
+	dev_dbg(dev, "using %s (tx) and %s (rx) for DMA transfers\n",
 		 dma_chan_name(dma->chan_tx), dma_chan_name(dma->chan_rx));
 
 	return dma;
@@ -74,7 +74,7 @@ fail_tx:
 	dma_release_channel(dma->chan_tx);
 fail_al:
 	devm_kfree(dev, dma);
-	dev_info(dev, "can't use DMA\n");
+	dev_dbg(dev, "can't use DMA\n");
 
 	return ERR_PTR(ret);
 }

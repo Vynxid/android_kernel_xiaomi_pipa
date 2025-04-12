@@ -518,7 +518,7 @@ static int nvme_rdma_alloc_queue(struct nvme_rdma_ctrl *ctrl,
 	queue->cm_id = rdma_create_id(&init_net, nvme_rdma_cm_handler, queue,
 			RDMA_PS_TCP, IB_QPT_RC);
 	if (IS_ERR(queue->cm_id)) {
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"failed to create CM ID: %ld\n", PTR_ERR(queue->cm_id));
 		return PTR_ERR(queue->cm_id);
 	}
@@ -531,14 +531,14 @@ static int nvme_rdma_alloc_queue(struct nvme_rdma_ctrl *ctrl,
 			(struct sockaddr *)&ctrl->addr,
 			NVME_RDMA_CONNECT_TIMEOUT_MS);
 	if (ret) {
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"rdma_resolve_addr failed (%d).\n", ret);
 		goto out_destroy_cm_id;
 	}
 
 	ret = nvme_rdma_wait_for_cm(queue);
 	if (ret) {
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"rdma connection establishment failed (%d)\n", ret);
 		goto out_destroy_cm_id;
 	}
@@ -599,7 +599,7 @@ static int nvme_rdma_start_queue(struct nvme_rdma_ctrl *ctrl, int idx)
 	if (!ret)
 		set_bit(NVME_RDMA_Q_LIVE, &ctrl->queues[idx].flags);
 	else
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			"failed to connect queue: %d ret=%d\n", idx, ret);
 	return ret;
 }
@@ -650,7 +650,7 @@ static int nvme_rdma_alloc_io_queues(struct nvme_rdma_ctrl *ctrl)
 	}
 
 	ctrl->ctrl.queue_count = nr_io_queues + 1;
-	dev_info(ctrl->ctrl.device,
+	dev_dbg(ctrl->ctrl.device,
 		"creating %d I/O queues.\n", nr_io_queues);
 
 	for (i = 1; i < ctrl->ctrl.queue_count; i++) {
@@ -948,7 +948,7 @@ static void nvme_rdma_reconnect_or_remove(struct nvme_rdma_ctrl *ctrl)
 	}
 
 	if (nvmf_should_reconnect(&ctrl->ctrl)) {
-		dev_info(ctrl->ctrl.device, "Reconnecting in %d seconds...\n",
+		dev_dbg(ctrl->ctrl.device, "Reconnecting in %d seconds...\n",
 			ctrl->ctrl.opts->reconnect_delay);
 		queue_delayed_work(nvme_wq, &ctrl->reconnect_work,
 				ctrl->ctrl.opts->reconnect_delay * HZ);
@@ -1031,7 +1031,7 @@ static void nvme_rdma_reconnect_ctrl_work(struct work_struct *work)
 	if (nvme_rdma_setup_ctrl(ctrl, false))
 		goto requeue;
 
-	dev_info(ctrl->ctrl.device, "Successfully reconnected (%d attempts)\n",
+	dev_dbg(ctrl->ctrl.device, "Successfully reconnected (%d attempts)\n",
 			ctrl->ctrl.nr_reconnects);
 
 	ctrl->ctrl.nr_reconnects = 0;
@@ -1039,7 +1039,7 @@ static void nvme_rdma_reconnect_ctrl_work(struct work_struct *work)
 	return;
 
 requeue:
-	dev_info(ctrl->ctrl.device, "Failed reconnect attempt %d\n",
+	dev_dbg(ctrl->ctrl.device, "Failed reconnect attempt %d\n",
 			ctrl->ctrl.nr_reconnects);
 	nvme_rdma_reconnect_or_remove(ctrl);
 }
@@ -1079,7 +1079,7 @@ static void nvme_rdma_wr_error(struct ib_cq *cq, struct ib_wc *wc,
 	struct nvme_rdma_ctrl *ctrl = queue->ctrl;
 
 	if (ctrl->ctrl.state == NVME_CTRL_LIVE)
-		dev_info(ctrl->ctrl.device,
+		dev_dbg(ctrl->ctrl.device,
 			     "%s for CQE 0x%p failed with status %s (%d)\n",
 			     op, wc->wr_cqe,
 			     ib_wc_status_msg(wc->status), wc->status);
@@ -2022,7 +2022,7 @@ static struct nvme_ctrl *nvme_rdma_create_ctrl(struct device *dev,
 	if (ret)
 		goto out_uninit_ctrl;
 
-	dev_info(ctrl->ctrl.device, "new ctrl: NQN \"%s\", addr %pISpcs\n",
+	dev_dbg(ctrl->ctrl.device, "new ctrl: NQN \"%s\", addr %pISpcs\n",
 		ctrl->ctrl.opts->subsysnqn, &ctrl->addr);
 
 	nvme_get_ctrl(&ctrl->ctrl);

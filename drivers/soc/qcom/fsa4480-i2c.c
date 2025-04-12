@@ -155,7 +155,7 @@ static int fsa4480_usbc_analog_setup_switches(struct fsa4480_priv *fsa_priv)
 		atomic_set(&(fsa_priv->usbc_mode), mode.intval);
 	}
 
-	dev_info(dev, "%s: setting GPIOs active = %d, mode.intval = %d\n",
+	dev_dbg(dev, "%s: setting GPIOs active = %d, mode.intval = %d\n",
 		__func__, mode.intval != POWER_SUPPLY_TYPEC_NONE, mode.intval);
 
 	if ((atomic_read(&(fsa_priv->usbc_mode)) != mode.intval) &&
@@ -435,7 +435,7 @@ static int fsa4480_probe(struct i2c_client *i2c,
 				__func__, rc);
 	} else {
 		atomic_set(&(fsa_priv->usbc_mode), mode.intval);
-		dev_info(fsa_priv->dev, "%s: set usbc_mode to %d\n", __func__, fsa_priv->usbc_mode.counter);
+		dev_dbg(fsa_priv->dev, "%s: set usbc_mode to %d\n", __func__, fsa_priv->usbc_mode.counter);
 	}
 #endif
 	return 0;

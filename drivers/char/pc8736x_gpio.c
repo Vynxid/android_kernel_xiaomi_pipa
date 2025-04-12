@@ -265,7 +265,7 @@ static int __init pc8736x_gpio_init(void)
 		rc = -ENODEV;
 		goto undo_platform_dev_alloc;
 	}
-	dev_info(&pdev->dev, "NatSemi pc8736x GPIO Driver Initializing\n");
+	dev_dbg(&pdev->dev, "NatSemi pc8736x GPIO Driver Initializing\n");
 
 	if (!pc8736x_superio_present()) {
 		rc = -ENODEV;
@@ -300,7 +300,7 @@ static int __init pc8736x_gpio_init(void)
 			pc8736x_gpio_base);
 		goto undo_platform_dev_add;
 	}
-	dev_info(&pdev->dev, "GPIO ioport %x reserved\n", pc8736x_gpio_base);
+	dev_dbg(&pdev->dev, "GPIO ioport %x reserved\n", pc8736x_gpio_base);
 
 	if (major) {
 		devid = MKDEV(major, 0);

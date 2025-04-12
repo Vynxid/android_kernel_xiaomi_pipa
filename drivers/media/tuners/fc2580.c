@@ -592,7 +592,7 @@ static int fc2580_probe(struct i2c_client *client,
 	pdata->get_v4l2_subdev = fc2580_get_v4l2_subdev;
 	i2c_set_clientdata(client, dev);
 
-	dev_info(&client->dev, "FCI FC2580 successfully identified\n");
+	dev_dbg(&client->dev, "FCI FC2580 successfully identified\n");
 	return 0;
 err_kfree:
 	kfree(dev);

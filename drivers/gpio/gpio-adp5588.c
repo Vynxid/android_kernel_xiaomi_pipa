@@ -434,7 +434,7 @@ static int adp5588_gpio_probe(struct i2c_client *client,
 	if (ret)
 		goto err_irq;
 
-	dev_info(&client->dev, "IRQ Base: %d Rev.: %d\n",
+	dev_dbg(&client->dev, "IRQ Base: %d Rev.: %d\n",
 			pdata->irq_base, revid);
 
 	if (pdata->setup) {

@@ -376,7 +376,7 @@ dm355evm_msp_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	status = dm355evm_msp_read(DM355EVM_MSP_FIRMREV);
 	if (status < 0)
 		goto fail;
-	dev_info(&client->dev, "firmware v.%02X, %s as video-in\n",
+	dev_dbg(&client->dev, "firmware v.%02X, %s as video-in\n",
 			status, video);
 
 	/* mux video input:  either tvp5146 or some external imager */

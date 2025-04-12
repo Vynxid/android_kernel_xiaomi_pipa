@@ -266,7 +266,7 @@ static int zfcp_ccw_notify(struct ccw_device *cdev, int event)
 			zfcp_dbf_hba_basic("ccniop1", adapter);
 			break;
 		}
-		dev_info(&cdev->dev, "The FCP device is operational again\n");
+		dev_dbg(&cdev->dev, "The FCP device is operational again\n");
 		zfcp_erp_set_adapter_status(adapter,
 					    ZFCP_STATUS_COMMON_RUNNING);
 		zfcp_erp_adapter_reopen(adapter, ZFCP_STATUS_COMMON_ERP_FAILED,

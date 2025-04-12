@@ -188,10 +188,10 @@ int i1480_phy_fw_upload(struct i1480 *i1480)
 	}
 	if (phy_stat != 0) {
 		result = -ENODEV;
-		dev_info(i1480->dev, "error, PHY not ready: %u\n", phy_stat);
+		dev_dbg(i1480->dev, "error, PHY not ready: %u\n", phy_stat);
 		goto error_phy_status;
 	}
-	dev_info(i1480->dev, "PHY fw '%s': uploaded\n", i1480->phy_fw_name);
+	dev_dbg(i1480->dev, "PHY fw '%s': uploaded\n", i1480->phy_fw_name);
 error_phy_status:
 error_mpi_status:
 error_mpi_write:

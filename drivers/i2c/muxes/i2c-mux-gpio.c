@@ -239,7 +239,7 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
 	}
 
 	if (muxc->mux_locked)
-		dev_info(&pdev->dev, "mux-locked i2c mux\n");
+		dev_dbg(&pdev->dev, "mux-locked i2c mux\n");
 
 	for (i = 0; i < mux->data.n_values; i++) {
 		u32 nr = mux->data.base_nr ? (mux->data.base_nr + i) : 0;
@@ -250,7 +250,7 @@ static int i2c_mux_gpio_probe(struct platform_device *pdev)
 			goto add_adapter_failed;
 	}
 
-	dev_info(&pdev->dev, "%d port mux on %s adapter\n",
+	dev_dbg(&pdev->dev, "%d port mux on %s adapter\n",
 		 mux->data.n_values, parent->name);
 
 	return 0;

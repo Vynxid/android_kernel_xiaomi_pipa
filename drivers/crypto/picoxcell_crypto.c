@@ -1690,12 +1690,12 @@ static int spacc_probe(struct platform_device *pdev)
 
 	engine->clk = clk_get(&pdev->dev, "ref");
 	if (IS_ERR(engine->clk)) {
-		dev_info(&pdev->dev, "clk unavailable\n");
+		dev_dbg(&pdev->dev, "clk unavailable\n");
 		return PTR_ERR(engine->clk);
 	}
 
 	if (clk_prepare_enable(engine->clk)) {
-		dev_info(&pdev->dev, "unable to prepare/enable clk\n");
+		dev_dbg(&pdev->dev, "unable to prepare/enable clk\n");
 		ret = -EIO;
 		goto err_clk_put;
 	}

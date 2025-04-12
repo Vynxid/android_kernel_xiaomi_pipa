@@ -1625,7 +1625,7 @@ static int s5c73m3_get_platform_data(struct s5c73m3 *state)
 	if (of_property_read_u32(node, "clock-frequency",
 				 &state->mclk_frequency)) {
 		state->mclk_frequency = S5C73M3_DEFAULT_MCLK_FREQ;
-		dev_info(dev, "using default %u Hz clock frequency\n",
+		dev_dbg(dev, "using default %u Hz clock frequency\n",
 					state->mclk_frequency);
 	}
 
@@ -1653,7 +1653,7 @@ static int s5c73m3_get_platform_data(struct s5c73m3 *state)
 	 * always a default value of 4 lanes is used.
 	 */
 	if (ep.bus.mipi_csi2.num_data_lanes != S5C73M3_MIPI_DATA_LANES)
-		dev_info(dev, "falling back to 4 MIPI CSI-2 data lanes\n");
+		dev_dbg(dev, "falling back to 4 MIPI CSI-2 data lanes\n");
 
 	return 0;
 }

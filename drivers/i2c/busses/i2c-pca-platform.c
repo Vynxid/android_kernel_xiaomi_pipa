@@ -223,7 +223,7 @@ static int i2c_pca_pf_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, i2c);
 
-	dev_info(&pdev->dev, "registered.\n");
+	dev_dbg(&pdev->dev, "registered.\n");
 
 	return 0;
 }

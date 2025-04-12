@@ -640,7 +640,7 @@ emc2103_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	if (IS_ERR(hwmon_dev))
 		return PTR_ERR(hwmon_dev);
 
-	dev_info(&client->dev, "%s: sensor '%s'\n",
+	dev_dbg(&client->dev, "%s: sensor '%s'\n",
 		 dev_name(hwmon_dev), client->name);
 
 	return 0;

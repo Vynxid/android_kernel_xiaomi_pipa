@@ -503,11 +503,11 @@ static void apm_error(char *str, int err)
 		if (error_table[i].key == err)
 			break;
 	if (i < ERROR_COUNT)
-		pr_notice("%s: %s\n", str, error_table[i].msg);
+		pr_debug("%s: %s\n", str, error_table[i].msg);
 	else if (err < 0)
-		pr_notice("%s: linux error code %i\n", str, err);
+		pr_debug("%s: linux error code %i\n", str, err);
 	else
-		pr_notice("%s: unknown error code %#2.2x\n",
+		pr_debug("%s: unknown error code %#2.2x\n",
 		       str, err);
 }
 
@@ -2309,16 +2309,16 @@ static int __init apm_init(void)
 	}
 
 	if (apm_info.disabled) {
-		pr_notice("disabled on user request.\n");
+		pr_debug("disabled on user request.\n");
 		return -ENODEV;
 	}
 	if ((num_online_cpus() > 1) && !power_off && !smp) {
-		pr_notice("disabled - APM is not SMP safe.\n");
+		pr_debug("disabled - APM is not SMP safe.\n");
 		apm_info.disabled = 1;
 		return -ENODEV;
 	}
 	if (!acpi_disabled) {
-		pr_notice("overridden by ACPI.\n");
+		pr_debug("overridden by ACPI.\n");
 		apm_info.disabled = 1;
 		return -ENODEV;
 	}

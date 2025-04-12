@@ -1140,7 +1140,7 @@ static void gfar_detect_errata(struct gfar_private *priv)
 #endif
 
 	if (priv->errata)
-		dev_info(dev, "enabled errata workarounds, flags: 0x%x\n",
+		dev_dbg(dev, "enabled errata workarounds, flags: 0x%x\n",
 			 priv->errata);
 }
 

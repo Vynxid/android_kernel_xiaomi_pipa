@@ -512,7 +512,7 @@ static void amd_handle_event(struct amd_ntb_dev *ndev, int vec)
 	status &= AMD_EVENT_INTMASK;
 	switch (status) {
 	case AMD_PEER_FLUSH_EVENT:
-		dev_info(dev, "Flush is done.\n");
+		dev_dbg(dev, "Flush is done.\n");
 		break;
 	case AMD_PEER_RESET_EVENT:
 		amd_ack_smu(ndev, AMD_PEER_RESET_EVENT);
@@ -538,7 +538,7 @@ static void amd_handle_event(struct amd_ntb_dev *ndev, int vec)
 		status = readl(mmio + AMD_PMESTAT_OFFSET);
 		/* check if this is WAKEUP event */
 		if (status & 0x1)
-			dev_info(dev, "Wakeup is done.\n");
+			dev_dbg(dev, "Wakeup is done.\n");
 
 		amd_ack_smu(ndev, AMD_PEER_D0_EVENT);
 
@@ -547,7 +547,7 @@ static void amd_handle_event(struct amd_ntb_dev *ndev, int vec)
 				      AMD_LINK_HB_TIMEOUT);
 		break;
 	default:
-		dev_info(dev, "event status = 0x%x.\n", status);
+		dev_dbg(dev, "event status = 0x%x.\n", status);
 		break;
 	}
 }
@@ -1091,7 +1091,7 @@ static int amd_ntb_pci_probe(struct pci_dev *pdev,
 	if (rc)
 		goto err_register;
 
-	dev_info(&pdev->dev, "NTB device registered.\n");
+	dev_dbg(&pdev->dev, "NTB device registered.\n");
 
 	return 0;
 
@@ -1140,7 +1140,7 @@ static struct pci_driver amd_ntb_pci_driver = {
 static int __init amd_ntb_pci_driver_init(void)
 {
 	int ret;
-	pr_info("%s %s\n", NTB_DESC, NTB_VER);
+	pr_debug("%s %s\n", NTB_DESC, NTB_VER);
 
 	if (debugfs_initialized())
 		debugfs_dir = debugfs_create_dir(KBUILD_MODNAME, NULL);

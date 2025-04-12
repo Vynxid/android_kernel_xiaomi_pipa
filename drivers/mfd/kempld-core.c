@@ -427,7 +427,7 @@ static int kempld_detect_device(struct kempld_device_data *pld)
 	if (ret)
 		return ret;
 
-	dev_info(pld->dev, "Found Kontron PLD - %s (%s), spec %d.%d\n",
+	dev_dbg(pld->dev, "Found Kontron PLD - %s (%s), spec %d.%d\n",
 		 pld->info.version, kempld_get_type_string(pld),
 		 pld->info.spec_major, pld->info.spec_minor);
 

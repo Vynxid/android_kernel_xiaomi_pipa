@@ -745,11 +745,11 @@ int sst_byt_dsp_init(struct device *dev, struct sst_pdata *pdata)
 
 	/* show firmware information */
 	sst_dsp_inbox_read(byt->dsp, &init, sizeof(init));
-	dev_info(byt->dev, "FW version: %02x.%02x.%02x.%02x\n",
+	dev_dbg(byt->dev, "FW version: %02x.%02x.%02x.%02x\n",
 		 init.fw_version.major, init.fw_version.minor,
 		 init.fw_version.build, init.fw_version.type);
-	dev_info(byt->dev, "Build type: %x\n", init.fw_version.type);
-	dev_info(byt->dev, "Build date: %s %s\n",
+	dev_dbg(byt->dev, "Build type: %x\n", init.fw_version.type);
+	dev_dbg(byt->dev, "Build date: %s %s\n",
 		 init.build_info.date, init.build_info.time);
 
 	pdata->dsp = byt;

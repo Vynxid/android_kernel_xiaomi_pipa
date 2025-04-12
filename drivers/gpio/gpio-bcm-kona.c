@@ -688,7 +688,7 @@ static int bcm_kona_gpio_probe(struct platform_device *pdev)
 		}
 	}
 
-	dev_info(&pdev->dev, "Setting up Kona GPIO\n");
+	dev_dbg(&pdev->dev, "Setting up Kona GPIO\n");
 
 	bcm_kona_gpio_reset(kona_gpio);
 

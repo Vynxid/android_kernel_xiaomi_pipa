@@ -1038,7 +1038,7 @@ static int ad9523_probe(struct spi_device *spi)
 	if (ret)
 		goto error_disable_reg;
 
-	dev_info(&spi->dev, "probed %s\n", indio_dev->name);
+	dev_dbg(&spi->dev, "probed %s\n", indio_dev->name);
 
 	return 0;
 

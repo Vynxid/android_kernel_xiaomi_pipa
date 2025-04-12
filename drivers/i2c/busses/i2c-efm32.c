@@ -382,7 +382,7 @@ static int efm32_i2c_probe(struct platform_device *pdev)
 		/* default to location configured in hardware */
 		location = efm32_i2c_get_configured_location(ddata);
 
-		dev_info(&pdev->dev, "fall back to location %u\n", location);
+		dev_dbg(&pdev->dev, "fall back to location %u\n", location);
 	}
 
 	ddata->location = location;
@@ -392,7 +392,7 @@ static int efm32_i2c_probe(struct platform_device *pdev)
 		dev_dbg(&pdev->dev, "using frequency %u\n", frequency);
 	} else {
 		frequency = 100000;
-		dev_info(&pdev->dev, "defaulting to 100 kHz\n");
+		dev_dbg(&pdev->dev, "defaulting to 100 kHz\n");
 	}
 	ddata->frequency = frequency;
 

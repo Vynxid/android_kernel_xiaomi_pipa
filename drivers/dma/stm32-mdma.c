@@ -1589,7 +1589,7 @@ static int stm32_mdma_probe(struct platform_device *pdev)
 	if (IS_ERR(dmadev->clk)) {
 		ret = PTR_ERR(dmadev->clk);
 		if (ret == -EPROBE_DEFER)
-			dev_info(&pdev->dev, "Missing controller clock\n");
+			dev_dbg(&pdev->dev, "Missing controller clock\n");
 		return ret;
 	}
 
@@ -1665,7 +1665,7 @@ static int stm32_mdma_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, dmadev);
 
-	dev_info(&pdev->dev, "STM32 MDMA driver registered\n");
+	dev_dbg(&pdev->dev, "STM32 MDMA driver registered\n");
 
 	return 0;
 

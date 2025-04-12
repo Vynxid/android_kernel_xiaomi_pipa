@@ -518,7 +518,7 @@ err_phydev:
 	xgbe_free_pdata(pdata);
 
 err_alloc:
-	dev_notice(dev, "net device not enabled\n");
+	dev_dbg(dev, "net device not enabled\n");
 
 	return ret;
 }

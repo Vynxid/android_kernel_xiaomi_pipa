@@ -460,12 +460,12 @@ static int get_gpmc_timing_reg(
 		if (l)
 			time_ns_min = gpmc_clk_ticks_to_ns(l - 1, cs, cd) + 1;
 		time_ns = gpmc_clk_ticks_to_ns(l, cs, cd);
-		pr_info("gpmc,%s = <%u>; /* %u ns - %u ns; %i ticks%s*/\n",
+		pr_debug("gpmc,%s = <%u>; /* %u ns - %u ns; %i ticks%s*/\n",
 			name, time_ns, time_ns_min, time_ns, l,
 			invalid ? "; invalid " : " ");
 	} else {
 		/* raw format */
-		pr_info("gpmc,%s = <%u>;%s\n", name, l,
+		pr_debug("gpmc,%s = <%u>;%s\n", name, l,
 			invalid ? " /* invalid */" : "");
 	}
 
@@ -473,7 +473,7 @@ static int get_gpmc_timing_reg(
 }
 
 #define GPMC_PRINT_CONFIG(cs, config) \
-	pr_info("cs%i %s: 0x%08x\n", cs, #config, \
+	pr_debug("cs%i %s: 0x%08x\n", cs, #config, \
 		gpmc_cs_read_reg(cs, config))
 #define GPMC_GET_RAW(reg, st, end, field) \
 	get_gpmc_timing_reg(cs, (reg), (st), (end), 0, field, GPMC_CD_FCLK, 0, 1, 0)
@@ -492,7 +492,7 @@ static int get_gpmc_timing_reg(
 
 static void gpmc_show_regs(int cs, const char *desc)
 {
-	pr_info("gpmc cs%i %s:\n", cs, desc);
+	pr_debug("gpmc cs%i %s:\n", cs, desc);
 	GPMC_PRINT_CONFIG(cs, GPMC_CS_CONFIG1);
 	GPMC_PRINT_CONFIG(cs, GPMC_CS_CONFIG2);
 	GPMC_PRINT_CONFIG(cs, GPMC_CS_CONFIG3);
@@ -509,7 +509,7 @@ static void gpmc_cs_show_timings(int cs, const char *desc)
 {
 	gpmc_show_regs(cs, desc);
 
-	pr_info("gpmc cs%i access configuration:\n", cs);
+	pr_debug("gpmc cs%i access configuration:\n", cs);
 	GPMC_GET_RAW_BOOL(GPMC_CS_CONFIG1,  4,  4, "time-para-granularity");
 	GPMC_GET_RAW(GPMC_CS_CONFIG1,  8,  9, "mux-add-data");
 	GPMC_GET_RAW_SHIFT_MAX(GPMC_CS_CONFIG1, 12, 13, 1,
@@ -536,7 +536,7 @@ static void gpmc_cs_show_timings(int cs, const char *desc)
 	GPMC_GET_RAW_BOOL(GPMC_CS_CONFIG6,  7,  7, "cycle2cycle-samecsen");
 	GPMC_GET_RAW_BOOL(GPMC_CS_CONFIG6,  6,  6, "cycle2cycle-diffcsen");
 
-	pr_info("gpmc cs%i timings configuration:\n", cs);
+	pr_debug("gpmc cs%i timings configuration:\n", cs);
 	GPMC_GET_TICKS(GPMC_CS_CONFIG2,  0,  3, "cs-on-ns");
 	GPMC_GET_TICKS(GPMC_CS_CONFIG2,  8, 12, "cs-rd-off-ns");
 	GPMC_GET_TICKS(GPMC_CS_CONFIG2, 16, 20, "cs-wr-off-ns");
@@ -627,7 +627,7 @@ static int set_gpmc_timing_reg(int cs, int reg, int st_bit, int end_bit, int max
 
 	l = gpmc_cs_read_reg(cs, reg);
 #ifdef CONFIG_OMAP_GPMC_DEBUG
-	pr_info(
+	pr_debug(
 		"GPMC CS%d: %-17s: %3d ticks, %3lu ns (was %3i ticks) %3d ns\n",
 	       cs, name, ticks, gpmc_get_clk_period(cs, cd) * ticks / 1000,
 			(l >> st_bit) & mask, time);
@@ -790,7 +790,7 @@ int gpmc_cs_set_timings(int cs, const struct gpmc_timings *t,
 			    clk_activation, GPMC_CD_FCLK);
 
 #ifdef CONFIG_OMAP_GPMC_DEBUG
-	pr_info("GPMC CS%d CLK period is %lu ns (div %d)\n",
+	pr_debug("GPMC CS%d CLK period is %lu ns (div %d)\n",
 			cs, (div * gpmc_get_fclk_period()) / 1000, div);
 #endif
 
@@ -2106,11 +2106,11 @@ static int gpmc_probe_generic_child(struct platform_device *pdev,
 		dev_err(&pdev->dev, "cannot remap GPMC CS %d to %pa\n",
 			cs, &res.start);
 		if (res.start < GPMC_MEM_START) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "GPMC CS %d start cannot be lesser than 0x%x\n",
 				 cs, GPMC_MEM_START);
 		} else if (res.end > GPMC_MEM_END) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				 "GPMC CS %d end cannot be greater than 0x%x\n",
 				 cs, GPMC_MEM_END);
 		}
@@ -2426,7 +2426,7 @@ static int gpmc_probe(struct platform_device *pdev)
 		gpmc_capability = GPMC_HAS_WR_ACCESS | GPMC_HAS_WR_DATA_MUX_BUS;
 	if (GPMC_REVISION_MAJOR(l) > 0x5)
 		gpmc_capability |= GPMC_HAS_MUX_AAD;
-	dev_info(gpmc->dev, "GPMC revision %d.%d\n", GPMC_REVISION_MAJOR(l),
+	dev_dbg(gpmc->dev, "GPMC revision %d.%d\n", GPMC_REVISION_MAJOR(l),
 		 GPMC_REVISION_MINOR(l));
 
 	gpmc_mem_init();

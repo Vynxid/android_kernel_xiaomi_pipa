@@ -303,7 +303,7 @@ int sst_context_init(struct intel_sst_drv *ctx)
 	ctx->ipc_reg.ipcx = SST_IPCX + ctx->pdata->ipc_info->ipc_offset;
 	ctx->ipc_reg.ipcd = SST_IPCD + ctx->pdata->ipc_info->ipc_offset;
 
-	dev_info(ctx->dev, "Got drv data max stream %d\n",
+	dev_dbg(ctx->dev, "Got drv data max stream %d\n",
 				ctx->info.max_streams);
 
 	for (i = 1; i <= ctx->info.max_streams; i++) {

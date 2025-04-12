@@ -648,7 +648,7 @@ static int pd6729_pci_probe(struct pci_dev *dev,
 		goto err_out_disable;
 	}
 
-	dev_info(&dev->dev, "Cirrus PD6729 PCI to PCMCIA Bridge at 0x%llx "
+	dev_dbg(&dev->dev, "Cirrus PD6729 PCI to PCMCIA Bridge at 0x%llx "
 		"on irq %d\n",
 		(unsigned long long)pci_resource_start(dev, 0), dev->irq);
 	/*

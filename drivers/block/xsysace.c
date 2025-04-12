@@ -393,7 +393,7 @@ static inline void ace_dump_mem(void *base, int len)
 
 static void ace_dump_regs(struct ace_device *ace)
 {
-	dev_info(ace->dev,
+	dev_dbg(ace->dev,
 		 "    ctrl:  %.8x  seccnt/cmd: %.4x      ver:%.4x\n"
 		 "    status:%.8x  mpu_lba:%.8x  busmode:%4x\n"
 		 "    error: %.8x  cfg_lba:%.8x  fatstat:%.4x\n",
@@ -495,7 +495,7 @@ static void ace_fsm_dostate(struct ace_device *ace)
 		ace->fsm_state = ACE_FSM_STATE_IDLE;
 		ace->media_change = 1;
 		set_capacity(ace->gd, 0);
-		dev_info(ace->dev, "No CF in slot\n");
+		dev_dbg(ace->dev, "No CF in slot\n");
 
 		/* Drop all in-flight and pending requests */
 		if (ace->req) {
@@ -632,7 +632,7 @@ static void ace_fsm_dostate(struct ace_device *ace)
 			/* Record disk parameters */
 			set_capacity(ace->gd,
 				ata_id_u32(ace->cf_id, ATA_ID_LBA_CAPACITY));
-			dev_info(ace->dev, "capacity: %i sectors\n",
+			dev_dbg(ace->dev, "capacity: %i sectors\n",
 				ata_id_u32(ace->cf_id, ATA_ID_LBA_CAPACITY));
 		}
 
@@ -1049,7 +1049,7 @@ static int ace_setup(struct ace_device *ace)
 	ace_out(ace, ACE_CTRL, val);
 
 	/* Print the identification */
-	dev_info(ace->dev, "Xilinx SystemACE revision %i.%i.%i\n",
+	dev_dbg(ace->dev, "Xilinx SystemACE revision %i.%i.%i\n",
 		 (version >> 12) & 0xf, (version >> 8) & 0x0f, version & 0xff);
 	dev_dbg(ace->dev, "physaddr 0x%llx, mapped to 0x%p, irq=%i\n",
 		(unsigned long long) ace->physaddr, ace->baseaddr, ace->irq);
@@ -1071,7 +1071,7 @@ err_alloc_disk:
 err_blk_initq:
 	iounmap(ace->baseaddr);
 err_ioremap:
-	dev_info(ace->dev, "xsysace: error initializing device at 0x%llx\n",
+	dev_dbg(ace->dev, "xsysace: error initializing device at 0x%llx\n",
 		 (unsigned long long) ace->physaddr);
 	return -ENOMEM;
 }
@@ -1228,7 +1228,7 @@ static int __init ace_init(void)
 	if (rc)
 		goto err_plat;
 
-	pr_info("Xilinx SystemACE device driver, major=%i\n", ace_major);
+	pr_debug("Xilinx SystemACE device driver, major=%i\n", ace_major);
 	return 0;
 
 err_plat:

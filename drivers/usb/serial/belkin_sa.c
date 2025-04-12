@@ -125,7 +125,7 @@ static int belkin_sa_port_probe(struct usb_serial_port *port)
 	/* see comments at top of file */
 	priv->bad_flow_control =
 		(le16_to_cpu(dev->descriptor.bcdDevice) <= 0x0206) ? 1 : 0;
-	dev_info(&dev->dev, "bcdDevice: %04x, bfc: %d\n",
+	dev_dbg(&dev->dev, "bcdDevice: %04x, bfc: %d\n",
 					le16_to_cpu(dev->descriptor.bcdDevice),
 					priv->bad_flow_control);
 

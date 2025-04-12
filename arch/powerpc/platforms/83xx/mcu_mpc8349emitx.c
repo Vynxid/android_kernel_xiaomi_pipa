@@ -90,7 +90,7 @@ static void mcu_power_off(void)
 {
 	struct mcu *mcu = glob_mcu;
 
-	pr_info("Sending power-off request to the MCU...\n");
+	pr_debug("Sending power-off request to the MCU...\n");
 	mutex_lock(&mcu->lock);
 	i2c_smbus_write_byte_data(mcu->client, MCU_REG_CTRL,
 				  mcu->reg_ctrl | MCU_CTRL_POFF);
@@ -172,7 +172,7 @@ static int mcu_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	if (!pm_power_off) {
 		glob_mcu = mcu;
 		pm_power_off = mcu_power_off;
-		dev_info(&client->dev, "will provide power-off service\n");
+		dev_dbg(&client->dev, "will provide power-off service\n");
 	}
 
 	if (device_create_file(&client->dev, &dev_attr_status))

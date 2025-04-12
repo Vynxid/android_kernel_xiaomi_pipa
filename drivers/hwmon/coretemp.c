@@ -380,7 +380,7 @@ static int get_tjmax(struct cpuinfo_x86 *c, u32 id, struct device *dev)
 	}
 
 	if (force_tjmax) {
-		dev_notice(dev, "TjMax forced to %d degrees C by user\n",
+		dev_dbg(dev, "TjMax forced to %d degrees C by user\n",
 			   force_tjmax);
 		return force_tjmax * 1000;
 	}

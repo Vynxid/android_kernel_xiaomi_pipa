@@ -522,7 +522,7 @@ found:
 
 	bridge->driver = &ati_generic_bridge;
 
-	dev_info(&pdev->dev, "Ati %s chipset\n", devs[j].chipset_name);
+	dev_dbg(&pdev->dev, "Ati %s chipset\n", devs[j].chipset_name);
 
 	/* Fill in the mode register */
 	pci_read_config_dword(pdev,

@@ -279,7 +279,7 @@ static void diolan_fw_version(struct i2c_diolan_u2c *dev)
 
 	ret = diolan_usb_cmd(dev, CMD_GET_FW_VERSION, true);
 	if (ret >= 2)
-		dev_info(&dev->interface->dev,
+		dev_dbg(&dev->interface->dev,
 			 "Diolan U2C firmware version %u.%u\n",
 			 (unsigned int)dev->ibuffer[0],
 			 (unsigned int)dev->ibuffer[1]);
@@ -293,7 +293,7 @@ static void diolan_get_serial(struct i2c_diolan_u2c *dev)
 	ret = diolan_usb_cmd(dev, CMD_GET_SERIAL, true);
 	if (ret >= 4) {
 		serial = le32_to_cpu(*(u32 *)dev->ibuffer);
-		dev_info(&dev->interface->dev,
+		dev_dbg(&dev->interface->dev,
 			 "Diolan U2C serial number %u\n", serial);
 	}
 }
@@ -315,7 +315,7 @@ static int diolan_init(struct i2c_diolan_u2c *dev)
 		frequency = U2C_I2C_FREQ(speed);
 	}
 
-	dev_info(&dev->interface->dev,
+	dev_dbg(&dev->interface->dev,
 		 "Diolan U2C at USB bus %03d address %03d speed %d Hz\n",
 		 dev->usb_dev->bus->busnum, dev->usb_dev->devnum, frequency);
 

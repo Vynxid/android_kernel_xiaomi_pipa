@@ -1633,7 +1633,7 @@ static int fimc_lite_remove(struct platform_device *pdev)
 	vb2_dma_contig_clear_max_seg_size(dev);
 	fimc_lite_clk_put(fimc);
 
-	dev_info(dev, "Driver unloaded\n");
+	dev_dbg(dev, "Driver unloaded\n");
 	return 0;
 }
 

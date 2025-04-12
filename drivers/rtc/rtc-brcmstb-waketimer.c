@@ -268,7 +268,7 @@ static int brcmstb_waketmr_probe(struct platform_device *pdev)
 		goto err_notifier;
 	}
 
-	dev_info(dev, "registered, with irq %d\n", timer->irq);
+	dev_dbg(dev, "registered, with irq %d\n", timer->irq);
 
 	return 0;
 

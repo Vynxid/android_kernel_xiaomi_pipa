@@ -160,7 +160,7 @@ static void nvme_delete_ctrl_work(struct work_struct *work)
 	struct nvme_ctrl *ctrl =
 		container_of(work, struct nvme_ctrl, delete_work);
 
-	dev_info(ctrl->device,
+	dev_dbg(ctrl->device,
 		 "Removing ctrl: NQN \"%s\"\n", ctrl->opts->subsysnqn);
 
 	flush_work(&ctrl->reset_work);
@@ -497,14 +497,14 @@ static int nvme_configure_directives(struct nvme_ctrl *ctrl)
 
 	ctrl->nssa = le16_to_cpu(s.nssa);
 	if (ctrl->nssa < BLK_MAX_WRITE_HINTS - 1) {
-		dev_info(ctrl->device, "too few streams (%u) available\n",
+		dev_dbg(ctrl->device, "too few streams (%u) available\n",
 					ctrl->nssa);
 		nvme_disable_streams(ctrl);
 		return 0;
 	}
 
 	ctrl->nr_streams = min_t(unsigned, ctrl->nssa, BLK_MAX_WRITE_HINTS - 1);
-	dev_info(ctrl->device, "Using %u streams\n", ctrl->nr_streams);
+	dev_dbg(ctrl->device, "Using %u streams\n", ctrl->nr_streams);
 	return 0;
 }
 
@@ -2525,7 +2525,7 @@ int nvme_init_identify(struct nvme_ctrl *ctrl)
 						 shutdown_timeout, 60);
 
 		if (ctrl->shutdown_timeout != shutdown_timeout)
-			dev_info(ctrl->device,
+			dev_dbg(ctrl->device,
 				 "Shutdown timeout set to %u seconds\n",
 				 ctrl->shutdown_timeout);
 	} else
@@ -3412,7 +3412,7 @@ static void nvme_scan_work(struct work_struct *work)
 	WARN_ON_ONCE(!ctrl->tagset);
 
 	if (test_and_clear_bit(NVME_AER_NOTICE_NS_CHANGED, &ctrl->events)) {
-		dev_info(ctrl->device, "rescanning namespaces.\n");
+		dev_dbg(ctrl->device, "rescanning namespaces.\n");
 		nvme_clear_changed_ns_log(ctrl);
 	}
 

@@ -1670,7 +1670,7 @@ struct qcom_smd_edge *qcom_smd_register_edge(struct device *parent,
 	/* ipc logging handler */
 	edge->ipc = ipc_log_context_create(4, dev_name(&edge->dev), 0);
 	if (!edge->ipc)
-		dev_info(&edge->dev, "%s: failed to create ipc log cntxt\n",
+		dev_dbg(&edge->dev, "%s: failed to create ipc log cntxt\n",
 							__func__);
 
 	ret = device_register(&edge->dev);

@@ -299,7 +299,7 @@ static int max8997_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
 	if (ret < 0)
 		return ret;
 
-	dev_info(info->dev, "%s: %d-%02d-%02d %02d:%02d:%02d\n", __func__,
+	dev_dbg(info->dev, "%s: %d-%02d-%02d %02d:%02d:%02d\n", __func__,
 			data[RTC_YEAR] + 2000, data[RTC_MONTH], data[RTC_DATE],
 			data[RTC_HOUR], data[RTC_MIN], data[RTC_SEC]);
 
@@ -348,7 +348,7 @@ static irqreturn_t max8997_rtc_alarm_irq(int irq, void *data)
 {
 	struct max8997_rtc_info *info = data;
 
-	dev_info(info->dev, "%s:irq(%d)\n", __func__, irq);
+	dev_dbg(info->dev, "%s:irq(%d)\n", __func__, irq);
 
 	rtc_update_irq(info->rtc_dev, 1, RTC_IRQF | RTC_AF);
 
@@ -378,7 +378,7 @@ static void max8997_rtc_enable_wtsr(struct max8997_rtc_info *info, bool enable)
 
 	mask = WTSR_EN_MASK | WTSRT_MASK;
 
-	dev_info(info->dev, "%s: %s WTSR\n", __func__,
+	dev_dbg(info->dev, "%s: %s WTSR\n", __func__,
 			enable ? "enable" : "disable");
 
 	ret = max8997_update_reg(info->rtc, MAX8997_RTC_WTSR_SMPL, val, mask);
@@ -406,7 +406,7 @@ static void max8997_rtc_enable_smpl(struct max8997_rtc_info *info, bool enable)
 
 	mask = SMPL_EN_MASK | SMPLT_MASK;
 
-	dev_info(info->dev, "%s: %s SMPL\n", __func__,
+	dev_dbg(info->dev, "%s: %s SMPL\n", __func__,
 			enable ? "enable" : "disable");
 
 	ret = max8997_update_reg(info->rtc, MAX8997_RTC_WTSR_SMPL, val, mask);
@@ -420,7 +420,7 @@ static void max8997_rtc_enable_smpl(struct max8997_rtc_info *info, bool enable)
 
 	val = 0;
 	max8997_read_reg(info->rtc, MAX8997_RTC_WTSR_SMPL, &val);
-	pr_info("WTSR_SMPL(0x%02x)\n", val);
+	pr_debug("WTSR_SMPL(0x%02x)\n", val);
 }
 
 static int max8997_rtc_init_reg(struct max8997_rtc_info *info)

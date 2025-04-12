@@ -208,7 +208,7 @@ static int lm355x_control(struct lm355x_chip_data *chip,
 	if (ret < 0)
 		goto out;
 	if (chip->last_flag & preg[REG_FLAG].mask)
-		dev_info(chip->dev, "%s Last FLAG is 0x%x\n",
+		dev_dbg(chip->dev, "%s Last FLAG is 0x%x\n",
 			 lm355x_name[chip->type],
 			 chip->last_flag & preg[REG_FLAG].mask);
 	/* brightness 0 means shutdown */
@@ -235,7 +235,7 @@ static int lm355x_control(struct lm355x_chip_data *chip,
 			if (ret < 0)
 				goto out;
 			opmode = MODE_SHDN;
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "torch brt is set - ext. torch pin mode\n");
 		}
 		break;
@@ -264,7 +264,7 @@ static int lm355x_control(struct lm355x_chip_data *chip,
 			if (ret < 0)
 				goto out;
 			opmode = MODE_SHDN;
-			dev_info(chip->dev,
+			dev_dbg(chip->dev,
 				 "flash brt is set - ext. strobe pin mode\n");
 		}
 		break;
@@ -486,7 +486,7 @@ static int lm355x_probe(struct i2c_client *client,
 	if (err < 0)
 		goto err_create_indicator_file;
 
-	dev_info(&client->dev, "%s is initialized\n",
+	dev_dbg(&client->dev, "%s is initialized\n",
 		 lm355x_name[id->driver_data]);
 	return 0;
 
@@ -507,7 +507,7 @@ static int lm355x_remove(struct i2c_client *client)
 	led_classdev_unregister(&chip->cdev_indicator);
 	led_classdev_unregister(&chip->cdev_torch);
 	led_classdev_unregister(&chip->cdev_flash);
-	dev_info(&client->dev, "%s is removed\n", lm355x_name[chip->type]);
+	dev_dbg(&client->dev, "%s is removed\n", lm355x_name[chip->type]);
 
 	return 0;
 }

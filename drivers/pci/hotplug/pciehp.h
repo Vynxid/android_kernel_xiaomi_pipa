@@ -53,7 +53,7 @@ do {									\
 #define ctrl_err(ctrl, format, arg...)					\
 	dev_err(&ctrl->pcie->device, format, ## arg)
 #define ctrl_info(ctrl, format, arg...)					\
-	dev_info(&ctrl->pcie->device, format, ## arg)
+	dev_dbg(&ctrl->pcie->device, format, ## arg)
 #define ctrl_warn(ctrl, format, arg...)					\
 	dev_warn(&ctrl->pcie->device, format, ## arg)
 

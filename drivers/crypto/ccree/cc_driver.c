@@ -308,7 +308,7 @@ static int init_cc_resources(struct platform_device *plat_dev)
 	dev_dbg(dev, "CC SIGNATURE=0x%08X\n", signature_val);
 
 	/* Display HW versions */
-	dev_info(dev, "ARM CryptoCell %s Driver: HW version 0x%08X, Driver version %s\n",
+	dev_dbg(dev, "ARM CryptoCell %s Driver: HW version 0x%08X, Driver version %s\n",
 		 hw_rev->name, cc_ioread(new_drvdata, new_drvdata->ver_offset),
 		 DRV_MODULE_VERSION);
 
@@ -483,7 +483,7 @@ static int ccree_probe(struct platform_device *plat_dev)
 	if (rc)
 		return rc;
 
-	dev_info(dev, "ARM ccree device initialized\n");
+	dev_dbg(dev, "ARM ccree device initialized\n");
 
 	return 0;
 }
@@ -496,7 +496,7 @@ static int ccree_remove(struct platform_device *plat_dev)
 
 	cleanup_cc_resources(plat_dev);
 
-	dev_info(dev, "ARM ccree device terminated\n");
+	dev_dbg(dev, "ARM ccree device terminated\n");
 
 	return 0;
 }

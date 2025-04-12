@@ -260,7 +260,7 @@ static int adf_ctl_is_device_in_use(int id)
 	list_for_each_entry(dev, adf_devmgr_get_head(), list) {
 		if (id == dev->accel_id || id == ADF_CFG_ALL_DEVICES) {
 			if (adf_devmgr_in_reset(dev) || adf_dev_in_use(dev)) {
-				dev_info(&GET_DEV(dev),
+				dev_dbg(&GET_DEV(dev),
 					 "device qat_dev%d is busy\n",
 					 dev->accel_id);
 				return -EBUSY;
@@ -320,9 +320,9 @@ static int adf_ctl_ioctl_dev_stop(struct file *fp, unsigned int cmd,
 		goto out;
 
 	if (ctl_data->device_id == ADF_CFG_ALL_DEVICES)
-		pr_info("QAT: Stopping all acceleration devices.\n");
+		pr_debug("QAT: Stopping all acceleration devices.\n");
 	else
-		pr_info("QAT: Stopping acceleration device qat_dev%d.\n",
+		pr_debug("QAT: Stopping acceleration device qat_dev%d.\n",
 			ctl_data->device_id);
 
 	adf_ctl_stop_devices(ctl_data->device_id);
@@ -349,14 +349,14 @@ static int adf_ctl_ioctl_dev_start(struct file *fp, unsigned int cmd,
 		goto out;
 
 	if (!adf_dev_started(accel_dev)) {
-		dev_info(&GET_DEV(accel_dev),
+		dev_dbg(&GET_DEV(accel_dev),
 			 "Starting acceleration device qat_dev%d.\n",
 			 ctl_data->device_id);
 		ret = adf_dev_init(accel_dev);
 		if (!ret)
 			ret = adf_dev_start(accel_dev);
 	} else {
-		dev_info(&GET_DEV(accel_dev),
+		dev_dbg(&GET_DEV(accel_dev),
 			 "Acceleration device qat_dev%d already started.\n",
 			 ctl_data->device_id);
 	}
@@ -387,34 +387,34 @@ static int adf_ctl_ioctl_get_status(struct file *fp, unsigned int cmd,
 				    unsigned long arg)
 {
 	struct adf_hw_device_data *hw_data;
-	struct adf_dev_status_info dev_info;
+	struct adf_dev_status_info dev_dbg;
 	struct adf_accel_dev *accel_dev;
 
-	if (copy_from_user(&dev_info, (void __user *)arg,
+	if (copy_from_user(&dev_dbg, (void __user *)arg,
 			   sizeof(struct adf_dev_status_info))) {
 		pr_err("QAT: failed to copy from user.\n");
 		return -EFAULT;
 	}
 
-	accel_dev = adf_devmgr_get_dev_by_id(dev_info.accel_id);
+	accel_dev = adf_devmgr_get_dev_by_id(dev_dbg.accel_id);
 	if (!accel_dev)
 		return -ENODEV;
 
 	hw_data = accel_dev->hw_device;
-	dev_info.state = adf_dev_started(accel_dev) ? DEV_UP : DEV_DOWN;
-	dev_info.num_ae = hw_data->get_num_aes(hw_data);
-	dev_info.num_accel = hw_data->get_num_accels(hw_data);
-	dev_info.num_logical_accel = hw_data->num_logical_accel;
-	dev_info.banks_per_accel = hw_data->num_banks
+	dev_dbg.state = adf_dev_started(accel_dev) ? DEV_UP : DEV_DOWN;
+	dev_dbg.num_ae = hw_data->get_num_aes(hw_data);
+	dev_dbg.num_accel = hw_data->get_num_accels(hw_data);
+	dev_dbg.num_logical_accel = hw_data->num_logical_accel;
+	dev_dbg.banks_per_accel = hw_data->num_banks
 					/ hw_data->num_logical_accel;
-	strlcpy(dev_info.name, hw_data->dev_class->name, sizeof(dev_info.name));
-	dev_info.instance_id = hw_data->instance_id;
-	dev_info.type = hw_data->dev_class->type;
-	dev_info.bus = accel_to_pci_dev(accel_dev)->bus->number;
-	dev_info.dev = PCI_SLOT(accel_to_pci_dev(accel_dev)->devfn);
-	dev_info.fun = PCI_FUNC(accel_to_pci_dev(accel_dev)->devfn);
+	strlcpy(dev_dbg.name, hw_data->dev_class->name, sizeof(dev_dbg.name));
+	dev_dbg.instance_id = hw_data->instance_id;
+	dev_dbg.type = hw_data->dev_class->type;
+	dev_dbg.bus = accel_to_pci_dev(accel_dev)->bus->number;
+	dev_dbg.dev = PCI_SLOT(accel_to_pci_dev(accel_dev)->devfn);
+	dev_dbg.fun = PCI_FUNC(accel_to_pci_dev(accel_dev)->devfn);
 
-	if (copy_to_user((void __user *)arg, &dev_info,
+	if (copy_to_user((void __user *)arg, &dev_dbg,
 			 sizeof(struct adf_dev_status_info))) {
 		dev_err(&GET_DEV(accel_dev), "failed to copy status.\n");
 		return -EFAULT;

@@ -216,7 +216,7 @@ struct e752x_pvt {
 	int mc_symmetric;
 	u8 map[8];
 	int map_type;
-	const struct e752x_dev_info *dev_info;
+	const struct e752x_dev_info *dev_dbg;
 };
 
 struct e752x_dev_info {
@@ -847,7 +847,7 @@ static void e752x_get_error_info(struct mem_ctl_info *mci,
 	pci_read_config_dword(dev, E752X_FERR_GLOBAL, &info->ferr_global);
 
 	if (info->ferr_global) {
-		if (pvt->dev_info->err_dev == PCI_DEVICE_ID_INTEL_3100_1_ERR) {
+		if (pvt->dev_dbg->err_dev == PCI_DEVICE_ID_INTEL_3100_1_ERR) {
 			pci_read_config_dword(dev, I3100_NSI_FERR,
 					     &info->nsi_ferr);
 			info->hi_ferr = 0;
@@ -899,7 +899,7 @@ static void e752x_get_error_info(struct mem_ctl_info *mci,
 	pci_read_config_dword(dev, E752X_NERR_GLOBAL, &info->nerr_global);
 
 	if (info->nerr_global) {
-		if (pvt->dev_info->err_dev == PCI_DEVICE_ID_INTEL_3100_1_ERR) {
+		if (pvt->dev_dbg->err_dev == PCI_DEVICE_ID_INTEL_3100_1_ERR) {
 			pci_read_config_dword(dev, I3100_NSI_NERR,
 					     &info->nsi_nerr);
 			info->hi_nerr = 0;
@@ -993,7 +993,7 @@ static int set_sdram_scrub_rate(struct mem_ctl_info *mci, u32 new_bw)
 	struct pci_dev *pdev = pvt->dev_d0f0;
 	int i;
 
-	if (pvt->dev_info->ctl_dev == PCI_DEVICE_ID_INTEL_3100_0)
+	if (pvt->dev_dbg->ctl_dev == PCI_DEVICE_ID_INTEL_3100_0)
 		scrubrates = scrubrates_i3100;
 	else
 		scrubrates = scrubrates_e752x;
@@ -1023,7 +1023,7 @@ static int get_sdram_scrub_rate(struct mem_ctl_info *mci)
 	u16 scrubval;
 	int i;
 
-	if (pvt->dev_info->ctl_dev == PCI_DEVICE_ID_INTEL_3100_0)
+	if (pvt->dev_dbg->ctl_dev == PCI_DEVICE_ID_INTEL_3100_0)
 		scrubrates = scrubrates_i3100;
 	else
 		scrubrates = scrubrates_e752x;
@@ -1176,7 +1176,7 @@ static int e752x_get_devs(struct pci_dev *pdev, int dev_idx,
 			struct e752x_pvt *pvt)
 {
 	pvt->dev_d0f1 = pci_get_device(PCI_VENDOR_ID_INTEL,
-				pvt->dev_info->err_dev, NULL);
+				pvt->dev_dbg->err_dev, NULL);
 
 	if (pvt->dev_d0f1 == NULL) {
 		pvt->dev_d0f1 = pci_scan_single_device(pdev->bus,
@@ -1236,7 +1236,7 @@ static void e752x_init_error_reporting_regs(struct e752x_pvt *pvt)
 
 	dev = pvt->dev_d0f1;
 	/* Turn off error disable & SMI in case the BIOS turned it on */
-	if (pvt->dev_info->err_dev == PCI_DEVICE_ID_INTEL_3100_1_ERR) {
+	if (pvt->dev_dbg->err_dev == PCI_DEVICE_ID_INTEL_3100_1_ERR) {
 		pci_write_config_dword(dev, I3100_NSI_EMASK, 0);
 		pci_write_config_dword(dev, I3100_NSI_SMICMD, 0);
 	} else {
@@ -1306,7 +1306,7 @@ static int e752x_probe1(struct pci_dev *pdev, int dev_idx)
 
 	edac_dbg(3, "init pvt\n");
 	pvt = (struct e752x_pvt *)mci->pvt_info;
-	pvt->dev_info = &e752x_devs[dev_idx];
+	pvt->dev_dbg = &e752x_devs[dev_idx];
 	pvt->mc_symmetric = ((ddrcsr & 0x10) != 0);
 
 	if (e752x_get_devs(pdev, dev_idx, pvt)) {
@@ -1315,7 +1315,7 @@ static int e752x_probe1(struct pci_dev *pdev, int dev_idx)
 	}
 
 	edac_dbg(3, "more mci init\n");
-	mci->ctl_name = pvt->dev_info->ctl_name;
+	mci->ctl_name = pvt->dev_dbg->ctl_name;
 	mci->dev_name = pci_name(pdev);
 	mci->edac_check = e752x_check;
 	mci->ctl_page_to_phys = ctl_page_to_phys;

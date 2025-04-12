@@ -50,7 +50,7 @@ int __fscache_register_netfs(struct fscache_netfs *netfs)
 
 	netfs->primary_index = cookie;
 
-	pr_notice("Netfs '%s' registered for caching\n", netfs->name);
+	pr_debug("Netfs '%s' registered for caching\n", netfs->name);
 	trace_fscache_netfs(netfs);
 	_leave(" = 0");
 	return 0;
@@ -71,7 +71,7 @@ void __fscache_unregister_netfs(struct fscache_netfs *netfs)
 	_enter("{%s.%u}", netfs->name, netfs->version);
 
 	fscache_relinquish_cookie(netfs->primary_index, NULL, false);
-	pr_notice("Netfs '%s' unregistered from caching\n", netfs->name);
+	pr_debug("Netfs '%s' unregistered from caching\n", netfs->name);
 
 	_leave("");
 }

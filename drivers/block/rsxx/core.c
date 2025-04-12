@@ -366,7 +366,7 @@ static irqreturn_t rsxx_isr(int irq, void *pdata)
 			 * where PCI reads return all Fs, but retrying the read
 			 * a little later will return as expected.
 			 */
-			dev_info(CARD_TO_DEV(card),
+			dev_dbg(CARD_TO_DEV(card),
 				"ISR = 0xFFFFFFFF, retrying later\n");
 			break;
 		}
@@ -422,7 +422,7 @@ static void card_state_change(struct rsxx_cardinfo *card,
 {
 	int st;
 
-	dev_info(CARD_TO_DEV(card),
+	dev_dbg(CARD_TO_DEV(card),
 		"card state change detected.(%s -> %s)\n",
 		rsxx_card_state_to_str(card->state),
 		rsxx_card_state_to_str(new_state));
@@ -495,7 +495,7 @@ static void card_event_handler(struct work_struct *work)
 
 	st = rsxx_get_card_state(card, &state);
 	if (st) {
-		dev_info(CARD_TO_DEV(card),
+		dev_dbg(CARD_TO_DEV(card),
 			"Failed reading state after event.\n");
 		return;
 	}
@@ -610,7 +610,7 @@ static void rsxx_eeh_failure(struct pci_dev *dev)
 		cnt += rsxx_dma_cancel(&card->ctrl[i]);
 
 		if (cnt)
-			dev_info(CARD_TO_DEV(card),
+			dev_dbg(CARD_TO_DEV(card),
 				"Freed %d queued DMAs on channel %d\n",
 				cnt, card->ctrl[i].id);
 	}
@@ -719,7 +719,7 @@ static pci_ers_result_t rsxx_slot_reset(struct pci_dev *dev)
 				&card->ctrl[i].issue_dma_work);
 	}
 
-	dev_info(&dev->dev, "IBM Flash Adapter PCI: recovery complete.\n");
+	dev_dbg(&dev->dev, "IBM Flash Adapter PCI: recovery complete.\n");
 
 	return PCI_ERS_RESULT_RECOVERED;
 
@@ -763,7 +763,7 @@ static int rsxx_pci_probe(struct pci_dev *dev,
 	int st;
 	unsigned int sync_timeout;
 
-	dev_info(&dev->dev, "PCI-Flash SSD discovered\n");
+	dev_dbg(&dev->dev, "PCI-Flash SSD discovered\n");
 
 	card = kzalloc(sizeof(*card), GFP_KERNEL);
 	if (!card)
@@ -862,7 +862,7 @@ static int rsxx_pci_probe(struct pci_dev *dev,
 	/************* Setup DMA Engine *************/
 	st = rsxx_get_num_targets(card, &card->n_targets);
 	if (st)
-		dev_info(CARD_TO_DEV(card),
+		dev_dbg(CARD_TO_DEV(card),
 			"Failed reading the number of DMA targets\n");
 
 	card->ctrl = kcalloc(card->n_targets, sizeof(*card->ctrl),
@@ -874,7 +874,7 @@ static int rsxx_pci_probe(struct pci_dev *dev,
 
 	st = rsxx_dma_setup(card);
 	if (st) {
-		dev_info(CARD_TO_DEV(card),
+		dev_dbg(CARD_TO_DEV(card),
 			"Failed to setup DMA engine\n");
 		goto failed_dma_setup;
 	}
@@ -895,7 +895,7 @@ static int rsxx_pci_probe(struct pci_dev *dev,
 
 	rsxx_get_card_state(card, &card->state);
 
-	dev_info(CARD_TO_DEV(card),
+	dev_dbg(CARD_TO_DEV(card),
 		"card state: %s\n",
 		rsxx_card_state_to_str(card->state));
 
@@ -916,7 +916,7 @@ static int rsxx_pci_probe(struct pci_dev *dev,
 		if (sync_start) {
 			sync_timeout = SYNC_START_TIMEOUT;
 
-			dev_info(CARD_TO_DEV(card),
+			dev_dbg(CARD_TO_DEV(card),
 				 "Waiting for card to startup\n");
 
 			do {
@@ -932,7 +932,7 @@ static int rsxx_pci_probe(struct pci_dev *dev,
 					 "Card startup timed out\n");
 				card->size8 = 0;
 			} else {
-				dev_info(CARD_TO_DEV(card),
+				dev_dbg(CARD_TO_DEV(card),
 					"card state: %s\n",
 					rsxx_card_state_to_str(card->state));
 				st = rsxx_get_card_size8(card, &card->size8);
@@ -995,7 +995,7 @@ static void rsxx_pci_remove(struct pci_dev *dev)
 	if (!card)
 		return;
 
-	dev_info(CARD_TO_DEV(card),
+	dev_dbg(CARD_TO_DEV(card),
 		"Removing PCI-Flash SSD.\n");
 
 	rsxx_detach_dev(card);
@@ -1062,7 +1062,7 @@ static void rsxx_pci_shutdown(struct pci_dev *dev)
 	if (!card)
 		return;
 
-	dev_info(CARD_TO_DEV(card), "Shutting down PCI-Flash SSD.\n");
+	dev_dbg(CARD_TO_DEV(card), "Shutting down PCI-Flash SSD.\n");
 
 	rsxx_detach_dev(card);
 

@@ -51,7 +51,7 @@ static int service_remote_etm_new_server(struct qmi_handle *qmi,
 	drvdata->s_addr.sq_node = svc->node;
 	drvdata->s_addr.sq_port = svc->port;
 	drvdata->service_connected = true;
-	dev_info(drvdata->dev,
+	dev_dbg(drvdata->dev,
 		"Connection established between QMI handle and %d service\n",
 		drvdata->inst_id);
 
@@ -64,7 +64,7 @@ static void service_remote_etm_del_server(struct qmi_handle *qmi,
 	struct remote_etm_drvdata *drvdata = container_of(qmi,
 					struct remote_etm_drvdata, handle);
 	drvdata->service_connected = false;
-	dev_info(drvdata->dev,
+	dev_dbg(drvdata->dev,
 		"Connection disconnected between QMI handle and %d service\n",
 		drvdata->inst_id);
 }
@@ -140,7 +140,7 @@ static int remote_etm_enable(struct coresight_device *csdev,
 	drvdata->enable = true;
 	mutex_unlock(&drvdata->mutex);
 
-	dev_info(drvdata->dev, "Remote ETM tracing enabled for instance %d\n",
+	dev_dbg(drvdata->dev, "Remote ETM tracing enabled for instance %d\n",
 				drvdata->inst_id);
 	return 0;
 err:
@@ -203,7 +203,7 @@ static void remote_etm_disable(struct coresight_device *csdev,
 	}
 
 	drvdata->enable = false;
-	dev_info(drvdata->dev, "Remote ETM tracing disabled for instance %d\n",
+	dev_dbg(drvdata->dev, "Remote ETM tracing disabled for instance %d\n",
 				drvdata->inst_id);
 err:
 	mutex_unlock(&drvdata->mutex);
@@ -284,7 +284,7 @@ static int remote_etm_probe(struct platform_device *pdev)
 		ret = PTR_ERR(drvdata->csdev);
 		goto err;
 	}
-	dev_info(dev, "Remote ETM initialized\n");
+	dev_dbg(dev, "Remote ETM initialized\n");
 
 	if (drvdata->inst_id >= sizeof(int)*BITS_PER_BYTE)
 		dev_err(dev, "inst_id greater than boot_enable bit mask\n");

@@ -195,7 +195,7 @@ static int __init cmx270_init(void)
 	/* Scan to find existence of the device */
 	ret = nand_scan(this, 1);
 	if (ret) {
-		pr_notice("No NAND device\n");
+		pr_debug("No NAND device\n");
 		goto err_scan;
 	}
 

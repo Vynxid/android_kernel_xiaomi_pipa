@@ -497,7 +497,7 @@ static int bdc_probe(struct platform_device *pdev)
 
 	clk = devm_clk_get(dev, "sw_usbd");
 	if (IS_ERR(clk)) {
-		dev_info(dev, "Clock not found in Device Tree\n");
+		dev_dbg(dev, "Clock not found in Device Tree\n");
 		clk = NULL;
 	}
 
@@ -540,7 +540,7 @@ static int bdc_probe(struct platform_device *pdev)
 	} else {
 		bdc->num_phys = 0;
 	}
-	dev_info(dev, "Using %d phy(s)\n", bdc->num_phys);
+	dev_dbg(dev, "Using %d phy(s)\n", bdc->num_phys);
 
 	for (phy_num = 0; phy_num < bdc->num_phys; phy_num++) {
 		bdc->phys[phy_num] = devm_of_phy_get_by_index(

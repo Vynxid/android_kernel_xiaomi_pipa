@@ -263,7 +263,7 @@ int tc_dwc_g210_config_40_bit(struct ufs_hba *hba)
 {
 	int ret = 0;
 
-	dev_info(hba->dev, "Configuring Test Chip 40-bit RMMI\n");
+	dev_dbg(hba->dev, "Configuring Test Chip 40-bit RMMI\n");
 	ret = tc_dwc_g210_setup_40bit_rmmi(hba);
 	if (ret) {
 		dev_err(hba->dev, "Configuration failed\n");
@@ -295,7 +295,7 @@ int tc_dwc_g210_config_20_bit(struct ufs_hba *hba)
 {
 	int ret = 0;
 
-	dev_info(hba->dev, "Configuring Test Chip 20-bit RMMI\n");
+	dev_dbg(hba->dev, "Configuring Test Chip 20-bit RMMI\n");
 	ret = tc_dwc_g210_setup_20bit_rmmi(hba);
 	if (ret) {
 		dev_err(hba->dev, "Configuration failed\n");

@@ -715,7 +715,7 @@ static int smi_fe_init(struct smi_port *port)
 	}
 	/* init MAC.*/
 	ret = smi_read_eeprom(&dev->i2c_bus[0], 0xc0, mac_ee, 16);
-	dev_info(&port->dev->pci_dev->dev,
+	dev_dbg(&port->dev->pci_dev->dev,
 		"%s port %d MAC: %pM\n", dev->info->name,
 		port->idx, mac_ee + (port->idx)*8);
 	memcpy(adap->proposed_mac, mac_ee + (port->idx)*8, 6);
@@ -960,7 +960,7 @@ static int smi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	dev->pci_dev = pdev;
 	pci_set_drvdata(pdev, dev);
 	dev->info = (struct smi_cfg_info *) id->driver_data;
-	dev_info(&dev->pci_dev->dev,
+	dev_dbg(&dev->pci_dev->dev,
 		"card detected: %s\n", dev->info->name);
 
 	dev->nr = dev->info->type;
@@ -1006,7 +1006,7 @@ static int smi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	if (pci_msi_enabled())
 		ret = pci_enable_msi(dev->pci_dev);
 	if (ret)
-		dev_info(&dev->pci_dev->dev, "MSI not available.\n");
+		dev_dbg(&dev->pci_dev->dev, "MSI not available.\n");
 #endif
 
 	ret = request_irq(dev->pci_dev->irq, smi_irq_handler,

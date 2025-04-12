@@ -211,7 +211,7 @@ EXPORT_SYMBOL_GPL(tps80031_ext_power_req_config);
 
 static void tps80031_power_off(void)
 {
-	dev_info(tps80031_power_off_dev->dev, "switching off PMU\n");
+	dev_dbg(tps80031_power_off_dev->dev, "switching off PMU\n");
 	tps80031_write(tps80031_power_off_dev->dev, TPS80031_SLAVE_ID1,
 				TPS80031_PHOENIX_DEV_ON, TPS80031_DEVOFF);
 }
@@ -473,7 +473,7 @@ static int tps80031_probe(struct i2c_client *client,
 		goto fail_client_reg;
 	}
 
-	dev_info(&client->dev, "ES version 0x%02x and EPROM version 0x%02x\n",
+	dev_dbg(&client->dev, "ES version 0x%02x and EPROM version 0x%02x\n",
 					es_version, ep_ver);
 	tps80031->es_version = es_version;
 	tps80031->dev = &client->dev;

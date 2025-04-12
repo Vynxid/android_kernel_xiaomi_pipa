@@ -394,12 +394,12 @@ static int lcd_probe(struct usb_interface *interface,
 
 	i = le16_to_cpu(dev->udev->descriptor.bcdDevice);
 
-	dev_info(&interface->dev, "USBLCD Version %1d%1d.%1d%1d found "
+	dev_dbg(&interface->dev, "USBLCD Version %1d%1d.%1d%1d found "
 		 "at address %d\n", (i & 0xF000)>>12, (i & 0xF00)>>8,
 		 (i & 0xF0)>>4, (i & 0xF), dev->udev->devnum);
 
 	/* let the user know what node this device is now attached to */
-	dev_info(&interface->dev, "USB LCD device now attached to USBLCD-%d\n",
+	dev_dbg(&interface->dev, "USB LCD device now attached to USBLCD-%d\n",
 		 interface->minor);
 	return 0;
 
@@ -454,7 +454,7 @@ static void lcd_disconnect(struct usb_interface *interface)
 	/* decrement our usage count */
 	kref_put(&dev->kref, lcd_delete);
 
-	dev_info(&interface->dev, "USB LCD #%d now disconnected\n", minor);
+	dev_dbg(&interface->dev, "USB LCD #%d now disconnected\n", minor);
 }
 
 static struct usb_driver lcd_driver = {

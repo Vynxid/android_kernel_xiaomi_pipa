@@ -259,7 +259,7 @@ static int da9030_init_chip(struct da903x_chip *chip)
 	if (err)
 		return err;
 
-	dev_info(chip->dev, "DA9030 (CHIP ID: 0x%02x) detected\n", chip_id);
+	dev_dbg(chip->dev, "DA9030 (CHIP ID: 0x%02x) detected\n", chip_id);
 	return 0;
 }
 
@@ -336,7 +336,7 @@ static int da9034_init_chip(struct da903x_chip *chip)
 	/* make ADTV1 and SDTV1 effective */
 	__da903x_write(chip->client, 0x20, 0x00);
 
-	dev_info(chip->dev, "DA9034 (CHIP ID: 0x%02x) detected\n", chip_id);
+	dev_dbg(chip->dev, "DA9034 (CHIP ID: 0x%02x) detected\n", chip_id);
 	return 0;
 }
 

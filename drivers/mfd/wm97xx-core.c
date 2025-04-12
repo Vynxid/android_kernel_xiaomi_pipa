@@ -273,7 +273,7 @@ static int wm97xx_ac97_probe(struct ac97_codec_device *adev)
 
 
 	ac97_set_drvdata(adev, wm97xx);
-	dev_info(wm97xx->dev, "wm97xx core found, id=0x%x\n",
+	dev_dbg(wm97xx->dev, "wm97xx core found, id=0x%x\n",
 		 adev->vendor_id);
 
 	codec_pdata = &wm97xx->codec_pdata;

@@ -405,7 +405,7 @@ static void octeon_pci_initialize(void)
 	udelay(2000);		/* Wait 2 ms before doing PCI reads */
 
 	ctl_status_2.u32 = octeon_npi_read32(CVMX_NPI_PCI_CTL_STATUS_2);
-	pr_notice("PCI Status: %s %s-bit\n",
+	pr_debug("PCI Status: %s %s-bit\n",
 		  ctl_status_2.s.ap_pcix ? "PCI-X" : "PCI",
 		  ctl_status_2.s.ap_64ad ? "64" : "32");
 
@@ -421,7 +421,7 @@ static void octeon_pci_initialize(void)
 		cycles = read_c0_cvmcount() - cycles;
 		pci_clock = (cnt_reg_end.s.pcicnt - cnt_reg_start.s.pcicnt) /
 			    (cycles / (mips_hpt_frequency / 1000000));
-		pr_notice("PCI Clock: %lu MHz\n", pci_clock);
+		pr_debug("PCI Clock: %lu MHz\n", pci_clock);
 	}
 
 	/*
@@ -569,7 +569,7 @@ static int __init octeon_pci_setup(void)
 		return 0;
 
 	if (!octeon_is_pci_host()) {
-		pr_notice("Not in host mode, PCI Controller not initialized\n");
+		pr_debug("Not in host mode, PCI Controller not initialized\n");
 		return 0;
 	}
 
@@ -589,7 +589,7 @@ static int __init octeon_pci_setup(void)
 	ioport_resource.start = 0;
 	ioport_resource.end = OCTEON_PCI_IOSPACE_SIZE - 1;
 
-	pr_notice("%s Octeon big bar support\n",
+	pr_debug("%s Octeon big bar support\n",
 		  (octeon_dma_bar_type ==
 		  OCTEON_DMA_BAR_TYPE_BIG) ? "Enabling" : "Disabling");
 

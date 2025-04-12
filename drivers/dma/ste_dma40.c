@@ -3058,7 +3058,7 @@ static int __init d40_phy_res_init(struct d40_base *base)
 		base->phy_res[chan].use_soft_lli = true;
 	}
 
-	dev_info(base->dev, "%d of %d physical DMA channels available\n",
+	dev_dbg(base->dev, "%d of %d physical DMA channels available\n",
 		 num_phy_chans_avail, base->num_phy_chans);
 
 	/* Verify settings extended vs standard */
@@ -3068,7 +3068,7 @@ static int __init d40_phy_res_init(struct d40_base *base)
 
 		if (base->phy_res[i].allocated_src == D40_ALLOC_FREE &&
 		    (val[0] & 0x3) != 1)
-			dev_info(base->dev,
+			dev_dbg(base->dev,
 				 "[%s] INFO: channel %d is misconfigured (%d)\n",
 				 __func__, i, val[0] & 0x3);
 
@@ -3175,7 +3175,7 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
 
 	num_log_chans = num_phy_chans * D40_MAX_LOG_CHAN_PER_PHY;
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "hardware rev: %d @ %pa with %d physical and %d logical channels\n",
 		 rev, &res->start, num_phy_chans, num_log_chans);
 
@@ -3644,7 +3644,7 @@ static int __init d40_probe(struct platform_device *pdev)
 				"could not register of_dma_controller\n");
 	}
 
-	dev_info(base->dev, "initialized\n");
+	dev_dbg(base->dev, "initialized\n");
 	return 0;
  destroy_cache:
 	kmem_cache_destroy(base->desc_slab);

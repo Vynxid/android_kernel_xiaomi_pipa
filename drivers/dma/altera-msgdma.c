@@ -890,7 +890,7 @@ static int msgdma_probe(struct platform_device *pdev)
 	if (ret)
 		goto fail;
 
-	dev_notice(&pdev->dev, "Altera mSGDMA driver probe success\n");
+	dev_dbg(&pdev->dev, "Altera mSGDMA driver probe success\n");
 
 	return 0;
 
@@ -913,7 +913,7 @@ static int msgdma_remove(struct platform_device *pdev)
 	dma_async_device_unregister(&mdev->dmadev);
 	msgdma_dev_remove(mdev);
 
-	dev_notice(&pdev->dev, "Altera mSGDMA driver removed\n");
+	dev_dbg(&pdev->dev, "Altera mSGDMA driver removed\n");
 
 	return 0;
 }

@@ -166,7 +166,7 @@ static int pasemi_nand_probe(struct platform_device *ofdev)
 		goto out_cleanup_nand;
 	}
 
-	dev_info(dev, "PA Semi NAND flash at %pR, control at I/O %x\n", &res,
+	dev_dbg(dev, "PA Semi NAND flash at %pR, control at I/O %x\n", &res,
 		 lpcctl);
 
 	return 0;

@@ -457,21 +457,21 @@ static irqreturn_t v3_irq(int irq, void *data)
 
 	status = readb(v3->base + V3_LB_ISTAT);
 	if (status & V3_LB_ISTAT_MAILBOX)
-		dev_info(dev, "PCI mailbox interrupt\n");
+		dev_dbg(dev, "PCI mailbox interrupt\n");
 	if (status & V3_LB_ISTAT_PCI_RD)
 		dev_err(dev, "PCI target LB->PCI READ abort interrupt\n");
 	if (status & V3_LB_ISTAT_PCI_WR)
 		dev_err(dev, "PCI target LB->PCI WRITE abort interrupt\n");
 	if (status &  V3_LB_ISTAT_PCI_INT)
-		dev_info(dev, "PCI pin interrupt\n");
+		dev_dbg(dev, "PCI pin interrupt\n");
 	if (status & V3_LB_ISTAT_PCI_PERR)
 		dev_err(dev, "PCI parity error interrupt\n");
 	if (status & V3_LB_ISTAT_I2O_QWR)
-		dev_info(dev, "I2O inbound post queue interrupt\n");
+		dev_dbg(dev, "I2O inbound post queue interrupt\n");
 	if (status & V3_LB_ISTAT_DMA1)
-		dev_info(dev, "DMA channel 1 interrupt\n");
+		dev_dbg(dev, "DMA channel 1 interrupt\n");
 	if (status & V3_LB_ISTAT_DMA0)
-		dev_info(dev, "DMA channel 0 interrupt\n");
+		dev_dbg(dev, "DMA channel 0 interrupt\n");
 	/* Clear all possible interrupts on the local bus */
 	writeb(0, v3->base + V3_LB_ISTAT);
 	if (v3->map)
@@ -514,7 +514,7 @@ static int v3_integrator_init(struct v3_pci *v3)
 			 readb(v3->base + V3_MAIL_DATA) != 0x55);
 	}
 
-	dev_info(v3->dev, "initialized PCI V3 Integrator/AP integration\n");
+	dev_dbg(v3->dev, "initialized PCI V3 Integrator/AP integration\n");
 
 	return 0;
 }
@@ -604,7 +604,7 @@ static int v3_pci_setup_resource(struct v3_pci *v3,
 		host->busnr = win->res->start;
 		break;
 	default:
-		dev_info(dev, "Unknown resource type %lu\n",
+		dev_dbg(dev, "Unknown resource type %lu\n",
 			 resource_type(win->res));
 		break;
 	}

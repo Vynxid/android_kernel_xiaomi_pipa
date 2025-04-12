@@ -165,7 +165,7 @@ static int si2157_init(struct dvb_frontend *fe)
 		goto err;
 	}
 
-	dev_info(&client->dev, "found a 'Silicon Labs Si21%d-%c%c%c'\n",
+	dev_dbg(&client->dev, "found a 'Silicon Labs Si21%d-%c%c%c'\n",
 			cmd.args[2], cmd.args[1], cmd.args[3], cmd.args[4]);
 
 	if (fw_name == NULL)
@@ -187,7 +187,7 @@ static int si2157_init(struct dvb_frontend *fe)
 		goto err_release_firmware;
 	}
 
-	dev_info(&client->dev, "downloading firmware from file '%s'\n",
+	dev_dbg(&client->dev, "downloading firmware from file '%s'\n",
 			fw_name);
 
 	for (remaining = fw->size; remaining > 0; remaining -= 17) {
@@ -227,7 +227,7 @@ skip_fw_download:
 	if (ret)
 		goto err;
 
-	dev_info(&client->dev, "firmware version: %c.%c.%d\n",
+	dev_dbg(&client->dev, "firmware version: %c.%c.%d\n",
 			cmd.args[6], cmd.args[7], cmd.args[8]);
 warm:
 	/* init statistics in order signal app which are supported */
@@ -485,7 +485,7 @@ static int si2157_probe(struct i2c_client *client,
 	}
 #endif
 
-	dev_info(&client->dev, "Silicon Labs %s successfully attached\n",
+	dev_dbg(&client->dev, "Silicon Labs %s successfully attached\n",
 			dev->chiptype == SI2157_CHIPTYPE_SI2141 ?  "Si2141" :
 			dev->chiptype == SI2157_CHIPTYPE_SI2146 ?
 			"Si2146" : "Si2147/2148/2157/2158");

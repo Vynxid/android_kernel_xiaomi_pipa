@@ -789,7 +789,7 @@ int line6_probe(struct usb_interface *interface,
 	usb_get_dev(usbdev);
 
 	/* initialize device info: */
-	dev_info(&interface->dev, "Line 6 %s found\n", properties->name);
+	dev_dbg(&interface->dev, "Line 6 %s found\n", properties->name);
 
 	/* query interface number */
 	interface_number = interface->cur_altsetting->desc.bInterfaceNumber;
@@ -817,7 +817,7 @@ int line6_probe(struct usb_interface *interface,
 
 	/* creation of additional special files should go here */
 
-	dev_info(&interface->dev, "Line 6 %s now attached\n",
+	dev_dbg(&interface->dev, "Line 6 %s now attached\n",
 		 properties->name);
 
 	return 0;
@@ -856,7 +856,7 @@ void line6_disconnect(struct usb_interface *interface)
 	if (line6->disconnect)
 		line6->disconnect(line6);
 
-	dev_info(&interface->dev, "Line 6 %s now disconnected\n",
+	dev_dbg(&interface->dev, "Line 6 %s now disconnected\n",
 		 line6->properties->name);
 
 	/* make sure the device isn't destructed twice: */

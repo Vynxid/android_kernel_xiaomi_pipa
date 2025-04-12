@@ -92,7 +92,7 @@ static int create_gpio_led(const struct gpio_led *template,
 
 		/* skip leds that aren't available */
 		if (!gpio_is_valid(template->gpio)) {
-			dev_info(parent, "Skipping unavailable LED gpio %d (%s)\n",
+			dev_dbg(parent, "Skipping unavailable LED gpio %d (%s)\n",
 					template->gpio, template->name);
 			return 0;
 		}

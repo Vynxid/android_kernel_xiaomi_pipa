@@ -177,39 +177,39 @@ static void ccdc_readregs(void)
 	unsigned int val = 0;
 
 	val = regr(CCDC_ALAW);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to ALAW...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to ALAW...\n", val);
 	val = regr(CCDC_CLAMP);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to CLAMP...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to CLAMP...\n", val);
 	val = regr(CCDC_DCSUB);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to DCSUB...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to DCSUB...\n", val);
 	val = regr(CCDC_BLKCMP);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to BLKCMP...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to BLKCMP...\n", val);
 	val = regr(CCDC_FPC_ADDR);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FPC_ADDR...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to FPC_ADDR...\n", val);
 	val = regr(CCDC_FPC);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FPC...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to FPC...\n", val);
 	val = regr(CCDC_FMTCFG);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMTCFG...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to FMTCFG...\n", val);
 	val = regr(CCDC_COLPTN);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to COLPTN...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to COLPTN...\n", val);
 	val = regr(CCDC_FMT_HORZ);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMT_HORZ...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to FMT_HORZ...\n", val);
 	val = regr(CCDC_FMT_VERT);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to FMT_VERT...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to FMT_VERT...\n", val);
 	val = regr(CCDC_HSIZE_OFF);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to HSIZE_OFF...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to HSIZE_OFF...\n", val);
 	val = regr(CCDC_SDOFST);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to SDOFST...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to SDOFST...\n", val);
 	val = regr(CCDC_VP_OUT);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VP_OUT...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to VP_OUT...\n", val);
 	val = regr(CCDC_SYN_MODE);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to SYN_MODE...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to SYN_MODE...\n", val);
 	val = regr(CCDC_HORZ_INFO);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to HORZ_INFO...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to HORZ_INFO...\n", val);
 	val = regr(CCDC_VERT_START);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VERT_START...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to VERT_START...\n", val);
 	val = regr(CCDC_VERT_LINES);
-	dev_notice(ccdc_cfg.dev, "\nReading 0x%x to VERT_LINES...\n", val);
+	dev_dbg(ccdc_cfg.dev, "\nReading 0x%x to VERT_LINES...\n", val);
 }
 
 static int ccdc_close(struct device *dev)

@@ -93,7 +93,7 @@ static void tqm85xx_ti1520_fixup(struct pci_dev *pdev)
 	if (!machine_is(tqm85xx))
 		return;
 
-	dev_info(&pdev->dev, "Using TI 1520 fixup on TQM85xx\n");
+	dev_dbg(&pdev->dev, "Using TI 1520 fixup on TQM85xx\n");
 
 	/*
 	 * Enable P2CCLK bit in system control register

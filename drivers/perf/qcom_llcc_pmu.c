@@ -289,7 +289,7 @@ static int qcom_llcc_pmu_probe(struct platform_device *pdev)
 	if (ret < 0)
 		dev_err(&pdev->dev, "Failed to register LLCC PMU (%d)\n", ret);
 
-	dev_info(&pdev->dev, "Registered llcc_pmu, type: %d\n",
+	dev_dbg(&pdev->dev, "Registered llcc_pmu, type: %d\n",
 		 llccpmu->pmu.type);
 
 	return 0;

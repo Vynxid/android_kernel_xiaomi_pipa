@@ -377,7 +377,7 @@ static int video_cc_lagoon_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered VIDEO CC clocks\n");
+	dev_dbg(&pdev->dev, "Registered VIDEO CC clocks\n");
 
 	return ret;
 }

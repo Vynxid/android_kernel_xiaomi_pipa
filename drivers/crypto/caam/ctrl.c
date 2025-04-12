@@ -238,7 +238,7 @@ static int instantiate_rng(struct device *ctrldev, int state_handle_mask,
 			break;
 		}
 
-		dev_info(ctrldev, "Instantiated RNG4 SH%d\n", sh_idx);
+		dev_dbg(ctrldev, "Instantiated RNG4 SH%d\n", sh_idx);
 		/* Clear the contents before recreating the descriptor */
 		memset(desc, 0x00, CAAM_CMD_SZ * 7);
 	}
@@ -293,7 +293,7 @@ static int deinstantiate_rng(struct device *ctrldev, int state_handle_mask)
 					sh_idx);
 				break;
 			}
-			dev_info(ctrldev, "Deinstantiated RNG4 SH%d\n", sh_idx);
+			dev_dbg(ctrldev, "Deinstantiated RNG4 SH%d\n", sh_idx);
 		}
 	}
 
@@ -764,7 +764,7 @@ static int caam_probe(struct platform_device *pdev)
 			 * the TRNG parameters.
 			 */
 			if (!(ctrlpriv->rng4_sh_init || inst_handles)) {
-				dev_info(dev,
+				dev_dbg(dev,
 					 "Entropy delay = %u\n",
 					 ent_delay);
 				kick_trng(pdev, ent_delay);
@@ -806,9 +806,9 @@ static int caam_probe(struct platform_device *pdev)
 		  (u64)rd_reg32(&ctrl->perfmon.caam_id_ls);
 
 	/* Report "alive" for developer to see */
-	dev_info(dev, "device ID = 0x%016llx (Era %d)\n", caam_id,
+	dev_dbg(dev, "device ID = 0x%016llx (Era %d)\n", caam_id,
 		 ctrlpriv->era);
-	dev_info(dev, "job rings = %d, qi = %d\n",
+	dev_dbg(dev, "job rings = %d, qi = %d\n",
 		 ctrlpriv->total_jobrs, ctrlpriv->qi_present);
 
 #ifdef CONFIG_DEBUG_FS

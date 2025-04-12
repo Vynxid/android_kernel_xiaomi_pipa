@@ -275,7 +275,7 @@ static int cc770_isa_probe(struct platform_device *pdev)
 		goto exit_free;
 	}
 
-	dev_info(&pdev->dev, "device registered (reg_base=0x%p, irq=%d)\n",
+	dev_dbg(&pdev->dev, "device registered (reg_base=0x%p, irq=%d)\n",
 		 priv->reg_base, dev->irq);
 	return 0;
 
@@ -354,7 +354,7 @@ static int __init cc770_isa_init(void)
 	if (err)
 		goto exit_free_devices;
 
-	pr_info("driver for max. %d devices registered\n", MAXDEV);
+	pr_debug("driver for max. %d devices registered\n", MAXDEV);
 
 	return 0;
 

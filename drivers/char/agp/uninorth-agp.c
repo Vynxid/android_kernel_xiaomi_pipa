@@ -112,7 +112,7 @@ static int uninorth_configure(void)
 
 	current_size = A_SIZE_32(agp_bridge->current_size);
 
-	dev_info(&agp_bridge->dev->dev, "configuring for size idx: %d\n",
+	dev_dbg(&agp_bridge->dev->dev, "configuring for size idx: %d\n",
 		 current_size->size_value);
 
 	/* aperture size and gatt addr */
@@ -173,7 +173,7 @@ static int uninorth_insert_memory(struct agp_memory *mem, off_t pg_start, int ty
 	gp = (u32 *) &agp_bridge->gatt_table[pg_start];
 	for (i = 0; i < mem->page_count; ++i) {
 		if (gp[i] != scratch_value) {
-			dev_info(&agp_bridge->dev->dev,
+			dev_dbg(&agp_bridge->dev->dev,
 				 "uninorth_insert_memory: entry 0x%x occupied (%x)\n",
 				 i, gp[i]);
 			return -EBUSY;
@@ -319,7 +319,7 @@ static int agp_uninorth_suspend(struct pci_dev *pdev)
 		pci_read_config_dword(device, agp + PCI_AGP_COMMAND, &cmd);
 		if (!(cmd & PCI_AGP_COMMAND_AGP))
 			continue;
-		dev_info(&pdev->dev, "disabling AGP on device %s\n",
+		dev_dbg(&pdev->dev, "disabling AGP on device %s\n",
 			 pci_name(device));
 		cmd &= ~PCI_AGP_COMMAND_AGP;
 		pci_write_config_dword(device, agp + PCI_AGP_COMMAND, cmd);
@@ -330,7 +330,7 @@ static int agp_uninorth_suspend(struct pci_dev *pdev)
 	pci_read_config_dword(pdev, agp + PCI_AGP_COMMAND, &cmd);
 	bridge->dev_private_data = (void *)(long)cmd;
 	if (cmd & PCI_AGP_COMMAND_AGP) {
-		dev_info(&pdev->dev, "disabling AGP on bridge\n");
+		dev_dbg(&pdev->dev, "disabling AGP on bridge\n");
 		cmd &= ~PCI_AGP_COMMAND_AGP;
 		pci_write_config_dword(pdev, agp + PCI_AGP_COMMAND, cmd);
 	}
@@ -613,7 +613,7 @@ static int agp_uninorth_probe(struct pci_dev *pdev,
 	/* probe for known chipsets */
 	for (j = 0; devs[j].chipset_name != NULL; ++j) {
 		if (pdev->device == devs[j].device_id) {
-			dev_info(&pdev->dev, "Apple %s chipset\n",
+			dev_dbg(&pdev->dev, "Apple %s chipset\n",
 				 devs[j].chipset_name);
 			goto found;
 		}

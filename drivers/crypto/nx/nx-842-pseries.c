@@ -553,7 +553,7 @@ static int nx842_OF_set_defaults(struct nx842_devdata *devdata)
  * The status field indicates if the device is enabled when the status
  * is 'okay'.  Otherwise the device driver will be disabled.
  *
- * @devdata: struct nx842_devdata to use for dev_info
+ * @devdata: struct nx842_devdata to use for dev_dbg
  * @prop: struct property point containing the maxsyncop for the update
  *
  * Returns:
@@ -569,7 +569,7 @@ static int nx842_OF_upd_status(struct nx842_devdata *devdata,
 		return 0;
 	if (!strncmp(status, "disabled", (size_t)prop->length))
 		return -ENODEV;
-	dev_info(devdata->dev, "%s: unknown status '%s'\n", __func__, status);
+	dev_dbg(devdata->dev, "%s: unknown status '%s'\n", __func__, status);
 
 	return -EINVAL;
 }
@@ -788,13 +788,13 @@ static int nx842_OF_upd(struct property *new_prop)
 		goto error_out;
 
 out:
-	dev_info(old_devdata->dev, "%s: max_sync_size new:%u old:%u\n",
+	dev_dbg(old_devdata->dev, "%s: max_sync_size new:%u old:%u\n",
 			__func__, new_devdata->max_sync_size,
 			old_devdata->max_sync_size);
-	dev_info(old_devdata->dev, "%s: max_sync_sg new:%u old:%u\n",
+	dev_dbg(old_devdata->dev, "%s: max_sync_sg new:%u old:%u\n",
 			__func__, new_devdata->max_sync_sg,
 			old_devdata->max_sync_sg);
-	dev_info(old_devdata->dev, "%s: max_sg_len new:%u old:%u\n",
+	dev_dbg(old_devdata->dev, "%s: max_sg_len new:%u old:%u\n",
 			__func__, new_devdata->max_sg_len,
 			old_devdata->max_sg_len);
 
@@ -807,7 +807,7 @@ out:
 
 error_out:
 	if (new_devdata) {
-		dev_info(old_devdata->dev, "%s: device disabled\n", __func__);
+		dev_dbg(old_devdata->dev, "%s: device disabled\n", __func__);
 		nx842_OF_set_defaults(new_devdata);
 		rcu_assign_pointer(devdata, new_devdata);
 		spin_unlock_irqrestore(&devdata_mutex, flags);
@@ -1064,7 +1064,7 @@ static int nx842_remove(struct vio_dev *viodev)
 	struct nx842_devdata *old_devdata;
 	unsigned long flags;
 
-	pr_info("Removing IBM Power 842 compression device\n");
+	pr_debug("Removing IBM Power 842 compression device\n");
 	sysfs_remove_group(&viodev->dev.kobj, &nx842_attribute_group);
 
 	crypto_unregister_alg(&nx842_pseries_alg);

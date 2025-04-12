@@ -363,7 +363,7 @@ static void rtas_hack_32bit_msi_gen2(struct pci_dev *pdev)
 	 * fact that we using RTAS for MSIs, we don't have the 32 bit MSI RTAS
 	 * support, and we are in a PCIe Gen2 slot.
 	 */
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "rtas_msi: No 32 bit MSI firmware support, forcing 32 bit MSI\n");
 	pci_read_config_dword(pdev, pdev->msi_cap + PCI_MSI_ADDRESS_HI, &addr_hi);
 	addr_lo = 0xffff0000 | ((addr_hi >> (48 - 32)) << 4);

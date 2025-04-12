@@ -54,8 +54,8 @@
 #include "core.h"
 #include "ohci.h"
 
-#define ohci_info(ohci, f, args...)	dev_info(ohci->card.device, f, ##args)
-#define ohci_notice(ohci, f, args...)	dev_notice(ohci->card.device, f, ##args)
+#define ohci_info(ohci, f, args...)	dev_dbg(ohci->card.device, f, ##args)
+#define ohci_notice(ohci, f, args...)	dev_dbg(ohci->card.device, f, ##args)
 #define ohci_err(ohci, f, args...)	dev_err(ohci->card.device, f, ##args)
 
 #define DESCRIPTOR_OUTPUT_MORE		0
@@ -3859,7 +3859,7 @@ static void pci_remove(struct pci_dev *dev)
 	kfree(ohci);
 	pmac_ohci_off(dev);
 
-	dev_notice(&dev->dev, "removed fw-ohci device\n");
+	dev_dbg(&dev->dev, "removed fw-ohci device\n");
 }
 
 #ifdef CONFIG_PM

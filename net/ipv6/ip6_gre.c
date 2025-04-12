@@ -2371,7 +2371,7 @@ static int __init ip6gre_init(void)
 {
 	int err;
 
-	pr_info("GRE over IPv6 tunneling driver\n");
+	pr_debug("GRE over IPv6 tunneling driver\n");
 
 	err = register_pernet_device(&ip6gre_net_ops);
 	if (err < 0)
@@ -2379,7 +2379,7 @@ static int __init ip6gre_init(void)
 
 	err = inet6_add_protocol(&ip6gre_protocol, IPPROTO_GRE);
 	if (err < 0) {
-		pr_info("%s: can't add protocol\n", __func__);
+		pr_debug("%s: can't add protocol\n", __func__);
 		goto add_proto_failed;
 	}
 

@@ -352,7 +352,7 @@ static int twl6030_usb_probe(struct platform_device *pdev)
 
 	ret = omap_usb2_set_comparator(&twl->comparator);
 	if (ret == -ENODEV) {
-		dev_info(&pdev->dev, "phy not ready, deferring probe");
+		dev_dbg(&pdev->dev, "phy not ready, deferring probe");
 		return -EPROBE_DEFER;
 	}
 
@@ -396,7 +396,7 @@ static int twl6030_usb_probe(struct platform_device *pdev)
 	twl->asleep = 0;
 	twl6030_enable_irq(twl);
 	schedule_delayed_work(&twl->get_status_work, HZ);
-	dev_info(&pdev->dev, "Initialized TWL6030 USB module\n");
+	dev_dbg(&pdev->dev, "Initialized TWL6030 USB module\n");
 
 	return 0;
 }

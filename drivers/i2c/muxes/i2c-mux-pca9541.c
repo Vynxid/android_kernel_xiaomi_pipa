@@ -324,7 +324,7 @@ static int pca9541_probe(struct i2c_client *client,
 	if (ret)
 		return ret;
 
-	dev_info(&client->dev, "registered master selector for I2C %s\n",
+	dev_dbg(&client->dev, "registered master selector for I2C %s\n",
 		 client->name);
 
 	return 0;

@@ -346,7 +346,7 @@ static int parport_ax88796_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, pp);
 
-	dev_info(_dev, "attached parallel port driver\n");
+	dev_dbg(_dev, "attached parallel port driver\n");
 	parport_announce_port(pp);
 
 	return 0;

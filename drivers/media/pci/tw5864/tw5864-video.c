@@ -1175,7 +1175,7 @@ static int tw5864_video_input_init(struct tw5864_input *input, int video_nr)
 	if (ret)
 		goto free_v4l2_hdl;
 
-	dev_info(&input->root->pci->dev, "Registered video device %s\n",
+	dev_dbg(&input->root->pci->dev, "Registered video device %s\n",
 		 video_device_node_name(&input->vdev));
 
 	/*

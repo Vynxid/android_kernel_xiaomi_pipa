@@ -318,7 +318,7 @@ static int __init eisa_probe(struct eisa_root_device *root)
 	struct eisa_device *edev;
 	char *enabled_str;
 
-	dev_info(root->dev, "Probing EISA bus %d\n", root->bus_nr);
+	dev_dbg(root->dev, "Probing EISA bus %d\n", root->bus_nr);
 
 	/* First try to get hold of slot 0. If there is no device
 	 * here, simply fail, unless root->force_probe is set. */
@@ -344,7 +344,7 @@ static int __init eisa_probe(struct eisa_root_device *root)
 		goto force_probe;
 	}
 
-	dev_info(&edev->dev, "EISA: Mainboard %s detected\n", edev->id.sig);
+	dev_dbg(&edev->dev, "EISA: Mainboard %s detected\n", edev->id.sig);
 
 	if (eisa_register_device(edev)) {
 		dev_err(&edev->dev, "EISA: Failed to register %s\n",
@@ -386,7 +386,7 @@ static int __init eisa_probe(struct eisa_root_device *root)
 		else
 			enabled_str = "";
 
-		dev_info(&edev->dev, "EISA: slot %d: %s detected%s\n", i,
+		dev_dbg(&edev->dev, "EISA: slot %d: %s detected%s\n", i,
 			 edev->id.sig, enabled_str);
 
 		c++;
@@ -399,7 +399,7 @@ static int __init eisa_probe(struct eisa_root_device *root)
 		}
 	}
 
-	dev_info(root->dev, "EISA: Detected %d card%s\n", c, c == 1 ? "" : "s");
+	dev_dbg(root->dev, "EISA: Detected %d card%s\n", c, c == 1 ? "" : "s");
 	return 0;
 }
 

@@ -251,7 +251,7 @@ static int spear13xx_pcie_probe(struct platform_device *pdev)
 	if (IS_ERR(spear13xx_pcie->phy)) {
 		ret = PTR_ERR(spear13xx_pcie->phy);
 		if (ret == -EPROBE_DEFER)
-			dev_info(dev, "probe deferred\n");
+			dev_dbg(dev, "probe deferred\n");
 		else
 			dev_err(dev, "couldn't get pcie-phy\n");
 		return ret;

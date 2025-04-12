@@ -384,7 +384,7 @@ static void usbhsc_hotplug(struct usbhs_priv *priv)
 			cable = extcon_get_state(priv->edev, EXTCON_USB_HOST);
 			if ((cable > 0 && id != USBHS_HOST) ||
 			    (!cable && id != USBHS_GADGET)) {
-				dev_info(&pdev->dev,
+				dev_dbg(&pdev->dev,
 					 "USB cable plugged in doesn't match the selected role!\n");
 				return;
 			}
@@ -710,7 +710,7 @@ static int usbhs_probe(struct platform_device *pdev)
 	 */
 	usbhsc_drvcllbck_notify_hotplug(pdev);
 
-	dev_info(&pdev->dev, "probed\n");
+	dev_dbg(&pdev->dev, "probed\n");
 
 	return ret;
 
@@ -721,7 +721,7 @@ probe_end_fifo_exit:
 probe_end_pipe_exit:
 	usbhs_pipe_remove(priv);
 
-	dev_info(&pdev->dev, "probe failed (%d)\n", ret);
+	dev_dbg(&pdev->dev, "probe failed (%d)\n", ret);
 
 	return ret;
 }

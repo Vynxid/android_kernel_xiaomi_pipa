@@ -219,7 +219,7 @@ static void cam_mode(struct cxd *ci, int mode)
 		if (!ci->en.read_data)
 			return;
 		ci->write_busy = 0;
-		dev_info(&ci->client->dev, "enable cam buffer mode\n");
+		dev_dbg(&ci->client->dev, "enable cam buffer mode\n");
 		write_reg(ci, 0x0d, 0x00);
 		write_reg(ci, 0x0e, 0x01);
 		write_regm(ci, 0x08, 0x40, 0x40);
@@ -523,7 +523,7 @@ static int campoll(struct cxd *ci)
 			if (ci->slot_stat) {
 				ci->slot_stat = 0;
 				write_regm(ci, 0x03, 0x00, 0x08);
-				dev_info(&ci->client->dev, "NO CAM\n");
+				dev_dbg(&ci->client->dev, "NO CAM\n");
 				ci->ready = 0;
 			}
 		}
@@ -635,7 +635,7 @@ static int cxd2099_probe(struct i2c_client *client,
 
 	ret = regmap_read(ci->regmap, 0x00, &val);
 	if (ret < 0) {
-		dev_info(&client->dev, "No CXD2099AR detected at 0x%02x\n",
+		dev_dbg(&client->dev, "No CXD2099AR detected at 0x%02x\n",
 			 client->addr);
 		goto err_rmexit;
 	}
@@ -648,7 +648,7 @@ static int cxd2099_probe(struct i2c_client *client,
 	ci->en = en_templ;
 	ci->en.data = ci;
 	init(ci);
-	dev_info(&client->dev, "Attached CXD2099AR at 0x%02x\n", client->addr);
+	dev_dbg(&client->dev, "Attached CXD2099AR at 0x%02x\n", client->addr);
 
 	*cfg->en = &ci->en;
 
@@ -656,7 +656,7 @@ static int cxd2099_probe(struct i2c_client *client,
 		ci->en.read_data = NULL;
 		ci->en.write_data = NULL;
 	} else {
-		dev_info(&client->dev, "Using CXD2099AR buffer mode");
+		dev_dbg(&client->dev, "Using CXD2099AR buffer mode");
 	}
 
 	i2c_set_clientdata(client, ci);

@@ -252,7 +252,7 @@ static bool acpi_gpio_irq_is_wake(struct device *parent,
 		return false;
 
 	if (acpi_gpio_in_ignore_list(dev_name(parent), pin)) {
-		dev_info(parent, "Ignoring wakeup on pin %d\n", pin);
+		dev_dbg(parent, "Ignoring wakeup on pin %d\n", pin);
 		return false;
 	}
 

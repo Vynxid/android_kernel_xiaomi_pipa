@@ -214,7 +214,7 @@ static int iproc_rng200_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(dev, "hwrng registered\n");
+	dev_dbg(dev, "hwrng registered\n");
 
 	return 0;
 }

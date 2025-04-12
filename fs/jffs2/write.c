@@ -110,7 +110,7 @@ struct jffs2_full_dnode *jffs2_write_dnode(struct jffs2_sb_info *c, struct jffs2
 				 (alloc_mode==ALLOC_GC)?0:f->inocache->ino);
 
 	if (ret || (retlen != sizeof(*ri) + datalen)) {
-		pr_notice("Write of %zd bytes at 0x%08x failed. returned %d, retlen %zd\n",
+		pr_debug("Write of %zd bytes at 0x%08x failed. returned %d, retlen %zd\n",
 			  sizeof(*ri) + datalen, flash_ofs, ret, retlen);
 
 		/* Mark the space as dirtied */
@@ -122,7 +122,7 @@ struct jffs2_full_dnode *jffs2_write_dnode(struct jffs2_sb_info *c, struct jffs2
 			   this node */
 			jffs2_add_physical_node_ref(c, flash_ofs | REF_OBSOLETE, PAD(sizeof(*ri)+datalen), NULL);
 		} else {
-			pr_notice("Not marking the space at 0x%08x as dirty because the flash driver returned retlen zero\n",
+			pr_debug("Not marking the space at 0x%08x as dirty because the flash driver returned retlen zero\n",
 				  flash_ofs);
 		}
 		if (!retried && alloc_mode != ALLOC_NORETRY) {
@@ -268,13 +268,13 @@ struct jffs2_full_dirent *jffs2_write_dirent(struct jffs2_sb_info *c, struct jff
 	ret = jffs2_flash_writev(c, vecs, 2, flash_ofs, &retlen,
 				 (alloc_mode==ALLOC_GC)?0:je32_to_cpu(rd->pino));
 	if (ret || (retlen != sizeof(*rd) + namelen)) {
-		pr_notice("Write of %zd bytes at 0x%08x failed. returned %d, retlen %zd\n",
+		pr_debug("Write of %zd bytes at 0x%08x failed. returned %d, retlen %zd\n",
 			  sizeof(*rd) + namelen, flash_ofs, ret, retlen);
 		/* Mark the space as dirtied */
 		if (retlen) {
 			jffs2_add_physical_node_ref(c, flash_ofs | REF_OBSOLETE, PAD(sizeof(*rd)+namelen), NULL);
 		} else {
-			pr_notice("Not marking the space at 0x%08x as dirty because the flash driver returned retlen zero\n",
+			pr_debug("Not marking the space at 0x%08x as dirty because the flash driver returned retlen zero\n",
 				  flash_ofs);
 		}
 		if (!retried) {

@@ -328,7 +328,7 @@ static int s3c2410_nand_setrate(struct s3c2410_nand_info *info)
 		return -EINVAL;
 	}
 
-	dev_info(info->device, "Tacls=%d, %dns Twrph0=%d %dns, Twrph1=%d %dns\n",
+	dev_dbg(info->device, "Tacls=%d, %dns Twrph0=%d %dns, Twrph1=%d %dns\n",
 		tacls, to_ns(tacls, clkrate), twrph0, to_ns(twrph0, clkrate),
 						twrph1, to_ns(twrph1, clkrate));
 
@@ -894,7 +894,7 @@ static void s3c2410_nand_init_chip(struct s3c2410_nand_info *info,
 		chip->dev_ready = s3c2412_nand_devready;
 
 		if (readl(regs + S3C2410_NFCONF) & S3C2412_NFCONF_NANDBOOT)
-			dev_info(info->device, "System booted from NAND\n");
+			dev_dbg(info->device, "System booted from NAND\n");
 
 		break;
 	}
@@ -932,7 +932,7 @@ static int s3c2410_nand_attach_chip(struct nand_chip *chip)
 	switch (chip->ecc.mode) {
 
 	case NAND_ECC_NONE:
-		dev_info(info->device, "ECC disabled\n");
+		dev_dbg(info->device, "ECC disabled\n");
 		break;
 
 	case NAND_ECC_SOFT:
@@ -943,7 +943,7 @@ static int s3c2410_nand_attach_chip(struct nand_chip *chip)
 		 * s3c2410_platform_nand.
 		 */
 		chip->ecc.algo = NAND_ECC_HAMMING;
-		dev_info(info->device, "soft ECC\n");
+		dev_dbg(info->device, "soft ECC\n");
 		break;
 
 	case NAND_ECC_HW:
@@ -983,7 +983,7 @@ static int s3c2410_nand_attach_chip(struct nand_chip *chip)
 					  &s3c2410_ooblayout_ops);
 		}
 
-		dev_info(info->device, "hardware ECC\n");
+		dev_dbg(info->device, "hardware ECC\n");
 		break;
 
 	default:
@@ -1189,7 +1189,7 @@ static int s3c24xx_nand_probe(struct platform_device *pdev)
 	}
 
 	if (allow_clk_suspend(info)) {
-		dev_info(&pdev->dev, "clock idle support enabled\n");
+		dev_dbg(&pdev->dev, "clock idle support enabled\n");
 		s3c2410_nand_clk_set_state(info, CLOCK_SUSPEND);
 	}
 

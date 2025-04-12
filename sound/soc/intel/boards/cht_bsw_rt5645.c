@@ -63,11 +63,11 @@ static unsigned long cht_rt5645_quirk = 0;
 static void log_quirks(struct device *dev)
 {
 	if (cht_rt5645_quirk & CHT_RT5645_SSP2_AIF2)
-		dev_info(dev, "quirk SSP2_AIF2 enabled");
+		dev_dbg(dev, "quirk SSP2_AIF2 enabled");
 	if (cht_rt5645_quirk & CHT_RT5645_SSP0_AIF1)
-		dev_info(dev, "quirk SSP0_AIF1 enabled");
+		dev_dbg(dev, "quirk SSP0_AIF1 enabled");
 	if (cht_rt5645_quirk & CHT_RT5645_SSP0_AIF2)
-		dev_info(dev, "quirk SSP0_AIF2 enabled");
+		dev_dbg(dev, "quirk SSP0_AIF2 enabled");
 }
 
 static int platform_clock_control(struct snd_soc_dapm_widget *w,
@@ -622,13 +622,13 @@ static int snd_cht_mc_probe(struct platform_device *pdev)
 							       &pkg_ctx);
 		if (pkg_found) {
 			if (chan_package.aif_value == 1) {
-				dev_info(&pdev->dev, "BIOS Routing: AIF1 connected\n");
+				dev_dbg(&pdev->dev, "BIOS Routing: AIF1 connected\n");
 				cht_rt5645_quirk |= CHT_RT5645_SSP0_AIF1;
 			} else  if (chan_package.aif_value == 2) {
-				dev_info(&pdev->dev, "BIOS Routing: AIF2 connected\n");
+				dev_dbg(&pdev->dev, "BIOS Routing: AIF2 connected\n");
 				cht_rt5645_quirk |= CHT_RT5645_SSP0_AIF2;
 			} else {
-				dev_info(&pdev->dev, "BIOS Routing isn't valid, ignored\n");
+				dev_dbg(&pdev->dev, "BIOS Routing isn't valid, ignored\n");
 				pkg_found = false;
 			}
 		}

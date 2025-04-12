@@ -98,7 +98,7 @@ static struct lt3593_led_data *lt3593_led_probe_pdata(struct device *dev)
 	if (ret < 0)
 		return ERR_PTR(ret);
 
-	dev_info(dev, "registered LT3593 LED '%s' at GPIO %d\n",
+	dev_dbg(dev, "registered LT3593 LED '%s' at GPIO %d\n",
 		 template->name, template->gpio);
 
 	return led_data;

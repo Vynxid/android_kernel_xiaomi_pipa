@@ -261,7 +261,7 @@ static unsigned short s3c_onenand_readw(void __iomem *addr)
 	}
 
 	value = s3c_read_cmd(CMD_MAP_11(onenand, word_addr)) & 0xffff;
-	dev_info(dev, "%s: Illegal access at reg 0x%x, value 0x%x\n", __func__,
+	dev_dbg(dev, "%s: Illegal access at reg 0x%x, value 0x%x\n", __func__,
 		 word_addr, value);
 	return value;
 }
@@ -304,7 +304,7 @@ static void s3c_onenand_writew(unsigned short value, void __iomem *addr)
 		}
 	}
 
-	dev_info(dev, "%s: Illegal access at reg 0x%x, value 0x%x\n", __func__,
+	dev_dbg(dev, "%s: Illegal access at reg 0x%x, value 0x%x\n", __func__,
 		 word_addr, value);
 
 	s3c_write_cmd(value, CMD_MAP_11(onenand, word_addr));
@@ -356,7 +356,7 @@ static int s3c_onenand_wait(struct mtd_info *mtd, int state)
 	if (stat & LOAD_CMP) {
 		ecc = s3c_read_reg(ECC_ERR_STAT_OFFSET);
 		if (ecc & ONENAND_ECC_4BIT_UNCORRECTABLE) {
-			dev_info(dev, "%s: ECC error = 0x%04x\n", __func__,
+			dev_dbg(dev, "%s: ECC error = 0x%04x\n", __func__,
 				 ecc);
 			mtd->ecc_stats.failed++;
 			return -EBADMSG;
@@ -364,10 +364,10 @@ static int s3c_onenand_wait(struct mtd_info *mtd, int state)
 	}
 
 	if (stat & (LOCKED_BLK | ERS_FAIL | PGM_FAIL | LD_FAIL_ECC_ERR)) {
-		dev_info(dev, "%s: controller error = 0x%04x\n", __func__,
+		dev_dbg(dev, "%s: controller error = 0x%04x\n", __func__,
 			 stat);
 		if (stat & LOCKED_BLK)
-			dev_info(dev, "%s: it's locked error = 0x%04x\n",
+			dev_dbg(dev, "%s: it's locked error = 0x%04x\n",
 				 __func__, stat);
 
 		return -EIO;
@@ -931,7 +931,7 @@ static int s3c_onenand_probe(struct platform_device *pdev)
 	}
 
 	if (s3c_read_reg(MEM_CFG_OFFSET) & ONENAND_SYS_CFG1_SYNC_READ)
-		dev_info(&onenand->pdev->dev, "OneNAND Sync. Burst Read enabled\n");
+		dev_dbg(&onenand->pdev->dev, "OneNAND Sync. Burst Read enabled\n");
 
 	err = mtd_device_register(mtd, pdata ? pdata->parts : NULL,
 				  pdata ? pdata->nr_parts : 0);

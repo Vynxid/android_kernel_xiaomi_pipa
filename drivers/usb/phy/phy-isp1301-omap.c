@@ -714,7 +714,7 @@ static irqreturn_t omap_otg_irq(int irq, void *_isp)
 	 */
 	} else if (otg_irq & A_REQ_TMROUT) {
 		otg_ctrl = omap_readl(OTG_CTRL);
-		pr_info("otg: BCON_TMOUT from %s, %06x\n",
+		pr_debug("otg: BCON_TMOUT from %s, %06x\n",
 				state_name(isp), otg_ctrl);
 		notresponding(isp);
 
@@ -1251,7 +1251,7 @@ static int isp1301_otg_enable(struct isp1301 *isp)
 	isp1301_set_bits(isp, ISP1301_INTERRUPT_FALLING,
 		INTR_VBUS_VLD | INTR_SESS_VLD | INTR_ID_GND);
 
-	dev_info(&isp->client->dev, "ready for dual-role USB ...\n");
+	dev_dbg(&isp->client->dev, "ready for dual-role USB ...\n");
 
 	return 0;
 }
@@ -1291,7 +1291,7 @@ isp1301_set_host(struct usb_otg *otg, struct usb_bus *host)
 	if (machine_is_omap_h2())
 		isp1301_set_bits(isp, ISP1301_MODE_CONTROL_1, MC1_DAT_SE0);
 
-	dev_info(&isp->client->dev, "A-Host sessions ok\n");
+	dev_dbg(&isp->client->dev, "A-Host sessions ok\n");
 	isp1301_set_bits(isp, ISP1301_INTERRUPT_RISING,
 		INTR_ID_GND);
 	isp1301_set_bits(isp, ISP1301_INTERRUPT_FALLING,
@@ -1364,7 +1364,7 @@ isp1301_set_peripheral(struct usb_otg *otg, struct usb_gadget *gadget)
 		INTR_SESS_VLD);
 	isp1301_set_bits(isp, ISP1301_INTERRUPT_FALLING,
 		INTR_VBUS_VLD);
-	dev_info(&isp->client->dev, "B-Peripheral sessions ok\n");
+	dev_dbg(&isp->client->dev, "B-Peripheral sessions ok\n");
 	dump_regs(isp, __func__);
 
 	/* If this has a Mini-AB connector, this mode is highly
@@ -1516,7 +1516,7 @@ isp1301_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
 
 	/* initial development used chiprev 2.00 */
 	status = i2c_smbus_read_word_data(i2c, ISP1301_BCD_DEVICE);
-	dev_info(&i2c->dev, "chiprev %x.%02x, driver " DRIVER_VERSION "\n",
+	dev_dbg(&i2c->dev, "chiprev %x.%02x, driver " DRIVER_VERSION "\n",
 		status >> 8, status & 0xff);
 
 	/* make like power-on reset */

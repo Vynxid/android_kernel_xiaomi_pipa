@@ -755,7 +755,7 @@ static struct omap_clk omap_clks[] = {
 
 static void __init omap1_show_rates(void)
 {
-	pr_notice("Clocking rate (xtal/DPLL1/MPU): %ld.%01ld/%ld.%01ld/%ld.%01ld MHz\n",
+	pr_debug("Clocking rate (xtal/DPLL1/MPU): %ld.%01ld/%ld.%01ld/%ld.%01ld MHz\n",
 		  ck_ref.rate / 1000000, (ck_ref.rate / 100000) % 10,
 		  ck_dpll1.rate / 1000000, (ck_dpll1.rate / 100000) % 10,
 		  arm_ck.rate / 1000000, (arm_ck.rate / 100000) % 10);
@@ -817,7 +817,7 @@ int __init omap1_clk_init(void)
 	if (cpu_is_omap16xx() && crystal_type == 2)
 		ck_ref.rate = 19200000;
 
-	pr_info("Clocks: ARM_SYSST: 0x%04x DPLL_CTL: 0x%04x ARM_CKCTL: 0x%04x\n",
+	pr_debug("Clocks: ARM_SYSST: 0x%04x DPLL_CTL: 0x%04x ARM_CKCTL: 0x%04x\n",
 		omap_readw(ARM_SYSST), omap_readw(DPLL_CTL),
 		omap_readw(ARM_CKCTL));
 

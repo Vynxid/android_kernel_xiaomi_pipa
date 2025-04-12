@@ -565,7 +565,7 @@ static int ohci_hcd_at91_drv_probe(struct platform_device *pdev)
 				       IRQF_SHARED,
 				       "ohci_overcurrent", pdev);
 		if (ret)
-			dev_info(&pdev->dev, "failed to request gpio \"overcurrent\" IRQ\n");
+			dev_dbg(&pdev->dev, "failed to request gpio \"overcurrent\" IRQ\n");
 	}
 
 	device_init_wakeup(&pdev->dev, 1);
@@ -674,7 +674,7 @@ static int __init ohci_at91_init(void)
 	if (usb_disabled())
 		return -ENODEV;
 
-	pr_info("%s: " DRIVER_DESC "\n", hcd_name);
+	pr_debug("%s: " DRIVER_DESC "\n", hcd_name);
 	ohci_init_driver(&ohci_at91_hc_driver, &ohci_at91_drv_overrides);
 
 	/*

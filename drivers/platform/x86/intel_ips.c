@@ -646,7 +646,7 @@ static bool cpu_exceeded(struct ips_driver *ips, int cpu)
 	spin_unlock_irqrestore(&ips->turbo_status_lock, flags);
 
 	if (ret)
-		dev_info(ips->dev, "CPU power or thermal limit exceeded\n");
+		dev_dbg(ips->dev, "CPU power or thermal limit exceeded\n");
 
 	return ret;
 }
@@ -1167,8 +1167,8 @@ static irqreturn_t ips_irq_handler(int irq, void *arg)
 	if (!tses && !tes)
 		return IRQ_NONE;
 
-	dev_info(ips->dev, "TSES: 0x%02x\n", tses);
-	dev_info(ips->dev, "TES: 0x%02x\n", tes);
+	dev_dbg(ips->dev, "TSES: 0x%02x\n", tses);
+	dev_dbg(ips->dev, "TES: 0x%02x\n", tes);
 
 	/* STS update from EC? */
 	if (tes & 1) {
@@ -1363,7 +1363,7 @@ static struct ips_mcp_limits *ips_detect_cpu(struct ips_driver *ips)
 	u16 tdp;
 
 	if (!(boot_cpu_data.x86 == 6 && boot_cpu_data.x86_model == 37)) {
-		dev_info(ips->dev, "Non-IPS CPU detected.\n");
+		dev_dbg(ips->dev, "Non-IPS CPU detected.\n");
 		return NULL;
 	}
 
@@ -1385,7 +1385,7 @@ static struct ips_mcp_limits *ips_detect_cpu(struct ips_driver *ips)
 	else if (strstr(boot_cpu_data.x86_model_id, "CPU       U"))
 		limits = &ips_ulv_limits;
 	else {
-		dev_info(ips->dev, "No CPUID match found.\n");
+		dev_dbg(ips->dev, "No CPUID match found.\n");
 		return NULL;
 	}
 
@@ -1394,7 +1394,7 @@ static struct ips_mcp_limits *ips_detect_cpu(struct ips_driver *ips)
 
 	/* Sanity check TDP against CPU */
 	if (limits->core_power_limit != (tdp / 8) * 1000) {
-		dev_info(ips->dev,
+		dev_dbg(ips->dev,
 			 "CPU TDP doesn't match expected value (found %d, expected %d)\n",
 			 tdp / 8, limits->core_power_limit / 1000);
 		limits->core_power_limit = (tdp / 8) * 1000;
@@ -1449,7 +1449,7 @@ ips_gpu_turbo_enabled(struct ips_driver *ips)
 {
 	if (!ips->gpu_busy && late_i915_load) {
 		if (ips_get_i915_syms(ips)) {
-			dev_info(ips->dev,
+			dev_dbg(ips->dev,
 				 "i915 driver attached, reenabling gpu turbo\n");
 			ips->gpu_turbo_enabled = !(thm_readl(THM_HTS) & HTS_GTD_DIS);
 		}
@@ -1478,7 +1478,7 @@ MODULE_DEVICE_TABLE(pci, ips_id_table);
 
 static int ips_blacklist_callback(const struct dmi_system_id *id)
 {
-	pr_info("Blacklisted intel_ips for %s\n", id->ident);
+	pr_debug("Blacklisted intel_ips for %s\n", id->ident);
 	return 1;
 }
 
@@ -1515,7 +1515,7 @@ static int ips_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
 	ips->limits = ips_detect_cpu(ips);
 	if (!ips->limits) {
-		dev_info(&dev->dev, "IPS not supported on this CPU\n");
+		dev_dbg(&dev->dev, "IPS not supported on this CPU\n");
 		return -ENXIO;
 	}
 
@@ -1560,7 +1560,7 @@ static int ips_probe(struct pci_dev *dev, const struct pci_device_id *id)
 		ips->poll_turbo_status = true;
 
 	if (!ips_get_i915_syms(ips)) {
-		dev_info(&dev->dev, "failed to get i915 symbols, graphics turbo disabled until i915 loads\n");
+		dev_dbg(&dev->dev, "failed to get i915 symbols, graphics turbo disabled until i915 loads\n");
 		ips->gpu_turbo_enabled = false;
 	} else {
 		dev_dbg(&dev->dev, "graphics turbo enabled\n");
@@ -1640,7 +1640,7 @@ static int ips_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
 	ips_debugfs_init(ips);
 
-	dev_info(&dev->dev, "IPS driver initialized, MCP temp limit %d\n",
+	dev_dbg(&dev->dev, "IPS driver initialized, MCP temp limit %d\n",
 		 ips->mcp_temp_limit);
 	return ret;
 

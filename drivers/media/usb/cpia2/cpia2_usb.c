@@ -931,7 +931,7 @@ static int cpia2_usb_suspend(struct usb_interface *intf, pm_message_t message)
 	}
 	mutex_unlock(&cam->v4l2_lock);
 
-	dev_info(&intf->dev, "going into suspend..\n");
+	dev_dbg(&intf->dev, "going into suspend..\n");
 	return 0;
 }
 
@@ -949,7 +949,7 @@ static int cpia2_usb_resume(struct usb_interface *intf)
 	}
 	mutex_unlock(&cam->v4l2_lock);
 
-	dev_info(&intf->dev, "coming out of suspend..\n");
+	dev_dbg(&intf->dev, "coming out of suspend..\n");
 	return 0;
 }
 

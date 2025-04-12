@@ -257,7 +257,7 @@ static const struct i40e_priv_flags i40e_gl_gstrings_priv_flags[] = {
  **/
 static void i40e_partition_setting_complaint(struct i40e_pf *pf)
 {
-	dev_info(&pf->pdev->dev,
+	dev_dbg(&pf->pdev->dev,
 		 "The link settings are allowed to be changed only from the first partition of a given port. Please switch to the first partition in order to change the setting.\n");
 }
 
@@ -1314,7 +1314,7 @@ static int i40e_get_eeprom(struct net_device *netdev,
 			ret_val = i40e_nvmupd_command(hw, cmd, bytes, &errno);
 
 		if ((errno || ret_val) && (hw->debug_mask & I40E_DEBUG_NVM))
-			dev_info(&pf->pdev->dev,
+			dev_dbg(&pf->pdev->dev,
 				 "NVMUpdate read failed err=%d status=0x%x errno=%d module=%d offset=0x%x size=%d\n",
 				 ret_val, hw->aq.asq_last_status, errno,
 				 (u8)(cmd->config & I40E_NVM_MOD_PNT_MASK),
@@ -1332,7 +1332,7 @@ static int i40e_get_eeprom(struct net_device *netdev,
 
 	ret_val = i40e_acquire_nvm(hw, I40E_RESOURCE_READ);
 	if (ret_val) {
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "Failed Acquiring NVM resource for read err=%d status=0x%x\n",
 			 ret_val, hw->aq.asq_last_status);
 		goto free_buff;
@@ -1352,18 +1352,18 @@ static int i40e_get_eeprom(struct net_device *netdev,
 				(u8 *)eeprom_buff + (I40E_NVM_SECTOR_SIZE * i),
 				last, NULL);
 		if (ret_val && hw->aq.asq_last_status == I40E_AQ_RC_EPERM) {
-			dev_info(&pf->pdev->dev,
+			dev_dbg(&pf->pdev->dev,
 				 "read NVM failed, invalid offset 0x%x\n",
 				 offset);
 			break;
 		} else if (ret_val &&
 			   hw->aq.asq_last_status == I40E_AQ_RC_EACCES) {
-			dev_info(&pf->pdev->dev,
+			dev_dbg(&pf->pdev->dev,
 				 "read NVM failed, access, offset 0x%x\n",
 				 offset);
 			break;
 		} else if (ret_val) {
-			dev_info(&pf->pdev->dev,
+			dev_dbg(&pf->pdev->dev,
 				 "read NVM failed offset %d err=%d status=0x%x\n",
 				 offset, ret_val, hw->aq.asq_last_status);
 			break;
@@ -1421,7 +1421,7 @@ static int i40e_set_eeprom(struct net_device *netdev,
 		ret_val = i40e_nvmupd_command(hw, cmd, bytes, &errno);
 
 	if ((errno || ret_val) && (hw->debug_mask & I40E_DEBUG_NVM))
-		dev_info(&pf->pdev->dev,
+		dev_dbg(&pf->pdev->dev,
 			 "NVMUpdate write failed err=%d status=0x%x errno=%d module=%d offset=0x%x size=%d\n",
 			 ret_val, hw->aq.asq_last_status, errno,
 			 (u8)(cmd->config & I40E_NVM_MOD_PNT_MASK),
@@ -4652,7 +4652,7 @@ flags_complete:
 		ret = i40e_aq_set_switch_config(&pf->hw, sw_flags, valid_flags,
 						0, NULL);
 		if (ret && pf->hw.aq.asq_last_status != I40E_AQ_RC_ESRCH) {
-			dev_info(&pf->pdev->dev,
+			dev_dbg(&pf->pdev->dev,
 				 "couldn't set switch config bits, err %s aq_err %s\n",
 				 i40e_stat_str(&pf->hw, ret),
 				 i40e_aq_str(&pf->hw,

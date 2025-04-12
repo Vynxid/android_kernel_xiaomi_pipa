@@ -1010,8 +1010,8 @@ static int airspy_probe(struct usb_interface *intf,
 
 	buf[BUF_SIZE - 1] = '\0';
 
-	dev_info(s->dev, "Board ID: %02x\n", u8tmp);
-	dev_info(s->dev, "Firmware version: %s\n", buf);
+	dev_dbg(s->dev, "Board ID: %02x\n", u8tmp);
+	dev_dbg(s->dev, "Firmware version: %s\n", buf);
 
 	/* Init videobuf2 queue structure */
 	s->vb_queue.type = V4L2_BUF_TYPE_SDR_CAPTURE;
@@ -1073,9 +1073,9 @@ static int airspy_probe(struct usb_interface *intf,
 				ret);
 		goto err_free_controls;
 	}
-	dev_info(s->dev, "Registered as %s\n",
+	dev_dbg(s->dev, "Registered as %s\n",
 			video_device_node_name(&s->vdev));
-	dev_notice(s->dev, "SDR API is still slightly experimental and functionality changes may follow\n");
+	dev_dbg(s->dev, "SDR API is still slightly experimental and functionality changes may follow\n");
 	return 0;
 
 err_free_controls:

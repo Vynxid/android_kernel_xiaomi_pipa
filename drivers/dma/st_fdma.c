@@ -847,7 +847,7 @@ static int st_fdma_probe(struct platform_device *pdev)
 		goto err_dma_dev;
 	}
 
-	dev_info(&pdev->dev, "ST FDMA engine driver, irq:%d\n", fdev->irq);
+	dev_dbg(&pdev->dev, "ST FDMA engine driver, irq:%d\n", fdev->irq);
 
 	return 0;
 

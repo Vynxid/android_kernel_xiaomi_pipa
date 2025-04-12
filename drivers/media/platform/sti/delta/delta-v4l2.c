@@ -334,7 +334,7 @@ static void register_decoders(struct delta_dev *delta)
 		}
 
 		delta->decoders[delta->nb_of_decoders++] = delta_decoders[i];
-		dev_info(delta->dev, "%s %s decoder registered\n",
+		dev_dbg(delta->dev, "%s %s decoder registered\n",
 			 DELTA_PREFIX, delta_decoders[i]->name);
 	}
 }
@@ -1225,12 +1225,12 @@ static void dump_frames_status(struct delta_ctx *ctx)
 	struct delta_frame *frame;
 	unsigned char str[100] = "";
 
-	dev_info(delta->dev,
+	dev_dbg(delta->dev,
 		 "%s dumping frames status...\n", ctx->name);
 
 	for (i = 0; i < ctx->nb_of_frames; i++) {
 		frame = ctx->frames[i];
-		dev_info(delta->dev,
+		dev_dbg(delta->dev,
 			 "%s frame[%d] %s\n",
 			 ctx->name, frame->index,
 			 frame_state_str(frame->state,
@@ -1892,7 +1892,7 @@ static int delta_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_work_queue;
 
-	dev_info(dev, "%s %s registered as /dev/video%d\n",
+	dev_dbg(dev, "%s %s registered as /dev/video%d\n",
 		 DELTA_PREFIX, delta->vdev->name, delta->vdev->num);
 
 	return 0;

@@ -41,7 +41,7 @@ static int menf21bmc_wdt_exit_prod_mode(struct i2c_client *client)
 	 * if active.
 	 */
 	if (val == 0x00) {
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			"BMC in production mode. Exit production mode\n");
 
 		ret = i2c_smbus_write_byte(client, BMC_CMD_WDT_EXIT_PROD);
@@ -83,7 +83,7 @@ menf21bmc_probe(struct i2c_client *client, const struct i2c_device_id *ids)
 		return rev_main;
 	}
 
-	dev_info(&client->dev, "FW Revision: %02d.%02d.%02d\n",
+	dev_dbg(&client->dev, "FW Revision: %02d.%02d.%02d\n",
 		 rev_major, rev_minor, rev_main);
 
 	/*

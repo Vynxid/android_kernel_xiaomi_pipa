@@ -349,7 +349,7 @@ static int da9062_get_device_type(struct da9062 *chip)
 		break;
 	}
 
-	dev_info(chip->dev,
+	dev_dbg(chip->dev,
 		 "Device detected (device-ID: 0x%02X, var-ID: 0x%02X, %s)\n",
 		 device_id, variant_id, type);
 

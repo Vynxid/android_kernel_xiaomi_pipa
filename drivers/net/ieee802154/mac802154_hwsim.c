@@ -877,7 +877,7 @@ static int hwsim_probe(struct platform_device *pdev)
 			goto err_slave;
 	}
 
-	dev_info(&pdev->dev, "Added 2 mac802154 hwsim hardware radios\n");
+	dev_dbg(&pdev->dev, "Added 2 mac802154 hwsim hardware radios\n");
 	return 0;
 
 err_slave:

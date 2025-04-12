@@ -214,7 +214,7 @@ int fdtv_dvb_register(struct firedtv *fdtv, const char *name)
 
 	err = fdtv_ca_register(fdtv);
 	if (err)
-		dev_info(fdtv->device,
+		dev_dbg(fdtv->device,
 			 "Conditional Access Module not enabled\n");
 	return 0;
 

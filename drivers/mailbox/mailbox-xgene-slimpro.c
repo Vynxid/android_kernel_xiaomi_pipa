@@ -207,7 +207,7 @@ static int slimpro_mbox_probe(struct platform_device *pdev)
 				dev_err(&pdev->dev, "no available IRQ\n");
 				return -EINVAL;
 			}
-			dev_info(&pdev->dev, "no IRQ for channel %d\n", i);
+			dev_dbg(&pdev->dev, "no IRQ for channel %d\n", i);
 			break;
 		}
 
@@ -231,7 +231,7 @@ static int slimpro_mbox_probe(struct platform_device *pdev)
 		return rc;
 	}
 
-	dev_info(&pdev->dev, "APM X-Gene SLIMpro MailBox registered\n");
+	dev_dbg(&pdev->dev, "APM X-Gene SLIMpro MailBox registered\n");
 	return 0;
 }
 

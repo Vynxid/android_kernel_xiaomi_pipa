@@ -461,13 +461,13 @@ static struct notifier_block rmnet_perf_dev_notifier __read_mostly = {
 
 int __init rmnet_perf_init(void)
 {
-	pr_info("%s(): initializing rmnet_perf\n", __func__);
+	pr_debug("%s(): initializing rmnet_perf\n", __func__);
 	return register_netdevice_notifier(&rmnet_perf_dev_notifier);
 }
 
 void __exit rmnet_perf_exit(void)
 {
-	pr_info("%s(): exiting rmnet_perf\n", __func__);
+	pr_debug("%s(): exiting rmnet_perf\n", __func__);
 	unregister_netdevice_notifier(&rmnet_perf_dev_notifier);
 }
 

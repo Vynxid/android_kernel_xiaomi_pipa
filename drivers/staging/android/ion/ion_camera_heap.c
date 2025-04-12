@@ -269,7 +269,7 @@ static int ion_camera_heap_allocate(struct ion_heap *heap,
 
 	if (ion_heap_is_camera_heap_type(buffer->heap->type) &&
 	    is_secure_vmid_valid(vmid)) {
-		pr_info("%s: camera heap doesn't support secure allocations\n",
+		pr_debug("%s: camera heap doesn't support secure allocations\n",
 			__func__);
 		return -EINVAL;
 	}
@@ -588,12 +588,12 @@ static int ion_camera_heap_debug_show(struct ion_heap *heap, struct seq_file *s,
 			   reserved_total + uncached_total + cached_total + secure_total);
 		seq_puts(s, "--------------------------------------------\n");
 	} else {
-		pr_info("-------------------------------------------------\n");
-		pr_info("reserved pool = %lu\n uncached pool = %lu cached pool = %lu secure pool = %lu\n",
+		pr_debug("-------------------------------------------------\n");
+		pr_debug("reserved pool = %lu\n uncached pool = %lu cached pool = %lu secure pool = %lu\n",
 			   reserved_total, uncached_total, cached_total, secure_total);
-		pr_info("pool total (reserved + uncached + cached + secure) = %lu\n",
+		pr_debug("pool total (reserved + uncached + cached + secure) = %lu\n",
 			   reserved_total + uncached_total + cached_total + secure_total);
-		pr_info("-------------------------------------------------\n");
+		pr_debug("-------------------------------------------------\n");
 	}
 
 	return 0;

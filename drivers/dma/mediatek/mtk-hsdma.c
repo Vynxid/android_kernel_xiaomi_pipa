@@ -954,7 +954,7 @@ static int mtk_hsdma_probe(struct platform_device *pdev)
 	if (pdev->dev.of_node && of_property_read_u32(pdev->dev.of_node,
 						      "dma-requests",
 						      &hsdma->dma_requests)) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Using %u as missing dma-requests property\n",
 			 MTK_HSDMA_NR_VCHANS);
 	}
@@ -1002,7 +1002,7 @@ static int mtk_hsdma_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, hsdma);
 
-	dev_info(&pdev->dev, "MediaTek HSDMA driver registered\n");
+	dev_dbg(&pdev->dev, "MediaTek HSDMA driver registered\n");
 
 	return 0;
 

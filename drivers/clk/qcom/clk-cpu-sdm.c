@@ -483,14 +483,14 @@ static void cpucc_clk_get_speed_bin(struct platform_device *pdev, int *bin,
 
 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "efuse");
 	if (!res) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"No speed/PVS binning available. Defaulting to 0!\n");
 		return;
 	}
 
 	base = ioremap(res->start, resource_size(res));
 	if (!base) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"Unable to read efuse data. Defaulting to 0!\n");
 		return;
 	}
@@ -500,7 +500,7 @@ static void cpucc_clk_get_speed_bin(struct platform_device *pdev, int *bin,
 
 	*bin = (pte_efuse >> 2) & 0x7;
 
-	dev_info(&pdev->dev, "PVS version: %d speed bin: %d\n", *version, *bin);
+	dev_dbg(&pdev->dev, "PVS version: %d speed bin: %d\n", *version, *bin);
 }
 
 static int cpucc_clk_get_fmax_vdd_class(struct platform_device *pdev,
@@ -636,9 +636,9 @@ static void cpucc_clk_print_opp_table(int c0, int c1, bool is_sdm439)
 	oppfmin = dev_pm_opp_find_freq_exact(get_cpu_device(c1),
 		apc_c1_fmin, true);
 
-	pr_info("Clock_cpu:(cpu %d) OPP voltage for %lu: %ld\n", c1,
+	pr_debug("Clock_cpu:(cpu %d) OPP voltage for %lu: %ld\n", c1,
 		 apc_c1_fmin, dev_pm_opp_get_voltage(oppfmin));
-	pr_info("Clock_cpu:(cpu %d) OPP voltage for %lu: %ld\n", c1,
+	pr_debug("Clock_cpu:(cpu %d) OPP voltage for %lu: %ld\n", c1,
 		 apc_c1_fmax, dev_pm_opp_get_voltage(oppfmax));
 
 	if (is_sdm439) {
@@ -652,9 +652,9 @@ static void cpucc_clk_print_opp_table(int c0, int c1, bool is_sdm439)
 		oppfmin = dev_pm_opp_find_freq_exact(get_cpu_device(c0),
 			apc_c0_fmin, true);
 
-		pr_info("Clock_cpu:(cpu %d) OPP voltage for %lu: %ld\n", c0,
+		pr_debug("Clock_cpu:(cpu %d) OPP voltage for %lu: %ld\n", c0,
 			 apc_c0_fmin, dev_pm_opp_get_voltage(oppfmin));
-		pr_info("Clock_cpu:(cpu %d) OPP voltage for %lu: %ld\n", c0,
+		pr_debug("Clock_cpu:(cpu %d) OPP voltage for %lu: %ld\n", c0,
 			 apc_c0_fmax, dev_pm_opp_get_voltage(oppfmax));
 	}
 }
@@ -1204,7 +1204,7 @@ static int cpucc_driver_probe(struct platform_device *pdev)
 		register_pm_notifier(&clock_qm215_pm_notifier);
 
 	cpucc_clk_populate_opp_table(pdev, is_sdm439);
-	dev_info(dev, "CPU clock Driver probed successfully\n");
+	dev_dbg(dev, "CPU clock Driver probed successfully\n");
 
 	return ret;
 }

@@ -1721,7 +1721,7 @@ static int snd_ca0106_create(int dev, struct snd_card *card,
 	/* read serial */
 	pci_read_config_dword(pci, PCI_SUBSYSTEM_VENDOR_ID, &chip->serial);
 	pci_read_config_word(pci, PCI_SUBSYSTEM_ID, &chip->model);
-	dev_info(card->dev, "Model %04x Rev %08x Serial %08x\n",
+	dev_dbg(card->dev, "Model %04x Rev %08x Serial %08x\n",
 	       chip->model, pci->revision, chip->serial);
 	strcpy(card->driver, "CA0106");
 	strcpy(card->shortname, "CA0106");
@@ -1735,7 +1735,7 @@ static int snd_ca0106_create(int dev, struct snd_card *card,
 	}
 	chip->details = c;
 	if (subsystem[dev]) {
-		dev_info(card->dev, "Sound card name=%s, "
+		dev_dbg(card->dev, "Sound card name=%s, "
 		       "subsystem=0x%x. Forced to subsystem=0x%x\n",
 		       c->name, chip->serial, subsystem[dev]);
 	}

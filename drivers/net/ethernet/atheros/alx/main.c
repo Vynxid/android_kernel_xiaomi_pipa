@@ -1929,7 +1929,7 @@ static pci_ers_result_t alx_pci_error_detected(struct pci_dev *pdev,
 	struct net_device *netdev = alx->dev;
 	pci_ers_result_t rc = PCI_ERS_RESULT_NEED_RESET;
 
-	dev_info(&pdev->dev, "pci error detected\n");
+	dev_dbg(&pdev->dev, "pci error detected\n");
 
 	rtnl_lock();
 
@@ -1954,7 +1954,7 @@ static pci_ers_result_t alx_pci_error_slot_reset(struct pci_dev *pdev)
 	struct alx_hw *hw = &alx->hw;
 	pci_ers_result_t rc = PCI_ERS_RESULT_DISCONNECT;
 
-	dev_info(&pdev->dev, "pci error slot reset\n");
+	dev_dbg(&pdev->dev, "pci error slot reset\n");
 
 	rtnl_lock();
 
@@ -1981,7 +1981,7 @@ static void alx_pci_error_resume(struct pci_dev *pdev)
 	struct alx_priv *alx = pci_get_drvdata(pdev);
 	struct net_device *netdev = alx->dev;
 
-	dev_info(&pdev->dev, "pci error resume\n");
+	dev_dbg(&pdev->dev, "pci error resume\n");
 
 	rtnl_lock();
 

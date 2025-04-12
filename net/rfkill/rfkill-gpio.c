@@ -154,7 +154,7 @@ static int rfkill_gpio_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, rfkill);
 
-	dev_info(&pdev->dev, "%s device registered.\n", rfkill->name);
+	dev_dbg(&pdev->dev, "%s device registered.\n", rfkill->name);
 
 	return 0;
 

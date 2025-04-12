@@ -1188,7 +1188,7 @@ static int smi_start_processing(void            *send_info,
 		new_smi->thread = kthread_run(ipmi_thread, new_smi,
 					      "kipmi%d", new_smi->si_num);
 		if (IS_ERR(new_smi->thread)) {
-			dev_notice(new_smi->io.dev, "Could not start"
+			dev_dbg(new_smi->io.dev, "Could not start"
 				   " kernel thread due to error %ld, only using"
 				   " timers to drive the interface\n",
 				   PTR_ERR(new_smi->thread));
@@ -1296,7 +1296,7 @@ int ipmi_std_irq_setup(struct si_sm_io *io)
 	} else {
 		io->irq_cleanup = std_irq_cleanup;
 		ipmi_irq_finish_setup(io);
-		dev_info(io->dev, "Using irq %d\n", io->irq);
+		dev_dbg(io->dev, "Using irq %d\n", io->irq);
 	}
 
 	return rv;
@@ -1886,7 +1886,7 @@ int ipmi_si_add_smi(struct si_sm_io *io)
 	 */
 	if (io->addr_source != SI_HARDCODED &&
 	    ipmi_si_hardcode_match(io->addr_type, io->addr_data)) {
-		dev_info(io->dev,
+		dev_dbg(io->dev,
 			 "Hard-coded device at this address already exists");
 		return -ENODEV;
 	}
@@ -1914,12 +1914,12 @@ int ipmi_si_add_smi(struct si_sm_io *io)
 		if (new_smi->io.addr_source == SI_ACPI &&
 		    dup->io.addr_source == SI_SMBIOS) {
 			/* We prefer ACPI over SMBIOS. */
-			dev_info(dup->io.dev,
+			dev_dbg(dup->io.dev,
 				 "Removing SMBIOS-specified %s state machine in favor of ACPI\n",
 				 si_to_str[new_smi->io.si_type]);
 			cleanup_one_si(dup);
 		} else {
-			dev_info(new_smi->io.dev,
+			dev_dbg(new_smi->io.dev,
 				 "%s-specified %s state machine: duplicate\n",
 				 ipmi_addr_src_to_str(new_smi->io.addr_source),
 				 si_to_str[new_smi->io.si_type]);
@@ -1929,7 +1929,7 @@ int ipmi_si_add_smi(struct si_sm_io *io)
 		}
 	}
 
-	pr_info(PFX "Adding %s-specified %s state machine\n",
+	pr_debug(PFX "Adding %s-specified %s state machine\n",
 		ipmi_addr_src_to_str(new_smi->io.addr_source),
 		si_to_str[new_smi->io.si_type]);
 
@@ -1953,7 +1953,7 @@ static int try_smi_init(struct smi_info *new_smi)
 	int i;
 	char *init_name = NULL;
 
-	pr_info(PFX "Trying %s-specified %s state machine at %s address 0x%lx, slave address 0x%x, irq %d\n",
+	pr_debug(PFX "Trying %s-specified %s state machine at %s address 0x%lx, slave address 0x%x, irq %d\n",
 		ipmi_addr_src_to_str(new_smi->io.addr_source),
 		si_to_str[new_smi->io.si_type],
 		addr_space_to_str[new_smi->io.addr_type],
@@ -2108,7 +2108,7 @@ static int try_smi_init(struct smi_info *new_smi)
 	/* Don't increment till we know we have succeeded. */
 	smi_num++;
 
-	dev_info(new_smi->io.dev, "IPMI %s interface initialized\n",
+	dev_dbg(new_smi->io.dev, "IPMI %s interface initialized\n",
 		 si_to_str[new_smi->io.si_type]);
 
 	WARN_ON(new_smi->io.dev->init_name != NULL);
@@ -2137,7 +2137,7 @@ static int __init init_ipmi_si(void)
 		return 0;
 
 	ipmi_hardcode_init();
-	pr_info("IPMI System Interface driver.\n");
+	pr_debug("IPMI System Interface driver.\n");
 
 	ipmi_si_platform_init();
 

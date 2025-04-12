@@ -474,7 +474,7 @@ static int pem_probe(struct i2c_client *client,
 	if (ret < 0)
 		return ret;
 
-	dev_info(dev, "Firmware revision %d.%d.%d\n",
+	dev_dbg(dev, "Firmware revision %d.%d.%d\n",
 		 data->firmware_rev[0], data->firmware_rev[1],
 		 data->firmware_rev[2]);
 

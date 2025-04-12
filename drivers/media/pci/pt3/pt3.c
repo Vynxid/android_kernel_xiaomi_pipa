@@ -726,7 +726,7 @@ static int pt3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 			dev_err(&pdev->dev, "Failed to set DMA mask\n");
 			goto err_release_regions;
 		}
-		dev_info(&pdev->dev, "Use 32bit DMA\n");
+		dev_dbg(&pdev->dev, "Use 32bit DMA\n");
 	}
 
 	pt3 = kzalloc(sizeof(*pt3), GFP_KERNEL);
@@ -792,7 +792,7 @@ static int pt3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 		goto err_cleanup_adapters;
 	}
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "successfully init'ed PT%d (fw:0x%02x, I/F:0x%02x)\n",
 		 ver >> 24, (ver >> 8) & 0xff, (ver >> 16) & 0xff);
 	return 0;

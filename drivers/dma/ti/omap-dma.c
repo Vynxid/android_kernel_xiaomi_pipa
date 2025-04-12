@@ -1501,7 +1501,7 @@ static int omap_dma_probe(struct platform_device *pdev)
 	if (pdev->dev.of_node && of_property_read_u32(pdev->dev.of_node,
 						      "dma-requests",
 						      &od->dma_requests)) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Missing dma-requests property, using %u.\n",
 			 OMAP_SDMA_REQUESTS);
 	}
@@ -1513,7 +1513,7 @@ static int omap_dma_probe(struct platform_device *pdev)
 			lch_count = OMAP_SDMA_CHANNELS;
 	} else if (of_property_read_u32(pdev->dev.of_node, "dma-channels",
 					&lch_count)) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "Missing dma-channels property, using %u.\n",
 			 OMAP_SDMA_CHANNELS);
 		lch_count = OMAP_SDMA_CHANNELS;
@@ -1534,7 +1534,7 @@ static int omap_dma_probe(struct platform_device *pdev)
 
 	irq = platform_get_irq(pdev, 1);
 	if (irq <= 0) {
-		dev_info(&pdev->dev, "failed to get L1 IRQ: %d\n", irq);
+		dev_dbg(&pdev->dev, "failed to get L1 IRQ: %d\n", irq);
 		od->legacy = true;
 	} else {
 		/* Disable all interrupts */
@@ -1591,7 +1591,7 @@ static int omap_dma_probe(struct platform_device *pdev)
 		}
 	}
 
-	dev_info(&pdev->dev, "OMAP DMA engine driver%s\n",
+	dev_dbg(&pdev->dev, "OMAP DMA engine driver%s\n",
 		 od->ll123_supported ? " (LinkedList1/2/3 supported)" : "");
 
 	return rc;

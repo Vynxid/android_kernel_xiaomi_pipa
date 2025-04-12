@@ -1413,7 +1413,7 @@ static int ov7251_probe(struct i2c_client *client)
 	}
 	chip_rev >>= 4;
 
-	dev_info(dev, "OV7251 revision %x (%s) detected at address 0x%02x\n",
+	dev_dbg(dev, "OV7251 revision %x (%s) detected at address 0x%02x\n",
 		 chip_rev,
 		 chip_rev == 0x4 ? "1A / 1B" :
 		 chip_rev == 0x5 ? "1C / 1D" :

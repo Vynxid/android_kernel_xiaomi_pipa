@@ -120,7 +120,7 @@ static int nsc_wait_for_ready(struct tpm_chip *chip)
 	}
 	while (time_before(jiffies, stop));
 
-	dev_info(&chip->dev, "wait for ready failed\n");
+	dev_dbg(&chip->dev, "wait for ready failed\n");
 	return -EBUSY;
 }
 
@@ -385,7 +385,7 @@ static int __init init_nsc(void)
 		tpm_read_index(nscAddrBase,0xF6), tpm_read_index(nscAddrBase,0xF7),
 		tpm_read_index(nscAddrBase,0xF8), tpm_read_index(nscAddrBase,0xF9));
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "NSC TPM revision %d\n",
 		 tpm_read_index(nscAddrBase, 0x27) & 0x1F);
 

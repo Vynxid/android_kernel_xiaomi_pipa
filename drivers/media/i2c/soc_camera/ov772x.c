@@ -960,7 +960,7 @@ static int ov772x_video_probe(struct ov772x_priv *priv)
 		goto done;
 	}
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "%s Product ID %0x:%0x Manufacturer ID %x:%x\n",
 		 devname,
 		 pid,

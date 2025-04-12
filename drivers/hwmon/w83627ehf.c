@@ -1108,7 +1108,7 @@ store_fan_min(struct device *dev, struct device_attribute *attr,
 		/* No min limit, alarm disabled */
 		data->fan_min[nr] = 255;
 		new_div = data->fan_div[nr]; /* No change */
-		dev_info(dev, "fan%u low limit and alarm disabled\n", nr + 1);
+		dev_dbg(dev, "fan%u low limit and alarm disabled\n", nr + 1);
 	} else if ((reg = 1350000U / val) >= 128 * 255) {
 		/*
 		 * Speed below this value cannot possibly be represented,
@@ -2414,7 +2414,7 @@ static int w83627ehf_probe(struct platform_device *pdev)
 				goto exit_release;
 			}
 		} else {
-			dev_info(dev,
+			dev_dbg(dev,
 				 "VID pins in output mode, CPU VID not available\n");
 		}
 	}
@@ -2431,7 +2431,7 @@ static int w83627ehf_probe(struct platform_device *pdev)
 		else
 			superio_outb(sio_data->sioreg, NCT6775_REG_FAN_DEBOUNCE,
 				     0x1e | tmp);
-		pr_info("Enabled fan debounce for chip %s\n", data->name);
+		pr_debug("Enabled fan debounce for chip %s\n", data->name);
 	}
 
 	w83627ehf_check_fan_inputs(sio_data, data);
@@ -2796,7 +2796,7 @@ static int __init w83627ehf_find(int sioaddr, unsigned short *addr,
 	}
 
 	superio_exit(sioaddr);
-	pr_info("Found %s chip at %#x\n", sio_name, *addr);
+	pr_debug("Found %s chip at %#x\n", sio_name, *addr);
 	sio_data->sioreg = sioaddr;
 
 	return 0;

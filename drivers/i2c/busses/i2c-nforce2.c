@@ -369,7 +369,7 @@ static int nforce2_probe_smb(struct pci_dev *dev, int bar, int alt_reg,
 		release_region(smbus->base, smbus->size);
 		return error;
 	}
-	dev_info(&smbus->adapter.dev, "nForce2 SMBus adapter at %#x\n",
+	dev_dbg(&smbus->adapter.dev, "nForce2 SMBus adapter at %#x\n",
 		smbus->base);
 	return 0;
 }

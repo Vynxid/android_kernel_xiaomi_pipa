@@ -191,7 +191,7 @@ static void do_io_probe(struct pcmcia_socket *s, unsigned int base,
 	int any;
 	u_char *b, hole, most;
 
-	dev_info(&s->dev, "cs: IO port probe %#x-%#x:", base, base+num-1);
+	dev_dbg(&s->dev, "cs: IO port probe %#x-%#x:", base, base+num-1);
 
 	/* First, what does a floating port look like? */
 	b = kzalloc(256, GFP_KERNEL);
@@ -411,7 +411,7 @@ static int do_mem_probe(struct pcmcia_socket *s, u_long base, u_long num,
 	struct socket_data *s_data = s->resource_data;
 	u_long i, j, bad, fail, step;
 
-	dev_info(&s->dev, "cs: memory probe 0x%06lx-0x%06lx:",
+	dev_dbg(&s->dev, "cs: memory probe 0x%06lx-0x%06lx:",
 		 base, base+num-1);
 	bad = fail = 0;
 	step = (num < 0x20000) ? 0x2000 : ((num>>4) & ~0x1fff);
@@ -493,7 +493,7 @@ static int validate_mem(struct pcmcia_socket *s, unsigned int probe_mask)
 			return 0;
 		if (s_data->mem_db_valid.next != &s_data->mem_db_valid)
 			return 0;
-		dev_notice(&s->dev,
+		dev_dbg(&s->dev,
 			   "cs: warning: no high memory space available!\n");
 		return -ENODEV;
 	}
@@ -979,7 +979,7 @@ static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
 			if (res == &ioport_resource)
 				continue;
 
-			dev_info(&s->cb_dev->dev,
+			dev_dbg(&s->cb_dev->dev,
 				 "pcmcia: parent PCI bridge window: %pR\n",
 				 res);
 			if (!adjust_io(s, ADD_MANAGED_RESOURCE, res->start, res->end))
@@ -994,7 +994,7 @@ static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
 			if (res == &iomem_resource)
 				continue;
 
-			dev_info(&s->cb_dev->dev,
+			dev_dbg(&s->cb_dev->dev,
 				 "pcmcia: parent PCI bridge window: %pR\n",
 				 res);
 			if (!adjust_memory(s, ADD_MANAGED_RESOURCE, res->start, res->end))

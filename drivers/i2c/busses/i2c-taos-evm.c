@@ -55,7 +55,7 @@ static struct i2c_board_info tsl2550_info = {
 static struct i2c_client *taos_instantiate_device(struct i2c_adapter *adapter)
 {
 	if (!strncmp(adapter->name, "TAOS TSL2550 EVM", 16)) {
-		dev_info(&adapter->dev, "Instantiating device %s at 0x%02x\n",
+		dev_dbg(&adapter->dev, "Instantiating device %s at 0x%02x\n",
 			tsl2550_info.type, tsl2550_info.addr);
 		return i2c_new_device(adapter, &tsl2550_info);
 	}
@@ -265,7 +265,7 @@ static int taos_connect(struct serio *serio, struct serio_driver *drv)
 	err = i2c_add_adapter(adapter);
 	if (err)
 		goto exit_close;
-	dev_info(&serio->dev, "Connected to TAOS EVM\n");
+	dev_dbg(&serio->dev, "Connected to TAOS EVM\n");
 
 	taos->client = taos_instantiate_device(adapter);
 	return 0;
@@ -287,7 +287,7 @@ static void taos_disconnect(struct serio *serio)
 	serio_close(serio);
 	kfree(taos);
 
-	dev_info(&serio->dev, "Disconnected from TAOS EVM\n");
+	dev_dbg(&serio->dev, "Disconnected from TAOS EVM\n");
 }
 
 static const struct serio_device_id taos_serio_ids[] = {

@@ -785,7 +785,7 @@ out:
 static int msm_11ad_ssr_shutdown(const struct subsys_desc *subsys,
 				 bool force_stop)
 {
-	pr_info("%s(%pK,%d)\n", __func__, subsys, force_stop);
+	pr_debug("%s(%pK,%d)\n", __func__, subsys, force_stop);
 	/* nothing is done in shutdown. We do full recovery in powerup */
 	return 0;
 }
@@ -796,7 +796,7 @@ static int msm_11ad_ssr_powerup(const struct subsys_desc *subsys)
 	struct platform_device *pdev;
 	struct msm11ad_ctx *ctx;
 
-	pr_info("%s(%pK)\n", __func__, subsys);
+	pr_debug("%s(%pK)\n", __func__, subsys);
 
 	pdev = to_platform_device(subsys->dev);
 	ctx = platform_get_drvdata(pdev);
@@ -978,16 +978,16 @@ static void msm_11ad_init_cpu_boost(struct msm11ad_ctx *ctx)
 		cpumask_set_cpu(boost_cpu, &ctx->boost_cpu_0);
 		if (boost_cpu < (nr_cpu_ids - 1)) {
 			cpumask_set_cpu(boost_cpu + 1, &ctx->boost_cpu_1);
-			dev_info(ctx->dev, "CPU boost: will use cores %d - %d\n",
+			dev_dbg(ctx->dev, "CPU boost: will use cores %d - %d\n",
 				 boost_cpu, boost_cpu + 1);
 		} else {
 			cpumask_set_cpu(boost_cpu, &ctx->boost_cpu_1);
-			dev_info(ctx->dev, "CPU boost: will use core %d\n",
+			dev_dbg(ctx->dev, "CPU boost: will use core %d\n",
 				 boost_cpu);
 		}
 	} else {
 		ctx->use_cpu_boost = false;
-		dev_info(ctx->dev, "CPU boost disabled, uniform topology\n");
+		dev_dbg(ctx->dev, "CPU boost disabled, uniform topology\n");
 	}
 }
 
@@ -1000,7 +1000,7 @@ static void msm_11ad_pci_event_cb(struct msm_pcie_notify *notify)
 		return;
 
 	if (!ctx->rops.notify || !ctx->wil_handle) {
-		dev_info(ctx->dev,
+		dev_dbg(ctx->dev,
 			 "no registered notif CB, cannot hadle pci notifications\n");
 		return;
 	}
@@ -1224,7 +1224,7 @@ static int msm_11ad_probe(struct platform_device *pdev)
 	msm_11ad_init_cpu_boost(ctx);
 
 	/* report */
-	dev_info(ctx->dev, "msm_11ad discovered. %pK {\n"
+	dev_dbg(ctx->dev, "msm_11ad discovered. %pK {\n"
 		 "  gpio_en = %d\n"
 		 "  gpio_dc = %d\n"
 		 "  sleep_clk_en = %d\n"
@@ -1300,7 +1300,7 @@ static int msm_11ad_remove(struct platform_device *pdev)
 	msm_pcie_deregister_event(&ctx->pci_event);
 	msm_11ad_ssr_deinit(ctx);
 	list_del(&ctx->list);
-	dev_info(ctx->dev, "%s: pdev %pK pcidev %pK\n", __func__, pdev,
+	dev_dbg(ctx->dev, "%s: pdev %pK pcidev %pK\n", __func__, pdev,
 		 ctx->pcidev);
 	kfree(ctx->pristine_state);
 	kfree(ctx->golden_state);
@@ -1477,7 +1477,7 @@ static int msm_11ad_notify_crash(struct msm11ad_ctx *ctx)
 	int rc;
 
 	if (ctx->subsys) {
-		dev_info(ctx->dev, "SSR requested\n");
+		dev_dbg(ctx->dev, "SSR requested\n");
 		(void)msm_11ad_ssr_copy_ramdump(ctx);
 		ctx->recovery_in_progress = true;
 		subsys_set_crash_status(ctx->subsys, CRASH_STATUS_ERR_FATAL);
@@ -1601,7 +1601,7 @@ void *msm_11ad_dev_init(struct device *dev, struct wil_platform_ops *ops,
 		dev_err(ctx->dev, "Failed msm_bus registration\n");
 		return NULL;
 	}
-	dev_info(ctx->dev, "msm_bus handle 0x%x\n", ctx->msm_bus_handle);
+	dev_dbg(ctx->dev, "msm_bus handle 0x%x\n", ctx->msm_bus_handle);
 
 	domain = iommu_get_domain_for_dev(&pcidev->dev);
 	if (domain) {
@@ -1611,7 +1611,7 @@ void *msm_11ad_dev_init(struct device *dev, struct wil_platform_ops *ops,
 				      DOMAIN_ATTR_PAGE_TABLE_IS_COHERENT,
 				      &coherent);
 
-		dev_info(ctx->dev, "SMMU initialized, bypass=%d, fastmap=%d, coherent=%d\n",
+		dev_dbg(ctx->dev, "SMMU initialized, bypass=%d, fastmap=%d, coherent=%d\n",
 			 bypass, fastmap, coherent);
 	} else {
 		dev_warn(ctx->dev, "Unable to get iommu domain\n");

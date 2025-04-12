@@ -105,7 +105,7 @@ static int ucd9200_probe(struct i2c_client *client,
 		return ret;
 	}
 	block_buffer[ret] = '\0';
-	dev_info(&client->dev, "Device ID %s\n", block_buffer);
+	dev_dbg(&client->dev, "Device ID %s\n", block_buffer);
 
 	for (mid = ucd9200_id; mid->name[0]; mid++) {
 		if (!strncasecmp(mid->name, block_buffer, strlen(mid->name)))
@@ -122,7 +122,7 @@ static int ucd9200_probe(struct i2c_client *client,
 		chip = id->driver_data;
 
 	if (chip != ucd9200 && chip != mid->driver_data)
-		dev_notice(&client->dev,
+		dev_dbg(&client->dev,
 			   "Device mismatch: Configured %s, detected %s\n",
 			   id->name, mid->name);
 
@@ -154,7 +154,7 @@ static int ucd9200_probe(struct i2c_client *client,
 		dev_err(&client->dev, "No rails configured\n");
 		return -ENODEV;
 	}
-	dev_info(&client->dev, "%d rails configured\n", info->pages);
+	dev_dbg(&client->dev, "%d rails configured\n", info->pages);
 
 	/*
 	 * Set PHASE registers on all pages to 0xff to ensure that phase

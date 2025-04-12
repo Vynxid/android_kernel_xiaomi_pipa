@@ -1017,7 +1017,7 @@ static int ps3fb_probe(struct ps3_system_bus_device *dev)
 
 	max_ps3fb_size = _ALIGN_UP(GPU_IOIF, 256*1024*1024) - GPU_IOIF;
 	if (ps3fb_videomemory.size > max_ps3fb_size) {
-		dev_info(&dev->core, "Limiting ps3fb mem size to %lu bytes\n",
+		dev_dbg(&dev->core, "Limiting ps3fb mem size to %lu bytes\n",
 			 max_ps3fb_size);
 		ps3fb_videomemory.size = max_ps3fb_size;
 	}
@@ -1166,7 +1166,7 @@ static int ps3fb_probe(struct ps3_system_bus_device *dev)
 
 	ps3_system_bus_set_drvdata(dev, info);
 
-	dev_info(info->device, "%s %s, using %u KiB of video memory\n",
+	dev_dbg(info->device, "%s %s, using %u KiB of video memory\n",
 		 dev_driver_string(info->dev), dev_name(info->dev),
 		 info->fix.smem_len >> 10);
 

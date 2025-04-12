@@ -938,7 +938,7 @@ static int aspeed_i2c_probe_bus(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, bus);
 
-	dev_info(bus->dev, "i2c bus %d registered, irq %d\n",
+	dev_dbg(bus->dev, "i2c bus %d registered, irq %d\n",
 		 bus->adap.nr, irq);
 
 	return 0;

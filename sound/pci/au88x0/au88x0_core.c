@@ -1214,7 +1214,7 @@ static int vortex_adbdma_bufshift(vortex_t * vortex, int adbdma)
 	if (dma->period_virt >= dma->nr_periods)
 		dma->period_virt -= dma->nr_periods;
 	if (delta != 1)
-		dev_info(vortex->card->dev,
+		dev_dbg(vortex->card->dev,
 			 "%d virt=%d, real=%d, delta=%d\n",
 			 adbdma, dma->period_virt, dma->period_real, delta);
 
@@ -2688,7 +2688,7 @@ static void vortex_spdif_init(vortex_t * vortex, int spdif_sr, int spdif_mode)
 static int vortex_core_init(vortex_t *vortex)
 {
 
-	dev_info(vortex->card->dev, "init started\n");
+	dev_dbg(vortex->card->dev, "init started\n");
 	/* Hardware Init. */
 	hwwrite(vortex->mmio, VORTEX_CTRL, 0xffffffff);
 	msleep(5);
@@ -2733,7 +2733,7 @@ static int vortex_core_init(vortex_t *vortex)
 	//vortex_enable_timer_int(vortex);
 	//vortex_disable_timer_int(vortex);
 
-	dev_info(vortex->card->dev, "init.... done.\n");
+	dev_dbg(vortex->card->dev, "init.... done.\n");
 	spin_lock_init(&vortex->lock);
 
 	return 0;
@@ -2742,7 +2742,7 @@ static int vortex_core_init(vortex_t *vortex)
 static int vortex_core_shutdown(vortex_t * vortex)
 {
 
-	dev_info(vortex->card->dev, "shutdown started\n");
+	dev_dbg(vortex->card->dev, "shutdown started\n");
 #ifndef CHIP_AU8820
 	vortex_eq_free(vortex);
 	vortex_Vort3D_disable(vortex);
@@ -2764,7 +2764,7 @@ static int vortex_core_shutdown(vortex_t * vortex)
 	msleep(5);
 	hwwrite(vortex->mmio, VORTEX_IRQ_SOURCE, 0xffff);
 
-	dev_info(vortex->card->dev, "shutdown.... done.\n");
+	dev_dbg(vortex->card->dev, "shutdown.... done.\n");
 	return 0;
 }
 

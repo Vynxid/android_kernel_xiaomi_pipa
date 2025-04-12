@@ -571,7 +571,7 @@ static int dt3155_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	err = video_register_device(&pd->vdev, VFL_TYPE_GRABBER, -1);
 	if (err)
 		goto err_free_irq;
-	dev_info(&pdev->dev, "/dev/video%i is ready\n", pd->vdev.minor);
+	dev_dbg(&pdev->dev, "/dev/video%i is ready\n", pd->vdev.minor);
 	return 0;  /*   success   */
 
 err_free_irq:

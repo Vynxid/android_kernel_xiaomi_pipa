@@ -2019,7 +2019,7 @@ static int snd_via8233_init_misc(struct via82xx *chip)
 		strcpy(sid.name, "PCM Playback Volume");
 		sid.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 		if (! snd_ctl_find_id(chip->card, &sid)) {
-			dev_info(chip->card->dev,
+			dev_dbg(chip->card->dev,
 				 "Using DXS as PCM Playback\n");
 			err = snd_ctl_add(chip->card, snd_ctl_new1(&snd_via8233_pcmdxs_volume_control, chip));
 			if (err < 0)
@@ -2517,10 +2517,10 @@ static int check_dxs_list(struct pci_dev *pci, int revision)
 	/*
 	 * not detected, try 48k rate only to be sure.
 	 */
-	dev_info(&pci->dev, "Assuming DXS channels with 48k fixed sample rate.\n");
-	dev_info(&pci->dev, "         Please try dxs_support=5 option\n");
-	dev_info(&pci->dev, "         and report if it works on your machine.\n");
-	dev_info(&pci->dev, "         For more details, read ALSA-Configuration.txt.\n");
+	dev_dbg(&pci->dev, "Assuming DXS channels with 48k fixed sample rate.\n");
+	dev_dbg(&pci->dev, "         Please try dxs_support=5 option\n");
+	dev_dbg(&pci->dev, "         and report if it works on your machine.\n");
+	dev_dbg(&pci->dev, "         For more details, read ALSA-Configuration.txt.\n");
 	return VIA_DXS_48K;
 };
 

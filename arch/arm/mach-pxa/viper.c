@@ -932,7 +932,7 @@ static inline void viper_init_cpufreq(void) {}
 
 static void viper_power_off(void)
 {
-	pr_notice("Shutting off UPS\n");
+	pr_debug("Shutting off UPS\n");
 	gpio_set_value(VIPER_UPS_GPIO, 1);
 	/* Spin to death... */
 	while (1);
@@ -971,7 +971,7 @@ static void __init viper_init(void)
 	register_syscore_ops(&viper_cpu_syscore_ops);
 
 	if (version) {
-		pr_info("viper: hardware v%di%d detected. "
+		pr_debug("viper: hardware v%di%d detected. "
 			"CPLD revision %d.\n",
 			VIPER_BOARD_VERSION(version),
 			VIPER_BOARD_ISSUE(version),
@@ -980,7 +980,7 @@ static void __init viper_init(void)
 			     (VIPER_BOARD_ISSUE(version) << 4) |
 			     VIPER_CPLD_REVISION(version);
 	} else {
-		pr_info("viper: No version register.\n");
+		pr_debug("viper: No version register.\n");
 	}
 
 	i2c_register_board_info(1, ARRAY_AND_SIZE(viper_i2c_devices));

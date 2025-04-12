@@ -245,7 +245,7 @@ static int usb251xb_connect(struct usb251xb *hub)
 	memset(i2c_wb, 0, USB251XB_I2C_REG_SZ);
 
 	if (hub->skip_config) {
-		dev_info(dev, "Skip hub configuration, only attach.\n");
+		dev_dbg(dev, "Skip hub configuration, only attach.\n");
 		i2c_wb[0] = 0x01;
 		i2c_wb[1] = USB251XB_STATUS_COMMAND_ATTACH;
 
@@ -322,7 +322,7 @@ static int usb251xb_connect(struct usb251xb *hub)
 			goto out_err;
 	}
 
-	dev_info(dev, "Hub configuration was successful.\n");
+	dev_dbg(dev, "Hub configuration was successful.\n");
 	return 0;
 
 out_err:
@@ -616,7 +616,7 @@ static int usb251xb_probe(struct usb251xb *hub)
 		return err;
 	}
 
-	dev_info(dev, "Hub probed successfully\n");
+	dev_dbg(dev, "Hub probed successfully\n");
 
 	return 0;
 }

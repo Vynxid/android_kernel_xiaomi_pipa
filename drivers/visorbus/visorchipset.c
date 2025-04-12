@@ -639,7 +639,7 @@ static int visorbus_device_create(struct controlvm_message *inmsg)
 	struct controlvm_message_header *pmsg_hdr;
 	u32 bus_no = cmd->create_device.bus_no;
 	u32 dev_no = cmd->create_device.dev_no;
-	struct visor_device *dev_info;
+	struct visor_device *dev_dbg;
 	struct visor_device *bus_info;
 	struct visorchannel *visorchannel;
 	int err;
@@ -657,23 +657,23 @@ static int visorbus_device_create(struct controlvm_message *inmsg)
 		err = -EINVAL;
 		goto err_respond;
 	}
-	dev_info = visorbus_get_device_by_id(bus_no, dev_no, NULL);
-	if (dev_info && dev_info->state.created == 1) {
+	dev_dbg = visorbus_get_device_by_id(bus_no, dev_no, NULL);
+	if (dev_dbg && dev_dbg->state.created == 1) {
 		dev_err(&chipset_dev->acpi_device->dev,
 			"failed to get bus by id: %d/%d\n", bus_no, dev_no);
 		err = -EEXIST;
 		goto err_respond;
 	}
 
-	dev_info = kzalloc(sizeof(*dev_info), GFP_KERNEL);
-	if (!dev_info) {
+	dev_dbg = kzalloc(sizeof(*dev_dbg), GFP_KERNEL);
+	if (!dev_dbg) {
 		err = -ENOMEM;
 		goto err_respond;
 	}
-	dev_info->chipset_bus_no = bus_no;
-	dev_info->chipset_dev_no = dev_no;
-	guid_copy(&dev_info->inst, &cmd->create_device.dev_inst_guid);
-	dev_info->device.parent = &bus_info->device;
+	dev_dbg->chipset_bus_no = bus_no;
+	dev_dbg->chipset_dev_no = dev_no;
+	guid_copy(&dev_dbg->inst, &cmd->create_device.dev_inst_guid);
+	dev_dbg->device.parent = &bus_info->device;
 	visorchannel = visorchannel_create(cmd->create_device.channel_addr,
 					   GFP_KERNEL,
 					   &cmd->create_device.data_type_guid,
@@ -685,8 +685,8 @@ static int visorbus_device_create(struct controlvm_message *inmsg)
 		err = -ENOMEM;
 		goto err_free_dev_info;
 	}
-	dev_info->visorchannel = visorchannel;
-	guid_copy(&dev_info->channel_type_guid,
+	dev_dbg->visorchannel = visorchannel;
+	guid_copy(&dev_dbg->channel_type_guid,
 		  &cmd->create_device.data_type_guid);
 	if (guid_equal(&cmd->create_device.data_type_guid,
 		       &visor_vhba_channel_guid)) {
@@ -702,10 +702,10 @@ static int visorbus_device_create(struct controlvm_message *inmsg)
 		}
 		memcpy(pmsg_hdr, &inmsg->hdr,
 		       sizeof(struct controlvm_message_header));
-		dev_info->pending_msg_hdr = pmsg_hdr;
+		dev_dbg->pending_msg_hdr = pmsg_hdr;
 	}
 	/* create_visor_device will send response */
-	err = create_visor_device(dev_info);
+	err = create_visor_device(dev_dbg);
 	if (err)
 		goto err_destroy_visorchannel;
 
@@ -715,7 +715,7 @@ err_destroy_visorchannel:
 	visorchannel_destroy(visorchannel);
 
 err_free_dev_info:
-	kfree(dev_info);
+	kfree(dev_dbg);
 
 err_respond:
 	if (inmsg->hdr.flags.response_expected == 1)
@@ -730,19 +730,19 @@ static int visorbus_device_changestate(struct controlvm_message *inmsg)
 	u32 bus_no = cmd->device_change_state.bus_no;
 	u32 dev_no = cmd->device_change_state.dev_no;
 	struct visor_segment_state state = cmd->device_change_state.state;
-	struct visor_device *dev_info;
+	struct visor_device *dev_dbg;
 	int err = 0;
 
-	dev_info = visorbus_get_device_by_id(bus_no, dev_no, NULL);
-	if (!dev_info) {
+	dev_dbg = visorbus_get_device_by_id(bus_no, dev_no, NULL);
+	if (!dev_dbg) {
 		err = -ENODEV;
 		goto err_respond;
 	}
-	if (dev_info->state.created == 0) {
+	if (dev_dbg->state.created == 0) {
 		err = -EINVAL;
 		goto err_respond;
 	}
-	if (dev_info->pending_msg_hdr) {
+	if (dev_dbg->pending_msg_hdr) {
 		/* only non-NULL if dev is still waiting on a response */
 		err = -EIO;
 		goto err_respond;
@@ -756,12 +756,12 @@ static int visorbus_device_changestate(struct controlvm_message *inmsg)
 		}
 		memcpy(pmsg_hdr, &inmsg->hdr,
 		       sizeof(struct controlvm_message_header));
-		dev_info->pending_msg_hdr = pmsg_hdr;
+		dev_dbg->pending_msg_hdr = pmsg_hdr;
 	}
 	if (state.alive == segment_state_running.alive &&
 	    state.operating == segment_state_running.operating)
 		/* Response will be sent from visorchipset_device_resume */
-		err = visorchipset_device_resume(dev_info);
+		err = visorchipset_device_resume(dev_dbg);
 	/* ServerNotReady / ServerLost / SegmentStateStandby */
 	else if (state.alive == segment_state_standby.alive &&
 		 state.operating == segment_state_standby.operating)
@@ -769,7 +769,7 @@ static int visorbus_device_changestate(struct controlvm_message *inmsg)
 		 * technically this is standby case where server is lost.
 		 * Response will be sent from visorchipset_device_pause.
 		 */
-		err = visorchipset_device_pause(dev_info);
+		err = visorchipset_device_pause(dev_dbg);
 	if (err)
 		goto err_respond;
 	return 0;
@@ -787,19 +787,19 @@ static int visorbus_device_destroy(struct controlvm_message *inmsg)
 	struct controlvm_message_header *pmsg_hdr;
 	u32 bus_no = cmd->destroy_device.bus_no;
 	u32 dev_no = cmd->destroy_device.dev_no;
-	struct visor_device *dev_info;
+	struct visor_device *dev_dbg;
 	int err;
 
-	dev_info = visorbus_get_device_by_id(bus_no, dev_no, NULL);
-	if (!dev_info) {
+	dev_dbg = visorbus_get_device_by_id(bus_no, dev_no, NULL);
+	if (!dev_dbg) {
 		err = -ENODEV;
 		goto err_respond;
 	}
-	if (dev_info->state.created == 0) {
+	if (dev_dbg->state.created == 0) {
 		err = -EINVAL;
 		goto err_respond;
 	}
-	if (dev_info->pending_msg_hdr) {
+	if (dev_dbg->pending_msg_hdr) {
 		/* only non-NULL if dev is still waiting on a response */
 		err = -EIO;
 		goto err_respond;
@@ -813,10 +813,10 @@ static int visorbus_device_destroy(struct controlvm_message *inmsg)
 
 		memcpy(pmsg_hdr, &inmsg->hdr,
 		       sizeof(struct controlvm_message_header));
-		dev_info->pending_msg_hdr = pmsg_hdr;
+		dev_dbg->pending_msg_hdr = pmsg_hdr;
 	}
-	kfree(dev_info->name);
-	remove_visor_device(dev_info);
+	kfree(dev_dbg->name);
+	remove_visor_device(dev_dbg);
 	return 0;
 
 err_respond:
@@ -1290,17 +1290,17 @@ void visorbus_response(struct visor_device *bus_info, int response,
 	bus_info->pending_msg_hdr = NULL;
 }
 
-void visorbus_device_changestate_response(struct visor_device *dev_info,
+void visorbus_device_changestate_response(struct visor_device *dev_dbg,
 					  int response,
 					  struct visor_segment_state state)
 {
-	if (!dev_info->pending_msg_hdr)
+	if (!dev_dbg->pending_msg_hdr)
 		return;
 
-	device_changestate_responder(CONTROLVM_DEVICE_CHANGESTATE, dev_info,
+	device_changestate_responder(CONTROLVM_DEVICE_CHANGESTATE, dev_dbg,
 				     response, state);
-	kfree(dev_info->pending_msg_hdr);
-	dev_info->pending_msg_hdr = NULL;
+	kfree(dev_dbg->pending_msg_hdr);
+	dev_dbg->pending_msg_hdr = NULL;
 }
 
 static void parser_done(struct parser_context *ctx)
@@ -1674,7 +1674,7 @@ static int __init init_unisys(void)
 	result = acpi_bus_register_driver(&unisys_acpi_driver);
 	if (result)
 		return -ENODEV;
-	pr_info("Unisys Visorchipset Driver Loaded.\n");
+	pr_debug("Unisys Visorchipset Driver Loaded.\n");
 	return 0;
 };
 

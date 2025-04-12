@@ -608,7 +608,7 @@ static int hwicap_setup(struct device *dev, int id,
 	struct hwicap_drvdata *drvdata = NULL;
 	int retval = 0;
 
-	dev_info(dev, "Xilinx icap port driver\n");
+	dev_dbg(dev, "Xilinx icap port driver\n");
 
 	mutex_lock(&icap_sem);
 
@@ -674,7 +674,7 @@ static int hwicap_setup(struct device *dev, int id,
 	mutex_init(&drvdata->sem);
 	drvdata->is_open = 0;
 
-	dev_info(dev, "ioremap %llx to %p with size %llx\n",
+	dev_dbg(dev, "ioremap %llx to %p with size %llx\n",
 		 (unsigned long long) drvdata->mem_start,
 		 drvdata->base_address,
 		 (unsigned long long) drvdata->mem_size);

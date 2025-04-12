@@ -435,7 +435,7 @@ static int mn88472_init(struct dvb_frontend *fe)
 		goto err;
 	}
 
-	dev_info(&client->dev, "downloading firmware from file '%s'\n", name);
+	dev_dbg(&client->dev, "downloading firmware from file '%s'\n", name);
 
 	ret = regmap_write(dev->regmap[0], 0xf5, 0x03);
 	if (ret)
@@ -682,7 +682,7 @@ static int mn88472_probe(struct i2c_client *client,
 	/* Setup callbacks */
 	pdata->get_dvb_frontend = mn88472_get_dvb_frontend;
 
-	dev_info(&client->dev, "Panasonic MN88472 successfully identified\n");
+	dev_dbg(&client->dev, "Panasonic MN88472 successfully identified\n");
 
 	return 0;
 err_regmap_2_regmap_exit:

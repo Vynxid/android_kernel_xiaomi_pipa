@@ -336,7 +336,7 @@ static int max30102_led_init(struct max30102_data *data)
 
 	ret = of_property_read_u32(np, "maxim,red-led-current-microamp", &val);
 	if (ret) {
-		dev_info(dev, "no red-led-current-microamp set\n");
+		dev_dbg(dev, "no red-led-current-microamp set\n");
 
 		/* Default to 7 mA RED LED */
 		val = 7000;
@@ -356,7 +356,7 @@ static int max30102_led_init(struct max30102_data *data)
 		ret = of_property_read_u32(np,
 			"maxim,green-led-current-microamp", &val);
 		if (ret) {
-			dev_info(dev, "no green-led-current-microamp set\n");
+			dev_dbg(dev, "no green-led-current-microamp set\n");
 
 			/* Default to 7 mA green LED */
 			val = 7000;
@@ -377,7 +377,7 @@ static int max30102_led_init(struct max30102_data *data)
 
 	ret = of_property_read_u32(np, "maxim,ir-led-current-microamp", &val);
 	if (ret) {
-		dev_info(dev, "no ir-led-current-microamp set\n");
+		dev_dbg(dev, "no ir-led-current-microamp set\n");
 
 		/* Default to 7 mA IR LED */
 		val = 7000;

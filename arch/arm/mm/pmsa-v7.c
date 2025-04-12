@@ -282,7 +282,7 @@ void __init pmsav7_adjust_lowmem_bounds(void)
 			 * all blocks afterwards in one go (we can't remove
 			 * blocks separately while iterating)
 			 */
-			pr_notice("Ignoring RAM after %pa, memory at %pa ignored\n",
+			pr_debug("Ignoring RAM after %pa, memory at %pa ignored\n",
 				  &mem_end, &reg->base);
 			memblock_remove(reg->base, 0 - reg->base);
 			break;
@@ -467,7 +467,7 @@ void __init pmsav7_setup(void)
 	if (err) {
 		panic("MPU region initialization failure! %d", err);
 	} else {
-		pr_info("Using ARMv7 PMSA Compliant MPU. "
+		pr_debug("Using ARMv7 PMSA Compliant MPU. "
 			 "Region independence: %s, Used %d of %d regions\n",
 			mpu_iside_independent() ? "Yes" : "No",
 			mpu_rgn_info.used, mpu_max_regions);

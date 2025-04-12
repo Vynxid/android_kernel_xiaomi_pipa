@@ -704,7 +704,7 @@ static int waveform_common_attach(struct comedi_device *dev,
 	timer_setup(&devpriv->ai_timer, waveform_ai_timer, 0);
 	timer_setup(&devpriv->ao_timer, waveform_ao_timer, 0);
 
-	dev_info(dev->class_dev,
+	dev_dbg(dev->class_dev,
 		 "%s: %u microvolt, %u microsecond waveform attached\n",
 		 dev->board_name,
 		 devpriv->wf_amplitude, devpriv->wf_period);

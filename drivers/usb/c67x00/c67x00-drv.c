@@ -45,7 +45,7 @@ static void c67x00_probe_sie(struct c67x00_sie *sie,
 		break;
 
 	case C67X00_SIE_UNUSED:
-		dev_info(sie_dev(sie),
+		dev_dbg(sie_dev(sie),
 			 "Not using SIE %d as requested\n", sie->sie_num);
 		break;
 

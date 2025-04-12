@@ -171,7 +171,7 @@ static int cm3605_probe(struct platform_device *pdev)
 
 	ret = of_property_read_u32(np, "capella,aset-resistance-ohms", &rset);
 	if (ret) {
-		dev_info(dev, "no RSET specified, assuming 100K\n");
+		dev_dbg(dev, "no RSET specified, assuming 100K\n");
 		rset = 100000;
 	}
 	switch (rset) {
@@ -188,7 +188,7 @@ static int cm3605_probe(struct platform_device *pdev)
 		cm3605->als_max = 50;
 		break;
 	default:
-		dev_info(dev, "non-standard resistance\n");
+		dev_dbg(dev, "non-standard resistance\n");
 		return -EINVAL;
 	}
 
@@ -248,7 +248,7 @@ static int cm3605_probe(struct platform_device *pdev)
 	ret = iio_device_register(indio_dev);
 	if (ret)
 		goto out_remove_trigger;
-	dev_info(dev, "Capella Microsystems CM3605 enabled range 0..%d LUX\n",
+	dev_dbg(dev, "Capella Microsystems CM3605 enabled range 0..%d LUX\n",
 		 cm3605->als_max);
 
 	return 0;

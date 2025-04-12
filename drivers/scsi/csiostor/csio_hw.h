@@ -609,7 +609,7 @@ csio_us_to_core_ticks(struct csio_hw *hw, uint32_t us)
 #define CSIO_DEVID_HI(__dev)		((CSIO_DEVID((__dev)) >> 16) & 0xFFFF)
 
 #define csio_info(__hw, __fmt, ...)					\
-			dev_info(&(__hw)->pdev->dev, __fmt, ##__VA_ARGS__)
+			dev_dbg(&(__hw)->pdev->dev, __fmt, ##__VA_ARGS__)
 
 #define csio_fatal(__hw, __fmt, ...)					\
 			dev_crit(&(__hw)->pdev->dev, __fmt, ##__VA_ARGS__)

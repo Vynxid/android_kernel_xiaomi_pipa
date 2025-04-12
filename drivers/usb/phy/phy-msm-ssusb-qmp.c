@@ -1278,7 +1278,7 @@ static int msm_ssphy_qmp_probe(struct platform_device *pdev)
 
 	phy->usb3_eye =
 		of_property_read_bool(dev->of_node, "usb3,eyegram-tuning");
-	dev_info(dev, "usb3 eye gram:%d\n", phy->usb3_eye);
+	dev_dbg(dev, "usb3 eye gram:%d\n", phy->usb3_eye);
 
 	phy->phy.dev			= dev;
 	phy->phy.init			= msm_ssphy_qmp_init;

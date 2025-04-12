@@ -1811,7 +1811,7 @@ out:
 	}
 
 	if (mad_agent && !mad_agent->agent.recv_handler) {
-		dev_notice(&port_priv->device->dev,
+		dev_dbg(&port_priv->device->dev,
 			   "No receive handler for client %p on port %d\n",
 			   &mad_agent->agent, port_priv->port_num);
 		deref_mad_agent(mad_agent);

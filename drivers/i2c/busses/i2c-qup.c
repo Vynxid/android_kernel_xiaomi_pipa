@@ -1683,12 +1683,12 @@ static int qup_i2c_probe(struct platform_device *pdev)
 	platform_set_drvdata(pdev, qup);
 
 	if (scl_freq) {
-		dev_notice(qup->dev, "Using override frequency of %u\n", scl_freq);
+		dev_dbg(qup->dev, "Using override frequency of %u\n", scl_freq);
 		clk_freq = scl_freq;
 	} else {
 		ret = device_property_read_u32(qup->dev, "clock-frequency", &clk_freq);
 		if (ret) {
-			dev_notice(qup->dev, "using default clock-frequency %d",
+			dev_dbg(qup->dev, "using default clock-frequency %d",
 				DEFAULT_CLK_FREQ);
 		}
 	}
@@ -1778,7 +1778,7 @@ nodma:
 		ret = device_property_read_u32(qup->dev,
 				"src-clock-hz", &src_clk_freq);
 		if (ret) {
-			dev_notice(qup->dev, "using default src-clock-hz %d",
+			dev_dbg(qup->dev, "using default src-clock-hz %d",
 				DEFAULT_SRC_CLK);
 		}
 		ACPI_COMPANION_SET(&qup->adap.dev, ACPI_COMPANION(qup->dev));

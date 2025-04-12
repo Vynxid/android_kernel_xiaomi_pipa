@@ -503,12 +503,12 @@ static int rtd520_probe_fifo_depth(struct comedi_device *dev)
 		}
 	}
 	if (i == limit) {
-		dev_info(dev->class_dev, "failed to probe fifo size.\n");
+		dev_dbg(dev->class_dev, "failed to probe fifo size.\n");
 		return -EIO;
 	}
 	writel(0, dev->mmio + LAS0_ADC_FIFO_CLEAR);
 	if (fifo_size != 0x400 && fifo_size != 0x2000) {
-		dev_info(dev->class_dev,
+		dev_dbg(dev->class_dev,
 			 "unexpected fifo size of %i, expected 1024 or 8192.\n",
 			 fifo_size);
 		return -EIO;
@@ -1198,7 +1198,7 @@ static void rtd_pci_latency_quirk(struct comedi_device *dev,
 
 	pci_read_config_byte(pcidev, PCI_LATENCY_TIMER, &pci_latency);
 	if (pci_latency < 32) {
-		dev_info(dev->class_dev,
+		dev_dbg(dev->class_dev,
 			 "PCI latency changed from %d to %d\n",
 			 pci_latency, 32);
 		pci_write_config_byte(pcidev, PCI_LATENCY_TIMER, 32);

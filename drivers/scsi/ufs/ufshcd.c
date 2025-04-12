@@ -390,7 +390,7 @@ static inline void ufshcd_wb_config(struct ufs_hba *hba)
 	if (ret)
 		dev_err(hba->dev, "%s: Enable WB failed: %d\n", __func__, ret);
 	else
-		dev_info(hba->dev, "%s: Write Booster Configured\n", __func__);
+		dev_dbg(hba->dev, "%s: Write Booster Configured\n", __func__);
 	ret = ufshcd_wb_toggle_flush_during_h8(hba, true);
 	if (ret)
 		dev_err(hba->dev, "%s: En WB flush during H8: failed: %d\n",
@@ -1022,7 +1022,7 @@ static void ufshcd_print_host_state(struct ufs_hba *hba)
 	dev_err(hba->dev, "Host capabilities=0x%x, caps=0x%x\n",
 		hba->capabilities, hba->caps);
 	dev_err(hba->dev, "quirks=0x%x, dev. quirks=0x%x\n", hba->quirks,
-		hba->dev_info.quirks);
+		hba->dev_dbg.quirks);
 	dev_err(hba->dev, "pa_err_cnt_total=%d, pa_lane_0_err_cnt=%d, pa_lane_1_err_cnt=%d, pa_line_reset_err_cnt=%d\n",
 		hba->ufs_stats.pa_err_cnt_total,
 		hba->ufs_stats.pa_err_cnt[UFS_EC_PA_LANE_0],
@@ -1672,7 +1672,7 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
 		 * quirk is enabled for such devices, this 2 steps gear switch
 		 * workaround will be applied.
 		 */
-		if ((hba->dev_info.quirks &
+		if ((hba->dev_dbg.quirks &
 		     UFS_DEVICE_QUIRK_HS_G1_TO_HS_G3_SWITCH)
 		    && (hba->pwr_info.gear_tx == UFS_HS_G1)
 		    && (new_pwr_info.gear_tx == UFS_HS_G3)) {
@@ -1705,7 +1705,7 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
 			/* scale down gear */
 			new_pwr_info.gear_tx = scale_down_gear;
 			new_pwr_info.gear_rx = scale_down_gear;
-			if (!(hba->dev_info.quirks & UFS_DEVICE_NO_FASTAUTO)) {
+			if (!(hba->dev_dbg.quirks & UFS_DEVICE_NO_FASTAUTO)) {
 				new_pwr_info.pwr_tx = FASTAUTO_MODE;
 				new_pwr_info.pwr_rx = FASTAUTO_MODE;
 			}
@@ -5271,7 +5271,7 @@ more_wait:
 				if (wait_retries--)
 					goto more_wait;
 
-				dev_info(hba->dev, "IS:0x%08x last_intr_sts:0x%08x last_intr_ts:%lld, retry-cnt:%d\n",
+				dev_dbg(hba->dev, "IS:0x%08x last_intr_sts:0x%08x last_intr_ts:%lld, retry-cnt:%d\n",
 					intr_status, hba->ufs_stats.last_intr_status,
 					hba->ufs_stats.last_intr_ts, wait_retries);
 				/*
@@ -6083,7 +6083,7 @@ static int ufshcd_link_startup(struct ufs_hba *hba)
 			goto out;
 	}
 
-	if (hba->dev_info.quirks & UFS_DEVICE_QUIRK_BROKEN_LCC) {
+	if (hba->dev_dbg.quirks & UFS_DEVICE_QUIRK_BROKEN_LCC) {
 		ret = ufshcd_disable_host_tx_lcc(hba);
 		if (ret)
 			goto out;
@@ -6219,14 +6219,14 @@ static int ufshcd_get_lu_wp(struct ufs_hba *hba,
 static inline void ufshcd_get_lu_power_on_wp_status(struct ufs_hba *hba,
 						    struct scsi_device *sdev)
 {
-	if (hba->dev_info.f_power_on_wp_en &&
-	    !hba->dev_info.is_lu_power_on_wp) {
+	if (hba->dev_dbg.f_power_on_wp_en &&
+	    !hba->dev_dbg.is_lu_power_on_wp) {
 		u8 b_lu_write_protect;
 
 		if (!ufshcd_get_lu_wp(hba, ufshcd_scsi_to_upiu_lun(sdev->lun),
 				      &b_lu_write_protect) &&
 		    (b_lu_write_protect == UFS_LU_POWER_ON_WP))
-			hba->dev_info.is_lu_power_on_wp = true;
+			hba->dev_dbg.is_lu_power_on_wp = true;
 	}
 }
 
@@ -6977,10 +6977,10 @@ out:
 
 static bool ufshcd_wb_sup(struct ufs_hba *hba)
 {
-	return ((hba->dev_info.d_ext_ufs_feature_sup &
+	return ((hba->dev_dbg.d_ext_ufs_feature_sup &
 		   UFS_DEV_WRITE_BOOSTER_SUP) &&
-		  (hba->dev_info.b_wb_buffer_type
-		   || hba->dev_info.wb_config_lun));
+		  (hba->dev_dbg.b_wb_buffer_type
+		   || hba->dev_dbg.wb_config_lun));
 }
 
 static int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
@@ -7089,10 +7089,10 @@ static bool ufshcd_wb_is_buf_flush_needed(struct ufs_hba *hba)
 		ret = UFS_WB_BUFF_PRESERVE_USER_SPACE;
 	}
 
-	hba->dev_info.keep_vcc_on = false;
+	hba->dev_dbg.keep_vcc_on = false;
 	if (ret == UFS_WB_BUFF_USER_SPACE_RED_EN) {
 		if (avail_buf <= UFS_WB_10_PERCENT_BUF_REMAIN) {
-			hba->dev_info.keep_vcc_on = true;
+			hba->dev_dbg.keep_vcc_on = true;
 			return true;
 		}
 		return false;
@@ -7107,7 +7107,7 @@ static bool ufshcd_wb_is_buf_flush_needed(struct ufs_hba *hba)
 		}
 
 		if (!cur_buf) {
-			dev_info(hba->dev, "dCurWBBuf: %d WB disabled until free-space is available\n",
+			dev_dbg(hba->dev, "dCurWBBuf: %d WB disabled until free-space is available\n",
 				 cur_buf);
 			return false;
 		}
@@ -7117,7 +7117,7 @@ static bool ufshcd_wb_is_buf_flush_needed(struct ufs_hba *hba)
 			dev_err(hba->dev, "%s: failed to get exception status %d\n",
 				__func__, ret);
 			if (avail_buf < UFS_WB_40_PERCENT_BUF_REMAIN) {
-				hba->dev_info.keep_vcc_on = true;
+				hba->dev_dbg.keep_vcc_on = true;
 				return true;
 			}
 			return false;
@@ -7127,7 +7127,7 @@ static bool ufshcd_wb_is_buf_flush_needed(struct ufs_hba *hba)
 
 		if ((status & MASK_EE_URGENT_BKOPS) ||
 		    (avail_buf < UFS_WB_40_PERCENT_BUF_REMAIN)) {
-			hba->dev_info.keep_vcc_on = true;
+			hba->dev_dbg.keep_vcc_on = true;
 			return true;
 		}
 	}
@@ -7322,7 +7322,7 @@ static void ufshcd_err_handler(struct work_struct *work)
 	/* Complete requests that have door-bell cleared by h/w */
 	ufshcd_complete_requests(hba);
 
-	if (hba->dev_info.quirks &
+	if (hba->dev_dbg.quirks &
 	    UFS_DEVICE_QUIRK_RECOVERY_FROM_DL_NAC_ERRORS) {
 		bool ret;
 
@@ -7580,7 +7580,7 @@ static irqreturn_t ufshcd_update_uic_error(struct ufs_hba *hba)
 
 		if (reg & UIC_DATA_LINK_LAYER_ERROR_PA_INIT) {
 			hba->uic_error |= UFSHCD_UIC_DL_PA_INIT_ERROR;
-		} else if (hba->dev_info.quirks &
+		} else if (hba->dev_dbg.quirks &
 			   UFS_DEVICE_QUIRK_RECOVERY_FROM_DL_NAC_ERRORS) {
 			if (reg & UIC_DATA_LINK_LAYER_ERROR_NAC_RECEIVED)
 				hba->uic_error |=
@@ -8604,7 +8604,7 @@ static int ufs_get_device_desc(struct ufs_hba *hba,
 	/*if ((dev_desc->wmanufacturerid == UFS_VENDOR_TOSHIBA &&
 	     dev_desc->wspecversion >= 0x300 &&
 	     hba->desc_size.dev_desc >= 0x59)) {
-		hba->dev_info.d_ext_ufs_feature_sup =
+		hba->dev_dbg.d_ext_ufs_feature_sup =
 			desc_buf[DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP]
 								<< 24 |
 			desc_buf[DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 1]
@@ -8612,13 +8612,13 @@ static int ufs_get_device_desc(struct ufs_hba *hba,
 			desc_buf[DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 2]
 								<< 8 |
 			desc_buf[DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 3];
-		hba->dev_info.b_wb_buffer_type =
+		hba->dev_dbg.b_wb_buffer_type =
 			desc_buf[DEVICE_DESC_PARAM_WB_TYPE];
 
-		if (hba->dev_info.b_wb_buffer_type)
+		if (hba->dev_dbg.b_wb_buffer_type)
 			goto skip_unit_desc;
 
-		hba->dev_info.wb_config_lun = false;
+		hba->dev_dbg.wb_config_lun = false;
 		for (lun = 0; lun < UFS_UPIU_MAX_GENERAL_LUN; lun++) {
 			d_lu_wb_buf_alloc = 0;
 			err = ufshcd_read_unit_desc_param(hba,
@@ -8631,7 +8631,7 @@ static int ufs_get_device_desc(struct ufs_hba *hba,
 				break;
 
 			if (d_lu_wb_buf_alloc) {
-				hba->dev_info.wb_config_lun = true;
+				hba->dev_dbg.wb_config_lun = true;
 				break;
 			}
 		}
@@ -8671,7 +8671,7 @@ static void ufs_fixup_device_setup(struct ufs_hba *hba,
 		     f->w_manufacturer_id == UFS_ANY_VENDOR) &&
 		    (STR_PRFX_EQUAL(f->model, dev_desc->model) ||
 		     !strcmp(f->model, UFS_ANY_MODEL)))
-			hba->dev_info.quirks |= f->quirk;
+			hba->dev_dbg.quirks |= f->quirk;
 	}
 }
 
@@ -8841,11 +8841,11 @@ static void ufshcd_tune_unipro_params(struct ufs_hba *hba)
 		ufshcd_tune_pa_hibern8time(hba);
 	}
 
-	if (hba->dev_info.quirks & UFS_DEVICE_QUIRK_PA_TACTIVATE)
+	if (hba->dev_dbg.quirks & UFS_DEVICE_QUIRK_PA_TACTIVATE)
 		/* set 1ms timeout for PA_TACTIVATE */
 		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_TACTIVATE), 10);
 
-	if (hba->dev_info.quirks & UFS_DEVICE_QUIRK_HOST_PA_TACTIVATE)
+	if (hba->dev_dbg.quirks & UFS_DEVICE_QUIRK_HOST_PA_TACTIVATE)
 		ufshcd_quirk_tune_host_pa_tactivate(hba);
 
 	ufshcd_vops_apply_dev_quirks(hba);
@@ -8916,14 +8916,14 @@ static void ufshcd_def_desc_sizes(struct ufs_hba *hba)
 
 void ufshcd_apply_pm_quirks(struct ufs_hba *hba)
 {
-	if (hba->dev_info.quirks & UFS_DEVICE_QUIRK_NO_LINK_OFF) {
+	if (hba->dev_dbg.quirks & UFS_DEVICE_QUIRK_NO_LINK_OFF) {
 		if (ufs_get_pm_lvl_to_link_pwr_state(hba->rpm_lvl) ==
 		    UIC_LINK_OFF_STATE) {
 			hba->rpm_lvl =
 				ufs_get_desired_pm_lvl_for_dev_link_state(
 						UFS_SLEEP_PWR_MODE,
 						UIC_LINK_HIBERN8_STATE);
-			dev_info(hba->dev, "UFS_DEVICE_QUIRK_NO_LINK_OFF enabled, changed rpm_lvl to %d\n",
+			dev_dbg(hba->dev, "UFS_DEVICE_QUIRK_NO_LINK_OFF enabled, changed rpm_lvl to %d\n",
 				hba->rpm_lvl);
 		}
 		if (ufs_get_pm_lvl_to_link_pwr_state(hba->spm_lvl) ==
@@ -8932,7 +8932,7 @@ void ufshcd_apply_pm_quirks(struct ufs_hba *hba)
 				ufs_get_desired_pm_lvl_for_dev_link_state(
 						UFS_SLEEP_PWR_MODE,
 						UIC_LINK_HIBERN8_STATE);
-			dev_info(hba->dev, "UFS_DEVICE_QUIRK_NO_LINK_OFF enabled, changed spm_lvl to %d\n",
+			dev_dbg(hba->dev, "UFS_DEVICE_QUIRK_NO_LINK_OFF enabled, changed spm_lvl to %d\n",
 				hba->spm_lvl);
 		}
 	}
@@ -8974,7 +8974,7 @@ static int ufs_init_serial(struct ufs_hba *hba)
 			 str_desc_buf[i], str_desc_buf[i+1]);
 	}
 
-	pr_info("SerialNumber:%s\n", serial);
+	pr_debug("SerialNumber:%s\n", serial);
 
 out:
 	return err;
@@ -9028,7 +9028,7 @@ static int ufshcd_set_dev_ref_clk(struct ufs_hba *hba)
 		 * It is good to print this out here to debug any later failures
 		 * related to gear switch.
 		 */
-		dev_info(hba->dev, "%s: bRefClkFreq setting to %s succeeded\n",
+		dev_dbg(hba->dev, "%s: bRefClkFreq setting to %s succeeded\n",
 			__func__, ref_clk_freqs[hba->dev_ref_clk_freq]);
 
 out:
@@ -9082,13 +9082,13 @@ static int ufs_read_device_desc_data(struct ufs_hba *hba)
 	 * getting vendor (manufacturerID) and Bank Index in big endian
 	 * format
 	 */
-	hba->dev_info.w_manufacturer_id =
+	hba->dev_dbg.w_manufacturer_id =
 		desc_buf[DEVICE_DESC_PARAM_MANF_ID] << 8 |
 		desc_buf[DEVICE_DESC_PARAM_MANF_ID + 1];
-	hba->dev_info.b_device_sub_class =
+	hba->dev_dbg.b_device_sub_class =
 		desc_buf[DEVICE_DESC_PARAM_DEVICE_SUB_CLASS];
-	hba->dev_info.i_product_name = desc_buf[DEVICE_DESC_PARAM_PRDCT_NAME];
-	hba->dev_info.w_spec_version =
+	hba->dev_dbg.i_product_name = desc_buf[DEVICE_DESC_PARAM_PRDCT_NAME];
+	hba->dev_dbg.w_spec_version =
 		desc_buf[DEVICE_DESC_PARAM_SPEC_VER] << 8 |
 		desc_buf[DEVICE_DESC_PARAM_SPEC_VER + 1];
 out:
@@ -9100,12 +9100,12 @@ static inline bool ufshcd_needs_reinit(struct ufs_hba *hba)
 {
 	bool reinit = false;
 
-	if (hba->dev_info.w_spec_version < 0x300 && hba->phy_init_g4) {
+	if (hba->dev_dbg.w_spec_version < 0x300 && hba->phy_init_g4) {
 		dev_warn(hba->dev, "%s: Using force-g4 setting for a non-g4 device, re-init\n",
 				  __func__);
 		hba->phy_init_g4 = false;
 		reinit = true;
-	} else if (hba->dev_info.w_spec_version >= 0x300 && !hba->phy_init_g4) {
+	} else if (hba->dev_dbg.w_spec_version >= 0x300 && !hba->phy_init_g4) {
 		dev_warn(hba->dev, "%s: Re-init UFS host to use proper PHY settings for the UFS device. This can be avoided by setting the force-g4 in DT\n",
 				  __func__);
 		hba->phy_init_g4 = true;
@@ -9150,7 +9150,7 @@ reinit:
 		goto out;
 
 	/* clear any previous UFS device information */
-	memset(&hba->dev_info, 0, sizeof(hba->dev_info));
+	memset(&hba->dev_dbg, 0, sizeof(hba->dev_dbg));
 
 	/* cache important parameters from device descriptor for later use */
 	ret = ufs_read_device_desc_data(hba);
@@ -9199,7 +9199,7 @@ reinit:
 	ufshcd_apply_pm_quirks(hba);
 	if (card.wspecversion < 0x300) {
 		ret = ufshcd_set_vccq_rail_unused(hba,
-			(hba->dev_info.quirks & UFS_DEVICE_NO_VCCQ) ?
+			(hba->dev_dbg.quirks & UFS_DEVICE_NO_VCCQ) ?
 			true : false);
 		if (ret)
 			goto out;
@@ -9217,12 +9217,12 @@ reinit:
 	if (hba->spm_lvl == ufs_get_desired_pm_lvl_for_dev_link_state(
 				UFS_POWERDOWN_PWR_MODE,
 				UIC_LINK_OFF_STATE)) {
-		if ((hba->dev_info.w_spec_version >= 0x300 &&
+		if ((hba->dev_dbg.w_spec_version >= 0x300 &&
 		     hba->vreg_info.vccq &&
 		     !hba->vreg_info.vccq->sys_suspend_pwr_off))
 			hba->vreg_info.vccq->sys_suspend_pwr_off = true;
 
-		if ((hba->dev_info.w_spec_version < 0x300 &&
+		if ((hba->dev_dbg.w_spec_version < 0x300 &&
 		     !hba->vreg_info.vccq2->sys_suspend_pwr_off))
 			hba->vreg_info.vccq2->sys_suspend_pwr_off = true;
 	}
@@ -9279,7 +9279,7 @@ reinit:
 
 		if (!ufshcd_query_flag_retry(hba, UPIU_QUERY_OPCODE_READ_FLAG,
 				QUERY_FLAG_IDN_PWR_ON_WPE, &flag))
-			hba->dev_info.f_power_on_wp_en = flag;
+			hba->dev_dbg.f_power_on_wp_en = flag;
 
 		/* Add required well known logical units to scsi mid layer */
 		ret = ufshcd_scsi_add_wlus(hba);
@@ -10246,12 +10246,12 @@ static int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
 	 * handling context.
 	 */
 	hba->host->eh_noresume = 1;
-	if (!hba->dev_info.is_ufs_dev_wlun_ua_cleared) {
+	if (!hba->dev_dbg.is_ufs_dev_wlun_ua_cleared) {
 		ret = ufshcd_send_request_sense(hba, sdp);
 		if (ret)
 			goto out;
 		/* Unit attention condition is cleared now */
-		hba->dev_info.is_ufs_dev_wlun_ua_cleared = 1;
+		hba->dev_dbg.is_ufs_dev_wlun_ua_cleared = 1;
 	}
 
 	cmd[4] = pwr_mode << 4;
@@ -10355,9 +10355,9 @@ static void ufshcd_vreg_set_lpm(struct ufs_hba *hba)
 	 * buffer OR if bkops status is urgent for WB, keep Vcc on.
 	 */
 	if (ufshcd_is_ufs_dev_poweroff(hba) && ufshcd_is_link_off(hba) &&
-	    !hba->dev_info.is_lu_power_on_wp) {
+	    !hba->dev_dbg.is_lu_power_on_wp) {
 		ufshcd_toggle_vreg(hba->dev, hba->vreg_info.vcc, false);
-		if (hba->dev_info.w_spec_version >= 0x300 &&
+		if (hba->dev_dbg.w_spec_version >= 0x300 &&
 			hba->vreg_info.vccq &&
 			hba->vreg_info.vccq->sys_suspend_pwr_off)
 			ufshcd_toggle_vreg(hba->dev,
@@ -10365,14 +10365,14 @@ static void ufshcd_vreg_set_lpm(struct ufs_hba *hba)
 		else
 			ufshcd_config_vreg_lpm(hba, hba->vreg_info.vccq);
 
-		if (hba->dev_info.w_spec_version < 0x300 &&
+		if (hba->dev_dbg.w_spec_version < 0x300 &&
 			hba->vreg_info.vccq2->sys_suspend_pwr_off)
 			ufshcd_toggle_vreg(hba->dev,
 				hba->vreg_info.vccq2, false);
 		else
 			ufshcd_config_vreg_lpm(hba, hba->vreg_info.vccq2);
 	} else if (!ufshcd_is_ufs_dev_active(hba)) {
-		if (!hba->dev_info.keep_vcc_on)
+		if (!hba->dev_dbg.keep_vcc_on)
 			ufshcd_toggle_vreg(hba->dev, hba->vreg_info.vcc, false);
 		if (!ufshcd_is_link_active(hba)) {
 			ufshcd_config_vreg_lpm(hba, hba->vreg_info.vccq);
@@ -10386,8 +10386,8 @@ static int ufshcd_vreg_set_hpm(struct ufs_hba *hba)
 	int ret = 0;
 
 	if (ufshcd_is_ufs_dev_poweroff(hba) && ufshcd_is_link_off(hba) &&
-		!hba->dev_info.is_lu_power_on_wp) {
-		if (hba->dev_info.w_spec_version < 0x300 &&
+		!hba->dev_dbg.is_lu_power_on_wp) {
+		if (hba->dev_dbg.w_spec_version < 0x300 &&
 			hba->vreg_info.vccq2->sys_suspend_pwr_off)
 			ret = ufshcd_toggle_vreg(hba->dev,
 				hba->vreg_info.vccq2, true);
@@ -10396,7 +10396,7 @@ static int ufshcd_vreg_set_hpm(struct ufs_hba *hba)
 		if (ret)
 			goto vcc_disable;
 
-		if (hba->dev_info.w_spec_version >= 0x300 &&
+		if (hba->dev_dbg.w_spec_version >= 0x300 &&
 			hba->vreg_info.vccq &&
 			hba->vreg_info.vccq->sys_suspend_pwr_off)
 			ret = ufshcd_toggle_vreg(hba->dev,
@@ -10535,7 +10535,7 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
 		ufshcd_wb_toggle_flush(hba);
 	} else if (!ufshcd_is_runtime_pm(pm_op)) {
 		ufshcd_wb_buf_flush_disable(hba);
-		hba->dev_info.keep_vcc_on = false;
+		hba->dev_dbg.keep_vcc_on = false;
 	}
 
 	if ((req_dev_pwr_mode != hba->curr_dev_pwr_mode) &&
@@ -10724,7 +10724,7 @@ static inline int __ufshcd_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
 				ufshcd_eh_in_progress(hba)) {
 				flush_work(&hba->eh_work);
 				ret = 0;
-				dev_info(hba->dev, "dev pwr mode=%d, UIC link state=%d\n",
+				dev_dbg(hba->dev, "dev pwr mode=%d, UIC link state=%d\n",
 					hba->curr_dev_pwr_mode,
 					hba->uic_link_state);
 				}

@@ -263,7 +263,7 @@ static int tc3589x_chip_init(struct tc3589x *tc3589x)
 		return -EINVAL;
 	}
 
-	dev_info(tc3589x->dev, "manufacturer: %#x, version: %#x\n", manf, ver);
+	dev_dbg(tc3589x->dev, "manufacturer: %#x, version: %#x\n", manf, ver);
 
 	/*
 	 * Put everything except the IRQ module into reset;
@@ -294,7 +294,7 @@ static int tc3589x_device_init(struct tc3589x *tc3589x)
 			dev_err(tc3589x->dev, "failed to add gpio child\n");
 			return ret;
 		}
-		dev_info(tc3589x->dev, "added gpio block\n");
+		dev_dbg(tc3589x->dev, "added gpio block\n");
 	}
 
 	if (blocks & TC3589x_BLOCK_KEYPAD) {
@@ -305,7 +305,7 @@ static int tc3589x_device_init(struct tc3589x *tc3589x)
 			dev_err(tc3589x->dev, "failed to keypad child\n");
 			return ret;
 		}
-		dev_info(tc3589x->dev, "added keypad block\n");
+		dev_dbg(tc3589x->dev, "added keypad block\n");
 	}
 
 	return ret;

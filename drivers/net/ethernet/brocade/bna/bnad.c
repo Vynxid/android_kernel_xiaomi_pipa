@@ -3488,7 +3488,7 @@ bnad_init(struct bnad *bnad,
 		dev_err(&pdev->dev, "ioremap for bar0 failed\n");
 		return -ENOMEM;
 	}
-	dev_info(&pdev->dev, "bar0 mapped to %p, len %llu\n", bnad->bar0,
+	dev_dbg(&pdev->dev, "bar0 mapped to %p, len %llu\n", bnad->bar0,
 		 (unsigned long long) bnad->mmio_len);
 
 	spin_lock_irqsave(&bnad->bna_lock, flags);
@@ -3853,7 +3853,7 @@ bnad_module_init(void)
 {
 	int err;
 
-	pr_info("bna: QLogic BR-series 10G Ethernet driver - version: %s\n",
+	pr_debug("bna: QLogic BR-series 10G Ethernet driver - version: %s\n",
 		BNAD_VERSION);
 
 	bfa_nw_ioc_auto_recover(bnad_ioc_auto_recover);

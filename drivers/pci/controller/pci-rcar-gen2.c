@@ -201,7 +201,7 @@ static int rcar_pci_setup(int nr, struct pci_sys_data *sys)
 	pm_runtime_get_sync(dev);
 
 	val = ioread32(reg + RCAR_PCI_UNIT_REV_REG);
-	dev_info(dev, "PCI: bus%u revision %x\n", sys->busnr, val);
+	dev_dbg(dev, "PCI: bus%u revision %x\n", sys->busnr, val);
 
 	/* Disable Direct Power Down State and assert reset */
 	val = ioread32(reg + RCAR_USBCTR_REG) & ~RCAR_USBCTR_DIRPD;

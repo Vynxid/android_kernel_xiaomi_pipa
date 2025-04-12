@@ -51,15 +51,15 @@ static struct pci_device_id ids[] = {
 };
 MODULE_DEVICE_TABLE(pci, ids);
 
-static irqreturn_t aectc_irq(int irq, struct uio_info *dev_info)
+static irqreturn_t aectc_irq(int irq, struct uio_info *dev_dbg)
 {
-	void __iomem *int_flag = dev_info->priv + INTA_DRVR_ADDR;
+	void __iomem *int_flag = dev_dbg->priv + INTA_DRVR_ADDR;
 	unsigned char status = ioread8(int_flag);
 
 
 	if ((status & INTA_ENABLED_FLAG) && (status & INTA_FLAG)) {
 		/* application writes 0x00 to 0x2F to get next interrupt */
-		status = ioread8(dev_info->priv + MAILBOX);
+		status = ioread8(dev_dbg->priv + MAILBOX);
 		return IRQ_HANDLED;
 	}
 
@@ -68,7 +68,7 @@ static irqreturn_t aectc_irq(int irq, struct uio_info *dev_info)
 
 static void print_board_data(struct pci_dev *pdev, struct uio_info *i)
 {
-	dev_info(&pdev->dev, "PCI-TC board vendor: %x%x number: %x%x"
+	dev_dbg(&pdev->dev, "PCI-TC board vendor: %x%x number: %x%x"
 		" revision: %c%c\n",
 		ioread8(i->priv + 0x01),
 		ioread8(i->priv + 0x00),

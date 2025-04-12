@@ -325,7 +325,7 @@ static struct ispstat_buffer *isp_stat_buf_get(struct ispstat *stat,
 			    buf->buf_size);
 
 	if (rval) {
-		dev_info(stat->isp->dev,
+		dev_dbg(stat->isp->dev,
 			 "%s: failed copying %d bytes of stat data\n",
 			 stat->subdev.name, rval);
 		buf = ERR_PTR(-EFAULT);
@@ -421,7 +421,7 @@ static int isp_stat_bufs_alloc(struct ispstat *stat, u32 size)
 	}
 
 	if (stat->state != ISPSTAT_DISABLED || stat->buf_processing) {
-		dev_info(stat->isp->dev,
+		dev_dbg(stat->isp->dev,
 			 "%s: trying to allocate memory when busy\n",
 			 stat->subdev.name);
 		spin_unlock_irqrestore(&stat->isp->stat_lock, flags);

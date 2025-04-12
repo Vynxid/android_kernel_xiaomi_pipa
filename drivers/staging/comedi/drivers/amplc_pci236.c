@@ -90,7 +90,7 @@ static int pci236_auto_attach(struct comedi_device *dev,
 	unsigned long iobase;
 	int ret;
 
-	dev_info(dev->class_dev, "amplc_pci236: attach pci %s\n",
+	dev_dbg(dev->class_dev, "amplc_pci236: attach pci %s\n",
 		 pci_name(pci_dev));
 
 	devpriv = comedi_alloc_devpriv(dev, sizeof(*devpriv));

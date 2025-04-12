@@ -1570,7 +1570,7 @@ static int osd_probe(struct platform_device *pdev)
 	spin_lock_init(&osd->lock);
 	osd->ops = osd_ops;
 	platform_set_drvdata(pdev, osd);
-	dev_notice(osd->dev, "OSD sub device probe success\n");
+	dev_dbg(osd->dev, "OSD sub device probe success\n");
 
 	return 0;
 }

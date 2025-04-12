@@ -48,7 +48,7 @@ static void vortex_fix_latency(struct pci_dev *vortex)
 {
 	int rc;
 	if (!(rc = pci_write_config_byte(vortex, 0x40, 0xff))) {
-			dev_info(&vortex->dev, "vortex latency is 0xff\n");
+			dev_dbg(&vortex->dev, "vortex latency is 0xff\n");
 	} else {
 		dev_warn(&vortex->dev,
 			 "could not set vortex latency: pci error 0x%x\n", rc);
@@ -69,7 +69,7 @@ static void vortex_fix_agp_bridge(struct pci_dev *via)
 	if (!(rc = pci_read_config_byte(via, 0x42, &value))
 			&& ((value & 0x10)
 				|| !(rc = pci_write_config_byte(via, 0x42, value | 0x10)))) {
-		dev_info(&via->dev, "bridge config is 0x%x\n", value | 0x10);
+		dev_dbg(&via->dev, "bridge config is 0x%x\n", value | 0x10);
 	} else {
 		dev_warn(&via->dev,
 			 "could not set vortex latency: pci error 0x%x\n", rc);
@@ -95,7 +95,7 @@ static void snd_vortex_workaround(struct pci_dev *vortex, int fix)
 					PCI_DEVICE_ID_AMD_FE_GATE_7007, NULL);
 		}
 		if (via) {
-			dev_info(&vortex->dev,
+			dev_dbg(&vortex->dev,
 				 "Activating latency workaround...\n");
 			vortex_fix_latency(vortex);
 			vortex_fix_agp_bridge(via);

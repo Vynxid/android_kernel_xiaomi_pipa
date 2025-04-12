@@ -217,7 +217,7 @@ static inline struct net_device *vnic_get_netdev(struct vnic_dev *vdev)
 #define vdev_warn(vdev, fmt, ...)					\
 	dev_warn(&(vdev)->pdev->dev, fmt, ##__VA_ARGS__)
 #define vdev_info(vdev, fmt, ...)					\
-	dev_info(&(vdev)->pdev->dev, fmt, ##__VA_ARGS__)
+	dev_dbg(&(vdev)->pdev->dev, fmt, ##__VA_ARGS__)
 
 #define vdev_neterr(vdev, fmt, ...)					\
 	netdev_err(vnic_get_netdev(vdev), fmt, ##__VA_ARGS__)

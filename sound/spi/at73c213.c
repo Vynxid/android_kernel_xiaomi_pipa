@@ -198,7 +198,7 @@ set_rate:
 	/* SSC clock / (ssc divider * 16-bit * stereo). */
 	chip->bitrate = ssc_rate / (ssc_div * 16 * 2);
 
-	dev_info(&chip->spi->dev,
+	dev_dbg(&chip->spi->dev,
 			"at73c213: supported bitrate is %lu (%lu divider)\n",
 			chip->bitrate, ssc_div);
 

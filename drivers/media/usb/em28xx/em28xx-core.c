@@ -517,7 +517,7 @@ int em28xx_audio_setup(struct em28xx *dev)
 
 	/* See how this device is configured */
 	cfg = em28xx_read_reg(dev, EM28XX_R00_CHIPCFG);
-	dev_info(&dev->intf->dev, "Config register raw data: 0x%02x\n", cfg);
+	dev_dbg(&dev->intf->dev, "Config register raw data: 0x%02x\n", cfg);
 	if (cfg < 0) { /* Register read error */
 		/* Be conservative */
 		dev->int_audio_type = EM28XX_INT_AUDIO_AC97;
@@ -538,7 +538,7 @@ int em28xx_audio_setup(struct em28xx *dev)
 			i2s_samplerates = 5;
 		else
 			i2s_samplerates = 3;
-		dev_info(&dev->intf->dev, "I2S Audio (%d sample rate(s))\n",
+		dev_dbg(&dev->intf->dev, "I2S Audio (%d sample rate(s))\n",
 			 i2s_samplerates);
 		/* Skip the code that does AC97 vendor detection */
 		dev->audio_mode.ac97 = EM28XX_NO_AC97;
@@ -588,14 +588,14 @@ init_audio:
 	/* Reports detected AC97 processor */
 	switch (dev->audio_mode.ac97) {
 	case EM28XX_NO_AC97:
-		dev_info(&dev->intf->dev, "No AC97 audio processor\n");
+		dev_dbg(&dev->intf->dev, "No AC97 audio processor\n");
 		break;
 	case EM28XX_AC97_EM202:
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "Empia 202 AC97 audio processor detected\n");
 		break;
 	case EM28XX_AC97_SIGMATEL:
-		dev_info(&dev->intf->dev,
+		dev_dbg(&dev->intf->dev,
 			 "Sigmatel audio processor detected (stac 97%02x)\n",
 			 vid & 0xff);
 		break;
@@ -1089,7 +1089,7 @@ int em28xx_register_extension(struct em28xx_ops *ops)
 		}
 	}
 	mutex_unlock(&em28xx_devlist_mutex);
-	pr_info("em28xx: Registered (%s) extension\n", ops->name);
+	pr_debug("em28xx: Registered (%s) extension\n", ops->name);
 	return 0;
 }
 EXPORT_SYMBOL(em28xx_register_extension);
@@ -1108,7 +1108,7 @@ void em28xx_unregister_extension(struct em28xx_ops *ops)
 	}
 	list_del(&ops->next);
 	mutex_unlock(&em28xx_devlist_mutex);
-	pr_info("em28xx: Removed (%s) extension\n", ops->name);
+	pr_debug("em28xx: Removed (%s) extension\n", ops->name);
 }
 EXPORT_SYMBOL(em28xx_unregister_extension);
 
@@ -1148,7 +1148,7 @@ int em28xx_suspend_extension(struct em28xx *dev)
 {
 	const struct em28xx_ops *ops = NULL;
 
-	dev_info(&dev->intf->dev, "Suspending extensions\n");
+	dev_dbg(&dev->intf->dev, "Suspending extensions\n");
 	mutex_lock(&em28xx_devlist_mutex);
 	list_for_each_entry(ops, &em28xx_extension_devlist, next) {
 		if (!ops->suspend)
@@ -1165,7 +1165,7 @@ int em28xx_resume_extension(struct em28xx *dev)
 {
 	const struct em28xx_ops *ops = NULL;
 
-	dev_info(&dev->intf->dev, "Resuming extensions\n");
+	dev_dbg(&dev->intf->dev, "Resuming extensions\n");
 	mutex_lock(&em28xx_devlist_mutex);
 	list_for_each_entry(ops, &em28xx_extension_devlist, next) {
 		if (!ops->resume)

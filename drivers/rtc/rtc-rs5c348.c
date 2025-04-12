@@ -164,7 +164,7 @@ static int rs5c348_probe(struct spi_device *spi)
 		goto kfree_exit;
 	}
 
-	dev_info(&spi->dev, "spiclk %u KHz.\n",
+	dev_dbg(&spi->dev, "spiclk %u KHz.\n",
 		 (spi->max_speed_hz + 500) / 1000);
 
 	/* turn RTC on if it was not on */

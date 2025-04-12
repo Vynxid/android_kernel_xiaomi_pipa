@@ -244,7 +244,7 @@ static void atmel_tdes_hw_version_init(struct atmel_tdes_dev *dd)
 
 	dd->hw_version = atmel_tdes_get_version(dd);
 
-	dev_info(dd->dev,
+	dev_dbg(dd->dev,
 			"version: 0x%x\n", dd->hw_version);
 
 	clk_disable_unprepare(dd->iclk);
@@ -1423,7 +1423,7 @@ static int atmel_tdes_probe(struct platform_device *pdev)
 		if (err)
 			goto err_tdes_dma;
 
-		dev_info(dev, "using %s, %s for DMA transfers\n",
+		dev_dbg(dev, "using %s, %s for DMA transfers\n",
 				dma_chan_name(tdes_dd->dma_lch_in.chan),
 				dma_chan_name(tdes_dd->dma_lch_out.chan));
 	}
@@ -1436,7 +1436,7 @@ static int atmel_tdes_probe(struct platform_device *pdev)
 	if (err)
 		goto err_algs;
 
-	dev_info(dev, "Atmel DES/TDES\n");
+	dev_dbg(dev, "Atmel DES/TDES\n");
 
 	return 0;
 

@@ -270,7 +270,7 @@ static int sis96x_probe(struct pci_dev *dev,
 			"not initialized!\n");
 		return -EINVAL;
 	}
-	dev_info(&dev->dev, "SiS96x SMBus base address: 0x%04x\n",
+	dev_dbg(&dev->dev, "SiS96x SMBus base address: 0x%04x\n",
 			sis96x_smbus_base);
 
 	retval = acpi_check_resource_conflict(&dev->resource[SIS96x_BAR]);

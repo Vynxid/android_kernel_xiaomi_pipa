@@ -134,7 +134,7 @@ static int c_can_pci_probe(struct pci_dev *pdev,
 
 	ret = pci_enable_msi(pdev);
 	if (!ret) {
-		dev_info(&pdev->dev, "MSI enabled\n");
+		dev_dbg(&pdev->dev, "MSI enabled\n");
 		pci_set_master(pdev);
 	}
 

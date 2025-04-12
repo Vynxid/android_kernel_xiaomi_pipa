@@ -518,12 +518,12 @@ static inline bool dwc3_msm_is_superspeed(struct dwc3_msm *mdwc)
 	}
 	if (mdwc->in_host_mode) {
 		ret = dwc3_msm_is_host_superspeed(mdwc);
-		dev_info(mdwc->dev, "%s: host SS:%d.\n", __func__,ret);
+		dev_dbg(mdwc->dev, "%s: host SS:%d.\n", __func__,ret);
 	} else if (mdwc->in_device_mode) {
 		ret =  dwc3_msm_is_dev_superspeed(mdwc);
-		dev_info(mdwc->dev, "%s: device SS:%d.\n", __func__, ret);
+		dev_dbg(mdwc->dev, "%s: device SS:%d.\n", __func__, ret);
 	} else {
-		dev_info(mdwc->dev, "%s: Null Insert.\n", __func__);
+		dev_dbg(mdwc->dev, "%s: Null Insert.\n", __func__);
 		return 0;
 	}
 
@@ -2053,7 +2053,7 @@ static void dwc3_msm_notify_event(struct dwc3 *dwc, unsigned int event,
 
 	switch (event) {
 	case DWC3_CONTROLLER_ERROR_EVENT:
-		dev_info(mdwc->dev,
+		dev_dbg(mdwc->dev,
 			"DWC3_CONTROLLER_ERROR_EVENT received\n");
 
 		dwc3_gadget_disable_irq(dwc);
@@ -2747,7 +2747,7 @@ static int dwc3_msm_suspend(struct dwc3_msm *mdwc, bool enable_wakeup)
 	if (mdwc->lpm_flags & MDWC3_USE_PWR_EVENT_IRQ_FOR_WAKEUP)
 		enable_irq(mdwc->wakeup_irq[PWR_EVNT_IRQ].irq);
 
-	dev_info(mdwc->dev, "DWC3 in low power mode\n");
+	dev_dbg(mdwc->dev, "DWC3 in low power mode\n");
 	dbg_event(0xFF, "Ctl Sus", atomic_read(&dwc->in_lpm));
 
 	/* kick_sm if it is waiting for lpm sequence to finish */
@@ -2909,7 +2909,7 @@ static int dwc3_msm_resume(struct dwc3_msm *mdwc)
 		mdwc->lpm_flags &= ~MDWC3_ASYNC_IRQ_WAKE_CAPABILITY;
 	}
 
-	dev_info(mdwc->dev, "DWC3 exited from low power mode\n");
+	dev_dbg(mdwc->dev, "DWC3 exited from low power mode\n");
 
 	/* Enable core irq */
 	if (dwc->irq)
@@ -4766,7 +4766,7 @@ static int dwc3_msm_gadget_vbus_draw(struct dwc3_msm *mdwc, unsigned int mA)
 	pval.intval = 1000 * mA;
 
 set_prop:
-	dev_info(mdwc->dev, "Avail curr from USB = %u\n", mA);
+	dev_dbg(mdwc->dev, "Avail curr from USB = %u\n", mA);
 	ret = power_supply_set_property(mdwc->usb_psy,
 				POWER_SUPPLY_PROP_SDP_CURRENT_MAX, &pval);
 	if (ret) {

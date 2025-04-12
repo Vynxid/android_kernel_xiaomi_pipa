@@ -373,7 +373,7 @@ static void notify_handler(acpi_handle handle, u32 event, void *context)
 			return;
 
 		if (!sparse_keymap_entry_from_scancode(priv->array, event)) {
-			dev_info(&device->dev, "unknown event 0x%x\n", event);
+			dev_dbg(&device->dev, "unknown event 0x%x\n", event);
 			return;
 		}
 
@@ -467,7 +467,7 @@ static int intel_hid_probe(struct platform_device *device)
 		 * to be no other modes, but we should be paranoid and check
 		 * for compatibility.
 		 */
-		dev_info(&device->dev, "platform is not in simple mode\n");
+		dev_dbg(&device->dev, "platform is not in simple mode\n");
 		return -ENODEV;
 	}
 
@@ -484,7 +484,7 @@ static int intel_hid_probe(struct platform_device *device)
 
 	/* Setup 5 button array */
 	if (button_array_present(device)) {
-		dev_info(&device->dev, "platform supports 5 button array\n");
+		dev_dbg(&device->dev, "platform supports 5 button array\n");
 		err = intel_button_array_input_setup(device);
 		if (err)
 			pr_err("Failed to setup Intel 5 button array hotkeys\n");
@@ -569,7 +569,7 @@ check_acpi_dev(acpi_handle handle, u32 lvl, void *context, void **rv)
 
 	if (acpi_match_device_ids(dev, ids) == 0)
 		if (!IS_ERR_OR_NULL(acpi_create_platform_device(dev, NULL)))
-			dev_info(&dev->dev,
+			dev_dbg(&dev->dev,
 				 "intel-hid: created platform device\n");
 
 	return AE_OK;

@@ -836,7 +836,7 @@ static int xgene_ahci_probe(struct platform_device *pdev)
 	}
 
 	if (xgene_ahci_is_memram_inited(ctx)) {
-		dev_info(dev, "skip clock and PHY initialization\n");
+		dev_dbg(dev, "skip clock and PHY initialization\n");
 		goto skip_clk_phy;
 	}
 

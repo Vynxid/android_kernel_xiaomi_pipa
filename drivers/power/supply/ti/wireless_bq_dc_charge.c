@@ -158,7 +158,7 @@ static bool wldc_get_dc_online(struct wireless_dc_device_info *pm)
 	rc = power_supply_get_property(pm->dc_psy, POWER_SUPPLY_PROP_ONLINE,
 				       &pval);
 	if (rc < 0) {
-		pr_info("Couldn't get dc online prop:%d\n", rc);
+		pr_debug("Couldn't get dc online prop:%d\n", rc);
 		return false;
 	}
 
@@ -216,7 +216,7 @@ static int wldc_get_effective_fcc_val(struct wireless_dc_device_info *pm)
 
 	effective_fcc_val = get_effective_result(pm->fcc_votable);
 	effective_fcc_val = effective_fcc_val / 1000;
-	pr_info("effective_fcc_val: %d\n", effective_fcc_val);
+	pr_debug("effective_fcc_val: %d\n", effective_fcc_val);
 	return effective_fcc_val;
 }
 
@@ -237,7 +237,7 @@ static int wldc_get_batt_charge_type(struct wireless_dc_device_info *pm,
 	rc = power_supply_get_property((pm)->sw_psy,
 				       POWER_SUPPLY_PROP_CHARGE_TYPE, &pval);
 	if (rc < 0) {
-		pr_info("Couldn't get fastcharge mode:%d\n", rc);
+		pr_debug("Couldn't get fastcharge mode:%d\n", rc);
 		return rc;
 	}
 
@@ -264,7 +264,7 @@ static int wldc_get_batt_step_vfloat_index(struct wireless_dc_device_info *pm,
 	rc = power_supply_get_property(
 		(pm)->sw_psy, POWER_SUPPLY_PROP_STEP_VFLOAT_INDEX, &pval);
 	if (rc < 0) {
-		pr_info("Couldn't get fastcharge mode:%d\n", rc);
+		pr_debug("Couldn't get fastcharge mode:%d\n", rc);
 		return rc;
 	}
 
@@ -496,7 +496,7 @@ static int wldc_pm_check_cp_enabled(struct wireless_dc_device_info *pm)
 	if (!ret)
 		pm->cp.charge_enabled = !!val.intval;
 
-	pr_info("pm->cp.charge_enabled:%d\n", pm->cp.charge_enabled);
+	pr_debug("pm->cp.charge_enabled:%d\n", pm->cp.charge_enabled);
 
 	return ret;
 }
@@ -517,7 +517,7 @@ static int wldc_pm_check_cp_sec_enabled(struct wireless_dc_device_info *pm)
 		pm->cp_sec_psy, POWER_SUPPLY_PROP_CHARGING_ENABLED, &val);
 	if (!ret)
 		pm->cp_sec.charge_enabled = !!val.intval;
-	pr_info("pm->cp_sec.charge_enabled:%d\n", pm->cp_sec.charge_enabled);
+	pr_debug("pm->cp_sec.charge_enabled:%d\n", pm->cp_sec.charge_enabled);
 	return ret;
 }
 
@@ -612,7 +612,7 @@ static void wldc_dump_wl_volt(struct wireless_dc_device_info *pm)
 	ret = power_supply_get_property(
 		pm->wl_psy, POWER_SUPPLY_PROP_INPUT_VOLTAGE_REGULATION, &val);
 	if (!ret)
-		pr_info("wl_vout:%d mA\n", val.intval / 1000);
+		pr_debug("wl_vout:%d mA\n", val.intval / 1000);
 }
 
 static int wldc_get_bq_cp_vbat(struct wireless_dc_device_info *pm,
@@ -629,7 +629,7 @@ static int wldc_get_bq_cp_vbat(struct wireless_dc_device_info *pm,
 	ret = power_supply_get_property(
 		pm->cp_psy, POWER_SUPPLY_PROP_TI_BATTERY_VOLTAGE, &val);
 	if (!ret) {
-		pr_info("bq_vbat:%d mA\n", val.intval);
+		pr_debug("bq_vbat:%d mA\n", val.intval);
 		*vbat_val = val.intval;
 	}
 
@@ -650,7 +650,7 @@ static int wldc_get_bq_cp_ibus(struct wireless_dc_device_info *pm,
 	ret = power_supply_get_property(pm->cp_psy,
 					POWER_SUPPLY_PROP_TI_BUS_CURRENT, &val);
 	if (!ret) {
-		pr_info("bq_ibus:%d mA\n", val.intval);
+		pr_debug("bq_ibus:%d mA\n", val.intval);
 		*ibus_val = val.intval;
 	}
 
@@ -671,7 +671,7 @@ static int wldc_get_bq_cp_vbus(struct wireless_dc_device_info *pm,
 	ret = power_supply_get_property(pm->cp_psy,
 					POWER_SUPPLY_PROP_TI_BUS_VOLTAGE, &val);
 	if (!ret) {
-		pr_info("bq_vbus:%d mA\n", val.intval);
+		pr_debug("bq_vbus:%d mA\n", val.intval);
 		*vbus_val = val.intval;
 	}
 
@@ -694,7 +694,7 @@ wireless_charge_get_tx_adapter_type(struct wireless_dc_device_info *pm,
 					POWER_SUPPLY_PROP_TX_ADAPTER, &val);
 	if (!ret) {
 		*adpater_type = val.intval;
-		pr_info("TX adapter type is:%d\n", *adpater_type);
+		pr_debug("TX adapter type is:%d\n", *adpater_type);
 	}
 	return ret;
 }
@@ -712,7 +712,7 @@ static int wireless_charge_set_rx_vout(struct wireless_dc_device_info *pm,
 	if (!pm->wl_psy)
 		return -ENODEV;
 
-	pr_info("%s: rx_vout is set to %dmV\n", __func__, rx_vout);
+	pr_debug("%s: rx_vout is set to %dmV\n", __func__, rx_vout);
 
 	val.intval = rx_vout * 1000;
 	ret = power_supply_set_property(
@@ -736,7 +736,7 @@ static int wireless_charge_get_rx_vout(struct wireless_dc_device_info *pm,
 		pm->wl_psy, POWER_SUPPLY_PROP_INPUT_VOLTAGE_REGULATION, &val);
 	if (!ret) {
 		*rx_vout = val.intval / 1000;
-		pr_info("rx_vout:%d mV\n", *rx_vout);
+		pr_debug("rx_vout:%d mV\n", *rx_vout);
 	}
 	return ret;
 }
@@ -756,7 +756,7 @@ static int wireless_charge_get_rx_iout(struct wireless_dc_device_info *pm,
 					&val);
 	if (!ret) {
 		*rx_iout = val.intval / 1000;
-		pr_info("rx_iout:%d mA\n", *rx_iout);
+		pr_debug("rx_iout:%d mA\n", *rx_iout);
 	}
 	return ret;
 }
@@ -776,7 +776,7 @@ static int wireless_charge_get_rx_vrect(struct wireless_dc_device_info *pm,
 		pm->wl_psy, POWER_SUPPLY_PROP_INPUT_VOLTAGE_VRECT, &val);
 	if (!ret) {
 		*vrect_val = val.intval / 1000;
-		pr_info("vrect_val:%d mV\n", *vrect_val);
+		pr_debug("vrect_val:%d mV\n", *vrect_val);
 	}
 	return ret;
 }
@@ -788,7 +788,7 @@ static void wldc_regulate_power(struct wireless_dc_device_info *pm, int volt)
 	};
 	int ret = 0;
 
-	pr_info("volt: %d, rx_vout_set:%d\n", volt, pm->rx_vout_set);
+	pr_debug("volt: %d, rx_vout_set:%d\n", volt, pm->rx_vout_set);
 
 	val.intval = volt * 1000;
 
@@ -810,7 +810,7 @@ static int wldc_soft_start_to_open_dc_path(struct wireless_dc_device_info *pm)
 	int ret = 0, i = 0;
 	int bq_vbatt, bq_ibus, bq_vbus, rx_vrect, rx_vout, rx_vout_set;
 	int rx_iout = 0;
-	pr_info("wldc_soft_start_to_open_dc_path start\n");
+	pr_debug("wldc_soft_start_to_open_dc_path start\n");
 
 	if (!pm->wl_info.active)
 		return -WL_DISCONNECTED_ERR;
@@ -847,7 +847,7 @@ static int wldc_soft_start_to_open_dc_path(struct wireless_dc_device_info *pm)
 	if (ret) {
 		pr_err("%s: bq cp open fail!\n", __func__);
 	} else {
-		pr_info("pm->cp.charge_enabled:%d\n", pm->cp.charge_enabled);
+		pr_debug("pm->cp.charge_enabled:%d\n", pm->cp.charge_enabled);
 	}
 
 	for (i = 0; i < WLDC_OPEN_DC_PATH_MAX_CNT; i++) {
@@ -869,7 +869,7 @@ static int wldc_soft_start_to_open_dc_path(struct wireless_dc_device_info *pm)
 		ret = wireless_charge_get_rx_iout(pm, &rx_iout);
 
 		if (bq_ibus > WLDC_OPEN_PATH_RX_IOUT_MIN) {
-			pr_info("[%s] get rx iout above IOUT_MIN succ\n",
+			pr_debug("[%s] get rx iout above IOUT_MIN succ\n",
 				__func__);
 			return 0;
 		}
@@ -903,7 +903,7 @@ static int wldc_soft_start_to_open_dc_path(struct wireless_dc_device_info *pm)
 		if (ret)
 			return ret;
 
-		pr_info("[%s] bq_ibus = %dmA, vrect = %dmV, vout = %dmV\n",
+		pr_debug("[%s] bq_ibus = %dmA, vrect = %dmV, vout = %dmV\n",
 			__func__, bq_ibus, rx_vrect, rx_vout);
 
 		/* try to enable bq */
@@ -923,11 +923,11 @@ static int wldc_soft_start_to_open_dc_path(struct wireless_dc_device_info *pm)
 		if (ret)
 			pr_err("%s: bq cp open fail!\n", __func__);
 		else
-			pr_info("pm->cp.charge_enabled:%d\n",
+			pr_debug("pm->cp.charge_enabled:%d\n",
 				pm->cp.charge_enabled);
 	}
 
-	pr_info("wldc_soft_start_to_open_dc_path end\n");
+	pr_debug("wldc_soft_start_to_open_dc_path end\n");
 	return -NORMAL_ERR;
 }
 #define DELAY_BEFORE_CP_OPEN_MS 0
@@ -960,7 +960,7 @@ static int wl_get_batt_current_thermal_level(struct wireless_dc_device_info *pm,
 	rc = power_supply_get_property(
 		pm->sw_psy, POWER_SUPPLY_PROP_DC_THERMAL_LEVELS, &pval);
 	if (rc < 0) {
-		pr_info("Couldn't get fastcharge mode:%d\n", rc);
+		pr_debug("Couldn't get fastcharge mode:%d\n", rc);
 		return rc;
 	}
 
@@ -984,7 +984,7 @@ static bool wl_disable_cp_by_jeita_status(struct wireless_dc_device_info *pm)
 	rc = power_supply_get_property(pm->bms_psy, POWER_SUPPLY_PROP_TEMP,
 				       &pval);
 	if (rc < 0) {
-		pr_info("Couldn't get batt temp prop:%d\n", rc);
+		pr_debug("Couldn't get batt temp prop:%d\n", rc);
 		return false;
 	}
 
@@ -1023,7 +1023,7 @@ static bool wl_get_fastcharge_mode_enabled(struct wireless_dc_device_info *pm)
 	rc = power_supply_get_property(
 		pm->bms_psy, POWER_SUPPLY_PROP_FASTCHARGE_MODE, &pval);
 	if (rc < 0) {
-		pr_info("Couldn't get fastcharge mode:%d\n", rc);
+		pr_debug("Couldn't get fastcharge mode:%d\n", rc);
 		return false;
 	}
 
@@ -1062,13 +1062,13 @@ static int wldc_pm_fc2_charge_algo(struct wireless_dc_device_info *pm)
 	int soc = 0;
 
 	if (!pm->wl_info.active) {
-		pr_info("active is false, return\n");
+		pr_debug("active is false, return\n");
 		return PM_ALGO_RET_CHG_DISABLED;
 	}
 
 	ret = wireless_charge_get_rx_vrect(pm, &vrect);
 	ret = wireless_charge_get_rx_vout(pm, &vout);
-	pr_info("vrect = %dmV, vout = %dmV\n", vrect, vout);
+	pr_debug("vrect = %dmV, vout = %dmV\n", vrect, vout);
 
 	/* if tx adapter type is 27/40w chargers, set maxium rx iout curr to 1A */
 	ret = wireless_charge_get_tx_adapter_type(pm, &tx_adapter_type);
@@ -1165,7 +1165,7 @@ static int wldc_pm_fc2_charge_algo(struct wireless_dc_device_info *pm)
 		iout_max_limit = effective_fcc_val / 4;
 		iout_max_limit =
 			min(effective_iout_current_max, iout_max_limit);
-		pr_info("iout_max_limit :%d\n", iout_max_limit);
+		pr_debug("iout_max_limit :%d\n", iout_max_limit);
 	}
 
 	if (iout_max_limit <= IOUT_SAFTY_THRESHOLD)
@@ -1193,7 +1193,7 @@ static int wldc_pm_fc2_charge_algo(struct wireless_dc_device_info *pm)
 	} else {
 		iout_lmt_change_timer = 0;
 	}
-	pr_info("rx_iout_limit:%d\n", rx_iout_limit);
+	pr_debug("rx_iout_limit:%d\n", rx_iout_limit);
 
 	/* battery voltage loop*/
 	if (pm->cp.vbat_volt > pm_config.bat_volt_lp_lmt)
@@ -1219,9 +1219,9 @@ static int wldc_pm_fc2_charge_algo(struct wireless_dc_device_info *pm)
 		step_iout = pm_config.fc2_steps;
 	else if (rx_iout > rx_iout_limit)
 		step_iout = -pm_config.fc2_steps;
-	pr_info("step_iout:%d\n", step_iout);
+	pr_debug("step_iout:%d\n", step_iout);
 
-	pr_info("pm->cp.vbat_reg:%d, pm->cp.ibat_reg:%d\n", pm->cp.vbat_reg,
+	pr_debug("pm->cp.vbat_reg:%d, pm->cp.ibat_reg:%d\n", pm->cp.vbat_reg,
 		pm->cp.ibat_reg);
 	/* hardware regulation loop*/
 	if (pm->cp.vbat_reg)
@@ -1242,17 +1242,17 @@ static int wldc_pm_fc2_charge_algo(struct wireless_dc_device_info *pm)
 			     effective_fcc_val * 1000);
 	}
 
-	pr_info("step_bat_reg:%d\n", step_bat_reg);
+	pr_debug("step_bat_reg:%d\n", step_bat_reg);
 	sw_ctrl_steps = min(step_vbat, step_iout);
 	sw_ctrl_steps = min(sw_ctrl_steps, step_bat_reg);
 
-	pr_info("sw_ctrl_steps:%d\n", sw_ctrl_steps);
+	pr_debug("sw_ctrl_steps:%d\n", sw_ctrl_steps);
 	/* hardware alarm loop */
 	if (pm->cp.bus_ocp_alarm || pm->cp.bus_ovp_alarm)
 		hw_ctrl_steps = -pm_config.fc2_steps;
 	else
 		hw_ctrl_steps = pm_config.fc2_steps;
-	pr_info("hw_ctrl_steps:%d\n", hw_ctrl_steps);
+	pr_debug("hw_ctrl_steps:%d\n", hw_ctrl_steps);
 	/* check if cp disabled due to other reason*/
 	wldc_pm_check_cp_enabled(pm);
 
@@ -1260,26 +1260,26 @@ static int wldc_pm_fc2_charge_algo(struct wireless_dc_device_info *pm)
 		wldc_pm_check_cp_sec_enabled(pm);
 
 	if (pm->cp.bat_therm_fault) { /* battery overheat, stop charge*/
-		pr_info("bat_therm_fault:%d\n", pm->cp.bat_therm_fault);
+		pr_debug("bat_therm_fault:%d\n", pm->cp.bat_therm_fault);
 		return PM_ALGO_RET_THERM_FAULT;
 	} else if (pm->cp.bat_ocp_fault || pm->cp.bus_ocp_fault ||
 		   pm->cp.bat_ovp_fault || pm->cp.bus_ovp_fault) {
-		pr_info("bat_ocp_fault:%d, bus_ocp_fault:%d, bat_ovp_fault:%d, bus_ovp_fault:%d\n",
+		pr_debug("bat_ocp_fault:%d, bus_ocp_fault:%d, bat_ovp_fault:%d, bus_ovp_fault:%d\n",
 			pm->cp.bat_ocp_fault, pm->cp.bus_ocp_fault,
 			pm->cp.bat_ovp_fault, pm->cp.bus_ovp_fault);
 		return PM_ALGO_RET_OTHER_FAULT; /* go to switch, and try to ramp up*/
 	} else if (!pm->cp.charge_enabled
 		   /* || (pm_config.cp_sec_enable && !pm->cp_sec.charge_enabled)*/) {
-		pr_info("cp.charge_enabled:%d, cp_sec.charge_enabled:%d\n",
+		pr_debug("cp.charge_enabled:%d, cp_sec.charge_enabled:%d\n",
 			pm->cp.charge_enabled, pm->cp_sec.charge_enabled);
 		return PM_ALGO_RET_CHG_DISABLED;
 	}
 
 	ret = wldc_pm_get_batt_capacity(pm, &soc);
 	if (ret) {
-		pr_info("read soc error:%d\n", ret);
+		pr_debug("read soc error:%d\n", ret);
 	} else if (soc > CAPACITY_TOO_HIGH_THR) {
-		pr_info("high soc:%d, close bq pump\n", soc);
+		pr_debug("high soc:%d, close bq pump\n", soc);
 		return PM_ALGO_RET_CHG_DISABLED;
 	}
 
@@ -1287,7 +1287,7 @@ static int wldc_pm_fc2_charge_algo(struct wireless_dc_device_info *pm)
 	if (pm->cp.vbat_volt > pm_config.bat_volt_lp_lmt - 80 &&
 	    pm->cp.ibat_curr < pm_config.fc2_taper_current) {
 		if (fc2_taper_timer++ > TAPER_TIMEOUT) {
-			pr_info("charge pump taper charging done\n");
+			pr_debug("charge pump taper charging done\n");
 			fc2_taper_timer = 0;
 			return PM_ALGO_RET_TAPER_DONE;
 		}
@@ -1296,7 +1296,7 @@ static int wldc_pm_fc2_charge_algo(struct wireless_dc_device_info *pm)
 	}
 
 	pm->night_charging = wldc_pm_get_night_charging_enabled(pm);
-	pr_info("wl is open night charging:%d\n", pm->night_charging);
+	pr_debug("wl is open night charging:%d\n", pm->night_charging);
 
 	if (pm->night_charging)
 		return PM_ALGO_RET_CHG_DISABLED;
@@ -1304,23 +1304,23 @@ static int wldc_pm_fc2_charge_algo(struct wireless_dc_device_info *pm)
 	/* do thermal and jeita check */
 	wl_get_batt_current_thermal_level(pm, &thermal_level);
 	pm->is_temp_out_fc2_range = wl_disable_cp_by_jeita_status(pm);
-	pr_info("wl is_temp_out_fc2_range:%d\n", pm->is_temp_out_fc2_range);
+	pr_debug("wl is_temp_out_fc2_range:%d\n", pm->is_temp_out_fc2_range);
 
 	if (thermal_level >= MAX_THERMAL_LEVEL || pm->is_temp_out_fc2_range) {
-		pr_info("cp.is_temp_out_fc2_range:%d thermal_level:%d\n",
+		pr_debug("cp.is_temp_out_fc2_range:%d thermal_level:%d\n",
 			pm->is_temp_out_fc2_range, thermal_level);
 		return PM_ALGO_RET_CHG_DISABLED;
 	}
 
 	steps = min(sw_ctrl_steps, hw_ctrl_steps);
-	pr_info("steps: %d, sw_ctrl_steps:%d, hw_ctrl_steps:%d\n", steps,
+	pr_debug("steps: %d, sw_ctrl_steps:%d, hw_ctrl_steps:%d\n", steps,
 		sw_ctrl_steps, hw_ctrl_steps);
 	pm->rx_vout_set += steps * step_mv;
 
 	if (pm->rx_vout_set > pm->wl_info.max_volt)
 		pm->rx_vout_set = pm->wl_info.max_volt;
 
-	pr_info("steps: %d, pm->rx_vout_set: %d\n", steps, pm->rx_vout_set);
+	pr_debug("steps: %d, pm->rx_vout_set: %d\n", steps, pm->rx_vout_set);
 
 	return PM_ALGO_RET_OK;
 }
@@ -1336,7 +1336,7 @@ static void wldc_pm_move_state(struct wireless_dc_device_info *pm,
 			       enum pm_state state)
 {
 #if 1
-	pr_info("state change:%s -> %s\n", pm_str[pm->state], pm_str[state]);
+	pr_debug("state change:%s -> %s\n", pm_str[pm->state], pm_str[state]);
 #endif
 	pm->state = state;
 }
@@ -1353,7 +1353,7 @@ static int wldc_get_usb_icl_val(struct wireless_dc_device_info *pm)
 
 	effective_usb_icl_val = get_effective_result(pm->usb_icl_votable);
 	effective_usb_icl_val = effective_usb_icl_val / 1000;
-	pr_info("effective_usb_icl_val: %d\n", effective_usb_icl_val);
+	pr_debug("effective_usb_icl_val: %d\n", effective_usb_icl_val);
 	return effective_usb_icl_val;
 }
 
@@ -1390,34 +1390,34 @@ static int wldc_pm_sm(struct wireless_dc_device_info *pm)
 
 		wl_get_batt_current_thermal_level(pm, &thermal_level);
 		pm->is_temp_out_fc2_range = wl_disable_cp_by_jeita_status(pm);
-		pr_info("is_temp_out_fc2_range:%d\n",
+		pr_debug("is_temp_out_fc2_range:%d\n",
 			pm->is_temp_out_fc2_range);
 
 		pm->night_charging = wldc_pm_get_night_charging_enabled(pm);
-		pr_info("night charging is open :%d\n", pm->night_charging);
+		pr_debug("night charging is open :%d\n", pm->night_charging);
 
 		if (pm->cp.vbat_volt < pm_config.min_vbat_for_cp) {
-			pr_info("batt_volt %d, waiting...\n", pm->cp.vbat_volt);
+			pr_debug("batt_volt %d, waiting...\n", pm->cp.vbat_volt);
 		} else if (tx_adapter_type > ADAPTER_XIAOMI_PD_100W ||
 			   tx_adapter_type < ADAPTER_XIAOMI_QC3) {
-			pr_info("not our defined quick chargers, waiting...\n");
+			pr_debug("not our defined quick chargers, waiting...\n");
 		} else if (pm->cp.vbat_volt > pm_config.bat_volt_lp_lmt -
 						      VBAT_HIGH_FOR_FC_HYS_MV ||
 			   capacity >= CAPACITY_TOO_HIGH_THR) {
-			pr_info("batt_volt %d or capacity is too high for cp,\
+			pr_debug("batt_volt %d or capacity is too high for cp,\
 					charging with switch charger\n",
 				pm->cp.vbat_volt);
 			wldc_pm_move_state(pm, CP_PM_STATE_FC2_EXIT);
 		} else if (thermal_level >= MAX_THERMAL_LEVEL ||
 			   pm->is_temp_out_fc2_range) {
-			pr_info("thermal level is too high, waiting...\n");
+			pr_debug("thermal level is too high, waiting...\n");
 		} else if (pm->night_charging) {
-			pr_info("night charging is open, waiting...\n");
+			pr_debug("night charging is open, waiting...\n");
 		} else if (effective_fcc_val <= MIN_FCC_FOR_OPEN_BQ_MA) {
-			pr_info("fcc %d is too low, waiting...\n",
+			pr_debug("fcc %d is too low, waiting...\n",
 				effective_fcc_val);
 		} else {
-			pr_info("batt_volt-%d is ok, start flash charging\n",
+			pr_debug("batt_volt-%d is ok, start flash charging\n",
 				pm->cp.vbat_volt);
 			wldc_pm_move_state(pm, CP_PM_STATE_FC2_ENTRY);
 		}
@@ -1437,7 +1437,7 @@ static int wldc_pm_sm(struct wireless_dc_device_info *pm)
 				     true, effective_usb_icl);
 				effective_usb_icl -=
 					MAX_MAIN_CHARGER_ICL_STEP_UA;
-				pr_info("smooth down the icl \n");
+				pr_debug("smooth down the icl \n");
 				msleep(50);
 			}
 			vote(pm->usb_icl_votable, STEP_BMS_CHG_VOTER, true,
@@ -1451,7 +1451,7 @@ static int wldc_pm_sm(struct wireless_dc_device_info *pm)
 			wldc_pm_move_state(pm, CP_PM_STATE_FC2_ENTRY_3);
 			break;
 		} else {
-			pr_info("wldc security confirm failed, enter state fc2_entry_1 now\n");
+			pr_debug("wldc security confirm failed, enter state fc2_entry_1 now\n");
 			wldc_pm_move_state(pm, CP_PM_STATE_FC2_ENTRY_1);
 		}
 		break;
@@ -1528,31 +1528,31 @@ static int wldc_pm_sm(struct wireless_dc_device_info *pm)
 	case CP_PM_STATE_FC2_TUNE:
 		ret = wldc_pm_fc2_charge_algo(pm);
 		if (ret == PM_ALGO_RET_THERM_FAULT) {
-			pr_info("Move to stop charging:%d\n", ret);
+			pr_debug("Move to stop charging:%d\n", ret);
 			stop_sw = true;
 			wldc_pm_move_state(pm, CP_PM_STATE_FC2_EXIT);
 			break;
 		} else if (ret == PM_ALGO_RET_OTHER_FAULT ||
 			   ret == PM_ALGO_RET_TAPER_DONE) {
-			pr_info("Move to switch charging:%d\n", ret);
+			pr_debug("Move to switch charging:%d\n", ret);
 			wldc_pm_move_state(pm, CP_PM_STATE_FC2_EXIT);
 			break;
 		} else if (ret == PM_ALGO_RET_CHG_DISABLED) {
-			pr_info("Move to switch charging, will try to recover flash charging:%d\n",
+			pr_debug("Move to switch charging, will try to recover flash charging:%d\n",
 				ret);
 			recover = true;
 			wldc_pm_move_state(pm, CP_PM_STATE_FC2_EXIT);
 			break;
 		} else {
 			wldc_regulate_power(pm, pm->rx_vout_set);
-			pr_info("rx_vout_set:%d\n", pm->rx_vout_set);
+			pr_debug("rx_vout_set:%d\n", pm->rx_vout_set);
 		}
 		/*stop second charge pump if either of ibus is lower than 500ma during CV */
 		if (pm_config.cp_sec_enable && pm->cp_sec.charge_enabled &&
 		    pm->cp.vbat_volt > pm_config.bat_volt_lp_lmt - 80 &&
 		    (pm->cp.ibus_curr < MIN_IBUS_FOR_TWIN_BQ_MA ||
 		     pm->cp_sec.ibus_curr < MIN_IBUS_FOR_TWIN_BQ_MA)) {
-			pr_info("second cp is disabled due to ibus < 500mA\n");
+			pr_debug("second cp is disabled due to ibus < 500mA\n");
 			wldc_pm_enable_cp_sec(pm, false);
 			wldc_pm_check_cp_sec_enabled(pm);
 		}
@@ -1561,7 +1561,7 @@ static int wldc_pm_sm(struct wireless_dc_device_info *pm)
 		if (pm->cp.charge_enabled && !pm->cp_sec.charge_enabled &&
 		    pm->cp.vbat_volt > pm_config.bat_volt_lp_lmt - 80 &&
 		    pm->cp.ibus_curr < MIN_IBUS_FOR_SINGLE_BQ_MA) {
-			pr_info("master cp is disabled due sto ibus < 750 ma \n");
+			pr_debug("master cp is disabled due sto ibus < 750 ma \n");
 			wldc_pm_move_state(pm, CP_PM_STATE_FC2_EXIT);
 			break;
 		}
@@ -1570,7 +1570,7 @@ static int wldc_pm_sm(struct wireless_dc_device_info *pm)
 		if (!wldc_is_fcc_voter_esr(pm)) {
 			if (effective_fcc_val <= MIN_FCC_FOR_OPEN_BQ_MA) {
 				/* close BQs */
-				pr_info("disable bq because of fcc :%d ma \n",
+				pr_debug("disable bq because of fcc :%d ma \n",
 					effective_fcc_val);
 				wldc_pm_move_state(pm, CP_PM_STATE_FC2_EXIT);
 				/* we need recovery after fcc is larger later */
@@ -1581,7 +1581,7 @@ static int wldc_pm_sm(struct wireless_dc_device_info *pm)
 				/* close slave bq*/
 				if (pm_config.cp_sec_enable &&
 				    pm->cp_sec.charge_enabled) {
-					pr_info("second cp is disabled due to fcc :%d too low \n",
+					pr_debug("second cp is disabled due to fcc :%d too low \n",
 						effective_fcc_val);
 					wldc_pm_enable_cp_sec(pm, false);
 					wldc_pm_check_cp_sec_enabled(pm);
@@ -1595,7 +1595,7 @@ static int wldc_pm_sm(struct wireless_dc_device_info *pm)
 				    !pm->cp_sec.charge_enabled &&
 				    pm->cp.ibus_curr >=
 					    MIN_IBUS_FOR_SINGLE_BQ_MA) {
-					pr_info("second cp is enabled due to fcc :%d\n",
+					pr_debug("second cp is enabled due to fcc :%d\n",
 						effective_fcc_val);
 					ret = wldc_pm_enable_cp_sec(pm, true);
 					ret = wldc_pm_check_cp_sec_enabled(pm);
@@ -1763,7 +1763,7 @@ static void wl_psy_change_work(struct work_struct *work)
 	};
 	int ret = 0;
 
-	pr_info("enter");
+	pr_debug("enter");
 
 	ret = power_supply_get_property(pm->wl_psy,
 					POWER_SUPPLY_PROP_WIRELESS_CP_EN, &val);
@@ -1772,7 +1772,7 @@ static void wl_psy_change_work(struct work_struct *work)
 		pr_err("Failed to read wl cp enable status\n");
 		goto out;
 	}
-	pr_info("wl_info.active:%d, psy new value:%d", pm->wl_info.active,
+	pr_debug("wl_info.active:%d, psy new value:%d", pm->wl_info.active,
 		val.intval);
 
 	if (!pm->wl_info.active && val.intval)
@@ -1782,7 +1782,7 @@ static void wl_psy_change_work(struct work_struct *work)
 
 out:
 	pm->psy_change_running = false;
-	pr_info("exit");
+	pr_debug("exit");
 }
 
 static int wldc_psy_notifier_cb(struct notifier_block *nb, unsigned long event,
@@ -1836,7 +1836,7 @@ static int wldc_charge_parse_dt(struct wireless_dc_device_info *pm)
 		pr_err("wc-dc-bat-volt-max property missing, use default val\n");
 	else
 		pm_config.bat_volt_lp_lmt = pm->bat_volt_max;
-	pr_info("pm_config.bat_volt_lp_lmt:%d\n", pm_config.bat_volt_lp_lmt);
+	pr_debug("pm_config.bat_volt_lp_lmt:%d\n", pm_config.bat_volt_lp_lmt);
 
 	rc = of_property_read_u32(node, "mi,wc-dc-bat-curr-max",
 				  &pm->bat_curr_max);
@@ -1844,7 +1844,7 @@ static int wldc_charge_parse_dt(struct wireless_dc_device_info *pm)
 		pr_err("wc-dc-bat-curr-max property missing, use default val\n");
 	else
 		pm_config.bat_curr_lp_lmt = pm->bat_curr_max;
-	pr_info("pm_config.bat_curr_lp_lmt:%d\n", pm_config.bat_curr_lp_lmt);
+	pr_debug("pm_config.bat_curr_lp_lmt:%d\n", pm_config.bat_curr_lp_lmt);
 
 	rc = of_property_read_u32(node, "mi,wc-dc-bus-volt-max",
 				  &pm->bus_volt_max);
@@ -1852,7 +1852,7 @@ static int wldc_charge_parse_dt(struct wireless_dc_device_info *pm)
 		pr_err("wc-dc-bus-volt-max property missing, use default val\n");
 	else
 		pm_config.bus_volt_lp_lmt = pm->bus_volt_max;
-	pr_info("pm_config.bus_volt_lp_lmt:%d\n", pm_config.bus_volt_lp_lmt);
+	pr_debug("pm_config.bus_volt_lp_lmt:%d\n", pm_config.bus_volt_lp_lmt);
 
 	rc = of_property_read_u32(node, "mi,wc-dc-bus-curr-max",
 				  &pm->bus_curr_max);
@@ -1860,7 +1860,7 @@ static int wldc_charge_parse_dt(struct wireless_dc_device_info *pm)
 		pr_err("wc-dc-bus-curr-max property missing, use default val\n");
 	else
 		pm_config.bus_curr_lp_lmt = pm->bus_curr_max;
-	pr_info("pm_config.bus_curr_lp_lmt:%d\n", pm_config.bus_curr_lp_lmt);
+	pr_debug("pm_config.bus_curr_lp_lmt:%d\n", pm_config.bus_curr_lp_lmt);
 
 	rc = of_property_read_u32(node, "mi,wc-dc-rx-iout-curr-max",
 				  &pm->rx_iout_curr_max);
@@ -1871,33 +1871,33 @@ static int wldc_charge_parse_dt(struct wireless_dc_device_info *pm)
 
 	pm->cp_sec_enable = of_property_read_bool(node, "mi,cp-sec-enable");
 	pm_config.cp_sec_enable = pm->cp_sec_enable;
-	pr_info("pm_config.cp_sec_enable:%d\n", pm_config.cp_sec_enable);
+	pr_debug("pm_config.cp_sec_enable:%d\n", pm_config.cp_sec_enable);
 
 	pm->use_qcom_gauge = of_property_read_bool(node, "mi,use-qcom-gauge");
 
 	rc = of_property_read_u32(node, "mi,wc-non-ffc-bat-volt-max",
 				  &pm->non_ffc_bat_volt_max);
 
-	pr_info("pm->non_ffc_bat_volt_max:%d\n", pm->non_ffc_bat_volt_max);
+	pr_debug("pm->non_ffc_bat_volt_max:%d\n", pm->non_ffc_bat_volt_max);
 
 	if (!pm->use_qcom_gauge) {
 		rc = of_property_read_u32(node,
 					  "mi,step-charge-high-vol-curr-max",
 					  &pm->step_charge_high_vol_curr_max);
 
-		pr_info("pm->step_charge_high_vol_curr_max:%d\n",
+		pr_debug("pm->step_charge_high_vol_curr_max:%d\n",
 			pm->step_charge_high_vol_curr_max);
 
 		rc = of_property_read_u32(node, "mi,cell-vol-high-threshold-mv",
 					  &pm->cell_vol_high_threshold_mv);
 
-		pr_info("pm->cell_vol_high_threshold_mv:%d\n",
+		pr_debug("pm->cell_vol_high_threshold_mv:%d\n",
 			pm->cell_vol_high_threshold_mv);
 
 		rc = of_property_read_u32(node, "mi,cell-vol-max-threshold-mv",
 					  &pm->cell_vol_max_threshold_mv);
 
-		pr_info("pm->cell_vol_max_threshold_mv:%d\n",
+		pr_debug("pm->cell_vol_max_threshold_mv:%d\n",
 			pm->cell_vol_max_threshold_mv);
 	}
 
@@ -1910,7 +1910,7 @@ static int wldc_pm_probe(struct platform_device *pdev)
 	struct device *dev = &pdev->dev;
 	struct wireless_dc_device_info *pm;
 
-	pr_info("%s enter\n", __func__);
+	pr_debug("%s enter\n", __func__);
 
 	pm = kzalloc(sizeof(struct wireless_dc_device_info), GFP_KERNEL);
 	if (!pm)

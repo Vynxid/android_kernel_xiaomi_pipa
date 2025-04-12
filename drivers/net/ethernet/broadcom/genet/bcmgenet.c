@@ -3400,7 +3400,7 @@ static void bcmgenet_set_hw_params(struct bcmgenet_priv *priv)
 	}
 
 	/* Print the GENET core version */
-	dev_info(&priv->pdev->dev, "GENET " GENET_VER_FMT,
+	dev_dbg(&priv->pdev->dev, "GENET " GENET_VER_FMT,
 		 major, (reg >> 16) & 0x0f, reg & 0xffff);
 
 	/* Store the integrated PHY revision for the MDIO probing function

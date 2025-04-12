@@ -608,7 +608,7 @@ static int acpi_suspend_enter(suspend_state_t pm_state)
 		error = acpi_suspend_lowlevel();
 		if (error)
 			return error;
-		pr_info(PREFIX "Low-level resume complete\n");
+		pr_debug(PREFIX "Low-level resume complete\n");
 		pm_set_resume_via_firmware();
 		break;
 	}
@@ -829,7 +829,7 @@ static void lpi_device_get_constraints(void)
 			union acpi_object *info_obj = &info.package[j];
 			union acpi_object *cnstr_pkg;
 			union acpi_object *obj;
-			struct lpi_device_constraint dev_info;
+			struct lpi_device_constraint dev_dbg;
 
 			switch (info_obj->type) {
 			case ACPI_TYPE_INTEGER:
@@ -841,16 +841,16 @@ static void lpi_device_get_constraints(void)
 
 				cnstr_pkg = info_obj->package.elements;
 				obj = &cnstr_pkg[0];
-				dev_info.uid = obj->integer.value;
+				dev_dbg.uid = obj->integer.value;
 				obj = &cnstr_pkg[1];
-				dev_info.min_dstate = obj->integer.value;
+				dev_dbg.min_dstate = obj->integer.value;
 
 				acpi_handle_debug(lps0_device_handle,
 					"uid:%d min_dstate:%s\n",
-					dev_info.uid,
-					acpi_power_state_string(dev_info.min_dstate));
+					dev_dbg.uid,
+					acpi_power_state_string(dev_dbg.min_dstate));
 
-				constraint->min_dstate = dev_info.min_dstate;
+				constraint->min_dstate = dev_dbg.min_dstate;
 				break;
 			}
 		}
@@ -1309,7 +1309,7 @@ int __init acpi_sleep_init(void)
 		if (sleep_states[i])
 			pos += sprintf(pos, " S%d", i);
 	}
-	pr_info(PREFIX "(supports%s)\n", supported);
+	pr_debug(PREFIX "(supports%s)\n", supported);
 
 	/*
 	 * Register the tts_notifier to reboot notifier list so that the _TTS

@@ -945,7 +945,7 @@ static int wdm_create(struct usb_interface *intf, struct usb_endpoint_descriptor
 	if (rv < 0)
 		goto err;
 	else
-		dev_info(&intf->dev, "%s: USB WDM device\n", dev_name(intf->usb_dev));
+		dev_dbg(&intf->dev, "%s: USB WDM device\n", dev_name(intf->usb_dev));
 out:
 	return rv;
 err:

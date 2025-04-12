@@ -524,7 +524,7 @@ static void i2c_pxa_reset(struct pxa_i2c *i2c)
 	writel(readl(_ICR(i2c)) | (i2c->high_mode ? i2c->hs_mask : 0), _ICR(i2c));
 
 #ifdef CONFIG_I2C_PXA_SLAVE
-	dev_info(&i2c->adap.dev, "Enabling slave mode\n");
+	dev_dbg(&i2c->adap.dev, "Enabling slave mode\n");
 	writel(readl(_ICR(i2c)) | ICR_SADIE | ICR_ALDIE | ICR_SSDIE, _ICR(i2c));
 #endif
 
@@ -1280,7 +1280,7 @@ static int i2c_pxa_probe(struct platform_device *dev)
 	if (i2c->high_mode) {
 		if (i2c->rate) {
 			clk_set_rate(i2c->clk, i2c->rate);
-			pr_info("i2c: <%s> set rate to %ld\n",
+			pr_debug("i2c: <%s> set rate to %ld\n",
 				i2c->adap.name, clk_get_rate(i2c->clk));
 		} else
 			pr_warn("i2c: <%s> clock rate not set\n",
@@ -1317,10 +1317,10 @@ static int i2c_pxa_probe(struct platform_device *dev)
 	platform_set_drvdata(dev, i2c);
 
 #ifdef CONFIG_I2C_PXA_SLAVE
-	dev_info(&i2c->adap.dev, " PXA I2C adapter, slave address %d\n",
+	dev_dbg(&i2c->adap.dev, " PXA I2C adapter, slave address %d\n",
 		i2c->slave_addr);
 #else
-	dev_info(&i2c->adap.dev, " PXA I2C adapter\n");
+	dev_dbg(&i2c->adap.dev, " PXA I2C adapter\n");
 #endif
 	return 0;
 

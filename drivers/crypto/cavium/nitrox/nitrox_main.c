@@ -120,7 +120,7 @@ static int nitrox_load_fw(struct nitrox_device *ndev, const char *fw_name)
 	struct ucode *ucode;
 	int ret;
 
-	dev_info(DEV(ndev), "Loading firmware \"%s\"\n", fw_name);
+	dev_dbg(DEV(ndev), "Loading firmware \"%s\"\n", fw_name);
 
 	ret = request_firmware(&fw, fw_name, DEV(ndev));
 	if (ret < 0) {
@@ -599,7 +599,7 @@ static void nitrox_remove(struct pci_dev *pdev)
 		return;
 	}
 
-	dev_info(DEV(ndev), "Removing Device %x:%x\n",
+	dev_dbg(DEV(ndev), "Removing Device %x:%x\n",
 		 ndev->hw.vendor_id, ndev->hw.device_id);
 
 	clear_bit(NITROX_READY, &ndev->status);

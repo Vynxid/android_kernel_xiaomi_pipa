@@ -339,14 +339,14 @@ static int pl061_probe(struct amba_device *adev, const struct amba_id *id)
 				   0, handle_bad_irq,
 				   IRQ_TYPE_NONE);
 	if (ret) {
-		dev_info(&adev->dev, "could not add irqchip\n");
+		dev_dbg(&adev->dev, "could not add irqchip\n");
 		return ret;
 	}
 	gpiochip_set_chained_irqchip(&pl061->gc, &pl061->irq_chip,
 				     irq, pl061_irq_handler);
 
 	amba_set_drvdata(adev, pl061);
-	dev_info(&adev->dev, "PL061 GPIO chip @%pa registered\n",
+	dev_dbg(&adev->dev, "PL061 GPIO chip @%pa registered\n",
 		 &adev->res.start);
 
 	return 0;

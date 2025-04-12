@@ -1649,7 +1649,7 @@ static void __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
 	u16 wraparound_bits;
 
 	if (list_empty(&dep->pending_list)) {
-		dev_info(dep->dwc->dev, "%s: ran out of requests\n",
+		dev_dbg(dep->dwc->dev, "%s: ran out of requests\n",
 				dep->name);
 		dep->flags |= DWC3_EP_PENDING_REQUEST;
 		return;
@@ -4425,7 +4425,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
 	 */
 	if (dwc->revision < DWC3_REVISION_220A &&
 	    !dwc->dis_metastability_quirk)
-		dev_info(dwc->dev, "changing max_speed on rev %08x\n",
+		dev_dbg(dwc->dev, "changing max_speed on rev %08x\n",
 				dwc->revision);
 
 	dwc->gadget.max_speed		= dwc->maximum_speed;

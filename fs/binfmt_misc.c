@@ -820,7 +820,7 @@ static ssize_t bm_register_write(struct file *file, const char __user *buffer,
 	if (e->flags & MISC_FMT_OPEN_FILE) {
 		f = open_exec(e->interpreter);
 		if (IS_ERR(f)) {
-			pr_notice("register: failed to install interpreter file %s\n",
+			pr_debug("register: failed to install interpreter file %s\n",
 				 e->interpreter);
 			kfree(e);
 			return PTR_ERR(f);

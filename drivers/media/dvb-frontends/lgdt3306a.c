@@ -2243,7 +2243,7 @@ static int lgdt3306a_probe(struct i2c_client *client,
 	*config->i2c_adapter = state->muxc->adapter[0];
 	*config->fe = fe;
 
-	dev_info(&client->dev, "LG Electronics LGDT3306A successfully identified\n");
+	dev_dbg(&client->dev, "LG Electronics LGDT3306A successfully identified\n");
 
 	return 0;
 

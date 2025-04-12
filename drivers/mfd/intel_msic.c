@@ -426,7 +426,7 @@ static int intel_msic_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Intel MSIC version %c%d (vendor %#x)\n",
+	dev_dbg(&pdev->dev, "Intel MSIC version %c%d (vendor %#x)\n",
 		 MSIC_MAJOR(msic->version), MSIC_MINOR(msic->version),
 		 msic->vendor);
 

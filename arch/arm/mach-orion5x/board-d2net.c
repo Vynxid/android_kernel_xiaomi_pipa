@@ -105,5 +105,5 @@ void __init d2net_init(void)
 {
 	d2net_gpio_leds_init();
 
-	pr_notice("d2net: Flash write are not yet supported.\n");
+	pr_debug("d2net: Flash write are not yet supported.\n");
 }

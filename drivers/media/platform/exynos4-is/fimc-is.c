@@ -347,7 +347,7 @@ static int fimc_is_alloc_cpu_memory(struct fimc_is *is)
 	is->memory.size = FIMC_IS_CPU_MEM_SIZE;
 	memset(is->memory.vaddr, 0, is->memory.size);
 
-	dev_info(dev, "FIMC-IS CPU memory base: %#x\n", (u32)is->memory.paddr);
+	dev_dbg(dev, "FIMC-IS CPU memory base: %#x\n", (u32)is->memory.paddr);
 
 	if (((u32)is->memory.paddr) & FIMC_IS_FW_ADDR_MASK) {
 		dev_err(dev, "invalid firmware memory alignment: %#x\n",
@@ -419,7 +419,7 @@ static void fimc_is_load_firmware(const struct firmware *fw, void *context)
 
 	is->fw.state = 1;
 
-	dev_info(dev, "loaded firmware: %s, rev. %s\n",
+	dev_dbg(dev, "loaded firmware: %s, rev. %s\n",
 		 is->fw.info, is->fw.version);
 	dev_dbg(dev, "FW size: %zu, paddr: %pad\n", fw->size, &is->memory.paddr);
 
@@ -473,7 +473,7 @@ static void fimc_is_general_irq_handler(struct fimc_is *is)
 	case IHC_NOT_READY:
 		break;
 	default:
-		pr_info("unknown command: %#x\n", is->i2h_cmd.cmd);
+		pr_debug("unknown command: %#x\n", is->i2h_cmd.cmd);
 	}
 
 	fimc_is_fw_clear_irq1(is, FIMC_IS_INT_GENERAL);
@@ -694,7 +694,7 @@ int fimc_is_hw_initialize(struct fimc_is *is)
 
 	pr_debug("setfile: base: %#x, size: %d\n",
 		 is->setfile.base, is->setfile.size);
-	pr_info("FIMC-IS Setfile info: %s\n", is->fw.setfile_info);
+	pr_debug("FIMC-IS Setfile info: %s\n", is->fw.setfile_info);
 
 	/* Check magic number. */
 	if (is->is_p_region->shared[MAX_SHARED_COUNT - 1] !=
@@ -734,7 +734,7 @@ int fimc_is_hw_initialize(struct fimc_is *is)
 	is->config_index = prev_id;
 
 	set_bit(IS_ST_INIT_DONE, &is->state);
-	dev_info(dev, "initialization sequence completed (%d)\n",
+	dev_dbg(dev, "initialization sequence completed (%d)\n",
 						is->config_index);
 	return 0;
 }

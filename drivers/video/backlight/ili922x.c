@@ -496,7 +496,7 @@ static int ili922x_probe(struct spi_device *spi)
 		return -ENODEV;
 	}
 
-	dev_info(&spi->dev, "ILI%x found, SPI freq %d, mode %d\n",
+	dev_dbg(&spi->dev, "ILI%x found, SPI freq %d, mode %d\n",
 		 reg, spi->max_speed_hz, spi->mode);
 
 	ret = ili922x_read_status(spi, &reg);

@@ -2435,7 +2435,7 @@ static int spi_nor_parse_sfdp(struct spi_nor *nor,
 
 		switch (SFDP_PARAM_HEADER_ID(param_header)) {
 		case SFDP_SECTOR_MAP_ID:
-			dev_info(dev, "non-uniform erase sector maps are not supported yet.\n");
+			dev_dbg(dev, "non-uniform erase sector maps are not supported yet.\n");
 			break;
 
 		default:
@@ -2972,7 +2972,7 @@ int spi_nor_scan(struct spi_nor *nor, const char *name,
 	if (ret)
 		return ret;
 
-	dev_info(dev, "%s (%lld Kbytes)\n", info->name,
+	dev_dbg(dev, "%s (%lld Kbytes)\n", info->name,
 			(long long)mtd->size >> 10);
 
 	dev_dbg(dev,

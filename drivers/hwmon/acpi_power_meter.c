@@ -812,7 +812,7 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
 		str++;
 	}
 
-	dev_info(&resource->acpi_dev->dev, "Found ACPI power meter.\n");
+	dev_dbg(&resource->acpi_dev->dev, "Found ACPI power meter.\n");
 	goto end;
 error:
 	str = &resource->model_number;
@@ -859,7 +859,7 @@ static void acpi_power_meter_notify(struct acpi_device *device, u32 event)
 		break;
 	case METER_NOTIFY_CAPPING:
 		sysfs_notify(&device->dev.kobj, NULL, POWER_ALARM_NAME);
-		dev_info(&device->dev, "Capping in progress.\n");
+		dev_dbg(&device->dev, "Capping in progress.\n");
 		break;
 	default:
 		WARN(1, "Unexpected event %d\n", event);

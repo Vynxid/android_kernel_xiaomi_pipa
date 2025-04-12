@@ -204,7 +204,7 @@ void __w1_remove_master_device(struct w1_master *dev)
 	atomic_dec(&dev->refcnt);
 
 	while (atomic_read(&dev->refcnt)) {
-		dev_info(&dev->dev, "Waiting for %s to become free: refcnt=%d.\n",
+		dev_dbg(&dev->dev, "Waiting for %s to become free: refcnt=%d.\n",
 				dev->name, atomic_read(&dev->refcnt));
 
 		if (msleep_interruptible(1000))

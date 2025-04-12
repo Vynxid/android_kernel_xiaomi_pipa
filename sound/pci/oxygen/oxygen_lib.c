@@ -309,7 +309,7 @@ static void oxygen_restore_eeprom(struct oxygen *chip,
 		oxygen_clear_bits8(chip, OXYGEN_MISC,
 				   OXYGEN_MISC_WRITE_PCI_SUBID);
 
-		dev_info(chip->card->dev, "EEPROM ID restored\n");
+		dev_dbg(chip->card->dev, "EEPROM ID restored\n");
 	}
 }
 

@@ -506,7 +506,7 @@ static int gpucc_bengal_probe(struct platform_device *pdev)
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "Registered GPUCC clocks\n");
+	dev_dbg(&pdev->dev, "Registered GPUCC clocks\n");
 	return ret;
 }
 

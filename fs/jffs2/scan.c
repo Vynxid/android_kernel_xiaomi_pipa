@@ -27,10 +27,10 @@
 #define noisy_printk(noise, fmt, ...)					\
 do {									\
 	if (*(noise)) {							\
-		pr_notice(fmt, ##__VA_ARGS__);				\
+		pr_debug(fmt, ##__VA_ARGS__);				\
 		(*(noise))--;						\
 		if (!(*(noise)))					\
-			pr_notice("Further such events for this erase block will not be printed\n"); \
+			pr_debug("Further such events for this erase block will not be printed\n"); \
 	}								\
 } while (0)
 
@@ -262,8 +262,8 @@ int jffs2_scan_medium(struct jffs2_sb_info *c)
 #endif
 	if (c->nr_erasing_blocks) {
 		if ( !c->used_size && ((c->nr_free_blocks+empty_blocks+bad_blocks)!= c->nr_blocks || bad_blocks == c->nr_blocks) ) {
-			pr_notice("Cowardly refusing to erase blocks on filesystem with no valid JFFS2 nodes\n");
-			pr_notice("empty_blocks %d, bad_blocks %d, c->nr_blocks %d\n",
+			pr_debug("Cowardly refusing to erase blocks on filesystem with no valid JFFS2 nodes\n");
+			pr_debug("empty_blocks %d, bad_blocks %d, c->nr_blocks %d\n",
 				  empty_blocks, bad_blocks, c->nr_blocks);
 			ret = -EIO;
 			goto out;
@@ -867,14 +867,14 @@ scan_more:
 		case JFFS2_NODETYPE_CLEANMARKER:
 			jffs2_dbg(1, "CLEANMARKER node found at 0x%08x\n", ofs);
 			if (je32_to_cpu(node->totlen) != c->cleanmarker_size) {
-				pr_notice("CLEANMARKER node found at 0x%08x has totlen 0x%x != normal 0x%x\n",
+				pr_debug("CLEANMARKER node found at 0x%08x has totlen 0x%x != normal 0x%x\n",
 					  ofs, je32_to_cpu(node->totlen),
 					  c->cleanmarker_size);
 				if ((err = jffs2_scan_dirty_space(c, jeb, PAD(sizeof(struct jffs2_unknown_node)))))
 					return err;
 				ofs += PAD(sizeof(struct jffs2_unknown_node));
 			} else if (jeb->first_node) {
-				pr_notice("CLEANMARKER node found at 0x%08x, not first node in block (0x%08x)\n",
+				pr_debug("CLEANMARKER node found at 0x%08x, not first node in block (0x%08x)\n",
 					  ofs, jeb->offset);
 				if ((err = jffs2_scan_dirty_space(c, jeb, PAD(sizeof(struct jffs2_unknown_node)))))
 					return err;
@@ -897,7 +897,7 @@ scan_more:
 		default:
 			switch (je16_to_cpu(node->nodetype) & JFFS2_COMPAT_MASK) {
 			case JFFS2_FEATURE_ROCOMPAT:
-				pr_notice("Read-only compatible feature node (0x%04x) found at offset 0x%08x\n",
+				pr_debug("Read-only compatible feature node (0x%04x) found at offset 0x%08x\n",
 					  je16_to_cpu(node->nodetype), ofs);
 				c->flags |= JFFS2_SB_FLAG_RO;
 				if (!(jffs2_is_readonly(c)))
@@ -908,7 +908,7 @@ scan_more:
 				break;
 
 			case JFFS2_FEATURE_INCOMPAT:
-				pr_notice("Incompatible feature node (0x%04x) found at offset 0x%08x\n",
+				pr_debug("Incompatible feature node (0x%04x) found at offset 0x%08x\n",
 					  je16_to_cpu(node->nodetype), ofs);
 				return -EINVAL;
 
@@ -971,7 +971,7 @@ struct jffs2_inode_cache *jffs2_scan_make_ino_cache(struct jffs2_sb_info *c, uin
 
 	ic = jffs2_alloc_inode_cache();
 	if (!ic) {
-		pr_notice("%s(): allocation of inode cache failed\n", __func__);
+		pr_debug("%s(): allocation of inode cache failed\n", __func__);
 		return NULL;
 	}
 	memset(ic, 0, sizeof(*ic));
@@ -1004,7 +1004,7 @@ static int jffs2_scan_inode_node(struct jffs2_sb_info *c, struct jffs2_erasebloc
 	/* Check the node CRC in any case. */
 	crc = crc32(0, ri, sizeof(*ri)-8);
 	if (crc != je32_to_cpu(ri->node_crc)) {
-		pr_notice("%s(): CRC failed on node at 0x%08x: Read 0x%08x, calculated 0x%08x\n",
+		pr_debug("%s(): CRC failed on node at 0x%08x: Read 0x%08x, calculated 0x%08x\n",
 			  __func__, ofs, je32_to_cpu(ri->node_crc), crc);
 		/*
 		 * We believe totlen because the CRC on the node
@@ -1054,7 +1054,7 @@ static int jffs2_scan_dirent_node(struct jffs2_sb_info *c, struct jffs2_eraseblo
 	crc = crc32(0, rd, sizeof(*rd)-8);
 
 	if (crc != je32_to_cpu(rd->node_crc)) {
-		pr_notice("%s(): Node CRC failed on node at 0x%08x: Read 0x%08x, calculated 0x%08x\n",
+		pr_debug("%s(): Node CRC failed on node at 0x%08x: Read 0x%08x, calculated 0x%08x\n",
 			  __func__, ofs, je32_to_cpu(rd->node_crc), crc);
 		/* We believe totlen because the CRC on the node _header_ was OK, just the node itself failed. */
 		if ((err = jffs2_scan_dirty_space(c, jeb, PAD(je32_to_cpu(rd->totlen)))))
@@ -1079,7 +1079,7 @@ static int jffs2_scan_dirent_node(struct jffs2_sb_info *c, struct jffs2_eraseblo
 
 	crc = crc32(0, fd->name, checkedlen);
 	if (crc != je32_to_cpu(rd->name_crc)) {
-		pr_notice("%s(): Name CRC failed on node at 0x%08x: Read 0x%08x, calculated 0x%08x\n",
+		pr_debug("%s(): Name CRC failed on node at 0x%08x: Read 0x%08x, calculated 0x%08x\n",
 			  __func__, ofs, je32_to_cpu(rd->name_crc), crc);
 		jffs2_dbg(1, "Name for which CRC failed is (now) '%s', ino #%d\n",
 			  fd->name, je32_to_cpu(rd->ino));

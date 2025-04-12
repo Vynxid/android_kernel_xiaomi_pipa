@@ -157,7 +157,7 @@ static int denali_dt_probe(struct platform_device *pdev)
 		 * Hardcode the clock rates for the backward compatibility.
 		 * This works for both SOCFPGA and UniPhier.
 		 */
-		dev_notice(dev,
+		dev_dbg(dev,
 			   "necessary clock is missing. default clock rates are used.\n");
 		denali->clk_rate = 50000000;
 		denali->clk_x_rate = 200000000;

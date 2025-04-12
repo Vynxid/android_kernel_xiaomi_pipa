@@ -169,7 +169,7 @@ static void decode_osc_bits(struct acpi_pci_root *root, char *msg, u32 word,
 			len += snprintf(buf + len, sizeof(buf) - len, "%s%s",
 					len ? " " : "", entry->desc);
 
-	dev_info(&root->device->dev, "_OSC: %s [%s]\n", msg, buf);
+	dev_dbg(&root->device->dev, "_OSC: %s [%s]\n", msg, buf);
 }
 
 static void decode_osc_support(struct acpi_pci_root *root, char *msg, u32 word)
@@ -455,7 +455,7 @@ static void negotiate_os_control(struct acpi_pci_root *root, int *no_aspm)
 	decode_osc_support(root, "OS supports", support);
 	status = acpi_pci_osc_support(root, support);
 	if (ACPI_FAILURE(status)) {
-		dev_info(&device->dev, "_OSC failed (%s)%s\n",
+		dev_dbg(&device->dev, "_OSC failed (%s)%s\n",
 			 acpi_format_exception(status),
 			 pcie_aspm_support_enabled() ? "; disabling ASPM" : "");
 		*no_aspm = 1;
@@ -463,7 +463,7 @@ static void negotiate_os_control(struct acpi_pci_root *root, int *no_aspm)
 	}
 
 	if (pcie_ports_disabled) {
-		dev_info(&device->dev, "PCIe port services disabled; not requesting _OSC control\n");
+		dev_dbg(&device->dev, "PCIe port services disabled; not requesting _OSC control\n");
 		return;
 	}
 
@@ -487,7 +487,7 @@ static void negotiate_os_control(struct acpi_pci_root *root, int *no_aspm)
 
 	if (pci_aer_available()) {
 		if (aer_acpi_firmware_first())
-			dev_info(&device->dev,
+			dev_dbg(&device->dev,
 				 "PCIe AER handled by firmware\n");
 		else
 			control |= OSC_PCI_EXPRESS_AER_CONTROL;
@@ -504,13 +504,13 @@ static void negotiate_os_control(struct acpi_pci_root *root, int *no_aspm)
 			 * it's unsupported. Leave existing configuration
 			 * intact and prevent the OS from touching it.
 			 */
-			dev_info(&device->dev, "FADT indicates ASPM is unsupported, using BIOS configuration\n");
+			dev_dbg(&device->dev, "FADT indicates ASPM is unsupported, using BIOS configuration\n");
 			*no_aspm = 1;
 		}
 	} else {
 		decode_osc_control(root, "OS requested", requested);
 		decode_osc_control(root, "platform willing to grant", control);
-		dev_info(&device->dev, "_OSC failed (%s); disabling ASPM\n",
+		dev_dbg(&device->dev, "_OSC failed (%s); disabling ASPM\n",
 			acpi_format_exception(status));
 
 		/*
@@ -585,7 +585,7 @@ static int acpi_pci_root_add(struct acpi_device *device,
 		goto end;
 	}
 
-	pr_info(PREFIX "%s [%s] (domain %04x %pR)\n",
+	pr_debug(PREFIX "%s [%s] (domain %04x %pR)\n",
 	       acpi_device_name(device), acpi_device_bid(device),
 	       root->segment, &root->secondary);
 
@@ -699,12 +699,12 @@ static void acpi_pci_root_validate_resources(struct device *dev,
 		/* Exclude non-addressable range or non-addressable portion */
 		end = min(res1->end, root->end);
 		if (end <= res1->start) {
-			dev_info(dev, "host bridge window %pR (ignored, not CPU addressable)\n",
+			dev_dbg(dev, "host bridge window %pR (ignored, not CPU addressable)\n",
 				 res1);
 			free = true;
 			goto next;
 		} else if (res1->end != end) {
-			dev_info(dev, "host bridge window %pR ([%#llx-%#llx] ignored, not CPU addressable)\n",
+			dev_dbg(dev, "host bridge window %pR ([%#llx-%#llx] ignored, not CPU addressable)\n",
 				 res1, (unsigned long long)end + 1,
 				 (unsigned long long)res1->end);
 			res1->end = end;
@@ -723,7 +723,7 @@ static void acpi_pci_root_validate_resources(struct device *dev,
 			if (resource_overlaps(res1, res2)) {
 				res2->start = min(res1->start, res2->start);
 				res2->end = max(res1->end, res2->end);
-				dev_info(dev, "host bridge window expanded to %pR; %pR ignored\n",
+				dev_dbg(dev, "host bridge window expanded to %pR; %pR ignored\n",
 					 res2, res1);
 				free = true;
 				goto next;
@@ -763,7 +763,7 @@ static void acpi_pci_root_remap_iospace(struct fwnode_handle *fwnode,
 	if (pci_remap_iospace(res, cpu_addr) < 0)
 		goto err;
 
-	pr_info("Remapped I/O %pa to %pR\n", &cpu_addr, res);
+	pr_debug("Remapped I/O %pa to %pR\n", &cpu_addr, res);
 	return;
 err:
 	res->flags |= IORESOURCE_DISABLED;
@@ -831,7 +831,7 @@ static void pci_acpi_root_add_resources(struct acpi_pci_root_info *info)
 
 		conflict = insert_resource_conflict(root, res);
 		if (conflict) {
-			dev_info(&info->bridge->dev,
+			dev_dbg(&info->bridge->dev,
 				 "ignoring host bridge window %pR (conflicts with %s %pR)\n",
 				 res, conflict->name, conflict);
 			resource_list_destroy_entry(entry);

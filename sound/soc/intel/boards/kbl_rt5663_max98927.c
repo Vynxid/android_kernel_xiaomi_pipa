@@ -994,7 +994,7 @@ static int kabylake_audio_probe(struct platform_device *pdev)
 	if (IS_ERR(ctx->mclk)) {
 		ret = PTR_ERR(ctx->mclk);
 		if (ret == -ENOENT) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				"Failed to get ssp1_sclk, defer probe\n");
 			return -EPROBE_DEFER;
 		}
@@ -1008,7 +1008,7 @@ static int kabylake_audio_probe(struct platform_device *pdev)
 	if (IS_ERR(ctx->sclk)) {
 		ret = PTR_ERR(ctx->sclk);
 		if (ret == -ENOENT) {
-			dev_info(&pdev->dev,
+			dev_dbg(&pdev->dev,
 				"Failed to get ssp1_sclk, defer probe\n");
 			return -EPROBE_DEFER;
 		}

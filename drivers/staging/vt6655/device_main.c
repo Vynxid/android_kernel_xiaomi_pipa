@@ -412,7 +412,7 @@ static void device_init_registers(struct vnt_private *priv)
 
 static void device_print_info(struct vnt_private *priv)
 {
-	dev_info(&priv->pcid->dev, "MAC=%pM IO=0x%lx Mem=0x%lx IRQ=%d\n",
+	dev_dbg(&priv->pcid->dev, "MAC=%pM IO=0x%lx Mem=0x%lx IRQ=%d\n",
 		 priv->abyCurrentNetAddr, (unsigned long)priv->ioaddr,
 		 (unsigned long)priv->PortOffset, priv->pcid->irq);
 }
@@ -1665,10 +1665,10 @@ vt6655_probe(struct pci_dev *pcid, const struct pci_device_id *ent)
 	struct wiphy *wiphy;
 	int         rc;
 
-	dev_notice(&pcid->dev,
+	dev_dbg(&pcid->dev,
 		   "%s Ver. %s\n", DEVICE_FULL_DRV_NAM, DEVICE_VERSION);
 
-	dev_notice(&pcid->dev,
+	dev_dbg(&pcid->dev,
 		   "Copyright (c) 2003 VIA Networking Technologies, Inc.\n");
 
 	hw = ieee80211_alloc_hw(sizeof(*priv), &vnt_mac_ops);

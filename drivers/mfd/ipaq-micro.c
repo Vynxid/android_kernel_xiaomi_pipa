@@ -114,9 +114,9 @@ static void micro_rx_msg(struct ipaq_micro *micro, u8 id, int len, u8 *data)
 			dev_err(micro->dev,
 				"out of band RX message 0x%02x\n", id);
 			if (!micro->msg)
-				dev_info(micro->dev, "no message queued\n");
+				dev_dbg(micro->dev, "no message queued\n");
 			else
-				dev_info(micro->dev, "expected message %02x\n",
+				dev_dbg(micro->dev, "expected message %02x\n",
 					 micro->msg->id);
 		}
 		break;
@@ -248,36 +248,36 @@ static void __init ipaq_micro_eeprom_dump(struct ipaq_micro *micro)
 	ipaq_micro_eeprom_read(micro, 0, 128, dump);
 	str = ipaq_micro_str(dump, 10);
 	if (str) {
-		dev_info(micro->dev, "HW version %s\n", str);
+		dev_dbg(micro->dev, "HW version %s\n", str);
 		kfree(str);
 	}
 	str = ipaq_micro_str(dump+10, 40);
 	if (str) {
-		dev_info(micro->dev, "serial number: %s\n", str);
+		dev_dbg(micro->dev, "serial number: %s\n", str);
 		/* Feed the random pool with this */
 		add_device_randomness(str, strlen(str));
 		kfree(str);
 	}
 	str = ipaq_micro_str(dump+50, 20);
 	if (str) {
-		dev_info(micro->dev, "module ID: %s\n", str);
+		dev_dbg(micro->dev, "module ID: %s\n", str);
 		kfree(str);
 	}
 	str = ipaq_micro_str(dump+70, 10);
 	if (str) {
-		dev_info(micro->dev, "product revision: %s\n", str);
+		dev_dbg(micro->dev, "product revision: %s\n", str);
 		kfree(str);
 	}
-	dev_info(micro->dev, "product ID: %u\n", ipaq_micro_to_u16(dump+80));
-	dev_info(micro->dev, "frame rate: %u fps\n",
+	dev_dbg(micro->dev, "product ID: %u\n", ipaq_micro_to_u16(dump+80));
+	dev_dbg(micro->dev, "frame rate: %u fps\n",
 		 ipaq_micro_to_u16(dump+82));
-	dev_info(micro->dev, "page mode: %u\n", ipaq_micro_to_u16(dump+84));
-	dev_info(micro->dev, "country ID: %u\n", ipaq_micro_to_u16(dump+86));
-	dev_info(micro->dev, "color display: %s\n",
+	dev_dbg(micro->dev, "page mode: %u\n", ipaq_micro_to_u16(dump+84));
+	dev_dbg(micro->dev, "country ID: %u\n", ipaq_micro_to_u16(dump+86));
+	dev_dbg(micro->dev, "color display: %s\n",
 		 ipaq_micro_to_u16(dump+88) ? "yes" : "no");
-	dev_info(micro->dev, "ROM size: %u MiB\n", ipaq_micro_to_u16(dump+90));
-	dev_info(micro->dev, "RAM size: %u KiB\n", ipaq_micro_to_u16(dump+92));
-	dev_info(micro->dev, "screen: %u x %u\n",
+	dev_dbg(micro->dev, "ROM size: %u MiB\n", ipaq_micro_to_u16(dump+90));
+	dev_dbg(micro->dev, "RAM size: %u KiB\n", ipaq_micro_to_u16(dump+92));
+	dev_dbg(micro->dev, "screen: %u x %u\n",
 		 ipaq_micro_to_u16(dump+94), ipaq_micro_to_u16(dump+96));
 }
 
@@ -419,7 +419,7 @@ static int __init micro_probe(struct platform_device *pdev)
 		dev_err(&pdev->dev, "unable to grab serial port IRQ\n");
 		return ret;
 	} else
-		dev_info(&pdev->dev, "grabbed serial port IRQ\n");
+		dev_dbg(&pdev->dev, "grabbed serial port IRQ\n");
 
 	spin_lock_init(&micro->lock);
 	INIT_LIST_HEAD(&micro->queue);
@@ -434,7 +434,7 @@ static int __init micro_probe(struct platform_device *pdev)
 
 	/* Check version */
 	ipaq_micro_get_version(micro);
-	dev_info(&pdev->dev, "Atmel micro ASIC version %s\n", micro->version);
+	dev_dbg(&pdev->dev, "Atmel micro ASIC version %s\n", micro->version);
 	ipaq_micro_eeprom_dump(micro);
 
 	return 0;

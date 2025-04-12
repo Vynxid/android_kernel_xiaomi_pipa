@@ -901,31 +901,31 @@ static void netvsc_get_channels(struct net_device *net,
 static struct netvsc_device_info *netvsc_devinfo_get
 			(struct netvsc_device *nvdev)
 {
-	struct netvsc_device_info *dev_info;
+	struct netvsc_device_info *dev_dbg;
 
-	dev_info = kzalloc(sizeof(*dev_info), GFP_ATOMIC);
+	dev_dbg = kzalloc(sizeof(*dev_dbg), GFP_ATOMIC);
 
-	if (!dev_info)
+	if (!dev_dbg)
 		return NULL;
 
 	if (nvdev) {
-		dev_info->num_chn = nvdev->num_chn;
-		dev_info->send_sections = nvdev->send_section_cnt;
-		dev_info->send_section_size = nvdev->send_section_size;
-		dev_info->recv_sections = nvdev->recv_section_cnt;
-		dev_info->recv_section_size = nvdev->recv_section_size;
+		dev_dbg->num_chn = nvdev->num_chn;
+		dev_dbg->send_sections = nvdev->send_section_cnt;
+		dev_dbg->send_section_size = nvdev->send_section_size;
+		dev_dbg->recv_sections = nvdev->recv_section_cnt;
+		dev_dbg->recv_section_size = nvdev->recv_section_size;
 
-		memcpy(dev_info->rss_key, nvdev->extension->rss_key,
+		memcpy(dev_dbg->rss_key, nvdev->extension->rss_key,
 		       NETVSC_HASH_KEYLEN);
 	} else {
-		dev_info->num_chn = VRSS_CHANNEL_DEFAULT;
-		dev_info->send_sections = NETVSC_DEFAULT_TX;
-		dev_info->send_section_size = NETVSC_SEND_SECTION_SIZE;
-		dev_info->recv_sections = NETVSC_DEFAULT_RX;
-		dev_info->recv_section_size = NETVSC_RECV_SECTION_SIZE;
+		dev_dbg->num_chn = VRSS_CHANNEL_DEFAULT;
+		dev_dbg->send_sections = NETVSC_DEFAULT_TX;
+		dev_dbg->send_section_size = NETVSC_SEND_SECTION_SIZE;
+		dev_dbg->recv_sections = NETVSC_DEFAULT_RX;
+		dev_dbg->recv_section_size = NETVSC_RECV_SECTION_SIZE;
 	}
 
-	return dev_info;
+	return dev_dbg;
 }
 
 static int netvsc_detach(struct net_device *ndev,
@@ -966,7 +966,7 @@ static int netvsc_detach(struct net_device *ndev,
 }
 
 static int netvsc_attach(struct net_device *ndev,
-			 struct netvsc_device_info *dev_info)
+			 struct netvsc_device_info *dev_dbg)
 {
 	struct net_device_context *ndev_ctx = netdev_priv(ndev);
 	struct hv_device *hdev = ndev_ctx->device_ctx;
@@ -974,12 +974,12 @@ static int netvsc_attach(struct net_device *ndev,
 	struct rndis_device *rdev;
 	int ret;
 
-	nvdev = rndis_filter_device_add(hdev, dev_info);
+	nvdev = rndis_filter_device_add(hdev, dev_dbg);
 	if (IS_ERR(nvdev))
 		return PTR_ERR(nvdev);
 
 	if (nvdev->num_chn > 1) {
-		ret = rndis_set_subchannel(ndev, nvdev, dev_info);
+		ret = rndis_set_subchannel(ndev, nvdev, dev_dbg);
 
 		/* if unavailable, just proceed with one queue */
 		if (ret) {
@@ -2603,7 +2603,7 @@ static int __init netvsc_drv_init(void)
 
 	if (ring_size < RING_SIZE_MIN) {
 		ring_size = RING_SIZE_MIN;
-		pr_info("Increased ring_size to %u (min allowed)\n",
+		pr_debug("Increased ring_size to %u (min allowed)\n",
 			ring_size);
 	}
 	netvsc_ring_bytes = ring_size * PAGE_SIZE;

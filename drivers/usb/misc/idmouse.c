@@ -385,7 +385,7 @@ static int idmouse_probe(struct usb_interface *interface,
 	}
 
 	/* be noisy */
-	dev_info(&interface->dev,"%s now attached\n",DRIVER_DESC);
+	dev_dbg(&interface->dev,"%s now attached\n",DRIVER_DESC);
 
 	return 0;
 }
@@ -418,7 +418,7 @@ static void idmouse_disconnect(struct usb_interface *interface)
 		mutex_unlock(&dev->lock);
 	}
 
-	dev_info(&interface->dev, "disconnected\n");
+	dev_dbg(&interface->dev, "disconnected\n");
 }
 
 module_usb_driver(idmouse_driver);

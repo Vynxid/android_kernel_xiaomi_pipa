@@ -1068,7 +1068,7 @@ static int rcsi2_probe(struct platform_device *pdev)
 	if (ret < 0)
 		goto error;
 
-	dev_info(priv->dev, "%d lanes found\n", priv->lanes);
+	dev_dbg(priv->dev, "%d lanes found\n", priv->lanes);
 
 	return 0;
 

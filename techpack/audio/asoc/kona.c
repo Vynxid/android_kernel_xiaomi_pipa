@@ -5694,7 +5694,7 @@ static int msm_mi2s_cs35l41_startup(struct snd_pcm_substream *substream)
 			return ret;
 		}
 	}
-	dev_info(card->dev, "------%s\n", __func__);
+	dev_dbg(card->dev, "------%s\n", __func__);
 	return 0;
 }
 
@@ -5711,7 +5711,7 @@ void msm_mi2s_cs35l41_shutdown(struct snd_pcm_substream *substream)
 		msm_mi2s_snd_shutdown(substream);
 	}
 
-	dev_info(card->dev, "-----%s\n", __func__);
+	dev_dbg(card->dev, "-----%s\n", __func__);
 	return;
 }
 
@@ -5731,7 +5731,7 @@ static int cs35l41_init(struct snd_soc_pcm_runtime *rtd)
 	struct snd_soc_codec *rcv_cdc = rtd->codec_dais[1]->codec;
 	struct snd_soc_dapm_context *rcv_dapm = snd_soc_codec_get_dapm(rcv_cdc);
 
-	dev_info(card->dev, "%s: found codec[%s]\n", __func__, dev_name(spk_cdc->dev));
+	dev_dbg(card->dev, "%s: found codec[%s]\n", __func__, dev_name(spk_cdc->dev));
 			snd_soc_dapm_ignore_suspend(spk_dapm, "AMP Playback");
 			snd_soc_dapm_ignore_suspend(spk_dapm, "AMP Capture");
 			snd_soc_dapm_ignore_suspend(spk_dapm, "DSP1");
@@ -5743,7 +5743,7 @@ static int cs35l41_init(struct snd_soc_pcm_runtime *rtd)
 			snd_soc_dapm_ignore_suspend(spk_dapm, "SPK");
 	snd_soc_dapm_sync(spk_dapm);
 
-	dev_info(card->dev, "%s: found codec[%s]\n", __func__, dev_name(rcv_cdc->dev));
+	dev_dbg(card->dev, "%s: found codec[%s]\n", __func__, dev_name(rcv_cdc->dev));
 			snd_soc_dapm_ignore_suspend(rcv_dapm, "RCV AMP Playback");
 			snd_soc_dapm_ignore_suspend(rcv_dapm, "RCV AMP Capture");
 			snd_soc_dapm_ignore_suspend(rcv_dapm, "RCV DSP1");
@@ -8478,20 +8478,20 @@ static struct snd_soc_card *populate_snd_card_dailinks(struct device *dev)
 						tert_mi2s_rx_cs35l41_dai_links,
 						sizeof(tert_mi2s_rx_cs35l41_dai_links));
 					total_links += ARRAY_SIZE(tert_mi2s_rx_cs35l41_dai_links);
-					dev_info(dev, "%s: Using tert_mi2s_rx_cs35l41_dai_links\n", __func__);
+					dev_dbg(dev, "%s: Using tert_mi2s_rx_cs35l41_dai_links\n", __func__);
 				} else if (get_hw_version_platform() == HARDWARE_PLATFORM_LMI ||
 							get_hw_version_platform() == HARDWARE_PLATFORM_MUNCH) {
 					memcpy(msm_kona_dai_links + total_links,
 						pri_mi2s_rx_tfa9874_dai_links,
 						sizeof(pri_mi2s_rx_tfa9874_dai_links));
 					total_links += ARRAY_SIZE(pri_mi2s_rx_tfa9874_dai_links);
-					dev_info(dev, "%s: Using pri_mi2s_rx_tfa9874_dai_links\n", __func__);
+					dev_dbg(dev, "%s: Using pri_mi2s_rx_tfa9874_dai_links\n", __func__);
 				} else if (get_hw_version_platform() == HARDWARE_PLATFORM_PIPA) {
 					memcpy(msm_kona_dai_links + total_links,
 						tert_mi2s_rx_aw882xx_dai_links,
 						sizeof(tert_mi2s_rx_aw882xx_dai_links));
 					total_links += ARRAY_SIZE(tert_mi2s_rx_aw882xx_dai_links);
-					dev_info(dev, "%s: Using tert_mi2s_rx_aw882xx_dai_links\n", __func__);
+					dev_dbg(dev, "%s: Using tert_mi2s_rx_aw882xx_dai_links\n", __func__);
 				}
 #endif
 #ifdef CONFIG_BOARD_XIAOMI_SM7250
@@ -8795,7 +8795,7 @@ static int msm_init_aux_dev(struct platform_device *pdev,
 	ret = of_property_read_u32(pdev->dev.of_node,
 				   "qcom,wsa-max-devs", &wsa_max_devs);
 	if (ret) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "%s: wsa-max-devs property missing in DT %s, ret = %d\n",
 			 __func__, pdev->dev.of_node->full_name, ret);
 		wsa_max_devs = 0;
@@ -8891,7 +8891,7 @@ static int msm_init_aux_dev(struct platform_device *pdev,
 			__func__, wsa_max_devs, found);
 		return -EPROBE_DEFER;
 	}
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"%s: found %d wsa881x devices registered with ALSA core\n",
 		__func__, found);
 
@@ -8987,7 +8987,7 @@ codec_aux_dev:
 			__func__, codec_aux_dev_cnt, codecs_found);
 		return -EPROBE_DEFER;
 	}
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"%s: found %d AUX codecs registered with ALSA core\n",
 		__func__, codecs_found);
 
@@ -9358,7 +9358,7 @@ static int msm_asoc_machine_probe(struct platform_device *pdev)
 			__func__, ret);
 		goto err;
 	}
-	dev_info(&pdev->dev, "%s: Sound card %s registered\n",
+	dev_dbg(&pdev->dev, "%s: Sound card %s registered\n",
 		 __func__, card->name);
 
 	/* Get maximum WSA device count for this platform */

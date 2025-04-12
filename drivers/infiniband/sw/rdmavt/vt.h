@@ -79,7 +79,7 @@
 		     ##__VA_ARGS__)
 
 #define __rvt_pr_info(pdev, name, fmt, ...) \
-	dev_info(&pdev->dev, "%s: " fmt, name, ##__VA_ARGS__)
+	dev_dbg(&pdev->dev, "%s: " fmt, name, ##__VA_ARGS__)
 
 #define __rvt_pr_warn(pdev, name, fmt, ...) \
 	dev_warn(&pdev->dev, "%s: " fmt, name, ##__VA_ARGS__)

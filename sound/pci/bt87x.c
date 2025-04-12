@@ -863,9 +863,9 @@ static int snd_bt87x_detect_card(struct pci_dev *pci)
 			return -EBUSY;
 		}
 
-	dev_info(&pci->dev, "unknown card %#04x-%#04x:%#04x\n",
+	dev_dbg(&pci->dev, "unknown card %#04x-%#04x:%#04x\n",
 		   pci->device, pci->subsystem_vendor, pci->subsystem_device);
-	dev_info(&pci->dev, "please mail id, board name, and, "
+	dev_dbg(&pci->dev, "please mail id, board name, and, "
 		   "if it works, the correct digital_rate option to "
 		   "<alsa-devel@alsa-project.org>\n");
 	return SND_BT87X_BOARD_UNKNOWN;
@@ -933,7 +933,7 @@ static int snd_bt87x_probe(struct pci_dev *pci,
 		if (err < 0)
 			goto _error;
 	}
-	dev_info(card->dev, "bt87x%d: Using board %d, %sanalog, %sdigital "
+	dev_dbg(card->dev, "bt87x%d: Using board %d, %sanalog, %sdigital "
 		   "(rate %d Hz)\n", dev, boardid,
 		   chip->board.no_analog ? "no " : "",
 		   chip->board.no_digital ? "no " : "", chip->board.dig_rate);

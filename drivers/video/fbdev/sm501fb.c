@@ -1195,7 +1195,7 @@ static ssize_t sm501fb_crtsrc_store(struct device *dev,
 	else
 		return -EINVAL;
 
-	dev_info(dev, "setting crt source to head %d\n", head);
+	dev_dbg(dev, "setting crt source to head %d\n", head);
 
 	ctrl = smc501_readl(info->regs + SM501_DC_CRT_CONTROL);
 
@@ -1703,7 +1703,7 @@ static int sm501fb_init_fb(struct fb_info *fb, enum sm501_controller head,
 		BUG();
 	}
 
-	dev_info(info->dev, "fb %s %sabled at start\n",
+	dev_dbg(info->dev, "fb %s %sabled at start\n",
 		 fbname, enable ? "en" : "dis");
 
 	/* check to see if our routing allows this */
@@ -1768,7 +1768,7 @@ static int sm501fb_init_fb(struct fb_info *fb, enum sm501_controller head,
 		/* TODO read the mode from the current display */
 	} else {
 		if (pd->def_mode) {
-			dev_info(info->dev, "using supplied mode\n");
+			dev_dbg(info->dev, "using supplied mode\n");
 			fb_videomode_to_var(&fb->var, pd->def_mode);
 
 			fb->var.bits_per_pixel = pd->def_bpp ? pd->def_bpp : 8;
@@ -1789,23 +1789,23 @@ static int sm501fb_init_fb(struct fb_info *fb, enum sm501_controller head,
 
 			switch (ret) {
 			case 1:
-				dev_info(info->dev, "using mode specified in "
+				dev_dbg(info->dev, "using mode specified in "
 						"@mode\n");
 				break;
 			case 2:
-				dev_info(info->dev, "using mode specified in "
+				dev_dbg(info->dev, "using mode specified in "
 					"@mode with ignored refresh rate\n");
 				break;
 			case 3:
-				dev_info(info->dev, "using mode default "
+				dev_dbg(info->dev, "using mode default "
 					"mode\n");
 				break;
 			case 4:
-				dev_info(info->dev, "using mode from list\n");
+				dev_dbg(info->dev, "using mode from list\n");
 				break;
 			default:
-				dev_info(info->dev, "ret = %d\n", ret);
-				dev_info(info->dev, "failed to find mode\n");
+				dev_dbg(info->dev, "ret = %d\n", ret);
+				dev_dbg(info->dev, "failed to find mode\n");
 				return -EINVAL;
 			}
 		}
@@ -1863,7 +1863,7 @@ static int sm501fb_probe_one(struct sm501fb_info *info,
 
 	/* Do not initialise if we've not been given any platform data */
 	if (pd == NULL) {
-		dev_info(info->dev, "no data for fb %s (disabled)\n", name);
+		dev_dbg(info->dev, "no data for fb %s (disabled)\n", name);
 		return 0;
 	}
 
@@ -1920,7 +1920,7 @@ static int sm501fb_start_one(struct sm501fb_info *info,
 		return ret;
 	}
 
-	dev_info(info->dev, "fb%d: %s frame buffer\n", fbi->node, fbi->fix.id);
+	dev_dbg(info->dev, "fb%d: %s frame buffer\n", fbi->node, fbi->fix.id);
 
 	return 0;
 }
@@ -1970,7 +1970,7 @@ static int sm501fb_probe(struct platform_device *pdev)
 		}
 #endif
 		if (!found) {
-			dev_info(dev, "using default configuration data\n");
+			dev_dbg(dev, "using default configuration data\n");
 			info->pdata = &sm501fb_def_pdata;
 		}
 	}

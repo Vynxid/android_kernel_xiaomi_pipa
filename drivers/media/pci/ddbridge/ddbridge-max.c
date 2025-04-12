@@ -68,7 +68,7 @@ static int lnb_command(struct ddb *dev, u32 link, u32 lnb, u32 cmd)
 		msleep(20);
 	}
 	if (c == 10)
-		dev_info(dev->dev, "%s lnb = %08x  cmd = %08x\n",
+		dev_dbg(dev->dev, "%s lnb = %08x  cmd = %08x\n",
 			 __func__, lnb, cmd);
 	return 0;
 }
@@ -356,7 +356,7 @@ static int mxl_fw_read(void *priv, u8 *buf, u32 len)
 	struct ddb_link *link = priv;
 	struct ddb *dev = link->dev;
 
-	dev_info(dev->dev, "Read mxl_fw from link %u\n", link->nr);
+	dev_dbg(dev->dev, "Read mxl_fw from link %u\n", link->nr);
 
 	return ddbridge_flashread(dev, link->nr, buf, 0xc0000, len);
 }
@@ -367,7 +367,7 @@ int ddb_lnb_init_fmode(struct ddb *dev, struct ddb_link *link, u32 fm)
 
 	if (link->lnb.fmode == fm)
 		return 0;
-	dev_info(dev->dev, "Set fmode link %u = %u\n", l, fm);
+	dev_dbg(dev->dev, "Set fmode link %u = %u\n", l, fm);
 	mutex_lock(&link->lnb.lock);
 	if (fm == 2 || fm == 1) {
 		if (fmode_sat >= 0) {

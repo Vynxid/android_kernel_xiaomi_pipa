@@ -109,10 +109,10 @@ static void ddb_irq_msi(struct ddb *dev, int nr)
 					     PCI_IRQ_MSI | PCI_IRQ_MSIX);
 		if (stat >= 1) {
 			dev->msi = stat;
-			dev_info(dev->dev, "using %d MSI interrupt(s)\n",
+			dev_dbg(dev->dev, "using %d MSI interrupt(s)\n",
 				 dev->msi);
 		} else {
-			dev_info(dev->dev, "MSI not available.\n");
+			dev_dbg(dev->dev, "MSI not available.\n");
 		}
 	}
 }
@@ -204,7 +204,7 @@ static int ddb_probe(struct pci_dev *pdev,
 	dev->link[0].info = get_ddb_info(id->vendor, id->device,
 					 id->subvendor, pdev->subsystem_device);
 
-	dev_info(&pdev->dev, "detected %s\n", dev->link[0].info->name);
+	dev_dbg(&pdev->dev, "detected %s\n", dev->link[0].info->name);
 
 	dev->regs_len = pci_resource_len(dev->pdev, 0);
 	dev->regs = ioremap(pci_resource_start(dev->pdev, 0),
@@ -224,7 +224,7 @@ static int ddb_probe(struct pci_dev *pdev,
 	dev->link[0].ids.hwid = ddbreadl(dev, 0);
 	dev->link[0].ids.regmapid = ddbreadl(dev, 4);
 
-	dev_info(&pdev->dev, "HW %08x REGMAP %08x\n",
+	dev_dbg(&pdev->dev, "HW %08x REGMAP %08x\n",
 		 dev->link[0].ids.hwid, dev->link[0].ids.regmapid);
 
 	ddbwritel(dev, 0, DMA_BASE_READ);
@@ -294,7 +294,7 @@ static __init int module_init_ddbridge(void)
 {
 	int stat;
 
-	pr_info("Digital Devices PCIE bridge driver "
+	pr_debug("Digital Devices PCIE bridge driver "
 		DDBRIDGE_VERSION
 		", Copyright (C) 2010-17 Digital Devices GmbH\n");
 	stat = ddb_init_ddbridge();

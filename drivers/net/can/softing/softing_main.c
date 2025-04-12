@@ -839,7 +839,7 @@ static int softing_pdev_probe(struct platform_device *pdev)
 			goto netdev_failed;
 		}
 	}
-	dev_info(&card->pdev->dev, "%s ready.\n", card->pdat->name);
+	dev_dbg(&card->pdev->dev, "%s ready.\n", card->pdat->name);
 	return 0;
 
 netdev_failed:

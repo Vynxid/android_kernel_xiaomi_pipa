@@ -213,7 +213,7 @@ static int pl172_probe(struct amba_device *adev, const struct amba_id *id)
 			rev = pl176_revisions[amba_rev(adev)];
 	}
 
-	dev_info(dev, "ARM PL%x revision %s\n", amba_part(adev), rev);
+	dev_dbg(dev, "ARM PL%x revision %s\n", amba_part(adev), rev);
 
 	pl172 = devm_kzalloc(dev, sizeof(*pl172), GFP_KERNEL);
 	if (!pl172)

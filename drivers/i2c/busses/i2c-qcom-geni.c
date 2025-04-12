@@ -1033,14 +1033,14 @@ static int geni_i2c_probe(struct platform_device *pdev)
 
 	if (of_property_read_bool(pdev->dev.of_node, "qcom,shared")) {
 		gi2c->is_shared = true;
-		dev_info(&pdev->dev, "Multi-EE usecase\n");
+		dev_dbg(&pdev->dev, "Multi-EE usecase\n");
 	}
 
 	if (of_property_read_u32(pdev->dev.of_node, "qcom,clk-freq-out",
 				&gi2c->i2c_rsc.clk_freq_out)) {
 		gi2c->i2c_rsc.clk_freq_out = KHz(400);
 	}
-	dev_info(&pdev->dev, "Bus frequency is set to %dHz\n",
+	dev_dbg(&pdev->dev, "Bus frequency is set to %dHz\n",
 					gi2c->i2c_rsc.clk_freq_out);
 
 	gi2c->irq = platform_get_irq(pdev, 0);

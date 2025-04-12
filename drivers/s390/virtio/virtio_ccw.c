@@ -358,7 +358,7 @@ static void virtio_ccw_drop_indicator(struct virtio_ccw_device *vcdev,
 			    VIRTIO_CCW_DOING_SET_IND_ADAPTER :
 			    VIRTIO_CCW_DOING_SET_IND);
 	if (ret && (ret != -ENODEV))
-		dev_info(&vcdev->cdev->dev,
+		dev_dbg(&vcdev->cdev->dev,
 			 "Failed to deregister indicators (%d)\n", ret);
 	else if (vcdev->is_thinint)
 		virtio_ccw_drop_indicators(vcdev);
@@ -620,7 +620,7 @@ static int virtio_ccw_register_adapter_ind(struct virtio_ccw_device *vcdev,
 			 * for virtio-ccw, stop trying.
 			 */
 			virtio_ccw_use_airq = 0;
-			pr_info("Adapter interrupts unsupported on host\n");
+			pr_debug("Adapter interrupts unsupported on host\n");
 		} else
 			dev_warn(&vcdev->cdev->dev,
 				 "enabling adapter interrupts = %d\n", ret);

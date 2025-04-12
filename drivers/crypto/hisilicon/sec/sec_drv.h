@@ -314,7 +314,7 @@ struct sec_request_el {
 
 /**
  * struct sec_queue - All the information about a HW queue
- * @dev_info: The parent SEC device to which this queue belongs.
+ * @dev_dbg: The parent SEC device to which this queue belongs.
  * @task_irq: Completion interrupt for the queue.
  * @name: Human readable queue description also used as irq name.
  * @ring: The several HW rings associated with one queue.
@@ -333,7 +333,7 @@ struct sec_request_el {
  *   need because we can't store any context reference in the bd element.
  */
 struct sec_queue {
-	struct sec_dev_info *dev_info;
+	struct sec_dev_info *dev_dbg;
 	int task_irq;
 	char name[SEC_NAME_SIZE];
 	struct sec_queue_ring_cmd ring_cmd;

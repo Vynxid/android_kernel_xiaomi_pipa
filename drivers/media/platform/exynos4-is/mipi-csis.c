@@ -877,7 +877,7 @@ static int s5pcsis_probe(struct platform_device *pdev)
 			goto e_m_ent;
 	}
 
-	dev_info(&pdev->dev, "lanes: %d, hs_settle: %d, wclk: %d, freq: %u\n",
+	dev_dbg(&pdev->dev, "lanes: %d, hs_settle: %d, wclk: %d, freq: %u\n",
 		 state->num_lanes, state->hs_settle, state->wclk_ext,
 		 state->clk_frequency);
 	return 0;

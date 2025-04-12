@@ -96,7 +96,7 @@ static int sp_get_irqs(struct sp_device *sp)
 
 	ret = platform_get_irq(pdev, 0);
 	if (ret < 0) {
-		dev_notice(dev, "unable to get IRQ (%d)\n", ret);
+		dev_dbg(dev, "unable to get IRQ (%d)\n", ret);
 		return ret;
 	}
 
@@ -106,7 +106,7 @@ static int sp_get_irqs(struct sp_device *sp)
 	} else {
 		ret = platform_get_irq(pdev, 1);
 		if (ret < 0) {
-			dev_notice(dev, "unable to get IRQ (%d)\n", ret);
+			dev_dbg(dev, "unable to get IRQ (%d)\n", ret);
 			return ret;
 		}
 
@@ -178,12 +178,12 @@ static int sp_platform_probe(struct platform_device *pdev)
 	if (ret)
 		goto e_err;
 
-	dev_notice(dev, "enabled\n");
+	dev_dbg(dev, "enabled\n");
 
 	return 0;
 
 e_err:
-	dev_notice(dev, "initialization failed\n");
+	dev_dbg(dev, "initialization failed\n");
 	return ret;
 }
 
@@ -194,7 +194,7 @@ static int sp_platform_remove(struct platform_device *pdev)
 
 	sp_destroy(sp);
 
-	dev_notice(dev, "disabled\n");
+	dev_dbg(dev, "disabled\n");
 
 	return 0;
 }

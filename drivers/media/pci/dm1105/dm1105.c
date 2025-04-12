@@ -973,7 +973,7 @@ static void dm1105_read_mac(struct dm1105_dev *dev, u8 *mac)
 	};
 
 	dm1105_i2c_xfer(&dev->i2c_adap, msg , 2);
-	dev_info(&dev->pdev->dev, "MAC %pM\n", mac);
+	dev_dbg(&dev->pdev->dev, "MAC %pM\n", mac);
 }
 
 static int dm1105_probe(struct pci_dev *pdev,

@@ -906,7 +906,7 @@ struct intel_spi *intel_spi_probe(struct device *dev,
 
 	ret = spi_nor_scan(&ispi->nor, NULL, &hwcaps);
 	if (ret) {
-		dev_info(dev, "failed to locate the chip\n");
+		dev_dbg(dev, "failed to locate the chip\n");
 		return ERR_PTR(ret);
 	}
 

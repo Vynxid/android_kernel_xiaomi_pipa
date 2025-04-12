@@ -263,7 +263,7 @@ int ssb_pcicore_plat_dev_init(struct pci_dev *d)
 		return -ENODEV;
 	}
 
-	dev_info(&d->dev, "PCI: Fixing up device %s\n", pci_name(d));
+	dev_dbg(&d->dev, "PCI: Fixing up device %s\n", pci_name(d));
 
 	/* Fix up interrupt lines */
 	d->irq = ssb_mips_irq(extpci_core->dev) + 2;
@@ -284,7 +284,7 @@ static void ssb_pcicore_fixup_pcibridge(struct pci_dev *dev)
 	if (dev->bus->number != 0 || PCI_SLOT(dev->devfn) != 0)
 		return;
 
-	dev_info(&dev->dev, "PCI: Fixing up bridge %s\n", pci_name(dev));
+	dev_dbg(&dev->dev, "PCI: Fixing up bridge %s\n", pci_name(dev));
 
 	/* Enable PCI bridge bus mastering and memory space */
 	pci_set_master(dev);
@@ -298,7 +298,7 @@ static void ssb_pcicore_fixup_pcibridge(struct pci_dev *dev)
 
 	/* Make sure our latency is high enough to handle the devices behind us */
 	lat = 168;
-	dev_info(&dev->dev,
+	dev_dbg(&dev->dev,
 		 "PCI: Fixing latency timer of device %s to %u\n",
 		 pci_name(dev), lat);
 	pci_write_config_byte(dev, PCI_LATENCY_TIMER, lat);

@@ -5461,7 +5461,7 @@ static int atlas7_pinmux_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, pmx);
 
-	dev_info(&pdev->dev, "initialized atlas7 pinmux driver\n");
+	dev_dbg(&pdev->dev, "initialized atlas7 pinmux driver\n");
 
 	return 0;
 
@@ -6096,7 +6096,7 @@ static int atlas7_gpio_probe(struct platform_device *pdev)
 	}
 
 	platform_set_drvdata(pdev, a7gc);
-	dev_info(&pdev->dev, "add to system.\n");
+	dev_dbg(&pdev->dev, "add to system.\n");
 	return 0;
 failed:
 	return ret;

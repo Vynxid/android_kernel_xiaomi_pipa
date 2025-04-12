@@ -511,7 +511,7 @@ static irqreturn_t mdm_errfatal(int irq, void *dev_id)
 mdm_pwroff_irq:
 	esoc_mdm_log(
 	"MDM2AP_ERRFATAL IRQ received before modem booted. Ignoring.\n");
-	dev_info(dev, "errfatal irq when in pwroff\n");
+	dev_dbg(dev, "errfatal irq when in pwroff\n");
 no_mdm_irq:
 	return IRQ_HANDLED;
 }
@@ -893,7 +893,7 @@ static int mdm9x55_setup_hw(struct mdm_ctrl *mdm,
 	ret = of_property_read_string(node, "qcom,mdm-link-info",
 					&esoc->link_info);
 	if (ret)
-		dev_info(mdm->dev, "esoc link info missing\n");
+		dev_dbg(mdm->dev, "esoc link info missing\n");
 
 	ret = of_property_read_u32(node, "qcom,shutdown-timeout-ms",
 				   &mdm->shutdown_timeout_ms);
@@ -1003,7 +1003,7 @@ static int sdx50m_setup_hw(struct mdm_ctrl *mdm,
 	ret = of_property_read_string(node, "qcom,mdm-link-info",
 					&esoc->link_info);
 	if (ret)
-		dev_info(mdm->dev, "esoc link info missing\n");
+		dev_dbg(mdm->dev, "esoc link info missing\n");
 
 	mdm->skip_restart_for_mdm_crash = of_property_read_bool(node,
 				"qcom,esoc-skip-restart-for-mdm-crash");
@@ -1103,7 +1103,7 @@ static int sdx55m_setup_hw(struct mdm_ctrl *mdm,
 	ret = of_property_read_string(node, "qcom,mdm-link-info",
 					&esoc->link_info);
 	if (ret)
-		dev_info(mdm->dev, "esoc link info missing\n");
+		dev_dbg(mdm->dev, "esoc link info missing\n");
 
 	mdm->skip_restart_for_mdm_crash = of_property_read_bool(node,
 				"qcom,esoc-skip-restart-for-mdm-crash");

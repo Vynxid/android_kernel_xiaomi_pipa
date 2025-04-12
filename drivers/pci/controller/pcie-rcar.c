@@ -451,7 +451,7 @@ static void rcar_pcie_force_speedup(struct rcar_pcie *pcie)
 	dev_err(dev, "Speed change timed out\n");
 
 done:
-	dev_info(dev, "Current link speed is %s GT/s\n",
+	dev_dbg(dev, "Current link speed is %s GT/s\n",
 		 (macsr & LINK_SPEED) == LINK_SPEED_5_0GTS ? "5" : "2.5");
 }
 
@@ -756,7 +756,7 @@ static irqreturn_t rcar_pcie_msi_irq(int irq, void *data)
 			if (test_bit(index, msi->used))
 				generic_handle_irq(irq);
 			else
-				dev_info(dev, "unhandled MSI\n");
+				dev_dbg(dev, "unhandled MSI\n");
 		} else {
 			/* Unknown MSI, just clear it */
 			dev_dbg(dev, "unexpected MSI\n");
@@ -1180,13 +1180,13 @@ static int rcar_pcie_probe(struct platform_device *pdev)
 
 	/* Failure to get a link might just be that no cards are inserted */
 	if (rcar_pcie_hw_init(pcie)) {
-		dev_info(dev, "PCIe link down\n");
+		dev_dbg(dev, "PCIe link down\n");
 		err = -ENODEV;
 		goto err_phy_shutdown;
 	}
 
 	data = rcar_pci_read_reg(pcie, MACSR);
-	dev_info(dev, "PCIe x%d: link up\n", (data >> 20) & 0x3f);
+	dev_dbg(dev, "PCIe x%d: link up\n", (data >> 20) & 0x3f);
 
 	if (IS_ENABLED(CONFIG_PCI_MSI)) {
 		err = rcar_pcie_enable_msi(pcie);

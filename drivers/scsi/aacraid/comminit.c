@@ -549,7 +549,7 @@ struct aac_dev *aac_init_adapter(struct aac_dev *dev)
 	 */
 	if (aac_is_msix_mode(dev)) {
 		aac_change_to_intx(dev);
-		dev_info(&dev->pdev->dev, "Changed firmware to INTX mode");
+		dev_dbg(&dev->pdev->dev, "Changed firmware to INTX mode");
 	}
 
 	if ((!aac_adapter_sync_cmd(dev, GET_ADAPTER_PROPERTIES,

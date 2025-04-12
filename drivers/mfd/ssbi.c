@@ -292,7 +292,7 @@ static int ssbi_probe(struct platform_device *pdev)
 		dev_err(&pdev->dev, "Missing qcom,controller-type property\n");
 		return -EINVAL;
 	}
-	dev_info(&pdev->dev, "SSBI controller type: '%s'\n", type);
+	dev_dbg(&pdev->dev, "SSBI controller type: '%s'\n", type);
 	if (strcmp(type, "ssbi") == 0)
 		ssbi->controller_type = MSM_SBI_CTRL_SSBI;
 	else if (strcmp(type, "ssbi2") == 0)

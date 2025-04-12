@@ -136,10 +136,10 @@ static int max6916_probe(struct spi_device *spi)
 
 	/* display the settings */
 	max6916_read_reg(&spi->dev, MAX6916_CONTROL_REG, &data);
-	dev_info(&spi->dev, "MAX6916 RTC CTRL Reg = 0x%02x\n", data);
+	dev_dbg(&spi->dev, "MAX6916 RTC CTRL Reg = 0x%02x\n", data);
 
 	max6916_read_reg(&spi->dev, MAX6916_STATUS_REG, &data);
-	dev_info(&spi->dev, "MAX6916 RTC Status Reg = 0x%02x\n", data);
+	dev_dbg(&spi->dev, "MAX6916 RTC Status Reg = 0x%02x\n", data);
 
 	rtc = devm_rtc_device_register(&spi->dev, "max6916",
 				       &max6916_rtc_ops, THIS_MODULE);

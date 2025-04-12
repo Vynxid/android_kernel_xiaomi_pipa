@@ -129,7 +129,7 @@ int adf_ae_start(struct adf_accel_dev *accel_dev)
 			ae_ctr++;
 		}
 	}
-	dev_info(&GET_DEV(accel_dev),
+	dev_dbg(&GET_DEV(accel_dev),
 		 "qat_dev%d started %d acceleration engines\n",
 		 accel_dev->accel_id, ae_ctr);
 	return 0;
@@ -150,7 +150,7 @@ int adf_ae_stop(struct adf_accel_dev *accel_dev)
 			ae_ctr++;
 		}
 	}
-	dev_info(&GET_DEV(accel_dev),
+	dev_dbg(&GET_DEV(accel_dev),
 		 "qat_dev%d stopped %d acceleration engines\n",
 		 accel_dev->accel_id, ae_ctr);
 	return 0;

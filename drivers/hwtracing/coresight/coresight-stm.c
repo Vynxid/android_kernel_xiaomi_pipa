@@ -149,7 +149,7 @@ static int stm_enable(struct coresight_device *csdev,
 	drvdata->enable = true;
 	spin_unlock(&drvdata->spinlock);
 
-	dev_info(drvdata->dev, "STM tracing enabled\n");
+	dev_dbg(drvdata->dev, "STM tracing enabled\n");
 	return 0;
 }
 
@@ -213,7 +213,7 @@ static void stm_disable(struct coresight_device *csdev,
 		pm_runtime_put(drvdata->dev);
 
 		local_set(&drvdata->mode, CS_MODE_DISABLED);
-		dev_info(drvdata->dev, "STM tracing disabled\n");
+		dev_dbg(drvdata->dev, "STM tracing disabled\n");
 	}
 }
 
@@ -844,7 +844,7 @@ static int stm_probe(struct amba_device *adev, const struct amba_id *id)
 	stm_init_generic_data(drvdata);
 
 	if (stm_register_device(dev, &drvdata->stm, THIS_MODULE)) {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "stm_register_device failed, probing deffered\n");
 		return -EPROBE_DEFER;
 	}
@@ -868,7 +868,7 @@ static int stm_probe(struct amba_device *adev, const struct amba_id *id)
 
 	pm_runtime_put(&adev->dev);
 
-	dev_info(dev, "%s initialized\n", (char *)id->data);
+	dev_dbg(dev, "%s initialized\n", (char *)id->data);
 	return 0;
 
 stm_unregister:

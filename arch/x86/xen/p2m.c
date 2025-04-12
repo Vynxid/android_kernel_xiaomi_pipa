@@ -415,7 +415,7 @@ void __init xen_vmalloc_p2m_tree(void)
 	vm.size = ALIGN(sizeof(unsigned long) * max(xen_max_p2m_pfn, p2m_limit),
 			PMD_SIZE * PMDS_PER_MID_PAGE);
 	vm_area_register_early(&vm, PMD_SIZE * PMDS_PER_MID_PAGE);
-	pr_notice("p2m virtual area at %p, size is %lx\n", vm.addr, vm.size);
+	pr_debug("p2m virtual area at %p, size is %lx\n", vm.addr, vm.size);
 
 	xen_max_p2m_pfn = vm.size / sizeof(unsigned long);
 

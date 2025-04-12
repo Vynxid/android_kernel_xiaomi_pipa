@@ -91,7 +91,7 @@ static int acpi_gpe_irq_setup(struct si_sm_io *io)
 	} else {
 		io->irq_cleanup = acpi_gpe_irq_cleanup;
 		ipmi_irq_finish_setup(io);
-		dev_info(io->dev, "Using ACPI GPE %d\n", io->irq);
+		dev_dbg(io->dev, "Using ACPI GPE %d\n", io->irq);
 		return 0;
 	}
 }
@@ -156,7 +156,7 @@ static int platform_ipmi_probe(struct platform_device *pdev)
 
 	memset(&io, 0, sizeof(io));
 	io.addr_source = addr_source;
-	dev_info(&pdev->dev, PFX "probing via %s\n",
+	dev_dbg(&pdev->dev, PFX "probing via %s\n",
 		 ipmi_addr_src_to_str(addr_source));
 
 	switch (type) {
@@ -201,7 +201,7 @@ static int platform_ipmi_probe(struct platform_device *pdev)
 
 	io.dev = &pdev->dev;
 
-	pr_info("ipmi_si: %s: %s %#lx regsize %d spacing %d irq %d\n",
+	pr_debug("ipmi_si: %s: %s %#lx regsize %d spacing %d irq %d\n",
 		ipmi_addr_src_to_str(addr_source),
 		(io.addr_type == IPMI_IO_ADDR_SPACE) ? "io" : "mem",
 		io.addr_data, io.regsize, io.regspacing, io.irq);
@@ -236,7 +236,7 @@ static int of_ipmi_probe(struct platform_device *pdev)
 	if (!si_tryopenfirmware)
 		return -ENODEV;
 
-	dev_info(&pdev->dev, "probing via device tree\n");
+	dev_dbg(&pdev->dev, "probing via device tree\n");
 
 	match = of_match_device(of_ipmi_match, &pdev->dev);
 	if (!match)
@@ -337,7 +337,7 @@ static int acpi_ipmi_probe(struct platform_device *pdev)
 
 	memset(&io, 0, sizeof(io));
 	io.addr_source = SI_ACPI;
-	dev_info(&pdev->dev, PFX "probing via ACPI\n");
+	dev_dbg(&pdev->dev, PFX "probing via ACPI\n");
 
 	io.addr_info.acpi_info.acpi_handle = handle;
 
@@ -363,7 +363,7 @@ static int acpi_ipmi_probe(struct platform_device *pdev)
 		rv = -ENODEV;
 		goto err_free;
 	default:
-		dev_info(&pdev->dev, "unknown IPMI type %lld\n", tmp);
+		dev_dbg(&pdev->dev, "unknown IPMI type %lld\n", tmp);
 		goto err_free;
 	}
 
@@ -394,7 +394,7 @@ static int acpi_ipmi_probe(struct platform_device *pdev)
 
 	io.dev = &pdev->dev;
 
-	dev_info(io.dev, "%pR regsize %d spacing %d irq %d\n",
+	dev_dbg(io.dev, "%pR regsize %d spacing %d irq %d\n",
 		 res, io.regsize, io.regspacing, io.irq);
 
 	return ipmi_si_add_smi(&io);

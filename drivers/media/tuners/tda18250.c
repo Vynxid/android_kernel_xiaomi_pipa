@@ -837,12 +837,12 @@ static int tda18250_probe(struct i2c_client *client,
 
 	switch (chip_id[2]) {
 	case 0x20:
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 				"NXP TDA18250AHN/%s successfully identified",
 				dev->slave ? "S" : "M");
 		break;
 	case 0x21:
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 				"NXP TDA18250BHN/%s successfully identified",
 				dev->slave ? "S" : "M");
 		break;

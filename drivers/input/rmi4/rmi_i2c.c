@@ -270,7 +270,7 @@ static int rmi_i2c_probe(struct i2c_client *client,
 		return error;
 	}
 
-	dev_info(&client->dev, "registering I2C-connected sensor\n");
+	dev_dbg(&client->dev, "registering I2C-connected sensor\n");
 
 	error = rmi_register_transport_device(&rmi_i2c->xport);
 	if (error) {

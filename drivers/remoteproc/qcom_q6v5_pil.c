@@ -864,7 +864,7 @@ static int q6v5_start(struct rproc *rproc)
 		goto halt_axi_ports;
 	}
 
-	dev_info(qproc->dev, "MBA booted, loading mpss\n");
+	dev_dbg(qproc->dev, "MBA booted, loading mpss\n");
 
 	ret = q6v5_mpss_load(qproc);
 	if (ret)

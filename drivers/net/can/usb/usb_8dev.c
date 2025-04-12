@@ -927,7 +927,7 @@ static int usb_8dev_probe(struct usb_interface *intf,
 	/* product id looks strange, better we also check iProduct string */
 	if (usb_string(usbdev, usbdev->descriptor.iProduct, buf,
 		       sizeof(buf)) > 0 && strcmp(buf, "USB2CAN converter")) {
-		dev_info(&usbdev->dev, "ignoring: not an USB2CAN converter\n");
+		dev_dbg(&usbdev->dev, "ignoring: not an USB2CAN converter\n");
 		return -ENODEV;
 	}
 

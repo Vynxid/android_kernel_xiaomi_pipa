@@ -88,7 +88,7 @@ static int set_max_cstate(const struct dmi_system_id *id)
 	if (max_cstate > ACPI_PROCESSOR_MAX_POWER)
 		return 0;
 
-	pr_notice("%s detected - limiting to C%ld max_cstate."
+	pr_debug("%s detected - limiting to C%ld max_cstate."
 		  " Override with \"processor.max_cstate=%d\"\n", id->ident,
 		  (long)id->driver_data, ACPI_PROCESSOR_MAX_POWER + 1);
 
@@ -605,7 +605,7 @@ static int acpi_processor_power_verify(struct acpi_processor *pr)
 	}
 
 	if (buggy_latency) {
-		pr_notice("FW issue: working around C-state latencies out of order\n");
+		pr_debug("FW issue: working around C-state latencies out of order\n");
 		acpi_cst_latency_sort(&pr->power.states[1], max_cstate);
 	}
 
@@ -944,7 +944,7 @@ static inline void acpi_processor_cstate_first_run_checks(void)
 	dmi_check_system(processor_power_dmi_table);
 	max_cstate = acpi_processor_cstate_check(max_cstate);
 	if (max_cstate < ACPI_C_STATES_MAX)
-		pr_notice("ACPI: processor limited to max C-state %d\n",
+		pr_debug("ACPI: processor limited to max C-state %d\n",
 			  max_cstate);
 	first_run++;
 

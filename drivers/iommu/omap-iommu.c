@@ -162,7 +162,7 @@ static int omap2_iommu_enable(struct omap_iommu *obj)
 		return -EINVAL;
 
 	l = iommu_read_reg(obj, MMU_REVISION);
-	dev_info(obj->dev, "%s: version %d.%d\n", obj->name,
+	dev_dbg(obj->dev, "%s: version %d.%d\n", obj->name,
 		 (l >> 4) & 0xf, l & 0xf);
 
 	iommu_write_reg(obj, pa, MMU_TTB);
@@ -1045,7 +1045,7 @@ static int omap_iommu_probe(struct platform_device *pdev)
 
 	omap_iommu_debugfs_add(obj);
 
-	dev_info(&pdev->dev, "%s registered\n", obj->name);
+	dev_dbg(&pdev->dev, "%s registered\n", obj->name);
 
 	return 0;
 
@@ -1072,7 +1072,7 @@ static int omap_iommu_remove(struct platform_device *pdev)
 
 	pm_runtime_disable(obj->dev);
 
-	dev_info(&pdev->dev, "%s removed\n", obj->name);
+	dev_dbg(&pdev->dev, "%s removed\n", obj->name);
 	return 0;
 }
 

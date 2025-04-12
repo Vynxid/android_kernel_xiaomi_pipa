@@ -396,7 +396,7 @@ static int lxfb_map_video_memory(struct fb_info *info, struct pci_dev *dev)
 	write_dc(par, DC_GLIU0_MEM_OFFSET, info->fix.smem_start & 0xFF000000);
 	write_dc(par, DC_UNLOCK, DC_UNLOCK_LOCK);
 
-	dev_info(&dev->dev, "%d KB of video memory at 0x%lx\n",
+	dev_dbg(&dev->dev, "%d KB of video memory at 0x%lx\n",
 		 info->fix.smem_len / 1024, info->fix.smem_start);
 
 	return 0;

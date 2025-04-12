@@ -1014,7 +1014,7 @@ int arizona_dev_init(struct arizona *arizona)
 	for (i = 0; i < ARRAY_SIZE(arizona->mclk); i++) {
 		arizona->mclk[i] = devm_clk_get(arizona->dev, mclk_name[i]);
 		if (IS_ERR(arizona->mclk[i])) {
-			dev_info(arizona->dev, "Failed to get %s: %ld\n",
+			dev_dbg(arizona->dev, "Failed to get %s: %ld\n",
 				 mclk_name[i], PTR_ERR(arizona->mclk[i]));
 			arizona->mclk[i] = NULL;
 		}
@@ -1301,7 +1301,7 @@ int arizona_dev_init(struct arizona *arizona)
 		goto err_reset;
 	}
 
-	dev_info(dev, "%s revision %c\n", type_name, arizona->rev + 'A');
+	dev_dbg(dev, "%s revision %c\n", type_name, arizona->rev + 'A');
 
 	if (apply_patch) {
 		ret = apply_patch(arizona);

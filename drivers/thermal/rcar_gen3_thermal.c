@@ -404,7 +404,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
 		if (ret < 0)
 			goto error_unregister;
 
-		dev_info(dev, "TSC%d: Loaded %d trip points\n", i, ret);
+		dev_dbg(dev, "TSC%d: Loaded %d trip points\n", i, ret);
 	}
 
 	priv->num_tscs = i;

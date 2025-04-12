@@ -122,7 +122,7 @@ good_area:
 		if (cpu_has_rixi) {
 			if (address == regs->cp0_epc && !(vma->vm_flags & VM_EXEC)) {
 #if 0
-				pr_notice("Cpu%d[%s:%d:%0*lx:%ld:%0*lx] XI violation\n",
+				pr_debug("Cpu%d[%s:%d:%0*lx:%ld:%0*lx] XI violation\n",
 					  raw_smp_processor_id(),
 					  current->comm, current->pid,
 					  field, address, write,
@@ -133,7 +133,7 @@ good_area:
 			if (!(vma->vm_flags & VM_READ) &&
 			    exception_epc(regs) != address) {
 #if 0
-				pr_notice("Cpu%d[%s:%d:%0*lx:%ld:%0*lx] RI violation\n",
+				pr_debug("Cpu%d[%s:%d:%0*lx:%ld:%0*lx] RI violation\n",
 					  raw_smp_processor_id(),
 					  current->comm, current->pid,
 					  field, address, write,
@@ -209,15 +209,15 @@ bad_area_nosemaphore:
 		if (show_unhandled_signals &&
 		    unhandled_signal(tsk, SIGSEGV) &&
 		    __ratelimit(&ratelimit_state)) {
-			pr_info("do_page_fault(): sending SIGSEGV to %s for invalid %s %0*lx\n",
+			pr_debug("do_page_fault(): sending SIGSEGV to %s for invalid %s %0*lx\n",
 				tsk->comm,
 				write ? "write access to" : "read access from",
 				field, address);
-			pr_info("epc = %0*lx in", field,
+			pr_debug("epc = %0*lx in", field,
 				(unsigned long) regs->cp0_epc);
 			print_vma_addr(KERN_CONT " ", regs->cp0_epc);
 			pr_cont("\n");
-			pr_info("ra  = %0*lx in", field,
+			pr_debug("ra  = %0*lx in", field,
 				(unsigned long) regs->regs[31]);
 			print_vma_addr(KERN_CONT " ", regs->regs[31]);
 			pr_cont("\n");

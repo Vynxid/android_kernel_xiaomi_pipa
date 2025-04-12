@@ -242,7 +242,7 @@ int ili9320_probe_spi(struct spi_device *spi,
 
 	ili->lcd = lcd;
 
-	dev_info(dev, "initialising %s\n", client->name);
+	dev_dbg(dev, "initialising %s\n", client->name);
 
 	ret = ili9320_power(ili, FB_BLANK_UNBLANK);
 	if (ret != 0) {
@@ -281,7 +281,7 @@ EXPORT_SYMBOL_GPL(ili9320_suspend);
 
 int ili9320_resume(struct ili9320 *lcd)
 {
-	dev_info(lcd->dev, "resuming from power state %d\n", lcd->power);
+	dev_dbg(lcd->dev, "resuming from power state %d\n", lcd->power);
 
 	if (lcd->platdata->suspend == ILI9320_SUSPEND_DEEP)
 		ili9320_write(lcd, ILI9320_POWER1, 0x00);

@@ -124,7 +124,7 @@ static spinlock_t icom_lock;
 static inline void trace(struct icom_port *icom_port, char *trace_pt,
 			unsigned long trace_data)
 {
-	dev_info(&icom_port->adapter->pci_dev->dev, ":%d:%s - %lx\n",
+	dev_dbg(&icom_port->adapter->pci_dev->dev, ":%d:%s - %lx\n",
 	icom_port->port, trace_pt, trace_data);
 }
 #else
@@ -1441,7 +1441,7 @@ static void icom_remove_adapter(struct icom_adapter *icom_adapter)
 		icom_port = &icom_adapter->port_info[index];
 
 		if (icom_port->status == ICOM_PORT_ACTIVE) {
-			dev_info(&icom_adapter->pci_dev->dev,
+			dev_dbg(&icom_adapter->pci_dev->dev,
 				 "Device removed\n");
 
 			uart_remove_one_port(&icom_uart_driver,
@@ -1567,7 +1567,7 @@ static int icom_probe(struct pci_dev *dev,
 				icom_port->status = ICOM_PORT_OFF;
 				dev_err(&dev->dev, "Device add failed\n");
 			 } else
-				dev_info(&dev->dev, "Device added\n");
+				dev_dbg(&dev->dev, "Device added\n");
 		}
 	}
 

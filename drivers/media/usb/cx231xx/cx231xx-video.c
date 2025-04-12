@@ -1854,12 +1854,12 @@ void cx231xx_release_analog_resources(struct cx231xx *dev)
 	if (video_is_registered(&dev->radio_dev))
 		video_unregister_device(&dev->radio_dev);
 	if (video_is_registered(&dev->vbi_dev)) {
-		dev_info(dev->dev, "V4L2 device %s deregistered\n",
+		dev_dbg(dev->dev, "V4L2 device %s deregistered\n",
 			video_device_node_name(&dev->vbi_dev));
 		video_unregister_device(&dev->vbi_dev);
 	}
 	if (video_is_registered(&dev->vdev)) {
-		dev_info(dev->dev, "V4L2 device %s deregistered\n",
+		dev_dbg(dev->dev, "V4L2 device %s deregistered\n",
 			video_device_node_name(&dev->vdev));
 
 		if (dev->board.has_417)
@@ -2183,7 +2183,7 @@ int cx231xx_register_analog_devices(struct cx231xx *dev)
 {
 	int ret;
 
-	dev_info(dev->dev, "v4l2 driver version %s\n", CX231XX_VERSION);
+	dev_dbg(dev->dev, "v4l2 driver version %s\n", CX231XX_VERSION);
 
 	/* set default norm */
 	dev->norm = V4L2_STD_PAL;
@@ -2237,7 +2237,7 @@ int cx231xx_register_analog_devices(struct cx231xx *dev)
 		return ret;
 	}
 
-	dev_info(dev->dev, "Registered video device %s [v4l2]\n",
+	dev_dbg(dev->dev, "Registered video device %s [v4l2]\n",
 		video_device_node_name(&dev->vdev));
 
 	/* Initialize VBI template */
@@ -2262,7 +2262,7 @@ int cx231xx_register_analog_devices(struct cx231xx *dev)
 		return ret;
 	}
 
-	dev_info(dev->dev, "Registered VBI device %s\n",
+	dev_dbg(dev->dev, "Registered VBI device %s\n",
 		video_device_node_name(&dev->vbi_dev));
 
 	if (cx231xx_boards[dev->model].radio.type == CX231XX_RADIO) {
@@ -2276,7 +2276,7 @@ int cx231xx_register_analog_devices(struct cx231xx *dev)
 				"can't register radio device\n");
 			return ret;
 		}
-		dev_info(dev->dev, "Registered radio device as %s\n",
+		dev_dbg(dev->dev, "Registered radio device as %s\n",
 			video_device_node_name(&dev->radio_dev));
 	}
 

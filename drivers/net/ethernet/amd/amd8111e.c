@@ -1888,14 +1888,14 @@ static int amd8111e_probe_one(struct pci_dev *pdev,
 
 	/*  display driver and device information */
     	chip_version = (readl(lp->mmio + CHIPID) & 0xf0000000)>>28;
-	dev_info(&pdev->dev, "AMD-8111e Driver Version: %s\n", MODULE_VERS);
-	dev_info(&pdev->dev, "[ Rev %x ] PCI 10/100BaseT Ethernet %pM\n",
+	dev_dbg(&pdev->dev, "AMD-8111e Driver Version: %s\n", MODULE_VERS);
+	dev_dbg(&pdev->dev, "[ Rev %x ] PCI 10/100BaseT Ethernet %pM\n",
 		 chip_version, dev->dev_addr);
 	if (lp->ext_phy_id)
-		dev_info(&pdev->dev, "Found MII PHY ID 0x%08x at address 0x%02x\n",
+		dev_dbg(&pdev->dev, "Found MII PHY ID 0x%08x at address 0x%02x\n",
 			 lp->ext_phy_id, lp->ext_phy_addr);
 	else
-		dev_info(&pdev->dev, "Couldn't detect MII PHY, assuming address 0x01\n");
+		dev_dbg(&pdev->dev, "Couldn't detect MII PHY, assuming address 0x01\n");
 
     	return 0;
 

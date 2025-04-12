@@ -93,7 +93,7 @@ static int osiris_dvs_probe(struct platform_device *pdev)
 {
 	int ret;
 
-	dev_info(&pdev->dev, "initialising\n");
+	dev_dbg(&pdev->dev, "initialising\n");
 
 	ret = gpio_request(OSIRIS_GPIO_DVS, "osiris-dvs");
 	if (ret) {
@@ -124,7 +124,7 @@ err_nogpio:
 
 static int osiris_dvs_remove(struct platform_device *pdev)
 {
-	dev_info(&pdev->dev, "exiting\n");
+	dev_dbg(&pdev->dev, "exiting\n");
 
 	/* disable any current dvs */
 	gpio_set_value(OSIRIS_GPIO_DVS, 1);

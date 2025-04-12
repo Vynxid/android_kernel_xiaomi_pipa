@@ -911,7 +911,7 @@ static int zpa2326_init_managed_irq(struct device          *parent,
 		 * Platform declared no interrupt line: device will be polled
 		 * for data availability.
 		 */
-		dev_info(parent, "no interrupt found, running in polling mode");
+		dev_dbg(parent, "no interrupt found, running in polling mode");
 		return 0;
 	}
 
@@ -928,7 +928,7 @@ static int zpa2326_init_managed_irq(struct device          *parent,
 		return err;
 	}
 
-	dev_info(parent, "using interrupt %d", irq);
+	dev_dbg(parent, "using interrupt %d", irq);
 
 	return 0;
 }

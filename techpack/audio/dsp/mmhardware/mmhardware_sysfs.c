@@ -124,7 +124,7 @@ int register_kobj_under_mmsysfs(enum hardware_id mm_id, const char *name)
 		if (mm_id == mi->mm_id) {
 			find_id = 1;
 			if (mi->on_register) {
-				pr_info("%s: device(id:%d name:%s) has already registered\n",
+				pr_debug("%s: device(id:%d name:%s) has already registered\n",
 					__func__, mi->mm_id, name);
 				ret = -4;
 				goto err;

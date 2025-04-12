@@ -162,7 +162,7 @@ static int mpc85xx_l2ctlr_of_remove(struct platform_device *dev)
 
 	iounmap(l2ctlr);
 	remove_cache_sram(dev);
-	dev_info(&dev->dev, "MPC85xx L2 controller unloaded\n");
+	dev_dbg(&dev->dev, "MPC85xx L2 controller unloaded\n");
 
 	return 0;
 }

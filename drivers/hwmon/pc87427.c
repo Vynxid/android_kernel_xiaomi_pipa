@@ -635,7 +635,7 @@ static ssize_t set_pwm(struct device *dev, struct device_attribute
 	pc87427_readall_pwm(data, nr);
 	mode = data->pwm_enable[nr] & PWM_ENABLE_MODE_MASK;
 	if (mode != PWM_MODE_MANUAL && mode != PWM_MODE_OFF) {
-		dev_notice(dev,
+		dev_dbg(dev,
 			   "Can't set PWM%d duty cycle while not in manual mode\n",
 			   nr + 1);
 		mutex_unlock(&data->lock);
@@ -1248,7 +1248,7 @@ static int __init pc87427_find(int sioaddr, struct pc87427_sio_data *sio_data)
 
 		val = superio_inb(sioaddr, SIOREG_ACT);
 		if (!(val & 0x01)) {
-			pr_info("Logical device 0x%02x not activated\n",
+			pr_debug("Logical device 0x%02x not activated\n",
 				logdev[i]);
 			continue;
 		}
@@ -1263,7 +1263,7 @@ static int __init pc87427_find(int sioaddr, struct pc87427_sio_data *sio_data)
 		val = (superio_inb(sioaddr, SIOREG_IOBASE) << 8)
 		    | superio_inb(sioaddr, SIOREG_IOBASE + 1);
 		if (!val) {
-			pr_info("I/O base address not set for logical device 0x%02x\n",
+			pr_debug("I/O base address not set for logical device 0x%02x\n",
 				logdev[i]);
 			continue;
 		}

@@ -316,7 +316,7 @@ static int imx074_video_probe(struct i2c_client *client)
 
 	id |= ret;
 
-	dev_info(&client->dev, "Chip ID 0x%04x detected\n", id);
+	dev_dbg(&client->dev, "Chip ID 0x%04x detected\n", id);
 
 	if (id != 0x74) {
 		ret = -ENODEV;
@@ -439,7 +439,7 @@ static int imx074_probe(struct i2c_client *client,
 
 	priv->clk = v4l2_clk_get(&client->dev, "mclk");
 	if (IS_ERR(priv->clk)) {
-		dev_info(&client->dev, "Error %ld getting clock\n", PTR_ERR(priv->clk));
+		dev_dbg(&client->dev, "Error %ld getting clock\n", PTR_ERR(priv->clk));
 		return -EPROBE_DEFER;
 	}
 

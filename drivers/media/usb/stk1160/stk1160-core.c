@@ -240,7 +240,7 @@ static int stk1160_scan_usb(struct usb_interface *intf, struct usb_device *udev,
 		speed = "unknown";
 	}
 
-	dev_info(&udev->dev, "New device %s %s @ %s Mbps (%04x:%04x, interface %d, class %d)\n",
+	dev_dbg(&udev->dev, "New device %s %s @ %s Mbps (%04x:%04x, interface %d, class %d)\n",
 		udev->manufacturer ? udev->manufacturer : "",
 		udev->product ? udev->product : "",
 		speed,
@@ -256,7 +256,7 @@ static int stk1160_scan_usb(struct usb_interface *intf, struct usb_device *udev,
 				you should use snd-usb-audio instead\n", ifnum);
 
 	if (has_video)
-		dev_info(&udev->dev, "video interface %d found\n",
+		dev_dbg(&udev->dev, "video interface %d found\n",
 				ifnum);
 
 	/*

@@ -2441,7 +2441,7 @@ smb2_print_status(__le32 status)
 
 	while (smb2_error_map_table[idx].status_string != NULL) {
 		if ((smb2_error_map_table[idx].smb2_status) == status) {
-			pr_notice("Status code returned 0x%08x %s\n", status,
+			pr_debug("Status code returned 0x%08x %s\n", status,
 				  smb2_error_map_table[idx].status_string);
 		}
 		idx++;

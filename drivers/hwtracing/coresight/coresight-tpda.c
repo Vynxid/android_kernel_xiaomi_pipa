@@ -187,7 +187,7 @@ static int tpda_enable(struct coresight_device *csdev, int inport, int outport)
 	drvdata->enable = true;
 	mutex_unlock(&drvdata->lock);
 
-	dev_info(drvdata->dev, "TPDA inport %d enabled\n", inport);
+	dev_dbg(drvdata->dev, "TPDA inport %d enabled\n", inport);
 	return 0;
 }
 
@@ -214,7 +214,7 @@ static void tpda_disable(struct coresight_device *csdev, int inport,
 	drvdata->enable = false;
 	mutex_unlock(&drvdata->lock);
 
-	dev_info(drvdata->dev, "TPDA inport %d disabled\n", inport);
+	dev_dbg(drvdata->dev, "TPDA inport %d disabled\n", inport);
 }
 
 static const struct coresight_ops_link tpda_link_ops = {

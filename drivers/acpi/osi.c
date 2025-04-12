@@ -106,7 +106,7 @@ void __init acpi_osi_setup(char *str)
 		return;
 
 	if (str == NULL || *str == '\0') {
-		pr_info("_OSI method disabled\n");
+		pr_debug("_OSI method disabled\n");
 		acpi_gbl_create_osi_method = FALSE;
 		return;
 	}
@@ -229,7 +229,7 @@ static void __init acpi_osi_setup_late(void)
 	if (osi_config.default_disabling) {
 		status = acpi_update_interfaces(osi_config.default_disabling);
 		if (ACPI_SUCCESS(status))
-			pr_info("Disabled all _OSI OS vendors%s\n",
+			pr_debug("Disabled all _OSI OS vendors%s\n",
 				osi_config.default_disabling ==
 				ACPI_DISABLE_ALL_STRINGS ?
 				" and feature groups" : "");
@@ -243,11 +243,11 @@ static void __init acpi_osi_setup_late(void)
 		if (osi->enable) {
 			status = acpi_install_interface(str);
 			if (ACPI_SUCCESS(status))
-				pr_info("Added _OSI(%s)\n", str);
+				pr_debug("Added _OSI(%s)\n", str);
 		} else {
 			status = acpi_remove_interface(str);
 			if (ACPI_SUCCESS(status))
-				pr_info("Deleted _OSI(%s)\n", str);
+				pr_debug("Deleted _OSI(%s)\n", str);
 		}
 	}
 }
@@ -277,7 +277,7 @@ EXPORT_SYMBOL(acpi_osi_is_win8);
 
 static void __init acpi_osi_dmi_darwin(void)
 {
-	pr_notice("DMI detected to setup _OSI(\"Darwin\"): Apple hardware\n");
+	pr_debug("DMI detected to setup _OSI(\"Darwin\"): Apple hardware\n");
 	osi_config.darwin_dmi = 1;
 	__acpi_osi_setup_darwin(true);
 }
@@ -285,7 +285,7 @@ static void __init acpi_osi_dmi_darwin(void)
 static void __init acpi_osi_dmi_linux(bool enable,
 				      const struct dmi_system_id *d)
 {
-	pr_notice("DMI detected to setup _OSI(\"Linux\"): %s\n", d->ident);
+	pr_debug("DMI detected to setup _OSI(\"Linux\"): %s\n", d->ident);
 	osi_config.linux_dmi = 1;
 	__acpi_osi_setup_linux(enable);
 }
@@ -299,7 +299,7 @@ static int __init dmi_enable_osi_linux(const struct dmi_system_id *d)
 
 static int __init dmi_disable_osi_vista(const struct dmi_system_id *d)
 {
-	pr_notice("DMI detected: %s\n", d->ident);
+	pr_debug("DMI detected: %s\n", d->ident);
 	acpi_osi_setup("!Windows 2006");
 	acpi_osi_setup("!Windows 2006 SP1");
 	acpi_osi_setup("!Windows 2006 SP2");
@@ -309,7 +309,7 @@ static int __init dmi_disable_osi_vista(const struct dmi_system_id *d)
 
 static int __init dmi_disable_osi_win7(const struct dmi_system_id *d)
 {
-	pr_notice("DMI detected: %s\n", d->ident);
+	pr_debug("DMI detected: %s\n", d->ident);
 	acpi_osi_setup("!Windows 2009");
 
 	return 0;
@@ -317,7 +317,7 @@ static int __init dmi_disable_osi_win7(const struct dmi_system_id *d)
 
 static int __init dmi_disable_osi_win8(const struct dmi_system_id *d)
 {
-	pr_notice("DMI detected: %s\n", d->ident);
+	pr_debug("DMI detected: %s\n", d->ident);
 	acpi_osi_setup("!Windows 2012");
 
 	return 0;

@@ -828,7 +828,7 @@ static int cm109_usb_suspend(struct usb_interface *intf, pm_message_t message)
 {
 	struct cm109_dev *dev = usb_get_intfdata(intf);
 
-	dev_info(&intf->dev, "cm109: usb_suspend (event=%d)\n", message.event);
+	dev_dbg(&intf->dev, "cm109: usb_suspend (event=%d)\n", message.event);
 
 	mutex_lock(&dev->pm_mutex);
 	cm109_stop_traffic(dev);
@@ -841,7 +841,7 @@ static int cm109_usb_resume(struct usb_interface *intf)
 {
 	struct cm109_dev *dev = usb_get_intfdata(intf);
 
-	dev_info(&intf->dev, "cm109: usb_resume\n");
+	dev_dbg(&intf->dev, "cm109: usb_resume\n");
 
 	mutex_lock(&dev->pm_mutex);
 	cm109_restore_state(dev);

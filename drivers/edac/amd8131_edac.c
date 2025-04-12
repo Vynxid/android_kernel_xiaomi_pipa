@@ -89,10 +89,10 @@ static struct amd8131_dev_info amd8131_devices[] = {
 	{.inst = NO_BRIDGE,},
 };
 
-static void amd8131_pcix_init(struct amd8131_dev_info *dev_info)
+static void amd8131_pcix_init(struct amd8131_dev_info *dev_dbg)
 {
 	u32 val32;
-	struct pci_dev *dev = dev_info->dev;
+	struct pci_dev *dev = dev_dbg->dev;
 
 	/* First clear error detection flags */
 	edac_pci_read_dword(dev, REG_MEM_LIM, &val32);
@@ -140,10 +140,10 @@ static void amd8131_pcix_init(struct amd8131_dev_info *dev_info)
 	edac_pci_write_dword(dev, REG_LNK_CTRL_B, val32);
 }
 
-static void amd8131_pcix_exit(struct amd8131_dev_info *dev_info)
+static void amd8131_pcix_exit(struct amd8131_dev_info *dev_dbg)
 {
 	u32 val32;
-	struct pci_dev *dev = dev_info->dev;
+	struct pci_dev *dev = dev_dbg->dev;
 
 	/* Disable SERR, PERR and DTSE Error detection */
 	edac_pci_read_dword(dev, REG_INT_CTLR, &val32);
@@ -168,15 +168,15 @@ static void amd8131_pcix_exit(struct amd8131_dev_info *dev_info)
 
 static void amd8131_pcix_check(struct edac_pci_ctl_info *edac_dev)
 {
-	struct amd8131_dev_info *dev_info = edac_dev->pvt_info;
-	struct pci_dev *dev = dev_info->dev;
+	struct amd8131_dev_info *dev_dbg = edac_dev->pvt_info;
+	struct pci_dev *dev = dev_dbg->dev;
 	u32 val32;
 
 	/* Check PCI-X Bridge Memory Base-Limit Register for errors */
 	edac_pci_read_dword(dev, REG_MEM_LIM, &val32);
 	if (val32 & MEM_LIMIT_MASK) {
 		printk(KERN_INFO "Error(s) in mem limit register "
-			"on %s bridge\n", dev_info->ctl_name);
+			"on %s bridge\n", dev_dbg->ctl_name);
 		printk(KERN_INFO "DPE: %d, RSE: %d, RMA: %d\n"
 			"RTA: %d, STA: %d, MDPE: %d\n",
 			val32 & MEM_LIMIT_DPE,
@@ -196,7 +196,7 @@ static void amd8131_pcix_check(struct edac_pci_ctl_info *edac_dev)
 	edac_pci_read_dword(dev, REG_INT_CTLR, &val32);
 	if (val32 & INT_CTLR_DTS) {
 		printk(KERN_INFO "Error(s) in interrupt and control register "
-			"on %s bridge\n", dev_info->ctl_name);
+			"on %s bridge\n", dev_dbg->ctl_name);
 		printk(KERN_INFO "DTS: %d\n", val32 & INT_CTLR_DTS);
 
 		val32 |= INT_CTLR_DTS;
@@ -209,7 +209,7 @@ static void amd8131_pcix_check(struct edac_pci_ctl_info *edac_dev)
 	edac_pci_read_dword(dev, REG_LNK_CTRL_A, &val32);
 	if (val32 & LNK_CTRL_CRCERR_A) {
 		printk(KERN_INFO "Error(s) in link conf and control register "
-			"on %s bridge\n", dev_info->ctl_name);
+			"on %s bridge\n", dev_dbg->ctl_name);
 		printk(KERN_INFO "CRCERR: %d\n", val32 & LNK_CTRL_CRCERR_A);
 
 		val32 |= LNK_CTRL_CRCERR_A;
@@ -222,7 +222,7 @@ static void amd8131_pcix_check(struct edac_pci_ctl_info *edac_dev)
 	edac_pci_read_dword(dev, REG_LNK_CTRL_B, &val32);
 	if (val32 & LNK_CTRL_CRCERR_B) {
 		printk(KERN_INFO "Error(s) in link conf and control register "
-			"on %s bridge\n", dev_info->ctl_name);
+			"on %s bridge\n", dev_dbg->ctl_name);
 		printk(KERN_INFO "CRCERR: %d\n", val32 & LNK_CTRL_CRCERR_B);
 
 		val32 |= LNK_CTRL_CRCERR_B;
@@ -247,28 +247,28 @@ static struct amd8131_info amd8131_chipset = {
  */
 static int amd8131_probe(struct pci_dev *dev, const struct pci_device_id *id)
 {
-	struct amd8131_dev_info *dev_info;
+	struct amd8131_dev_info *dev_dbg;
 
-	for (dev_info = amd8131_chipset.devices; dev_info->inst != NO_BRIDGE;
-		dev_info++)
-		if (dev_info->devfn == dev->devfn)
+	for (dev_dbg = amd8131_chipset.devices; dev_dbg->inst != NO_BRIDGE;
+		dev_dbg++)
+		if (dev_dbg->devfn == dev->devfn)
 			break;
 
-	if (dev_info->inst == NO_BRIDGE) /* should never happen */
+	if (dev_dbg->inst == NO_BRIDGE) /* should never happen */
 		return -ENODEV;
 
 	/*
 	 * We can't call pci_get_device() as we are used to do because
 	 * there are 4 of them but pci_dev_get() instead.
 	 */
-	dev_info->dev = pci_dev_get(dev);
+	dev_dbg->dev = pci_dev_get(dev);
 
-	if (pci_enable_device(dev_info->dev)) {
-		pci_dev_put(dev_info->dev);
+	if (pci_enable_device(dev_dbg->dev)) {
+		pci_dev_put(dev_dbg->dev);
 		printk(KERN_ERR "failed to enable:"
 			"vendor %x, device %x, devfn %x, name %s\n",
 			PCI_VENDOR_ID_AMD, amd8131_chipset.err_dev,
-			dev_info->devfn, dev_info->ctl_name);
+			dev_dbg->devfn, dev_dbg->ctl_name);
 		return -ENODEV;
 	}
 
@@ -277,59 +277,59 @@ static int amd8131_probe(struct pci_dev *dev, const struct pci_device_id *id)
 	 * edac_pci_ctl_info, but make use of existing
 	 * one instead.
 	 */
-	dev_info->edac_idx = edac_pci_alloc_index();
-	dev_info->edac_dev = edac_pci_alloc_ctl_info(0, dev_info->ctl_name);
-	if (!dev_info->edac_dev)
+	dev_dbg->edac_idx = edac_pci_alloc_index();
+	dev_dbg->edac_dev = edac_pci_alloc_ctl_info(0, dev_dbg->ctl_name);
+	if (!dev_dbg->edac_dev)
 		return -ENOMEM;
 
-	dev_info->edac_dev->pvt_info = dev_info;
-	dev_info->edac_dev->dev = &dev_info->dev->dev;
-	dev_info->edac_dev->mod_name = AMD8131_EDAC_MOD_STR;
-	dev_info->edac_dev->ctl_name = dev_info->ctl_name;
-	dev_info->edac_dev->dev_name = dev_name(&dev_info->dev->dev);
+	dev_dbg->edac_dev->pvt_info = dev_dbg;
+	dev_dbg->edac_dev->dev = &dev_dbg->dev->dev;
+	dev_dbg->edac_dev->mod_name = AMD8131_EDAC_MOD_STR;
+	dev_dbg->edac_dev->ctl_name = dev_dbg->ctl_name;
+	dev_dbg->edac_dev->dev_name = dev_name(&dev_dbg->dev->dev);
 
 	if (edac_op_state == EDAC_OPSTATE_POLL)
-		dev_info->edac_dev->edac_check = amd8131_chipset.check;
+		dev_dbg->edac_dev->edac_check = amd8131_chipset.check;
 
 	if (amd8131_chipset.init)
-		amd8131_chipset.init(dev_info);
+		amd8131_chipset.init(dev_dbg);
 
-	if (edac_pci_add_device(dev_info->edac_dev, dev_info->edac_idx) > 0) {
+	if (edac_pci_add_device(dev_dbg->edac_dev, dev_dbg->edac_idx) > 0) {
 		printk(KERN_ERR "failed edac_pci_add_device() for %s\n",
-			dev_info->ctl_name);
-		edac_pci_free_ctl_info(dev_info->edac_dev);
+			dev_dbg->ctl_name);
+		edac_pci_free_ctl_info(dev_dbg->edac_dev);
 		return -ENODEV;
 	}
 
 	printk(KERN_INFO "added one device on AMD8131 "
 		"vendor %x, device %x, devfn %x, name %s\n",
 		PCI_VENDOR_ID_AMD, amd8131_chipset.err_dev,
-		dev_info->devfn, dev_info->ctl_name);
+		dev_dbg->devfn, dev_dbg->ctl_name);
 
 	return 0;
 }
 
 static void amd8131_remove(struct pci_dev *dev)
 {
-	struct amd8131_dev_info *dev_info;
+	struct amd8131_dev_info *dev_dbg;
 
-	for (dev_info = amd8131_chipset.devices; dev_info->inst != NO_BRIDGE;
-		dev_info++)
-		if (dev_info->devfn == dev->devfn)
+	for (dev_dbg = amd8131_chipset.devices; dev_dbg->inst != NO_BRIDGE;
+		dev_dbg++)
+		if (dev_dbg->devfn == dev->devfn)
 			break;
 
-	if (dev_info->inst == NO_BRIDGE) /* should never happen */
+	if (dev_dbg->inst == NO_BRIDGE) /* should never happen */
 		return;
 
-	if (dev_info->edac_dev) {
-		edac_pci_del_device(dev_info->edac_dev->dev);
-		edac_pci_free_ctl_info(dev_info->edac_dev);
+	if (dev_dbg->edac_dev) {
+		edac_pci_del_device(dev_dbg->edac_dev->dev);
+		edac_pci_free_ctl_info(dev_dbg->edac_dev);
 	}
 
 	if (amd8131_chipset.exit)
-		amd8131_chipset.exit(dev_info);
+		amd8131_chipset.exit(dev_dbg);
 
-	pci_dev_put(dev_info->dev);
+	pci_dev_put(dev_dbg->dev);
 }
 
 static const struct pci_device_id amd8131_edac_pci_tbl[] = {

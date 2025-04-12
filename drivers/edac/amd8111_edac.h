@@ -111,8 +111,8 @@ struct amd8111_dev_info {
 	int edac_idx;	/* device index */
 	char *ctl_name;
 	struct edac_device_ctl_info *edac_dev;
-	void (*init)(struct amd8111_dev_info *dev_info);
-	void (*exit)(struct amd8111_dev_info *dev_info);
+	void (*init)(struct amd8111_dev_info *dev_dbg);
+	void (*exit)(struct amd8111_dev_info *dev_dbg);
 	void (*check)(struct edac_device_ctl_info *edac_dev);
 };
 
@@ -122,8 +122,8 @@ struct amd8111_pci_info {
 	int edac_idx;	/* pci index */
 	const char *ctl_name;
 	struct edac_pci_ctl_info *edac_dev;
-	void (*init)(struct amd8111_pci_info *dev_info);
-	void (*exit)(struct amd8111_pci_info *dev_info);
+	void (*init)(struct amd8111_pci_info *dev_dbg);
+	void (*exit)(struct amd8111_pci_info *dev_dbg);
 	void (*check)(struct edac_pci_ctl_info *edac_dev);
 };
 

@@ -56,7 +56,7 @@ static void do_nokia_modem_rst_ind_tasklet(unsigned long data)
 	if (!modem)
 		return;
 
-	dev_info(modem->device, "CMT rst line change detected\n");
+	dev_dbg(modem->device, "CMT rst line change detected\n");
 
 	if (modem->ssi_protocol)
 		ssip_reset_event(modem->ssi_protocol);
@@ -233,7 +233,7 @@ static int nokia_modem_probe(struct device *dev)
 		goto error4;
 	}
 
-	dev_info(dev, "Registered Nokia HSI modem\n");
+	dev_dbg(dev, "Registered Nokia HSI modem\n");
 
 	return 0;
 

@@ -119,7 +119,7 @@ int s3fwrn5_nci_rf_configure(struct s3fwrn5_info *info, const char *fw_name)
 
 	/* Start rfreg configuration */
 
-	dev_info(&info->ndev->nfc_dev->dev,
+	dev_dbg(&info->ndev->nfc_dev->dev,
 		"rfreg configuration update: %s\n", fw_name);
 
 	ret = nci_prop_cmd(info->ndev, NCI_PROP_START_RFREG, 0, NULL);
@@ -157,7 +157,7 @@ int s3fwrn5_nci_rf_configure(struct s3fwrn5_info *info, const char *fw_name)
 		goto out;
 	}
 
-	dev_info(&info->ndev->nfc_dev->dev,
+	dev_dbg(&info->ndev->nfc_dev->dev,
 		"rfreg configuration update: success\n");
 out:
 	release_firmware(fw);

@@ -181,7 +181,7 @@ static void register_encoders(struct hva_dev *hva)
 		}
 
 		hva->encoders[hva->nb_of_encoders++] = hva_encoders[i];
-		dev_info(dev, "%s %s encoder registered\n", HVA_PREFIX,
+		dev_dbg(dev, "%s %s encoder registered\n", HVA_PREFIX,
 			 hva_encoders[i]->name);
 	}
 }
@@ -1212,7 +1212,7 @@ static int hva_open(struct file *file)
 	hva_dbg_ctx_create(ctx);
 #endif
 
-	dev_info(dev, "%s encoder instance created\n", ctx->name);
+	dev_dbg(dev, "%s encoder instance created\n", ctx->name);
 
 	return 0;
 
@@ -1257,7 +1257,7 @@ static int hva_release(struct file *file)
 	hva_dbg_ctx_remove(ctx);
 #endif
 
-	dev_info(dev, "%s encoder instance released\n", ctx->name);
+	dev_dbg(dev, "%s encoder instance released\n", ctx->name);
 
 	kfree(ctx);
 
@@ -1402,7 +1402,7 @@ static int hva_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_work_queue;
 
-	dev_info(dev, "%s %s registered as /dev/video%d\n", HVA_PREFIX,
+	dev_dbg(dev, "%s %s registered as /dev/video%d\n", HVA_PREFIX,
 		 HVA_NAME, hva->vdev->num);
 
 	return 0;
@@ -1437,7 +1437,7 @@ static int hva_remove(struct platform_device *pdev)
 
 	v4l2_device_unregister(&hva->v4l2_dev);
 
-	dev_info(dev, "%s %s removed\n", HVA_PREFIX, pdev->name);
+	dev_dbg(dev, "%s %s removed\n", HVA_PREFIX, pdev->name);
 
 	return 0;
 }

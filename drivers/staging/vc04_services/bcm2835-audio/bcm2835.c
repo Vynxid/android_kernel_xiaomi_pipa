@@ -334,7 +334,7 @@ static int snd_add_child_device(struct device *device,
 	}
 
 	dev_set_drvdata(child, chip);
-	dev_info(child, "card created with %d channels\n", numchans);
+	dev_dbg(child, "card created with %d channels\n", numchans);
 
 	return 0;
 }

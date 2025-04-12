@@ -183,11 +183,11 @@ int cxl_psl_purge(struct cxl_afu *afu)
 
 		if (dsisr & trans_fault) {
 			dar = cxl_p2n_read(afu, CXL_PSL_DAR_An);
-			dev_notice(&afu->dev, "PSL purge terminating pending translation, DSISR: 0x%016llx, DAR: 0x%016llx\n",
+			dev_dbg(&afu->dev, "PSL purge terminating pending translation, DSISR: 0x%016llx, DAR: 0x%016llx\n",
 				   dsisr, dar);
 			cxl_p2n_write(afu, CXL_PSL_TFC_An, CXL_PSL_TFC_An_AE);
 		} else if (dsisr) {
-			dev_notice(&afu->dev, "PSL purge acknowledging pending non-translation fault, DSISR: 0x%016llx\n",
+			dev_dbg(&afu->dev, "PSL purge acknowledging pending non-translation fault, DSISR: 0x%016llx\n",
 				   dsisr);
 			cxl_p2n_write(afu, CXL_PSL_TFC_An, CXL_PSL_TFC_An_A);
 		} else {
@@ -557,7 +557,7 @@ static int activate_afu_directed(struct cxl_afu *afu)
 {
 	int rc;
 
-	dev_info(&afu->dev, "Activating AFU directed mode\n");
+	dev_dbg(&afu->dev, "Activating AFU directed mode\n");
 
 	afu->num_procs = afu->max_procs_virtualised;
 	if (afu->native->spa == NULL) {
@@ -789,7 +789,7 @@ int cxl_attach_afu_directed_psl8(struct cxl_context *ctx, u64 wed, u64 amr)
 
 static int deactivate_afu_directed(struct cxl_afu *afu)
 {
-	dev_info(&afu->dev, "Deactivating AFU directed mode\n");
+	dev_dbg(&afu->dev, "Deactivating AFU directed mode\n");
 
 	afu->current_mode = 0;
 	afu->num_procs = 0;
@@ -832,7 +832,7 @@ static int deactivate_afu_directed(struct cxl_afu *afu)
 
 int cxl_activate_dedicated_process_psl9(struct cxl_afu *afu)
 {
-	dev_info(&afu->dev, "Activating dedicated process mode\n");
+	dev_dbg(&afu->dev, "Activating dedicated process mode\n");
 
 	/*
 	 * If XSL is set to dedicated mode (Set in PSL_SCNTL reg), the
@@ -858,7 +858,7 @@ int cxl_activate_dedicated_process_psl9(struct cxl_afu *afu)
 
 int cxl_activate_dedicated_process_psl8(struct cxl_afu *afu)
 {
-	dev_info(&afu->dev, "Activating dedicated process mode\n");
+	dev_dbg(&afu->dev, "Activating dedicated process mode\n");
 
 	cxl_p1n_write(afu, CXL_PSL_SCNTL_An, CXL_PSL_SCNTL_An_PM_Process);
 
@@ -969,7 +969,7 @@ int cxl_attach_dedicated_process_psl8(struct cxl_context *ctx, u64 wed, u64 amr)
 
 static int deactivate_dedicated_process(struct cxl_afu *afu)
 {
-	dev_info(&afu->dev, "Deactivating dedicated process mode\n");
+	dev_dbg(&afu->dev, "Deactivating dedicated process mode\n");
 
 	afu->current_mode = 0;
 	afu->num_procs = 0;
@@ -1279,7 +1279,7 @@ static irqreturn_t native_slice_irq_err(int irq, void *data)
 	irq_mask = (serr & CXL_PSL_SERR_An_IRQS) >> 32;
 	serr |= irq_mask;
 	cxl_p1n_write(afu, CXL_PSL_SERR_An, serr);
-	dev_info(&afu->dev, "Further such interrupts will be masked until the AFU is reset\n");
+	dev_dbg(&afu->dev, "Further such interrupts will be masked until the AFU is reset\n");
 
 	return IRQ_HANDLED;
 }

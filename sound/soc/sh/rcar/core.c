@@ -1565,7 +1565,7 @@ static int rsnd_probe(struct platform_device *pdev)
 
 	pm_runtime_enable(dev);
 
-	dev_info(dev, "probed\n");
+	dev_dbg(dev, "probed\n");
 	return ret;
 
 exit_snd_probe:

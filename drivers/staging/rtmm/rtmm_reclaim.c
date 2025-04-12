@@ -152,7 +152,7 @@ static int mem_process_kill(pid_t pid)
 
 	rss = get_mm_rss(mm);
 
-	pr_info("kill process %d(%s)\n", pid, task->comm);
+	pr_debug("kill process %d(%s)\n", pid, task->comm);
 	send_sig(SIGKILL, task, 0);
 out:
 	rcu_read_unlock();
@@ -235,7 +235,7 @@ out:
 	if (ret == -EPIPE)
 		ret = 0;
 
-	pr_info("process reclaim: pid %d, page_type %d, try to reclaim %d, reclaimed %d(scan %d)\n",
+	pr_debug("process reclaim: pid %d, page_type %d, try to reclaim %d, reclaimed %d(scan %d)\n",
 		pid, type, nr_to_reclaim, rp.nr_reclaimed, rp.nr_scanned);
 
 	return rp.nr_reclaimed;
@@ -265,7 +265,7 @@ static int mem_global_reclaim(unsigned long nr_to_reclaim, int swappiness)
 	if (remain && (nr_reclaimed < nr_to_reclaim))
 		nr_reclaimed += reclaim_global(remain);
 
-	pr_info("global reclaim: try to reclaim %ld, reclaimed %ld, swappiness %d\n",
+	pr_debug("global reclaim: try to reclaim %ld, reclaimed %ld, swappiness %d\n",
 		nr_to_reclaim, nr_reclaimed, swappiness);
 
 	return nr_reclaimed;
@@ -726,7 +726,7 @@ int __init rtmm_reclaim_init(struct kobject *rtmm_kobj)
 		return PTR_ERR_OR_ZERO(reclaim->tsk);
 	}
 
-	pr_info("rtmm reclaim init OK\n");
+	pr_debug("rtmm reclaim init OK\n");
 
 	return 0;
 }

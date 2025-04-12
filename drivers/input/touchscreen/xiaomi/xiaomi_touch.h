@@ -44,19 +44,19 @@ extern int mi_log_level;
 #define MI_TOUCH_LOGD(level, fmt, args...)                                     \
 	do {                                                                   \
 		if (mi_log_level == TOUCH_DEBUG && level == 1)                 \
-			pr_info(fmt, ##args);                                  \
+			pr_debug(fmt, ##args);                                  \
 	} while (0)
 
 #define MI_TOUCH_LOGN(level, fmt, args...)                                     \
 	do {                                                                   \
 		if (mi_log_level >= TOUCH_NOTICE && level == 1)                \
-			pr_info(fmt, ##args);                                  \
+			pr_debug(fmt, ##args);                                  \
 	} while (0)
 
 #define MI_TOUCH_LOGI(level, fmt, args...)                                     \
 	do {                                                                   \
 		if (mi_log_level >= TOUCH_INFO && level == 1)                  \
-			pr_info(fmt, ##args);                                  \
+			pr_debug(fmt, ##args);                                  \
 	} while (0)
 
 #define MI_TOUCH_LOGE(level, fmt, args...)                                     \

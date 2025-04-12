@@ -1085,7 +1085,7 @@ static int mt9t112_camera_probe(struct i2c_client *client)
 		goto done;
 	}
 
-	dev_info(&client->dev, "%s chip ID %04x\n", devname, chipid);
+	dev_dbg(&client->dev, "%s chip ID %04x\n", devname, chipid);
 
 done:
 	mt9t112_s_power(&priv->subdev, 0);

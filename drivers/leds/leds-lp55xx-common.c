@@ -372,13 +372,13 @@ bool lp55xx_is_extclk_used(struct lp55xx_chip *chip)
 		goto use_internal_clk;
 	}
 
-	dev_info(&chip->cl->dev, "%dHz external clock used\n",	LP55XX_CLK_32K);
+	dev_dbg(&chip->cl->dev, "%dHz external clock used\n",	LP55XX_CLK_32K);
 
 	chip->clk = clk;
 	return true;
 
 use_internal_clk:
-	dev_info(&chip->cl->dev, "internal clock used\n");
+	dev_dbg(&chip->cl->dev, "internal clock used\n");
 	return false;
 }
 EXPORT_SYMBOL_GPL(lp55xx_is_extclk_used);

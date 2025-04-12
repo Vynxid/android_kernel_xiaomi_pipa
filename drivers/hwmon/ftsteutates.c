@@ -839,7 +839,7 @@ static int fts_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	if (err)
 		return err;
 
-	dev_info(&client->dev, "Detected FTS Teutates chip, revision: %d.%d\n",
+	dev_dbg(&client->dev, "Detected FTS Teutates chip, revision: %d.%d\n",
 		 (revision & 0xF0) >> 4, revision & 0x0F);
 	return 0;
 }

@@ -477,7 +477,7 @@ static int imx1_pinctrl_parse_groups(struct device_node *np,
 	list = of_get_property(np, "fsl,pins", &size);
 	/* we do not check return since it's safe node passed down */
 	if (!size || size % 12) {
-		dev_notice(info->dev, "Not a valid fsl,pins property (%s)\n",
+		dev_dbg(info->dev, "Not a valid fsl,pins property (%s)\n",
 				np->name);
 		return -EINVAL;
 	}
@@ -642,7 +642,7 @@ int imx1_pinctrl_core_probe(struct platform_device *pdev,
 		return ret;
 	}
 
-	dev_info(&pdev->dev, "initialized IMX pinctrl driver\n");
+	dev_dbg(&pdev->dev, "initialized IMX pinctrl driver\n");
 
 	return 0;
 }

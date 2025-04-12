@@ -904,7 +904,7 @@ dvb_pll_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	 * keeping dvb_pll_attach untouched for legacy (dvb_attach) drivers.
 	 */
 	fe->ops.tuner_ops.release = NULL;
-	dev_info(&client->dev, "DVB Simple Tuner attached.\n");
+	dev_dbg(&client->dev, "DVB Simple Tuner attached.\n");
 	return 0;
 }
 

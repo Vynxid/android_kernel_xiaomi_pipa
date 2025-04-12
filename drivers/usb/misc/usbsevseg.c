@@ -358,7 +358,7 @@ static int sevseg_probe(struct usb_interface *interface,
 	if (rc)
 		goto error;
 
-	dev_info(&interface->dev, "USB 7 Segment device now attached\n");
+	dev_dbg(&interface->dev, "USB 7 Segment device now attached\n");
 	return 0;
 
 error:
@@ -378,7 +378,7 @@ static void sevseg_disconnect(struct usb_interface *interface)
 	usb_set_intfdata(interface, NULL);
 	usb_put_dev(mydev->udev);
 	kfree(mydev);
-	dev_info(&interface->dev, "USB 7 Segment now disconnected\n");
+	dev_dbg(&interface->dev, "USB 7 Segment now disconnected\n");
 }
 
 static int sevseg_suspend(struct usb_interface *intf, pm_message_t message)

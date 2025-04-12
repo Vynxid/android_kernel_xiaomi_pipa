@@ -148,7 +148,7 @@ static int pwm_omap_dmtimer_config(struct pwm_chip *chip,
 	duty_cycles = pwm_omap_dmtimer_get_clock_cycles(clk_rate, duty_ns);
 
 	if (period_cycles < 2) {
-		dev_info(chip->dev,
+		dev_dbg(chip->dev,
 			 "period %d ns too short for clock rate %lu Hz\n",
 			 period_ns, clk_rate);
 		goto err_einval;

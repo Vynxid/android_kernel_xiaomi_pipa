@@ -460,7 +460,7 @@ static int emc1403_probe(struct i2c_client *client,
 	if (IS_ERR(hwmon_dev))
 		return PTR_ERR(hwmon_dev);
 
-	dev_info(&client->dev, "%s Thermal chip found\n", id->name);
+	dev_dbg(&client->dev, "%s Thermal chip found\n", id->name);
 	return 0;
 }
 

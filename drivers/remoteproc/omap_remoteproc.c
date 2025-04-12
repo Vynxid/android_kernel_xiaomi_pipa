@@ -77,7 +77,7 @@ static void omap_rproc_mbox_callback(struct mbox_client *client, void *data)
 		dev_err(dev, "omap rproc %s crashed\n", name);
 		break;
 	case RP_MBOX_ECHO_REPLY:
-		dev_info(dev, "received echo reply from %s\n", name);
+		dev_dbg(dev, "received echo reply from %s\n", name);
 		break;
 	default:
 		/* msg contains the index of the triggered vring */

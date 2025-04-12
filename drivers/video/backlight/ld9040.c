@@ -748,7 +748,7 @@ static int ld9040_probe(struct spi_device *spi)
 
 	spi_set_drvdata(spi, lcd);
 
-	dev_info(&spi->dev, "ld9040 panel driver has been probed.\n");
+	dev_dbg(&spi->dev, "ld9040 panel driver has been probed.\n");
 	return 0;
 }
 

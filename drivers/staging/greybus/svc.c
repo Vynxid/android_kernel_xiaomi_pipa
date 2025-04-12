@@ -1039,7 +1039,7 @@ static void gb_svc_process_intf_oops(struct gb_operation *operation)
 		return;
 	}
 
-	dev_info(&svc->dev, "Deactivating interface %u, interface oops reason = %u\n",
+	dev_dbg(&svc->dev, "Deactivating interface %u, interface oops reason = %u\n",
 		 intf_id, reason);
 
 	mutex_lock(&intf->mutex);

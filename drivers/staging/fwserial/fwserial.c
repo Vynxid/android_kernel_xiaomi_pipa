@@ -93,9 +93,9 @@ struct fwtty_transaction {
 #define fwtty_err(p, fmt, ...)						\
 	dev_err(to_device(p, device), fmt, ##__VA_ARGS__)
 #define fwtty_info(p, fmt, ...)						\
-	dev_info(to_device(p, device), fmt, ##__VA_ARGS__)
+	dev_dbg(to_device(p, device), fmt, ##__VA_ARGS__)
 #define fwtty_notice(p, fmt, ...)					\
-	dev_notice(to_device(p, device), fmt, ##__VA_ARGS__)
+	dev_dbg(to_device(p, device), fmt, ##__VA_ARGS__)
 #define fwtty_dbg(p, fmt, ...)						\
 	dev_dbg(to_device(p, device), "%s: " fmt, __func__, ##__VA_ARGS__)
 #define fwtty_err_ratelimited(p, fmt, ...)				\

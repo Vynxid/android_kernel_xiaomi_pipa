@@ -185,7 +185,7 @@ static int gemini_sata_setup_bridge(struct sata_gemini *sg,
 
 	bridge_online = !!(val & GEMINI_SATA_STATUS_PHY_READY);
 
-	dev_info(sg->dev, "SATA%d PHY %s\n", bridge,
+	dev_dbg(sg->dev, "SATA%d PHY %s\n", bridge,
 		 bridge_online ? "ready" : "not ready");
 
 	return bridge_online ? 0: -ENODEV;
@@ -286,7 +286,7 @@ static int gemini_sata_bridge_init(struct sata_gemini *sg)
 	clk_disable(sg->sata0_pclk);
 	clk_disable(sg->sata1_pclk);
 
-	dev_info(dev, "SATA ID %08x, PHY ID: %08x\n", sata_id, sata_phy_id);
+	dev_dbg(dev, "SATA ID %08x, PHY ID: %08x\n", sata_id, sata_phy_id);
 
 	return 0;
 }
@@ -393,7 +393,7 @@ static int gemini_sata_probe(struct platform_device *pdev)
 			return ret;
 	}
 
-	dev_info(dev, "set up the Gemini IDE/SATA nexus\n");
+	dev_dbg(dev, "set up the Gemini IDE/SATA nexus\n");
 	platform_set_drvdata(pdev, sg);
 	sg_singleton = sg;
 

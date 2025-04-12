@@ -345,7 +345,7 @@ int __mac_fw_upload(struct i1480 *i1480, const char *fw_name,
 	mac_fw_upload_disable(i1480);
 out_hdrs_release:
 	if (result >= 0)
-		dev_info(i1480->dev, "%s fw '%s': uploaded\n", fw_tag, fw_name);
+		dev_dbg(i1480->dev, "%s fw '%s': uploaded\n", fw_tag, fw_name);
 	else
 		dev_err(i1480->dev, "%s fw '%s': failed to upload (%d), "
 			"power cycle device\n", fw_tag, fw_name, result);

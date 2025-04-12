@@ -645,7 +645,7 @@ void acpi_dock_add(struct acpi_device *adev)
 	dock_station_count++;
 	list_add(&dock_station->sibling, &dock_stations);
 	adev->flags.is_dock_station = true;
-	dev_info(&adev->dev, "ACPI dock station (docks/bays count: %d)\n",
+	dev_dbg(&adev->dev, "ACPI dock station (docks/bays count: %d)\n",
 		 dock_station_count);
 	return;
 

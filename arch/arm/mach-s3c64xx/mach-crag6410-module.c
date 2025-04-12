@@ -383,7 +383,7 @@ static int wlf_gf_module_probe(struct i2c_client *i2c,
 	gpiod_add_lookup_table(&wm5102_gpiod_table);
 
 	if (i < ARRAY_SIZE(gf_mods)) {
-		dev_info(&i2c->dev, "%s revision %d\n",
+		dev_dbg(&i2c->dev, "%s revision %d\n",
 			 gf_mods[i].name, rev + 1);
 
 		for (j = 0; j < gf_mods[i].num_i2c_devs; j++) {

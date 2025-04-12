@@ -48,7 +48,7 @@ static int fwe_run_tlv(struct fmc_device *fmc, const struct firmware *fw,
 		}
 		err = 0;
 		if (write) {
-			dev_info(&fmc->dev, "write %i bytes at 0x%04x\n",
+			dev_dbg(&fmc->dev, "write %i bytes at 0x%04x\n",
 				 thislen, thisaddr);
 			err = fmc_write_ee(fmc, thisaddr, p + 5, thislen);
 		}
@@ -61,7 +61,7 @@ static int fwe_run_tlv(struct fmc_device *fmc, const struct firmware *fw,
 		len -= 5 + thislen;
 	}
 	if (write)
-		dev_info(&fmc->dev, "write_eeprom: success\n");
+		dev_dbg(&fmc->dev, "write_eeprom: success\n");
 	return 0;
 }
 
@@ -69,13 +69,13 @@ static int fwe_run_bin(struct fmc_device *fmc, const struct firmware *fw)
 {
 	int ret;
 
-	dev_info(&fmc->dev, "programming %zi bytes\n", fw->size);
+	dev_dbg(&fmc->dev, "programming %zi bytes\n", fw->size);
 	ret = fmc_write_ee(fmc, 0, (void *)fw->data, fw->size);
 	if (ret < 0) {
-		dev_info(&fmc->dev, "write_eeprom: error %i\n", ret);
+		dev_dbg(&fmc->dev, "write_eeprom: error %i\n", ret);
 		return ret;
 	}
-	dev_info(&fmc->dev, "write_eeprom: success\n");
+	dev_dbg(&fmc->dev, "write_eeprom: success\n");
 	return 0;
 }
 

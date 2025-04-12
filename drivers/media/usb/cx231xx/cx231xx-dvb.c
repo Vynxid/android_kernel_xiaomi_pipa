@@ -403,7 +403,7 @@ static int attach_xc5000(u8 addr, struct cx231xx *dev)
 		return -EINVAL;
 	}
 
-	dev_info(dev->dev, "%s/2: xc5000 attached\n", dev->name);
+	dev_dbg(dev->dev, "%s/2: xc5000 attached\n", dev->name);
 
 	return 0;
 }
@@ -642,7 +642,7 @@ static int dvb_init(struct cx231xx *dev)
 	dvb = kzalloc(sizeof(struct cx231xx_dvb), GFP_KERNEL);
 
 	if (dvb == NULL) {
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "cx231xx_dvb: memory allocation failed\n");
 		return -ENOMEM;
 	}
@@ -755,7 +755,7 @@ static int dvb_init(struct cx231xx *dev)
 		break;
 	case CX231XX_BOARD_HAUPPAUGE_EXETER:
 
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "%s: looking for tuner / demod on i2c bus: %d\n",
 		       __func__, i2c_adapter_id(tuner_i2c));
 
@@ -903,7 +903,7 @@ static int dvb_init(struct cx231xx *dev)
 	case CX231XX_BOARD_PV_PLAYTV_USB_HYBRID:
 	case CX231XX_BOARD_KWORLD_UB430_USB_HYBRID:
 
-		dev_info(dev->dev,
+		dev_dbg(dev->dev,
 			 "%s: looking for demod on i2c bus: %d\n",
 			 __func__, i2c_adapter_id(tuner_i2c));
 
@@ -1129,7 +1129,7 @@ static int dvb_init(struct cx231xx *dev)
 		goto out_free;
 
 
-	dev_info(dev->dev, "Successfully loaded cx231xx-dvb\n");
+	dev_dbg(dev->dev, "Successfully loaded cx231xx-dvb\n");
 
 ret:
 	cx231xx_set_mode(dev, CX231XX_SUSPEND);

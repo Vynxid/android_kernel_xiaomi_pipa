@@ -161,7 +161,7 @@ static enum hrtimer_restart pwm_hrtimer_handler(struct hrtimer *timer)
 
 void drv8846_move(struct drv8846_soc_ctrl *c_ctrl)
 {
-	pr_info("move %s\n", (c_ctrl->pdata.dir ? "up" : "down"));
+	pr_debug("move %s\n", (c_ctrl->pdata.dir ? "up" : "down"));
 
 	c_ctrl->direction = c_ctrl->pdata.dir;
 
@@ -568,7 +568,7 @@ static int drv8846_probe(struct platform_device *pdev)
 	int32_t rc = 0;
 	struct drv8846_soc_ctrl *c_ctrl = NULL;
 
-	pr_info("Enter");
+	pr_debug("Enter");
 
 	if (!pdev->dev.of_node) {
 		pr_err("of_node NULL");

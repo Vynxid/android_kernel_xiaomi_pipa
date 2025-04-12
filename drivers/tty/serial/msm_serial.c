@@ -1697,7 +1697,7 @@ static int __init msm_console_setup(struct console *co, char *options)
 	if (options)
 		uart_parse_options(options, &baud, &parity, &bits, &flow);
 
-	pr_info("msm_serial: console setup on port #%d\n", port->line);
+	pr_debug("msm_serial: console setup on port #%d\n", port->line);
 
 	return uart_set_options(port, co, baud, parity, bits, flow);
 }
@@ -1798,7 +1798,7 @@ static int msm_serial_probe(struct platform_device *pdev)
 	if (unlikely(line < 0 || line >= UART_NR))
 		return -ENXIO;
 
-	dev_info(&pdev->dev, "msm_serial: detected port #%d\n", line);
+	dev_dbg(&pdev->dev, "msm_serial: detected port #%d\n", line);
 
 	port = msm_get_port_from_line(line);
 	port->dev = &pdev->dev;
@@ -1821,7 +1821,7 @@ static int msm_serial_probe(struct platform_device *pdev)
 	}
 
 	port->uartclk = clk_get_rate(msm_port->clk);
-	dev_info(&pdev->dev, "uartclk = %d\n", port->uartclk);
+	dev_dbg(&pdev->dev, "uartclk = %d\n", port->uartclk);
 
 	resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	if (unlikely(!resource))
@@ -1898,7 +1898,7 @@ static int __init msm_serial_init(void)
 	if (unlikely(ret))
 		uart_unregister_driver(&msm_uart_driver);
 
-	pr_info("msm_serial: driver initialized\n");
+	pr_debug("msm_serial: driver initialized\n");
 
 	return ret;
 }

@@ -285,7 +285,7 @@ mediatek_gpio_bank_probe(struct device *dev,
 	/* set polarity to low for all gpios */
 	mtk_gpio_w32(rg, GPIO_REG_POL, 0);
 
-	dev_info(dev, "registering %d gpios\n", rg->chip.ngpio);
+	dev_dbg(dev, "registering %d gpios\n", rg->chip.ngpio);
 
 	return 0;
 }

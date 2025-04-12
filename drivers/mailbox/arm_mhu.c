@@ -158,7 +158,7 @@ static int mhu_probe(struct amba_device *adev, const struct amba_id *id)
 		return err;
 	}
 
-	dev_info(dev, "ARM MHU Mailbox registered\n");
+	dev_dbg(dev, "ARM MHU Mailbox registered\n");
 	return 0;
 }
 

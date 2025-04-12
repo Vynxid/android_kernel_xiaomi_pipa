@@ -509,7 +509,7 @@ static ssize_t program_store(struct device *dev, struct device_attribute *attr,
 	if (ret)
 		goto exit;
 
-	dev_info(dev, "Copying %zu byte program to EC", count);
+	dev_dbg(dev, "Copying %zu byte program to EC", count);
 
 	param = (struct ec_params_lightbar *)msg->data;
 	param->cmd = LIGHTBAR_CMD_SET_PROGRAM;

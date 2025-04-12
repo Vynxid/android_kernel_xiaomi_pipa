@@ -733,7 +733,7 @@ static int aspeed_gpio_setup_irqs(struct aspeed_gpio *gpio,
 	rc = gpiochip_irqchip_add(&gpio->chip, &aspeed_gpio_irqchip,
 			0, handle_bad_irq, IRQ_TYPE_NONE);
 	if (rc) {
-		dev_info(&pdev->dev, "Could not add irqchip\n");
+		dev_dbg(&pdev->dev, "Could not add irqchip\n");
 		return rc;
 	}
 

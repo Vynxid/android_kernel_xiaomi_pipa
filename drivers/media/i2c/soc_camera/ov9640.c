@@ -605,7 +605,7 @@ static int ov9640_video_probe(struct i2c_client *client)
 		goto done;
 	}
 
-	dev_info(&client->dev, "%s Product ID %0x:%0x Manufacturer ID %x:%x\n",
+	dev_dbg(&client->dev, "%s Product ID %0x:%0x Manufacturer ID %x:%x\n",
 		 devname, pid, ver, midh, midl);
 
 	ret = v4l2_ctrl_handler_setup(&priv->hdl);

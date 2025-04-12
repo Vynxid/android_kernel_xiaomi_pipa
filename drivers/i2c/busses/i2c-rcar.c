@@ -1009,7 +1009,7 @@ static int rcar_i2c_probe(struct platform_device *pdev)
 	if (ret < 0)
 		goto out_pm_disable;
 
-	dev_info(dev, "probed\n");
+	dev_dbg(dev, "probed\n");
 
 	return 0;
 

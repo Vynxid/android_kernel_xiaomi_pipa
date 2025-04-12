@@ -831,7 +831,7 @@ static int stm32_rtc_probe(struct platform_device *pdev)
 	if (regs->verr != UNDEF_REG) {
 		u32 ver = readl_relaxed(rtc->base + regs->verr);
 
-		dev_info(&pdev->dev, "registered rev:%d.%d\n",
+		dev_dbg(&pdev->dev, "registered rev:%d.%d\n",
 			 (ver >> STM32_RTC_VERR_MAJREV_SHIFT) & 0xF,
 			 (ver >> STM32_RTC_VERR_MINREV_SHIFT) & 0xF);
 	}

@@ -1333,7 +1333,7 @@ static int bcm2048_checkrev(struct bcm2048_device *bdev)
 	mutex_unlock(&bdev->mutex);
 
 	if (!err) {
-		dev_info(&bdev->client->dev, "BCM2048 Version 0x%x\n",
+		dev_dbg(&bdev->client->dev, "BCM2048 Version 0x%x\n",
 			 version);
 		return version;
 	}

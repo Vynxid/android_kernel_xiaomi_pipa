@@ -100,7 +100,7 @@ static int octeon_rng_probe(struct platform_device *pdev)
 	if (ret)
 		return -ENOENT;
 
-	dev_info(&pdev->dev, "Octeon Random Number Generator\n");
+	dev_dbg(&pdev->dev, "Octeon Random Number Generator\n");
 
 	return 0;
 }

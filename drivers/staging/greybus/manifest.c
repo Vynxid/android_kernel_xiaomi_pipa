@@ -526,7 +526,7 @@ bool gb_manifest_parse(struct gb_interface *intf, void *data, size_t size)
 	 * don't know what newer format manifests might leave.
 	 */
 	if (result && !list_empty(&intf->manifest_descs))
-		dev_info(&intf->dev, "excess descriptors in interface manifest\n");
+		dev_dbg(&intf->dev, "excess descriptors in interface manifest\n");
 out:
 	release_manifest_descriptors(intf);
 

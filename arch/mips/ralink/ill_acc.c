@@ -79,7 +79,7 @@ static int __init ill_acc_of_setup(void)
 
 	rt_memc_w32(ILL_INT_STATUS, REG_ILL_ACC_TYPE);
 
-	dev_info(&pdev->dev, "irq registered\n");
+	dev_dbg(&pdev->dev, "irq registered\n");
 
 	return 0;
 }

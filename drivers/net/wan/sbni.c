@@ -409,13 +409,13 @@ sbni_probe1( struct net_device  *dev,  unsigned long  ioaddr,  int  irq )
 	if( inb( ioaddr + CSR0 ) & 0x01 )
 		nl->state |= FL_SLOW_MODE;
 
-	pr_notice("%s: ioaddr %#lx, irq %d, MAC: 00:ff:01:%02x:%02x:%02x\n",
+	pr_debug("%s: ioaddr %#lx, irq %d, MAC: 00:ff:01:%02x:%02x:%02x\n",
 		  dev->name, dev->base_addr, dev->irq,
 		  ((u8 *)dev->dev_addr)[3],
 		  ((u8 *)dev->dev_addr)[4],
 		  ((u8 *)dev->dev_addr)[5]);
 
-	pr_notice("%s: speed %d",
+	pr_debug("%s: speed %d",
 		  dev->name,
 		  ((nl->state & FL_SLOW_MODE) ? 500000 : 2000000)
 		  / (1 << nl->csr1.rate));

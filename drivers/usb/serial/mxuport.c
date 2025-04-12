@@ -1104,7 +1104,7 @@ static int mxuport_probe(struct usb_serial *serial,
 		}
 	}
 
-	dev_info(&serial->interface->dev,
+	dev_dbg(&serial->interface->dev,
 		 "Using device firmware version v%x.%x.%x\n",
 		 (version & 0xff0000) >> 16,
 		 (version & 0xff00) >> 8,

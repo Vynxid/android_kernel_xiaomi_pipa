@@ -377,7 +377,7 @@ extern int mthca_debug_level;
 #define mthca_err(mdev, format, arg...) \
 	dev_err(&mdev->pdev->dev, format, ## arg)
 #define mthca_info(mdev, format, arg...) \
-	dev_info(&mdev->pdev->dev, format, ## arg)
+	dev_dbg(&mdev->pdev->dev, format, ## arg)
 #define mthca_warn(mdev, format, arg...) \
 	dev_warn(&mdev->pdev->dev, format, ## arg)
 

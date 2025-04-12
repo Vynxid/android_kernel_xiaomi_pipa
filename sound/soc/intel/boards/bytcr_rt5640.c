@@ -115,47 +115,47 @@ static void log_quirks(struct device *dev)
 	map = BYT_RT5640_MAP(byt_rt5640_quirk);
 	switch (map) {
 	case BYT_RT5640_DMIC1_MAP:
-		dev_info(dev, "quirk DMIC1_MAP enabled\n");
+		dev_dbg(dev, "quirk DMIC1_MAP enabled\n");
 		break;
 	case BYT_RT5640_DMIC2_MAP:
-		dev_info(dev, "quirk DMIC2_MAP enabled\n");
+		dev_dbg(dev, "quirk DMIC2_MAP enabled\n");
 		break;
 	case BYT_RT5640_IN1_MAP:
-		dev_info(dev, "quirk IN1_MAP enabled\n");
+		dev_dbg(dev, "quirk IN1_MAP enabled\n");
 		break;
 	case BYT_RT5640_IN3_MAP:
-		dev_info(dev, "quirk IN3_MAP enabled\n");
+		dev_dbg(dev, "quirk IN3_MAP enabled\n");
 		break;
 	default:
 		dev_err(dev, "quirk map 0x%x is not supported, microphone input will not work\n", map);
 		break;
 	}
 	if (BYT_RT5640_JDSRC(byt_rt5640_quirk)) {
-		dev_info(dev, "quirk realtek,jack-detect-source %ld\n",
+		dev_dbg(dev, "quirk realtek,jack-detect-source %ld\n",
 			 BYT_RT5640_JDSRC(byt_rt5640_quirk));
-		dev_info(dev, "quirk realtek,over-current-threshold-microamp %ld\n",
+		dev_dbg(dev, "quirk realtek,over-current-threshold-microamp %ld\n",
 			 BYT_RT5640_OVCD_TH(byt_rt5640_quirk) * 100);
-		dev_info(dev, "quirk realtek,over-current-scale-factor %ld\n",
+		dev_dbg(dev, "quirk realtek,over-current-scale-factor %ld\n",
 			 BYT_RT5640_OVCD_SF(byt_rt5640_quirk));
 	}
 	if (byt_rt5640_quirk & BYT_RT5640_JD_NOT_INV)
-		dev_info(dev, "quirk JD_NOT_INV enabled\n");
+		dev_dbg(dev, "quirk JD_NOT_INV enabled\n");
 	if (byt_rt5640_quirk & BYT_RT5640_MONO_SPEAKER)
-		dev_info(dev, "quirk MONO_SPEAKER enabled\n");
+		dev_dbg(dev, "quirk MONO_SPEAKER enabled\n");
 	if (byt_rt5640_quirk & BYT_RT5640_DIFF_MIC)
-		dev_info(dev, "quirk DIFF_MIC enabled\n");
+		dev_dbg(dev, "quirk DIFF_MIC enabled\n");
 	if (byt_rt5640_quirk & BYT_RT5640_SSP0_AIF1) {
-		dev_info(dev, "quirk SSP0_AIF1 enabled\n");
+		dev_dbg(dev, "quirk SSP0_AIF1 enabled\n");
 		has_ssp0 = true;
 		has_ssp0_aif1 = true;
 	}
 	if (byt_rt5640_quirk & BYT_RT5640_SSP0_AIF2) {
-		dev_info(dev, "quirk SSP0_AIF2 enabled\n");
+		dev_dbg(dev, "quirk SSP0_AIF2 enabled\n");
 		has_ssp0 = true;
 		has_ssp0_aif2 = true;
 	}
 	if (byt_rt5640_quirk & BYT_RT5640_SSP2_AIF2) {
-		dev_info(dev, "quirk SSP2_AIF2 enabled\n");
+		dev_dbg(dev, "quirk SSP2_AIF2 enabled\n");
 		has_ssp2_aif2 = true;
 	}
 	if (is_bytcr && !has_ssp0)
@@ -166,12 +166,12 @@ static void log_quirks(struct device *dev)
 		dev_err(dev, "Invalid routing, cannot have both SSP0 and SSP2 connected to codec\n");
 
 	if (byt_rt5640_quirk & BYT_RT5640_MCLK_EN) {
-		dev_info(dev, "quirk MCLK_EN enabled\n");
+		dev_dbg(dev, "quirk MCLK_EN enabled\n");
 		has_mclk = true;
 	}
 	if (byt_rt5640_quirk & BYT_RT5640_MCLK_25MHZ) {
 		if (has_mclk)
-			dev_info(dev, "quirk MCLK_25MHZ enabled\n");
+			dev_dbg(dev, "quirk MCLK_25MHZ enabled\n");
 		else
 			dev_err(dev, "quirk MCLK_25MHZ enabled but quirk MCLK not selected, will be ignored\n");
 	}
@@ -1417,13 +1417,13 @@ static int snd_byt_rt5640_mc_probe(struct platform_device *pdev)
 							       &pkg_ctx);
 		if (pkg_found) {
 			if (chan_package.aif_value == 1) {
-				dev_info(&pdev->dev, "BIOS Routing: AIF1 connected\n");
+				dev_dbg(&pdev->dev, "BIOS Routing: AIF1 connected\n");
 				byt_rt5640_quirk |= BYT_RT5640_SSP0_AIF1;
 			} else  if (chan_package.aif_value == 2) {
-				dev_info(&pdev->dev, "BIOS Routing: AIF2 connected\n");
+				dev_dbg(&pdev->dev, "BIOS Routing: AIF2 connected\n");
 				byt_rt5640_quirk |= BYT_RT5640_SSP0_AIF2;
 			} else {
-				dev_info(&pdev->dev, "BIOS Routing isn't valid, ignored\n");
+				dev_dbg(&pdev->dev, "BIOS Routing isn't valid, ignored\n");
 				pkg_found = false;
 			}
 		}
@@ -1447,7 +1447,7 @@ static int snd_byt_rt5640_mc_probe(struct platform_device *pdev)
 	if (dmi_id)
 		byt_rt5640_quirk = (unsigned long)dmi_id->driver_data;
 	if (quirk_override) {
-		dev_info(&pdev->dev, "Overriding quirk 0x%x => 0x%x\n",
+		dev_dbg(&pdev->dev, "Overriding quirk 0x%x => 0x%x\n",
 			 (unsigned int)byt_rt5640_quirk, quirk_override);
 		byt_rt5640_quirk = quirk_override;
 	}

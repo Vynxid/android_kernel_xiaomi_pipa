@@ -1828,7 +1828,7 @@ struct bitmap *md_bitmap_create(struct mddev *mddev, int slot)
 	BUG_ON(file && mddev->bitmap_info.offset);
 
 	if (test_bit(MD_HAS_JOURNAL, &mddev->flags)) {
-		pr_notice("md/raid:%s: array with journal cannot have bitmap\n",
+		pr_debug("md/raid:%s: array with journal cannot have bitmap\n",
 			  mdname(mddev));
 		return ERR_PTR(-EBUSY);
 	}
@@ -2076,7 +2076,7 @@ int md_bitmap_resize(struct bitmap *bitmap, sector_t blocks,
 	struct bitmap_page *new_bp;
 
 	if (bitmap->storage.file && !init) {
-		pr_info("md: cannot resize file-based bitmap\n");
+		pr_debug("md: cannot resize file-based bitmap\n");
 		return -EINVAL;
 	}
 

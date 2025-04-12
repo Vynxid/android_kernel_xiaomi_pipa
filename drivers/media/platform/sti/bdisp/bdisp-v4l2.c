@@ -1390,7 +1390,7 @@ static int bdisp_probe(struct platform_device *pdev)
 		goto err_filter;
 	}
 
-	dev_info(dev, "%s%d registered as /dev/video%d\n", BDISP_NAME,
+	dev_dbg(dev, "%s%d registered as /dev/video%d\n", BDISP_NAME,
 		 bdisp->id, bdisp->vdev.num);
 
 	pm_runtime_put(dev);

@@ -1011,7 +1011,7 @@ static int ci_hdrc_probe(struct platform_device *pdev)
 		ret = ci_hdrc_host_init(ci);
 		if (ret) {
 			if (ret == -ENXIO)
-				dev_info(dev, "doesn't support host\n");
+				dev_dbg(dev, "doesn't support host\n");
 			else
 				goto deinit_phy;
 		}
@@ -1021,7 +1021,7 @@ static int ci_hdrc_probe(struct platform_device *pdev)
 		ret = ci_hdrc_gadget_init(ci);
 		if (ret) {
 			if (ret == -ENXIO)
-				dev_info(dev, "doesn't support gadget\n");
+				dev_dbg(dev, "doesn't support gadget\n");
 			else
 				goto deinit_host;
 		}

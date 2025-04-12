@@ -2687,7 +2687,7 @@ static void sky2_rx_checksum(struct sky2_port *sky2, u32 status)
 		skb->ip_summed = CHECKSUM_COMPLETE;
 		skb->csum = le16_to_cpu(status);
 	} else {
-		dev_notice(&sky2->hw->pdev->dev,
+		dev_dbg(&sky2->hw->pdev->dev,
 			   "%s: receive checksum problem (status = %#x)\n",
 			   sky2->netdev->name, status);
 
@@ -3290,7 +3290,7 @@ static void sky2_reset(struct sky2_hw *hw)
 
 		/* If error bit is stuck on ignore it */
 		if (sky2_read32(hw, B0_HWE_ISRC) & Y2_IS_PCI_EXP)
-			dev_info(&pdev->dev, "ignoring stuck error report bit\n");
+			dev_dbg(&pdev->dev, "ignoring stuck error report bit\n");
 		else
 			hwe_mask |= Y2_IS_PCI_EXP;
 	}
@@ -4893,7 +4893,7 @@ static int sky2_test_msi(struct sky2_hw *hw)
 
 	if (!(hw->flags & SKY2_HW_USE_MSI)) {
 		/* MSI test failed, go back to INTx mode */
-		dev_info(&pdev->dev, "No interrupt generated using MSI, "
+		dev_dbg(&pdev->dev, "No interrupt generated using MSI, "
 			 "switching to INTx mode.\n");
 
 		err = -EOPNOTSUPP;
@@ -5065,7 +5065,7 @@ static int sky2_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 		goto err_out_reset;
 	}
 
-	dev_info(&pdev->dev, "Yukon-2 %s chip revision %d\n",
+	dev_dbg(&pdev->dev, "Yukon-2 %s chip revision %d\n",
 		 sky2_name(hw->chip_id, buf1, sizeof(buf1)), hw->chip_rev);
 
 	sky2_reset(hw);
@@ -5294,7 +5294,7 @@ static struct pci_driver sky2_driver = {
 
 static int __init sky2_init_module(void)
 {
-	pr_info("driver version " DRV_VERSION "\n");
+	pr_debug("driver version " DRV_VERSION "\n");
 
 	sky2_debug_init();
 	return pci_register_driver(&sky2_driver);

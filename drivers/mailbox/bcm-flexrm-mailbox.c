@@ -1669,7 +1669,7 @@ skip_debugfs:
 	if (ret)
 		goto fail_free_debugfs_root;
 
-	dev_info(dev, "registered flexrm mailbox with %d channels\n",
+	dev_dbg(dev, "registered flexrm mailbox with %d channels\n",
 			mbox->controller.num_chans);
 
 	return 0;

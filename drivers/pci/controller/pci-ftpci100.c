@@ -408,7 +408,7 @@ static int faraday_pci_parse_map_dma_ranges(struct faraday_pci *p,
 			return -EINVAL;
 		}
 
-		dev_info(dev, "DMA MEM%d BASE: 0x%016llx -> 0x%016llx config %08x\n",
+		dev_dbg(dev, "DMA MEM%d BASE: 0x%016llx -> 0x%016llx config %08x\n",
 			 i + 1, range.pci_addr, end, val);
 		if (i <= 2) {
 			faraday_raw_pci_write_config(p, 0, 0, confreg[i],
@@ -547,13 +547,13 @@ static int faraday_pci_probe(struct platform_device *pdev)
 		rate = clk_get_rate(p->bus_clk);
 
 		if ((rate == 33000000) && (val & PCI_STATUS_66MHZ_CAPABLE)) {
-			dev_info(dev, "33MHz bus is 66MHz capable\n");
+			dev_dbg(dev, "33MHz bus is 66MHz capable\n");
 			max_bus_speed = PCI_SPEED_66MHz;
 			ret = clk_set_rate(p->bus_clk, 66000000);
 			if (ret)
 				dev_err(dev, "failed to set bus clock\n");
 		} else {
-			dev_info(dev, "33MHz only bus\n");
+			dev_dbg(dev, "33MHz only bus\n");
 			max_bus_speed = PCI_SPEED_33MHz;
 		}
 

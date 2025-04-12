@@ -2150,7 +2150,7 @@ static int xennet_connect(struct net_device *dev)
 	struct netfront_queue *queue = NULL;
 
 	if (!xenbus_read_unsigned(np->xbdev->otherend, "feature-rx-copy", 0)) {
-		dev_info(&dev->dev,
+		dev_dbg(&dev->dev,
 			 "backend does not support copying receive path\n");
 		return -ENODEV;
 	}
@@ -2159,7 +2159,7 @@ static int xennet_connect(struct net_device *dev)
 	if (err)
 		return err;
 	if (np->bounce)
-		dev_info(&np->xbdev->dev,
+		dev_dbg(&np->xbdev->dev,
 			 "bouncing transmitted data to zeroed pages\n");
 
 	/* talk_to_netback() sets the correct number of queues */
@@ -2418,7 +2418,7 @@ static int __init netif_init(void)
 	if (!xen_has_pv_nic_devices())
 		return -ENODEV;
 
-	pr_info("Initialising Xen virtual ethernet driver\n");
+	pr_debug("Initialising Xen virtual ethernet driver\n");
 
 	/* Allow as many queues as there are CPUs inut max. 8 if user has not
 	 * specified a value.

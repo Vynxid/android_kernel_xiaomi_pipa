@@ -351,7 +351,7 @@ static int aop_qmp_clk_probe(struct platform_device *pdev)
 		goto fail;
 	}
 
-	dev_info(&pdev->dev, "Registered clocks with AOP\n");
+	dev_dbg(&pdev->dev, "Registered clocks with AOP\n");
 
 	if (of_property_read_bool(np, "qcom,clk-stop-bimc-log"))
 		atomic_notifier_chain_register(&panic_notifier_list,

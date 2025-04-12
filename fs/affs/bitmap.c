@@ -254,7 +254,7 @@ int affs_init_bitmap(struct super_block *sb, int *flags)
 		return 0;
 
 	if (!AFFS_ROOT_TAIL(sb, sbi->s_root_bh)->bm_flag) {
-		pr_notice("Bitmap invalid - mounting %s read only\n", sb->s_id);
+		pr_debug("Bitmap invalid - mounting %s read only\n", sb->s_id);
 		*flags |= SB_RDONLY;
 		return 0;
 	}

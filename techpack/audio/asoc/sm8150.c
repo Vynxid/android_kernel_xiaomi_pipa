@@ -6865,7 +6865,7 @@ static int msm_init_wsa_dev(struct platform_device *pdev,
 	ret = of_property_read_u32(pdev->dev.of_node,
 				   "qcom,wsa-max-devs", &wsa_max_devs);
 	if (ret) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "%s: wsa-max-devs property missing in DT %s, ret = %d\n",
 			 __func__, pdev->dev.of_node->full_name, ret);
 		card->num_aux_devs = 0;
@@ -6962,7 +6962,7 @@ static int msm_init_wsa_dev(struct platform_device *pdev,
 			__func__, wsa_max_devs, found);
 		return -EPROBE_DEFER;
 	}
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"%s: found %d wsa881x devices registered with ALSA core\n",
 		__func__, found);
 
@@ -7130,7 +7130,7 @@ static int msm_asoc_machine_probe(struct platform_device *pdev)
 			ret);
 		goto err;
 	}
-	dev_info(&pdev->dev, "Sound card %s registered\n", card->name);
+	dev_dbg(&pdev->dev, "Sound card %s registered\n", card->name);
 	spdev = pdev;
 
 	INIT_WORK(&pdata->adsp_power_up_work, msm_adsp_power_up_config_work);

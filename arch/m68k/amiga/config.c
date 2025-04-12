@@ -187,7 +187,7 @@ int __init amiga_parse_bootinfo(const struct bi_record *record)
 			    dev->rom.er_Product == ZORRO_PROD(ZORRO_PROD_CSLAB_WARP_1260)) {
 
 				/* turn off all interrupts */
-				pr_info("Warp 1260 card detected: applying interrupt storm workaround\n");
+				pr_debug("Warp 1260 card detected: applying interrupt storm workaround\n");
 				*(uint32_t *)(dev->boardaddr + 0x1000) = 0xfff;
 			}
 		} else
@@ -217,7 +217,7 @@ static void __init amiga_identify(void)
 
 	memset(&amiga_hw_present, 0, sizeof(amiga_hw_present));
 
-	pr_info("Amiga hardware found: ");
+	pr_debug("Amiga hardware found: ");
 	if (amiga_model >= AMI_500 && amiga_model <= AMI_DRACO) {
 		pr_cont("[%s] ", amiga_models[amiga_model-AMI_500]);
 		strcat(amiga_model_name, amiga_models[amiga_model-AMI_500]);
@@ -443,7 +443,7 @@ void __init config_amiga(void)
 			}
 		}
 		if (disabled_z2mem)
-			pr_info("%dK of Zorro II memory will not be used as system memory\n",
+			pr_debug("%dK of Zorro II memory will not be used as system memory\n",
 				disabled_z2mem>>10);
 	}
 

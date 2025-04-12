@@ -915,7 +915,7 @@ static int rsnd_ssi_fallback(struct rsnd_mod *mod,
 	 */
 	mod->ops = &rsnd_ssi_pio_ops;
 
-	dev_info(dev, "%s[%d] fallback to PIO mode\n",
+	dev_dbg(dev, "%s[%d] fallback to PIO mode\n",
 		 rsnd_mod_name(mod), rsnd_mod_id(mod));
 
 	return 0;

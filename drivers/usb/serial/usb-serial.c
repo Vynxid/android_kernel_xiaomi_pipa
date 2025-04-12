@@ -929,7 +929,7 @@ static int usb_serial_probe(struct usb_interface *interface,
 	serial->num_interrupt_out = epds->num_interrupt_out;
 
 	/* found all that we need */
-	dev_info(ddev, "%s converter detected\n", type->description);
+	dev_dbg(ddev, "%s converter detected\n", type->description);
 
 	/* create our ports, we need as many as the max endpoints */
 	/* we don't use num_ports here because some devices have more
@@ -1085,7 +1085,7 @@ static void usb_serial_disconnect(struct usb_interface *interface)
 
 	/* let the last holder of this object cause it to be cleaned up */
 	usb_serial_put(serial);
-	dev_info(dev, "device disconnected\n");
+	dev_dbg(dev, "device disconnected\n");
 }
 
 int usb_serial_suspend(struct usb_interface *intf, pm_message_t message)
@@ -1308,7 +1308,7 @@ static int usb_serial_register(struct usb_serial_driver *driver)
 		pr_err("problem %d when registering driver %s\n", retval, driver->description);
 		list_del(&driver->driver_list);
 	} else {
-		pr_info("USB Serial support registered for %s\n", driver->description);
+		pr_debug("USB Serial support registered for %s\n", driver->description);
 	}
 	mutex_unlock(&table_lock);
 	return retval;
@@ -1316,7 +1316,7 @@ static int usb_serial_register(struct usb_serial_driver *driver)
 
 static void usb_serial_deregister(struct usb_serial_driver *device)
 {
-	pr_info("USB Serial deregistering driver %s\n", device->description);
+	pr_debug("USB Serial deregistering driver %s\n", device->description);
 
 	mutex_lock(&table_lock);
 	list_del(&device->driver_list);

@@ -1156,7 +1156,7 @@ static int emac_dev_setmac_addr(struct net_device *ndev, void *addr)
 	}
 
 	if (netif_msg_drv(priv))
-		dev_notice(emac_dev, "DaVinci EMAC: emac_dev_setmac_addr %pM\n",
+		dev_dbg(emac_dev, "DaVinci EMAC: emac_dev_setmac_addr %pM\n",
 					priv->mac_addr);
 
 	return 0;
@@ -1540,7 +1540,7 @@ static int emac_dev_open(struct net_device *ndev)
 
 	if (!phydev) {
 		/* No PHY , fix the link, speed and duplex settings */
-		dev_notice(emac_dev, "no phy, defaulting to 100/full\n");
+		dev_dbg(emac_dev, "no phy, defaulting to 100/full\n");
 		priv->link = 1;
 		priv->speed = SPEED_100;
 		priv->duplex = DUPLEX_FULL;
@@ -1548,7 +1548,7 @@ static int emac_dev_open(struct net_device *ndev)
 	}
 
 	if (netif_msg_drv(priv))
-		dev_notice(emac_dev, "DaVinci EMAC: Opened %s\n", ndev->name);
+		dev_dbg(emac_dev, "DaVinci EMAC: Opened %s\n", ndev->name);
 
 	if (phydev)
 		phy_start(phydev);
@@ -1613,7 +1613,7 @@ static int emac_dev_stop(struct net_device *ndev)
 	}
 
 	if (netif_msg_drv(priv))
-		dev_notice(emac_dev, "DaVinci EMAC: %s stopped\n", ndev->name);
+		dev_dbg(emac_dev, "DaVinci EMAC: %s stopped\n", ndev->name);
 
 	pm_runtime_put(&priv->pdev->dev);
 	return 0;
@@ -1955,7 +1955,7 @@ static int davinci_emac_probe(struct platform_device *pdev)
 
 
 	if (netif_msg_probe(priv)) {
-		dev_notice(&pdev->dev, "DaVinci EMAC Probe found device "
+		dev_dbg(&pdev->dev, "DaVinci EMAC Probe found device "
 			   "(regs: %pa, irq: %d)\n",
 			   &priv->emac_base_phys, ndev->irq);
 	}
@@ -1993,7 +1993,7 @@ static int davinci_emac_remove(struct platform_device *pdev)
 	struct emac_priv *priv = netdev_priv(ndev);
 	struct device_node *np = pdev->dev.of_node;
 
-	dev_notice(&ndev->dev, "DaVinci EMAC: davinci_emac_remove()\n");
+	dev_dbg(&ndev->dev, "DaVinci EMAC: davinci_emac_remove()\n");
 
 	if (priv->txchan)
 		cpdma_chan_destroy(priv->txchan);

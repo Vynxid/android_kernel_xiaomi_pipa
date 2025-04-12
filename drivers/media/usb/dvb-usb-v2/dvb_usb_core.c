@@ -52,7 +52,7 @@ static int dvb_usbv2_download_firmware(struct dvb_usb_device *d,
 		goto err;
 	}
 
-	dev_info(&d->udev->dev, "%s: downloading firmware from file '%s'\n",
+	dev_dbg(&d->udev->dev, "%s: downloading firmware from file '%s'\n",
 			KBUILD_MODNAME, name);
 
 	ret = d->props->download_firmware(d, fw);
@@ -178,7 +178,7 @@ static int dvb_usbv2_remote_init(struct dvb_usb_device *d)
 		/* initialize a work queue for handling polling */
 		INIT_DELAYED_WORK(&d->rc_query_work,
 				dvb_usb_read_remote_control);
-		dev_info(&d->udev->dev,
+		dev_dbg(&d->udev->dev,
 				"%s: schedule remote query interval to %d msecs\n",
 				KBUILD_MODNAME, d->rc.interval);
 		schedule_delayed_work(&d->rc_query_work,
@@ -412,7 +412,7 @@ static int dvb_usbv2_media_device_init(struct dvb_usb_adapter *adap)
 
 	dvb_register_media_controller(&adap->dvb_adap, mdev);
 
-	dev_info(&d->udev->dev, "media controller created\n");
+	dev_dbg(&d->udev->dev, "media controller created\n");
 #endif
 	return 0;
 }
@@ -471,7 +471,7 @@ static int dvb_usbv2_adapter_dvb_init(struct dvb_usb_adapter *adap)
 		if (ret < 0)
 			goto err_dvb_dmx_init;
 
-		dev_info(&d->udev->dev, "%s: MAC address: %pM\n",
+		dev_dbg(&d->udev->dev, "%s: MAC address: %pM\n",
 				KBUILD_MODNAME, adap->dvb_adap.proposed_mac);
 	}
 
@@ -783,14 +783,14 @@ static int dvb_usbv2_adapter_init(struct dvb_usb_device *d)
 		} else if ((d->udev->speed == USB_SPEED_FULL &&
 				adap->props->caps & DVB_USB_ADAP_HAS_PID_FILTER) ||
 				(adap->props->caps & DVB_USB_ADAP_NEED_PID_FILTERING)) {
-			dev_info(&d->udev->dev,
+			dev_dbg(&d->udev->dev,
 					"%s: will use the device's hardware PID filter (table count: %d)\n",
 					KBUILD_MODNAME,
 					adap->props->pid_filter_count);
 			adap->pid_filtering  = 1;
 			adap->max_feed_count = adap->props->pid_filter_count;
 		} else {
-			dev_info(&d->udev->dev,
+			dev_dbg(&d->udev->dev,
 					"%s: will pass the complete MPEG2 transport stream to the software demuxer\n",
 					KBUILD_MODNAME);
 			adap->pid_filtering  = 0;
@@ -799,7 +799,7 @@ static int dvb_usbv2_adapter_init(struct dvb_usb_device *d)
 
 		if (!adap->pid_filtering && dvb_usb_force_pid_filter_usage &&
 				adap->props->caps & DVB_USB_ADAP_HAS_PID_FILTER) {
-			dev_info(&d->udev->dev,
+			dev_dbg(&d->udev->dev,
 					"%s: PID filter enabled by module option\n",
 					KBUILD_MODNAME);
 			adap->pid_filtering  = 1;
@@ -960,7 +960,7 @@ int dvb_usbv2_probe(struct usb_interface *intf,
 		if (ret == 0) {
 			;
 		} else if (ret == COLD) {
-			dev_info(&d->udev->dev,
+			dev_dbg(&d->udev->dev,
 					"%s: found a '%s' in cold state\n",
 					KBUILD_MODNAME, d->name);
 
@@ -989,14 +989,14 @@ int dvb_usbv2_probe(struct usb_interface *intf,
 		}
 	}
 
-	dev_info(&d->udev->dev, "%s: found a '%s' in warm state\n",
+	dev_dbg(&d->udev->dev, "%s: found a '%s' in warm state\n",
 			KBUILD_MODNAME, d->name);
 
 	ret = dvb_usbv2_init(d);
 	if (ret < 0)
 		goto err_free_all;
 
-	dev_info(&d->udev->dev,
+	dev_dbg(&d->udev->dev,
 			"%s: '%s' successfully initialized and connected\n",
 			KBUILD_MODNAME, d->name);
 exit:
@@ -1037,7 +1037,7 @@ void dvb_usbv2_disconnect(struct usb_interface *intf)
 	kfree(d->priv);
 	kfree(d);
 
-	pr_info("%s: '%s:%s' successfully deinitialized and disconnected\n",
+	pr_debug("%s: '%s:%s' successfully deinitialized and disconnected\n",
 		KBUILD_MODNAME, drvname, devname);
 	kfree(devname);
 }

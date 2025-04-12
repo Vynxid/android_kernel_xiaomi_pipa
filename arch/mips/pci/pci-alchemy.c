@@ -436,7 +436,7 @@ static int alchemy_pci_probe(struct platform_device *pdev)
 		val |= PCI_CONFIG_NC;
 		__raw_writel(val, ctx->regs + PCI_REG_CONFIG);
 		wmb();
-		dev_info(&pdev->dev, "non-coherent PCI on Au1500 AA/AB/AC\n");
+		dev_dbg(&pdev->dev, "non-coherent PCI on Au1500 AA/AB/AC\n");
 	}
 
 	if (pd->board_map_irq)
@@ -482,7 +482,7 @@ static int alchemy_pci_probe(struct platform_device *pdev)
 	register_syscore_ops(&alchemy_pci_pmops);
 	register_pci_controller(&ctx->alchemy_pci_ctrl);
 
-	dev_info(&pdev->dev, "PCI controller at %ld MHz\n",
+	dev_dbg(&pdev->dev, "PCI controller at %ld MHz\n",
 		 clk_get_rate(c) / 1000000);
 
 	return 0;

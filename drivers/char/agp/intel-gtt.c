@@ -194,7 +194,7 @@ static int i810_setup(void)
 
 	if ((readl(intel_private.registers+I810_DRAM_CTL)
 		& I810_DRAM_ROW_0) == I810_DRAM_ROW_0_SDRAM) {
-		dev_info(&intel_private.pcidev->dev,
+		dev_dbg(&intel_private.pcidev->dev,
 			 "detected 4MB dedicated video ram\n");
 		intel_private.num_dcache_entries = 1024;
 	}
@@ -419,10 +419,10 @@ static resource_size_t intel_gtt_stolen_size(void)
 	}
 
 	if (stolen_size > 0) {
-		dev_info(&intel_private.bridge_dev->dev, "detected %lluK %s memory\n",
+		dev_dbg(&intel_private.bridge_dev->dev, "detected %lluK %s memory\n",
 		       (u64)stolen_size / KB(1), local ? "local" : "stolen");
 	} else {
-		dev_info(&intel_private.bridge_dev->dev,
+		dev_dbg(&intel_private.bridge_dev->dev,
 		       "no pre-allocated video memory detected\n");
 		stolen_size = 0;
 	}
@@ -494,7 +494,7 @@ static unsigned int i965_gtt_total_entries(void)
 		size = KB(1024 + 512);
 		break;
 	default:
-		dev_info(&intel_private.pcidev->dev,
+		dev_dbg(&intel_private.pcidev->dev,
 			 "unknown page table size, assuming 512KB\n");
 		size = KB(512);
 	}
@@ -621,7 +621,7 @@ static int intel_gtt_init(void)
 	if (HAS_PGTBL_EN)
 		intel_private.PGETBL_save |= I810_PGETBL_ENABLED;
 
-	dev_info(&intel_private.bridge_dev->dev,
+	dev_dbg(&intel_private.bridge_dev->dev,
 			"detected gtt size: %dK total, %dK mappable\n",
 			intel_private.gtt_total_entries * 4,
 			intel_private.gtt_mappable_entries * 4);
@@ -1407,7 +1407,7 @@ int intel_gmch_probe(struct pci_dev *bridge_pdev, struct pci_dev *gpu_pdev,
 
 	intel_private.bridge_dev = pci_dev_get(bridge_pdev);
 
-	dev_info(&bridge_pdev->dev, "Intel %s Chipset\n", intel_gtt_chipsets[i].name);
+	dev_dbg(&bridge_pdev->dev, "Intel %s Chipset\n", intel_gtt_chipsets[i].name);
 
 	mask = intel_private.driver->dma_mask_size;
 	if (pci_set_dma_mask(intel_private.pcidev, DMA_BIT_MASK(mask)))

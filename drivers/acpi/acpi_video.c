@@ -1751,7 +1751,7 @@ static int acpi_video_resume(struct notifier_block *nb,
 
 	video = container_of(nb, struct acpi_video_bus, pm_nb);
 
-	dev_info(&video->device->dev, "Restoring backlight state\n");
+	dev_dbg(&video->device->dev, "Restoring backlight state\n");
 
 	for (i = 0; i < video->attached_count; i++) {
 		video_device = video->attached_array[i].bind_info;
@@ -1849,7 +1849,7 @@ static void acpi_video_dev_register_backlight(struct acpi_video_device *device)
 		return;
 	}
 
-	dev_info(&device->dev->dev, "registered as cooling_device%d\n",
+	dev_dbg(&device->dev->dev, "registered as cooling_device%d\n",
 		 device->cooling_dev->id);
 	result = sysfs_create_link(&device->dev->dev.kobj,
 			&device->cooling_dev->device.kobj,

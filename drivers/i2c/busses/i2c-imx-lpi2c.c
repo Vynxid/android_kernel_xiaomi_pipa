@@ -621,7 +621,7 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
 	pm_runtime_mark_last_busy(&pdev->dev);
 	pm_runtime_put_autosuspend(&pdev->dev);
 
-	dev_info(&lpi2c_imx->adapter.dev, "LPI2C adapter registered\n");
+	dev_dbg(&lpi2c_imx->adapter.dev, "LPI2C adapter registered\n");
 
 	return 0;
 

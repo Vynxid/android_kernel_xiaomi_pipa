@@ -192,7 +192,7 @@ static void mtk_gmac_sgmii_hw_setup(struct mtk_eth *eth, int mac_id)
 		val |= !mac_id ? SYSCFG0_SGMII_GMAC1 : SYSCFG0_SGMII_GMAC2;
 		regmap_write(eth->ethsys, ETHSYS_SYSCFG0, val);
 
-		dev_info(eth->dev, "setup shared sgmii for gmac=%d\n",
+		dev_dbg(eth->dev, "setup shared sgmii for gmac=%d\n",
 			 mac_id);
 	}
 
@@ -202,7 +202,7 @@ static void mtk_gmac_sgmii_hw_setup(struct mtk_eth *eth, int mac_id)
 	if (MTK_HAS_CAPS(eth->soc->caps, MTK_GMAC1_ESW | MTK_GMAC1_SGMII) &&
 	    !mac_id) {
 		mtk_w32(eth, 0, MTK_MAC_MISC);
-		dev_info(eth->dev, "setup gmac1 going through sgmii");
+		dev_dbg(eth->dev, "setup gmac1 going through sgmii");
 	}
 }
 
@@ -290,7 +290,7 @@ static int mtk_phy_connect_node(struct mtk_eth *eth, struct mtk_mac *mac,
 		return -ENODEV;
 	}
 
-	dev_info(eth->dev,
+	dev_dbg(eth->dev,
 		 "connected mac %d to PHY at %s [uid=%08x, driver=%s]\n",
 		 mac->id, phydev_name(phydev), phydev->phy_id,
 		 phydev->drv->name);
@@ -1172,7 +1172,7 @@ static int mtk_napi_tx(struct napi_struct *napi, int budget)
 	if (unlikely(netif_msg_intr(eth))) {
 		status = mtk_r32(eth, MTK_QMTK_INT_STATUS);
 		mask = mtk_r32(eth, MTK_QDMA_INT_MASK);
-		dev_info(eth->dev,
+		dev_dbg(eth->dev,
 			 "done tx %d, intr 0x%08x/0x%x\n",
 			 tx_done, status, mask);
 	}
@@ -1206,7 +1206,7 @@ poll_again:
 	if (unlikely(netif_msg_intr(eth))) {
 		status = mtk_r32(eth, MTK_PDMA_INT_STATUS);
 		mask = mtk_r32(eth, MTK_PDMA_INT_MASK);
-		dev_info(eth->dev,
+		dev_dbg(eth->dev,
 			 "done rx %d, intr 0x%08x/0x%x\n",
 			 rx_done, status, mask);
 	}

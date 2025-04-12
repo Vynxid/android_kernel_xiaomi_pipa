@@ -28,7 +28,7 @@
 /*
  * find which device holds a particular offset
  */
-static inline struct dev_info *which_dev(struct mddev *mddev, sector_t sector)
+static inline struct dev_dbg *which_dev(struct mddev *mddev, sector_t sector)
 {
 	int lo, mid, hi;
 	struct linear_conf *conf;
@@ -96,7 +96,7 @@ static struct linear_conf *linear_conf(struct mddev *mddev, int raid_disks)
 	int i, cnt;
 	bool discard_supported = false;
 
-	conf = kzalloc (sizeof (*conf) + raid_disks*sizeof(struct dev_info),
+	conf = kzalloc (sizeof (*conf) + raid_disks*sizeof(struct dev_dbg),
 			GFP_KERNEL);
 	if (!conf)
 		return NULL;
@@ -106,7 +106,7 @@ static struct linear_conf *linear_conf(struct mddev *mddev, int raid_disks)
 
 	rdev_for_each(rdev, mddev) {
 		int j = rdev->raid_disk;
-		struct dev_info *disk = conf->disks + j;
+		struct dev_dbg *disk = conf->disks + j;
 		sector_t sectors;
 
 		if (j < 0 || j >= raid_disks || disk->rdev) {
@@ -248,7 +248,7 @@ static void linear_free(struct mddev *mddev, void *priv)
 static bool linear_make_request(struct mddev *mddev, struct bio *bio)
 {
 	char b[BDEVNAME_SIZE];
-	struct dev_info *tmp_dev;
+	struct dev_dbg *tmp_dev;
 	sector_t start_sector, end_sector, data_offset;
 	sector_t bio_sector = bio->bi_iter.bi_sector;
 

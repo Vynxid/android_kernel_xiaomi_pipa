@@ -107,7 +107,7 @@
 	dev_warn(&(usb_dev)->dev , "[Ueagle-atm] " format, ##args)
 
 #define uea_info(usb_dev, format, args...) \
-	dev_info(&(usb_dev)->dev , "[ueagle-atm] " format, ##args)
+	dev_dbg(&(usb_dev)->dev , "[ueagle-atm] " format, ##args)
 
 struct intr_pkt;
 

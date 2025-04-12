@@ -133,7 +133,7 @@ static void klp_complete_transition(void)
 			klp_post_unpatch_callback(obj);
 	}
 
-	pr_notice("'%s': %s complete\n", klp_transition_patch->mod->name,
+	pr_debug("'%s': %s complete\n", klp_transition_patch->mod->name,
 		  klp_target_state == KLP_PATCHED ? "patching" : "unpatching");
 
 	/*
@@ -421,7 +421,7 @@ void klp_start_transition(void)
 
 	WARN_ON_ONCE(klp_target_state == KLP_UNDEFINED);
 
-	pr_notice("'%s': starting %s transition\n",
+	pr_debug("'%s': starting %s transition\n",
 		  klp_transition_patch->mod->name,
 		  klp_target_state == KLP_PATCHED ? "patching" : "unpatching");
 
@@ -591,7 +591,7 @@ void klp_send_signals(void)
 {
 	struct task_struct *g, *task;
 
-	pr_notice("signaling remaining tasks\n");
+	pr_debug("signaling remaining tasks\n");
 
 	read_lock(&tasklist_lock);
 	for_each_process_thread(g, task) {

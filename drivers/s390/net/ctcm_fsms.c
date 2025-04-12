@@ -195,7 +195,7 @@ void ctcm_ccw_check_rc(struct channel *ch, int rc, char *msg)
 		CTCM_FUNTAIL, ch->id, msg, rc);
 	switch (rc) {
 	case -EBUSY:
-		pr_info("%s: The communication peer is busy\n",
+		pr_debug("%s: The communication peer is busy\n",
 			ch->id);
 		fsm_event(ch->fsm, CTC_EVENT_IO_EBUSY, ch);
 		break;
@@ -2123,7 +2123,7 @@ static void dev_action_restart(fsm_instance *fi, int event, void *arg)
 	} else {
 		restart_timer = CTCM_TIME_5_SEC;
 	}
-	dev_info(&dev->dev, "Restarting device\n");
+	dev_dbg(&dev->dev, "Restarting device\n");
 
 	dev_action_stop(fi, event, arg);
 	fsm_event(priv->fsm, DEV_EVENT_STOP, dev);
@@ -2165,7 +2165,7 @@ static void dev_action_chup(fsm_instance *fi, int event, void *arg)
 	case DEV_STATE_STARTWAIT_RX:
 		if (event == DEV_EVENT_RXUP) {
 			fsm_newstate(fi, DEV_STATE_RUNNING);
-			dev_info(&dev->dev,
+			dev_dbg(&dev->dev,
 				"Connected with remote side\n");
 			ctcm_clear_busy(dev);
 		}
@@ -2173,7 +2173,7 @@ static void dev_action_chup(fsm_instance *fi, int event, void *arg)
 	case DEV_STATE_STARTWAIT_TX:
 		if (event == DEV_EVENT_TXUP) {
 			fsm_newstate(fi, DEV_STATE_RUNNING);
-			dev_info(&dev->dev,
+			dev_dbg(&dev->dev,
 				"Connected with remote side\n");
 			ctcm_clear_busy(dev);
 		}

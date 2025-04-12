@@ -198,7 +198,7 @@ static int ps2mult_connect(struct serio *serio, struct serio_driver *drv)
 	for (i = 0; i <  PS2MULT_NUM_PORTS; i++) {
 		struct serio *s = psm->ports[i].serio;
 
-		dev_info(&serio->dev, "%s port at %s\n", s->name, serio->phys);
+		dev_dbg(&serio->dev, "%s port at %s\n", s->name, serio->phys);
 		serio_register_port(s);
 	}
 

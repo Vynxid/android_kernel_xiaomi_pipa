@@ -633,7 +633,7 @@ static irqreturn_t arm_smmu_cf_selftest(int irq, void *cb_base)
 	irq_count++;
 	if (irq_data)
 		hwirq = irq_data->hwirq;
-	pr_info("Interrupt (irq:%d hwirq:%ld) received, fsr:0x%x\n",
+	pr_debug("Interrupt (irq:%d hwirq:%ld) received, fsr:0x%x\n",
 				irq, hwirq, fsr);
 
 	writel_relaxed(fsr, cb_base + ARM_SMMU_CB_FSR);
@@ -688,7 +688,7 @@ static void arm_smmu_interrupt_selftest(struct arm_smmu_device *smmu)
 		reg = reg_orig | SCTLR_CFIE | SCTLR_CFRE;
 
 		writel_relaxed(reg, cb_base + ARM_SMMU_CB_SCTLR);
-		dev_info(smmu->dev, "Testing cntx %d irq %d\n", cb, irq);
+		dev_dbg(smmu->dev, "Testing cntx %d irq %d\n", cb, irq);
 
 		/* Make sure ARM_SMMU_CB_SCTLR is configured */
 		wmb();
@@ -703,9 +703,9 @@ static void arm_smmu_interrupt_selftest(struct arm_smmu_device *smmu)
 		devm_free_irq(smmu->dev, irq, cb_base);
 	}
 
-	dev_info(smmu->dev,
+	dev_dbg(smmu->dev,
 			"Interrupt selftest completed...\n");
-	dev_info(smmu->dev,
+	dev_dbg(smmu->dev,
 			"Tested %d contexts, received %d interrupts\n",
 			cb_count, irq_count);
 	WARN_ON(cb_count != irq_count);
@@ -766,7 +766,7 @@ static int of_iommu_do_atos(struct device *dev, struct sme_pair *sme,
 
 		smr = &sme->smrs[i];
 		if (!smr->valid) {
-			dev_info(dev, "Can't run atos smr idx %d\n", i);
+			dev_dbg(dev, "Can't run atos smr idx %d\n", i);
 			continue;
 		}
 
@@ -899,14 +899,14 @@ static int get_atos_selftest_sids(struct arm_smmu_device *smmu,
 				case QCOM_SMMUV500:
 					tbu = qsmmuv500_find_tbu(smmu,
 							selftest_smrs[i].id);
-					dev_info(tbu->dev, "idx = %d valid: %d, sid : 0x%x, mask: 0x%x\n",
+					dev_dbg(tbu->dev, "idx = %d valid: %d, sid : 0x%x, mask: 0x%x\n",
 							idx,
 							selftest_smrs[i].valid,
 							selftest_smrs[i].id,
 							selftest_smrs[i].mask);
 					break;
 				case QCOM_SMMUV2:
-					dev_info(smmu->dev, "idx = %d valid: %d, sid : 0x%x, mask: 0x%x\n",
+					dev_dbg(smmu->dev, "idx = %d valid: %d, sid : 0x%x, mask: 0x%x\n",
 							idx,
 							selftest_smrs[i].valid,
 							selftest_smrs[i].id,
@@ -942,7 +942,7 @@ static void arm_smmu_atos_selftest(struct arm_smmu_device *smmu)
 	if (!selftest)
 		return;
 
-	dev_notice(smmu_dev, "ATOS Self test started\n");
+	dev_dbg(smmu_dev, "ATOS Self test started\n");
 	ret = get_atos_selftest_sids(smmu, &sme);
 	if (ret <= 0) {
 		dev_err(smmu_dev, "ATOS Self test failed ret %d!!\n", ret);
@@ -965,7 +965,7 @@ static void arm_smmu_atos_selftest(struct arm_smmu_device *smmu)
 	selftest_running = true;
 	of_iommu_do_atos(atos_dev, &sme, &iommu_spec);
 	selftest_running = false;
-	dev_notice(smmu_dev, "ATOS Self test complete\n");
+	dev_dbg(smmu_dev, "ATOS Self test complete\n");
 	kfree(sme.smrs);
 	of_node_put(iommu_spec.np);
 	platform_device_unregister(pdev);
@@ -5213,7 +5213,7 @@ static int register_regulator_notifier(struct arm_smmu_device *smmu)
 	consumers = pwr->gdscs;
 
 	if (!num_consumers) {
-		dev_info(dev, "no regulator info exist for %s\n",
+		dev_dbg(dev, "no regulator info exist for %s\n",
 			 dev_name(dev));
 		goto out;
 	}
@@ -5254,7 +5254,7 @@ static int arm_smmu_init_regulators(struct arm_smmu_power_resources *pwr)
 	if (!of_property_read_u32(dev->of_node,
 				  "qcom,deferred-regulator-disable-delay",
 				  &(pwr->regulator_defer)))
-		dev_info(dev, "regulator defer delay %d\n",
+		dev_dbg(dev, "regulator defer delay %d\n",
 			pwr->regulator_defer);
 
 	i = 0;
@@ -5391,10 +5391,10 @@ static int arm_smmu_device_cfg_probe(struct arm_smmu_device *smmu)
 	 */
 	cttw_reg = !!(id & ID0_CTTW);
 	if (cttw_fw || cttw_reg)
-		dev_notice(smmu->dev, "\t%scoherent table walk\n",
+		dev_dbg(smmu->dev, "\t%scoherent table walk\n",
 			   cttw_fw ? "" : "non-");
 	if (cttw_fw != cttw_reg)
-		dev_notice(smmu->dev,
+		dev_dbg(smmu->dev,
 			   "\t(IDR0.CTTW overridden by FW configuration)\n");
 
 	/* Max. number of entries we have for stream matching/indexing */
@@ -5421,7 +5421,7 @@ static int arm_smmu_device_cfg_probe(struct arm_smmu_device *smmu)
 		if (!smmu->smrs)
 			return -ENOMEM;
 
-		dev_notice(smmu->dev,
+		dev_dbg(smmu->dev,
 			   "\tstream matching with %lu register groups", size);
 	}
 	/* s2cr->type == 0 means translation, so initialise explicitly */
@@ -5475,7 +5475,7 @@ static int arm_smmu_device_cfg_probe(struct arm_smmu_device *smmu)
 			atomic_add_return(smmu->num_context_banks,
 					  &cavium_smmu_context_count);
 		smmu->cavium_id_base -= smmu->num_context_banks;
-		dev_notice(smmu->dev, "\tenabling workaround for Cavium erratum 27704\n");
+		dev_dbg(smmu->dev, "\tenabling workaround for Cavium erratum 27704\n");
 	}
 	smmu->cbs = devm_kcalloc(smmu->dev, smmu->num_context_banks,
 				 sizeof(*smmu->cbs), GFP_KERNEL);
@@ -5699,7 +5699,7 @@ static int arm_smmu_device_dt_probe(struct platform_device *pdev)
 	legacy_binding = of_find_property(dev->of_node, "mmu-masters", NULL);
 	if (legacy_binding && !using_generic_binding) {
 		if (!using_legacy_binding)
-			pr_notice("deprecated \"mmu-masters\" DT property in use; DMA API support unavailable\n");
+			pr_debug("deprecated \"mmu-masters\" DT property in use; DMA API support unavailable\n");
 		using_legacy_binding = true;
 	} else if (!legacy_binding && !using_legacy_binding) {
 		using_generic_binding = true;
@@ -6037,7 +6037,7 @@ static int qsmmuv500_tbu_halt(struct qsmmuv500_tbu_device *tbu,
 
 	if (of_property_read_bool(tbu->dev->of_node,
 						"qcom,opt-out-tbu-halting")) {
-		dev_notice(tbu->dev, "TBU opted-out for halting!\n");
+		dev_dbg(tbu->dev, "TBU opted-out for halting!\n");
 		return -EBUSY;
 	}
 
@@ -7052,18 +7052,18 @@ static irqreturn_t arm_smmu_debug_capture_bus_match(int irq, void *dev)
 	arm_smmu_power_off(tbu->pwr);
 	arm_smmu_power_off(smmu->pwr);
 
-	dev_info(tbu->dev, "TNX_TCR_CNTL : 0x%0llx\n", val);
+	dev_dbg(tbu->dev, "TNX_TCR_CNTL : 0x%0llx\n", val);
 
 	for (i = 0; i < NO_OF_MASK_AND_MATCH; ++i) {
-		dev_info(tbu->dev,
+		dev_dbg(tbu->dev,
 				"Mask_%d : 0x%0llx\n", i+1, mask[i]);
-		dev_info(tbu->dev,
+		dev_dbg(tbu->dev,
 				"Match_%d : 0x%0llx\n", i+1, match[i]);
 	}
 
 	for (i = 0; i < NO_OF_CAPTURE_POINTS ; ++i) {
 		for (j = 0; j < REGS_PER_CAPTURE_POINT; ++j) {
-			dev_info(tbu->dev,
+			dev_dbg(tbu->dev,
 					"Capture_%d_Snapshot_%d : 0x%0llx\n",
 					i+1, j+1, snapshot[i][j]);
 		}

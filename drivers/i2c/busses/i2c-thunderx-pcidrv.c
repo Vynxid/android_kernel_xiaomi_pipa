@@ -217,11 +217,11 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
 	if (ret)
 		goto error;
 
-	dev_info(i2c->dev, "Probed. Set system clock to %u\n", i2c->sys_freq);
+	dev_dbg(i2c->dev, "Probed. Set system clock to %u\n", i2c->sys_freq);
 
 	ret = thunder_i2c_smbus_setup(i2c, pdev->dev.of_node);
 	if (ret)
-		dev_info(dev, "SMBUS alert not active on this bus\n");
+		dev_dbg(dev, "SMBUS alert not active on this bus\n");
 
 	return 0;
 

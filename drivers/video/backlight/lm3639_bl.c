@@ -107,7 +107,7 @@ static int lm3639_bled_update_status(struct backlight_device *bl)
 		goto out;
 
 	if (reg_val != 0)
-		dev_info(pchip->dev, "last flag is 0x%x\n", reg_val);
+		dev_dbg(pchip->dev, "last flag is 0x%x\n", reg_val);
 
 	/* pwm control */
 	if (pdata->pin_pwm) {
@@ -233,7 +233,7 @@ static void lm3639_torch_brightness_set(struct led_classdev *cdev,
 	if (ret < 0)
 		goto out;
 	if (reg_val != 0)
-		dev_info(pchip->dev, "last flag is 0x%x\n", reg_val);
+		dev_dbg(pchip->dev, "last flag is 0x%x\n", reg_val);
 
 	/* brightness 0 means off state */
 	if (!brightness) {
@@ -270,7 +270,7 @@ static void lm3639_flash_brightness_set(struct led_classdev *cdev,
 	if (ret < 0)
 		goto out;
 	if (reg_val != 0)
-		dev_info(pchip->dev, "last flag is 0x%x\n", reg_val);
+		dev_dbg(pchip->dev, "last flag is 0x%x\n", reg_val);
 
 	/* torch off before flash control */
 	ret = regmap_update_bits(pchip->regmap, REG_ENABLE, 0x06, 0x00);

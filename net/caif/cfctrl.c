@@ -34,15 +34,15 @@ static void cfctrl_ctrlcmd(struct cflayer *layr, enum caif_ctrlcmd ctrl,
 
 struct cflayer *cfctrl_create(void)
 {
-	struct dev_info dev_info;
+	struct dev_dbg dev_dbg;
 	struct cfctrl *this =
 		kzalloc(sizeof(struct cfctrl), GFP_ATOMIC);
 	if (!this)
 		return NULL;
 	caif_assert(offsetof(struct cfctrl, serv.layer) == 0);
-	memset(&dev_info, 0, sizeof(dev_info));
-	dev_info.id = 0xff;
-	cfsrvl_init(&this->serv, 0, &dev_info, false);
+	memset(&dev_dbg, 0, sizeof(dev_dbg));
+	dev_dbg.id = 0xff;
+	cfsrvl_init(&this->serv, 0, &dev_dbg, false);
 	atomic_set(&this->req_seq_no, 1);
 	atomic_set(&this->rsp_seq_no, 1);
 	this->serv.layer.receive = cfctrl_recv;
@@ -170,7 +170,7 @@ static void init_info(struct caif_payload_info *info, struct cfctrl *cfctrl)
 {
 	info->hdr_len = 0;
 	info->channel_id = cfctrl->serv.layer.id;
-	info->dev_info = &cfctrl->serv.dev_info;
+	info->dev_dbg = &cfctrl->serv.dev_dbg;
 }
 
 void cfctrl_enum_req(struct cflayer *layer, u8 physlinkid)
@@ -188,8 +188,8 @@ void cfctrl_enum_req(struct cflayer *layer, u8 physlinkid)
 		return;
 	caif_assert(offsetof(struct cfctrl, serv.layer) == 0);
 	init_info(cfpkt_info(pkt), cfctrl);
-	cfpkt_info(pkt)->dev_info->id = physlinkid;
-	cfctrl->serv.dev_info.id = physlinkid;
+	cfpkt_info(pkt)->dev_dbg->id = physlinkid;
+	cfctrl->serv.dev_dbg.id = physlinkid;
 	cfpkt_addbdy(pkt, CFCTRL_CMD_ENUM);
 	cfpkt_addbdy(pkt, physlinkid);
 	cfpkt_set_prio(pkt, TC_PRIO_CONTROL);
@@ -288,7 +288,7 @@ int cfctrl_linkup_request(struct cflayer *layer,
 	 *	device as the payload. Otherwise old queued up payload
 	 *	might arrive with the newly allocated channel ID.
 	 */
-	cfpkt_info(pkt)->dev_info->id = param->phyid;
+	cfpkt_info(pkt)->dev_dbg->id = param->phyid;
 	cfpkt_set_prio(pkt, TC_PRIO_CONTROL);
 	ret =
 	    dn->transmit(dn, pkt);

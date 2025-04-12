@@ -6237,7 +6237,7 @@ static int msm_audrx_init(struct snd_soc_pcm_runtime *rtd)
 					    134, 135, 136, 137, 138, 139,
 					    140, 141, 142, 143};
 
-	pr_info("%s: dev_name:%s\n", __func__, dev_name(cpu_dai->dev));
+	pr_debug("%s: dev_name:%s\n", __func__, dev_name(cpu_dai->dev));
 
 	rtd->pmdown_time = 0;
 
@@ -10076,7 +10076,7 @@ static int msm_init_wsa_dev(struct platform_device *pdev,
 	ret = of_property_read_u32(pdev->dev.of_node,
 				   "qcom,wsa-max-devs", &wsa_max_devs);
 	if (ret) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			 "%s: wsa-max-devs property missing in DT %s, ret = %d\n",
 			 __func__, pdev->dev.of_node->full_name, ret);
 		card->num_aux_devs = 0;
@@ -10173,7 +10173,7 @@ static int msm_init_wsa_dev(struct platform_device *pdev,
 			__func__, wsa_max_devs, found);
 		return -EPROBE_DEFER;
 	}
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"%s: found %d wsa881x devices registered with ALSA core\n",
 		__func__, found);
 
@@ -10272,7 +10272,7 @@ static int msm_init_csra_dev(struct platform_device *pdev,
 	ret = of_property_read_u32(pdev->dev.of_node,
 		"qcom,csra-max-devs", &csra_max_devs);
 	if (ret) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"%s: csra-max-devs property missing in DT %s, ret = %d\n",
 			__func__, pdev->dev.of_node->full_name, ret);
 		card->num_aux_devs = 0;
@@ -10368,7 +10368,7 @@ static int msm_init_csra_dev(struct platform_device *pdev,
 			__func__, csra_max_devs, found);
 		return -EPROBE_DEFER;
 	}
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		"%s: found %d csra66x0 devices registered with ALSA core\n",
 		__func__, found);
 
@@ -10599,21 +10599,21 @@ static int msm_detect_ep92_dev(struct platform_device *pdev,
 	rc = of_property_read_u32(pdev->dev.of_node, "qcom,ep92-busnum",
 				  &ep92_busnum);
 	if (rc) {
-		dev_info(&pdev->dev, "%s: No DT match ep92-reg\n", __func__);
+		dev_dbg(&pdev->dev, "%s: No DT match ep92-reg\n", __func__);
 		return 0;
 	}
 
 	rc = of_property_read_u32(pdev->dev.of_node, "qcom,ep92-reg",
 				  &ep92_reg);
 	if (rc) {
-		dev_info(&pdev->dev, "%s: No DT match ep92-busnum\n", __func__);
+		dev_dbg(&pdev->dev, "%s: No DT match ep92-busnum\n", __func__);
 		return 0;
 	}
 
 	rc = of_property_read_string(pdev->dev.of_node, "qcom,ep92-name",
 				     &ep92_name);
 	if (rc) {
-		dev_info(&pdev->dev, "%s: No DT match ep92-name\n", __func__);
+		dev_dbg(&pdev->dev, "%s: No DT match ep92-name\n", __func__);
 		return 0;
 	}
 
@@ -10622,14 +10622,14 @@ static int msm_detect_ep92_dev(struct platform_device *pdev,
 		/* check a second time after a short delay */
 		msleep(20);
 		if (msm_scan_i2c_addr(pdev, ep92_busnum, ep92_reg) < 0) {
-			dev_info(&pdev->dev, "%s: No ep92 device found\n",
+			dev_dbg(&pdev->dev, "%s: No ep92 device found\n",
 				__func__);
 			/* continue with snd_card registration without ep92 */
 			return 0;
 		}
 	}
 
-	dev_info(&pdev->dev, "%s: ep92 device found\n", __func__);
+	dev_dbg(&pdev->dev, "%s: ep92 device found\n", __func__);
 
 	/* update codec info in MI2S dai link */
 	dai = &msm_mi2s_be_dai_links[0];
@@ -10891,7 +10891,7 @@ static int msm_asoc_machine_probe(struct platform_device *pdev)
 
 	ret = of_property_read_u32(pdev->dev.of_node, "qcom,csra-codec", &val);
 	if (ret) {
-		dev_info(&pdev->dev, "no 'qcom,csra-codec' in DT\n");
+		dev_dbg(&pdev->dev, "no 'qcom,csra-codec' in DT\n");
 		val = 0;
 	}
 	if (val) {
@@ -10981,7 +10981,7 @@ static int msm_asoc_machine_probe(struct platform_device *pdev)
 			ret);
 		goto err;
 	}
-	dev_info(&pdev->dev, "Sound card %s registered\n", card->name);
+	dev_dbg(&pdev->dev, "Sound card %s registered\n", card->name);
 	spdev = pdev;
 
 	ret = msm_mdf_mem_init();

@@ -1850,7 +1850,7 @@ aiptek_probe(struct usb_interface *intf, const struct usb_device_id *id)
 		aiptek->curSetting.programmableDelay = speeds[i];
 		(void)aiptek_program_tablet(aiptek);
 		if (input_abs_get_max(aiptek->inputdev, ABS_X) > 0) {
-			dev_info(&intf->dev,
+			dev_dbg(&intf->dev,
 				 "Aiptek using %d ms programming speed\n",
 				 aiptek->curSetting.programmableDelay);
 			break;
@@ -1860,7 +1860,7 @@ aiptek_probe(struct usb_interface *intf, const struct usb_device_id *id)
 	/* Murphy says that some day someone will have a tablet that fails the
 	   above test. That's you, Frederic Rodrigo */
 	if (i == ARRAY_SIZE(speeds)) {
-		dev_info(&intf->dev,
+		dev_dbg(&intf->dev,
 			 "Aiptek tried all speeds, no sane response\n");
 		err = -EINVAL;
 		goto fail3;

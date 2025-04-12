@@ -191,7 +191,7 @@ static int btqcomsmd_probe(struct platform_device *pdev)
 	 */
 	if (!of_property_read_u8_array(pdev->dev.of_node, "local-bd-address",
 				       (u8 *)&btq->bdaddr, sizeof(bdaddr_t))) {
-		dev_info(&pdev->dev, "BD address %pMR retrieved from device-tree",
+		dev_dbg(&pdev->dev, "BD address %pMR retrieved from device-tree",
 			 &btq->bdaddr);
 	}
 

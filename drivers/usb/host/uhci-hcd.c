@@ -829,11 +829,11 @@ static int uhci_count_ports(struct usb_hcd *hcd)
 			break;
 	}
 	if (debug)
-		dev_info(uhci_dev(uhci), "detected %d ports\n", port);
+		dev_dbg(uhci_dev(uhci), "detected %d ports\n", port);
 
 	/* Anything greater than 7 is weird so we'll ignore it. */
 	if (port > UHCI_RH_MAXCHILD) {
-		dev_info(uhci_dev(uhci),
+		dev_dbg(uhci_dev(uhci),
 			"port count misdetected? forcing to 2 ports\n");
 		port = 2;
 	}

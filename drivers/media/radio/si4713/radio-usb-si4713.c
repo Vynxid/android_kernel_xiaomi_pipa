@@ -419,7 +419,7 @@ static int usb_si4713_probe(struct usb_interface *intf,
 	struct v4l2_subdev *sd;
 	int retval = -ENOMEM;
 
-	dev_info(&intf->dev, "Si4713 development board discovered: (%04X:%04X)\n",
+	dev_dbg(&intf->dev, "Si4713 development board discovered: (%04X:%04X)\n",
 			id->idVendor, id->idProduct);
 
 	/* Initialize local device structure */
@@ -484,7 +484,7 @@ static int usb_si4713_probe(struct usb_interface *intf,
 		goto del_adapter;
 	}
 
-	dev_info(&intf->dev, "V4L2 device registered as %s\n",
+	dev_dbg(&intf->dev, "V4L2 device registered as %s\n",
 			video_device_node_name(&radio->vdev));
 
 	return 0;
@@ -503,7 +503,7 @@ static void usb_si4713_disconnect(struct usb_interface *intf)
 {
 	struct si4713_usb_device *radio = to_si4713_dev(usb_get_intfdata(intf));
 
-	dev_info(&intf->dev, "Si4713 development board now disconnected\n");
+	dev_dbg(&intf->dev, "Si4713 development board now disconnected\n");
 
 	mutex_lock(&radio->lock);
 	usb_set_intfdata(intf, NULL);

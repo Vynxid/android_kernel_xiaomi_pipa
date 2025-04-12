@@ -28,7 +28,7 @@
 
 static void print_fixup_info(const struct pci_dev *pdev)
 {
-	dev_info(&pdev->dev, "Device %x:%x, irq %d\n",
+	dev_dbg(&pdev->dev, "Device %x:%x, irq %d\n",
 			pdev->vendor, pdev->device, pdev->irq);
 }
 
@@ -57,7 +57,7 @@ static void pci_fixup_radeon(struct pci_dev *pdev)
 	res->flags = IORESOURCE_MEM | IORESOURCE_ROM_SHADOW |
 		     IORESOURCE_PCI_FIXED;
 
-	dev_info(&pdev->dev, "BAR %d: assigned %pR for Radeon ROM\n",
+	dev_dbg(&pdev->dev, "BAR %d: assigned %pR for Radeon ROM\n",
 		 PCI_ROM_RESOURCE, res);
 }
 

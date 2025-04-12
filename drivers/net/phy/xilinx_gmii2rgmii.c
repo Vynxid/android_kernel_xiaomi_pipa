@@ -85,12 +85,12 @@ static int xgmiitorgmii_probe(struct mdio_device *mdiodev)
 	priv->phy_dev = of_phy_find_device(phy_node);
 	of_node_put(phy_node);
 	if (!priv->phy_dev) {
-		dev_info(dev, "Couldn't find phydev\n");
+		dev_dbg(dev, "Couldn't find phydev\n");
 		return -EPROBE_DEFER;
 	}
 
 	if (!priv->phy_dev->drv) {
-		dev_info(dev, "Attached phy not ready\n");
+		dev_dbg(dev, "Attached phy not ready\n");
 		put_device(&priv->phy_dev->mdio.dev);
 		return -EPROBE_DEFER;
 	}

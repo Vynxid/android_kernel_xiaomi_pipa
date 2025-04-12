@@ -203,7 +203,7 @@ static int __init weim_probe(struct platform_device *pdev)
 	if (ret)
 		clk_disable_unprepare(clk);
 	else
-		dev_info(&pdev->dev, "Driver registered.\n");
+		dev_dbg(&pdev->dev, "Driver registered.\n");
 
 	return ret;
 }

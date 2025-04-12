@@ -3585,7 +3585,7 @@ static int cyz_load_fw(struct pci_dev *pdev, void __iomem *base_addr,
 			dev_err(&pdev->dev, "Board not started in 20 seconds! "
 					"Giving up. (fid->signature = 0x%x)\n",
 					status);
-			dev_info(&pdev->dev, "*** Warning ***: if you are "
+			dev_dbg(&pdev->dev, "*** Warning ***: if you are "
 				"upgrading the FW, please power cycle the "
 				"system before loading the new FW to the "
 				"Cyclades-Z.\n");
@@ -3606,7 +3606,7 @@ static int cyz_load_fw(struct pci_dev *pdev, void __iomem *base_addr,
 			base_addr + readl(&fid->zfwctrl_addr));
 
 	nchan = readl(&pt_zfwctrl->board_ctrl.n_channel);
-	dev_info(&pdev->dev, "Cyclades-Z FW loaded: version = %x, ports = %u\n",
+	dev_dbg(&pdev->dev, "Cyclades-Z FW loaded: version = %x, ports = %u\n",
 		readl(&pt_zfwctrl->board_ctrl.fw_version), nchan);
 
 	if (nchan == 0) {
@@ -3617,7 +3617,7 @@ static int cyz_load_fw(struct pci_dev *pdev, void __iomem *base_addr,
 		if (__cyz_fpga_loaded(ctl_addr))
 			plx_init(pdev, irq, ctl_addr);
 
-		dev_info(&pdev->dev, "Null number of ports detected. Board "
+		dev_dbg(&pdev->dev, "Null number of ports detected. Board "
 				"reset.\n");
 		retval = 0;
 		goto err;
@@ -3746,7 +3746,7 @@ static int cy_pci_probe(struct pci_dev *pdev,
 #ifdef CY_PCI_DEBUG
 			if (mailbox == ZO_V1) {
 				cy_writel(&ctl_addr->loc_addr_base, WIN_CREG);
-				dev_info(&pdev->dev, "Cyclades-8Zo/PCI: FPGA "
+				dev_dbg(&pdev->dev, "Cyclades-8Zo/PCI: FPGA "
 					"id %lx, ver %lx\n", (ulong)(0xff &
 					readl(&((struct CUSTOM_REG *)addr2)->
 						fpga_id)), (ulong)(0xff &
@@ -3754,7 +3754,7 @@ static int cy_pci_probe(struct pci_dev *pdev,
 						fpga_version)));
 				cy_writel(&ctl_addr->loc_addr_base, WIN_RAM);
 			} else {
-				dev_info(&pdev->dev, "Cyclades-Z/PCI: New "
+				dev_dbg(&pdev->dev, "Cyclades-Z/PCI: New "
 					"Cyclades-Z board.  FPGA not loaded\n");
 			}
 #endif
@@ -3858,7 +3858,7 @@ static int cy_pci_probe(struct pci_dev *pdev,
 		}
 	}
 
-	dev_info(&pdev->dev, "%s/PCI #%d found: %d channels starting from "
+	dev_dbg(&pdev->dev, "%s/PCI #%d found: %d channels starting from "
 		"port %d.\n", card_name, card_no + 1, nchan, cy_next_channel);
 	for (j = 0, i = cy_next_channel; i < cy_next_channel + nchan; i++, j++)
 		tty_port_register_device(&card->ports[j].port,

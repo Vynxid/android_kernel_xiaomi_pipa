@@ -2500,7 +2500,7 @@ static int cs43130_i2c_probe(struct i2c_client *client,
 		goto err;
 	}
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "Cirrus Logic CS43130 (%x), Revision: %02X\n", devid,
 		 reg & 0xFF);
 

@@ -510,7 +510,7 @@ int radeon_wb_init(struct radeon_device *rdev)
 		rdev->wb.use_event = true;
 	}
 
-	dev_info(rdev->dev, "WB %sabled\n", rdev->wb.enabled ? "en" : "dis");
+	dev_dbg(rdev->dev, "WB %sabled\n", rdev->wb.enabled ? "en" : "dis");
 
 	return 0;
 }
@@ -575,7 +575,7 @@ void radeon_vram_location(struct radeon_device *rdev, struct radeon_mc *mc, u64 
 	mc->vram_end = mc->vram_start + mc->mc_vram_size - 1;
 	if (limit && limit < mc->real_vram_size)
 		mc->real_vram_size = limit;
-	dev_info(rdev->dev, "VRAM: %lluM 0x%016llX - 0x%016llX (%lluM used)\n",
+	dev_dbg(rdev->dev, "VRAM: %lluM 0x%016llX - 0x%016llX (%lluM used)\n",
 			mc->mc_vram_size >> 20, mc->vram_start,
 			mc->vram_end, mc->real_vram_size >> 20);
 }
@@ -612,7 +612,7 @@ void radeon_gtt_location(struct radeon_device *rdev, struct radeon_mc *mc)
 		mc->gtt_start = (mc->vram_end + 1 + mc->gtt_base_align) & ~mc->gtt_base_align;
 	}
 	mc->gtt_end = mc->gtt_start + mc->gtt_size - 1;
-	dev_info(rdev->dev, "GTT: %lluM 0x%016llX - 0x%016llX\n",
+	dev_dbg(rdev->dev, "GTT: %lluM 0x%016llX - 0x%016llX\n",
 			mc->gtt_size >> 20, mc->gtt_start, mc->gtt_end);
 }
 
@@ -1222,7 +1222,7 @@ static void radeon_switcheroo_set_state(struct pci_dev *pdev, enum vga_switchero
 		return;
 
 	if (state == VGA_SWITCHEROO_ON) {
-		pr_info("radeon: switched on\n");
+		pr_debug("radeon: switched on\n");
 		/* don't suspend or resume card normally */
 		dev->switch_power_state = DRM_SWITCH_POWER_CHANGING;
 
@@ -1231,7 +1231,7 @@ static void radeon_switcheroo_set_state(struct pci_dev *pdev, enum vga_switchero
 		dev->switch_power_state = DRM_SWITCH_POWER_ON;
 		drm_kms_helper_poll_enable(dev);
 	} else {
-		pr_info("radeon: switched off\n");
+		pr_debug("radeon: switched off\n");
 		drm_kms_helper_poll_disable(dev);
 		dev->switch_power_state = DRM_SWITCH_POWER_CHANGING;
 		radeon_suspend_kms(dev, true, true, false);
@@ -1813,14 +1813,14 @@ int radeon_gpu_reset(struct radeon_device *rdev)
 						   &ring_data[i]);
 		if (ring_sizes[i]) {
 			saved = true;
-			dev_info(rdev->dev, "Saved %d dwords of commands "
+			dev_dbg(rdev->dev, "Saved %d dwords of commands "
 				 "on ring %d.\n", ring_sizes[i], i);
 		}
 	}
 
 	r = radeon_asic_reset(rdev);
 	if (!r) {
-		dev_info(rdev->dev, "GPU reset succeeded, trying to resume\n");
+		dev_dbg(rdev->dev, "GPU reset succeeded, trying to resume\n");
 		radeon_resume(rdev);
 	}
 
@@ -1882,7 +1882,7 @@ int radeon_gpu_reset(struct radeon_device *rdev)
 			r = -EAGAIN;
 	} else {
 		/* bad news, how to tell it to userspace ? */
-		dev_info(rdev->dev, "GPU reset failed\n");
+		dev_dbg(rdev->dev, "GPU reset failed\n");
 	}
 
 	rdev->needs_reset = r == -EAGAIN;

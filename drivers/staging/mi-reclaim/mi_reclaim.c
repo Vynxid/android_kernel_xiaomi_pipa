@@ -169,7 +169,7 @@ static inline void do_reclaim(void)
 			available = si_mem_available();
 			si_meminfo(&i);
 			si_swapinfo(&i);
-			pr_info("reclaim: reclaim_type=%d real_reclaim=%lu freeram=%llu freeswap=%llu"
+			pr_debug("reclaim: reclaim_type=%d real_reclaim=%lu freeram=%llu freeswap=%llu"
 				" MemAvailable=%ld nr_inactive_anon_pages=%lu nr_active_anon_pages=%lu"
 				" reclaim_ratio_contiguous_low_count %d",
 				reclaim_type, real_reclaim, KB(i.freeram), KB(i.freeswap),
@@ -202,7 +202,7 @@ end_reclaim:
 	pg_mi_reclaim->need_reclaim = false;
 	spin_unlock(&pg_mi_reclaim->page_reclaim.reclaim_lock);
 	if (pg_mi_reclaim->debug)
-		pr_info("reclaim event_type %d nr_cached %ld spent_time %llu ns"
+		pr_debug("reclaim event_type %d nr_cached %ld spent_time %llu ns"
 			" nr_want_reclaim_pages %lu reclaim_pages %llu"
 			" once_reclaim_time_up %lu\n",
 			event_type, nr_cached, spent_time,
@@ -570,7 +570,7 @@ static int __init mi_reclaim_init(void)
 		return RET_FAIL;
 
 	pg_mi_reclaim->switch_on = true;
-	pr_info("mi_reclaim init ok\n");
+	pr_debug("mi_reclaim init ok\n");
 	return RET_OK;
 
 failed_to_create_sysfs:

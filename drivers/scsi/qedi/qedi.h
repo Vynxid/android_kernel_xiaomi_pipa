@@ -54,7 +54,7 @@ struct qedi_endpoint;
 /* MAX Length for cached SGL */
 #define MAX_SGLEN_FOR_CACHESGL	((1U << 16) - 1)
 
-#define MIN_NUM_CPUS_MSIX(x)	min_t(u32, x->dev_info.num_cqs, \
+#define MIN_NUM_CPUS_MSIX(x)	min_t(u32, x->dev_dbg.num_cqs, \
 					num_online_cpus())
 
 #define QEDI_LOCAL_PORT_MIN     60000
@@ -269,7 +269,7 @@ struct qedi_ctx {
 	struct Scsi_Host *shost;
 	struct pci_dev *pdev;
 	struct qed_dev *cdev;
-	struct qed_dev_iscsi_info dev_info;
+	struct qed_dev_iscsi_info dev_dbg;
 	struct qed_int_info int_info;
 	struct qedi_glbl_q_params *p_cpuq;
 	struct global_queue **global_queues;

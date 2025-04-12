@@ -152,7 +152,7 @@ static int alt_pr_fpga_write_complete(struct fpga_manager *mgr,
 			return -EIO;
 
 		case FPGA_MGR_STATE_OPERATING:
-			dev_info(&mgr->dev,
+			dev_dbg(&mgr->dev,
 				 "successful partial reconfiguration\n");
 			return 0;
 

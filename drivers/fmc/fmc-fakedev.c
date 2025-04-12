@@ -106,7 +106,7 @@ static int ff_reprogram(struct fmc_device *fmc, struct fmc_driver *drv,
 		return 0;
 	}
 
-	dev_info(&fmc->dev, "reprogramming with %s\n", gw);
+	dev_dbg(&fmc->dev, "reprogramming with %s\n", gw);
 	ret = request_firmware(&fw, gw, &fmc->dev);
 	if (ret < 0) {
 		dev_warn(&fmc->dev, "request firmware \"%s\": error %i\n",
@@ -182,7 +182,7 @@ static int ff_eeprom_write(struct fmc_device *fmc, uint32_t offset,
 		return -EINVAL;
 	if (offset + size > FF_EEPROM_SIZE)
 		size = FF_EEPROM_SIZE - offset;
-	dev_info(&fmc->dev, "write_eeprom: offset %i, size %zi\n",
+	dev_dbg(&fmc->dev, "write_eeprom: offset %i, size %zi\n",
 		 (int)offset, size);
 	memcpy(fmc->eeprom + offset, buf, size);
 	schedule_delayed_work(&ff_work, HZ * 2); /* remove, replug, in 2s */
@@ -326,7 +326,7 @@ static int ff_init(void)
 			len = min_t(size_t, fw->size, (size_t)FF_EEPROM_SIZE);
 			memcpy(ff_eeimg[i], fw->data, len);
 			release_firmware(fw);
-			dev_info(&ff->dev, "Mezzanine %i: eeprom \"%s\"\n", i,
+			dev_dbg(&ff->dev, "Mezzanine %i: eeprom \"%s\"\n", i,
 				ff_eeprom[i]);
 		}
 	}

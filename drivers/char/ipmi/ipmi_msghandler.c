@@ -3018,7 +3018,7 @@ static int __ipmi_bmc_register(struct ipmi_smi *intf,
 		list_add_tail(&intf->bmc_link, &bmc->intfs);
 		mutex_unlock(&bmc->dyn_mutex);
 
-		dev_info(intf->si_dev,
+		dev_dbg(intf->si_dev,
 			 "ipmi: interfacing existing BMC (man_id: 0x%6.6x,"
 			 " prod_id: 0x%4.4x, dev_id: 0x%2.2x)\n",
 			 bmc->id.manufacturer_id,
@@ -3067,7 +3067,7 @@ static int __ipmi_bmc_register(struct ipmi_smi *intf,
 			goto out_list_del;
 		}
 
-		dev_info(intf->si_dev,
+		dev_dbg(intf->si_dev,
 			 "Found new BMC (man_id: 0x%6.6x, prod_id: 0x%4.4x, dev_id: 0x%2.2x)\n",
 			 bmc->id.manufacturer_id,
 			 bmc->id.product_id,
@@ -5188,7 +5188,7 @@ static int __init ipmi_init_msghandler_mod(void)
 {
 	int rv;
 
-	pr_info("version " IPMI_DRIVER_VERSION "\n");
+	pr_debug("version " IPMI_DRIVER_VERSION "\n");
 
 	mutex_lock(&ipmi_interfaces_mutex);
 	rv = ipmi_register_driver();

@@ -236,7 +236,7 @@ static int lmp91000_read_config(struct lmp91000_data *data)
 	ret = of_property_read_u32(np, "ti,rload-ohm", &val);
 	if (ret) {
 		val = 100;
-		dev_info(dev, "no ti,rload-ohm defined, default to %d\n", val);
+		dev_dbg(dev, "no ti,rload-ohm defined, default to %d\n", val);
 	}
 
 	ret = -EINVAL;

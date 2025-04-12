@@ -1501,7 +1501,7 @@ static int sahara_probe(struct platform_device *pdev)
 	if (err)
 		goto err_algs;
 
-	dev_info(&pdev->dev, "SAHARA version %d initialized\n", version);
+	dev_dbg(&pdev->dev, "SAHARA version %d initialized\n", version);
 
 	return 0;
 

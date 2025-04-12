@@ -14,7 +14,7 @@
 #ifdef MPG_DVB_DEBUG_ENABLE
 #define MPQ_DVB_ERR_PRINT(fmt, args...) pr_err(fmt, ## args)
 #define MPQ_DVB_WARN_PRINT(fmt, args...) pr_warn(fmt, ## args)
-#define MPQ_DVB_NOTICE_PRINT(fmt, args...) pr_notice(fmt, ## args)
+#define MPQ_DVB_NOTICE_PRINT(fmt, args...) pr_debug(fmt, ## args)
 #define MPQ_DVB_DBG_PRINT(fmt, args...) pr_debug(fmt, ## args)
 #else  /* MPG_DVB_DEBUG_ENABLE */
 #define MPQ_DVB_ERR_PRINT(fmt, args...)

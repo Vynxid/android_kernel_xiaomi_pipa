@@ -229,7 +229,7 @@ static int piix4_setup(struct pci_dev *PIIX4_dev,
 		pci_write_config_byte(PIIX4_dev, SMBHSTCFG, temp & 0xfe);
 		pci_write_config_word(PIIX4_dev, SMBBA, piix4_smba);
 		pci_write_config_byte(PIIX4_dev, SMBHSTCFG, temp | 0x01);
-		dev_info(&PIIX4_dev->dev, "WARNING: SMBus interface set to "
+		dev_dbg(&PIIX4_dev->dev, "WARNING: SMBus interface set to "
 			"new address %04x!\n", piix4_smba);
 	} else if ((temp & 1) == 0) {
 		if (force) {
@@ -243,7 +243,7 @@ static int piix4_setup(struct pci_dev *PIIX4_dev,
 			 */
 			pci_write_config_byte(PIIX4_dev, SMBHSTCFG,
 					      temp | 1);
-			dev_notice(&PIIX4_dev->dev,
+			dev_dbg(&PIIX4_dev->dev,
 				   "WARNING: SMBus interface has been FORCEFULLY ENABLED!\n");
 		} else {
 			dev_err(&PIIX4_dev->dev,
@@ -262,7 +262,7 @@ static int piix4_setup(struct pci_dev *PIIX4_dev,
 			"(or code out of date)!\n");
 
 	pci_read_config_byte(PIIX4_dev, SMBREV, &temp);
-	dev_info(&PIIX4_dev->dev,
+	dev_dbg(&PIIX4_dev->dev,
 		 "SMBus Host Controller at 0x%x, revision %d\n",
 		 piix4_smba, temp);
 
@@ -335,7 +335,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
 
 	/* Aux SMBus does not support IRQ information */
 	if (aux) {
-		dev_info(&PIIX4_dev->dev,
+		dev_dbg(&PIIX4_dev->dev,
 			 "Auxiliary SMBus Host Controller at 0x%x\n",
 			 piix4_smba);
 		return piix4_smba;
@@ -356,7 +356,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
 	else
 		dev_dbg(&PIIX4_dev->dev, "Using SMI# for SMBus\n");
 
-	dev_info(&PIIX4_dev->dev,
+	dev_dbg(&PIIX4_dev->dev,
 		 "SMBus Host Controller at 0x%x, revision %d\n",
 		 piix4_smba, i2ccfg >> 4);
 
@@ -390,7 +390,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
 		release_region(SB800_PIIX4_SMB_IDX, 2);
 	}
 
-	dev_info(&PIIX4_dev->dev,
+	dev_dbg(&PIIX4_dev->dev,
 		 "Using register 0x%02x for SMBus port selection\n",
 		 (unsigned int)piix4_port_sel_sb800);
 
@@ -430,7 +430,7 @@ static int piix4_setup_aux(struct pci_dev *PIIX4_dev,
 		return -EBUSY;
 	}
 
-	dev_info(&PIIX4_dev->dev,
+	dev_dbg(&PIIX4_dev->dev,
 		 "Auxiliary SMBus Host Controller at 0x%x\n",
 		 piix4_smba);
 

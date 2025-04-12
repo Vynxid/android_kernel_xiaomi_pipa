@@ -517,7 +517,7 @@ static int scx200_probe(struct platform_device *pdev)
 	if (!iface)
 		return -EIO;
 
-	dev_info(&pdev->dev, "SCx200 device '%s' registered\n",
+	dev_dbg(&pdev->dev, "SCx200 device '%s' registered\n",
 			iface->adapter.name);
 	platform_set_drvdata(pdev, iface);
 

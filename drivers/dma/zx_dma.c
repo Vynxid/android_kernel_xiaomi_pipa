@@ -749,7 +749,7 @@ static struct dma_chan *zx_of_dma_simple_xlate(struct of_phandle_args *dma_spec,
 	}
 	c = to_zx_chan(chan);
 	c->id = request;
-	dev_info(d->slave.dev, "zx_dma: pchan %u: alloc vchan %p\n",
+	dev_dbg(d->slave.dev, "zx_dma: pchan %u: alloc vchan %p\n",
 		 c->id, &c->vc);
 	return chan;
 }
@@ -870,7 +870,7 @@ static int zx_dma_probe(struct platform_device *op)
 	if (ret)
 		goto of_dma_register_fail;
 
-	dev_info(&op->dev, "initialized\n");
+	dev_dbg(&op->dev, "initialized\n");
 	return 0;
 
 of_dma_register_fail:

@@ -1407,7 +1407,7 @@ static const int *piix_init_sata_map(struct pci_dev *pdev,
 			break;
 		}
 	}
-	dev_info(&pdev->dev, "MAP [%s ]\n", buf);
+	dev_dbg(&pdev->dev, "MAP [%s ]\n", buf);
 
 	if (invalid_map)
 		dev_err(&pdev->dev, "invalid MAP value %u\n", map_value);
@@ -1493,7 +1493,7 @@ static int piix_init_sidpr(struct ata_host *host)
 		piix_sidpr_scr_read(link0, SCR_CONTROL, &scontrol);
 
 		if ((scontrol & 0xf00) != 0x300) {
-			dev_info(host->dev,
+			dev_dbg(host->dev,
 				 "SCR access via SIDPR is available but doesn't work\n");
 			return 0;
 		}
@@ -1543,7 +1543,7 @@ static void piix_iocfg_bit18_quirk(struct ata_host *host)
 	 * affected systems.
 	 */
 	if (hpriv->saved_iocfg & (1 << 18)) {
-		dev_info(&pdev->dev, "applying IOCFG bit18 quirk\n");
+		dev_dbg(&pdev->dev, "applying IOCFG bit18 quirk\n");
 		pci_write_config_dword(pdev, PIIX_IOCFG,
 				       hpriv->saved_iocfg & ~(1 << 18));
 	}
@@ -1634,7 +1634,7 @@ static void piix_ignore_devices_quirk(struct ata_host *host)
 
 	if (ignore && !allow && prefer_ms_hyperv) {
 		host->flags |= ATA_HOST_IGNORE_ATA;
-		dev_info(host->dev, "%s detected, ATA device ignore set\n",
+		dev_dbg(host->dev, "%s detected, ATA device ignore set\n",
 			ignore->ident);
 	}
 #endif
@@ -1676,7 +1676,7 @@ static int piix_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 		piix_port_info[ent->driver_data].flags |=
 				ATA_FLAG_NO_POWEROFF_SPINDOWN |
 					ATA_FLAG_NO_HIBERNATE_SPINDOWN;
-		dev_info(&pdev->dev, "quirky BIOS, skipping spindown "
+		dev_dbg(&pdev->dev, "quirky BIOS, skipping spindown "
 				"on poweroff and hibernation\n");
 	}
 

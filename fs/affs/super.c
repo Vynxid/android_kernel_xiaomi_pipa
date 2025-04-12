@@ -467,7 +467,7 @@ got_root:
 	 */
 	if ((chksum == FS_DCFFS || chksum == MUFS_DCFFS || chksum == FS_DCOFS
 	     || chksum == MUFS_DCOFS) && !sb_rdonly(sb)) {
-		pr_notice("Dircache FS - mounting %s read only\n", sb->s_id);
+		pr_debug("Dircache FS - mounting %s read only\n", sb->s_id);
 		sb->s_flags |= SB_RDONLY;
 	}
 	switch (chksum) {
@@ -509,7 +509,7 @@ got_root:
 
 	if (affs_test_opt(mount_flags, SF_VERBOSE)) {
 		u8 len = AFFS_ROOT_TAIL(sb, root_bh)->disk_name[0];
-		pr_notice("Mounting volume \"%.*s\": Type=%.3s\\%c, Blocksize=%d\n",
+		pr_debug("Mounting volume \"%.*s\": Type=%.3s\\%c, Blocksize=%d\n",
 			len > 31 ? 31 : len,
 			AFFS_ROOT_TAIL(sb, root_bh)->disk_name + 1,
 			sig, sig[3] + '0', blocksize);

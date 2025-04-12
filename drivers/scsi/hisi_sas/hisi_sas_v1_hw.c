@@ -1411,7 +1411,7 @@ static irqreturn_t int_phyup_v1_hw(int irq_no, void *p)
 	sas_phy->oob_mode = SAS_OOB_MODE;
 	memcpy(sas_phy->attached_sas_addr,
 		&id->sas_addr, SAS_ADDR_SIZE);
-	dev_info(dev, "phyup: phy%d link_rate=%d\n",
+	dev_dbg(dev, "phyup: phy%d link_rate=%d\n",
 		 phy_no, link_rate);
 	phy->port_id = port_id;
 	phy->phy_type &= ~(PORT_TYPE_SAS | PORT_TYPE_SATA);

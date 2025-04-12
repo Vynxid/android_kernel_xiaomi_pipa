@@ -594,10 +594,10 @@ static int serial_ir_probe(struct platform_device *dev)
 			msleep(40);
 		}
 		sense = nlow >= nhigh ? 1 : 0;
-		dev_info(&dev->dev, "auto-detected active %s receiver\n",
+		dev_dbg(&dev->dev, "auto-detected active %s receiver\n",
 			 sense ? "low" : "high");
 	} else
-		dev_info(&dev->dev, "Manually using active %s receiver\n",
+		dev_dbg(&dev->dev, "Manually using active %s receiver\n",
 			 sense ? "low" : "high");
 
 	dev_dbg(&dev->dev, "Interrupt %d, port %04x obtained\n", irq, io);

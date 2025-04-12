@@ -250,7 +250,7 @@ static void zfcp_fsf_status_read_handler(struct zfcp_fsf_req *req)
 		zfcp_fc_enqueue_event(adapter, FCH_EVT_LINKDOWN, 0);
 		break;
 	case FSF_STATUS_READ_LINK_UP:
-		dev_info(&adapter->ccw_device->dev,
+		dev_dbg(&adapter->ccw_device->dev,
 			 "The local link has been restored\n");
 		/* All ports should be marked as ready to run again */
 		zfcp_erp_set_adapter_status(adapter,

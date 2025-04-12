@@ -207,7 +207,7 @@ static int as3722_rtc_probe(struct platform_device *pdev)
 	}
 
 	as3722_rtc->alarm_irq = platform_get_irq(pdev, 0);
-	dev_info(&pdev->dev, "RTC interrupt %d\n", as3722_rtc->alarm_irq);
+	dev_dbg(&pdev->dev, "RTC interrupt %d\n", as3722_rtc->alarm_irq);
 
 	ret = devm_request_threaded_irq(&pdev->dev, as3722_rtc->alarm_irq, NULL,
 			as3722_alarm_irq, IRQF_ONESHOT,

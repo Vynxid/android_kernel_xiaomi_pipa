@@ -483,7 +483,7 @@ void inorder_test(void)
 		unsigned int i = 1, j = rounddown_pow_of_two(size - 1);
 
 		if (!(size % 4096))
-			pr_notice("loop %u, %llu per us\n", size,
+			pr_debug("loop %u, %llu per us\n", size,
 			       done / ktime_us_delta(ktime_get(), start));
 
 		while (1) {

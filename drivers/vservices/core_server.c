@@ -537,7 +537,7 @@ static ssize_t server_core_create_service_store(struct device *dev,
 		count--;
 	}
 	if (!count) {
-		dev_info(dev, "empty service name\n");
+		dev_dbg(dev, "empty service name\n");
 		return -EINVAL;
 	}
 	/* discard trailing whitespace */
@@ -545,7 +545,7 @@ static ssize_t server_core_create_service_store(struct device *dev,
 		count--;
 
 	if (count > VSERVICE_CORE_SERVICE_NAME_SIZE) {
-		dev_info(dev, "service name too long (max %d)\n", VSERVICE_CORE_SERVICE_NAME_SIZE);
+		dev_dbg(dev, "service name too long (max %d)\n", VSERVICE_CORE_SERVICE_NAME_SIZE);
 		return -EINVAL;
 	}
 

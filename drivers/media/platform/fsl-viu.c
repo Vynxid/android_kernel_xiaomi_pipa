@@ -1526,7 +1526,7 @@ static int viu_of_probe(struct platform_device *op)
 
 	mutex_unlock(&viu_dev->lock);
 
-	dev_info(&op->dev, "Freescale VIU Video Capture Board\n");
+	dev_dbg(&op->dev, "Freescale VIU Video Capture Board\n");
 	return ret;
 
 err_clk:

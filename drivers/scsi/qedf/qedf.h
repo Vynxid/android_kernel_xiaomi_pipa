@@ -303,7 +303,7 @@ struct qedf_ctx {
 	int vlan_id;
 	u8 prio;
 	struct qed_dev *cdev;
-	struct qed_dev_fcoe_info dev_info;
+	struct qed_dev_fcoe_info dev_dbg;
 	struct qed_int_info int_info;
 	uint16_t last_command;
 	spinlock_t hba_lock;
@@ -538,7 +538,7 @@ struct fip_vlan {
 #define QEDF_WRITE                    (1 << 0)
 #define MAX_FIBRE_LUNS			0xffffffff
 
-#define MIN_NUM_CPUS_MSIX(x)	min_t(u32, x->dev_info.num_cqs, \
+#define MIN_NUM_CPUS_MSIX(x)	min_t(u32, x->dev_dbg.num_cqs, \
 					num_online_cpus())
 
 /*

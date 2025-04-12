@@ -114,7 +114,7 @@ static int __init arm_cpuidle_read_ops(struct device_node *dn, int cpu)
 
 	cpuidle_ops[cpu] = *ops; /* structure copy */
 
-	pr_notice("cpuidle: enable-method property '%s'"
+	pr_debug("cpuidle: enable-method property '%s'"
 		  " found operations\n", enable_method);
 
 	return 0;

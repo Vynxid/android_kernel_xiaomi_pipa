@@ -762,13 +762,13 @@ static int sh_pfc_probe(struct platform_device *pdev)
 		 * PFC state as it is, given that there are already
 		 * extant users of it that have succeeded by this point.
 		 */
-		dev_notice(pfc->dev, "failed to init GPIO chip, ignoring...\n");
+		dev_dbg(pfc->dev, "failed to init GPIO chip, ignoring...\n");
 	}
 #endif
 
 	platform_set_drvdata(pdev, pfc);
 
-	dev_info(pfc->dev, "%s support registered\n", info->name);
+	dev_dbg(pfc->dev, "%s support registered\n", info->name);
 
 	return 0;
 }

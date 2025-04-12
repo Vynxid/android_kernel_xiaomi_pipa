@@ -508,7 +508,7 @@ static void atp_detect_size(struct atp *dev)
 	for (i = dev->info->xsensors; i < ATP_XSENSORS; i++) {
 		if (dev->xy_cur[i]) {
 
-			dev_info(&dev->intf->dev,
+			dev_dbg(&dev->intf->dev,
 				"appletouch: 17\" model detected.\n");
 
 			input_set_abs_params(dev->input, ABS_X, 0,
@@ -834,7 +834,7 @@ static int atp_handle_geyser(struct atp *dev)
 		if (atp_geyser_init(dev))
 			return -EIO;
 
-		dev_info(&dev->intf->dev, "Geyser mode initialized.\n");
+		dev_dbg(&dev->intf->dev, "Geyser mode initialized.\n");
 	}
 
 	return 0;
@@ -966,7 +966,7 @@ static void atp_disconnect(struct usb_interface *iface)
 		usb_free_urb(dev->urb);
 		kfree(dev);
 	}
-	dev_info(&iface->dev, "input: appletouch disconnected\n");
+	dev_dbg(&iface->dev, "input: appletouch disconnected\n");
 }
 
 static int atp_recover(struct atp *dev)

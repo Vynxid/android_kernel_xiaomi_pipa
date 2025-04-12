@@ -259,9 +259,9 @@ static void uwb_dbg_channel_changed(struct uwb_pal *pal, int channel)
 	struct device *dev = &pal->rc->uwb_dev.dev;
 
 	if (channel > 0)
-		dev_info(dev, "debug: channel %d started\n", channel);
+		dev_dbg(dev, "debug: channel %d started\n", channel);
 	else
-		dev_info(dev, "debug: channel stopped\n");
+		dev_dbg(dev, "debug: channel stopped\n");
 }
 
 static void uwb_dbg_new_rsv(struct uwb_pal *pal, struct uwb_rsv *rsv)

@@ -57,7 +57,7 @@ static int pata_of_platform_probe(struct platform_device *ofdev)
 			return -EINVAL;
 		}
 	} else {
-		dev_info(&ofdev->dev, "pio-mode unspecified, assuming PIO0\n");
+		dev_dbg(&ofdev->dev, "pio-mode unspecified, assuming PIO0\n");
 	}
 
 	pio_mask = 1 << pio_mode;

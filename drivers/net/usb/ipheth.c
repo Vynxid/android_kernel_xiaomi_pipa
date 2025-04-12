@@ -558,7 +558,7 @@ static int ipheth_probe(struct usb_interface *intf,
 	// carrier down and transmit queues stopped until packet from device
 	netif_carrier_off(netdev);
 	netif_tx_stop_all_queues(netdev);
-	dev_info(&intf->dev, "Apple iPhone USB Ethernet device attached\n");
+	dev_dbg(&intf->dev, "Apple iPhone USB Ethernet device attached\n");
 	return 0;
 
 err_register_netdev:
@@ -585,7 +585,7 @@ static void ipheth_disconnect(struct usb_interface *intf)
 		free_netdev(dev->net);
 	}
 	usb_set_intfdata(intf, NULL);
-	dev_info(&intf->dev, "Apple iPhone USB Ethernet now disconnected\n");
+	dev_dbg(&intf->dev, "Apple iPhone USB Ethernet now disconnected\n");
 }
 
 static struct usb_driver ipheth_driver = {

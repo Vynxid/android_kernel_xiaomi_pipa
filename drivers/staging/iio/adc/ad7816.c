@@ -414,7 +414,7 @@ static int ad7816_probe(struct spi_device *spi_dev)
 	if (ret)
 		return ret;
 
-	dev_info(&spi_dev->dev, "%s temperature sensor and ADC registered.\n",
+	dev_dbg(&spi_dev->dev, "%s temperature sensor and ADC registered.\n",
 		 indio_dev->name);
 
 	return 0;

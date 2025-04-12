@@ -259,7 +259,7 @@ static int tc589_config(struct pcmcia_device *link)
 	phys_addr = (__be16 *)dev->dev_addr;
 	/* Is this a 3c562? */
 	if (link->manf_id != MANFID_3COM)
-		dev_info(&link->dev, "hmmm, is this really a 3Com card??\n");
+		dev_dbg(&link->dev, "hmmm, is this really a 3Com card??\n");
 	multi = (link->card_id == PRODID_3COM_3C562);
 
 	link->io_lines = 16;

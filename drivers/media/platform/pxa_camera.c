@@ -2154,7 +2154,7 @@ static int pxa_camera_sensor_bound(struct v4l2_async_notifier *notifier,
 	};
 	struct v4l2_mbus_framefmt *mf = &format.format;
 
-	dev_info(pcdev_to_dev(pcdev), "%s(): trying to bind a device\n",
+	dev_dbg(pcdev_to_dev(pcdev), "%s(): trying to bind a device\n",
 		 __func__);
 	mutex_lock(&pcdev->mlock);
 	*vdev = pxa_camera_videodev_template;
@@ -2195,7 +2195,7 @@ static int pxa_camera_sensor_bound(struct v4l2_async_notifier *notifier,
 		goto out_sensor_poweroff;
 
 	v4l2_fill_pix_format(pix, mf);
-	pr_info("%s(): colorspace=0x%x pixfmt=0x%x\n",
+	pr_debug("%s(): colorspace=0x%x pixfmt=0x%x\n",
 		__func__, pix->colorspace, pix->pixelformat);
 
 	err = pxa_camera_init_videobuf2(pcdev);
@@ -2207,7 +2207,7 @@ static int pxa_camera_sensor_bound(struct v4l2_async_notifier *notifier,
 		v4l2_err(v4l2_dev, "register video device failed: %d\n", err);
 		pcdev->sensor = NULL;
 	} else {
-		dev_info(pcdev_to_dev(pcdev),
+		dev_dbg(pcdev_to_dev(pcdev),
 			 "PXA Camera driver attached to camera %s\n",
 			 subdev->name);
 	}
@@ -2226,7 +2226,7 @@ static void pxa_camera_sensor_unbind(struct v4l2_async_notifier *notifier,
 	struct pxa_camera_dev *pcdev = v4l2_dev_to_pcdev(notifier->v4l2_dev);
 
 	mutex_lock(&pcdev->mlock);
-	dev_info(pcdev_to_dev(pcdev),
+	dev_dbg(pcdev_to_dev(pcdev),
 		 "PXA Camera driver detached from camera %s\n",
 		 subdev->name);
 
@@ -2359,7 +2359,7 @@ static int pxa_camera_pdata_from_dt(struct device *dev,
 		asd->match.fwnode = of_fwnode_handle(remote);
 		of_node_put(remote);
 	} else {
-		dev_notice(dev, "no remote for %pOF\n", np);
+		dev_dbg(dev, "no remote for %pOF\n", np);
 	}
 
 out:
@@ -2561,7 +2561,7 @@ static int pxa_camera_remove(struct platform_device *pdev)
 
 	v4l2_device_unregister(&pcdev->v4l2_dev);
 
-	dev_info(&pdev->dev, "PXA Camera driver unloaded\n");
+	dev_dbg(&pdev->dev, "PXA Camera driver unloaded\n");
 
 	return 0;
 }

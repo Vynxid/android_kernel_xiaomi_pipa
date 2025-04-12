@@ -520,7 +520,7 @@ static int af9035_identify_state(struct dvb_usb_device *d, const char **name)
 	if (ret < 0)
 		goto err;
 
-	dev_info(&intf->dev, "prechip_version=%02x chip_version=%02x chip_type=%04x\n",
+	dev_dbg(&intf->dev, "prechip_version=%02x chip_version=%02x chip_type=%04x\n",
 		 state->prechip_version, state->chip_version, state->chip_type);
 
 	if (state->chip_type == 0x9135) {
@@ -587,7 +587,7 @@ static int af9035_identify_state(struct dvb_usb_device *d, const char **name)
 	dev_dbg(&intf->dev, "ts mode=%d dual mode=%d\n", tmp, state->dual_mode);
 
 	if (ts_mode_invalid)
-		dev_info(&intf->dev, "ts mode=%d not supported, defaulting to single tuner mode!", tmp);
+		dev_dbg(&intf->dev, "ts mode=%d not supported, defaulting to single tuner mode!", tmp);
 
 check_firmware_status:
 	ret = af9035_ctrl_msg(d, &req);
@@ -827,7 +827,7 @@ static int af9035_download_firmware(struct dvb_usb_device *d,
 		goto err;
 	}
 
-	dev_info(&intf->dev, "firmware version=%d.%d.%d.%d",
+	dev_dbg(&intf->dev, "firmware version=%d.%d.%d.%d",
 		 rbuf[0], rbuf[1], rbuf[2], rbuf[3]);
 
 	return 0;
@@ -930,7 +930,7 @@ static int af9035_read_config(struct dvb_usb_device *d)
 		}
 
 		if (state->af9033_config[i].tuner != tmp) {
-			dev_info(&intf->dev, "[%d] overriding tuner from %02x to %02x\n",
+			dev_dbg(&intf->dev, "[%d] overriding tuner from %02x to %02x\n",
 				 i, tmp, state->af9033_config[i].tuner);
 		}
 
@@ -969,7 +969,7 @@ static int af9035_read_config(struct dvb_usb_device *d)
 				break;
 			default:
 				state->dual_mode = false;
-				dev_info(&intf->dev, "driver does not support 2nd tuner and will disable it");
+				dev_dbg(&intf->dev, "driver does not support 2nd tuner and will disable it");
 		}
 
 		/* tuner IF frequency */
@@ -1005,7 +1005,7 @@ skip_eeprom:
 		switch (le16_to_cpu(d->udev->descriptor.idProduct)) {
 		case USB_PID_AVERMEDIA_A867:
 		case USB_PID_AVERMEDIA_TWINSTAR:
-			dev_info(&intf->dev,
+			dev_dbg(&intf->dev,
 				 "Device may have issues with I2C read operations. Enabling fix.\n");
 			state->no_read = true;
 			break;

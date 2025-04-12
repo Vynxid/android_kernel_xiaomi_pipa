@@ -275,7 +275,7 @@ static int zx_gpio_probe(struct platform_device *pdev)
 				     irq, zx_irq_handler);
 
 	platform_set_drvdata(pdev, chip);
-	dev_info(dev, "ZX GPIO chip registered\n");
+	dev_dbg(dev, "ZX GPIO chip registered\n");
 
 	return 0;
 }

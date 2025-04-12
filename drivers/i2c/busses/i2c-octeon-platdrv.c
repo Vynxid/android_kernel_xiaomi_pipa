@@ -248,7 +248,7 @@ static int octeon_i2c_probe(struct platform_device *pdev)
 	result = i2c_add_adapter(&i2c->adap);
 	if (result < 0)
 		goto out;
-	dev_info(i2c->dev, "probed\n");
+	dev_dbg(i2c->dev, "probed\n");
 	return 0;
 
 out:

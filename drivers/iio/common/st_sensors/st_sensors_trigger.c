@@ -161,17 +161,17 @@ int st_sensors_allocate_trigger(struct iio_dev *indio_dev,
 				sdata->sensor_settings->drdy_irq.mask_ihl, 1);
 			if (err < 0)
 				goto iio_trigger_free;
-			dev_info(&indio_dev->dev,
+			dev_dbg(&indio_dev->dev,
 				 "interrupts on the falling edge or "
 				 "active low level\n");
 		}
 		break;
 	case IRQF_TRIGGER_RISING:
-		dev_info(&indio_dev->dev,
+		dev_dbg(&indio_dev->dev,
 			 "interrupts on the rising edge\n");
 		break;
 	case IRQF_TRIGGER_HIGH:
-		dev_info(&indio_dev->dev,
+		dev_dbg(&indio_dev->dev,
 			 "interrupts active high level\n");
 		break;
 	default:

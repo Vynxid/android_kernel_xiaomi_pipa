@@ -119,7 +119,7 @@ static int sm_block_markbad(struct mtd_info *mtd, loff_t ofs)
 
 	ret = mtd_write_oob(mtd, ofs, &ops);
 	if (ret < 0 || ops.oobretlen != SM_OOB_SIZE) {
-		pr_notice("sm_common: can't mark sector at %i as bad\n",
+		pr_debug("sm_common: can't mark sector at %i as bad\n",
 			  (int)ofs);
 		return -EIO;
 	}

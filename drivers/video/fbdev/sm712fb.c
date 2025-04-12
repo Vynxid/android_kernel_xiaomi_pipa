@@ -1500,7 +1500,7 @@ static int smtcfb_pci_probe(struct pci_dev *pdev,
 	int err;
 	unsigned long mmio_base;
 
-	dev_info(&pdev->dev, "Silicon Motion display driver.\n");
+	dev_dbg(&pdev->dev, "Silicon Motion display driver.\n");
 
 	err = pci_enable_device(pdev);	/* enable SMTC chip */
 	if (err)
@@ -1541,7 +1541,7 @@ static int smtcfb_pci_probe(struct pci_dev *pdev,
 	pci_read_config_byte(pdev, PCI_REVISION_ID, &sfb->chip_rev_id);
 
 	smem_size = sm7xx_vram_probe(sfb);
-	dev_info(&pdev->dev, "%lu MiB of VRAM detected.\n",
+	dev_dbg(&pdev->dev, "%lu MiB of VRAM detected.\n",
 					smem_size / 1048576);
 
 	switch (sfb->chip_id) {
@@ -1564,7 +1564,7 @@ static int smtcfb_pci_probe(struct pci_dev *pdev,
 		sfb->vp_regs = sfb->lfb + 0x0040c000;
 		if (sfb->fb->var.bits_per_pixel == 32) {
 			sfb->lfb += big_addr;
-			dev_info(&pdev->dev, "sfb->lfb=%p\n", sfb->lfb);
+			dev_dbg(&pdev->dev, "sfb->lfb=%p\n", sfb->lfb);
 		}
 
 		/* set MCLK = 14.31818 * (0x16 / 0x2) */
@@ -1620,7 +1620,7 @@ static int smtcfb_pci_probe(struct pci_dev *pdev,
 	if (err < 0)
 		goto failed;
 
-	dev_info(&pdev->dev,
+	dev_dbg(&pdev->dev,
 		 "Silicon Motion SM%X Rev%X primary display mode %dx%d-%d Init Complete.\n",
 		 sfb->chip_id, sfb->chip_rev_id, sfb->fb->var.xres,
 		 sfb->fb->var.yres, sfb->fb->var.bits_per_pixel);

@@ -511,27 +511,27 @@ static void get_config_work(struct work_struct *work)
 	chip->config_is_read = true;
 
 	for (i = 0; i < MAX_STEP_CHG_ENTRIES; i++)
-		pr_info("step-chg-cfg: %duV(SoC) ~ %duV(SoC), %duA\n",
+		pr_debug("step-chg-cfg: %duV(SoC) ~ %duV(SoC), %duA\n",
 			chip->step_chg_config->fcc_cfg[i].low_threshold,
 			chip->step_chg_config->fcc_cfg[i].high_threshold,
 			chip->step_chg_config->fcc_cfg[i].value);
 	for (i = 0; i < MAX_STEP_CHG_ENTRIES; i++)
-		pr_info("soc-fcc-cfg: %d(Soc)~ %d(Soc), %duA\n",
+		pr_debug("soc-fcc-cfg: %d(Soc)~ %d(Soc), %duA\n",
 			chip->soc_fcc_config->fcc_cfg[i].low_threshold,
 			chip->soc_fcc_config->fcc_cfg[i].high_threshold,
 			chip->soc_fcc_config->fcc_cfg[i].value);
 	for (i = 0; i < MAX_STEP_CHG_ENTRIES; i++)
-		pr_info("jeita-fcc-cfg: %ddecidegree ~ %ddecidegre, %duA\n",
+		pr_debug("jeita-fcc-cfg: %ddecidegree ~ %ddecidegre, %duA\n",
 			chip->jeita_fcc_config->fcc_cfg[i].low_threshold,
 			chip->jeita_fcc_config->fcc_cfg[i].high_threshold,
 			chip->jeita_fcc_config->fcc_cfg[i].value);
 	for (i = 0; i < MAX_STEP_CHG_ENTRIES; i++)
-		pr_info("jeita-fv-cfg: %ddecidegree ~ %ddecidegre, %duV\n",
+		pr_debug("jeita-fv-cfg: %ddecidegree ~ %ddecidegre, %duV\n",
 			chip->jeita_fv_config->fv_cfg[i].low_threshold,
 			chip->jeita_fv_config->fv_cfg[i].high_threshold,
 			chip->jeita_fv_config->fv_cfg[i].value);
 	for (i = 0; i < MAX_STEP_CHG_ENTRIES; i++)
-		pr_info("taper-fcc-tate: %duV ~ %duV, %d\n",
+		pr_debug("taper-fcc-tate: %duV ~ %duV, %d\n",
 			chip->taper_fcc_rate->fcc_cfg[i].low_threshold,
 			chip->taper_fcc_rate->fcc_cfg[i].high_threshold,
 			chip->taper_fcc_rate->fcc_cfg[i].value);
@@ -686,7 +686,7 @@ static void taper_fcc_step_chg(struct step_chg_info *chip, int index,
 			max(chip->step_chg_config->fcc_cfg[index - 1].value,
 			current_fcc - step_ua));
 	}
-	pr_info("cur:%d, target:%d, rate:%d, vol:%d cfg[index-1].value:%d, low:%d, high:%d, hysteresis:%d",
+	pr_debug("cur:%d, target:%d, rate:%d, vol:%d cfg[index-1].value:%d, low:%d, high:%d, hysteresis:%d",
 		current_fcc, target_fcc, rate,
 		current_voltage, chip->step_chg_config->fcc_cfg[index - 1].value,
 		chip->step_chg_config->fcc_cfg[index - 1].low_threshold,
@@ -757,7 +757,7 @@ static int handle_soc_fcc_config(struct step_chg_info *chip)
 	if (fcc_ua)
 		vote(chip->fcc_votable, SOC_FCC_VOTER, true, fcc_ua);
 
-	pr_info("%s = %d SOC-FCC = %duA\n",
+	pr_debug("%s = %d SOC-FCC = %duA\n",
 		chip->soc_fcc_config->param.prop_name, pval.intval,
 		get_client_vote(chip->fcc_votable, SOC_FCC_VOTER));
 
@@ -919,7 +919,7 @@ static int handle_fast_charge_mode(struct step_chg_info *chip, int temp)
 				is_client_vote_enabled(chip->fv_votable, STEP_BMS_CHG_VOTER))
 			vote(chip->fv_votable, STEP_BMS_CHG_VOTER, false, 0);
 
-		pr_info("curr_vbat_uv[%d], fv_max[%d], curr_fcc[%d]\n", curr_vbat_uv, fv_max, curr_fcc);
+		pr_debug("curr_vbat_uv[%d], fv_max[%d], curr_fcc[%d]\n", curr_vbat_uv, fv_max, curr_fcc);
 	}
 
 	if (!ffc_enable && is_client_vote_enabled(chip->fcc_votable, STEP_BMS_CHG_VOTER))
@@ -1038,7 +1038,7 @@ static int handle_jeita(struct step_chg_info *chip)
 	if (chip->jeita_hot_th != -EINVAL && chip->jeita_cold_th != -EINVAL) {
 		if (temp >= chip->jeita_hot_th ||
 				temp <= chip->jeita_cold_th) {
-			pr_info("sw-jeita: temp is :%d, stop charing\n", temp);
+			pr_debug("sw-jeita: temp is :%d, stop charing\n", temp);
 			vote(chip->chg_disable_votable, JEITA_VOTER, true, 0);
 			vote_override(chip->fcc_main_votable, CC_MODE_VOTER, false, 0);
 			vote_override(chip->input_suspend_votable, CC_MODE_VOTER, false, 0);
@@ -1126,7 +1126,7 @@ static int handle_jeita(struct step_chg_info *chip)
 	} else {
 		vote(chip->fcc_votable, JEITA_VOTER, fcc_ua ? true : false, fcc_ua);
 	}
-	pr_info("handle_jeita: temp:%d, fcc_ua:%d\n", temp, fcc_ua);
+	pr_debug("handle_jeita: temp:%d, fcc_ua:%d\n", temp, fcc_ua);
 
 	rc = get_val(chip->jeita_fv_config->fv_cfg,
 			chip->jeita_fv_config->param.hysteresis,
@@ -1183,7 +1183,7 @@ static int handle_jeita(struct step_chg_info *chip)
 		}
 		curr_vbat_uv = pval.intval;
 
-		pr_info("handle_jeita: temp:%d, curr_vbat_uv:%d, cell_vbat_uv:%d fv_uv:%d\n",
+		pr_debug("handle_jeita: temp:%d, curr_vbat_uv:%d, cell_vbat_uv:%d fv_uv:%d\n",
 				temp, curr_vbat_uv, cell_vbat_uv, fv_uv);
 		if ((curr_vbat_uv > fv_uv) && ((cell_vbat_uv > fv_uv)) && (temp >= chip->jeita_warm_th))
 			vote(chip->input_suspend_votable, JEITA_VOTER, true, 0);
@@ -1293,7 +1293,7 @@ static void jeita_taper_workfunc(struct work_struct *work)
 	else
 		target_fcc = chip->jeita_target_fcc;
 
-	pr_info("handle_jeita curr:%d, target:%d\n",
+	pr_debug("handle_jeita curr:%d, target:%d\n",
 			chip->jeita_current_fcc, chip->jeita_target_fcc);
 	chip->jeita_current_fcc = min((chip->jeita_current_fcc + JEITA_TAPER_STEP_MA),
 			target_fcc);

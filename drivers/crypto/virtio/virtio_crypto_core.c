@@ -247,10 +247,10 @@ static int virtcrypto_update_status(struct virtio_crypto *vcrypto)
 
 			return -EPERM;
 		}
-		dev_info(&vcrypto->vdev->dev, "Accelerator device is ready\n");
+		dev_dbg(&vcrypto->vdev->dev, "Accelerator device is ready\n");
 	} else {
 		virtcrypto_dev_stop(vcrypto);
-		dev_info(&vcrypto->vdev->dev, "Accelerator is not ready\n");
+		dev_dbg(&vcrypto->vdev->dev, "Accelerator is not ready\n");
 	}
 
 	return 0;
@@ -391,7 +391,7 @@ static int virtcrypto_probe(struct virtio_device *vdev)
 	vcrypto->aead_algo = aead_algo;
 
 
-	dev_info(&vdev->dev,
+	dev_dbg(&vdev->dev,
 		"max_queues: %u, max_cipher_key_len: %u, max_auth_key_len: %u, max_size 0x%llx\n",
 		vcrypto->max_data_queues,
 		vcrypto->max_cipher_key_len,
@@ -448,7 +448,7 @@ static void virtcrypto_remove(struct virtio_device *vdev)
 	struct virtio_crypto *vcrypto = vdev->priv;
 	int i;
 
-	dev_info(&vdev->dev, "Start virtcrypto_remove.\n");
+	dev_dbg(&vdev->dev, "Start virtcrypto_remove.\n");
 
 	if (virtcrypto_dev_started(vcrypto))
 		virtcrypto_dev_stop(vcrypto);

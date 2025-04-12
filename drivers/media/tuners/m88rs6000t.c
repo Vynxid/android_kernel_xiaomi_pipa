@@ -656,7 +656,7 @@ static int m88rs6000t_probe(struct i2c_client *client,
 	ret = regmap_read(dev->regmap, 0x01, &utmp);
 	if (ret)
 		goto err;
-	dev_info(&dev->client->dev, "chip_id=%02x\n", utmp);
+	dev_dbg(&dev->client->dev, "chip_id=%02x\n", utmp);
 	if (utmp != 0x64) {
 		ret = -ENODEV;
 		goto err;
@@ -693,7 +693,7 @@ static int m88rs6000t_probe(struct i2c_client *client,
 			goto err;
 	}
 
-	dev_info(&dev->client->dev, "Montage M88RS6000 internal tuner successfully identified\n");
+	dev_dbg(&dev->client->dev, "Montage M88RS6000 internal tuner successfully identified\n");
 
 	fe->tuner_priv = dev;
 	memcpy(&fe->ops.tuner_ops, &m88rs6000t_tuner_ops,

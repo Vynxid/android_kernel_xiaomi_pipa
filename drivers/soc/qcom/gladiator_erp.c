@@ -1076,7 +1076,7 @@ static int gladiator_erp_probe(struct platform_device *pdev)
 #ifdef CONFIG_PANIC_ON_GLADIATOR_ERROR
 	enable_panic_on_error = 1;
 #endif
-	dev_info(&pdev->dev, "MSM Gladiator Error Reporting Initialized\n");
+	dev_dbg(&pdev->dev, "MSM Gladiator Error Reporting Initialized\n");
 	return ret;
 
 err_atb_clk:
@@ -1112,7 +1112,7 @@ static int __init init_gladiator_erp(void)
 
 	ret = scm_is_secure_device();
 	if (ret == 0) {
-		pr_info("Gladiator Error Reporting not available\n");
+		pr_debug("Gladiator Error Reporting not available\n");
 		return -ENODEV;
 	}
 

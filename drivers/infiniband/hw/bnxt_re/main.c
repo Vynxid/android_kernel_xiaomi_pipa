@@ -520,7 +520,7 @@ static struct bnxt_en_dev *bnxt_re_dev_probe(struct net_device *netdev)
 		return ERR_PTR(-EINVAL);
 
 	if (!(en_dev->flags & BNXT_EN_FLAG_ROCE_CAP)) {
-		dev_info(&pdev->dev,
+		dev_dbg(&pdev->dev,
 			"%s: probe error: RoCE is not supported on this device",
 			ROCE_DRV_MODULE_NAME);
 		return ERR_PTR(-ENODEV);
@@ -1360,7 +1360,7 @@ static int bnxt_re_ib_reg(struct bnxt_re_dev *rdev)
 	if (!rdev->is_virtfn) {
 		rc = bnxt_re_setup_qos(rdev);
 		if (rc)
-			pr_info("RoCE priority not yet configured\n");
+			pr_debug("RoCE priority not yet configured\n");
 
 		INIT_DELAYED_WORK(&rdev->worker, bnxt_re_worker);
 		set_bit(BNXT_RE_FLAG_QOS_WORK_REG, &rdev->flags);
@@ -1377,7 +1377,7 @@ static int bnxt_re_ib_reg(struct bnxt_re_dev *rdev)
 		goto fail;
 	}
 	set_bit(BNXT_RE_FLAG_IBDEV_REGISTERED, &rdev->flags);
-	dev_info(rdev_to_dev(rdev), "Device registered successfully");
+	dev_dbg(rdev_to_dev(rdev), "Device registered successfully");
 	for (i = 0; i < ARRAY_SIZE(bnxt_re_attributes); i++) {
 		rc = device_create_file(&rdev->ibdev.dev,
 					bnxt_re_attributes[i]);
@@ -1604,7 +1604,7 @@ static int __init bnxt_re_mod_init(void)
 {
 	int rc = 0;
 
-	pr_info("%s: %s", ROCE_DRV_MODULE_NAME, version);
+	pr_debug("%s: %s", ROCE_DRV_MODULE_NAME, version);
 
 	bnxt_re_wq = create_singlethread_workqueue("bnxt_re");
 	if (!bnxt_re_wq)
@@ -1641,7 +1641,7 @@ static void __exit bnxt_re_mod_exit(void)
 	* cleanup is done before PF cleanup
 	*/
 	list_for_each_entry_safe_reverse(rdev, next, &to_be_deleted, list) {
-		dev_info(rdev_to_dev(rdev), "Unregistering Device");
+		dev_dbg(rdev_to_dev(rdev), "Unregistering Device");
 		/*
 		 * Flush out any scheduled tasks before destroying the
 		 * resources

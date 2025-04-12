@@ -1473,7 +1473,7 @@ static int pxad_probe(struct platform_device *op)
 
 	platform_set_drvdata(op, pdev);
 	pxad_init_debugfs(pdev);
-	dev_info(pdev->slave.dev, "initialized %d channels on %d requestors\n",
+	dev_dbg(pdev->slave.dev, "initialized %d channels on %d requestors\n",
 		 dma_channels, nb_requestors);
 	return 0;
 }

@@ -752,7 +752,7 @@ static int jz4780_i2c_probe(struct platform_device *pdev)
 	}
 	jz4780_i2c_set_speed(i2c);
 
-	dev_info(&pdev->dev, "Bus frequency is %d KHz\n", i2c->speed);
+	dev_dbg(&pdev->dev, "Bus frequency is %d KHz\n", i2c->speed);
 
 	tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
 	tmp &= ~JZ4780_I2C_CTRL_STPHLD;

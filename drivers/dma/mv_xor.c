@@ -453,7 +453,7 @@ static int mv_xor_alloc_chan_resources(struct dma_chan *chan)
 	while (idx < num_descs_in_pool) {
 		slot = kzalloc(sizeof(*slot), GFP_KERNEL);
 		if (!slot) {
-			dev_info(mv_chan_to_devp(mv_chan),
+			dev_dbg(mv_chan_to_devp(mv_chan),
 				 "channel only initialized %d descriptor slots",
 				 idx);
 			break;
@@ -1147,7 +1147,7 @@ mv_xor_channel_add(struct mv_xor_device *xordev,
 			goto err_free_irq;
 	}
 
-	dev_info(&pdev->dev, "Marvell XOR (%s): ( %s%s%s)\n",
+	dev_dbg(&pdev->dev, "Marvell XOR (%s): ( %s%s%s)\n",
 		 mv_chan->op_in_desc ? "Descriptor Mode" : "Registers Mode",
 		 dma_has_cap(DMA_XOR, dma_dev->cap_mask) ? "xor " : "",
 		 dma_has_cap(DMA_MEMCPY, dma_dev->cap_mask) ? "cpy " : "",
@@ -1302,7 +1302,7 @@ static int mv_xor_probe(struct platform_device *pdev)
 	unsigned int max_engines, max_channels;
 	int i, ret;
 
-	dev_notice(&pdev->dev, "Marvell shared XOR driver\n");
+	dev_dbg(&pdev->dev, "Marvell shared XOR driver\n");
 
 	xordev = devm_kzalloc(&pdev->dev, sizeof(*xordev), GFP_KERNEL);
 	if (!xordev)

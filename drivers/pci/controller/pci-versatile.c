@@ -165,7 +165,7 @@ static int versatile_pci_probe(struct platform_device *pdev)
 	 */
 	pci_slot_ignore |= (1 << myslot);
 
-	dev_info(dev, "PCI core found (slot %d)\n", myslot);
+	dev_dbg(dev, "PCI core found (slot %d)\n", myslot);
 
 	writel(myslot, PCI_SELFID);
 	local_pci_cfg_base = versatile_cfg_base[1] + (myslot << 11);

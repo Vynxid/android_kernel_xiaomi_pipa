@@ -300,7 +300,7 @@ static int ion_sc_add_child(struct ion_sc_heap *manager,
 		goto out_free_carveout;
 
 	list_add(&entry->list, &manager->children);
-	dev_info(dev, "ion_secure_carveout: creating heap@0x%llx, size 0x%llx\n",
+	dev_dbg(dev, "ion_secure_carveout: creating heap@0x%llx, size 0x%llx\n",
 		 base, size);
 	return 0;
 

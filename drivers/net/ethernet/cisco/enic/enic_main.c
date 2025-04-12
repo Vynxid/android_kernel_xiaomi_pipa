@@ -2609,7 +2609,7 @@ static void enic_dev_deinit(struct enic *enic)
 static void enic_kdump_kernel_config(struct enic *enic)
 {
 	if (is_kdump_kernel()) {
-		dev_info(enic_get_dev(enic), "Running from within kdump kernel. Using minimal resources\n");
+		dev_dbg(enic_get_dev(enic), "Running from within kdump kernel. Using minimal resources\n");
 		enic->rq_count = 1;
 		enic->wq_count = 1;
 		enic->config.rq_desc_count = ENIC_MIN_RQ_DESCS;
@@ -2949,7 +2949,7 @@ static int enic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 		netdev->features &= ~NETIF_F_HW_VLAN_CTAG_TX;
 		enic->loop_enable = 1;
 		enic->loop_tag = enic->config.loop_tag;
-		dev_info(dev, "loopback tag=0x%04x\n", enic->loop_tag);
+		dev_dbg(dev, "loopback tag=0x%04x\n", enic->loop_tag);
 	}
 	if (ENIC_SETTING(enic, TXCSUM))
 		netdev->hw_features |= NETIF_F_SG | NETIF_F_HW_CSUM;
@@ -3086,7 +3086,7 @@ static struct pci_driver enic_driver = {
 
 static int __init enic_init_module(void)
 {
-	pr_info("%s, ver %s\n", DRV_DESCRIPTION, DRV_VERSION);
+	pr_debug("%s, ver %s\n", DRV_DESCRIPTION, DRV_VERSION);
 
 	return pci_register_driver(&enic_driver);
 }

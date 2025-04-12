@@ -2719,7 +2719,7 @@ static int __init coh901318_probe(struct platform_device *pdev)
 		goto err_register_of_dma;
 
 	platform_set_drvdata(pdev, base);
-	dev_info(&pdev->dev, "Initialized COH901318 DMA on virtual base 0x%p\n",
+	dev_dbg(&pdev->dev, "Initialized COH901318 DMA on virtual base 0x%p\n",
 		base->virtbase);
 
 	return err;

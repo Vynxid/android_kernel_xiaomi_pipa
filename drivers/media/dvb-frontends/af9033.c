@@ -1131,7 +1131,7 @@ static int af9033_probe(struct i2c_client *client,
 	if (ret)
 		goto err_regmap_exit;
 
-	dev_info(&client->dev,
+	dev_dbg(&client->dev,
 		 "firmware version: LINK %d.%d.%d.%d - OFDM %d.%d.%d.%d\n",
 		 buf[0], buf[1], buf[2], buf[3],
 		 buf[4], buf[5], buf[6], buf[7]);
@@ -1166,7 +1166,7 @@ static int af9033_probe(struct i2c_client *client,
 	cfg->regmap = dev->regmap;
 	i2c_set_clientdata(client, dev);
 
-	dev_info(&client->dev, "Afatech AF9033 successfully attached\n");
+	dev_dbg(&client->dev, "Afatech AF9033 successfully attached\n");
 
 	return 0;
 err_regmap_exit:

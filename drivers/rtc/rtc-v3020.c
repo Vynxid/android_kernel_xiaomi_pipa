@@ -321,12 +321,12 @@ static int rtc_probe(struct platform_device *pdev)
 	v3020_set_reg(chip, V3020_STATUS_0, 0x0);
 
 	if (pdata->use_gpio)
-		dev_info(&pdev->dev, "Chip available at GPIOs "
+		dev_dbg(&pdev->dev, "Chip available at GPIOs "
 			 "%d, %d, %d, %d\n",
 			 chip->gpio[V3020_CS].gpio, chip->gpio[V3020_WR].gpio,
 			 chip->gpio[V3020_RD].gpio, chip->gpio[V3020_IO].gpio);
 	else
-		dev_info(&pdev->dev, "Chip available at "
+		dev_dbg(&pdev->dev, "Chip available at "
 			 "physical address 0x%llx,"
 			 "data connected to D%d\n",
 			 (unsigned long long)pdev->resource[0].start,

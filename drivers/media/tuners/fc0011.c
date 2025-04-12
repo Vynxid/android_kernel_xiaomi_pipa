@@ -504,7 +504,7 @@ struct dvb_frontend *fc0011_attach(struct dvb_frontend *fe,
 	fe->tuner_priv = priv;
 	fe->ops.tuner_ops = fc0011_tuner_ops;
 
-	dev_info(&priv->i2c->dev, "Fitipower FC0011 tuner attached\n");
+	dev_dbg(&priv->i2c->dev, "Fitipower FC0011 tuner attached\n");
 
 	return fe;
 }

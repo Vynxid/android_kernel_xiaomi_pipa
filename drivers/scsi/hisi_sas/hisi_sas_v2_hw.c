@@ -2417,7 +2417,7 @@ slot_complete_v2_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
 			slot_err_v2_hw(hisi_hba, task, slot, 2);
 
 		if (ts->stat != SAS_DATA_UNDERRUN)
-			dev_info(dev, "erroneous completion iptt=%d task=%p dev id=%d "
+			dev_dbg(dev, "erroneous completion iptt=%d task=%p dev id=%d "
 				"CQ hdr: 0x%x 0x%x 0x%x 0x%x "
 				"Error info: 0x%x 0x%x 0x%x 0x%x\n",
 				slot->idx, task, sas_dev->device_id,
@@ -2485,7 +2485,7 @@ out:
 	spin_lock_irqsave(&task->task_state_lock, flags);
 	if (task->task_state_flags & SAS_TASK_STATE_ABORTED) {
 		spin_unlock_irqrestore(&task->task_state_lock, flags);
-		dev_info(dev, "slot complete: task(%p) aborted\n", task);
+		dev_dbg(dev, "slot complete: task(%p) aborted\n", task);
 		return SAS_ABORTED_TASK;
 	}
 	task->task_state_flags |= SAS_TASK_STATE_DONE;
@@ -2496,7 +2496,7 @@ out:
 		spin_lock_irqsave(&device->done_lock, flags);
 		if (test_bit(SAS_HA_FROZEN, &ha->state)) {
 			spin_unlock_irqrestore(&device->done_lock, flags);
-			dev_info(dev, "slot complete: task(%p) ignored\n ",
+			dev_dbg(dev, "slot complete: task(%p) ignored\n ",
 				 task);
 			return sts;
 		}
@@ -2700,7 +2700,7 @@ static int phy_up_v2_hw(int phy_no, struct hisi_hba *hisi_hba)
 	sas_phy->linkrate = link_rate;
 	sas_phy->oob_mode = SAS_OOB_MODE;
 	memcpy(sas_phy->attached_sas_addr, &id->sas_addr, SAS_ADDR_SIZE);
-	dev_info(dev, "phyup: phy%d link_rate=%d\n", phy_no, link_rate);
+	dev_dbg(dev, "phyup: phy%d link_rate=%d\n", phy_no, link_rate);
 	phy->port_id = port_id;
 	phy->phy_type &= ~(PORT_TYPE_SAS | PORT_TYPE_SATA);
 	phy->phy_type |= PORT_TYPE_SAS;
@@ -2753,7 +2753,7 @@ static int phy_down_v2_hw(int phy_no, struct hisi_hba *hisi_hba)
 	hisi_sas_phy_write32(hisi_hba, phy_no, PHYCTRL_NOT_RDY_MSK, 1);
 
 	phy_state = hisi_sas_read32(hisi_hba, PHY_STATE);
-	dev_info(dev, "phydown: phy%d phy_state=0x%x\n", phy_no, phy_state);
+	dev_dbg(dev, "phydown: phy%d phy_state=0x%x\n", phy_no, phy_state);
 	hisi_sas_phy_down(hisi_hba, phy_no, (phy_state & 1 << phy_no) ? 1 : 0);
 
 	sl_ctrl = hisi_sas_phy_read32(hisi_hba, phy_no, SL_CONTROL);
@@ -3276,7 +3276,7 @@ static irqreturn_t sata_int_v2_hw(int irq_no, void *p)
 	attached_sas_addr[7] = phy_no;
 	memcpy(sas_phy->attached_sas_addr, attached_sas_addr, SAS_ADDR_SIZE);
 	memcpy(sas_phy->frame_rcvd, fis, sizeof(struct dev_to_host_fis));
-	dev_info(dev, "sata int phyup: phy%d link_rate=%d\n", phy_no, link_rate);
+	dev_dbg(dev, "sata int phyup: phy%d link_rate=%d\n", phy_no, link_rate);
 	phy->phy_type &= ~(PORT_TYPE_SAS | PORT_TYPE_SATA);
 	phy->port_id = port_id;
 	phy->phy_type |= PORT_TYPE_SATA;

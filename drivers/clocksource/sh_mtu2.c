@@ -293,7 +293,7 @@ static int sh_mtu2_clock_event_set_periodic(struct clock_event_device *ced)
 	if (clockevent_state_periodic(ced))
 		sh_mtu2_disable(ch);
 
-	dev_info(&ch->mtu->pdev->dev, "ch%u: used for periodic clock events\n",
+	dev_dbg(&ch->mtu->pdev->dev, "ch%u: used for periodic clock events\n",
 		 ch->index);
 	sh_mtu2_enable(ch);
 	return 0;
@@ -323,7 +323,7 @@ static void sh_mtu2_register_clockevent(struct sh_mtu2_channel *ch,
 	ced->suspend = sh_mtu2_clock_event_suspend;
 	ced->resume = sh_mtu2_clock_event_resume;
 
-	dev_info(&ch->mtu->pdev->dev, "ch%u: used for clock events\n",
+	dev_dbg(&ch->mtu->pdev->dev, "ch%u: used for clock events\n",
 		 ch->index);
 	clockevents_register_device(ced);
 }
@@ -456,7 +456,7 @@ static int sh_mtu2_probe(struct platform_device *pdev)
 	}
 
 	if (mtu) {
-		dev_info(&pdev->dev, "kept as earlytimer\n");
+		dev_dbg(&pdev->dev, "kept as earlytimer\n");
 		goto out;
 	}
 

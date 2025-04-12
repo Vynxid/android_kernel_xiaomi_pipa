@@ -1905,7 +1905,7 @@ static int ti_sci_probe(struct platform_device *pdev)
 		}
 	}
 
-	dev_info(dev, "ABI: %d.%d (firmware rev 0x%04x '%s')\n",
+	dev_dbg(dev, "ABI: %d.%d (firmware rev 0x%04x '%s')\n",
 		 info->handle.version.abi_major, info->handle.version.abi_minor,
 		 info->handle.version.firmware_revision,
 		 info->handle.version.firmware_description);

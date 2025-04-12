@@ -436,7 +436,7 @@ static int xgene_edac_mc_add(struct xgene_edac *edac, struct device_node *np)
 
 	devres_remove_group(edac->dev, xgene_edac_mc_add);
 
-	dev_info(edac->dev, "X-Gene EDAC MC registered\n");
+	dev_dbg(edac->dev, "X-Gene EDAC MC registered\n");
 	return 0;
 
 err_free:
@@ -978,7 +978,7 @@ static int xgene_edac_pmd_add(struct xgene_edac *edac, struct device_node *np,
 
 	devres_remove_group(edac->dev, xgene_edac_pmd_add);
 
-	dev_info(edac->dev, "X-Gene EDAC PMD%d registered\n", ctx->pmd);
+	dev_dbg(edac->dev, "X-Gene EDAC PMD%d registered\n", ctx->pmd);
 	return 0;
 
 err_free:
@@ -1261,7 +1261,7 @@ static int xgene_edac_l3_add(struct xgene_edac *edac, struct device_node *np,
 
 	devres_remove_group(edac->dev, xgene_edac_l3_add);
 
-	dev_info(edac->dev, "X-Gene EDAC L3 registered\n");
+	dev_dbg(edac->dev, "X-Gene EDAC L3 registered\n");
 	return 0;
 
 err_ctl_free:
@@ -1673,7 +1673,7 @@ static void xgene_edac_soc_check(struct edac_device_ctl_info *edac_dev)
 		xgene_edac_pa_report(edac_dev);
 
 	if (pcp_lp_stat & CSW_SWITCH_TRACE_ERR_MASK) {
-		dev_info(edac_dev->dev,
+		dev_dbg(edac_dev->dev,
 			 "CSW switch trace correctable memory parity error\n");
 		edac_device_handle_ce(edac_dev, 0, 0, edac_dev->ctl_name);
 	}
@@ -1802,7 +1802,7 @@ static int xgene_edac_soc_add(struct xgene_edac *edac, struct device_node *np,
 
 	devres_remove_group(edac->dev, xgene_edac_soc_add);
 
-	dev_info(edac->dev, "X-Gene EDAC SoC registered\n");
+	dev_dbg(edac->dev, "X-Gene EDAC SoC registered\n");
 
 	return 0;
 

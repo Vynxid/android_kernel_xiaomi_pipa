@@ -422,7 +422,7 @@ static int uio_fsl_elbc_gpcm_probe(struct platform_device *pdev)
 	if (ret)
 		goto out_err4;
 
-	dev_info(priv->dev,
+	dev_dbg(priv->dev,
 		 "eLBC/GPCM device (%s) at 0x%llx, bank %d, irq=%d\n",
 		 priv->name, (unsigned long long)res.start, priv->bank,
 		 irq != NO_IRQ ? irq : -1);

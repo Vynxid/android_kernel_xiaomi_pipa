@@ -1173,7 +1173,7 @@ static int msm_bus_device_probe(struct platform_device *pdev)
 	devm_kfree(&pdev->dev, pdata->info);
 	devm_kfree(&pdev->dev, pdata);
 
-	dev_info(&pdev->dev, "Bus scaling driver probe successful\n");
+	dev_dbg(&pdev->dev, "Bus scaling driver probe successful\n");
 
 exit_device_probe:
 	return ret;

@@ -901,7 +901,7 @@ static int emac_probe(struct platform_device *pdev)
 		goto out_release_sram;
 	}
 
-	dev_info(&pdev->dev, "%s: at %p, IRQ %d MAC: %pM\n",
+	dev_dbg(&pdev->dev, "%s: at %p, IRQ %d MAC: %pM\n",
 		 ndev->name, db->membase, ndev->irq, ndev->dev_addr);
 
 	return 0;

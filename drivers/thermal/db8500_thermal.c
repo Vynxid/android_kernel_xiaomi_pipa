@@ -78,7 +78,7 @@ static int db8500_cdev_bind(struct thermal_zone_device *thermal,
 		ret = thermal_zone_bind_cooling_device(thermal, i, cdev,
 			upper, lower, THERMAL_WEIGHT_DEFAULT);
 
-		dev_info(&cdev->device, "%s bind to %d: %d-%s\n", cdev->type,
+		dev_dbg(&cdev->device, "%s bind to %d: %d-%s\n", cdev->type,
 			i, ret, ret ? "fail" : "succeed");
 	}
 
@@ -99,7 +99,7 @@ static int db8500_cdev_unbind(struct thermal_zone_device *thermal,
 
 		ret = thermal_zone_unbind_cooling_device(thermal, i, cdev);
 
-		dev_info(&cdev->device, "%s unbind from %d: %s\n", cdev->type,
+		dev_dbg(&cdev->device, "%s unbind from %d: %s\n", cdev->type,
 			i, ret ? "fail" : "succeed");
 	}
 
@@ -453,7 +453,7 @@ static int db8500_thermal_probe(struct platform_device *pdev)
 		ret = PTR_ERR(pzone->therm_dev);
 		goto out_unlock;
 	}
-	dev_info(&pdev->dev, "Thermal zone device registered.\n");
+	dev_dbg(&pdev->dev, "Thermal zone device registered.\n");
 
 	dft_low = PRCMU_DEFAULT_LOW_TEMP;
 	dft_high = ptrips->trip_points[0].temp;

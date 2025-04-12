@@ -478,7 +478,7 @@ static int mdc800_usb_probe (struct usb_interface *intf,
 	}
 
 
-	dev_info(&intf->dev, "Found Mustek MDC800 on USB.\n");
+	dev_dbg(&intf->dev, "Found Mustek MDC800 on USB.\n");
 
 	mutex_lock(&mdc800->io_lock);
 
@@ -561,7 +561,7 @@ static void mdc800_usb_disconnect (struct usb_interface *intf)
 		mdc800->dev = NULL;
 		usb_set_intfdata(intf, NULL);
 	}
-	dev_info(&intf->dev, "Mustek MDC800 disconnected from USB.\n");
+	dev_dbg(&intf->dev, "Mustek MDC800 disconnected from USB.\n");
 }
 
 

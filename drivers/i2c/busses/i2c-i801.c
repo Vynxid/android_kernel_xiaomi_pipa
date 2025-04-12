@@ -1578,7 +1578,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
 	/* Disable features on user request */
 	for (i = 0; i < ARRAY_SIZE(i801_feature_names); i++) {
 		if (priv->features & disable_features & (1 << i))
-			dev_notice(&dev->dev, "%s disabled by user\n",
+			dev_dbg(&dev->dev, "%s disabled by user\n",
 				   i801_feature_names[i]);
 	}
 	priv->features &= ~disable_features;
@@ -1616,7 +1616,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
 	pci_read_config_byte(priv->pci_dev, SMBHSTCFG, &priv->original_hstcfg);
 	temp = i801_setup_hstcfg(priv);
 	if (!(priv->original_hstcfg & SMBHSTCFG_HST_EN))
-		dev_info(&dev->dev, "Enabling SMBus device\n");
+		dev_dbg(&dev->dev, "Enabling SMBus device\n");
 
 	if (temp & SMBHSTCFG_SMB_SMI_EN) {
 		dev_dbg(&dev->dev, "SMBus using interrupt SMI#\n");
@@ -1624,7 +1624,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
 		priv->features &= ~FEATURE_IRQ;
 	}
 	if (temp & SMBHSTCFG_SPD_WD)
-		dev_info(&dev->dev, "SPD Write Disable is set\n");
+		dev_dbg(&dev->dev, "SPD Write Disable is set\n");
 
 	/* Clear special mode bits */
 	if (priv->features & (FEATURE_SMBUS_PEC | FEATURE_BLOCK_BUFFER))
@@ -1652,7 +1652,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
 		/* Check if interrupts have been disabled */
 		pci_read_config_word(priv->pci_dev, SMBPCICTL, &pcictl);
 		if (pcictl & SMBPCICTL_INTDIS) {
-			dev_info(&dev->dev, "Interrupts are disabled\n");
+			dev_dbg(&dev->dev, "Interrupts are disabled\n");
 			priv->features &= ~FEATURE_IRQ;
 		}
 	}
@@ -1669,7 +1669,7 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
 			priv->features &= ~FEATURE_IRQ;
 		}
 	}
-	dev_info(&dev->dev, "SMBus using %s\n",
+	dev_dbg(&dev->dev, "SMBus using %s\n",
 		 priv->features & FEATURE_IRQ ? "PCI interrupt" : "polling");
 
 	i801_add_tco(priv);

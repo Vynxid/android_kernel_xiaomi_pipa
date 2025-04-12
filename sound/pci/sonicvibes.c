@@ -1309,14 +1309,14 @@ static int snd_sonicvibes_create(struct snd_card *card,
 	if (!dmaa) {
 		dmaa = dmaio;
 		dmaio += 0x10;
-		dev_info(card->dev,
+		dev_dbg(card->dev,
 			 "BIOS did not allocate DDMA channel A i/o, allocated at 0x%x\n",
 			 dmaa);
 	}
 	if (!dmac) {
 		dmac = dmaio;
 		dmaio += 0x10;
-		dev_info(card->dev,
+		dev_dbg(card->dev,
 			 "BIOS did not allocate DDMA channel C i/o, allocated at 0x%x\n",
 			 dmac);
 	}

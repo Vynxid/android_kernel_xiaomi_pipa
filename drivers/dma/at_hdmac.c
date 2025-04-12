@@ -713,7 +713,7 @@ atc_prep_dma_interleaved(struct dma_chan *chan,
 
 	first = xt->sgl;
 
-	dev_info(chan2dev(chan),
+	dev_dbg(chan2dev(chan),
 		 "%s: src=%pad, dest=%pad, numf=%d, frame_size=%d, flags=0x%lx\n",
 		__func__, &xt->src_start, &xt->dst_start, xt->numf,
 		xt->frame_size, flags);
@@ -1952,7 +1952,7 @@ static int __init at_dma_probe(struct platform_device *pdev)
 
 	dma_writel(atdma, EN, AT_DMA_ENABLE);
 
-	dev_info(&pdev->dev, "Atmel AHB DMA Controller ( %s%s%s), %d channels\n",
+	dev_dbg(&pdev->dev, "Atmel AHB DMA Controller ( %s%s%s), %d channels\n",
 	  dma_has_cap(DMA_MEMCPY, atdma->dma_common.cap_mask) ? "cpy " : "",
 	  dma_has_cap(DMA_MEMSET, atdma->dma_common.cap_mask) ? "set " : "",
 	  dma_has_cap(DMA_SLAVE, atdma->dma_common.cap_mask)  ? "slave " : "",

@@ -460,7 +460,7 @@ static struct gpio_desc *mlx90614_probe_wakeup(struct i2c_client *client)
 
 	if (!i2c_check_functionality(client->adapter,
 						I2C_FUNC_SMBUS_WRITE_BYTE)) {
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			 "i2c adapter does not support SMBUS_WRITE_BYTE, sleep disabled");
 		return NULL;
 	}
@@ -473,7 +473,7 @@ static struct gpio_desc *mlx90614_probe_wakeup(struct i2c_client *client)
 			 PTR_ERR(gpio));
 		return NULL;
 	} else if (!gpio) {
-		dev_info(&client->dev,
+		dev_dbg(&client->dev,
 			 "wakeup-gpio not found, sleep disabled");
 	}
 

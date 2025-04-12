@@ -192,7 +192,7 @@ static int cma3000_poweron(struct cma3000_accl_data *data)
 	} else if (data->g_range == CMARANGE_8G) {
 		ctrl = (data->mode << 1) | CMA3000_RANGE8G;
 	} else {
-		dev_info(data->dev,
+		dev_dbg(data->dev,
 			 "Invalid G range specified, assuming 8G\n");
 		ctrl = (data->mode << 1) | CMA3000_RANGE8G;
 	}
@@ -326,7 +326,7 @@ struct cma3000_accl_data *cma3000_init(struct device *dev, int irq,
 
 	data->g_range = pdata->g_range;
 	if (data->g_range != CMARANGE_2G && data->g_range != CMARANGE_8G) {
-		dev_info(dev,
+		dev_dbg(dev,
 			 "Invalid G range specified, assuming 8G\n");
 		data->g_range = CMARANGE_8G;
 	}
@@ -358,7 +358,7 @@ struct cma3000_accl_data *cma3000_init(struct device *dev, int irq,
 		goto err_free_mem;
 	}
 
-	pr_info("CMA3000 Accelerometer: Revision %x\n", rev);
+	pr_debug("CMA3000 Accelerometer: Revision %x\n", rev);
 
 	error = request_threaded_irq(irq, NULL, cma3000_thread_irq,
 				     pdata->irqflags | IRQF_ONESHOT,

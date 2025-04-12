@@ -163,7 +163,7 @@ static void usb_raremono_disconnect(struct usb_interface *intf)
 {
 	struct raremono_device *radio = to_raremono_dev(usb_get_intfdata(intf));
 
-	dev_info(&intf->dev, "Thanko's Raremono disconnected\n");
+	dev_dbg(&intf->dev, "Thanko's Raremono disconnected\n");
 
 	mutex_lock(&radio->lock);
 	usb_set_intfdata(intf, NULL);
@@ -333,12 +333,12 @@ static int usb_raremono_probe(struct usb_interface *intf,
 		radio->buffer, 3, 500);
 	if (retval != 3 ||
 	    (get_unaligned_be16(&radio->buffer[1]) & 0xfff) == 0x0242) {
-		dev_info(&intf->dev, "this is not Thanko's Raremono.\n");
+		dev_dbg(&intf->dev, "this is not Thanko's Raremono.\n");
 		retval = -ENODEV;
 		goto free_mem;
 	}
 
-	dev_info(&intf->dev, "Thanko's Raremono connected: (%04X:%04X)\n",
+	dev_dbg(&intf->dev, "Thanko's Raremono connected: (%04X:%04X)\n",
 			id->idVendor, id->idProduct);
 
 	retval = v4l2_device_register(&intf->dev, &radio->v4l2_dev);
@@ -366,7 +366,7 @@ static int usb_raremono_probe(struct usb_interface *intf,
 
 	retval = video_register_device(&radio->vdev, VFL_TYPE_RADIO, -1);
 	if (retval == 0) {
-		dev_info(&intf->dev, "V4L2 device registered as %s\n",
+		dev_dbg(&intf->dev, "V4L2 device registered as %s\n",
 				video_device_node_name(&radio->vdev));
 		return 0;
 	}

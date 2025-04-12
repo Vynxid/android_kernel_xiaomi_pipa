@@ -502,7 +502,7 @@ static int wm8994_device_init(struct wm8994 *wm8994, int irq)
 		break;
 	}
 
-	dev_info(wm8994->dev, "%s revision %c CUST_ID %02x\n", devname,
+	dev_dbg(wm8994->dev, "%s revision %c CUST_ID %02x\n", devname,
 		 'A' + wm8994->revision, wm8994->cust_id);
 
 	switch (wm8994->type) {

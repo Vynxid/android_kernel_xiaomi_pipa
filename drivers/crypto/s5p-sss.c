@@ -2260,7 +2260,7 @@ static int s5p_aes_probe(struct platform_device *pdev)
 		}
 	}
 
-	dev_info(dev, "s5p-sss driver registered\n");
+	dev_dbg(dev, "s5p-sss driver registered\n");
 
 	return 0;
 

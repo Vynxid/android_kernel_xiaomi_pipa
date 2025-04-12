@@ -346,7 +346,7 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
 		goto exit_put_clock;
 	}
 
-	dev_info(&ofdev->dev, "MSCAN at 0x%p, irq %d, clock %d Hz\n",
+	dev_dbg(&ofdev->dev, "MSCAN at 0x%p, irq %d, clock %d Hz\n",
 		 priv->reg_base, dev->irq, priv->can.clock.freq);
 
 	return 0;

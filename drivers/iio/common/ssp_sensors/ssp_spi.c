@@ -579,7 +579,7 @@ unsigned int ssp_get_sensor_scanning_info(struct ssp_data *data)
 	ssp_get_buffer(msg, 0, &result, 4);
 	cpu_result = le32_to_cpu(result);
 
-	dev_info(SSP_DEV, "%s state: 0x%08x\n", __func__, cpu_result);
+	dev_dbg(SSP_DEV, "%s state: 0x%08x\n", __func__, cpu_result);
 
 _exit:
 	ssp_clean_msg(msg);

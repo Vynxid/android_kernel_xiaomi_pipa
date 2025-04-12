@@ -478,7 +478,7 @@ static int correct_data(struct mtd_info *mtd, uint8_t *buf, int page)
 			change_bit(errpos[i], (unsigned long *)buf);
 	}
 
-	dev_notice(doc->dev, "%d error(s) corrected at offset %08x\n",
+	dev_dbg(doc->dev, "%d error(s) corrected at offset %08x\n",
 		   numerrs, page * DOCG4_PAGE_SIZE);
 
 	return numerrs;
@@ -1098,7 +1098,7 @@ static int __init read_factory_bbt(struct mtd_info *mtd)
 			nand->bbt[badblock / 4] |=
 				0x03 << ((badblock % 4) * 2);
 			mtd->ecc_stats.badblocks++;
-			dev_notice(doc->dev, "factory-marked bad block: %d\n",
+			dev_dbg(doc->dev, "factory-marked bad block: %d\n",
 				   badblock);
 		}
 	}
@@ -1304,7 +1304,7 @@ static int read_id_reg(struct mtd_info *mtd)
 	id2 = readw(docptr + DOCG4_MYSTERY_REG);
 
 	if (id1 == DOCG4_IDREG1_VALUE && id2 == DOCG4_IDREG2_VALUE) {
-		dev_info(doc->dev,
+		dev_dbg(doc->dev,
 			 "NAND device: 128MiB Diskonchip G4 detected\n");
 		return 0;
 	}

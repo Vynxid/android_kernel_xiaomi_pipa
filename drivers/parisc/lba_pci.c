@@ -657,7 +657,7 @@ extend_lmmio_len(unsigned long start, unsigned long end, unsigned long lba_len)
 			end = tmp->start - 1;
 	}
 
-	pr_info("LBA: lmmio_space [0x%lx-0x%lx] - new\n", start, end);
+	pr_debug("LBA: lmmio_space [0x%lx-0x%lx] - new\n", start, end);
 
 	/* return new end */
 	return end;
@@ -1726,7 +1726,7 @@ static void quirk_diva_ati_card(struct pci_dev *dev)
 	    dev->subsystem_device != 0x1292)
 		return;
 
-	dev_info(&dev->dev, "Hiding Diva built-in ATI card");
+	dev_dbg(&dev->dev, "Hiding Diva built-in ATI card");
 	dev->device = 0;
 }
 DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_ATI, PCI_DEVICE_ID_ATI_RADEON_QY,
@@ -1738,7 +1738,7 @@ static void quirk_diva_aux_disable(struct pci_dev *dev)
 	    dev->subsystem_device != 0x1291)
 		return;
 
-	dev_info(&dev->dev, "Hiding Diva built-in AUX serial device");
+	dev_dbg(&dev->dev, "Hiding Diva built-in AUX serial device");
 	dev->device = 0;
 }
 DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_HP, PCI_DEVICE_ID_HP_DIVA_AUX,

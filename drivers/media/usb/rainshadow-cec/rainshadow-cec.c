@@ -194,7 +194,7 @@ static void rain_disconnect(struct serio *serio)
 
 	cancel_work_sync(&rain->work);
 	cec_unregister_adapter(rain->adap);
-	dev_info(&serio->dev, "disconnected\n");
+	dev_dbg(&serio->dev, "disconnected\n");
 	serio_close(serio);
 	serio_set_drvdata(serio, NULL);
 	kfree(rain);
@@ -248,7 +248,7 @@ static int rain_setup(struct rain *rain, struct serio *serio,
 	err = rain_send_and_wait(rain, "R", "REV");
 	if (err)
 		return err;
-	dev_info(rain->dev, "Firmware version %s\n", rain->cmd_reply + 4);
+	dev_dbg(rain->dev, "Firmware version %s\n", rain->cmd_reply + 4);
 
 	err = rain_send_and_wait(rain, "Q 1", "QTY");
 	if (err)

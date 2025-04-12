@@ -110,7 +110,7 @@ static void ssb_pmu0_pllinit_r0(struct ssb_chipcommon *cc,
 		return;
 	}
 
-	dev_info(cc->dev->dev, "Programming PLL to %u.%03u MHz\n",
+	dev_dbg(cc->dev->dev, "Programming PLL to %u.%03u MHz\n",
 		 crystalfreq / 1000, crystalfreq % 1000);
 
 	/* First turn the PLL off. */
@@ -249,7 +249,7 @@ static void ssb_pmu1_pllinit_r0(struct ssb_chipcommon *cc,
 		return;
 	}
 
-	dev_info(cc->dev->dev, "Programming PLL to %u.%03u MHz\n",
+	dev_dbg(cc->dev->dev, "Programming PLL to %u.%03u MHz\n",
 		 crystalfreq / 1000, crystalfreq % 1000);
 
 	/* First turn the PLL off. */

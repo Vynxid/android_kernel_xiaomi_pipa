@@ -471,7 +471,7 @@ static int aer_inject(struct aer_error_inj *einj)
 			ret = -EPROTONOSUPPORT;
 			goto out_put;
 		}
-		dev_info(&edev->device,
+		dev_dbg(&edev->device,
 			 "aer_inject: Injecting errors %08x/%08x into device %s\n",
 			 einj->cor_status, einj->uncor_status, pci_name(dev));
 		aer_irq(-1, edev);

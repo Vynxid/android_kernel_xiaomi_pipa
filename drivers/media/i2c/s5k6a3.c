@@ -313,7 +313,7 @@ static int s5k6a3_probe(struct i2c_client *client,
 	if (of_property_read_u32(dev->of_node, "clock-frequency",
 				 &sensor->clock_frequency)) {
 		sensor->clock_frequency = S5K6A3_DEFAULT_CLK_FREQ;
-		dev_info(dev, "using default %u Hz clock frequency\n",
+		dev_dbg(dev, "using default %u Hz clock frequency\n",
 					sensor->clock_frequency);
 	}
 

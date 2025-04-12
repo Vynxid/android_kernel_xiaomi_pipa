@@ -397,7 +397,7 @@ static int lp3944_probe(struct i2c_client *client,
 	if (err < 0)
 		return err;
 
-	dev_info(&client->dev, "lp3944 enabled\n");
+	dev_dbg(&client->dev, "lp3944 enabled\n");
 	return 0;
 }
 

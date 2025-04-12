@@ -72,7 +72,7 @@ static int writebuf_from_LL(int driverID, int channel, int ack,
 
 	if (!len) {
 		if (ack)
-			dev_notice(cs->dev, "%s: not ACKing empty packet\n",
+			dev_dbg(cs->dev, "%s: not ACKing empty packet\n",
 				   __func__);
 		return 0;
 	}
@@ -355,10 +355,10 @@ static int command_from_LL(isdn_ctrl *cntrl)
 
 		break;
 	case ISDN_CMD_CLREAZ: /* Do not signal incoming signals */
-		dev_info(cs->dev, "ignoring ISDN_CMD_CLREAZ\n");
+		dev_dbg(cs->dev, "ignoring ISDN_CMD_CLREAZ\n");
 		break;
 	case ISDN_CMD_SETEAZ: /* Signal incoming calls for given MSN */
-		dev_info(cs->dev, "ignoring ISDN_CMD_SETEAZ (%s)\n",
+		dev_dbg(cs->dev, "ignoring ISDN_CMD_SETEAZ (%s)\n",
 			 cntrl->parm.num);
 		break;
 	case ISDN_CMD_SETL2: /* Set L2 to given protocol */
@@ -497,7 +497,7 @@ int gigaset_isdn_icall(struct at_state_t *at_state)
 		response.parm.setup.eazmsn[0] = 0;
 
 	if (!bcs) {
-		dev_notice(cs->dev, "no channel for incoming call\n");
+		dev_dbg(cs->dev, "no channel for incoming call\n");
 		response.command = ISDN_STAT_ICALLW;
 		response.arg = 0;
 	} else {
@@ -682,7 +682,7 @@ void gigaset_isdn_unregdev(struct cardstate *cs)
  */
 void gigaset_isdn_regdrv(void)
 {
-	pr_info("ISDN4Linux interface\n");
+	pr_debug("ISDN4Linux interface\n");
 	/* nothing to do */
 }
 

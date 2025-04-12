@@ -981,7 +981,7 @@ static const match_table_t tokens = {
 static int parse_standard_option(const char *option)
 {
 
-	pr_notice("UBIFS: parse %s\n", option);
+	pr_debug("UBIFS: parse %s\n", option);
 	if (!strcmp(option, "sync"))
 		return SB_SYNCHRONOUS;
 	return 0;

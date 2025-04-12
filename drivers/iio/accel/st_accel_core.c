@@ -970,7 +970,7 @@ int st_accel_common_probe(struct iio_dev *indio_dev)
 	if (err)
 		goto st_accel_device_register_error;
 
-	dev_info(&indio_dev->dev, "registered accelerometer %s\n",
+	dev_dbg(&indio_dev->dev, "registered accelerometer %s\n",
 		 indio_dev->name);
 
 	return 0;

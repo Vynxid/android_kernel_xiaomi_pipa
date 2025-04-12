@@ -306,7 +306,7 @@ int ndt_get_pressure_f60(int touch_flag, int x, int y)
 		return 1;
 	data = i2c_get_clientdata(g_ndt_client);
 	if (data->is_fw_updating) {
-		pr_info("%s fw updating\n", __func__);
+		pr_debug("%s fw updating\n", __func__);
 		return 1;
 	}
 
@@ -391,7 +391,7 @@ static int ndt_burn_fw(unsigned char *buf, unsigned int len, int retry)
 	read_buf = (unsigned char *)kmalloc(len, GFP_KERNEL);
 
 	do {
-		pr_info("ndt:burn eeprom number: %d\n", number + 1);
+		pr_debug("ndt:burn eeprom number: %d\n", number + 1);
 		ret = 1;
 		byteno = 0;
 
@@ -406,7 +406,7 @@ static int ndt_burn_fw(unsigned char *buf, unsigned int len, int retry)
 			if (ndt_write_eeprom(reg, buf + pos, byteno) > 0) {
 				pr_debug("reg=0x%02x,byteno=%d\n", reg, byteno);
 			} else {
-				pr_info("failed!\n");
+				pr_debug("failed!\n");
 				i2c_ok_flag = false;
 			}
 
@@ -425,7 +425,7 @@ static int ndt_burn_fw(unsigned char *buf, unsigned int len, int retry)
 				pr_debug("ndt:reg=0x%02x,byteno=%d\n", reg,
 					 byteno);
 			} else {
-				pr_info("ndt:failed!\n");
+				pr_debug("ndt:failed!\n");
 				i2c_ok_flag = false;
 			}
 
@@ -437,7 +437,7 @@ static int ndt_burn_fw(unsigned char *buf, unsigned int len, int retry)
 		/*check */
 		for (i = 0; i < len; i++) {
 			if (i2c_ok_flag && buf[i] != read_buf[i]) {
-				pr_info("ndt:burn check error!%d,%d\n", buf[i],
+				pr_debug("ndt:burn check error!%d,%d\n", buf[i],
 					read_buf[i]);
 				ret = 0;
 				break;
@@ -452,7 +452,7 @@ static int ndt_burn_fw(unsigned char *buf, unsigned int len, int retry)
 		ret = 0;
 		goto fail;
 	} else {
-		pr_info("ndt:burn eeprom succeed!\n");
+		pr_debug("ndt:burn eeprom succeed!\n");
 	}
 
 	/*exit burn */
@@ -497,7 +497,7 @@ static ssize_t pressure_update_fw_show(struct device *dev,
 		pr_err("ndt:failed!\n");
 	}
 	memcpy(file_fw_ver, data + 8, sizeof(file_fw_ver));
-	pr_info("ndt:read file_fw_ver: %02x%02x%02x%02x\n", file_fw_ver[0],
+	pr_debug("ndt:read file_fw_ver: %02x%02x%02x%02x\n", file_fw_ver[0],
 		file_fw_ver[1], file_fw_ver[1], file_fw_ver[3]);
 	ret = snprintf(
 		buf, PAGE_SIZE,
@@ -541,7 +541,7 @@ static ssize_t ndt_reset_and_read_store(struct device *dev,
 	if (error < 0) {
 		pr_err("ndt:i2c test error\n");
 	} else
-		pr_info("ndt:i2c test ok,g_ver:0x%x:0x%x\n", g_ver[0],
+		pr_debug("ndt:i2c test ok,g_ver:0x%x:0x%x\n", g_ver[0],
 			g_ver[1]);
 	return count;
 }
@@ -557,7 +557,7 @@ static ssize_t ndt_get_rawdata_show(struct device *dev,
 	short raw_data[16];
 	int i;
 
-	pr_info("ndt:buf = %s \n", buf);
+	pr_debug("ndt:buf = %s \n", buf);
 
 	wake_up_fw();
 
@@ -656,7 +656,7 @@ static ssize_t ndt_rw_reg_show(struct device *dev,
 	}
 	ret += snprintf(buf + 3 * i, PAGE_SIZE, "\n");
 
-	pr_info("ndt:buf=%s\n", buf);
+	pr_debug("ndt:buf=%s\n", buf);
 
 	return ret;
 }
@@ -675,15 +675,15 @@ static ssize_t ndt_rw_reg_store(struct device *dev,
 	unsigned char change_val[32] = { 0 };
 
 	if (!buf || count <= 0) {
-		pr_info("ndt:argument err\n");
+		pr_debug("ndt:argument err\n");
 		return -EINVAL;
 	}
 
 	while (startpos < lastc) {
-		pr_info("idx:%d\n", idx);
+		pr_debug("idx:%d\n", idx);
 		firstc = strnstr(startpos, "0x", 3);
 		if (!firstc) {
-			pr_info("ndt:can not find firstc\n");
+			pr_debug("ndt:can not find firstc\n");
 			return -EINVAL;
 		}
 
@@ -691,15 +691,15 @@ static ssize_t ndt_rw_reg_store(struct device *dev,
 
 		ret = kstrtouint(startpos, 0, &tempdata);
 		if (ret) {
-			pr_info("ndt:fail to covert digit\n");
+			pr_debug("ndt:fail to covert digit\n");
 			return -EINVAL;
 		}
 		if (idx == 0) {
 			set_mode = tempdata;
-			pr_info("ndt:set_mode:%d\n", set_mode);
+			pr_debug("ndt:set_mode:%d\n", set_mode);
 		} else {
 			change_val[idx - 1] = tempdata;
-			pr_info("ndt:tempdata:%d\n", tempdata);
+			pr_debug("ndt:tempdata:%d\n", tempdata);
 		}
 
 		startpos = firstc + 5;
@@ -742,7 +742,7 @@ static ssize_t pressure_erase_fw_store(struct device *dev,
 	int yes_no = simple_strtoul(buf, NULL, 10);
 
 	if (yes_no != 1) {
-		pr_info("ndt:no need update fw\n");
+		pr_debug("ndt:no need update fw\n");
 		return count;
 	}
 	ndt_reset();
@@ -768,7 +768,7 @@ static ssize_t pressure_update_fw_store(struct device *dev,
 		else
 			fw_name[len] = 0;
 	}
-	pr_info("ndt:fw_name%s\n", fw_name);
+	pr_debug("ndt:fw_name%s\n", fw_name);
 	ndt_update_fw(false, fw_name, 1);
 	return count;
 }
@@ -851,7 +851,7 @@ static int ndt_update_fw(bool force, char *fw_name, int retry)
 		return -EINVAL;
 	ndt_data = i2c_get_clientdata(g_ndt_client);
 	if (!force && ndt_data->fw_updated) {
-		pr_info("ndt fw aleady updated or fw is updating,no need to update fw\n");
+		pr_debug("ndt fw aleady updated or fw is updating,no need to update fw\n");
 		return ret;
 	}
 	ndt_data->is_fw_updating = true;
@@ -878,19 +878,19 @@ static int ndt_update_fw(bool force, char *fw_name, int retry)
 	reg = IIC_FW_VER;
 	byteno = 4;
 	if (ndt_read_register(reg, ic_fw_ver, byteno) > 0) {
-		pr_info("ndt:ic_fw_ver: %02x%02x%02x%02x\n", ic_fw_ver[0],
+		pr_debug("ndt:ic_fw_ver: %02x%02x%02x%02x\n", ic_fw_ver[0],
 			ic_fw_ver[1], ic_fw_ver[2], ic_fw_ver[3]);
 	} else
 		pr_err("ndt:failed!\n");
 	memcpy(file_fw_ver, data, sizeof(file_fw_ver));
-	pr_info("ndt:read file_fw_ver: %02x%02x%02x%02x\n", file_fw_ver[0],
+	pr_debug("ndt:read file_fw_ver: %02x%02x%02x%02x\n", file_fw_ver[0],
 		file_fw_ver[1], file_fw_ver[2], file_fw_ver[3]);
 	if ((ic_fw_ver[0] | (ic_fw_ver[1] << 8)) ==
 		    (file_fw_ver[0] | (file_fw_ver[1] << 8)) &&
 	    (ic_fw_ver[2] | (ic_fw_ver[3] << 8)) ==
 		    (file_fw_ver[2] | (file_fw_ver[3] << 8))) {
 		if (!force) {
-			pr_info("ndt:fw version is equal,no need update!\n");
+			pr_debug("ndt:fw version is equal,no need update!\n");
 			ret = 0;
 			goto FAIL;
 		}
@@ -952,7 +952,7 @@ static ssize_t pressure_force_update_fw_store(struct device *dev,
 		else
 			fw_name[len] = 0;
 	}
-	pr_info("ndt:fw_name%s\n", fw_name);
+	pr_debug("ndt:fw_name%s\n", fw_name);
 	ndt_update_fw(true, fw_name, 1);
 	return count;
 }
@@ -1279,7 +1279,7 @@ static int ndt_force_probe(struct i2c_client *client,
 		goto ndt_put_regulator;
 	}
 	*/
-	pr_info("ndt reset gpio:%d\n", data->pdata->reset_gpio);
+	pr_debug("ndt reset gpio:%d\n", data->pdata->reset_gpio);
 	if (data->pdata->reset_gpio) {
 		error = gpio_request(data->pdata->reset_gpio,
 				     "ndt_force_reset_gpio");
@@ -1350,7 +1350,7 @@ static int ndt_force_probe(struct i2c_client *client,
 #endif
 */
 	misc_register(&ndt_misc);
-	pr_info("%s,probe ok\n", __func__);
+	pr_debug("%s,probe ok\n", __func__);
 	return 0;
 ndt_free_input_dev:
 	input_unregister_device(data->input_dev);

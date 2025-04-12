@@ -498,7 +498,7 @@ static void tps6586x_print_version(struct i2c_client *client, int version)
 		break;
 	}
 
-	dev_info(&client->dev, "Found %s, VERSIONCRC is %02x\n", name, version);
+	dev_dbg(&client->dev, "Found %s, VERSIONCRC is %02x\n", name, version);
 }
 
 static int tps6586x_i2c_probe(struct i2c_client *client,

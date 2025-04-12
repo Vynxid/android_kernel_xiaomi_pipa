@@ -209,7 +209,7 @@ static int mdio_mux_iproc_probe(struct platform_device *pdev)
 		/* For backward compatibility in case the
 		 * base address is specified with an offset.
 		 */
-		dev_info(&pdev->dev, "fix base address in dt-blob\n");
+		dev_dbg(&pdev->dev, "fix base address in dt-blob\n");
 		res->start &= ~0xfff;
 		res->end = res->start + MDIO_REG_ADDR_SPACE_SIZE - 1;
 	}
@@ -259,13 +259,13 @@ static int mdio_mux_iproc_probe(struct platform_device *pdev)
 	rc = mdio_mux_init(md->dev, md->dev->of_node, mdio_mux_iproc_switch_fn,
 			   &md->mux_handle, md, md->mii_bus);
 	if (rc) {
-		dev_info(md->dev, "mdiomux initialization failed\n");
+		dev_dbg(md->dev, "mdiomux initialization failed\n");
 		goto out_register;
 	}
 
 	mdio_mux_iproc_config(md);
 
-	dev_info(md->dev, "iProc mdiomux registered\n");
+	dev_dbg(md->dev, "iProc mdiomux registered\n");
 	return 0;
 
 out_register:

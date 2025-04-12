@@ -66,7 +66,7 @@ static void __ilsel_enable(ilsel_source_t set, unsigned int bit)
 	unsigned int tmp, shift;
 	unsigned long addr;
 
-	pr_notice("enabling ILSEL set %d\n", set);
+	pr_debug("enabling ILSEL set %d\n", set);
 
 	addr = mk_ilsel_addr(bit);
 	shift = mk_ilsel_shift(bit);
@@ -146,7 +146,7 @@ void ilsel_disable(unsigned int irq)
 	unsigned long addr;
 	unsigned int tmp;
 
-	pr_notice("disabling ILSEL set %d\n", irq);
+	pr_debug("disabling ILSEL set %d\n", irq);
 
 	addr = mk_ilsel_addr(irq);
 

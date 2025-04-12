@@ -674,12 +674,12 @@ static int gigaset_probe(struct usb_interface *interface,
 		return -ENODEV;
 	}
 	if (hostif->desc.bAlternateSetting != 0) {
-		dev_notice(&udev->dev, "unsupported altsetting %d - skip",
+		dev_dbg(&udev->dev, "unsupported altsetting %d - skip",
 			   hostif->desc.bAlternateSetting);
 		return -ENODEV;
 	}
 	if (hostif->desc.bInterfaceClass != 255) {
-		dev_notice(&udev->dev, "unsupported interface class %d - skip",
+		dev_dbg(&udev->dev, "unsupported interface class %d - skip",
 			   hostif->desc.bInterfaceClass);
 		return -ENODEV;
 	}
@@ -689,7 +689,7 @@ static int gigaset_probe(struct usb_interface *interface,
 		return -ENODEV;
 	}
 
-	dev_info(&udev->dev, "%s: Device matched ... !\n", __func__);
+	dev_dbg(&udev->dev, "%s: Device matched ... !\n", __func__);
 
 	/* allocate memory for our device state and initialize it */
 	cs = gigaset_initcs(driver, 1, 1, 0, cidmode, GIGASET_MODULENAME);
@@ -803,7 +803,7 @@ static void gigaset_disconnect(struct usb_interface *interface)
 	cs = usb_get_intfdata(interface);
 	ucs = cs->hw.usb;
 
-	dev_info(cs->dev, "disconnecting Gigaset USB adapter\n");
+	dev_dbg(cs->dev, "disconnecting Gigaset USB adapter\n");
 
 	usb_kill_urb(ucs->read_urb);
 
@@ -916,7 +916,7 @@ static int __init usb_gigaset_init(void)
 		goto error;
 	}
 
-	pr_info(DRIVER_DESC "\n");
+	pr_debug(DRIVER_DESC "\n");
 	return 0;
 
 error:

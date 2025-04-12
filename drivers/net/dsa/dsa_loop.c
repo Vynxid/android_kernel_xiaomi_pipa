@@ -287,7 +287,7 @@ static int dsa_loop_drv_probe(struct mdio_device *mdiodev)
 	if (!pdata)
 		return -ENODEV;
 
-	dev_info(&mdiodev->dev, "%s: 0x%0x\n",
+	dev_dbg(&mdiodev->dev, "%s: 0x%0x\n",
 		 pdata->name, pdata->enabled_ports);
 
 	ds = dsa_switch_alloc(&mdiodev->dev, DSA_MAX_PORTS);

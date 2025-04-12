@@ -879,7 +879,7 @@ static int mt9v032_registered(struct v4l2_subdev *subdev)
 	u32 version;
 	int ret;
 
-	dev_info(&client->dev, "Probing MT9V032 at address 0x%02x\n",
+	dev_dbg(&client->dev, "Probing MT9V032 at address 0x%02x\n",
 			client->addr);
 
 	ret = mt9v032_power_on(mt9v032);
@@ -911,7 +911,7 @@ static int mt9v032_registered(struct v4l2_subdev *subdev)
 		return -ENODEV;
 	}
 
-	dev_info(&client->dev, "%s detected at address 0x%02x\n",
+	dev_dbg(&client->dev, "%s detected at address 0x%02x\n",
 		 mt9v032->version->name, client->addr);
 
 	mt9v032_configure_pixel_rate(mt9v032);

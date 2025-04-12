@@ -297,7 +297,7 @@ static int adis16400_initial_setup(struct iio_dev *indio_dev)
 			dev_warn(&indio_dev->dev, "Device ID(%u) and product ID(%u) do not match.",
 					device_id, prod_id);
 
-		dev_info(&indio_dev->dev, "%s: prod_id 0x%04x at CS%d (irq %d)\n",
+		dev_dbg(&indio_dev->dev, "%s: prod_id 0x%04x at CS%d (irq %d)\n",
 			indio_dev->name, prod_id,
 			st->adis.spi->chip_select, st->adis.spi->irq);
 	}

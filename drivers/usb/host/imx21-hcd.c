@@ -1507,7 +1507,7 @@ static int imx21_hc_hub_status_data(struct usb_hcd *hcd, char *buf)
 	spin_unlock_irqrestore(&imx21->lock, flags);
 
 	if (changed)
-		dev_info(imx21->dev, "Hub status changed\n");
+		dev_dbg(imx21->dev, "Hub status changed\n");
 	return changed;
 }
 
@@ -1890,7 +1890,7 @@ static int imx21_probe(struct platform_device *pdev)
 	if (ret)
 		goto failed_clock_enable;
 
-	dev_info(imx21->dev, "Hardware HC revision: 0x%02X\n",
+	dev_dbg(imx21->dev, "Hardware HC revision: 0x%02X\n",
 		(readl(imx21->regs + USBOTG_HWMODE) >> 16) & 0xFF);
 
 	ret = usb_add_hcd(hcd, irq, 0);

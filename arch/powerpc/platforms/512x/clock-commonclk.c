@@ -1152,7 +1152,7 @@ static void mpc5121_clk_provide_backwards_compat(void)
 	 * desirable or preferrable but are not at all mandatory
 	 */
 	if (did_register) {
-		pr_notice("device tree lacks clock specs, adding fallbacks (0x%x,%s%s%s%s%s%s%s%s%s%s)\n",
+		pr_debug("device tree lacks clock specs, adding fallbacks (0x%x,%s%s%s%s%s%s%s%s%s%s)\n",
 			  did_register,
 			  (did_register & DID_REG_PSC) ? " PSC" : "",
 			  (did_register & DID_REG_PSCFIFO) ? " PSCFIFO" : "",

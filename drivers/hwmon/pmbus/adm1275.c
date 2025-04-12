@@ -405,7 +405,7 @@ static int adm1275_probe(struct i2c_client *client,
 	}
 
 	if (id->driver_data != mid->driver_data)
-		dev_notice(&client->dev,
+		dev_dbg(&client->dev,
 			   "Device mismatch: Configured %s, detected %s\n",
 			   id->name, mid->name);
 

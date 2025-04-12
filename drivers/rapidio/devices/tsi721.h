@@ -53,7 +53,7 @@ extern u32 tsi_dbg_level;
 #endif
 
 #define tsi_info(dev, fmt, arg...) \
-	dev_info(dev, "%s: " fmt "\n", __func__, ##arg)
+	dev_dbg(dev, "%s: " fmt "\n", __func__, ##arg)
 
 #define tsi_warn(dev, fmt, arg...) \
 	dev_warn(dev, "%s: WARNING " fmt "\n", __func__, ##arg)

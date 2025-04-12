@@ -103,7 +103,7 @@ static void __init unmarshal_key_value_pairs(struct dev_header *dev_header,
 		entry[i].pointer.u8_data = ptr + key_len + sizeof(val_len);
 
 		if (dump_properties) {
-			dev_info(dev, "property: %s\n", entry[i].name);
+			dev_dbg(dev, "property: %s\n", entry[i].name);
 			print_hex_dump(KERN_INFO, pr_fmt(), DUMP_PREFIX_OFFSET,
 				16, 1, entry[i].pointer.u8_data,
 				entry[i].length, true);
@@ -120,7 +120,7 @@ static void __init unmarshal_key_value_pairs(struct dev_header *dev_header,
 		return;
 	}
 
-	dev_info(dev, "assigning %d device properties\n", i);
+	dev_dbg(dev, "assigning %d device properties\n", i);
 }
 
 static int __init unmarshal_devices(struct properties_header *properties)

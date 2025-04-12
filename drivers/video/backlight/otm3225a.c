@@ -229,7 +229,7 @@ static int otm3225a_probe(struct spi_device *spi)
 	dd->ld = ld;
 	dev_set_drvdata(dev, dd);
 
-	dev_info(dev, "Initializing and switching to RGB interface");
+	dev_dbg(dev, "Initializing and switching to RGB interface");
 	otm3225a_write(spi, display_init, ARRAY_SIZE(display_init));
 	otm3225a_write(spi, display_enable_rgb_interface,
 		       ARRAY_SIZE(display_enable_rgb_interface));

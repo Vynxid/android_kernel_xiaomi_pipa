@@ -343,7 +343,7 @@ static void nx_of_update_status(struct device   *dev,
 		props->status = NX_WAITING;
 		props->flags |= NX_OF_FLAG_STATUS_SET;
 	} else {
-		dev_info(dev, "%s: status '%s' is not 'okay'\n", __func__,
+		dev_dbg(dev, "%s: status '%s' is not 'okay'\n", __func__,
 			 (char *)p->value);
 	}
 }
@@ -478,20 +478,20 @@ static void nx_of_init(struct device *dev, struct nx_of *props)
 
 	p = of_find_property(base_node, "status", NULL);
 	if (!p)
-		dev_info(dev, "%s: property 'status' not found\n", __func__);
+		dev_dbg(dev, "%s: property 'status' not found\n", __func__);
 	else
 		nx_of_update_status(dev, p, props);
 
 	p = of_find_property(base_node, "ibm,max-sg-len", NULL);
 	if (!p)
-		dev_info(dev, "%s: property 'ibm,max-sg-len' not found\n",
+		dev_dbg(dev, "%s: property 'ibm,max-sg-len' not found\n",
 			 __func__);
 	else
 		nx_of_update_sglen(dev, p, props);
 
 	p = of_find_property(base_node, "ibm,max-sync-cop", NULL);
 	if (!p)
-		dev_info(dev, "%s: property 'ibm,max-sync-cop' not found\n",
+		dev_dbg(dev, "%s: property 'ibm,max-sync-cop' not found\n",
 			 __func__);
 	else
 		nx_of_update_msc(dev, p, props);

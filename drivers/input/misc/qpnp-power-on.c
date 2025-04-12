@@ -897,7 +897,7 @@ int qpnp_pon_is_ps_hold_reset(void)
 		return 0;
 	}
 
-	dev_info(pon->dev, "hw_reset reason1 is 0x%x\n", reg);
+	dev_dbg(pon->dev, "hw_reset reason1 is 0x%x\n", reg);
 
 	/* The bit 1 is 1, means by PS_HOLD/MSM controlled shutdown */
 	if (reg & QPNP_PON_SET_PS_HOLD)
@@ -923,7 +923,7 @@ int qpnp_pon_is_lpk(void)
 		return 0;
 	}
 
-	dev_info(pon->dev,
+	dev_dbg(pon->dev,
 		"hw_reset reason1 is 0x%x\n", reg);
 
 	/* The bit 7 is 1, means the off reason is powerkey */
@@ -1226,10 +1226,10 @@ static void collect_d_work_func(struct work_struct *work)
 
 	if ((pon_rt_sts & QPNP_PON_KPDPWR_RESIN_N_SET) == QPNP_PON_KPDPWR_RESIN_N_SET) {
 		console_verbose();
-		pr_info("------ collect D&R-state processes info before long comb key ------\n");
+		pr_debug("------ collect D&R-state processes info before long comb key ------\n");
 		show_state_filter_single(TASK_UNINTERRUPTIBLE);
 		show_state_filter_single(TASK_RUNNING);
-		pr_info("------ end collecting D&R-state processes info ------\n");
+		pr_debug("------ end collecting D&R-state processes info ------\n");
 		console_loglevel = tmp_console;
 	}
 err_return:
@@ -1670,7 +1670,7 @@ static int qpnp_pon_config_kpdpwr_init(struct qpnp_pon *pon,
 		if (rc < 0)
 			pr_err("failed to read QPNP_PON_RT_STS rc=%d\n", rc);
 
-		pr_info("KPDPWR status at init=0x%02x, KPDPWR_ON=%d\n",
+		pr_debug("KPDPWR status at init=0x%02x, KPDPWR_ON=%d\n",
 			pon_rt_sts, (pon_rt_sts & QPNP_PON_KPDPWR_ON));
 	}
 
@@ -2409,12 +2409,12 @@ static int qpnp_pon_read_hardware_info(struct qpnp_pon *pon, bool sys_reset)
 	cold_boot = sys_reset_dev ? !_qpnp_pon_is_warm_reset(sys_reset_dev)
 				  : !_qpnp_pon_is_warm_reset(pon);
 	if (index >= ARRAY_SIZE(qpnp_pon_reason) || index < 0) {
-		dev_info(dev, "PMIC@SID%d Power-on reason: Unknown and '%s' boot\n",
+		dev_dbg(dev, "PMIC@SID%d Power-on reason: Unknown and '%s' boot\n",
 			 to_spmi_device(dev->parent)->usid,
 			 cold_boot ? "cold" : "warm");
 	} else {
 		pon->pon_trigger_reason = index;
-		dev_info(dev, "PMIC@SID%d Power-on reason: %s and '%s' boot\n",
+		dev_dbg(dev, "PMIC@SID%d Power-on reason: %s and '%s' boot\n",
 			 to_spmi_device(dev->parent)->usid,
 			 qpnp_pon_reason[index],
 			 cold_boot ? "cold" : "warm");
@@ -2439,11 +2439,11 @@ static int qpnp_pon_read_hardware_info(struct qpnp_pon *pon, bool sys_reset)
 	index = ffs(poff_sts) - 1 + reason_index_offset;
 	if (index >= ARRAY_SIZE(qpnp_poff_reason) || index < 0 ||
 					index < reason_index_offset) {
-		dev_info(dev, "PMIC@SID%d: Unknown power-off reason\n",
+		dev_dbg(dev, "PMIC@SID%d: Unknown power-off reason\n",
 			 to_spmi_device(dev->parent)->usid);
 	} else {
 		pon->pon_power_off_reason = index;
-		dev_info(dev, "PMIC@SID%d: Power-off reason: %s\n",
+		dev_dbg(dev, "PMIC@SID%d: Power-off reason: %s\n",
 			 to_spmi_device(dev->parent)->usid,
 			 qpnp_poff_reason[index]);
 	}
@@ -2512,7 +2512,7 @@ static int debug_pon_on_off_reg(struct qpnp_pon *pon)
 
 print_log:
 	strlcat(str_buf, "\n", sizeof(str_buf));
-	pr_info("%s\n", str_buf);
+	pr_debug("%s\n", str_buf);
 
 	return rc;
 }

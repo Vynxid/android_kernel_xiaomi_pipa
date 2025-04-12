@@ -124,7 +124,7 @@ static int sirfsoc_rtc_set_alarm(struct device *dev,
 			 * An ongoing alarm in progress - ingore it and not
 			 * to return EBUSY
 			 */
-			dev_info(dev, "An old alarm was set, will be replaced by a new one\n");
+			dev_dbg(dev, "An old alarm was set, will be replaced by a new one\n");
 		}
 
 		sirfsoc_rtc_writel(rtcdrv, RTC_ALARM0, rtc_alarm << RTC_SHIFT);

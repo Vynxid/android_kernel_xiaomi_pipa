@@ -526,7 +526,7 @@ static int romfs_fill_super(struct super_block *sb, void *data, int silent)
 
 	len = strnlen(rsb->name, ROMFS_MAXFN);
 	if (!silent)
-		pr_notice("Mounting image '%*.*s' through %s\n",
+		pr_debug("Mounting image '%*.*s' through %s\n",
 			  (unsigned) len, (unsigned) len, rsb->name, storage);
 
 	kfree(rsb);
@@ -617,7 +617,7 @@ static int __init init_romfs_fs(void)
 {
 	int ret;
 
-	pr_info("ROMFS MTD (C) 2007 Red Hat, Inc.\n");
+	pr_debug("ROMFS MTD (C) 2007 Red Hat, Inc.\n");
 
 	romfs_inode_cachep =
 		kmem_cache_create("romfs_i",

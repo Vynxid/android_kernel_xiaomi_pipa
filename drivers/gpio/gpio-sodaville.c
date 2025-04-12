@@ -238,7 +238,7 @@ static int sdv_gpio_probe(struct pci_dev *pdev,
 		goto unmap;
 
 	pci_set_drvdata(pdev, sd);
-	dev_info(&pdev->dev, "Sodaville GPIO driver registered.\n");
+	dev_dbg(&pdev->dev, "Sodaville GPIO driver registered.\n");
 	return 0;
 
 unmap:
