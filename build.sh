@@ -88,11 +88,15 @@ export KBUILD_BUILD_HOST="stormvault"
 echo "TARGET_DEVICE: $TARGET_DEVICE"
 echo "Cleaning..."
 rm -rf out/
-rm -rf anykernel/
 rm -rf error.log
 
-echo "Clone AnyKernel3 for packing kernel"
-git clone https://github.com/liyafe1997/AnyKernel3 -b kona --single-branch --depth=1 anykernel
+echo "Cloning AnyKernel3 for packing kernel..."
+if [ -d "anykernel/.git" ]; then
+    echo "AnyKernel3 already cloned. Skipping."
+else
+    rm -rf anykernel  # optional: ensure clean state
+    git clone https://github.com/liyafe1997/AnyKernel3 -b kona --single-branch --depth=1 anykernel
+fi
 
 if [ "$build_choice" == "1" ]; then
     # ------------- Building for AOSP -------------
