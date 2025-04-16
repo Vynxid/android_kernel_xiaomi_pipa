@@ -624,6 +624,7 @@ struct cfs_rq {
 	u64			avg_load;
 
 	u64			exec_clock;
+        u64                     min_vruntime;
 #ifdef CONFIG_XIAOMI_MIUI
 	u64			min_vruntimex;
 #endif
