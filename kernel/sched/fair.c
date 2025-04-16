@@ -7518,7 +7518,6 @@ static void find_best_target(struct sched_domain *sd, cpumask_t *cpus,
 #endif
 	struct task_struct *curr_tsk;
 	struct root_domain *rd;
-#endif
 #ifdef CONFIG_PACKAGE_RUNTIME_INFO
 	if (!prefer_idle)
 		prefer_idle = !!game_vip_task(p);
