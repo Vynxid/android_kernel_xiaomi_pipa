@@ -96,7 +96,9 @@ static int stop_pollstall_timer;
 static DECLARE_COMPLETION(on_pollstall_exit);
 
 /* tasklet for usb disconnect */
-static DECLARE_TASKLET(disconnect_tasklet, udc_tasklet_disconnect);
+static DECLARE_TASKLET(disconnect_tasklet, udc_tasklet_disconnect,
+		(unsigned long) &udc);
+
 
 /* endpoint names used for print */
 static const char ep0_string[] = "ep0in";
