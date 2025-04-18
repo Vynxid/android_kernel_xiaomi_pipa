@@ -147,8 +147,6 @@ extern void binder_alloc_print_allocated(struct seq_file *m,
 					 struct binder_alloc *alloc);
 void binder_alloc_print_pages(struct seq_file *m,
 			      struct binder_alloc *alloc);
-extern int binder_buffer_pool_create(void);
-extern void binder_buffer_pool_destroy(void);
 
 /**
  * binder_alloc_get_free_async_space() - get free space available for async
@@ -167,7 +165,7 @@ binder_alloc_get_free_async_space(struct binder_alloc *alloc)
 	return free_async_space;
 }
 
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 /**
  * binder_alloc_get_free_space() - get free space available
  * @alloc:      binder_alloc for this proc
