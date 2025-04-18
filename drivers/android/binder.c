@@ -76,9 +76,7 @@
 #ifdef CONFIG_MILLET
 #include <linux/millet.h>
 #endif
-#ifdef CONFIG_TASK_DELAY_ACCT
 #include <linux/delayacct.h>
-#endif
 
 #include <uapi/linux/android/binder.h>
 #include <uapi/linux/android/binderfs.h>
@@ -90,8 +88,8 @@
 #include "binder_internal.h"
 #include "binder_trace.h"
 
-#ifdef CONFIG_XIAOMI_MIUI
-#include <linux/trace_clock.h>
+#ifdef CONFIG_MIHW
+#include "linux/trace_clock.h"
 #endif
 
 static HLIST_HEAD(binder_deferred_list);
@@ -106,7 +104,7 @@ static DEFINE_SPINLOCK(binder_dead_nodes_lock);
 
 static struct dentry *binder_debugfs_dir_entry_root;
 static struct dentry *binder_debugfs_dir_entry_proc;
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 static struct dentry *binder_debugfs_dir_entry_proc_transaction;
 #endif
 static atomic_t binder_last_id;
@@ -114,7 +112,7 @@ static atomic_t binder_last_id;
 static int proc_show(struct seq_file *m, void *unused);
 DEFINE_SHOW_ATTRIBUTE(proc);
 
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 static int proc_transaction_show(struct seq_file *m, void *unused);
 DEFINE_SHOW_ATTRIBUTE(proc_transaction);
 #endif
@@ -237,14 +235,6 @@ static inline void binder_stats_created(enum binder_stat_types type)
 
 struct binder_transaction_log binder_transaction_log;
 struct binder_transaction_log binder_transaction_log_failed;
-
-static struct kmem_cache *binder_node_pool;
-static struct kmem_cache *binder_proc_pool;
-static struct kmem_cache *binder_ref_death_pool;
-static struct kmem_cache *binder_ref_pool;
-static struct kmem_cache *binder_thread_pool;
-static struct kmem_cache *binder_transaction_pool;
-static struct kmem_cache *binder_work_pool;
 
 static struct binder_transaction_log_entry *binder_transaction_log_add(
 	struct binder_transaction_log *log)
@@ -564,7 +554,7 @@ struct binder_proc {
 	int tmp_ref;
 	struct binder_priority default_priority;
 	struct dentry *debugfs_entry;
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 	struct dentry *debugfs_transaction_entry;
 	struct dentry *binderfs_transaction_entry;
 #endif
@@ -644,7 +634,7 @@ struct binder_transaction {
 	int debug_id;
 	struct binder_work work;
 	struct binder_thread *from;
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 	int async_from_pid;
 	int async_from_tid;
 	u64 timesRecord;
@@ -1297,13 +1287,13 @@ static void binder_transaction_priority(struct task_struct *task,
 	t->saved_priority.prio = task->normal_prio;
 
 	if (!inherit_rt && is_rt_policy(desired_prio.sched_policy)) {
-#ifdef CONFIG_BINDER_OPT
+#ifndef CONFIG_MIHW
+		desired_prio.prio = NICE_TO_PRIO(0);
+#else
 		// MIUI MOD:
 		// We boost some app process to FIFO, but binder out thread
 		// from fifo has low priority, so we modify priority higher.
 		desired_prio.prio = NICE_TO_PRIO(-10);
-#else
-		desired_prio.prio = NICE_TO_PRIO(0);
 #endif
 		desired_prio.sched_policy = SCHED_NORMAL;
 	}
@@ -1428,9 +1418,9 @@ static struct binder_node *binder_init_node_ilocked(
 static struct binder_node *binder_new_node(struct binder_proc *proc,
 					   struct flat_binder_object *fp)
 {
-	struct binder_node *node, *new_node;
+	struct binder_node *node;
+	struct binder_node *new_node = kzalloc(sizeof(*node), GFP_KERNEL);
 
-	new_node = kmem_cache_zalloc(binder_node_pool, GFP_KERNEL);
 	if (!new_node)
 		return NULL;
 	binder_inner_proc_lock(proc);
@@ -1440,14 +1430,14 @@ static struct binder_node *binder_new_node(struct binder_proc *proc,
 		/*
 		 * The node was already added by another thread
 		 */
-		kmem_cache_free(binder_node_pool, new_node);
+		kfree(new_node);
 
 	return node;
 }
 
 static void binder_free_node(struct binder_node *node)
 {
-	kmem_cache_free(binder_node_pool, node);
+	kfree(node);
 	binder_stats_deleted(BINDER_STAT_NODE);
 }
 
@@ -1927,9 +1917,8 @@ static void binder_free_ref(struct binder_ref *ref)
 {
 	if (ref->node)
 		binder_free_node(ref->node);
-	if (ref->death)
-		kmem_cache_free(binder_ref_death_pool, ref->death);
-	kmem_cache_free(binder_ref_pool, ref);
+	kfree(ref->death);
+	kfree(ref);
 }
 
 /**
@@ -2022,7 +2011,7 @@ static int binder_inc_ref_for_node(struct binder_proc *proc,
 	ref = binder_get_ref_for_node_olocked(proc, node, NULL);
 	if (!ref) {
 		binder_proc_unlock(proc);
-		new_ref = kmem_cache_zalloc(binder_ref_pool, GFP_KERNEL);
+		new_ref = kzalloc(sizeof(*ref), GFP_KERNEL);
 		if (!new_ref)
 			return -ENOMEM;
 		binder_proc_lock(proc);
@@ -2048,7 +2037,7 @@ static int binder_inc_ref_for_node(struct binder_proc *proc,
 		 * Another thread created the ref first so
 		 * free the one we allocated
 		 */
-		kmem_cache_free(binder_ref_pool, new_ref);
+		kfree(new_ref);
 	return ret;
 }
 
@@ -2183,7 +2172,7 @@ static void binder_free_transaction(struct binder_transaction *t)
 	 * If the transaction has no target_proc, then
 	 * t->buffer->transaction has already been cleared.
 	 */
-	kmem_cache_free(binder_transaction_pool, t);
+	kfree(t);
 	binder_stats_deleted(BINDER_STAT_TRANSACTION);
 }
 
@@ -2924,6 +2913,18 @@ static inline void binder_thread_restore_inherit_top_app(struct binder_thread *t
 	if (thread)
 		restore_inherit_top_app(thread->task);
 }
+#else
+static inline void binder_thread_set_inherit_top_app(
+		struct binder_thread *thread, struct binder_thread *from)
+{
+	// Do nothing.
+}
+
+static inline void binder_thread_restore_inherit_top_app(struct binder_thread *thread)
+{
+	// Do nothing.
+}
+
 #endif
 
 /**
@@ -2978,10 +2979,8 @@ static bool binder_proc_transaction(struct binder_transaction *t,
 		thread = binder_select_thread_ilocked(proc);
 
 	if (thread) {
-#ifdef CONFIG_BINDER_OPT
 		if (!oneway)
     			binder_thread_set_inherit_top_app(thread, t->from);
-#endif
 
 		binder_transaction_priority(thread->task, t, node_prio,
 					    node->inherit_rt);
@@ -2994,7 +2993,6 @@ static bool binder_proc_transaction(struct binder_transaction *t,
 
 	if (!pending_async)
 		binder_wakeup_thread_ilocked(proc, thread, !oneway /* sync */);
-
 	binder_inner_proc_unlock(proc);
 	binder_node_unlock(node);
 
@@ -3043,7 +3041,7 @@ static struct binder_node *binder_get_node_refs_for_txn(
 	return target_node;
 }
 
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 static inline u64 binder_clock(void)
 {
 	return trace_clock_local();
@@ -3210,6 +3208,7 @@ static void binder_transaction(struct binder_proc *proc,
 			goto err_dead_binder;
 		}
 		e->to_node = target_node->debug_id;
+
 #ifdef CONFIG_MILLET
 		if (target_proc
 			&& target_proc->tsk
@@ -3299,7 +3298,7 @@ static void binder_transaction(struct binder_proc *proc,
 	e->to_proc = target_proc->pid;
 
 	/* TODO: reuse incoming transaction for reply */
-	t = kmem_cache_zalloc(binder_transaction_pool, GFP_KERNEL);
+	t = kzalloc(sizeof(*t), GFP_KERNEL);
 	if (t == NULL) {
 		return_error = BR_FAILED_REPLY;
 		return_error_param = -ENOMEM;
@@ -3309,7 +3308,7 @@ static void binder_transaction(struct binder_proc *proc,
 	binder_stats_created(BINDER_STAT_TRANSACTION);
 	spin_lock_init(&t->lock);
 
-	tcomplete = kmem_cache_zalloc(binder_work_pool, GFP_KERNEL);
+	tcomplete = kzalloc(sizeof(*tcomplete), GFP_KERNEL);
 	if (tcomplete == NULL) {
 		return_error = BR_FAILED_REPLY;
 		return_error_param = -ENOMEM;
@@ -3340,13 +3339,13 @@ static void binder_transaction(struct binder_proc *proc,
 			     (u64)extra_buffers_size);
 	if (!reply && !(tr->flags & TF_ONE_WAY)) {
 		t->from = thread;
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 		t->async_from_pid = -1;
 		t->async_from_tid = -1;
 #endif
 	} else {
 		t->from = NULL;
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 		t->async_from_pid = thread->proc->pid;
 		t->async_from_tid = thread->pid;
 #endif
@@ -3671,7 +3670,7 @@ static void binder_transaction(struct binder_proc *proc,
 			goto err_dead_proc_or_thread;
 		}
 		BUG_ON(t->buffer->async_transaction != 0);
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 		t->timesRecord = in_reply_to->timesRecord;
 #endif
 		binder_pop_transaction_ilocked(target_thread, in_reply_to);
@@ -3679,9 +3678,7 @@ static void binder_transaction(struct binder_proc *proc,
 		binder_inner_proc_unlock(target_proc);
 
 		wake_up_interruptible_sync(&target_thread->wait);
-#ifdef CONFIG_BINDER_OPT
 		binder_thread_restore_inherit_top_app(thread);
-#endif
 		binder_restore_priority(current, in_reply_to->saved_priority);
 		binder_free_transaction(in_reply_to);
 	} else if (!(t->flags & TF_ONE_WAY)) {
@@ -3698,7 +3695,7 @@ static void binder_transaction(struct binder_proc *proc,
 		t->need_reply = 1;
 		t->from_parent = thread->transaction_stack;
 		thread->transaction_stack = t;
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 		t->timesRecord = binder_clock();
 #endif
 		binder_inner_proc_unlock(proc);
@@ -3712,7 +3709,7 @@ static void binder_transaction(struct binder_proc *proc,
 		BUG_ON(target_node == NULL);
 		BUG_ON(t->buffer->async_transaction != 1);
 		binder_enqueue_thread_work(thread, tcomplete);
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 		t->timesRecord = binder_clock();
 #endif
 		if (!binder_proc_transaction(t, target_proc, NULL))
@@ -3753,10 +3750,10 @@ err_bad_extra_size:
 	if (secctx)
 		security_release_secctx(secctx, secctx_sz);
 err_get_secctx_failed:
-	kmem_cache_free(binder_work_pool, tcomplete);
+	kfree(tcomplete);
 	binder_stats_deleted(BINDER_STAT_TRANSACTION_COMPLETE);
 err_alloc_tcomplete_failed:
-	kmem_cache_free(binder_transaction_pool, t);
+	kfree(t);
 	binder_stats_deleted(BINDER_STAT_TRANSACTION);
 err_alloc_t_failed:
 err_bad_todo_list:
@@ -4109,7 +4106,7 @@ static int binder_thread_write(struct binder_proc *proc,
 				 * Allocate memory for death notification
 				 * before taking lock
 				 */
-				death = kmem_cache_zalloc(binder_ref_death_pool, GFP_KERNEL);
+				death = kzalloc(sizeof(*death), GFP_KERNEL);
 				if (death == NULL) {
 					WARN_ON(thread->return_error.cmd !=
 						BR_OK);
@@ -4134,8 +4131,7 @@ static int binder_thread_write(struct binder_proc *proc,
 					"BC_CLEAR_DEATH_NOTIFICATION",
 					target);
 				binder_proc_unlock(proc);
-				if (death)
-					kmem_cache_free(binder_ref_death_pool, death);
+				kfree(death);
 				break;
 			}
 
@@ -4156,7 +4152,7 @@ static int binder_thread_write(struct binder_proc *proc,
 						proc->pid, thread->pid);
 					binder_node_unlock(ref->node);
 					binder_proc_unlock(proc);
-					kmem_cache_free(binder_ref_death_pool, death);
+					kfree(death);
 					break;
 				}
 				binder_stats_created(BINDER_STAT_DEATH);
@@ -4323,6 +4319,7 @@ static int binder_wait_for_work(struct binder_thread *thread,
 {
 	DEFINE_WAIT(wait);
 	struct binder_proc *proc = thread->proc;
+
 #ifdef CONFIG_MILLET
 	struct binder_transaction *t;
 	struct binder_proc *target_proc;
@@ -4391,7 +4388,6 @@ static int binder_thread_read(struct binder_proc *proc,
 #ifdef CONFIG_SF_BINDER
 	unsigned int flag = current->group_leader->sf_binder_task;
 #endif
-
 	if (*consumed == 0) {
 		if (put_user(BR_NOOP, (uint32_t __user *)ptr))
 			return -EFAULT;
@@ -4492,7 +4488,7 @@ retry:
 		case BINDER_WORK_TRANSACTION_COMPLETE: {
 			binder_inner_proc_unlock(proc);
 			cmd = BR_TRANSACTION_COMPLETE;
-			kmem_cache_free(binder_work_pool, w);
+			kfree(w);
 			binder_stats_deleted(BINDER_STAT_TRANSACTION_COMPLETE);
 			if (put_user(cmd, (uint32_t __user *)ptr))
 				return -EFAULT;
@@ -4613,7 +4609,7 @@ retry:
 				      (u64)cookie);
 			if (w->type == BINDER_WORK_CLEAR_DEATH_NOTIFICATION) {
 				binder_inner_proc_unlock(proc);
-				kmem_cache_free(binder_ref_death_pool, death);
+				kfree(death);
 				binder_stats_deleted(BINDER_STAT_DEATH);
 			} else {
 				binder_enqueue_work_ilocked(
@@ -4791,7 +4787,7 @@ static void binder_release_work(struct binder_proc *proc,
 		case BINDER_WORK_TRANSACTION_COMPLETE: {
 			binder_debug(BINDER_DEBUG_DEAD_TRANSACTION,
 				"undelivered TRANSACTION_COMPLETE\n");
-			kmem_cache_free(binder_work_pool, w);
+			kfree(w);
 			binder_stats_deleted(BINDER_STAT_TRANSACTION_COMPLETE);
 		} break;
 		case BINDER_WORK_DEAD_BINDER_AND_CLEAR:
@@ -4802,7 +4798,7 @@ static void binder_release_work(struct binder_proc *proc,
 			binder_debug(BINDER_DEBUG_DEAD_TRANSACTION,
 				"undelivered death notification, %016llx\n",
 				(u64)death->cookie);
-			kmem_cache_free(binder_ref_death_pool, death);
+			kfree(death);
 			binder_stats_deleted(BINDER_STAT_DEATH);
 		} break;
 		case BINDER_WORK_NODE:
@@ -4865,14 +4861,14 @@ static struct binder_thread *binder_get_thread(struct binder_proc *proc)
 	thread = binder_get_thread_ilocked(proc, NULL);
 	binder_inner_proc_unlock(proc);
 	if (!thread) {
-		new_thread = kmem_cache_zalloc(binder_thread_pool, GFP_KERNEL);
+		new_thread = kzalloc(sizeof(*thread), GFP_KERNEL);
 		if (new_thread == NULL)
 			return NULL;
 		binder_inner_proc_lock(proc);
 		thread = binder_get_thread_ilocked(proc, new_thread);
 		binder_inner_proc_unlock(proc);
 		if (thread != new_thread)
-			kmem_cache_free(binder_thread_pool, new_thread);
+			kfree(new_thread);
 	}
 	return thread;
 }
@@ -4892,7 +4888,7 @@ static void binder_free_proc(struct binder_proc *proc)
 	put_task_struct(proc->tsk);
 	put_cred(proc->cred);
 	binder_stats_deleted(BINDER_STAT_PROC);
-	kmem_cache_free(binder_proc_pool, proc);
+	kfree(proc);
 }
 
 static void binder_free_thread(struct binder_thread *thread)
@@ -4901,7 +4897,7 @@ static void binder_free_thread(struct binder_thread *thread)
 	binder_stats_deleted(BINDER_STAT_THREAD);
 	binder_proc_dec_tmpref(thread->proc);
 	put_task_struct(thread->task);
-	kmem_cache_free(binder_thread_pool, thread);
+	kfree(thread);
 }
 
 static int binder_thread_release(struct binder_proc *proc,
@@ -4953,7 +4949,7 @@ static int binder_thread_release(struct binder_proc *proc,
 			t = t->to_parent;
 		} else if (t->from == thread) {
 			t->from = NULL;
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 			t->async_from_pid = -1;
 			t->async_from_tid = -1;
 #endif
@@ -5218,13 +5214,9 @@ static long binder_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 	switch (cmd) {
 	case BINDER_WRITE_READ:
-#ifdef CONFIG_TASK_DELAY_ACCT
 		delayacct_binder_start();
-#endif
 		ret = binder_ioctl_write_read(filp, cmd, arg, thread);
-#ifdef CONFIG_TASK_DELAY_ACCT
 		delayacct_binder_end();
-#endif
 		if (ret)
 			goto err;
 		break;
@@ -5415,14 +5407,14 @@ static int binder_open(struct inode *nodp, struct file *filp)
 	struct binder_device *binder_dev;
 	struct binderfs_info *info;
 	struct dentry *binder_binderfs_dir_entry_proc = NULL;
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 	struct dentry *binder_binderfs_dir_entry_proc_transaction = NULL;
 #endif
 
 	binder_debug(BINDER_DEBUG_OPEN_CLOSE, "%s: %d:%d\n", __func__,
 		     current->group_leader->pid, current->pid);
 
-	proc = kmem_cache_zalloc(binder_proc_pool, GFP_KERNEL);
+	proc = kzalloc(sizeof(*proc), GFP_KERNEL);
 	if (proc == NULL)
 		return -ENOMEM;
 	spin_lock_init(&proc->inner_lock);
@@ -5459,7 +5451,7 @@ static int binder_open(struct inode *nodp, struct file *filp)
 		binder_dev = nodp->i_private;
 		info = nodp->i_sb->s_fs_info;
 		binder_binderfs_dir_entry_proc = info->proc_log_dir;
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 		binder_binderfs_dir_entry_proc_transaction = info->proc_transaction_log_dir;
 #endif
 	} else {
@@ -5526,7 +5518,7 @@ static int binder_open(struct inode *nodp, struct file *filp)
 		}
 	}
 
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 	if (binder_debugfs_dir_entry_proc_transaction) {
 		char strbuf[11];
 		snprintf(strbuf, sizeof(strbuf), "%u", proc->pid);
@@ -5743,7 +5735,7 @@ static int binder_release(struct inode *nodp, struct file *filp)
 	struct binder_proc *proc = filp->private_data;
 
 	debugfs_remove(proc->debugfs_entry);
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 	debugfs_remove(proc->debugfs_transaction_entry);
 	if (proc->binderfs_transaction_entry) {
 		binderfs_remove_file(proc->binderfs_transaction_entry);
@@ -6494,7 +6486,7 @@ int binder_transaction_log_show(struct seq_file *m, void *unused)
 	return 0;
 }
 
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 static void print_binder_proc_transaction_ilocked(
 				struct seq_file *m,
 				struct binder_proc *proc,
@@ -6703,73 +6695,6 @@ static int __init init_binder_device(const char *name)
 	return ret;
 }
 
-static int __init binder_create_pools(void)
-{
-	int ret;
-
-	ret = binder_buffer_pool_create();
-	if (ret)
-		return ret;
-
-	binder_node_pool = KMEM_CACHE(binder_node, SLAB_HWCACHE_ALIGN);
-	if (!binder_node_pool)
-		goto err_node_pool;
-
-	binder_proc_pool = KMEM_CACHE(binder_proc, SLAB_HWCACHE_ALIGN);
-	if (!binder_proc_pool)
-		goto err_proc_pool;
-
-	binder_ref_death_pool = KMEM_CACHE(binder_ref_death, SLAB_HWCACHE_ALIGN);
-	if (!binder_ref_death_pool)
-		goto err_ref_death_pool;
-
-	binder_ref_pool = KMEM_CACHE(binder_ref, SLAB_HWCACHE_ALIGN);
-	if (!binder_ref_pool)
-		goto err_ref_pool;
-
-	binder_thread_pool = KMEM_CACHE(binder_thread, SLAB_HWCACHE_ALIGN);
-	if (!binder_thread_pool)
-		goto err_thread_pool;
-
-	binder_transaction_pool = KMEM_CACHE(binder_transaction, SLAB_HWCACHE_ALIGN);
-	if (!binder_transaction_pool)
-		goto err_transaction_pool;
-
-	binder_work_pool = KMEM_CACHE(binder_work, SLAB_HWCACHE_ALIGN);
-	if (!binder_work_pool)
-		goto err_work_pool;
-
-	return 0;
-
-err_work_pool:
-	kmem_cache_destroy(binder_transaction_pool);
-err_transaction_pool:
-	kmem_cache_destroy(binder_thread_pool);
-err_thread_pool:
-	kmem_cache_destroy(binder_ref_pool);
-err_ref_pool:
-	kmem_cache_destroy(binder_ref_death_pool);
-err_ref_death_pool:
-	kmem_cache_destroy(binder_proc_pool);
-err_proc_pool:
-	kmem_cache_destroy(binder_node_pool);
-err_node_pool:
-	binder_buffer_pool_destroy();
-	return -ENOMEM;
-}
-
-static void __init binder_destroy_pools(void)
-{
-	binder_buffer_pool_destroy();
-	kmem_cache_destroy(binder_node_pool);
-	kmem_cache_destroy(binder_proc_pool);
-	kmem_cache_destroy(binder_ref_death_pool);
-	kmem_cache_destroy(binder_ref_pool);
-	kmem_cache_destroy(binder_thread_pool);
-	kmem_cache_destroy(binder_transaction_pool);
-	kmem_cache_destroy(binder_work_pool);
-}
-
 static int __init binder_init(void)
 {
 	int ret;
@@ -6778,13 +6703,9 @@ static int __init binder_init(void)
 	struct hlist_node *tmp;
 	char *device_names = NULL;
 
-	ret = binder_create_pools();
-	if (ret)
-		return ret;
-
 	ret = binder_alloc_shrinker_init();
 	if (ret)
-		goto err_alloc_shrinker_failed;
+		return ret;
 
 	atomic_set(&binder_transaction_log.cur, ~0U);
 	atomic_set(&binder_transaction_log_failed.cur, ~0U);
@@ -6793,7 +6714,7 @@ static int __init binder_init(void)
 	if (binder_debugfs_dir_entry_root) {
 		binder_debugfs_dir_entry_proc = debugfs_create_dir("proc",
 						 binder_debugfs_dir_entry_root);
-#ifdef CONFIG_XIAOMI_MIUI
+#ifdef CONFIG_MIHW
 		binder_debugfs_dir_entry_proc_transaction = debugfs_create_dir("proc_transaction",
 						 binder_debugfs_dir_entry_root);
 #endif
@@ -6872,9 +6793,6 @@ err_init_binder_device_failed:
 err_alloc_device_names_failed:
 	debugfs_remove_recursive(binder_debugfs_dir_entry_root);
 	binder_alloc_shrinker_exit();
-
-err_alloc_shrinker_failed:
-	binder_destroy_pools();
 
 	return ret;
 }
