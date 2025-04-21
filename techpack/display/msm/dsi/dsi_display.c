@@ -5621,6 +5621,10 @@ int dsi_display_dev_remove(struct platform_device *pdev)
 	}
 
 	display = platform_get_drvdata(pdev);
+        if (!display || !display->panel_node) {
+		DSI_ERR("invalid display\n");
+		return -EINVAL;
+	}
 
 	/* decrement ref count */
 	of_node_put(display->panel_node);
@@ -6947,9 +6951,9 @@ int dsi_display_set_mode(struct dsi_display *display,
 		goto error;
 	}
 
-	DSI_INFO("mdp_transfer_time_us=%d us\n",
+	DSI_DEBUG("mdp_transfer_time_us=%d us\n",
 			adj_mode.priv_info->mdp_transfer_time_us);
-	DSI_INFO("hactive= %d,vactive= %d,fps=%d\n",
+	DSI_DEBUG("hactive= %d,vactive= %d,fps=%d\n",
 			timing.h_active, timing.v_active,
 			timing.refresh_rate);
 
