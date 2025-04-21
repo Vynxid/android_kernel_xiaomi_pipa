@@ -53,10 +53,9 @@ extern int32_t PS_Config_Lmt_FW_Diff_N[40 * 40];
 extern int32_t PS_Config_Diff_Test_Frame;
 
 #ifndef NVT_SAVE_TESTDATA_IN_FILE
-#define	TEST_BUF_LEN	5000
+#define TEST_BUF_LEN 5000
 
-enum test_type
-{
+enum test_type {
 	SHORT_TEST = 0,
 	OPEN_TEST,
 	FWMUTUAL_TEST,
@@ -66,17 +65,15 @@ enum test_type
 	MAX_TEST_TYPE = 6,
 };
 
-struct item_buf
-{
+struct item_buf {
 	uint8_t *buf;
 	uint32_t len;
 	enum test_type type;
 };
 
-struct test_buf
-{
-/*	spinlock_t tbuf_lock;*/
-/*	bool update; */
+struct test_buf {
+	/*	spinlock_t tbuf_lock;*/
+	/*	bool update; */
 	struct item_buf shorttest;
 	struct item_buf opentest;
 	struct item_buf fwmutualtest;

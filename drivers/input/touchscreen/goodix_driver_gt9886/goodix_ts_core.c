@@ -2518,8 +2518,8 @@ static ssize_t goodix_lockdown_info_read(struct file *file, char __user *buf,
 		return cnt;
 }
 
-static const struct proc_ops goodix_lockdown_info_ops = {
-	.proc_read = goodix_lockdown_info_read,
+static const struct file_operations goodix_lockdown_info_ops = {
+	.read = goodix_lockdown_info_read,
 };
 
 static ssize_t goodix_rawdata_info_read(struct file *file, char __user *buf,
@@ -2563,8 +2563,8 @@ out:
 	return ret;
 }
 
-static const struct proc_ops goodix_rawdata_info_ops = {
-	.proc_read = goodix_rawdata_info_read,
+static const struct file_operations goodix_rawdata_info_ops = {
+	.read = goodix_rawdata_info_read,
 };
 
 static ssize_t goodix_fw_version_info_read(struct file *file, char __user *buf,
@@ -2598,7 +2598,7 @@ static ssize_t goodix_fw_version_info_read(struct file *file, char __user *buf,
 }
 
 static const struct file_operations goodix_fw_version_info_ops = {
-	.proc_read = goodix_fw_version_info_read,
+	.read = goodix_fw_version_info_read,
 };
 
 static ssize_t goodix_lockdown_info_show(struct device *dev,
@@ -2712,9 +2712,9 @@ out:
 	return retval;
 }
 
-static const struct proc_ops gtp_selftest_ops = {
-	.proc_read = gtp_selftest_read,
-	.proc_write = gtp_selftest_write,
+static const struct file_operations gtp_selftest_ops = {
+	.read = gtp_selftest_read,
+	.write = gtp_selftest_write,
 };
 
 static void goodix_power_supply_work(struct work_struct *work)

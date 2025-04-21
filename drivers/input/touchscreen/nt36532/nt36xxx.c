@@ -1856,6 +1856,7 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 			nvt_ts_pen_gesture_report(pen_format_id);
 		}
 		mutex_unlock(&ts->lock);
+
 		return IRQ_HANDLED;
 	}
 #endif
@@ -2041,6 +2042,7 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 XFER_ERROR:
 
 	mutex_unlock(&ts->lock);
+
 	return IRQ_HANDLED;
 }
 
@@ -2690,14 +2692,14 @@ static void get_lockdown_info(struct work_struct *work)
 			NVT_ERR("can't get lockdown info");
 		} else {
 			NVT_LOG("Lockdown:0x%02x,0x%02x\n",
-			ts->lockdown_info[0], ts->lockdown_info[1]);
+				ts->lockdown_info[0], ts->lockdown_info[1]);
 		}
 		ts->lkdown_readed = true;
 		NVT_LOG("READ LOCKDOWN!!!");
 	} else {
 		NVT_LOG("use lockdown info that readed before");
-		NVT_LOG("Lockdown:0x%02x,0x%02x\n",
-			ts->lockdown_info[0], ts->lockdown_info[1]);
+		NVT_LOG("Lockdown:0x%02x,0x%02x\n", ts->lockdown_info[0],
+			ts->lockdown_info[1]);
 	}
 }
 
