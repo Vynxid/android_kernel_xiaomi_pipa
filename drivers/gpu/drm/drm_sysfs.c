@@ -407,6 +407,8 @@ static ssize_t disp_pcc_store(struct device *device,
 	int ret;
 	ssize_t result;
 
+	pr_info("[LCD] %s: begin\n", __func__);
+
 	result = sscanf(buf,
 		"pcc_cfg_r_c=%d\n"
 		"pcc_cfg_r_r=%d\n"

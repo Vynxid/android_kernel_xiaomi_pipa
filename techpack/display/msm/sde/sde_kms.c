@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
  * Copyright (c) 2014-2021, The Linux Foundation. All rights reserved.
  * Copyright (C) 2013 Red Hat
  * Author: Rob Clark <robdclark@gmail.com>
@@ -932,7 +933,7 @@ static void _sde_kms_drm_check_dpms(struct drm_atomic_state *old_state,
 			old_mode = DRM_PANEL_BLANK_POWERDOWN;
 		}
 
-		if (old_mode != new_mode) {
+		if ((old_mode != new_mode) || (old_fps != new_fps)) {
 			struct drm_panel_notifier notifier_data;
 
 			SDE_EVT32(old_mode, new_mode, old_fps, new_fps,
@@ -1044,11 +1045,7 @@ static void sde_kms_commit(struct msm_kms *kms,
 			sde_crtc_commit_kickoff(crtc, old_crtc_state);
 		}
 	}
-/*
-	for_each_old_crtc_in_state(old_state, crtc, old_crtc_state, i) {
-		sde_crtc_fod_ui_ready(crtc, old_crtc_state);
-	}
-*/
+
 	SDE_ATRACE_END("sde_kms_commit");
 }
 
@@ -1103,9 +1100,10 @@ static void _sde_kms_release_splash_resource(struct sde_kms *sde_kms,
 	/* remove the votes if all displays are done with splash */
 	if (!sde_kms->splash_data.num_splash_displays) {
 		for (i = 0; i < SDE_POWER_HANDLE_DBUS_ID_MAX; i++)
-			sde_power_data_bus_set_quota(&priv->phandle, i,
-				SDE_POWER_HANDLE_ENABLE_BUS_AB_QUOTA,
-				SDE_POWER_HANDLE_ENABLE_BUS_IB_QUOTA);
+			if (sde_kms->perf.sde_rsc_available)
+				sde_power_data_bus_set_quota(&priv->phandle, i,
+					SDE_POWER_HANDLE_ENABLE_BUS_AB_QUOTA,
+					SDE_POWER_HANDLE_ENABLE_BUS_IB_QUOTA);
 
 		pm_runtime_put_sync(sde_kms->dev->dev);
 	}
@@ -1250,7 +1248,6 @@ static void sde_kms_wait_for_commit_done(struct msm_kms *kms,
 
 	SDE_ATRACE_BEGIN("sde_kms_wait_for_commit_done");
 	list_for_each_entry(encoder, &dev->mode_config.encoder_list, head) {
-
 		cwb_disabling = false;
 		if (encoder->crtc != crtc) {
 			cwb_disabling = sde_encoder_is_cwb_disabling(encoder,
@@ -1278,7 +1275,7 @@ static void sde_kms_wait_for_commit_done(struct msm_kms *kms,
 			sde_encoder_virt_reset(encoder);
 	}
 
-	SDE_ATRACE_END("sde_kms_wait_for_commit_done");
+	SDE_ATRACE_END("sde_ksm_wait_for_commit_done");
 }
 
 static void sde_kms_prepare_fence(struct msm_kms *kms,
@@ -3276,13 +3273,12 @@ void sde_kms_update_pm_qos_irq_request(struct sde_kms *sde_kms,
 
 		req = &sde_kms->pm_qos_irq_req;
 		req->type = PM_QOS_REQ_AFFINE_CORES;
-		atomic_set(&req->cpus_affine,
-			   *cpumask_bits(&sde_kms->irq_cpu_mask));
+		req->cpus_affine = sde_kms->irq_cpu_mask;
 		cpu_irq_latency = sde_kms->catalog->perf.cpu_irq_latency;
 
 		if (pm_qos_request_active(req))
 			pm_qos_update_request(req, cpu_irq_latency);
-		else if (atomic_read(&req->cpus_affine)) {
+		else if (!cpumask_empty(&req->cpus_affine)) {
 			/** If request is not active yet and mask is not empty
 			 *  then it needs to be added initially
 			 */
@@ -3970,4 +3966,18 @@ int sde_kms_handle_recovery(struct drm_encoder *encoder)
 {
 	SDE_EVT32(DRMID(encoder), MSM_ENC_ACTIVE_REGION);
 	return sde_encoder_wait_for_event(encoder, MSM_ENC_ACTIVE_REGION);
+}
+
+void sde_kms_kickoff_count(struct sde_kms *sde_kms)
+{
+	int i;
+	struct dsi_display *display = NULL;
+
+	if (sde_kms != NULL) {
+		for (i = 0; i < sde_kms->dsi_display_count; ++i) {
+			display = sde_kms->dsi_displays[i];
+		}
+	}
+
+	return;
 }
