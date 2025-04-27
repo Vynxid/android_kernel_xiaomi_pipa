@@ -16,7 +16,6 @@
  *
  */
 
-
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
 
@@ -38,21 +37,21 @@
 #define NVT_GAME_MODE_SWITCH "nvt_game_mode_switch"
 #define NVT_XIAOMI_LOCKDOWN_INFO "tp_lockdown_info"
 
-#define BUS_TRANSFER_LENGTH  256
+#define BUS_TRANSFER_LENGTH 256
 
 #define NORMAL_MODE 0x00
 #define TEST_MODE_1 0x21
 #define TEST_MODE_2 0x22
 #define HANDSHAKING_HOST_READY 0xBB
 
-#define XDATA_SECTOR_SIZE   256
+#define XDATA_SECTOR_SIZE 256
 
-static uint8_t xdata_tmp[5000] = {0};
-static int32_t xdata[2500] = {0};
-static int32_t xdata_pen_tip_x[256] = {0};
-static int32_t xdata_pen_tip_y[256] = {0};
-static int32_t xdata_pen_ring_x[256] = {0};
-static int32_t xdata_pen_ring_y[256] = {0};
+static uint8_t xdata_tmp[5000] = { 0 };
+static int32_t xdata[2500] = { 0 };
+static int32_t xdata_pen_tip_x[256] = { 0 };
+static int32_t xdata_pen_tip_y[256] = { 0 };
+static int32_t xdata_pen_ring_x[256] = { 0 };
+static int32_t xdata_pen_ring_y[256] = { 0 };
 
 static struct proc_dir_entry *NVT_proc_fw_version_entry;
 static struct proc_dir_entry *NVT_proc_baseline_entry;
@@ -79,7 +78,7 @@ return:
 *******************************************************/
 void nvt_change_mode(uint8_t mode)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 
 	//---set xdata index to EVENT BUF ADDR---
 	nvt_set_page(ts->mmap->EVENT_BUF_ADDR | EVENT_MAP_HOST_CMD);
@@ -99,7 +98,7 @@ void nvt_change_mode(uint8_t mode)
 
 int32_t nvt_set_pen_inband_mode_1(uint8_t freq_idx, uint8_t x_term)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t i = 0;
 	const int32_t retry = 5;
 
@@ -135,7 +134,7 @@ int32_t nvt_set_pen_inband_mode_1(uint8_t freq_idx, uint8_t x_term)
 
 int32_t nvt_set_pen_normal_mode(void)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t i = 0;
 	const int32_t retry = 5;
 
@@ -176,10 +175,11 @@ return:
 *******************************************************/
 uint8_t nvt_get_fw_pipe(void)
 {
-	uint8_t buf[8]= {0};
+	uint8_t buf[8] = { 0 };
 
 	//---set xdata index to EVENT BUF ADDR---
-	nvt_set_page(ts->mmap->EVENT_BUF_ADDR | EVENT_MAP_HANDSHAKING_or_SUB_CMD_BYTE);
+	nvt_set_page(ts->mmap->EVENT_BUF_ADDR |
+		     EVENT_MAP_HANDSHAKING_or_SUB_CMD_BYTE);
 
 	//---read fw status---
 	buf[0] = EVENT_MAP_HANDSHAKING_or_SUB_CMD_BYTE;
@@ -203,7 +203,7 @@ void nvt_read_mdata(uint32_t xdata_addr, uint32_t xdata_btn_addr)
 	int32_t i = 0;
 	int32_t j = 0;
 	int32_t k = 0;
-	uint8_t buf[BUS_TRANSFER_LENGTH + 2] = {0};
+	uint8_t buf[BUS_TRANSFER_LENGTH + 2] = { 0 };
 	uint32_t head_addr = 0;
 	int32_t dummy_len = 0;
 	int32_t data_len = 0;
@@ -223,14 +223,17 @@ void nvt_read_mdata(uint32_t xdata_addr, uint32_t xdata_btn_addr)
 		nvt_set_page(head_addr + XDATA_SECTOR_SIZE * i);
 
 		//---read xdata by BUS_TRANSFER_LENGTH
-		for (j = 0; j < (XDATA_SECTOR_SIZE / BUS_TRANSFER_LENGTH); j++) {
+		for (j = 0; j < (XDATA_SECTOR_SIZE / BUS_TRANSFER_LENGTH);
+		     j++) {
 			//---read data---
 			buf[0] = BUS_TRANSFER_LENGTH * j;
 			CTP_SPI_READ(ts->client, buf, BUS_TRANSFER_LENGTH + 1);
 
 			//---copy buf to xdata_tmp---
 			for (k = 0; k < BUS_TRANSFER_LENGTH; k++) {
-				xdata_tmp[XDATA_SECTOR_SIZE * i + BUS_TRANSFER_LENGTH * j + k] = buf[k + 1];
+				xdata_tmp[XDATA_SECTOR_SIZE * i +
+					  BUS_TRANSFER_LENGTH * j + k] =
+					buf[k + 1];
 				//printk("0x%02X, 0x%04X\n", buf[k+1], (XDATA_SECTOR_SIZE*i + BUS_TRANSFER_LENGTH*j + k));
 			}
 		}
@@ -250,7 +253,9 @@ void nvt_read_mdata(uint32_t xdata_addr, uint32_t xdata_btn_addr)
 
 			//---copy buf to xdata_tmp---
 			for (k = 0; k < BUS_TRANSFER_LENGTH; k++) {
-				xdata_tmp[(dummy_len + data_len - residual_len) + BUS_TRANSFER_LENGTH * j + k] = buf[k + 1];
+				xdata_tmp[(dummy_len + data_len - residual_len) +
+					  BUS_TRANSFER_LENGTH * j + k] =
+					buf[k + 1];
 				//printk("0x%02X, 0x%04x\n", buf[k+1], ((dummy_len+data_len-residual_len) + BUS_TRANSFER_LENGTH*j + k));
 			}
 		}
@@ -259,7 +264,8 @@ void nvt_read_mdata(uint32_t xdata_addr, uint32_t xdata_btn_addr)
 
 	//---remove dummy data and 2bytes-to-1data---
 	for (i = 0; i < (data_len / 2); i++) {
-		xdata[i] = (int16_t)(xdata_tmp[dummy_len + i * 2] + 256 * xdata_tmp[dummy_len + i * 2 + 1]);
+		xdata[i] = (int16_t)(xdata_tmp[dummy_len + i * 2] +
+				     256 * xdata_tmp[dummy_len + i * 2 + 1]);
 	}
 
 #if TOUCH_KEY_NUM > 0
@@ -273,7 +279,8 @@ void nvt_read_mdata(uint32_t xdata_addr, uint32_t xdata_btn_addr)
 
 	//---2bytes-to-1data---
 	for (i = 0; i < TOUCH_KEY_NUM; i++) {
-		xdata[ts->x_num * ts->y_num + i] = (int16_t)(buf[1 + i * 2] + 256 * buf[1 + i * 2 + 1]);
+		xdata[ts->x_num * ts->y_num + i] =
+			(int16_t)(buf[1 + i * 2] + 256 * buf[1 + i * 2 + 1]);
 	}
 #endif
 
@@ -292,7 +299,8 @@ void nvt_get_mdata(int32_t *buf, uint8_t *m_x_num, uint8_t *m_y_num)
 {
 	*m_x_num = ts->x_num;
 	*m_y_num = ts->y_num;
-	memcpy(buf, xdata, ((ts->x_num * ts->y_num + TOUCH_KEY_NUM) * sizeof(int32_t)));
+	memcpy(buf, xdata,
+	       ((ts->x_num * ts->y_num + TOUCH_KEY_NUM) * sizeof(int32_t)));
 }
 
 /*******************************************************
@@ -307,7 +315,7 @@ void nvt_read_get_num_mdata(uint32_t xdata_addr, int32_t *buffer, uint32_t num)
 	int32_t i = 0;
 	int32_t j = 0;
 	int32_t k = 0;
-	uint8_t buf[BUS_TRANSFER_LENGTH + 2] = {0};
+	uint8_t buf[BUS_TRANSFER_LENGTH + 2] = { 0 };
 	uint32_t head_addr = 0;
 	int32_t dummy_len = 0;
 	int32_t data_len = 0;
@@ -327,14 +335,17 @@ void nvt_read_get_num_mdata(uint32_t xdata_addr, int32_t *buffer, uint32_t num)
 		nvt_set_page(head_addr + XDATA_SECTOR_SIZE * i);
 
 		//---read xdata by BUS_TRANSFER_LENGTH
-		for (j = 0; j < (XDATA_SECTOR_SIZE / BUS_TRANSFER_LENGTH); j++) {
+		for (j = 0; j < (XDATA_SECTOR_SIZE / BUS_TRANSFER_LENGTH);
+		     j++) {
 			//---read data---
 			buf[0] = BUS_TRANSFER_LENGTH * j;
 			CTP_SPI_READ(ts->client, buf, BUS_TRANSFER_LENGTH + 1);
 
 			//---copy buf to xdata_tmp---
 			for (k = 0; k < BUS_TRANSFER_LENGTH; k++) {
-				xdata_tmp[XDATA_SECTOR_SIZE * i + BUS_TRANSFER_LENGTH * j + k] = buf[k + 1];
+				xdata_tmp[XDATA_SECTOR_SIZE * i +
+					  BUS_TRANSFER_LENGTH * j + k] =
+					buf[k + 1];
 				//printk("0x%02X, 0x%04X\n", buf[k+1], (XDATA_SECTOR_SIZE*i + BUS_TRANSFER_LENGTH*j + k));
 			}
 		}
@@ -354,7 +365,9 @@ void nvt_read_get_num_mdata(uint32_t xdata_addr, int32_t *buffer, uint32_t num)
 
 			//---copy buf to xdata_tmp---
 			for (k = 0; k < BUS_TRANSFER_LENGTH; k++) {
-				xdata_tmp[(dummy_len + data_len - residual_len) + BUS_TRANSFER_LENGTH * j + k] = buf[k + 1];
+				xdata_tmp[(dummy_len + data_len - residual_len) +
+					  BUS_TRANSFER_LENGTH * j + k] =
+					buf[k + 1];
 				//printk("0x%02X, 0x%04x\n", buf[k+1], ((dummy_len+data_len-residual_len) + BUS_TRANSFER_LENGTH*j + k));
 			}
 		}
@@ -363,7 +376,8 @@ void nvt_read_get_num_mdata(uint32_t xdata_addr, int32_t *buffer, uint32_t num)
 
 	//---remove dummy data and 2bytes-to-1data---
 	for (i = 0; i < (data_len / 2); i++) {
-		buffer[i] = (int16_t)(xdata_tmp[dummy_len + i * 2] + 256 * xdata_tmp[dummy_len + i * 2 + 1]);
+		buffer[i] = (int16_t)(xdata_tmp[dummy_len + i * 2] +
+				      256 * xdata_tmp[dummy_len + i * 2 + 1]);
 	}
 
 	//---set xdata index to EVENT BUF ADDR---
@@ -379,7 +393,8 @@ return:
 *******************************************************/
 static int32_t c_fw_version_show(struct seq_file *m, void *v)
 {
-	seq_printf(m, "fw_ver=%d, x_num=%d, y_num=%d, button_num=%d\n", ts->fw_ver, ts->x_num, ts->y_num, ts->max_button_num);
+	seq_printf(m, "fw_ver=%d, x_num=%d, y_num=%d, button_num=%d\n",
+		   ts->fw_ver, ts->x_num, ts->y_num, ts->max_button_num);
 	return 0;
 }
 
@@ -495,24 +510,22 @@ static void c_stop(struct seq_file *m, void *v)
 }
 
 const struct seq_operations nvt_fw_version_seq_ops = {
-	.start  = c_start,
-	.next   = c_next,
-	.stop   = c_stop,
-	.show   = c_fw_version_show
+	.start = c_start,
+	.next = c_next,
+	.stop = c_stop,
+	.show = c_fw_version_show
 };
 
-const struct seq_operations nvt_seq_ops = {
-	.start  = c_start,
-	.next   = c_next,
-	.stop   = c_stop,
-	.show   = c_show
-};
+const struct seq_operations nvt_seq_ops = { .start = c_start,
+					    .next = c_next,
+					    .stop = c_stop,
+					    .show = c_show };
 
 const struct seq_operations nvt_pen_diff_seq_ops = {
-	.start  = c_start,
-	.next   = c_next,
-	.stop   = c_stop,
-	.show   = c_pen_1d_diff_show
+	.start = c_start,
+	.next = c_next,
+	.stop = c_stop,
+	.show = c_pen_1d_diff_show
 };
 
 /*******************************************************
@@ -647,9 +660,11 @@ static int32_t nvt_raw_open(struct inode *inode, struct file *file)
 	}
 
 	if (nvt_get_fw_pipe() == 0)
-		nvt_read_mdata(ts->mmap->RAW_PIPE0_ADDR, ts->mmap->RAW_BTN_PIPE0_ADDR);
+		nvt_read_mdata(ts->mmap->RAW_PIPE0_ADDR,
+			       ts->mmap->RAW_BTN_PIPE0_ADDR);
 	else
-		nvt_read_mdata(ts->mmap->RAW_PIPE1_ADDR, ts->mmap->RAW_BTN_PIPE1_ADDR);
+		nvt_read_mdata(ts->mmap->RAW_PIPE1_ADDR,
+			       ts->mmap->RAW_BTN_PIPE1_ADDR);
 
 	nvt_change_mode(NORMAL_MODE);
 
@@ -705,9 +720,11 @@ static int32_t nvt_diff_open(struct inode *inode, struct file *file)
 	}
 
 	if (nvt_get_fw_pipe() == 0)
-		nvt_read_mdata(ts->mmap->DIFF_PIPE0_ADDR, ts->mmap->DIFF_BTN_PIPE0_ADDR);
+		nvt_read_mdata(ts->mmap->DIFF_PIPE0_ADDR,
+			       ts->mmap->DIFF_BTN_PIPE0_ADDR);
 	else
-		nvt_read_mdata(ts->mmap->DIFF_PIPE1_ADDR, ts->mmap->DIFF_BTN_PIPE1_ADDR);
+		nvt_read_mdata(ts->mmap->DIFF_PIPE1_ADDR,
+			       ts->mmap->DIFF_BTN_PIPE1_ADDR);
 
 	nvt_change_mode(NORMAL_MODE);
 
@@ -772,10 +789,14 @@ static int32_t nvt_pen_diff_open(struct inode *inode, struct file *file)
 		return -EAGAIN;
 	}
 
-	nvt_read_get_num_mdata(ts->mmap->PEN_1D_DIFF_TIP_X_ADDR, xdata_pen_tip_x, ts->x_num);
-	nvt_read_get_num_mdata(ts->mmap->PEN_1D_DIFF_TIP_Y_ADDR, xdata_pen_tip_y, ts->y_num);
-	nvt_read_get_num_mdata(ts->mmap->PEN_1D_DIFF_RING_X_ADDR, xdata_pen_ring_x, ts->x_num);
-	nvt_read_get_num_mdata(ts->mmap->PEN_1D_DIFF_RING_Y_ADDR, xdata_pen_ring_y, ts->y_num);
+	nvt_read_get_num_mdata(ts->mmap->PEN_1D_DIFF_TIP_X_ADDR,
+			       xdata_pen_tip_x, ts->x_num);
+	nvt_read_get_num_mdata(ts->mmap->PEN_1D_DIFF_TIP_Y_ADDR,
+			       xdata_pen_tip_y, ts->y_num);
+	nvt_read_get_num_mdata(ts->mmap->PEN_1D_DIFF_RING_X_ADDR,
+			       xdata_pen_ring_x, ts->x_num);
+	nvt_read_get_num_mdata(ts->mmap->PEN_1D_DIFF_RING_Y_ADDR,
+			       xdata_pen_ring_y, ts->y_num);
 
 	nvt_change_mode(NORMAL_MODE);
 
@@ -806,16 +827,20 @@ static int nvt_xiaomi_lockdown_info_show(struct seq_file *m, void *v)
 	if (ret < 0) {
 		NVT_ERR("can't get lockdown info");
 	} else {
-		seq_printf(m, "0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x\n",
-				ts->lockdown_info[0], ts->lockdown_info[1], ts->lockdown_info[2], ts->lockdown_info[3],
-				ts->lockdown_info[4], ts->lockdown_info[5], ts->lockdown_info[6], ts->lockdown_info[7]);
-
+		seq_printf(
+			m,
+			"0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x,0x%02x\n",
+			ts->lockdown_info[0], ts->lockdown_info[1],
+			ts->lockdown_info[2], ts->lockdown_info[3],
+			ts->lockdown_info[4], ts->lockdown_info[5],
+			ts->lockdown_info[6], ts->lockdown_info[7]);
 	}
 
 	return 0;
 }
 
-static int32_t nvt_xiaomi_lockdown_info_open(struct inode *inode, struct file *file)
+static int32_t nvt_xiaomi_lockdown_info_open(struct inode *inode,
+					     struct file *file)
 {
 	return single_open(file, nvt_xiaomi_lockdown_info_show, NULL);
 }
@@ -837,7 +862,7 @@ return:
 *******************************************************/
 int32_t nvt_set_pf_switch(uint8_t pf_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -868,7 +893,7 @@ nvt_set_pf_switch_out:
 
 int32_t nvt_get_pf_switch(uint8_t *pf_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -897,7 +922,8 @@ nvt_get_pf_switch_out:
 	return ret;
 }
 
-static ssize_t nvt_pf_switch_proc_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_pf_switch_proc_read(struct file *filp, char __user *buf,
+				       size_t count, loff_t *f_pos)
 {
 	static int finished;
 	int32_t cnt = 0;
@@ -944,7 +970,9 @@ static ssize_t nvt_pf_switch_proc_read(struct file *filp, char __user *buf, size
 	return len;
 }
 
-static ssize_t nvt_pf_switch_proc_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_pf_switch_proc_write(struct file *filp,
+					const char __user *buf, size_t count,
+					loff_t *f_pos)
 {
 	int32_t ret;
 	int32_t tmp;
@@ -959,7 +987,7 @@ static ssize_t nvt_pf_switch_proc_write(struct file *filp, const char __user *bu
 		goto out;
 	}
 
-	tmp_buf = kzalloc((count+1), GFP_KERNEL);
+	tmp_buf = kzalloc((count + 1), GFP_KERNEL);
 	if (!tmp_buf) {
 		NVT_ERR("Allocate tmp_buf fail!\n");
 		ret = -ENOMEM;
@@ -967,7 +995,7 @@ static ssize_t nvt_pf_switch_proc_write(struct file *filp, const char __user *bu
 	}
 	if (copy_from_user(tmp_buf, buf, count)) {
 		NVT_ERR("copy_from_user() error!\n");
-		ret =  -EFAULT;
+		ret = -EFAULT;
 		goto out;
 	}
 
@@ -1020,7 +1048,7 @@ return:
 *******************************************************/
 int32_t nvt_set_sensitivity_switch(uint8_t sensitivity_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1051,7 +1079,7 @@ nvt_set_sensitivity_switch_out:
 
 int32_t nvt_get_sensitivity_switch(uint8_t *sensitivity_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1081,7 +1109,9 @@ nvt_get_sensitivity_switch_out:
 	return ret;
 }
 
-static ssize_t nvt_sensitivity_switch_proc_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_sensitivity_switch_proc_read(struct file *filp,
+						char __user *buf, size_t count,
+						loff_t *f_pos)
 {
 	static int finished;
 	int32_t cnt = 0;
@@ -1116,7 +1146,8 @@ static ssize_t nvt_sensitivity_switch_proc_read(struct file *filp, char __user *
 	mutex_unlock(&ts->lock);
 
 	//cnt = snprintf(buf, PAGE_SIZE - len, "sensitivity_switch: %d\n", sensitivity_switch);
-	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "sensitivity_switch: %d\n", sensitivity_switch);
+	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "sensitivity_switch: %d\n",
+		       sensitivity_switch);
 	if (copy_to_user(buf, tmp_buf, sizeof(tmp_buf))) {
 		NVT_ERR("copy_to_user() error!\n");
 		return -EFAULT;
@@ -1128,7 +1159,9 @@ static ssize_t nvt_sensitivity_switch_proc_read(struct file *filp, char __user *
 	return len;
 }
 
-static ssize_t nvt_sensitivity_switch_proc_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_sensitivity_switch_proc_write(struct file *filp,
+						 const char __user *buf,
+						 size_t count, loff_t *f_pos)
 {
 	int32_t ret;
 	int32_t tmp;
@@ -1143,7 +1176,7 @@ static ssize_t nvt_sensitivity_switch_proc_write(struct file *filp, const char _
 		goto out;
 	}
 
-	tmp_buf = kzalloc((count+1), GFP_KERNEL);
+	tmp_buf = kzalloc((count + 1), GFP_KERNEL);
 	if (!tmp_buf) {
 		NVT_ERR("Allocate tmp_buf fail!\n");
 		ret = -ENOMEM;
@@ -1151,7 +1184,7 @@ static ssize_t nvt_sensitivity_switch_proc_write(struct file *filp, const char _
 	}
 	if (copy_from_user(tmp_buf, buf, count)) {
 		NVT_ERR("copy_from_user() error!\n");
-		ret =  -EFAULT;
+		ret = -EFAULT;
 		goto out;
 	}
 
@@ -1204,7 +1237,7 @@ return:
 *******************************************************/
 int32_t nvt_set_er_range_switch(uint8_t er_range_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1235,7 +1268,7 @@ nvt_set_er_range_switch_out:
 
 int32_t nvt_get_er_range_switch(uint8_t *er_range_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1265,7 +1298,9 @@ nvt_get_er_range_switch_out:
 	return ret;
 }
 
-static ssize_t nvt_er_range_switch_proc_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_er_range_switch_proc_read(struct file *filp,
+					     char __user *buf, size_t count,
+					     loff_t *f_pos)
 {
 	static int finished;
 	int32_t cnt = 0;
@@ -1299,7 +1334,8 @@ static ssize_t nvt_er_range_switch_proc_read(struct file *filp, char __user *buf
 
 	mutex_unlock(&ts->lock);
 
-	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "er_range_switch: %d\n", er_range_switch);
+	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "er_range_switch: %d\n",
+		       er_range_switch);
 	if (copy_to_user(buf, tmp_buf, sizeof(tmp_buf))) {
 		NVT_ERR("copy_to_user() error!\n");
 		return -EFAULT;
@@ -1311,7 +1347,9 @@ static ssize_t nvt_er_range_switch_proc_read(struct file *filp, char __user *buf
 	return len;
 }
 
-static ssize_t nvt_er_range_switch_proc_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_er_range_switch_proc_write(struct file *filp,
+					      const char __user *buf,
+					      size_t count, loff_t *f_pos)
 {
 	int32_t ret;
 	int32_t tmp;
@@ -1325,7 +1363,7 @@ static ssize_t nvt_er_range_switch_proc_write(struct file *filp, const char __us
 		ret = -EINVAL;
 		goto out;
 	}
-	tmp_buf = kzalloc((count+1), GFP_KERNEL);
+	tmp_buf = kzalloc((count + 1), GFP_KERNEL);
 	if (!tmp_buf) {
 		NVT_ERR("Allocate tmp_buf fail!\n");
 		ret = -ENOMEM;
@@ -1333,7 +1371,7 @@ static ssize_t nvt_er_range_switch_proc_write(struct file *filp, const char __us
 	}
 	if (copy_from_user(tmp_buf, buf, count)) {
 		NVT_ERR("copy_from_user() error!\n");
-		ret =  -EFAULT;
+		ret = -EFAULT;
 		goto out;
 	}
 
@@ -1387,7 +1425,7 @@ return:
 *******************************************************/
 int32_t nvt_set_edge_reject_switch(uint8_t edge_reject_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1413,7 +1451,8 @@ int32_t nvt_set_edge_reject_switch(uint8_t edge_reject_switch)
 		// righ up
 		buf[1] = 0xBC;
 	} else {
-		NVT_ERR("Invalid value! edge_reject_switch = %d\n", edge_reject_switch);
+		NVT_ERR("Invalid value! edge_reject_switch = %d\n",
+			edge_reject_switch);
 		ret = -EINVAL;
 		goto nvt_set_edge_reject_switch_out;
 	}
@@ -1430,7 +1469,7 @@ nvt_set_edge_reject_switch_out:
 
 int32_t nvt_get_edge_reject_switch(uint8_t *edge_reject_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1460,7 +1499,9 @@ nvt_get_edge_reject_switch_out:
 	return ret;
 }
 
-static ssize_t nvt_edge_reject_switch_proc_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_edge_reject_switch_proc_read(struct file *filp,
+						char __user *buf, size_t count,
+						loff_t *f_pos)
 {
 	static int finished;
 	int32_t cnt = 0;
@@ -1494,7 +1535,8 @@ static ssize_t nvt_edge_reject_switch_proc_read(struct file *filp, char __user *
 
 	mutex_unlock(&ts->lock);
 
-	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "edge_reject_switch: %d\n", edge_reject_switch);
+	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "edge_reject_switch: %d\n",
+		       edge_reject_switch);
 	if (copy_to_user(buf, tmp_buf, sizeof(tmp_buf))) {
 		NVT_ERR("copy_to_user() error!\n");
 		return -EFAULT;
@@ -1506,7 +1548,9 @@ static ssize_t nvt_edge_reject_switch_proc_read(struct file *filp, char __user *
 	return len;
 }
 
-static ssize_t nvt_edge_reject_switch_proc_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_edge_reject_switch_proc_write(struct file *filp,
+						 const char __user *buf,
+						 size_t count, loff_t *f_pos)
 {
 	int32_t ret;
 	int32_t tmp;
@@ -1521,7 +1565,7 @@ static ssize_t nvt_edge_reject_switch_proc_write(struct file *filp, const char _
 		goto out;
 	}
 
-	tmp_buf = kzalloc((count+1), GFP_KERNEL);
+	tmp_buf = kzalloc((count + 1), GFP_KERNEL);
 	if (!tmp_buf) {
 		NVT_ERR("Allocate tmp_buf fail!\n");
 		ret = -ENOMEM;
@@ -1529,7 +1573,7 @@ static ssize_t nvt_edge_reject_switch_proc_write(struct file *filp, const char _
 	}
 	if (copy_from_user(tmp_buf, buf, count)) {
 		NVT_ERR("copy_from_user() error!\n");
-		ret =  -EFAULT;
+		ret = -EFAULT;
 		goto out;
 	}
 
@@ -1583,7 +1627,7 @@ return:
 *******************************************************/
 int32_t nvt_set_hand_only_switch(uint8_t hand_only_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1614,7 +1658,7 @@ nvt_set_hand_only_switch_out:
 
 int32_t nvt_get_hand_only_switch(uint8_t *hand_only_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1644,7 +1688,9 @@ nvt_get_hand_only_switch_out:
 	return ret;
 }
 
-static ssize_t nvt_hand_only_switch_proc_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_hand_only_switch_proc_read(struct file *filp,
+					      char __user *buf, size_t count,
+					      loff_t *f_pos)
 {
 	static int finished;
 	int32_t cnt = 0;
@@ -1678,7 +1724,8 @@ static ssize_t nvt_hand_only_switch_proc_read(struct file *filp, char __user *bu
 
 	mutex_unlock(&ts->lock);
 
-	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "hand_only_switch: %d\n", hand_only_switch);
+	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "hand_only_switch: %d\n",
+		       hand_only_switch);
 	if (copy_to_user(buf, tmp_buf, sizeof(tmp_buf))) {
 		NVT_ERR("copy_to_user() error!\n");
 		return -EFAULT;
@@ -1690,7 +1737,9 @@ static ssize_t nvt_hand_only_switch_proc_read(struct file *filp, char __user *bu
 	return len;
 }
 
-static ssize_t nvt_hand_only_switch_proc_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_hand_only_switch_proc_write(struct file *filp,
+					       const char __user *buf,
+					       size_t count, loff_t *f_pos)
 {
 	int32_t ret;
 	int32_t tmp;
@@ -1705,7 +1754,7 @@ static ssize_t nvt_hand_only_switch_proc_write(struct file *filp, const char __u
 		goto out;
 	}
 
-	tmp_buf = kzalloc((count+1), GFP_KERNEL);
+	tmp_buf = kzalloc((count + 1), GFP_KERNEL);
 	if (!tmp_buf) {
 		NVT_ERR("Allocate tmp_buf fail!\n");
 		ret = -ENOMEM;
@@ -1713,7 +1762,7 @@ static ssize_t nvt_hand_only_switch_proc_write(struct file *filp, const char __u
 	}
 	if (copy_from_user(tmp_buf, buf, count)) {
 		NVT_ERR("copy_from_user() error!\n");
-		ret =  -EFAULT;
+		ret = -EFAULT;
 		goto out;
 	}
 	ret = sscanf(tmp_buf, "%d", &tmp);
@@ -1765,7 +1814,7 @@ return:
 *******************************************************/
 int32_t nvt_set_drag_latency_switch(uint8_t drag_latency_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1796,7 +1845,7 @@ nvt_set_drag_latency_switch_out:
 
 int32_t nvt_get_drag_latency_switch(uint8_t *drag_latency_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1826,7 +1875,9 @@ nvt_get_drag_latency_switch_out:
 	return ret;
 }
 
-static ssize_t nvt_drag_latency_switch_proc_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_drag_latency_switch_proc_read(struct file *filp,
+						 char __user *buf, size_t count,
+						 loff_t *f_pos)
 {
 	static int finished;
 	int32_t cnt = 0;
@@ -1860,7 +1911,8 @@ static ssize_t nvt_drag_latency_switch_proc_read(struct file *filp, char __user 
 
 	mutex_unlock(&ts->lock);
 
-	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "drag_latency_switch: %d\n", drag_latency_switch);
+	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "drag_latency_switch: %d\n",
+		       drag_latency_switch);
 	if (copy_to_user(buf, tmp_buf, sizeof(tmp_buf))) {
 		NVT_ERR("copy_to_user() error!\n");
 		return -EFAULT;
@@ -1872,7 +1924,9 @@ static ssize_t nvt_drag_latency_switch_proc_read(struct file *filp, char __user 
 	return len;
 }
 
-static ssize_t nvt_drag_latency_switch_proc_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_drag_latency_switch_proc_write(struct file *filp,
+						  const char __user *buf,
+						  size_t count, loff_t *f_pos)
 {
 	int32_t ret;
 	int32_t tmp;
@@ -1887,7 +1941,7 @@ static ssize_t nvt_drag_latency_switch_proc_write(struct file *filp, const char 
 		goto out;
 	}
 
-	tmp_buf = kzalloc((count+1), GFP_KERNEL);
+	tmp_buf = kzalloc((count + 1), GFP_KERNEL);
 	if (!tmp_buf) {
 		NVT_ERR("Allocate tmp_buf fail!\n");
 		ret = -ENOMEM;
@@ -1895,7 +1949,7 @@ static ssize_t nvt_drag_latency_switch_proc_write(struct file *filp, const char 
 	}
 	if (copy_from_user(tmp_buf, buf, count)) {
 		NVT_ERR("copy_from_user() error!\n");
-		ret =  -EFAULT;
+		ret = -EFAULT;
 		goto out;
 	}
 
@@ -1948,7 +2002,7 @@ return:
 *******************************************************/
 int32_t nvt_set_small_jitter_switch(uint8_t small_jitter_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -1979,7 +2033,7 @@ nvt_set_small_jitter_switch_out:
 
 int32_t nvt_get_small_jitter_switch(uint8_t *small_jitter_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -2002,7 +2056,8 @@ int32_t nvt_get_small_jitter_switch(uint8_t *small_jitter_switch)
 		goto nvt_get_small_jitter_switch_out;
 	}
 
-	*small_jitter_switch = (((buf[2] & 0x01) << 2) | ((buf[1] >> 6) & 0x03));
+	*small_jitter_switch =
+		(((buf[2] & 0x01) << 2) | ((buf[1] >> 6) & 0x03));
 	NVT_LOG("small_jitter_switch = %d\n", *small_jitter_switch);
 
 nvt_get_small_jitter_switch_out:
@@ -2010,7 +2065,9 @@ nvt_get_small_jitter_switch_out:
 	return ret;
 }
 
-static ssize_t nvt_small_jitter_switch_proc_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_small_jitter_switch_proc_read(struct file *filp,
+						 char __user *buf, size_t count,
+						 loff_t *f_pos)
 {
 	static int finished;
 	int32_t cnt = 0;
@@ -2044,7 +2101,8 @@ static ssize_t nvt_small_jitter_switch_proc_read(struct file *filp, char __user 
 
 	mutex_unlock(&ts->lock);
 
-	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "small_jitter_switch: %d\n", small_jitter_switch);
+	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "small_jitter_switch: %d\n",
+		       small_jitter_switch);
 	if (copy_to_user(buf, tmp_buf, sizeof(tmp_buf))) {
 		NVT_ERR("copy_to_user() error!\n");
 		return -EFAULT;
@@ -2056,7 +2114,9 @@ static ssize_t nvt_small_jitter_switch_proc_read(struct file *filp, char __user 
 	return len;
 }
 
-static ssize_t nvt_small_jitter_switch_proc_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_small_jitter_switch_proc_write(struct file *filp,
+						  const char __user *buf,
+						  size_t count, loff_t *f_pos)
 {
 	int32_t ret;
 	int32_t tmp;
@@ -2071,7 +2131,7 @@ static ssize_t nvt_small_jitter_switch_proc_write(struct file *filp, const char 
 		goto out;
 	}
 
-	tmp_buf = kzalloc((count+1), GFP_KERNEL);
+	tmp_buf = kzalloc((count + 1), GFP_KERNEL);
 	if (!tmp_buf) {
 		NVT_ERR("Allocate tmp_buf fail!\n");
 		ret = -ENOMEM;
@@ -2079,7 +2139,7 @@ static ssize_t nvt_small_jitter_switch_proc_write(struct file *filp, const char 
 	}
 	if (copy_from_user(tmp_buf, buf, count)) {
 		NVT_ERR("copy_from_user() error!\n");
-		ret =  -EFAULT;
+		ret = -EFAULT;
 		goto out;
 	}
 
@@ -2132,7 +2192,7 @@ return:
 *******************************************************/
 int32_t nvt_set_game_mode_switch(uint8_t game_mode_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -2163,7 +2223,7 @@ nvt_set_game_mode_switch_out:
 
 int32_t nvt_get_game_mode_switch(uint8_t *game_mode_switch)
 {
-	uint8_t buf[8] = {0};
+	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
 
 	NVT_LOG("++\n");
@@ -2193,7 +2253,9 @@ nvt_get_game_mode_switch_out:
 	return ret;
 }
 
-static ssize_t nvt_game_mode_switch_proc_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_game_mode_switch_proc_read(struct file *filp,
+					      char __user *buf, size_t count,
+					      loff_t *f_pos)
 {
 	static int finished;
 	int32_t cnt = 0;
@@ -2227,7 +2289,8 @@ static ssize_t nvt_game_mode_switch_proc_read(struct file *filp, char __user *bu
 
 	mutex_unlock(&ts->lock);
 
-	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "game_mode_switch: %d\n", game_mode_switch);
+	cnt = snprintf(tmp_buf, sizeof(tmp_buf), "game_mode_switch: %d\n",
+		       game_mode_switch);
 	if (copy_to_user(buf, tmp_buf, sizeof(tmp_buf))) {
 		NVT_ERR("copy_to_user() error!\n");
 		return -EFAULT;
@@ -2239,7 +2302,9 @@ static ssize_t nvt_game_mode_switch_proc_read(struct file *filp, char __user *bu
 	return len;
 }
 
-static ssize_t nvt_game_mode_switch_proc_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
+static ssize_t nvt_game_mode_switch_proc_write(struct file *filp,
+					       const char __user *buf,
+					       size_t count, loff_t *f_pos)
 {
 	int32_t ret;
 	int32_t tmp;
@@ -2254,7 +2319,7 @@ static ssize_t nvt_game_mode_switch_proc_write(struct file *filp, const char __u
 		goto out;
 	}
 
-	tmp_buf = kzalloc((count+1), GFP_KERNEL);
+	tmp_buf = kzalloc((count + 1), GFP_KERNEL);
 	if (!tmp_buf) {
 		NVT_ERR("Allocate tmp_buf fail!\n");
 		ret = -ENOMEM;
@@ -2262,7 +2327,7 @@ static ssize_t nvt_game_mode_switch_proc_write(struct file *filp, const char __u
 	}
 	if (copy_from_user(tmp_buf, buf, count)) {
 		NVT_ERR("copy_from_user() error!\n");
-		ret =  -EFAULT;
+		ret = -EFAULT;
 		goto out;
 	}
 	ret = sscanf(tmp_buf, "%d", &tmp);
@@ -2315,7 +2380,8 @@ return:
 *******************************************************/
 int32_t nvt_extra_proc_init(void)
 {
-	NVT_proc_fw_version_entry = proc_create(NVT_FW_VERSION, 0444, NULL,&nvt_fw_version_fops);
+	NVT_proc_fw_version_entry =
+		proc_create(NVT_FW_VERSION, 0444, NULL, &nvt_fw_version_fops);
 	if (NVT_proc_fw_version_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_FW_VERSION);
 		return -ENOMEM;
@@ -2323,7 +2389,8 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_FW_VERSION);
 	}
 
-	NVT_proc_baseline_entry = proc_create(NVT_BASELINE, 0444, NULL,&nvt_baseline_fops);
+	NVT_proc_baseline_entry =
+		proc_create(NVT_BASELINE, 0444, NULL, &nvt_baseline_fops);
 	if (NVT_proc_baseline_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_BASELINE);
 		return -ENOMEM;
@@ -2331,7 +2398,7 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_BASELINE);
 	}
 
-	NVT_proc_raw_entry = proc_create(NVT_RAW, 0444, NULL,&nvt_raw_fops);
+	NVT_proc_raw_entry = proc_create(NVT_RAW, 0444, NULL, &nvt_raw_fops);
 	if (NVT_proc_raw_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_RAW);
 		return -ENOMEM;
@@ -2339,7 +2406,7 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_RAW);
 	}
 
-	NVT_proc_diff_entry = proc_create(NVT_DIFF, 0444, NULL,&nvt_diff_fops);
+	NVT_proc_diff_entry = proc_create(NVT_DIFF, 0444, NULL, &nvt_diff_fops);
 	if (NVT_proc_diff_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_DIFF);
 		return -ENOMEM;
@@ -2348,7 +2415,8 @@ int32_t nvt_extra_proc_init(void)
 	}
 
 	if (ts->pen_support) {
-		NVT_proc_pen_diff_entry = proc_create(NVT_PEN_DIFF, 0444, NULL,&nvt_pen_diff_fops);
+		NVT_proc_pen_diff_entry = proc_create(NVT_PEN_DIFF, 0444, NULL,
+						      &nvt_pen_diff_fops);
 		if (NVT_proc_pen_diff_entry == NULL) {
 			NVT_ERR("create proc/%s Failed!\n", NVT_PEN_DIFF);
 			return -ENOMEM;
@@ -2357,7 +2425,8 @@ int32_t nvt_extra_proc_init(void)
 		}
 	}
 
-	NVT_proc_pf_switch_entry = proc_create(NVT_PF_SWITCH, 0666, NULL, &nvt_pf_switch_fops);
+	NVT_proc_pf_switch_entry =
+		proc_create(NVT_PF_SWITCH, 0666, NULL, &nvt_pf_switch_fops);
 	if (NVT_proc_pf_switch_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_PF_SWITCH);
 		return -ENOMEM;
@@ -2365,7 +2434,9 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_PF_SWITCH);
 	}
 
-	NVT_proc_sensitivity_switch_entry = proc_create(NVT_SENSITIVITY_SWITCH, 0666, NULL, &nvt_sensitivity_switch_fops);
+	NVT_proc_sensitivity_switch_entry =
+		proc_create(NVT_SENSITIVITY_SWITCH, 0666, NULL,
+			    &nvt_sensitivity_switch_fops);
 	if (NVT_proc_sensitivity_switch_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_SENSITIVITY_SWITCH);
 		return -ENOMEM;
@@ -2373,7 +2444,8 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_SENSITIVITY_SWITCH);
 	}
 
-	NVT_proc_er_range_switch_entry = proc_create(NVT_ER_RANGE_SWITCH, 0666, NULL, &nvt_er_range_switch_fops);
+	NVT_proc_er_range_switch_entry = proc_create(
+		NVT_ER_RANGE_SWITCH, 0666, NULL, &nvt_er_range_switch_fops);
 	if (NVT_proc_er_range_switch_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_ER_RANGE_SWITCH);
 		return -ENOMEM;
@@ -2381,7 +2453,9 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_ER_RANGE_SWITCH);
 	}
 
-	NVT_proc_edge_reject_switch_entry = proc_create(NVT_EDGE_REJECT_SWITCH, 0666, NULL, &nvt_edge_reject_switch_fops);
+	NVT_proc_edge_reject_switch_entry =
+		proc_create(NVT_EDGE_REJECT_SWITCH, 0666, NULL,
+			    &nvt_edge_reject_switch_fops);
 	if (NVT_proc_edge_reject_switch_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_EDGE_REJECT_SWITCH);
 		return -ENOMEM;
@@ -2389,7 +2463,8 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_EDGE_REJECT_SWITCH);
 	}
 
-	NVT_proc_hand_only_switch_entry = proc_create(NVT_HAND_ONLY_SWITCH, 0666, NULL, &nvt_hand_only_switch_fops);
+	NVT_proc_hand_only_switch_entry = proc_create(
+		NVT_HAND_ONLY_SWITCH, 0666, NULL, &nvt_hand_only_switch_fops);
 	if (NVT_proc_hand_only_switch_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_HAND_ONLY_SWITCH);
 		return -ENOMEM;
@@ -2397,7 +2472,9 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_HAND_ONLY_SWITCH);
 	}
 
-	NVT_proc_drag_latency_switch_entry = proc_create(NVT_DRAG_LATENCY_SWITCH, 0666, NULL, &nvt_drag_latency_switch_fops);
+	NVT_proc_drag_latency_switch_entry =
+		proc_create(NVT_DRAG_LATENCY_SWITCH, 0666, NULL,
+			    &nvt_drag_latency_switch_fops);
 	if (NVT_proc_drag_latency_switch_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_DRAG_LATENCY_SWITCH);
 		return -ENOMEM;
@@ -2405,7 +2482,9 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_DRAG_LATENCY_SWITCH);
 	}
 
-	NVT_proc_small_jitter_switch_entry = proc_create(NVT_SMALL_JITTER_SWITCH, 0666, NULL, &nvt_small_jitter_switch_fops);
+	NVT_proc_small_jitter_switch_entry =
+		proc_create(NVT_SMALL_JITTER_SWITCH, 0666, NULL,
+			    &nvt_small_jitter_switch_fops);
 	if (NVT_proc_small_jitter_switch_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_SMALL_JITTER_SWITCH);
 		return -ENOMEM;
@@ -2413,7 +2492,8 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_SMALL_JITTER_SWITCH);
 	}
 
-	NVT_proc_game_mode_switch_entry = proc_create(NVT_GAME_MODE_SWITCH, 0666, NULL, &nvt_game_mode_switch_fops);
+	NVT_proc_game_mode_switch_entry = proc_create(
+		NVT_GAME_MODE_SWITCH, 0666, NULL, &nvt_game_mode_switch_fops);
 	if (NVT_proc_game_mode_switch_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_GAME_MODE_SWITCH);
 		return -ENOMEM;
@@ -2421,12 +2501,15 @@ int32_t nvt_extra_proc_init(void)
 		NVT_LOG("create proc/%s Succeeded!\n", NVT_GAME_MODE_SWITCH);
 	}
 
-	NVT_proc_xiaomi_lockdown_info_entry = proc_create(NVT_XIAOMI_LOCKDOWN_INFO, 0444, NULL, &nvt_xiaomi_lockdown_info_fops);
+	NVT_proc_xiaomi_lockdown_info_entry =
+		proc_create(NVT_XIAOMI_LOCKDOWN_INFO, 0444, NULL,
+			    &nvt_xiaomi_lockdown_info_fops);
 	if (NVT_proc_xiaomi_lockdown_info_entry == NULL) {
 		NVT_ERR("create proc/%s Failed!\n", NVT_XIAOMI_LOCKDOWN_INFO);
 		return -ENOMEM;
 	} else {
-		NVT_LOG("create proc/%s Succeeded!\n", NVT_XIAOMI_LOCKDOWN_INFO);
+		NVT_LOG("create proc/%s Succeeded!\n",
+			NVT_XIAOMI_LOCKDOWN_INFO);
 	}
 
 	return 0;

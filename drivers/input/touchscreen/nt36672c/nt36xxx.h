@@ -15,8 +15,8 @@
  * more details.
  *
  */
-#ifndef 	_LINUX_NVT_TOUCH_H
-#define		_LINUX_NVT_TOUCH_H
+#ifndef _LINUX_NVT_TOUCH_H
+#define _LINUX_NVT_TOUCH_H
 
 #include <linux/delay.h>
 #include <linux/input.h>
@@ -27,7 +27,6 @@
 #include <linux/sysfs.h>
 #include <linux/workqueue.h>
 #include <linux/power_supply.h>
-
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 #include <linux/earlysuspend.h>
@@ -47,13 +46,12 @@
 #include "../xiaomi/xiaomi_touch.h"
 #endif
 
-
 /*Lock down info size*/
-#define NVT_LOCKDOWN_SIZE			8
+#define NVT_LOCKDOWN_SIZE 8
 
-#define PINCTRL_STATE_ACTIVE		"pmx_ts_active"
-#define PINCTRL_STATE_SUSPEND		"pmx_ts_suspend"
-#define PINCTRL_STATE_RELEASE		"pmx_ts_release"
+#define PINCTRL_STATE_ACTIVE "pmx_ts_active"
+#define PINCTRL_STATE_SUSPEND "pmx_ts_suspend"
+#define PINCTRL_STATE_RELEASE "pmx_ts_release"
 #define MI_DRM_NOTIFIER
 
 #define NVT_DEBUG 1
@@ -64,26 +62,26 @@
 #define NVTTOUCH_RST_PIN 980
 #define NVTTOUCH_INT_PIN 943
 
-
 /*---INT trigger mode---*/
 /*#define IRQ_TYPE_EDGE_RISING 1*/
 /*#define IRQ_TYPE_EDGE_FALLING 2*/
 #define INT_TRIGGER_TYPE IRQ_TYPE_EDGE_RISING
 
-
 /*---SPI driver info.---*/
 #define NVT_SPI_NAME "NVT-ts-spi"
 
 #if NVT_DEBUG
-#define NVT_LOG(fmt, args...)    pr_err("[%s] %s %d: " fmt, NVT_SPI_NAME, __func__, __LINE__, ##args)
+#define NVT_LOG(fmt, args...)                                                  \
+	pr_err("[%s] %s %d: " fmt, NVT_SPI_NAME, __func__, __LINE__, ##args)
 #else
-#define NVT_LOG(fmt, args...)    pr_info("[%s] %s %d: " fmt, NVT_SPI_NAME, __func__, __LINE__, ##args)
+#define NVT_LOG(fmt, args...)                                                  \
+	pr_info("[%s] %s %d: " fmt, NVT_SPI_NAME, __func__, __LINE__, ##args)
 #endif
-#define NVT_ERR(fmt, args...)    pr_err("[%s] %s %d: " fmt, NVT_SPI_NAME, __func__, __LINE__, ##args)
+#define NVT_ERR(fmt, args...)                                                  \
+	pr_err("[%s] %s %d: " fmt, NVT_SPI_NAME, __func__, __LINE__, ##args)
 
 /*---Input device info.---*/
 #define NVT_TS_NAME "NVTCapacitiveTouchScreen"
-
 
 /*---Touch info.---*/
 #define TOUCH_DEFAULT_MAX_WIDTH 1080
@@ -114,14 +112,13 @@ extern const uint16_t gesture_key_array[];
 #endif
 #define BOOT_UPDATE_FIRMWARE 1
 #define DEFAULT_BOOT_UPDATE_FIRMWARE_NAME "novatek_ts_fw.bin"
-#define DEFAULT_MP_UPDATE_FIRMWARE_NAME   "novatek_ts_mp.bin"
+#define DEFAULT_MP_UPDATE_FIRMWARE_NAME "novatek_ts_mp.bin"
 #define DEFAULT_DEBUG_FW_NAME "novatek_debug_fw.bin"
 #define DEFAULT_DEBUG_MP_NAME "novatek_debug_mp.bin"
 
-
 /*---ESD Protect.---*/
 #define NVT_TOUCH_ESD_PROTECT 1
-#define NVT_TOUCH_ESD_CHECK_PERIOD 1500	/* ms */
+#define NVT_TOUCH_ESD_CHECK_PERIOD 1500 /* ms */
 #define NVT_TOUCH_WDT_RECOVERY 1
 #define NVT_TOUCH_ESD_DISP_RECOVERY 1
 
@@ -144,7 +141,6 @@ enum nvt_ic_state {
 };
 
 struct nvt_ts_data {
-
 #if XIAOMI_ROI
 	struct xiaomi_diff_data *diff_data;
 	struct mutex diffdata_lock;
@@ -199,7 +195,7 @@ struct nvt_ts_data {
 	struct mt_chip_conf spi_ctrl;
 #endif
 #ifdef CONFIG_SPI_MT65XX
-    struct mtk_chip_config spi_ctrl;
+	struct mtk_chip_config spi_ctrl;
 #endif
 	struct pinctrl *ts_pinctrl;
 	struct pinctrl_state *pinctrl_state_active;
@@ -238,38 +234,35 @@ struct nvt_ts_data {
 };
 
 #if NVT_TOUCH_PROC
-struct nvt_flash_data{
+struct nvt_flash_data {
 	rwlock_t lock;
 };
 #endif
 
 typedef enum {
-	RESET_STATE_INIT = 0xA0,/* IC reset */
-	RESET_STATE_REK,		/* ReK baseline */
-	RESET_STATE_REK_FINISH,	/* baseline is ready */
-	RESET_STATE_NORMAL_RUN,	/* normal run */
-	RESET_STATE_MAX  = 0xAF
+	RESET_STATE_INIT = 0xA0, /* IC reset */
+	RESET_STATE_REK, /* ReK baseline */
+	RESET_STATE_REK_FINISH, /* baseline is ready */
+	RESET_STATE_NORMAL_RUN, /* normal run */
+	RESET_STATE_MAX = 0xAF
 } RST_COMPLETE_STATE;
 
 typedef enum {
-    EVENT_MAP_HOST_CMD                      = 0x50,
-    EVENT_MAP_HANDSHAKING_or_SUB_CMD_BYTE   = 0x51,
-    EVENT_MAP_RESET_COMPLETE                = 0x60,
-    EVENT_MAP_FWINFO                        = 0x78,
-    EVENT_MAP_PROJECTID                     = 0x9A,
+	EVENT_MAP_HOST_CMD = 0x50,
+	EVENT_MAP_HANDSHAKING_or_SUB_CMD_BYTE = 0x51,
+	EVENT_MAP_RESET_COMPLETE = 0x60,
+	EVENT_MAP_FWINFO = 0x78,
+	EVENT_MAP_PROJECTID = 0x9A,
 } SPI_EVENT_MAP;
 
 /*---SPI READ/WRITE---*/
-#define SPI_WRITE_MASK(a)	(a | 0x80)
-#define SPI_READ_MASK(a)	(a & 0x7F)
+#define SPI_WRITE_MASK(a) (a | 0x80)
+#define SPI_READ_MASK(a) (a & 0x7F)
 
 #define DUMMY_BYTES (1)
-#define NVT_TRANSFER_LEN	(63*1024)
+#define NVT_TRANSFER_LEN (63 * 1024)
 
-typedef enum {
-	NVTWRITE = 0,
-	NVTREAD  = 1
-} NVT_SPI_RW;
+typedef enum { NVTWRITE = 0, NVTREAD = 1 } NVT_SPI_RW;
 
 /*---extern structures---*/
 extern struct nvt_ts_data *ts;

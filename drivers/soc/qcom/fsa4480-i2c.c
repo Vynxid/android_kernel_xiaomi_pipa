@@ -9,7 +9,6 @@
 #include <linux/i2c.h>
 #include <linux/mutex.h>
 #include <linux/soc/qcom/fsa4480-i2c.h>
-#include <linux/mmhardware_others.h>
 
 #define FSA4480_I2C_NAME	"fsa4480-driver"
 
@@ -148,15 +147,8 @@ static int fsa4480_usbc_analog_setup_switches(struct fsa4480_priv *fsa_priv)
 			__func__, rc);
 		goto done;
 	}
-
-	if ((atomic_read(&(fsa_priv->usbc_mode)) != mode.intval) &&
-		(mode.intval == POWER_SUPPLY_TYPEC_SINK_AUDIO_ADAPTER ||
-		mode.intval == POWER_SUPPLY_TYPEC_NONE)) {
-		atomic_set(&(fsa_priv->usbc_mode), mode.intval);
-	}
-
-	dev_info(dev, "%s: setting GPIOs active = %d, mode.intval = %d\n",
-		__func__, mode.intval != POWER_SUPPLY_TYPEC_NONE, mode.intval);
+	dev_dbg(dev, "%s: setting GPIOs active = %d\n",
+		__func__, mode.intval != POWER_SUPPLY_TYPEC_NONE);
 
 	if ((atomic_read(&(fsa_priv->usbc_mode)) != mode.intval) &&
 		(mode.intval == POWER_SUPPLY_TYPEC_SINK_AUDIO_ADAPTER ||
@@ -325,7 +317,7 @@ int fsa4480_switch_event(struct device_node *node,
 		else
 			switch_control = 0x7;
 		fsa4480_usbc_update_settings(fsa_priv, switch_control, 0x9F);
-		return 1;
+		break;
 	case FSA_USBC_ORIENTATION_CC1:
 		fsa4480_usbc_update_settings(fsa_priv, 0x18, 0xF8);
 		return fsa4480_validate_display_port_settings(fsa_priv);
@@ -373,6 +365,7 @@ static int fsa4480_probe(struct i2c_client *i2c,
 #ifdef CONFIG_MACH_XIAOMI_MUNCH
 	union power_supply_propval mode;
 #endif
+
 	fsa_priv = devm_kzalloc(&i2c->dev, sizeof(*fsa_priv),
 				GFP_KERNEL);
 	if (!fsa_priv)
@@ -401,9 +394,6 @@ static int fsa4480_probe(struct i2c_client *i2c,
 		goto err_supply;
 	}
 
-#ifdef CONFIG_MMHARDWARE_OTHER_DETECTION
-	register_otherkobj_under_mmsysfs(MM_HW_AS, "audioswitch");
-#endif
 	fsa4480_update_reg_defaults(fsa_priv->regmap);
 
 	fsa_priv->psy_nb.notifier_call = fsa4480_usbc_event_changed;
@@ -421,10 +411,7 @@ static int fsa4480_probe(struct i2c_client *i2c,
 	INIT_WORK(&fsa_priv->usbc_analog_work,
 		  fsa4480_usbc_analog_work_fn);
 
-	fsa_priv->fsa4480_notifier.rwsem =
-		(struct rw_semaphore)__RWSEM_INITIALIZER
-		((fsa_priv->fsa4480_notifier).rwsem);
-	fsa_priv->fsa4480_notifier.head = NULL;
+	BLOCKING_INIT_NOTIFIER_HEAD(&fsa_priv->fsa4480_notifier);
 
 #ifdef CONFIG_MACH_XIAOMI_MUNCH
 	/* set usbc_mode initial value */
@@ -438,6 +425,7 @@ static int fsa4480_probe(struct i2c_client *i2c,
 		dev_info(fsa_priv->dev, "%s: set usbc_mode to %d\n", __func__, fsa_priv->usbc_mode.counter);
 	}
 #endif
+
 	return 0;
 
 err_supply:
