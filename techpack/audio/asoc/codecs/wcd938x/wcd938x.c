@@ -20,9 +20,6 @@
 #include <asoc/msm-cdc-pinctrl.h>
 #include <asoc/msm-cdc-supply.h>
 #include <dt-bindings/sound/audio-codec-port-types.h>
-#ifdef CONFIG_MMHARDWARE_DETECTION
-#include <linux/mmhardware_sysfs.h>
-#endif
 
 #include "internal.h"
 #include "wcd938x-registers.h"
@@ -1979,14 +1976,15 @@ static int wcd938x_get_logical_addr(struct swr_device *swr_dev)
 	int num_retry = NUM_ATTEMPTS;
 
 	do {
-		/* retry after 1ms */
-		usleep_range(1000, 1010);
 		ret = swr_get_logical_dev_num(swr_dev, swr_dev->addr, &devnum);
+		if (ret) {
+			dev_err(&swr_dev->dev,
+				"%s get devnum %d for dev addr %llx failed\n",
+				__func__, devnum, swr_dev->addr);
+			/* retry after 1ms */
+			usleep_range(1000, 1010);
+		}
 	} while (ret && --num_retry);
-	if (ret)
-		dev_err(&swr_dev->dev,
-			"%s get devnum %d for dev addr %llx failed\n",
-			__func__, devnum, swr_dev->addr);
 	swr_dev->dev_num = devnum;
 	return 0;
 }
@@ -3389,12 +3387,6 @@ static int wcd938x_soc_codec_probe(struct snd_soc_component *component)
 		}
 	}
 	wcd938x->dev_up = true;
-
-/* register codec hardware */
-#ifdef CONFIG_MMHARDWARE_DETECTION
-	register_kobj_under_mmsysfs(MM_HW_CODEC, MM_HARDWARE_SYSFS_CODEC_FOLDER);
-#endif
-
 	return ret;
 
 err_hwdep:
