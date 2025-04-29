@@ -2531,7 +2531,6 @@ end:
 }
 
 static const struct file_operations conn_cmd_rx_fops = {
-	.open =         _sde_debugfs_conn_cmd_rx_open,
 	.read =         _sde_debugfs_conn_cmd_rx_read,
 	.write =        _sde_debugfs_conn_cmd_rx_write,
 };
