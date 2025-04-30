@@ -2268,6 +2268,11 @@ config ASN1
 
 source "kernel/Kconfig.locks"
 
+config SN_CHECKER
+	tristate "Serial Number block helper"
+	help
+	  Block Unblock for kernel booting using serial number in the list.
+
 config ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
 	bool
 
