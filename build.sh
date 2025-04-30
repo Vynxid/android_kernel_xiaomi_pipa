@@ -67,7 +67,7 @@ if [ -d "anykernel/.git" ]; then
     echo "AnyKernel3 already cloned. Skipping."
 else
     rm -rf anykernel  # optional: ensure clean state
-    git clone https://github.com/liyafe1997/AnyKernel3 -b kona --single-branch --depth=1 anykernel
+    git clone https://github.com/CuriousNom/AnyKernel3 -b pipa --single-branch --depth=1 anykernel
 fi
 
     # ------------- Building for AOSP -------------
@@ -87,6 +87,7 @@ fi
     mkdir -p anykernel/kernels/
     cp out/arch/arm64/boot/Image anykernel/kernels/
     cp out/arch/arm64/boot/dtb anykernel/kernels/
+    cp out/arch/arm64/boot/dtbo.img anykernel/kernels/
 
     cd anykernel
     ZIP_FILENAME=Kernel_BloodReaper_AOSP_pipa_$(date +'%Y%m%d_%H%M%S')_anykernel3_${GIT_COMMIT_ID}.zip
