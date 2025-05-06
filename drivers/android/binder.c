@@ -3024,13 +3024,6 @@ static struct binder_node *binder_get_node_refs_for_txn(
 	return target_node;
 }
 
-#ifdef CONFIG_XIAOMI_MIUI
-static inline u64 binder_clock(void)
-{
-	return trace_clock_local();
-}
-#endif
-
 static void binder_transaction(struct binder_proc *proc,
 			       struct binder_thread *thread,
 			       struct binder_transaction_data *tr, int reply,
@@ -3679,9 +3672,6 @@ static void binder_transaction(struct binder_proc *proc,
 		t->need_reply = 1;
 		t->from_parent = thread->transaction_stack;
 		thread->transaction_stack = t;
-#ifdef CONFIG_XIAOMI_MIUI
-		t->timesRecord = binder_clock();
-#endif
 		binder_inner_proc_unlock(proc);
 		if (!binder_proc_transaction(t, target_proc, target_thread)) {
 			binder_inner_proc_lock(proc);
@@ -3693,9 +3683,6 @@ static void binder_transaction(struct binder_proc *proc,
 		BUG_ON(target_node == NULL);
 		BUG_ON(t->buffer->async_transaction != 1);
 		binder_enqueue_thread_work(thread, tcomplete);
-#ifdef CONFIG_XIAOMI_MIUI
-		t->timesRecord = binder_clock();
-#endif
 		if (!binder_proc_transaction(t, target_proc, NULL))
 			goto err_dead_proc_or_thread;
 	}
@@ -6627,7 +6614,6 @@ static int proc_transaction_show(struct seq_file *m, void *unused)
 	seq_printf(m, "proc %d\n", pid);
 	seq_puts(m, "binder transaction info:\n");
 	mutex_lock(&binder_procs_lock);
-	now = binder_clock();
 	hlist_for_each_entry(proc, &binder_procs, proc_node) {
 		if (proc->pid == pid)
 			print_binder_proc_transaction_info(m, proc, now);
