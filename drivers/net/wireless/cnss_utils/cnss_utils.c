@@ -434,7 +434,7 @@ static int cnss_utils_debugfs_create(struct cnss_utils_priv *priv)
 	if (IS_ERR(root_dentry)) {
 		ret = PTR_ERR(root_dentry);
 #ifdef CONFIG_DEBUG_FS
-		pr_err("Unable to create debugfs %d\n", ret);
+                pr_err("Unable to create debugfs %d\n", ret);
 #endif
 		goto out;
 	}
@@ -444,6 +444,7 @@ static int cnss_utils_debugfs_create(struct cnss_utils_priv *priv)
 out:
 	return ret;
 }
+# endif
 
 static int __init cnss_utils_init(void)
 {
@@ -457,7 +458,6 @@ static int __init cnss_utils_init(void)
 
 	mutex_init(&priv->unsafe_channel_list_lock);
 	spin_lock_init(&priv->dfs_nol_info_lock);
-	cnss_utils_debugfs_create(priv);
 	cnss_utils_priv = priv;
 
 	return 0;
