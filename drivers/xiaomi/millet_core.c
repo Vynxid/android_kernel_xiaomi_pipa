@@ -347,13 +347,12 @@ static ssize_t millet_stat_write(struct file *filp, const char __user *buf,
 	return count;
 }
 
-static const struct file_operations millet_proc_fops = {
-	.open = millet_stat_open,
-	.read = seq_read,
-	.write = millet_stat_write,
-	.llseek = seq_lseek,
-	.release = single_release,
-	.owner = THIS_MODULE,
+static const struct proc_ops millet_proc_ops = {
+    .proc_open    = millet_stat_open,
+    .proc_read    = seq_read,
+    .proc_write   = millet_stat_write,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int millet_version_show(struct seq_file *m, void *v)
@@ -367,12 +366,11 @@ static int millet_version_open(struct inode *inode, struct file *file)
 	return single_open(file, millet_version_show, NULL);
 }
 
-static const struct file_operations millet_version_fops = {
-	.open = millet_version_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
-	.owner = THIS_MODULE,
+static const struct proc_ops millet_version_ops = {
+        .proc_open    = millet_version_open,
+        .proc_read    = seq_read,
+        .proc_lseek   = seq_lseek,
+        .proc_release = single_release,
 };
 
 int register_millet_hook(int type, recv_hook recv_from, send_hook send_to,
@@ -457,12 +455,12 @@ static int __init millet_init(void)
 		pr_err("create /proc/millet failed\n");
 	else {
 		millet_stat_entry = proc_create(
-			"millet_stat", 0644, millet_rootdir, &millet_proc_fops);
+			"millet_stat", 0644, millet_rootdir, &millet_proc_ops);
 		if (!millet_stat_entry)
 			pr_err("create millet stat failed\n");
 
 		millet_version_entry = proc_create(
-			"version", 0644, millet_rootdir, &millet_version_fops);
+			"version", 0644, millet_rootdir, &millet_version_ops);
 		if (!millet_version_entry)
 			pr_err("create millet version failed\n");
 	}
