@@ -528,11 +528,11 @@ static int history_load_open(struct inode *inode, struct file *file)
 	return single_open(file, history_load_show, NULL);
 }
 
-static const struct file_operations history_load_fops = {
-	.open = history_load_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops history_load_ops = {
+        .proc_open = history_load_open,
+        .proc_read = seq_read,
+        .proc_lseek = seq_lseek,
+        .proc_release = single_release,
 };
 
 static int cpu_load_show(struct seq_file *m, void *v)
@@ -580,11 +580,11 @@ static int cpu_load_open(struct inode *inode, struct file *file)
 	return single_open(file, cpu_load_show, NULL);
 }
 
-static const struct file_operations cpu_load_fops = {
-	.open = cpu_load_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops cpu_load_ops = {
+        .proc_open = cpu_load_open,
+        .proc_read = seq_read,
+        .proc_lseek = seq_lseek,
+        .proc_release = single_release,
 };
 
 void create_game_load_proc(void *rootdir)
@@ -601,9 +601,9 @@ void create_game_load_proc(void *rootdir)
 		return;
 
 	history_load_entry = proc_create("game_history_load", 0664,
-					 game_load_dir, &history_load_fops);
+					 game_load_dir, &history_load_ops);
 	cpu_load_entry = proc_create("game_cpu_load", 0664, game_load_dir,
-				     &cpu_load_fops);
+				     &cpu_load_ops);
 }
 
 void delete_game_load_proc(void)
