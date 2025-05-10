@@ -1378,8 +1378,6 @@ static const struct proc_ops psi_io_proc_ops = {
 	.proc_write          = psi_io_write,
 	.proc_poll           = psi_fop_poll,
 	.proc_release        = psi_fop_release,
-	.proc_ioctl           = psi_fop_ioctl,
-	.proc_compat_ioctl   = psi_fop_ioctl,
 };
 
 static const struct proc_ops psi_memory_proc_ops = {
@@ -1389,8 +1387,6 @@ static const struct proc_ops psi_memory_proc_ops = {
 	.proc_write          = psi_memory_write,
 	.proc_poll           = psi_fop_poll,
 	.proc_release        = psi_fop_release,
-	.proc_ioctl           = psi_fop_ioctl,
-	.proc_compat_ioctl   = psi_fop_ioctl,
 };
 
 static const struct proc_ops psi_cpu_proc_ops = {
@@ -1400,8 +1396,6 @@ static const struct proc_ops psi_cpu_proc_ops = {
 	.proc_write          = psi_cpu_write,
 	.proc_poll           = psi_fop_poll,
 	.proc_release        = psi_fop_release,
-	.proc_ioctl           = psi_fop_ioctl,
-	.proc_compat_ioctl   = psi_fop_ioctl,
 };
 
 static int __init psi_proc_init(void)
