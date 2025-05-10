@@ -257,11 +257,11 @@ static int runtime_open_all(struct inode *inode, struct file *file)
 	return single_open(file, runtime_show_all, NULL);
 }
 
-static const struct file_operations package_show_all_fops = {
-	.open = runtime_open_all,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_show_all_ops = {
+    .proc_open    = runtime_open_all,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int package_runtime_show(struct seq_file *m, void *v)
@@ -423,12 +423,12 @@ static ssize_t trace_package_write(struct file *filp, const char __user *buf,
 	return count;
 }
 
-static const struct file_operations package_trace_fops = {
-	.open = package_runtime_open,
-	.read = seq_read,
-	.write = trace_package_write,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_trace_ops = {
+    .proc_open    = package_runtime_open,
+    .proc_read    = seq_read,
+    .proc_write   = trace_package_write,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int fb_show_all(struct seq_file *m, void *v)
@@ -523,11 +523,11 @@ static int fb_open_all(struct inode *inode, struct file *file)
 	return single_open(file, fb_show_all, NULL);
 }
 
-static const struct file_operations package_fb_fops = {
-	.open = fb_open_all,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_fb_ops = {
+    .proc_open    = fb_open_all,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int fb_show_uid(struct seq_file *m, void *v)
@@ -639,12 +639,12 @@ static ssize_t fb_uid_write(struct file *filp, const char __user *buf,
 	return count;
 }
 
-static const struct file_operations package_fb_uid_fops = {
-	.open = fb_open_uid,
-	.read = seq_read,
-	.write = fb_uid_write,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_fb_uid_ops = {
+    .proc_open    = fb_open_uid,
+    .proc_read    = seq_read,
+    .proc_write   = fb_uid_write,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static void reset_fb(int window_idx)
@@ -704,11 +704,11 @@ static int pkg_cond_reset_open(struct inode *inode, struct file *file)
 	return single_open(file, pkg_condition_reset, NULL);
 }
 
-static const struct file_operations pkg_cond_reset_fops = {
-	.open = pkg_cond_reset_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops pkg_cond_reset_ops = {
+    .proc_open    = pkg_cond_reset_open,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int fb_status_show(struct seq_file *m, void *v)
@@ -750,12 +750,12 @@ static ssize_t fb_status_set(struct file *filp, const char __user *buf,
 	return count;
 }
 
-static const struct file_operations pkg_fb_set_fops = {
-	.open = fb_status_open,
-	.read = seq_read,
-	.write = fb_status_set,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops pkg_fb_set_ops = {
+    .proc_open    = fb_status_open,
+    .proc_read    = seq_read,
+    .proc_write   = fb_status_set,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int top_package_on_bcore_open(struct inode *inode, struct file *file)
@@ -770,11 +770,11 @@ static int top_package_on_bcore_open(struct inode *inode, struct file *file)
 	return ret;
 }
 
-static const struct file_operations package_top_bcore_fops = {
-	.open = top_package_on_bcore_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_top_bcore_ops = {
+    .proc_open    = top_package_on_bcore_open,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int top_package_on_lcore_open(struct inode *inode, struct file *file)
@@ -789,11 +789,11 @@ static int top_package_on_lcore_open(struct inode *inode, struct file *file)
 	return ret;
 }
 
-static const struct file_operations package_top_lcore_fops = {
-	.open = top_package_on_lcore_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_top_lcore_ops = {
+    .proc_open    = top_package_on_lcore_open,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int top_package_open(struct inode *inode, struct file *file)
@@ -808,11 +808,11 @@ static int top_package_open(struct inode *inode, struct file *file)
 	return ret;
 }
 
-static const struct file_operations package_top_fops = {
-	.open = top_package_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_top_ops = {
+    .proc_open    = top_package_open,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int package_trace_stat(struct seq_file *m, void *v)
@@ -827,11 +827,11 @@ static int package_tracestat_open(struct inode *inode, struct file *file)
 	return single_open(file, package_trace_stat, NULL);
 }
 
-static const struct file_operations package_tracestat_fops = {
-	.open = package_tracestat_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_tracestat_ops = {
+    .proc_open    = package_tracestat_open,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static void set_traced_window(int window_idx)
@@ -910,11 +910,11 @@ static int package_reset_traced_window(struct inode *inode, struct file *file)
 	return single_open(file, reset_traced_window_show, NULL);
 }
 
-static const struct file_operations package_reset_tracedwindow_fops = {
-	.open = package_reset_traced_window,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_reset_tracedwindow_ops = {
+    .proc_open    = package_reset_traced_window,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int traced_window_show(struct seq_file *m, void *v)
@@ -946,12 +946,12 @@ static ssize_t traced_window_write(struct file *filp, const char __user *buf,
 	return count;
 }
 
-static const struct file_operations package_tracedwindow_fops = {
-	.open = package_open_traced_window,
-	.read = seq_read,
-	.write = traced_window_write,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_tracedwindow_ops = {
+    .proc_open    = package_open_traced_window,
+    .proc_read    = seq_read,
+    .proc_write   = traced_window_write,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int window_size_show(struct seq_file *m, void *v)
@@ -966,11 +966,11 @@ static int package_open_window_size(struct inode *inode, struct file *file)
 	return single_open(file, window_size_show, NULL);
 }
 
-static const struct file_operations package_windowsize_fops = {
-	.open = package_open_window_size,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops package_windowsize_ops = {
+    .proc_open    = package_open_window_size,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int develop_mode_show(struct seq_file *m, void *v)
@@ -999,12 +999,12 @@ static ssize_t develop_mode_set(struct file *filp, const char __user *buf,
 	return count;
 }
 
-static const struct file_operations develop_mode_fops = {
-	.open = develop_mode_open,
-	.read = seq_read,
-	.write = develop_mode_set,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops develop_mode_ops = {
+    .proc_open    = develop_mode_open,
+    .proc_read    = seq_read,
+    .proc_write   = develop_mode_set,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int pause_mode_show(struct seq_file *m, void *v)
@@ -1033,12 +1033,12 @@ static ssize_t pause_mode_set(struct file *filp, const char __user *buf,
 	return count;
 }
 
-static const struct file_operations pause_mode_fops = {
-	.open = pause_mode_open,
-	.read = seq_read,
-	.write = pause_mode_set,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops pause_mode_ops = {
+    .proc_open    = pause_mode_open,
+    .proc_read    = seq_read,
+    .proc_write   = pause_mode_set,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 static int exec_buckets_show(struct seq_file *m, void *v)
@@ -1100,11 +1100,11 @@ static int exec_buckets_open(struct inode *inode, struct file *file)
 	return ret;
 }
 
-static const struct file_operations exec_buckets_fops = {
-	.open = exec_buckets_open,
-	.read = seq_read,
-	.llseek = seq_lseek,
-	.release = single_release,
+static const struct proc_ops exec_buckets_ops = {
+    .proc_open    = exec_buckets_open,
+    .proc_read    = seq_read,
+    .proc_lseek   = seq_lseek,
+    .proc_release = single_release,
 };
 
 void create_runtime_proc(void)
@@ -1121,43 +1121,43 @@ void create_runtime_proc(void)
 		return;
 
 	package_showall_entry = proc_create("show_all", 0664, package_dir,
-					    &package_show_all_fops);
+					    &package_show_all_ops);
 	package_top_bcore_entry =
 		proc_create("top_package_on_bcore", 0664, package_dir,
-			    &package_top_bcore_fops);
+			    &package_top_bcore_ops);
 	package_top_lcore_entry =
 		proc_create("top_package_on_lcore", 0664, package_dir,
-			    &package_top_lcore_fops);
+			    &package_top_lcore_ops);
 	package_top_entry = proc_create("top_package", 0664, package_dir,
-					&package_top_fops);
+					&package_top_ops);
 	package_trace_entry = proc_create("show_traced_package", 0664,
-					  package_dir, &package_trace_fops);
+					  package_dir, &package_trace_ops);
 	package_fb_showall = proc_create("show_fb_showall", 0666, package_dir,
-					 &package_fb_fops);
+					 &package_fb_ops);
 	package_fb_traced_show = proc_create("show_fb_uid_show", 0666,
-					     package_dir, &package_fb_uid_fops);
+					     package_dir, &package_fb_uid_ops);
 	/*pkg runtime stat*/
 	stat_dir = proc_mkdir("stat", package_rootdir);
 	if (!stat_dir)
 		return;
 
 	package_tracestat_entry = proc_create("show_tracestat", 0664, stat_dir,
-					      &package_tracestat_fops);
+					      &package_tracestat_ops);
 	package_trace_window = proc_create("show_traced_window", 0664, stat_dir,
-					   &package_tracedwindow_fops);
+					   &package_tracedwindow_ops);
 	package_window_size_entry = proc_create(
-		"show_windowsize", 0664, stat_dir, &package_windowsize_fops);
+		"show_windowsize", 0664, stat_dir, &package_windowsize_ops);
 	package_develop_mode_entry =
-		proc_create("develop_mode", 0664, stat_dir, &develop_mode_fops);
+		proc_create("develop_mode", 0664, stat_dir, &develop_mode_ops);
 	package_resettraced_window =
 		proc_create("reset_traced_window", 0664, stat_dir,
-			    &package_reset_tracedwindow_fops);
+			    &package_reset_tracedwindow_ops);
 	package_condition_reset = proc_create("pkg_condition_reset", 0666,
-					      stat_dir, &pkg_cond_reset_fops);
+					      stat_dir, &pkg_cond_reset_ops);
 	package_fb_status_set =
-		proc_create("pkg_fb_set", 0666, stat_dir, &pkg_fb_set_fops);
+		proc_create("pkg_fb_set", 0666, stat_dir, &pkg_fb_set_ops);
 	package_pause_mode_entry =
-		proc_create("pause_mode", 0664, stat_dir, &pause_mode_fops);
+		proc_create("pause_mode", 0664, stat_dir, &pause_mode_ops);
 	package_runtime_info = get_package_runtime_info();
 	/*migt sched info*/
 	migt_dir = proc_mkdir("migt", package_rootdir);
@@ -1165,7 +1165,7 @@ void create_runtime_proc(void)
 		return;
 
 	exec_buckets_entry = proc_create("show_exec_buckets", 0664, migt_dir,
-					 &exec_buckets_fops);
+					 &exec_buckets_ops);
 	create_game_load_proc(migt_dir);
 }
 
