@@ -19,6 +19,8 @@ The pre-built kernel image/zip is built on the `android15-lineage22-mod` branch.
 
 Note: The zip does not include the `dtbo.img` and it will not replace your `dtbo` partition. It is recommanded to keep the stock `dtbo` or the `dtbo` from your third-party rom (If the builder comfirmed it works well). Since there are some problems with the `dtbo.img` which built from this source, one of them is the screen will suddently goes to the highest brightness when shut try to shut off the screen in the lock screen. If you had flashed any other third-party kernels, and you got some weird problem, you should keep an eye to check your `dtbo` has been replaced or not. 
 
+**Notice: If you are using MIUI/HyperOS please use the MIUI varient. Because the display driver is different between MIUI and AOSP, if you are using MIUI/HyperOS but installed the AOSP version, the display will not work and only black screen. If you only see a black screen after installed this kernel, please check if you installed the correct varient or not!**
+
 Supported devices:
 | Code Name | Device Name                          |
 |-----------|--------------------------------------|
@@ -57,6 +59,8 @@ Other Features/Improvement of this Kernel:
 Release里的编译好的内核成品由`android15-lineage22-mod`分支编译，应当能在原版MIUI和第三方的基于AOSP的各种Android11-15的ROM上使用。欢迎大家尝试并反馈（提Issue或Pull Requests）！酷友们到[酷安的这个帖子](https://www.coolapk.com/feed/56813047)讨论或反馈，也可以给我私信反馈！
 
 注意：该内核的zip包不包含`dtbo.img`，并且不会刷你的dtbo分区。推荐使用原厂的`dtbo`，或者来自第三方系统包自带的dtbo（如果原作者确认那好用的话）。因为该源码build出来的`dtbo.img`有些小问题，比如在锁屏界面上尝试熄屏时，屏幕会突然闪一下到最高亮度。如果你刷过其它第三方内核，或者遇到一些奇怪的问题，建议检查一下你的`dtbo`是否被替换过。
+
+**注意：如果你在用HyperOS/MIUI请刷MIUI的版本，AOSP版因为display驱动不同，在HyperOS上屏幕无法正常显示，如果刷内核之后开机黑屏，请先检查你是不是正在用着HyperOS/MIUI但是刷了AOSP版**
 
 度盘备用下载链接：https://pan.baidu.com/share/init?surl=11ocz7ggZ79gzRfWvsdbJA&pwd=ty58 （建议优先从Github Release下载）
 
