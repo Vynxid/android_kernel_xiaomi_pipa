@@ -729,12 +729,14 @@ OUT:
 
 struct kjson_container *kjson_parse(const char *json_str)
 {
-	// Inizialize the memory for errors message
-	kjson_parser_error.str_data = kjson_parser_error.__data;
-	kjstring_clear(((struct kjstring_t*)&kjson_parser_error));
-	
-	kjstring_iterator_from_string(iterator, json_str);
-    return kjson_start_parser(&iterator, false);
+        // Declare the iterator first via macro
+        kjstring_iterator_from_string(iterator, json_str);
+
+        // Initialize the memory for error messages
+        kjson_parser_error.str_data = kjson_parser_error.__data;
+        kjstring_clear(((struct kjstring_t*)&kjson_parser_error));
+
+        return kjson_start_parser(&iterator, false);
 }
 EXPORT_SYMBOL_GPL(kjson_parse);
 
