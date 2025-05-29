@@ -58,21 +58,45 @@ echo "Cloning AnyKernel3 for packing kernel..."
 if [ -d "anykernel/.git" ]; then
     echo "AnyKernel3 already cloned. Skipping."
 else
-    rm -rf anykernel  # ensure clean state
+    rm -rf anykernel  # optional: ensure clean state
     git clone https://github.com/CuriousNom/AnyKernel3 -b pipa --single-branch --depth=1 anykernel
 fi
 
-    # ------------- Building for AOSP ---------------
-    echo "Clearing [out/] and building for AOSP....."
+    # ------------- Building for MIUI/HOS -------------
+    echo "Clearing [out/] and building for MIUI/HOS....."
 
     make $MAKE_ARGS pipa_defconfig
+
+scripts/config --file out/.config \
+    --set-str STATIC_USERMODEHELPER_PATH /system/bin/micd \
+    -e PERF_CRITICAL_RT_TASK	\
+    -e SF_BINDER		\
+    -e MIGT \
+    -e MIGT_ENERGY_MODEL \
+    -e MIHW \
+    -e PACKAGE_RUNTIME_INFO \
+    -e BINDER_OPT \
+    -e KPERFEVENTS \
+    -e MILLET \
+    -e PERF_HUMANTASK \
+    -d LOCALVERSION_AUTO \
+    -e SF_BINDER \
+    -e XIAOMI_MIUI \
+    -d MI_MEMORY_SYSFS \
+    -e TASK_DELAY_ACCT \
+    -e MIUI_ZRAM_MEMORY_TRACKING \
+    -e MI_FRAGMENTION \
+    -e PERF_HELPER \
+    -e BOOTUP_RECLAIM \
+    -e MI_RECLAIM \
+    -e RTMM \
 
     make $MAKE_ARGS -j$(nproc --all) 2> >(tee -a error.log >&2)
 
     if [ -f "out/arch/arm64/boot/Image" ]; then
-        echo "The file [out/arch/arm64/boot/Image] exists. AOSP Build successfully."
+        echo "The file [out/arch/arm64/boot/Image] exists. MIUI Build successfully."
     else
-        echo "The file [out/arch/arm64/boot/Image] does not exist. Seems AOSP build failed."
+        echo "The file [out/arch/arm64/boot/Image] does not exist. Seems MIUI build failed."
         exit 1
     fi
 
@@ -82,11 +106,11 @@ fi
     cp out/arch/arm64/boot/dtb anykernel/kernels/
 
     cd anykernel
-    ZIP_FILENAME=Kernel_BloodReaper_AOSP_pipa_$(date +'%Y%m%d_%H%M%S')_anykernel3_${GIT_COMMIT_ID}.zip
+    ZIP_FILENAME=Kernel_BloodReaper_MIUI_pipa_$(date +'%Y%m%d_%H%M%S')_anykernel3_${GIT_COMMIT_ID}.zip
     zip -r9 $ZIP_FILENAME ./* -x .git .gitignore out/ ./*.zip
     mv $ZIP_FILENAME ../
     cd ..
 
-    echo "Build for AOSP finished."
+    echo "Build for MIUI/HOS finished."
 
 echo "Done. The flashable zip is: [./$ZIP_FILENAME]"
