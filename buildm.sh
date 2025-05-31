@@ -62,6 +62,9 @@ else
     git clone https://github.com/CuriousNom/AnyKernel3 -b pipa --single-branch --depth=1 anykernel
 fi
 
+echo "Applying patch..."
+git apply dtsi.patch
+
     # ------------- Building for MIUI/HOS -------------
     echo "Clearing [out/] and building for MIUI/HOS....."
 
@@ -75,6 +78,9 @@ fi
         echo "The file [out/arch/arm64/boot/Image] does not exist. Seems MIUI build failed."
         exit 1
     fi
+
+echo "Restoring patch..."
+git apply -R dtsi.patch
 
     rm -rf anykernel/kernels/
     mkdir -p anykernel/kernels/
