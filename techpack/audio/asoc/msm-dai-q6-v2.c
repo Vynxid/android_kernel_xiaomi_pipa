@@ -21,7 +21,7 @@
 #include "msm-dai-q6-v2.h"
 #include <asoc/core.h>
 #ifdef TFA_ADSP_SUPPORTED
-#if defined(CONFIG_TARGET_PRODUCT_MUNCH)
+#if defined(CONFIG_MACH_XIAOMI_MUNCH)
 #include "codecs/tfa9874/inc/tfa_platform_interface_definition.h"
 #else
 #include "codecs/tfa98xx/inc/tfa_platform_interface_definition.h"
@@ -5540,6 +5540,7 @@ static int msm_dai_q6_mi2s_hw_params(struct snd_pcm_substream *substream,
 		return -EINVAL;
 	}
 #endif
+
 	dai_data->channels = params_channels(params);
 	switch (dai_data->channels) {
 	case 15:
