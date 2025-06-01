@@ -33,7 +33,20 @@ fi
 # Enable ccache for speed up compiling
 export USE_CCACHE=1
 
-MAKE_ARGS="ARCH=arm64 O=out CC='ccache clang' LLVM=1 LLVM_IAS=1 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip"
+MAKE_ARGS=(
+    ARCH=arm64
+    O=out
+    CC="ccache clang"
+    LLVM=1
+    LLVM_IAS=1
+    CROSS_COMPILE=aarch64-linux-gnu-
+    CROSS_COMPILE_COMPAT=arm-linux-gnueabi-
+    AR=llvm-ar
+    NM=llvm-nm
+    OBJCOPY=llvm-objcopy
+    OBJDUMP=llvm-objdump
+    STRIP=llvm-strip
+)
 
 # Check clang is existing.
 echo "[clang --version]:"
@@ -61,9 +74,9 @@ fi
     # ------------- Building for AOSP ---------------
     echo "Clearing [out/] and building for AOSP....."
 
-    make $MAKE_ARGS pipa_defconfig
+    make "${MAKE_ARGS[@]}" pipa_defconfig
 
-    make $MAKE_ARGS -j$(nproc --all) 2> >(tee -a error.log >&2)
+    make "${MAKE_ARGS[@]}" -j$(nproc --all) 2> >(tee -a error.log >&2)
 
     if [ -f "out/arch/arm64/boot/Image" ]; then
         echo "The file [out/arch/arm64/boot/Image] exists. AOSP Build successfully."
