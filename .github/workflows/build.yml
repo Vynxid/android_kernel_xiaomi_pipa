@@ -42,7 +42,7 @@ jobs:
           curl -L $TOOLCHAIN_URL | tar -zxf - -C toolchain
 
       - name: Build kernel
-        run: ./build.sh $(readlink -f toolchain)/bin
+        run: ./build.sh $(readlink -f toolchain)
 
       - name: Upload to artifact
         uses: actions/upload-artifact@v4

@@ -3,17 +3,17 @@
 # Ensure the script exits on error
 set -e
 
-TOOLCHAIN_PATH=${1:-$HOME/tc/bin}
+TOOLCHAIN_PATH=${1:-$HOME/tc}
 GIT_COMMIT_ID=$(git rev-parse --short=8 HEAD)
 
 if [ ! -d $TOOLCHAIN_PATH ]; then
     echo "TOOLCHAIN_PATH [$TOOLCHAIN_PATH] does not exist."
-    echo "Please ensure the toolchain is there, or change TOOLCHAIN_PATH in the script to your toolchain path."
+    echo "Please ensure the toolchain is there."
     exit 1
 fi
 
 echo "TOOLCHAIN_PATH: [$TOOLCHAIN_PATH]"
-export PATH="$TOOLCHAIN_PATH:$PATH"
+export PATH="$TOOLCHAIN_PATH/bin:$PATH"
 
 if ! command -v aarch64-linux-gnu-ld >/dev/null 2>&1; then
     echo "[aarch64-linux-gnu-ld] does not exist, please check your environment."
@@ -34,7 +34,6 @@ fi
 export CCACHE_DIR="$HOME/.cache/ccache_mikernel"
 export CC="ccache gcc"
 export CXX="ccache g++"
-export PATH="/usr/lib/ccache:$PATH"
 echo "CCACHE_DIR: [$CCACHE_DIR]"
 
 MAKE_ARGS="ARCH=arm64 O=out CC=clang LLVM=1 LLVM_IAS=1 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabi- AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip"
