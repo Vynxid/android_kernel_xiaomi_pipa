@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.cache/ccache_mikernel
+            ~/.cache/ccache
           key: pipa-kernel-${{ github.sha }}
           restore-keys: pipa-kernel-
 
