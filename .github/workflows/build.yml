@@ -15,6 +15,7 @@ jobs:
      image: pexcn/docker-images:bookworm-android
     env:
       TZ: Asia/Taipei
+      TOOLCHAIN_URL: https://github.com/ZyCromerZ/Clang/releases/download/21.0.0git-20250531-release/Clang-21.0.0git-20250531.tar.gz
       #CONFIG: ${{ matrix.CONFIG }}
     #strategy:
     #  fail-fast: false
@@ -35,10 +36,15 @@ jobs:
           key: pipa-kernel-${{ github.sha }}
           restore-keys: pipa-kernel-
 
-      - name: Build Kernel
-        run: ./build.sh
+      - name: Prepare toolchain
+        run: |
+          mkdir toolchain
+          curl -L $TOOLCHAIN_URL | tar -zxf - -C toolchain
 
-      - name: Upload to Artifact
+      - name: Build kernel
+        run: ./build.sh $(readlink -f toolchain)
+
+      - name: Upload to artifact
         uses: actions/upload-artifact@v4
         with:
           name: pipa-kernel
