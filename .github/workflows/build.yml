@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    concurrency:
+      group: ${{ github.repository_owner }}
+    container:
+     image: pexcn/docker-images:bookworm-android
+    env:
+      TZ: Asia/Taipei
+      #CONFIG: ${{ matrix.CONFIG }}
+    #strategy:
+    #  fail-fast: false
+    #  matrix:
+    #    CONFIG:
+    #      - aosp
+    #      - miui
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Make build cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/ccache_mikernel
+          key: pipa-kernel-${{ github.sha }}
+          restore-keys: pipa-kernel-
+
+      - name: Build Kernel
+        run: ./build.sh
+
+      - name: Upload to Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipa-kernel
+          path: Kernel_BloodReaper*.zip
