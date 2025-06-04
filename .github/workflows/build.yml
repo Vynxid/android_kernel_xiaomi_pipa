@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    concurrency:
+      group: ${{ github.repository_owner }}
+    container:
+     image: pexcn/docker-images:bookworm-android
+    env:
+      TZ: Asia/Taipei
+      TOOLCHAIN_URL: https://github.com/ZyCromerZ/Clang/releases/download/21.0.0git-20250531-release/Clang-21.0.0git-20250531.tar.gz
+      #CONFIG: ${{ matrix.CONFIG }}
+    #strategy:
+    #  fail-fast: false
+    #  matrix:
+    #    CONFIG:
+    #      - aosp
+    #      - miui
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Make build cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/ccache
+          key: pipa-kernel-${{ github.sha }}
+          restore-keys: pipa-kernel-
+
+      - name: Prepare toolchain
+        run: |
+          mkdir toolchain
+          curl -L $TOOLCHAIN_URL | tar -zxf - -C toolchain
+
+      - name: Build kernel
+        run: ./build.sh $(readlink -f toolchain)
+
+      - name: Upload to artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipa-kernel
+          path: Kernel_BloodReaper*.zip
