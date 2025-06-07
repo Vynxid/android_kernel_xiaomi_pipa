@@ -194,6 +194,8 @@ struct dsi_display {
 	struct drm_device *drm_dev;
 	struct drm_connector *drm_conn;
 	struct drm_connector *ext_conn;
+	struct class *class;
+	struct device *dev;
 
 	const char *name;
 	const char *display_type;
@@ -747,5 +749,7 @@ int dsi_display_hbm_set_disp_param(struct drm_connector *connector,
 
 int dsi_display_esd_irq_ctrl(struct dsi_display *display,
 		bool enable);
+
+int mi_get_disp_id(struct dsi_display *display);
 
 #endif /* _DSI_DISPLAY_H_ */

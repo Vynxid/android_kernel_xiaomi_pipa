@@ -932,7 +932,7 @@ static void _sde_kms_drm_check_dpms(struct drm_atomic_state *old_state,
 			old_mode = DRM_PANEL_BLANK_POWERDOWN;
 		}
 
-		if ((old_mode != new_mode) || (old_fps != new_fps)) {
+		if (old_mode != new_mode) {
 			struct drm_panel_notifier notifier_data;
 
 			SDE_EVT32(old_mode, new_mode, old_fps, new_fps,
@@ -2072,6 +2072,11 @@ static int sde_kms_set_crtc_for_conn(struct drm_device *dev,
 	}
 
 	crtc_state = drm_atomic_get_crtc_state(state, enc->crtc);
+	if (IS_ERR(crtc_state)) {
+		SDE_ERROR("error %ld getting crtc %d state\n",
+			  PTR_ERR(crtc_state), DRMID(conn));
+                return -EINVAL;
+	}
 	conn_state = drm_atomic_get_connector_state(state, conn);
 	if (IS_ERR(conn_state)) {
 		SDE_ERROR("error %d getting connector %d state\n",
@@ -3276,12 +3281,13 @@ void sde_kms_update_pm_qos_irq_request(struct sde_kms *sde_kms,
 
 		req = &sde_kms->pm_qos_irq_req;
 		req->type = PM_QOS_REQ_AFFINE_CORES;
-		req->cpus_affine = sde_kms->irq_cpu_mask;
+		atomic_set(&req->cpus_affine,
+			   *cpumask_bits(&sde_kms->irq_cpu_mask));
 		cpu_irq_latency = sde_kms->catalog->perf.cpu_irq_latency;
 
 		if (pm_qos_request_active(req))
 			pm_qos_update_request(req, cpu_irq_latency);
-		else if (!cpumask_empty(&req->cpus_affine)) {
+		else if (atomic_read(&req->cpus_affine)) {
 			/** If request is not active yet and mask is not empty
 			 *  then it needs to be added initially
 			 */

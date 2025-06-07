@@ -51,6 +51,8 @@ static const struct of_device_id dsi_display_dt_match[] = {
 	{}
 };
 
+static unsigned int cur_refresh_rate = 60;
+
 static void dsi_display_mask_ctrl_error_interrupts(struct dsi_display *display,
 			u32 mask, bool enable)
 {
@@ -3955,7 +3957,9 @@ static int dsi_display_res_init(struct dsi_display *display)
 		ctrl->ctrl = dsi_ctrl_get(ctrl->ctrl_of_node);
 		if (IS_ERR_OR_NULL(ctrl->ctrl)) {
 			rc = PTR_ERR(ctrl->ctrl);
-			DSI_ERR("failed to get dsi controller, rc=%d\n", rc);
+			if (rc != -EPROBE_DEFER)
+				DSI_ERR("failed to get dsi controller, rc=%d\n", rc);
+
 			ctrl->ctrl = NULL;
 			goto error_ctrl_put;
 		}
@@ -5002,8 +5006,10 @@ static int _dsi_display_dev_init(struct dsi_display *display)
 
 	rc = dsi_display_res_init(display);
 	if (rc) {
-		DSI_ERR("[%s] failed to initialize resources, rc=%d\n",
-		       display->name, rc);
+		if (rc != -EPROBE_DEFER)
+			DSI_ERR("[%s] failed to initialize resources, rc=%d\n",
+			       display->name, rc);
+
 		goto error;
 	}
 error:
@@ -5325,6 +5331,81 @@ static int dsi_display_sysfs_deinit(struct dsi_display *display)
 
 }
 
+int dsi_display_get_fps(struct dsi_display *display, u32 *fps)
+{
+	struct dsi_display_mode *cur_mode = NULL;
+	int ret = 0;
+
+	if (!display || !display->panel) {
+		DSI_ERR("Invalid display/panel ptr\n");
+		return -EINVAL;
+	}
+
+	mutex_lock(&display->display_lock);
+	cur_mode = display->panel->cur_mode;
+	if (cur_mode) {
+		*fps =  cur_mode->timing.refresh_rate;
+	} else {
+		ret = -EINVAL;
+	}
+	mutex_unlock(&display->display_lock);
+
+	return ret;
+}
+
+static ssize_t dynamic_fps_show(struct device *dev, struct device_attribute *attr,
+				 char *buf)
+{
+	struct dsi_display *display;
+	u32 fps = 0;
+	int rc = 0;
+
+	struct platform_device *pdev = to_platform_device(dev);
+	display = platform_get_drvdata(pdev);
+
+	if (!display) {
+		DSI_ERR("Invalid display\n");
+		return -EINVAL;
+	}
+
+	rc = dsi_display_get_fps(display, &fps);
+	if (rc) {
+		DSI_ERR("%s: failed to get fps. rc=%d\n", __func__, rc);
+		return snprintf(buf, PAGE_SIZE, "%s\n", "null");
+	}
+
+	return snprintf(buf, PAGE_SIZE, "%d\n", fps);
+}
+static DEVICE_ATTR_RO(dynamic_fps);
+
+static struct attribute *mi_display_attrs[] = {
+	&dev_attr_dynamic_fps.attr,
+	NULL,
+};
+ATTRIBUTE_GROUPS(mi_display);
+
+void dsi_mi_display_init(struct dsi_display *display) {
+	int disp_id = mi_get_disp_id(display);
+
+	if (IS_ERR_OR_NULL(display->class)) {
+		display->class = class_create(THIS_MODULE, "mi_display");
+		if (IS_ERR(display->class))
+			DSI_ERR("class_create failed, rc: %d\n", PTR_ERR(display->class));
+	}
+
+	if (IS_ERR_OR_NULL(display->dev)) {
+		display->dev = device_create_with_groups(display->class, &display->pdev->dev,
+				0, display, mi_display_groups, "disp-DSI-%d", disp_id);
+		if (IS_ERR(display->dev))
+			DSI_ERR("device_create_with_groups failed for disp-DSI-%d, ret: %d\n", disp_id, PTR_ERR(display->dev));
+	}
+}
+
+void dsi_mi_display_deinit(struct dsi_display *display) {
+	device_unregister(display->dev);
+	class_destroy(display->class);
+}
+
 /**
  * dsi_display_bind - bind dsi device with controlling device
  * @dev:        Pointer to base of platform device
@@ -5387,11 +5468,7 @@ static int dsi_display_bind(struct device *dev,
 		goto error;
 	}
 
-	rc = dsi_display_debugfs_init(display);
-	if (rc) {
-		DSI_ERR("[%s] debugfs init failed, rc=%d\n", display->name, rc);
-		goto error;
-	}
+	dsi_display_debugfs_init(display);
 
 	atomic_set(&display->clkrate_change_pending, 0);
 	display->cached_clk_rate = 0;
@@ -5542,6 +5619,8 @@ static int dsi_display_bind(struct device *dev,
 	if (rc)
 		DSI_ERR("lhbm attach primary_dsi_display fail\n");
 
+	dsi_mi_display_init(display);
+
 	goto error;
 
 error_host_deinit:
@@ -5621,6 +5700,8 @@ static void dsi_display_unbind(struct device *dev,
 	(void)dsi_display_sysfs_deinit(display);
 	(void)dsi_display_debugfs_deinit(display);
 
+	dsi_mi_display_deinit(display);
+
 	mutex_unlock(&display->display_lock);
 }
 
@@ -5648,7 +5729,9 @@ static int dsi_display_init(struct dsi_display *display)
 
 	rc = _dsi_display_dev_init(display);
 	if (rc) {
-		DSI_ERR("device init failed, rc=%d\n", rc);
+		if (rc != -EPROBE_DEFER)
+			DSI_ERR("device init failed, rc=%d\n", rc);
+
 		goto end;
 	}
 
@@ -7083,6 +7166,8 @@ int dsi_display_set_mode(struct dsi_display *display,
 	int rc = 0;
 	struct dsi_display_mode adj_mode;
 	struct dsi_mode_info timing;
+	struct mi_drm_notifier notify_data;
+	int fps;
 
 	if (!display || !mode || !display->panel) {
 		DSI_ERR("Invalid params\n");
@@ -7122,9 +7207,9 @@ int dsi_display_set_mode(struct dsi_display *display,
 		goto error;
 	}
 
-	DSI_INFO("mdp_transfer_time_us=%d us\n",
+	DSI_DEBUG("mdp_transfer_time_us=%d us\n",
 			adj_mode.priv_info->mdp_transfer_time_us);
-	DSI_INFO("hactive= %d,vactive= %d,fps=%d\n",
+	DSI_DEBUG("hactive= %d,vactive= %d,fps=%d\n",
 			timing.h_active, timing.v_active,
 			timing.refresh_rate);
 
@@ -7132,6 +7217,14 @@ int dsi_display_set_mode(struct dsi_display *display,
 		if (display->drm_conn && display->drm_conn->kdev)
 			sysfs_notify(&display->drm_conn->kdev->kobj, NULL, "dynamic_fps");
 
+	}
+
+	if (display->panel->cur_mode->timing.refresh_rate != timing.refresh_rate) {
+		fps = timing.refresh_rate;
+		notify_data.data = &fps;
+		notify_data.id = mi_get_disp_id(display);
+		mi_drm_notifier_call_chain(MI_DRM_FPS_CHANGE_EVENT, &notify_data);
+		sysfs_notify(&display->dev->kobj, NULL, "dynamic_fps");
 	}
 
 	memcpy(display->panel->cur_mode, &adj_mode, sizeof(adj_mode));
@@ -7326,7 +7419,7 @@ static void dsi_display_handle_fifo_overflow(struct work_struct *work)
 	 * Add sufficient delay to make sure
 	 * pixel transmission has started
 	 */
-	udelay(200);
+	usleep_range(190, 210);
 end:
 	dsi_display_clk_ctrl(display->dsi_clk_handle,
 			DSI_ALL_CLKS, DSI_CLK_OFF);
@@ -7918,6 +8011,11 @@ int dsi_display_pre_commit(void *display,
 	return rc;
 }
 
+unsigned int dsi_panel_get_refresh_rate(void)
+{
+	return READ_ONCE(cur_refresh_rate);
+}
+
 int dsi_display_enable(struct dsi_display *display)
 {
 	int rc = 0;
@@ -8019,6 +8117,7 @@ int dsi_display_enable(struct dsi_display *display)
 	mutex_lock(&display->display_lock);
 
 	mode = display->panel->cur_mode;
+	WRITE_ONCE(cur_refresh_rate, mode->timing.refresh_rate);
 
 	if (mode->dsi_mode_flags & DSI_MODE_FLAG_DMS) {
 		rc = dsi_panel_post_switch(display->panel);
