@@ -562,7 +562,7 @@ static struct smcinvoke_cb_txn *find_cbtxn_locked(
  * smci_size_add saturates at SIZE_MAX. If integer overflow is detected,
  * this function would return SIZE_MAX otherwise normal a+b is returned.
  */
-static inline size_t smci_size_add(size_t a, size_t b)
+static inline size_t smci_size_add_soc(size_t a, size_t b)
 {
 	return (b > (SIZE_MAX - a)) ? SIZE_MAX : a + b;
 }
@@ -582,7 +582,7 @@ static inline size_t smci_pad_size(size_t a, size_t b)
  */
 static inline size_t smci_size_align(size_t a, size_t b)
 {
-	return smci_size_add(a, smci_pad_size(a, b));
+	return smci_size_add_soc(a, smci_pad_size(a, b));
 }
 
 static uint16_t get_server_id(int cb_server_fd)
@@ -1216,7 +1216,7 @@ static size_t compute_in_msg_size(const struct smcinvoke_cmd_req *req,
 
 	/* each buffer has to be 8 bytes aligned */
 	while (i < OBJECT_COUNTS_NUM_buffers(req->counts))
-		total_size = smci_size_add(total_size,
+		total_size = smci_size_add_soc(total_size,
 				smci_size_align(args_buf[i++].b.size,
 				SMCINVOKE_ARGS_ALIGN_SIZE));
 	return PAGE_ALIGN(total_size);
