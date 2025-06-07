@@ -1368,9 +1368,6 @@ static void dwc3_get_properties(struct dwc3 *dwc)
 	dwc->dis_metastability_quirk = device_property_read_bool(dev,
 				"snps,dis_metastability_quirk");
 
-	dwc->dis_split_quirk = device_property_read_bool(dev,
-				"snps,dis-split-quirk");
-
 	dwc->gen2_tx_de_emph = -1;
 	device_property_read_u32(dev, "snps,gen2-tx-de-emph",
 			&dwc->gen2_tx_de_emph);
