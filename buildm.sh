@@ -64,7 +64,6 @@ fi
     rm -rf anykernel/kernels/
     mkdir -p anykernel/kernels/
     cp out/arch/arm64/boot/Image.gz anykernel/kernels/
-    cp out/arch/arm64/boot/dtb anykernel/kernels/
 
     cd anykernel
     ZIP_FILENAME=Kernel_BloodReaper_MIUI_pipa_$(date +'%Y%m%d_%H%M%S')_anykernel3_${GIT_COMMIT_ID}.zip
