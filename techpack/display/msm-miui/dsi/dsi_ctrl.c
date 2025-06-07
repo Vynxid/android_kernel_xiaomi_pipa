@@ -264,18 +264,12 @@ static int dsi_ctrl_debugfs_init(struct dsi_ctrl *dsi_ctrl,
 	struct dentry *dir, *state_file, *reg_dump, *cmd_dma_logs;
 	char dbg_name[DSI_DEBUG_NAME_LEN];
 
-	if (!dsi_ctrl || !parent) {
+	if (!dsi_ctrl) {
 		DSI_CTRL_ERR(dsi_ctrl, "Invalid params\n");
 		return -EINVAL;
 	}
 
-	dir = debugfs_create_dir(dsi_ctrl->name, parent);
-	if (IS_ERR_OR_NULL(dir)) {
-		rc = PTR_ERR(dir);
-		DSI_CTRL_ERR(dsi_ctrl, "debugfs create dir failed, rc=%d\n",
-				rc);
-		goto error;
-	}
+	dsi_ctrl_debugfs_init(dsi_ctrl, parent);
 
 	state_file = debugfs_create_file("state_info",
 					 0444,
@@ -2329,7 +2323,7 @@ struct dsi_ctrl *dsi_ctrl_get(struct device_node *of_node)
 	mutex_unlock(&dsi_ctrl_list_lock);
 
 	if (!ctrl) {
-		DSI_CTRL_ERR(ctrl, "Device with of node not found\n");
+		DSI_CTRL_DEBUG(ctrl, "Device with of node not found\n");
 		ctrl = ERR_PTR(-EPROBE_DEFER);
 		return ctrl;
 	}
