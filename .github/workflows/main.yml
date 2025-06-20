@@ -17,12 +17,13 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y git zip ccache gcc g++ clang lld libncurses-dev bc bison flex libssl-dev
+          sudo apt install -y git zip ccache gcc g++ lld libncurses-dev bc bison flex libssl-dev curl
 
-      - name: Clone Clang toolchain
+      - name: Download Clang r547379 from AOSP
         run: |
           mkdir -p $HOME/tc
-          git clone --depth=1 https://github.com/Neutron-Toolchains/clang $HOME/tc
+          curl -L -o clang.tar.gz https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r547379.tar.gz
+          tar -C $HOME/tc -xzf clang.tar.gz
 
       - name: Set permission to build.sh
         run: chmod +x ./build.sh
