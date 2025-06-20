@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main  # ganti jika perlu
+      - main
 
 jobs:
   build:
@@ -14,10 +14,15 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Set up dependencies
+      - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y git zip ccache gcc g++ clang lld libncurses-dev bc bison flex libssl-dev
+
+      - name: Clone Clang toolchain
+        run: |
+          mkdir -p $HOME/tc
+          git clone --depth=1 https://github.com/Neutron-Toolchains/clang $HOME/tc
 
       - name: Set permission to build.sh
         run: chmod +x ./build.sh
@@ -31,4 +36,3 @@ jobs:
           name: kernel-flashable-zip
           path: |
             *.zip
-            
