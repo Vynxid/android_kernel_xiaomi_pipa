@@ -26,10 +26,10 @@ jobs:
           tar -C $HOME/tc -xzf clang.tar.gz
 
       - name: Set permission to build.sh
-        run: chmod +x ./build.sh
+        run: chmod +x ./buildm.sh
 
       - name: Run build script
-        run: ./build.sh
+        run: ./buildm.sh
 
       - name: Upload kernel zip artifact
         uses: actions/upload-artifact@v4
